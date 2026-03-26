@@ -1,0 +1,13 @@
+{
+  "include": [
+    "src",
+    "examples"
+  ],
+  "extraPaths": [
+    "src",
+    "examples"
+  ],
+  "venvPath": ".",
+  "reportMissingImports": true,
+  "typeCheckingMode": "basic"
+}

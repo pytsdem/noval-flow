@@ -1,0 +1,32 @@
+请审阅下面这份结构化小说书稿，并输出一个 JSON 对象。
+
+要求：
+1. 找出最重要的 1 到 3 个问题。
+2. 每个问题必须具体、可定位、可修改。
+3. 不允许输出空泛建议。
+4. 如果没有明显问题，也要返回 issues: []。
+
+书稿 JSON：
+{book_json}
+
+请严格输出 JSON 对象，字段必须包含：
+- summary
+- issues
+
+issues 中每一项必须包含：
+- severity
+- title
+- problem_type
+- location
+- evidence
+- impact
+- recommendation
+- acceptance_criteria
+
+location 中必须包含：
+- volume_id
+- chapter_id
+- scene_id
+- block_id
+
+只输出 JSON，不要解释。

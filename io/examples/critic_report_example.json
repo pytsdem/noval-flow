@@ -1,0 +1,26 @@
+{
+  "report_id": "critic_demo",
+  "summary": "发现影响首章抓力与核心卖点表达的问题。",
+  "issues": [
+    {
+      "issue_id": "issue_demo",
+      "severity": "medium",
+      "title": "核心冲突露出不足",
+      "problem_type": "missing_core_conflict",
+      "location": {
+        "book_id": "book_demo",
+        "volume_id": "vol_001",
+        "chapter_id": "ch_001",
+        "scene_id": "ch_001.sc_001",
+        "block_id": "ch_001.sc_001.b002"
+      },
+      "evidence": "首章尚未足够明确地指出女主被当作替身。",
+      "impact": "读者可能无法快速识别故事主钩子。",
+      "recommendation": "直接点明替身身份羞辱。",
+      "acceptance_criteria": [
+        "出现替身相关关键词",
+        "出现公开场合的羞辱氛围"
+      ]
+    }
+  ]
+}

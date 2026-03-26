@@ -1,0 +1,10 @@
+写一段知乎风格小说正文，章节《{chapter_title}》，场景 {scene_index}。
+高概念：{high_concept}
+本章目标：{chapter_objective}
+本章张力：{chapter_tension}
+
+要求：
+1. 第一人称女主视角。
+2. 开头尽快制造情绪拉力。
+3. 让读者在这一段里迅速感知关系失衡或羞辱感。
+4. 输出直接为正文，不要解释。

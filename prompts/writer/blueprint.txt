@@ -1,0 +1,20 @@
+请基于以下调研查询，为“知乎风格长篇女频小说”生成结构化创作蓝图。
+
+调研查询：{research_query}
+参考种子信息（只作为风格参考，不要机械照抄）：
+{seed_json}
+
+请输出一个 JSON 对象，字段必须严格包含：
+- premise
+- characters
+- volume_titles
+- chapter_plans
+
+约束：
+1. premise 内必须包含：title, high_concept, genre, target_style, emotional_hook, central_conflict, selling_points
+2. characters 是数组，每项必须包含：name, role, goal, flaw, relationship_hooks
+3. volume_titles 是字符串数组
+4. chapter_plans 是数组，每项必须包含：chapter_id, title, objective, tension, cliffhanger, planned_scene_count
+5. chapter_id 使用 ch_001 这种格式
+6. 风格要适合知乎高互动长篇，开局强冲突，高情绪密度，利于连载
+7. 只输出 JSON，不要解释

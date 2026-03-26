@@ -1,0 +1,28 @@
+{
+  "id": "book_demo",
+  "title": "婚礼弃我后，他小叔亲手把我捧上神坛",
+  "volumes": [
+    {
+      "id": "vol_001",
+      "title": "替身婚礼卷",
+      "chapters": [
+        {
+          "id": "ch_001",
+          "title": "婚礼变局",
+          "scenes": [
+            {
+              "id": "ch_001.sc_001",
+              "blocks": [
+                {
+                  "id": "ch_001.sc_001.b001",
+                  "purpose": "hook",
+                  "text": "正文示例"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

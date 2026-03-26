@@ -1,0 +1,34 @@
+{
+  "source_query": "知乎体高热度都市情感反转",
+  "blueprint": {
+    "blueprint_id": "blueprint_demo",
+    "premise": {
+      "title": "婚礼弃我后，他小叔亲手把我捧上神坛",
+      "high_concept": "婚礼当天被背叛的策展人女主，被迫与新郎权势深沉的小叔结盟。",
+      "genre": "都市言情",
+      "target_style": "知乎高反转长篇",
+      "emotional_hook": "从被当作替身的羞辱感走到被坚定选择。",
+      "central_conflict": "女主要证明自己不是任何人的替代品。",
+      "selling_points": ["婚礼开局爆点", "豪门资源战"]
+    },
+    "characters": [
+      {
+        "name": "沈知微",
+        "role": "女主",
+        "goal": "夺回事业主导权并摆脱被定义的人生",
+        "flaw": "习惯隐忍"
+      }
+    ],
+    "volume_titles": ["替身婚礼卷"],
+    "chapter_plans": [
+      {
+        "chapter_id": "ch_001",
+        "title": "婚礼变局",
+        "objective": "用婚礼事故打出替身羞辱与权力关系。",
+        "tension": "女主在众目睽睽下失去婚约与体面。",
+        "cliffhanger": "男主提出合作婚约。",
+        "planned_scene_count": 2
+      }
+    ]
+  }
+}

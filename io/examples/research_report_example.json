@@ -1,0 +1,23 @@
+{
+  "report_id": "research_demo",
+  "query": "知乎体高热度都市情感反转",
+  "sources": ["zhihu", "xiaohongshu"],
+  "trend_items": [
+    {
+      "source": "zhihu",
+      "title": "如果你突然发现伴侣其实在拿你当替身",
+      "summary": "高互动情感讨论，关键词集中在背叛、自尊、反击、成长。",
+      "url": "https://example.com/zhihu/mock-1",
+      "heat_score": 95,
+      "topic_tags": ["情感", "替身文学", "反转"],
+      "emotional_tags": ["委屈", "克制", "觉醒"],
+      "conflict_tags": ["身份误认", "阶层差异", "旧爱回归"],
+      "audience_preferences": ["快节奏", "强反转", "高情绪密度"]
+    }
+  ],
+  "genre_candidates": ["都市言情", "豪门博弈", "情感反转"],
+  "emotional_patterns": ["委屈", "克制", "觉醒"],
+  "conflict_patterns": ["身份误认", "阶层差异", "旧爱回归"],
+  "comment_preferences": ["快节奏", "强反转", "高情绪密度"],
+  "writing_recommendations": ["第一章必须在 800 字内抛出核心冲突。"]
+}

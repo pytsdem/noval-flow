@@ -1,0 +1,12 @@
+{
+  "python.analysis.extraPaths": [
+    "./src",
+    "./examples"
+  ],
+  "python.autoComplete.extraPaths": [
+    "./src",
+    "./examples"
+  ],
+  "python.envFile": "${workspaceFolder}/.env",
+  "python.analysis.indexing": true
+}
