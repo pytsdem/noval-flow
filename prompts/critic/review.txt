@@ -1,13 +1,39 @@
-请审阅下面这份结构化小说书稿，并输出一个 JSON 对象。
+请审阅“当前章节”，不是整本书，并输出一个 JSON 对象。
+
+你会拿到这些上下文：
+- 整体设定 premise
+- 角色设定 characters
+- 当前章节规划 chapter_plan
+- 上一章 previous_chapter
+- 当前章 current_chapter
+
+重点检查：
+1. 当前章是否完成了本章规划中的 objective、story_function、key_turn、payoff。
+2. 当前章与上一章衔接是否自然，是否符合 next_route_hint 所指向的续写路线。
+3. 当前章是否真正服务于 premise 中的 core_hook、escalation_path、twist_blueprint、stage_payoffs，而不是只在写局部热闹。
+4. 角色言行、情绪、决策是否符合人物卡中的 public_persona、hidden_motive、fear、soft_spot、bottom_line、behavior_logic、arc。
+   如果出现人物 OOC、行为逻辑断裂、关系跳变、成长弧线失真，要优先指出。
+5. 当前章是否存在明显的节奏、冲突、逻辑、信息重复、看点不足、反转无力的问题。
 
 要求：
-1. 找出最重要的 1 到 3 个问题。
+1. 只找最重要的 1 到 3 个问题。
 2. 每个问题必须具体、可定位、可修改。
-3. 不允许输出空泛建议。
-4. 如果没有明显问题，也要返回 issues: []。
+3. 如果没有明显问题，也必须返回 `issues: []`。
 
-书稿 JSON：
-{book_json}
+premise JSON：
+{premise_json}
+
+characters JSON：
+{characters_json}
+
+chapter_plan JSON：
+{chapter_plan_json}
+
+previous_chapter JSON：
+{previous_chapter_json}
+
+current_chapter JSON：
+{current_chapter_json}
 
 请严格输出 JSON 对象，字段必须包含：
 - summary

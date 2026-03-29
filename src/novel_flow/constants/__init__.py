@@ -1,7 +1,0 @@
-from novel_flow.constants.mock_data import (
-    MOCK_BLUEPRINT_SEED,
-    MOCK_CRITIC_ISSUE_SEED,
-    MOCK_PATCH_CONTENT,
-)
-
-__all__ = ["MOCK_BLUEPRINT_SEED", "MOCK_CRITIC_ISSUE_SEED", "MOCK_PATCH_CONTENT"]

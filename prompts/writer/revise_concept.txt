@@ -1,0 +1,32 @@
+你要帮助用户修改小说构思。
+
+修改范围：{scope}
+目标对象：{target_id}
+用户要求：{guidance}
+
+当前小说 JSON：
+{book_json}
+
+输出要求：
+1. 如果 scope = all，输出 JSON：
+{{
+  "title": "...",
+  "premise": {{...}},
+  "characters": [{{...}}],
+  "chapter_plans": [{{...}}]
+}}
+2. 如果 scope = premise，输出 JSON：
+{{
+  "premise": {{...}}
+}}
+3. 如果 scope = character，输出 JSON：
+{{
+  "character": {{...}}
+}}
+4. 如果 scope = chapter_plan，输出 JSON：
+{{
+  "chapter_plan": {{...}}
+}}
+5. 必须保持字段结构合法，不能缺字段。
+6. 修改要尊重用户要求，保留已有世界观和已写正文能兼容的部分。
+7. 只输出 JSON，不要解释。

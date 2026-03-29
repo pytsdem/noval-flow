@@ -1,0 +1,19 @@
+请根据这份大纲评审结果，整体修订小说蓝图。
+
+当前 blueprint JSON：
+{blueprint_json}
+
+评审结果 review JSON：
+{review_json}
+
+请输出一个完整 JSON 对象，字段必须严格包含：
+- premise
+- characters
+- volume_titles
+- chapter_plans
+
+要求：
+1. 优先解决 review 里指出的问题。
+2. 保留原本已经成立的亮点，不要推翻重来。
+3. 保证字段结构合法，适合长篇续写。
+4. 只输出 JSON，不要解释。

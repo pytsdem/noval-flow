@@ -17,6 +17,12 @@ class Settings(BaseModel):
     def from_env(cls, database_path: str | None = None) -> "Settings":
         import os
 
+        try:
+            from dotenv import load_dotenv
+            load_dotenv()
+        except ImportError:
+            pass
+
         db_value: str | None = database_path or os.getenv("NOVEL_FLOW_DB")
         return cls(
             database_path=Path(db_value) if db_value else Path("data/novel_flow.db"),

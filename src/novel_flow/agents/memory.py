@@ -12,8 +12,8 @@ class MemoryAgent(BaseAgent):
         super().__init__(name="MemoryAgent")
         self.store = store
 
-    def save_state(self, state: WorkflowState) -> None:
-        self.store.save_workflow_state(state)
+    def save_state(self, state: WorkflowState, mode: str = "formal") -> None:
+        self.store.save_workflow_state(state, mode=mode)
 
     def load_state(self, run_id: str) -> WorkflowState | None:
         return self.store.load_workflow_state(run_id)
@@ -30,11 +30,54 @@ class MemoryAgent(BaseAgent):
     def load_book(self, book_id: str) -> BookDocument | None:
         return self.store.load_book(book_id)
 
-    def save_critic_report(self, report: CriticReport) -> None:
-        self.store.save_critic_report(report)
+    def list_books(self, limit: int = 30) -> list[dict[str, Any]]:
+        return self.store.list_books(limit=limit)
+
+    def find_books_by_title(self, title: str, limit: int = 10) -> list[BookDocument]:
+        return self.store.find_books_by_title(title=title, limit=limit)
+
+    def delete_book(self, book_id: str) -> None:
+        self.store.delete_book(book_id)
+
+    def delete_run(self, run_id: str) -> None:
+        self.store.delete_run(run_id)
+
+    def latest_run_for_book(self, book_id: str) -> str | None:
+        return self.store.latest_run_for_book(book_id)
+
+    def list_runs(self, limit: int = 30, book_id: str | None = None) -> list[dict[str, Any]]:
+        return self.store.list_runs(limit=limit, book_id=book_id)
+
+    def save_run_output(
+        self,
+        *,
+        run_id: str,
+        agent: str,
+        output_type: str,
+        title: str,
+        payload: dict[str, Any],
+        created_at: str,
+    ) -> None:
+        self.store.save_run_output(
+            run_id=run_id,
+            agent=agent,
+            output_type=output_type,
+            title=title,
+            payload=payload,
+            created_at=created_at,
+        )
+
+    def list_run_outputs(self, run_id: str) -> list[dict[str, Any]]:
+        return self.store.list_run_outputs(run_id)
+
+    def save_critic_report(self, report: CriticReport, book_id: str | None = None) -> None:
+        self.store.save_critic_report(report, book_id=book_id)
 
     def load_critic_report(self, report_id: str) -> CriticReport | None:
         return self.store.load_critic_report(report_id)
+
+    def load_latest_critic_report(self, book_id: str) -> CriticReport | None:
+        return self.store.load_latest_critic_report(book_id)
 
     def save_patch_version(self, version: BlockPatchVersion) -> None:
         self.store.save_patch_version(version)

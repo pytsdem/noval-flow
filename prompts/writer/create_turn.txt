@@ -1,9 +1,29 @@
-继续章节《{chapter_title}》的下一段正文。
+继续写当前章节的下一段正文。
+
+章节标题：{chapter_title}
 本章目标：{chapter_objective}
-当前悬念：{chapter_cliffhanger}
+本章悬念：{chapter_cliffhanger}
+
+整体设定 JSON：
+{premise_json}
+
+本章规划 JSON：
+{chapter_plan_json}
+
+角色设定 JSON：
+{characters_json}
+
+上一章 JSON：
+{previous_chapter_json}
 
 要求：
-1. 让冲突继续升级，而不是重复上一段。
-2. 明确推进人物关系或局势变化。
-3. 段尾为下一段或下一场景埋钩子。
-4. 输出直接为正文，不要解释。
+1. 继续推进当前章节，而不是复述上一章。
+2. 不只是推进情节，还要推进整本书的长线：
+   - 本章处于哪个 phase
+   - 本章承担什么 story_function
+   - 这段要落什么 key_turn / payoff
+   - 下一章该往哪条路线推进
+3. 角色行为必须符合人物小传与行为逻辑，尤其注意 hidden_motive、fear、bottom_line、arc。
+4. 这一段要推动关系、局势或信息发生明显变化，不能平。
+5. 结尾要为后续场景或下一章留下钩子，和 premise 的 twist_blueprint / stage_payoffs 保持一致。
+6. 直接输出正文，不要解释。

@@ -1,0 +1,28 @@
+请审阅这份小说蓝图，输出 JSON 对象。
+
+blueprint JSON：
+{blueprint_json}
+
+重点检查：
+1. premise 是否足够具体、精妙，看点、反转链、兑现点是否清晰。
+2. characters 是否立体，是否具备行为逻辑闭环和可持续成长弧线。
+3. chapter_plans 是否能支撑长篇续写，是否不只停留在前几章。
+4. volume_titles、chapter_plans 与 premise 是否一致，有没有明显脱节。
+
+要求：
+1. 只找最重要的 1 到 5 个问题。
+2. 每个问题要具体、可执行。
+3. 如果整体通过，也要明确说出强项。
+
+输出 JSON 必须包含：
+- summary
+- issues
+
+issues 每项包含：
+- title
+- problem_type
+- evidence
+- impact
+- recommendation
+
+只输出 JSON，不要解释。

@@ -1,0 +1,35 @@
+请按用户要求重写整章内容。
+
+章节 ID：{chapter_id}
+用户修改要求：{guidance}
+
+当前章节 JSON：
+{chapter_json}
+
+当前章节规划：
+{chapter_plan_json}
+
+上一章 JSON：
+{previous_chapter_json}
+
+小说 premise：
+{premise_json}
+
+角色设定：
+{characters_json}
+
+输出要求：
+1. 输出 JSON 对象，格式为：
+{{
+  "chapter": {{
+    "id": "...",
+    "title": "...",
+    "summary": "...",
+    "scenes": [...]
+  }}
+}}
+2. scene id、block id 必须保留原有结构和数量，不要乱改。
+3. block 的 purpose 必须保留。
+4. 重点根据用户要求优化节奏、冲突、人物动机、衔接和情绪密度。
+5. 保持与 premise、角色设定、上一章、本章规划一致，不要 OOC。
+6. 只输出 JSON，不要解释。

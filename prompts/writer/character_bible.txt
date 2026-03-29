@@ -1,0 +1,44 @@
+请基于已有小说总策划，生成人物小传与人物逻辑。
+
+调研查询：{research_query}
+
+premise JSON：
+{premise_json}
+
+volume_titles：
+{volume_titles_json}
+
+请输出 JSON，对象字段必须包含：
+- characters
+
+`characters` 是数组，每项必须包含：
+- name
+- role
+- goal
+- flaw
+- public_persona
+- hidden_motive
+- fear
+- soft_spot
+- bottom_line
+- backstory
+- behavior_logic
+- arc
+- relationship_hooks
+
+人物设计要求：
+1. 每个人物都要像“会做事的人”，不是设定标签拼盘。
+2. `goal` 要写人物当前最想得到什么，不能太虚。
+3. `flaw` 要能真正制造剧情代价，而不是“嘴硬心软”“过于善良”这种廉价缺点。
+4. `public_persona` 写他在外人眼中的样子；`hidden_motive` 写他真正想要但不愿明说的东西。
+5. `fear`、`soft_spot`、`bottom_line` 必须能解释这个人为什么会在关键情节里做出某种选择。
+6. `backstory` 要能为当下行为提供来源，不要写流水账生平。
+7. `behavior_logic` 必须写成闭环，直接回答“这个人为什么会这么做，他在压力之下通常怎么选，他的选择会带来什么后果”。
+8. `arc` 要体现这个人物在长篇中的变化方向，而不是一句“完成成长”。
+9. `relationship_hooks` 要写成具体的人际拉扯、亏欠、误解、利用、执念、旧账，不要只写“感情纠葛”。
+10. 重点角色要具备可爱、可恨、可怜或可怕中的至少两面，避免人物过于正面或过于工具化。
+11. 避免 AI 味人设：不要堆砌“清冷腹黑”“温柔坚韧”“偏执深情”这类空心词组，必须落到行为习惯、处事方式和关系模式上。
+
+格式要求：
+1. `relationship_hooks` 必须是字符串数组。
+2. 只输出 JSON，不要解释，不要加 Markdown。

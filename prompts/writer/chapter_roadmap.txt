@@ -1,0 +1,47 @@
+请基于已有小说总策划和人物系统，生成长篇章节路线图。
+
+调研查询：{research_query}
+
+premise JSON：
+{premise_json}
+
+characters JSON：
+{characters_json}
+
+volume_titles：
+{volume_titles_json}
+
+请输出 JSON，对象字段必须包含：
+- chapter_plans
+
+`chapter_plans` 至少 12 章，每项必须包含：
+- chapter_id
+- title
+- objective
+- tension
+- cliffhanger
+- phase
+- story_function
+- key_turn
+- payoff
+- next_route_hint
+- planned_scene_count
+
+章节规划要求：
+1. 这不是列标题清单，而是给后续逐章续写提供可靠路线。
+2. 前 12 章必须足够具体，能直接看出每章在做什么、制造什么情绪、留下什么钩子。
+3. 每章都要承担明确功能，`story_function` 不要写成“推进剧情”“加深感情”这种空话，要写清楚推进哪条关系、哪条秘密、哪场博弈。
+4. `title` 要像网文章节名，简洁、具体、带一点戏剧感，避免口号式土味标题。
+5. `objective` 要写主动作和主要目标，而不是主题概括。
+6. `tension` 要写这一章最主要的压迫、误解、对抗、倒计时或关系撕扯。
+7. `cliffhanger` 必须是能逼读者点下一章的具体悬念，不要写“留下悬念”“矛盾升级”。
+8. `key_turn` 要写清这章最关键的一次信息变化、立场变化或局势变化。
+9. `payoff` 要写这一章兑现了前文什么期待，哪怕只是一小步兑现。
+10. `next_route_hint` 要清楚说明下一章该往哪条线继续，不允许“自由发挥”。
+11. 章节路线要和 `escalation_path`、`twist_blueprint`、`stage_payoffs` 对应，确保长篇能越写越紧，不是前面热闹后面发散。
+12. 避免 AI 味章纲：不要反复出现“关系升温”“产生误会”“迎来挑战”“揭开真相的一角”这种模板句，必须把事件写具体。
+
+格式要求：
+1. `chapter_id` 使用 `ch_001` 这种格式。
+2. `planned_scene_count` 是整数。
+3. 只输出 JSON，不要解释，不要加 Markdown。

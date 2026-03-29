@@ -1,10 +1,28 @@
-写一段知乎风格小说正文，章节《{chapter_title}》，场景 {scene_index}。
+写当前章节的开场正文。
+
+章节标题：{chapter_title}
+场景序号：{scene_index}
 高概念：{high_concept}
 本章目标：{chapter_objective}
 本章张力：{chapter_tension}
 
+整体设定 JSON：
+{premise_json}
+
+本章规划 JSON：
+{chapter_plan_json}
+
+角色设定 JSON：
+{characters_json}
+
+上一章 JSON：
+{previous_chapter_json}
+
 要求：
-1. 第一人称女主视角。
-2. 开头尽快制造情绪拉力。
-3. 让读者在这一段里迅速感知关系失衡或羞辱感。
-4. 输出直接为正文，不要解释。
+1. 使用第一人称女主视角。
+2. 这是一章一章续写，不要重复上一章已经发生过的内容。
+3. 明确服务于本章的 `phase / story_function / key_turn / payoff / next_route_hint`。
+4. 要利用 premise 里的 `core_hook / escalation_path / twist_blueprint / stage_payoffs`，让这段开场在整本书的大路线里有位置。
+5. 角色言行必须符合 `public_persona / hidden_motive / fear / bottom_line / behavior_logic / arc`，不能 OOC。
+6. 开场要尽快把冲突、情绪和看点立起来，不能空转。
+7. 直接输出正文，不要解释。

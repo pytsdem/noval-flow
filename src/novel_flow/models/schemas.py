@@ -13,6 +13,7 @@ def utc_now() -> datetime:
 
 class WriterMode(str, Enum):
     CREATE = "create"
+    WRITE_NEXT_CHAPTER = "write_next_chapter"
     REWRITE_UNIT = "rewrite_unit"
     PATCH_BLOCK = "patch_block"
     EXPAND = "expand"
@@ -58,6 +59,14 @@ class CharacterCard(BaseModel):
     role: str
     goal: str
     flaw: str
+    public_persona: str = ""
+    hidden_motive: str = ""
+    fear: str = ""
+    soft_spot: str = ""
+    bottom_line: str = ""
+    backstory: str = ""
+    behavior_logic: str = ""
+    arc: str = ""
     relationship_hooks: list[str] = Field(default_factory=list)
 
 
@@ -68,6 +77,11 @@ class StoryPremise(BaseModel):
     target_style: str
     emotional_hook: str
     central_conflict: str
+    core_hook: str = ""
+    escalation_path: list[str] = Field(default_factory=list)
+    twist_blueprint: list[str] = Field(default_factory=list)
+    stage_payoffs: list[str] = Field(default_factory=list)
+    ending_payoff: str = ""
     selling_points: list[str] = Field(default_factory=list)
 
 
@@ -77,6 +91,11 @@ class ChapterPlan(BaseModel):
     objective: str
     tension: str
     cliffhanger: str
+    phase: str = ""
+    story_function: str = ""
+    key_turn: str = ""
+    payoff: str = ""
+    next_route_hint: str = ""
     planned_scene_count: int = Field(ge=1, default=2)
 
 

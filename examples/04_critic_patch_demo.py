@@ -1,12 +1,5 @@
 from __future__ import annotations
 
-# Demo 04
-# 这个文件验证 CriticAgent + WriterAgent.patch_block：
-# 1. 先生成一本书
-# 2. 让 CriticAgent 输出 IssueCard
-# 3. 根据 IssueCard 生成 PatchInstruction
-# 4. 对目标 block 做精准修改并打印 patch 结果
-
 import argparse
 import sys
 from pathlib import Path
@@ -14,42 +7,56 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from _example_support import DEFAULT_QUERY, add_llm_argument, build_llm_client
-from novel_flow.agents.critic import CriticAgent
-from novel_flow.agents.writer import WriterAgent
-from novel_flow.services.patcher import PatchExecutor
+from _example_support import DEFAULT_DB, build_memory_agent, build_writer_agent, print_json
+from novel_flow.models.schemas import PatchInstruction, PatchOperation
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Demo 04: validate CriticAgent + patch flow.")
-    parser.add_argument("--query", default=DEFAULT_QUERY, help="Research query used to build the blueprint.")
-    add_llm_argument(parser)
+    parser = argparse.ArgumentParser(description="Debug chapter patching.")
+    parser.add_argument("--db", default=DEFAULT_DB, help="SQLite database path.")
+    parser.add_argument("--book-id", required=True, help="Book id to patch.")
+    parser.add_argument("--block-id", required=True, help="Target block id.")
+    parser.add_argument("--operation", choices=["replace", "append", "prepend"], default="replace")
+    parser.add_argument("--reason", default="manual debug patch", help="Patch reason.")
+    parser.add_argument("--patch-content", required=True, help="Patch content.")
     return parser
+
+
+def find_block_text(book, block_id: str) -> str:
+    for volume in book.volumes:
+        for chapter in volume.chapters:
+            for scene in chapter.scenes:
+                for block in scene.blocks:
+                    if block.id == block_id:
+                        return block.text
+    raise ValueError(f"Block not found: {block_id}")
 
 
 def main() -> None:
     args = build_parser().parse_args()
-    llm_client = build_llm_client(args.mock_llm)
-    writer = WriterAgent(llm_client=llm_client, patch_executor=PatchExecutor())
-    critic = CriticAgent(llm_client=llm_client)
+    memory = build_memory_agent(args.db)
+    writer = build_writer_agent()
+    book = memory.load_book(args.book_id)
+    if book is None:
+        raise ValueError(f"Book not found: {args.book_id}")
 
-    blueprint = writer.build_blueprint(research_query=args.query)
-    book = writer.create_book(blueprint=blueprint, source_query=args.query)
-    report = critic.review_book(book)
-
-    if not report.issues:
-        print({"issues": 0})
-        return
-
-    instruction = critic.build_patch_instruction(report.issues[0])
+    instruction = PatchInstruction(
+        patch_id="patch_debug_manual",
+        target_block_id=args.block_id,
+        operation=PatchOperation(args.operation),
+        reason=args.reason,
+        content=args.patch_content,
+    )
     patched_book, payload = writer.patch_block(book=book, instruction=instruction)
-    patched_block = patched_book.volumes[0].chapters[0].scenes[0].blocks[0]
-    print(
+    memory.save_book(patched_book)
+    print_json(
         {
-            "issue_id": report.issues[0].issue_id,
-            "target_block_id": instruction.target_block_id,
-            "patch_version_id": payload["patch_version"]["version_id"],
-            "patched_preview": patched_block.text[:80],
+            "agent": "WriterAgent",
+            "mode": "patch_block",
+            "book_id": args.book_id,
+            "block_id": args.block_id,
+            "patch_version": payload["patch_version"],
+            "text": find_block_text(patched_book, args.block_id),
         }
     )
 

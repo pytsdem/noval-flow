@@ -1,136 +1,57 @@
 from __future__ import annotations
 
-# Debug 06
-# 这个文件是 WriterAgent 的单独调试入口。
-# 可调模式：
-# - create：创建初始书稿
-# - rewrite_unit：重写某个 block
-# - patch_block：手工对某个 block 做精准替换
-# - expand：对某个 block 扩写
-
 import argparse
-import json
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from _example_support import DEFAULT_QUERY, add_llm_argument, build_llm_client
-from novel_flow.agents.writer import WriterAgent
-from novel_flow.models.schemas import PatchInstruction, PatchOperation
-from novel_flow.services.patcher import PatchExecutor
+from _example_support import DEFAULT_DB, DEFAULT_QUERY, build_blueprint_agent, build_memory_agent, build_writer_agent, print_json
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Debug WriterAgent with Doubao or mock LLM.")
-    parser.add_argument("--mode", choices=["create", "rewrite_unit", "patch_block", "expand"], default="create")
-    parser.add_argument("--query", default=DEFAULT_QUERY, help="Source query used to build the blueprint.")
-    parser.add_argument("--block-id", default="ch_001.sc_001.b001", help="Target block id.")
-    parser.add_argument(
-        "--guidance",
-        default="加强婚礼现场的压迫感，并让女主的反击动机更明确。",
-        help="Guidance for rewrite_unit mode.",
-    )
-    parser.add_argument(
-        "--expansion-goal",
-        default="增加婚礼现场细节和宾客反应，强化公开羞辱感。",
-        help="Goal for expand mode.",
-    )
-    parser.add_argument(
-        "--patch-content",
-        default=(
-            "我听见那句“替身”时，手里的捧花几乎被我掐断。"
-            "休息室外铺着长长的香槟色地毯，门缝里漏出来的笑声像耳光一样，"
-            "提醒我这场婚礼从来不是童话，而是一场精心布置的公开羞辱。"
-        ),
-        help="Replacement content for patch_block mode.",
-    )
-    add_llm_argument(parser)
+    parser = argparse.ArgumentParser(description="Debug chapter writing.")
+    parser.add_argument("--db", default=DEFAULT_DB, help="SQLite database path.")
+    subparsers = parser.add_subparsers(dest="command", required=True)
+
+    new_cmd = subparsers.add_parser("start", help="Create a new book shell and write the first chapter.")
+    new_cmd.add_argument("--query", default=DEFAULT_QUERY, help="Research query used to build the blueprint.")
+
+    cont_cmd = subparsers.add_parser("continue", help="Write the next chapter for an existing book.")
+    cont_cmd.add_argument("--book-id", required=True, help="Book id to continue.")
     return parser
-
-
-def build_writer(use_mock_llm: bool) -> WriterAgent:
-    return WriterAgent(llm_client=build_llm_client(use_mock_llm), patch_executor=PatchExecutor())
 
 
 def main() -> None:
     args = build_parser().parse_args()
-    writer = build_writer(use_mock_llm=args.mock_llm)
-    blueprint = writer.build_blueprint(research_query=args.query)
-    book = writer.create_book(blueprint=blueprint, source_query=args.query)
+    memory = build_memory_agent(args.db)
+    writer = build_writer_agent()
+    blueprint_agent = build_blueprint_agent()
 
-    if args.mode == "create":
-        first_block = book.volumes[0].chapters[0].scenes[0].blocks[0]
-        print_json(
-            {
-                "agent": "WriterAgent",
-                "mode": "create",
-                "book_id": book.id,
-                "book_title": book.title,
-                "first_block_id": first_block.id,
-                "first_block_text": first_block.text,
-            }
-        )
-        return
+    if args.command == "start":
+        blueprint = blueprint_agent.build_blueprint(research_query=args.query)
+        book = writer.create_book(blueprint=blueprint, source_query=args.query)
+        memory.save_book(book)
+        updated_book, chapter = writer.write_next_chapter(book)
+    else:
+        book = memory.load_book(args.book_id)
+        if book is None:
+            raise ValueError(f"Book not found: {args.book_id}")
+        updated_book, chapter = writer.write_next_chapter(book)
 
-    if args.mode == "rewrite_unit":
-        patched_book = writer.rewrite_unit(book=book, block_id=args.block_id, guidance=args.guidance)
-        print_json(
-            {
-                "agent": "WriterAgent",
-                "mode": "rewrite_unit",
-                "block_id": args.block_id,
-                "guidance": args.guidance,
-                "text": find_block_text(patched_book, args.block_id),
-            }
-        )
-        return
-
-    if args.mode == "expand":
-        expanded_book = writer.expand(book=book, block_id=args.block_id, expansion_goal=args.expansion_goal)
-        print_json(
-            {
-                "agent": "WriterAgent",
-                "mode": "expand",
-                "block_id": args.block_id,
-                "expansion_goal": args.expansion_goal,
-                "text": find_block_text(expanded_book, args.block_id),
-            }
-        )
-        return
-
-    instruction = PatchInstruction(
-        patch_id="patch_debug_manual",
-        target_block_id=args.block_id,
-        operation=PatchOperation.REPLACE,
-        reason="manual debug patch",
-        content=args.patch_content,
-    )
-    patched_book, payload = writer.patch_block(book=book, instruction=instruction)
+    memory.save_book(updated_book)
     print_json(
         {
             "agent": "WriterAgent",
-            "mode": "patch_block",
-            "block_id": args.block_id,
-            "patch_version": payload["patch_version"],
-            "text": find_block_text(patched_book, args.block_id),
+            "mode": "write_next_chapter",
+            "book_id": updated_book.id,
+            "book_title": updated_book.title,
+            "chapter": chapter.model_dump(mode="json"),
+            "next_chapter_index": updated_book.metadata.get("next_chapter_index"),
+            "completed_chapter_ids": updated_book.metadata.get("completed_chapter_ids", []),
         }
     )
-
-
-def find_block_text(book, block_id: str) -> str:
-    for volume in book.volumes:
-        for chapter in volume.chapters:
-            for scene in chapter.scenes:
-                for block in scene.blocks:
-                    if block.id == block_id:
-                        return block.text
-    raise ValueError(f"Block not found: {block_id}")
-
-
-def print_json(payload: dict[str, object]) -> None:
-    print(json.dumps(payload, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":

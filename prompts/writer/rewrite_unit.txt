@@ -1,7 +1,26 @@
-请将 block {block_id} 改写得更符合知乎风格。
-改写要求：{guidance}
+请按用户要求重写这个 block。
+
+block_id：{block_id}
+block 作用：{block_purpose}
+用户修改要求：{guidance}
+
+当前 block 文本：
+{block_text}
+
+当前章节 JSON：
+{chapter_json}
+
+当前章节规划：
+{chapter_plan_json}
+
+小说 premise：
+{premise_json}
+
+角色设定：
+{characters_json}
 
 输出要求：
-1. 直接输出改写后的正文。
+1. 直接输出改写后的 block 正文。
 2. 不要解释修改理由。
-3. 保持原有情节方向，但增强可读性、情绪密度和钩子感。
+3. 保持与本章剧情、角色设定、章节规划一致。
+4. 优先优化情绪密度、冲突力度、表达清晰度和钩子感。

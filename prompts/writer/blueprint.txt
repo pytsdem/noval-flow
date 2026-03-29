@@ -1,7 +1,7 @@
-请基于以下调研查询，为“知乎风格长篇女频小说”生成结构化创作蓝图。
+请基于以下调研查询，为“知乎风格长篇女频小说”生成一个更适合长期连载的结构化创作蓝图。
 
 调研查询：{research_query}
-参考种子信息（只作为风格参考，不要机械照抄）：
+参考种子信息（只作风格参考，不要机械照抄）：
 {seed_json}
 
 请输出一个 JSON 对象，字段必须严格包含：
@@ -10,11 +10,63 @@
 - volume_titles
 - chapter_plans
 
-约束：
-1. premise 内必须包含：title, high_concept, genre, target_style, emotional_hook, central_conflict, selling_points
-2. characters 是数组，每项必须包含：name, role, goal, flaw, relationship_hooks
-3. volume_titles 是字符串数组
-4. chapter_plans 是数组，每项必须包含：chapter_id, title, objective, tension, cliffhanger, planned_scene_count
-5. chapter_id 使用 ch_001 这种格式
-6. 风格要适合知乎高互动长篇，开局强冲突，高情绪密度，利于连载
-7. 只输出 JSON，不要解释
+你要重点解决以下问题：
+1. 小说构思要具体、精妙，明确写出这本书最抓人的看点、反转链、情绪升级路线和最终兑现点。
+2. 人物必须立体，每一个人都要有行为逻辑闭环，不能只是标签组合。
+3. 章节路线必须能支撑长篇续写，不是只把前几章写热闹。
+
+字段要求：
+1. `premise` 必须包含：
+   - title
+   - high_concept
+   - genre
+   - target_style
+   - emotional_hook
+   - central_conflict
+   - core_hook
+   - escalation_path
+   - twist_blueprint
+   - stage_payoffs
+   - ending_payoff
+   - selling_points
+2. `characters` 是数组，每项必须包含：
+   - name
+   - role
+   - goal
+   - flaw
+   - public_persona
+   - hidden_motive
+   - fear
+   - soft_spot
+   - bottom_line
+   - backstory
+   - behavior_logic
+   - arc
+   - relationship_hooks
+3. `volume_titles` 是字符串数组，至少 3 个。
+4. `chapter_plans` 至少 12 章，每项必须包含：
+   - chapter_id
+   - title
+   - objective
+   - tension
+   - cliffhanger
+   - phase
+   - story_function
+   - key_turn
+   - payoff
+   - next_route_hint
+   - planned_scene_count
+
+创作原则：
+1. 风格适合知乎高互动长篇女频，但不要把“知乎风”理解成口号化、段子化、故作狠话；重点是局面强、关系狠、情绪密、反转快。
+2. 开局必须尽快抛出最有戏剧性的关系局面或利益局面，让读者立刻站队。
+3. 所有“爽点”“虐点”“反转点”都要具体，不要写抽象概括。
+4. 不要使用土味表达和廉价宣言，例如“我偏不按剧本走”“命运由我改写”“狠狠打脸所有人”这种句式。
+5. 不要用“每章结尾生成钩子”这种 AI 说明书式表达；应该直接写出这一章的具体悬念或爆点。
+6. 人设不要只堆砌“疯批、清冷、偏执、腹黑、白切黑”等标签，必须写清人物为什么这样、会怎么做、会付出什么代价。
+7. 章节路线既要有前期强抓手，也要有中期升级和后期兑现，确保后续“续写下一章”时有明确路径。
+
+格式要求：
+1. 所有字段必须是合法 JSON。
+2. `escalation_path`、`twist_blueprint`、`stage_payoffs`、`selling_points`、`relationship_hooks` 必须是数组。
+3. 只输出 JSON，不要解释，不要加 Markdown。
