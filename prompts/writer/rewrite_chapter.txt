@@ -18,6 +18,9 @@
 角色设定：
 {characters_json}
 
+参考资料：
+{reference_pack}
+
 输出要求：
 1. 输出 JSON 对象，格式为：
 {{

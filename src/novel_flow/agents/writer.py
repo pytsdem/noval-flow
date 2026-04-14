@@ -43,11 +43,12 @@ class WriterAgent(BaseAgent):
         self._current_previous_chapter: Chapter | None = None
         self._current_characters: list[CharacterCard] = []
 
-    def build_blueprint(self, research_query: str) -> BookBlueprint:
+    def build_blueprint(self, research_query: str, style_request: str = "") -> BookBlueprint:
         ev.emit("agent_start", agent="WriterAgent", title="Build blueprint", query=research_query)
         prompt = self.prompt_library.render(
             "writer/blueprint.txt",
             research_query=research_query,
+            style_request=style_request or "未指定",
             seed_json="{}",
         )
         raw = self._generate_block_text(prompt=prompt)
@@ -115,10 +116,11 @@ class WriterAgent(BaseAgent):
         ev.emit("concept_done", agent="WriterAgent", title=f"Concept revised: {scope}", scope=scope, target_id=target_id or "")
         return updated_book
 
-    def create_book(self, blueprint: BookBlueprint, source_query: str) -> BookDocument:
+    def create_book(self, blueprint: BookBlueprint, source_query: str, style_request: str = "") -> BookDocument:
         ev.emit("agent_start", agent="WriterAgent", title=f"Initialize book shell: {blueprint.premise.title}")
         now = datetime.now(timezone.utc)
         volume_title = blueprint.volume_titles[0] if blueprint.volume_titles else "Volume 1"
+        effective_style = style_request or blueprint.premise.target_style
         book = BookDocument(
             id=f"book_{uuid4().hex[:10]}",
             title=blueprint.premise.title,
@@ -133,8 +135,9 @@ class WriterAgent(BaseAgent):
                 )
             ],
             metadata={
-                "target_words": 100000,
+                "target_words": self._target_words_for_style(effective_style),
                 "style": blueprint.premise.target_style,
+                "style_request": style_request,
                 "query": source_query,
                 "blueprint_id": blueprint.blueprint_id,
                 "chapter_plans": [plan.model_dump(mode="json") for plan in blueprint.chapter_plans],
@@ -153,7 +156,7 @@ class WriterAgent(BaseAgent):
         )
         return book
 
-    def write_next_chapter(self, book: BookDocument) -> tuple[BookDocument, Chapter]:
+    def write_next_chapter(self, book: BookDocument, reference_pack: str = "暂无额外参考资料。") -> tuple[BookDocument, Chapter]:
         chapter_plans = self._chapter_plans_from_book(book)
         next_index = int(book.metadata.get("next_chapter_index", 0))
         if next_index >= len(chapter_plans):
@@ -169,7 +172,7 @@ class WriterAgent(BaseAgent):
         )
         self._current_previous_chapter = book.volumes[0].chapters[-1] if book.volumes and book.volumes[0].chapters else None
         self._current_characters = book.characters
-        chapter = self._create_chapter(plan, book.premise)
+        chapter = self._create_chapter(plan, book.premise, reference_pack=reference_pack)
         self._current_previous_chapter = None
         self._current_characters = []
 
@@ -191,7 +194,13 @@ class WriterAgent(BaseAgent):
         )
         return updated_book, chapter
 
-    def rewrite_unit(self, book: BookDocument, block_id: str, guidance: str) -> BookDocument:
+    def rewrite_unit(
+        self,
+        book: BookDocument,
+        block_id: str,
+        guidance: str,
+        reference_pack: str = "暂无额外参考资料。",
+    ) -> BookDocument:
         ev.emit("agent_start", agent="WriterAgent", title=f"Rewrite block {block_id}")
         block, chapter, plan = self._locate_block(book, block_id)
         replacement = self._generate_block_text(
@@ -205,6 +214,7 @@ class WriterAgent(BaseAgent):
                 chapter_plan_json=plan.model_dump_json(indent=2) if plan else "{}",
                 premise_json=book.premise.model_dump_json(indent=2),
                 characters_json=json.dumps([item.model_dump(mode="json") for item in book.characters], ensure_ascii=False, indent=2),
+                reference_pack=reference_pack,
             )
         )
         patched_book, _ = self.patch_executor.apply(
@@ -219,7 +229,13 @@ class WriterAgent(BaseAgent):
         )
         return patched_book
 
-    def rewrite_chapter(self, book: BookDocument, chapter_id: str, guidance: str) -> BookDocument:
+    def rewrite_chapter(
+        self,
+        book: BookDocument,
+        chapter_id: str,
+        guidance: str,
+        reference_pack: str = "暂无额外参考资料。",
+    ) -> BookDocument:
         ev.emit("agent_start", agent="WriterAgent", title=f"Rewrite chapter {chapter_id}", chapter_id=chapter_id)
         volume_index, chapter_index, chapter = self._locate_chapter(book, chapter_id)
         plan = self._chapter_plan_by_id(book, chapter_id)
@@ -232,6 +248,7 @@ class WriterAgent(BaseAgent):
             premise_json=book.premise.model_dump_json(indent=2),
             characters_json=json.dumps([item.model_dump(mode="json") for item in book.characters], ensure_ascii=False, indent=2),
             previous_chapter_json=self._chapter_before(book, chapter_id),
+            reference_pack=reference_pack,
         )
         parsed = extract_json_object(self._generate_block_text(prompt=prompt))
         rewritten = Chapter.model_validate(parsed["chapter"])
@@ -252,13 +269,20 @@ class WriterAgent(BaseAgent):
         patched_book, version = self.patch_executor.apply(book, instruction)
         return patched_book, {"patch_version": version.model_dump(mode="json")}
 
-    def expand(self, book: BookDocument, block_id: str, expansion_goal: str) -> BookDocument:
+    def expand(
+        self,
+        book: BookDocument,
+        block_id: str,
+        expansion_goal: str,
+        reference_pack: str = "暂无额外参考资料。",
+    ) -> BookDocument:
         ev.emit("agent_start", agent="WriterAgent", title=f"Expand block {block_id}")
         addition = self._generate_block_text(
             prompt=self.prompt_library.render(
                 "writer/expand.txt",
                 block_id=block_id,
                 expansion_goal=expansion_goal,
+                reference_pack=reference_pack,
             )
         )
         patched_book, _ = self.patch_executor.apply(
@@ -277,7 +301,11 @@ class WriterAgent(BaseAgent):
         mode = WriterMode(kwargs["mode"])
         if mode == WriterMode.CREATE:
             blueprint = kwargs["blueprint"]
-            book = self.create_book(blueprint=blueprint, source_query=kwargs.get("source_query", ""))
+            book = self.create_book(
+                blueprint=blueprint,
+                source_query=kwargs.get("source_query", ""),
+                style_request=str(kwargs.get("style_request", "")),
+            )
             return AgentResult(
                 agent_name=self.name,
                 success=True,
@@ -286,7 +314,7 @@ class WriterAgent(BaseAgent):
             )
         if mode == WriterMode.WRITE_NEXT_CHAPTER:
             book = kwargs["book"]
-            updated_book, chapter = self.write_next_chapter(book=book)
+            updated_book, chapter = self.write_next_chapter(book=book, reference_pack=str(kwargs.get("reference_pack", "暂无额外参考资料。")))
             return AgentResult(
                 agent_name=self.name,
                 success=True,
@@ -295,7 +323,12 @@ class WriterAgent(BaseAgent):
             )
         if mode == WriterMode.REWRITE_UNIT:
             book = kwargs["book"]
-            rewritten_book = self.rewrite_unit(book=book, block_id=kwargs["block_id"], guidance=kwargs["guidance"])
+            rewritten_book = self.rewrite_unit(
+                book=book,
+                block_id=kwargs["block_id"],
+                guidance=kwargs["guidance"],
+                reference_pack=str(kwargs.get("reference_pack", "暂无额外参考资料。")),
+            )
             return AgentResult(
                 agent_name=self.name,
                 success=True,
@@ -313,7 +346,12 @@ class WriterAgent(BaseAgent):
             )
         if mode == WriterMode.EXPAND:
             book = kwargs["book"]
-            expanded_book = self.expand(book=book, block_id=kwargs["block_id"], expansion_goal=kwargs["expansion_goal"])
+            expanded_book = self.expand(
+                book=book,
+                block_id=kwargs["block_id"],
+                expansion_goal=kwargs["expansion_goal"],
+                reference_pack=str(kwargs.get("reference_pack", "暂无额外参考资料。")),
+            )
             return AgentResult(
                 agent_name=self.name,
                 success=True,
@@ -322,7 +360,7 @@ class WriterAgent(BaseAgent):
             )
         raise ValueError(f"Unsupported writer mode: {mode}")
 
-    def _create_chapter(self, plan: ChapterPlan, premise: StoryPremise) -> Chapter:
+    def _create_chapter(self, plan: ChapterPlan, premise: StoryPremise, reference_pack: str = "暂无额外参考资料。") -> Chapter:
         premise_json = premise.model_dump_json(indent=2)
         chapter_plan_json = plan.model_dump_json(indent=2)
         characters_json = json.dumps(
@@ -351,6 +389,7 @@ class WriterAgent(BaseAgent):
                             chapter_plan_json=chapter_plan_json,
                             characters_json=characters_json,
                             previous_chapter_json=previous_chapter_json,
+                            reference_pack=reference_pack,
                         )
                     ),
                 ),
@@ -367,6 +406,7 @@ class WriterAgent(BaseAgent):
                             chapter_plan_json=chapter_plan_json,
                             characters_json=characters_json,
                             previous_chapter_json=previous_chapter_json,
+                            reference_pack=reference_pack,
                         )
                     ),
                 ),
@@ -384,6 +424,15 @@ class WriterAgent(BaseAgent):
     def _chapter_plans_from_book(self, book: BookDocument) -> list[ChapterPlan]:
         raw_plans = book.metadata.get("chapter_plans", [])
         return [ChapterPlan.model_validate(item) for item in raw_plans]
+
+    @staticmethod
+    def _target_words_for_style(style_text: str) -> int:
+        text = style_text.lower()
+        if "短篇" in style_text or "short" in text:
+            return 12000
+        if "中篇" in style_text or "medium" in text or "mid" in text:
+            return 40000
+        return 100000
 
     def _chapter_plan_by_id(self, book: BookDocument, chapter_id: str) -> ChapterPlan | None:
         for item in self._chapter_plans_from_book(book):

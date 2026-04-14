@@ -25,7 +25,7 @@ def main() -> None:
             title="存储演示小说",
             high_concept="验证结构化书稿落库",
             genre="都市",
-            target_style="知乎风格",
+            target_style="都市情感",
             emotional_hook="压抑后的反击",
             central_conflict="女主在婚礼事故后重新夺回叙事权",
         ),

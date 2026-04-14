@@ -1,6 +1,6 @@
 # Novel Flow
 
-一个基于 Python 3.11 的 4+1 多 Agent 小说生成项目骨架，面向“多 Agent 协作生成 10 万字知乎风格小说”。当前版本优先把协议、Pydantic schema、SQLite 存储、block 级 patch、版本记录和单 Agent 调试入口打稳。
+一个基于 Python 3.11 的 4+1 多 Agent 小说生成项目骨架，面向“多 Agent 协作生成可持续续写的小说项目”。当前版本优先把协议、Pydantic schema、SQLite 存储、block 级 patch、版本记录和单 Agent 调试入口打稳。
 
 ## 架构
 
@@ -96,7 +96,58 @@ $env:DOUBAO_BASE_URL='https://ark.cn-beijing.volces.com/api/v3'
 
 - `DOUBAO_MODEL` 是你的 endpoint id
 - 当前默认优先走真实豆包
-- 只有在你显式加 `--mock-llm` 时，才使用 mock LLM
+- 当前分支的 CLI / Web 控制台不提供 `--mock-llm` 参数
+
+## 快速启动（后台服务 + 前端页面）
+
+### 1. 安装依赖
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e .
+```
+
+### 2. 配置豆包环境变量
+
+```bash
+export DOUBAO_API_KEY='你的 API Key'
+export DOUBAO_MODEL='你的 endpoint id'
+export DOUBAO_BASE_URL='https://ark.cn-beijing.volces.com/api/v3'
+```
+
+### 3. 启动服务（后端 + 前端一体）
+
+先确认你已经进入项目虚拟环境：
+
+```bash
+source .venv/bin/activate
+```
+
+然后启动：
+
+```bash
+novel-flow run --db data/novel_flow.db --test-db data/novel_flow_test.db --port 8765 --no-browser
+```
+
+如果你的 shell 提示 `novel-flow: command not found`，说明当前没有激活 `.venv`。也可以直接这样启动：
+
+```bash
+.venv/bin/novel-flow run --db data/novel_flow.db --test-db data/novel_flow_test.db --port 8765 --no-browser
+```
+
+### 4. 打开前端页面
+
+浏览器访问：
+
+```text
+http://127.0.0.1:8765/
+```
+
+说明：
+
+- 这个仓库没有独立的前端工程（不需要 `npm run dev`）
+- 前端页面由 Python 服务内置并通过 `/` 路由直接提供
 
 当前各 Agent 的模型接入状态：
 
@@ -153,7 +204,7 @@ $env:DOUBAO_BASE_URL='https://ark.cn-beijing.volces.com/api/v3'
 
 - `03_writer_demo.py`
   - 验证 `WriterAgent` 生成初始书稿结构
-  - 默认走真实豆包，可加 `--mock-llm`
+  - 需要配置豆包环境变量（`DOUBAO_API_KEY` / `DOUBAO_MODEL`）
 
 ### 链路验证
 
@@ -189,7 +240,7 @@ python examples/01_storage_demo.py
 
 ```bash
 python examples/02_research_demo.py
-python examples/07_debug_research_agent.py --query "知乎体高热度都市情感反转"
+python examples/07_debug_research_agent.py --query "都市情感反转"
 ```
 
 ### 3. 验证 Writer
@@ -216,14 +267,28 @@ python examples/05_master_demo.py
 
 ### 6. CLI
 
+推荐先激活虚拟环境：
+
 ```bash
-novel-flow run-mock --db data/novel_flow.db
+source .venv/bin/activate
 ```
 
-如果你只想本地跑结构，不访问模型：
+再运行：
 
 ```bash
-novel-flow run-mock --db data/novel_flow.db --mock-llm
+novel-flow run --db data/novel_flow.db --test-db data/novel_flow_test.db --port 8765
+```
+
+如果你不想自动拉起浏览器窗口：
+
+```bash
+novel-flow run --db data/novel_flow.db --test-db data/novel_flow_test.db --port 8765 --no-browser
+```
+
+如果未激活虚拟环境，也可以直接调用：
+
+```bash
+.venv/bin/novel-flow run --db data/novel_flow.db --test-db data/novel_flow_test.db --port 8765 --no-browser
 ```
 
 ## Agent 与可调试能力

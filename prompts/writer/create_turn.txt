@@ -16,6 +16,9 @@
 上一章 JSON：
 {previous_chapter_json}
 
+参考资料：
+{reference_pack}
+
 要求：
 1. 继续推进当前章节，而不是复述上一章。
 2. 不只是推进情节，还要推进整本书的长线：
@@ -24,6 +27,6 @@
    - 这段要落什么 key_turn / payoff
    - 下一章该往哪条路线推进
 3. 角色行为必须符合人物小传与行为逻辑，尤其注意 hidden_motive、fear、bottom_line、arc。
-4. 这一段要推动关系、局势或信息发生明显变化，不能平。
+4. 这一段要推动关系、局势或信息发生明显变化，不能平，表达方式要符合当前书的 `target_style`。
 5. 结尾要为后续场景或下一章留下钩子，和 premise 的 twist_blueprint / stage_payoffs 保持一致。
 6. 直接输出正文，不要解释。

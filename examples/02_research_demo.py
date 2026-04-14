@@ -18,7 +18,7 @@ from novel_flow.services.crawler import MockTrendCrawler
 
 def main() -> None:
     agent = ResearchAgent(crawler=MockTrendCrawler())
-    report = agent.collect_report(query="知乎体高热度都市情感反转")
+    report = agent.collect_report(query="都市情感反转")
     print(
         {
             "report_id": report.report_id,

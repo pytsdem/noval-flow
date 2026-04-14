@@ -20,21 +20,39 @@ class BlueprintAgent(BaseAgent):
         self.llm_client = llm_client
         self.prompt_library = prompt_library or PromptLibrary()
 
-    def build_story_spine(self, research_query: str) -> dict[str, Any]:
+    def build_story_spine(
+        self,
+        research_query: str,
+        style_request: str = "",
+        reference_pack: str = "暂无额外参考资料。",
+    ) -> dict[str, Any]:
         ev.emit("agent_start", agent=self.name, title="Build story spine", query=research_query)
-        prompt = self.prompt_library.render("writer/story_spine.txt", research_query=research_query, seed_json="{}")
+        prompt = self.prompt_library.render(
+            "writer/story_spine.txt",
+            research_query=research_query,
+            style_request=style_request or "未指定",
+            seed_json="{}",
+            reference_pack=reference_pack,
+        )
         parsed = extract_json_object(self._generate_json_text(prompt))
         parsed["premise"] = self._normalize_premise_payload(dict(parsed["premise"]))
         ev.emit("blueprint_spine_ready", agent=self.name, title="Story spine ready", premise_title=str(parsed["premise"]["title"]))
         return parsed
 
-    def build_character_bible(self, research_query: str, premise: StoryPremise, volume_titles: list[str]) -> list[CharacterCard]:
+    def build_character_bible(
+        self,
+        research_query: str,
+        premise: StoryPremise,
+        volume_titles: list[str],
+        reference_pack: str = "暂无额外参考资料。",
+    ) -> list[CharacterCard]:
         ev.emit("agent_start", agent=self.name, title="Build character bible", query=research_query)
         prompt = self.prompt_library.render(
             "writer/character_bible.txt",
             research_query=research_query,
             premise_json=premise.model_dump_json(indent=2),
             volume_titles_json=str(volume_titles),
+            reference_pack=reference_pack,
         )
         parsed = extract_json_object(self._generate_json_text(prompt))
         characters = [CharacterCard.model_validate(item) for item in parsed["characters"]]
@@ -47,6 +65,7 @@ class BlueprintAgent(BaseAgent):
         premise: StoryPremise,
         characters: list[CharacterCard],
         volume_titles: list[str],
+        reference_pack: str = "暂无额外参考资料。",
     ) -> list[ChapterPlan]:
         ev.emit("agent_start", agent=self.name, title="Build chapter roadmap", query=research_query)
         prompt = self.prompt_library.render(
@@ -55,6 +74,7 @@ class BlueprintAgent(BaseAgent):
             premise_json=premise.model_dump_json(indent=2),
             characters_json=self._json_dump([item.model_dump(mode="json") for item in characters]),
             volume_titles_json=str(volume_titles),
+            reference_pack=reference_pack,
         )
         parsed = extract_json_object(self._generate_json_text(prompt))
         parsed["chapter_plans"] = [self._normalize_chapter_plan_payload(dict(item)) for item in parsed["chapter_plans"]]
@@ -62,13 +82,18 @@ class BlueprintAgent(BaseAgent):
         ev.emit("blueprint_roadmap_ready", agent=self.name, title="Chapter roadmap ready", chapter_count=len(chapter_plans))
         return chapter_plans
 
-    def build_blueprint(self, research_query: str) -> BookBlueprint:
+    def build_blueprint(
+        self,
+        research_query: str,
+        style_request: str = "",
+        reference_pack: str = "暂无额外参考资料。",
+    ) -> BookBlueprint:
         ev.emit("agent_start", agent=self.name, title="Build blueprint", query=research_query)
-        spine = self.build_story_spine(research_query)
+        spine = self.build_story_spine(research_query, style_request=style_request, reference_pack=reference_pack)
         premise = StoryPremise.model_validate(spine["premise"])
         volume_titles = [str(item) for item in spine["volume_titles"]]
-        characters = self.build_character_bible(research_query, premise, volume_titles)
-        chapter_plans = self.build_chapter_roadmap(research_query, premise, characters, volume_titles)
+        characters = self.build_character_bible(research_query, premise, volume_titles, reference_pack=reference_pack)
+        chapter_plans = self.build_chapter_roadmap(research_query, premise, characters, volume_titles, reference_pack=reference_pack)
         blueprint = BookBlueprint(
             blueprint_id=f"blueprint_{uuid4().hex[:10]}",
             premise=premise,
@@ -128,12 +153,18 @@ class BlueprintAgent(BaseAgent):
         ev.emit("concept_done", agent=self.name, title=f"Concept revised: {scope}", scope=scope, target_id=target_id or "")
         return updated_book
 
-    def revise_blueprint(self, blueprint: BookBlueprint, review: dict[str, Any]) -> BookBlueprint:
+    def revise_blueprint(
+        self,
+        blueprint: BookBlueprint,
+        review: dict[str, Any],
+        reference_pack: str = "暂无额外参考资料。",
+    ) -> BookBlueprint:
         ev.emit("agent_start", agent=self.name, title="Revise blueprint from review", blueprint_id=blueprint.blueprint_id)
         prompt = self.prompt_library.render(
             "writer/revise_blueprint.txt",
             blueprint_json=blueprint.model_dump_json(indent=2),
             review_json=self._json_dump(review),
+            reference_pack=reference_pack,
         )
         parsed = extract_json_object(self._generate_json_text(prompt))
         parsed["premise"] = self._normalize_premise_payload(dict(parsed["premise"]))
@@ -151,23 +182,46 @@ class BlueprintAgent(BaseAgent):
     def run(self, **kwargs: Any) -> AgentResult:
         action = str(kwargs.get("action", "build"))
         if action == "story_spine":
-            payload = self.build_story_spine(research_query=str(kwargs["research_query"]))
+            payload = self.build_story_spine(
+                research_query=str(kwargs["research_query"]),
+                style_request=str(kwargs.get("style_request", "")),
+                reference_pack=str(kwargs.get("reference_pack", "暂无额外参考资料。")),
+            )
             return AgentResult(agent_name=self.name, success=True, message="Story spine built.", payload=payload)
         if action == "character_bible":
             premise = StoryPremise.model_validate(kwargs["premise"])
-            characters = self.build_character_bible(str(kwargs["research_query"]), premise, list(kwargs["volume_titles"]))
+            characters = self.build_character_bible(
+                str(kwargs["research_query"]),
+                premise,
+                list(kwargs["volume_titles"]),
+                reference_pack=str(kwargs.get("reference_pack", "暂无额外参考资料。")),
+            )
             return AgentResult(agent_name=self.name, success=True, message="Character bible built.", payload={"characters": [item.model_dump(mode="json") for item in characters]})
         if action == "chapter_roadmap":
             premise = StoryPremise.model_validate(kwargs["premise"])
             characters = [CharacterCard.model_validate(item) for item in kwargs["characters"]]
-            plans = self.build_chapter_roadmap(str(kwargs["research_query"]), premise, characters, list(kwargs["volume_titles"]))
+            plans = self.build_chapter_roadmap(
+                str(kwargs["research_query"]),
+                premise,
+                characters,
+                list(kwargs["volume_titles"]),
+                reference_pack=str(kwargs.get("reference_pack", "暂无额外参考资料。")),
+            )
             return AgentResult(agent_name=self.name, success=True, message="Chapter roadmap built.", payload={"chapter_plans": [item.model_dump(mode="json") for item in plans]})
         if action == "build":
-            blueprint = self.build_blueprint(research_query=str(kwargs["research_query"]))
+            blueprint = self.build_blueprint(
+                research_query=str(kwargs["research_query"]),
+                style_request=str(kwargs.get("style_request", "")),
+                reference_pack=str(kwargs.get("reference_pack", "暂无额外参考资料。")),
+            )
             return AgentResult(agent_name=self.name, success=True, message="Blueprint built.", payload={"blueprint": blueprint.model_dump(mode="json")})
         if action == "revise_blueprint":
             blueprint = BookBlueprint.model_validate(kwargs["blueprint"])
-            revised = self.revise_blueprint(blueprint, dict(kwargs["review"]))
+            revised = self.revise_blueprint(
+                blueprint,
+                dict(kwargs["review"]),
+                reference_pack=str(kwargs.get("reference_pack", "暂无额外参考资料。")),
+            )
             return AgentResult(agent_name=self.name, success=True, message="Blueprint revised from review.", payload={"blueprint": revised.model_dump(mode="json")})
         if action == "revise":
             book = kwargs["book"]

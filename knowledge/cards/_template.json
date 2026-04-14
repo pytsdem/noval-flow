@@ -1,0 +1,19 @@
+{
+  "card_id": "plot_example_001",
+  "kind": "plot_pattern",
+  "title": "示例卡片",
+  "summary": "把原始资料提炼成可复用的桥段方法，不要直接存大段原文。",
+  "domain": "示例主题",
+  "layer": "写法层",
+  "polarity": "正向",
+  "cluster_id": "example_cluster",
+  "tags": ["桥段设计", "对峙戏", "压迫铺垫", "延迟反击"],
+  "applicable_stages": ["planning", "writing"],
+  "scene_types": ["对峙", "反转"],
+  "emotions": ["压迫", "期待翻盘"],
+  "warning_signs": ["关键转折全靠他人点拨", "角色只有概念没有行动逻辑"],
+  "techniques": ["先压后扬", "延迟反击"],
+  "dos": ["写清适用场景", "写清为何有效"],
+  "donts": ["直接照搬原文句式", "只写抽象大词"],
+  "source": "template"
+}

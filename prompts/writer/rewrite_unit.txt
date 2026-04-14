@@ -19,6 +19,9 @@ block 作用：{block_purpose}
 角色设定：
 {characters_json}
 
+参考资料：
+{reference_pack}
+
 输出要求：
 1. 直接输出改写后的 block 正文。
 2. 不要解释修改理由。

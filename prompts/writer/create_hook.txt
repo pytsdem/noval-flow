@@ -18,11 +18,14 @@
 上一章 JSON：
 {previous_chapter_json}
 
+参考资料：
+{reference_pack}
+
 要求：
-1. 使用第一人称女主视角。
+1. 默认沿用当前小说已经建立的叙事视角；如果尚未建立视角，则选择最适合 premise 和 `target_style` 的视角，不要强行限定女主第一人称。
 2. 这是一章一章续写，不要重复上一章已经发生过的内容。
 3. 明确服务于本章的 `phase / story_function / key_turn / payoff / next_route_hint`。
 4. 要利用 premise 里的 `core_hook / escalation_path / twist_blueprint / stage_payoffs`，让这段开场在整本书的大路线里有位置。
 5. 角色言行必须符合 `public_persona / hidden_motive / fear / bottom_line / behavior_logic / arc`，不能 OOC。
-6. 开场要尽快把冲突、情绪和看点立起来，不能空转。
+6. 开场要尽快把冲突、情绪和看点立起来，但表达方式要符合当前书的 `target_style`，不能空转。
 7. 直接输出正文，不要解释。

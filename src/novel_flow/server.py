@@ -216,13 +216,13 @@ class NovelApp:
 
         return self._launch_run(mode, run_id, task)
 
-    def start_formal_novel(self, query: str) -> str:
+    def start_formal_novel(self, query: str, style_request: str = "") -> str:
         run_id = f"run_{uuid4().hex[:10]}"
 
         def task(store: SQLiteStore, handle: RunHandle) -> None:
             master = self._build_master(store)
             with EventBus(run_id=run_id, store=store, cancel_event=handle.cancel_event):
-                master.start_new_novel(query=query, run_id=run_id, mode="formal")
+                master.start_new_novel(query=query, run_id=run_id, mode="formal", style_request=style_request)
 
         return self._launch_run("formal", run_id, task)
 
@@ -454,7 +454,15 @@ class _Handler(BaseHTTPRequestHandler):
         payload = self._read_json()
         try:
             if parsed.path == "/api/novels/start":
-                self._json({"ok": True, "run_id": self.app.start_formal_novel(str(payload.get("query", "")))})
+                self._json(
+                    {
+                        "ok": True,
+                        "run_id": self.app.start_formal_novel(
+                            str(payload.get("query", "")),
+                            str(payload.get("style_request", "")),
+                        ),
+                    }
+                )
                 return
             if parsed.path == "/api/novels/continue":
                 self._json({"ok": True, "run_id": self.app.continue_formal_novel(book_id=payload.get("book_id"), title=payload.get("title"))})
@@ -558,7 +566,7 @@ _HTML_PAGE = """<!doctype html><html lang='zh-CN'><head><meta charset='UTF-8'><t
 select,button,input,textarea{background:#1b2130;color:#eef2ff;border:1px solid #323b52;border-radius:6px;padding:6px 10px;font-size:12px}button{cursor:pointer}.danger{border-color:#6a2b3b;color:#ffcad5}.ghost{background:transparent}
 #stage-pill{padding:4px 10px;border-radius:999px;border:1px solid #34405f;color:#9fb2eb;font-size:11px}#main{display:flex;flex:1;overflow:hidden}#left{width:42%;border-right:1px solid #232834;display:flex;flex-direction:column}#right{flex:1;display:flex;flex-direction:column}
 #subhdr{padding:8px 14px;border-bottom:1px solid #232834;color:#8390ad;font-size:12px}#evs{flex:1;overflow:auto;padding:10px}.run{background:#151a23;border:1px solid #242b3b;border-radius:10px;margin-bottom:10px;overflow:hidden}.head{display:flex;gap:8px;align-items:center;padding:10px 12px;background:#171d29;cursor:pointer}.ts{margin-left:auto;color:#6f7a95;font-size:10px}
-.tag{font-size:10px;padding:2px 6px;border-radius:999px;background:#222a3d;color:#b9c8ff}.live{background:#253b2c;color:#9fe2b0}.stop{background:#4a2230;color:#ffc4d2}.body{padding:10px 12px;border-top:1px solid #242b3b}.box{background:#121722;border:1px solid #242b3b;border-radius:8px;margin-bottom:8px;overflow:hidden}.box summary{list-style:none;cursor:pointer;padding:10px;color:#eef2ff;font-size:12px;display:flex;align-items:center;gap:8px}.box summary::-webkit-details-marker{display:none}.box .payload{padding:0 10px 10px 10px}.title{font-size:12px;color:#eef2ff;margin-bottom:0}.payload{font-size:11px;color:#93a0bf;white-space:pre-wrap;word-break:break-word;line-height:1.65}.empty{padding:50px 20px;text-align:center;color:#7f8aa3}
+.tag{font-size:10px;padding:2px 6px;border-radius:999px;background:#222a3d;color:#b9c8ff}.live{background:#253b2c;color:#9fe2b0}.stop{background:#4a2230;color:#ffc4d2}.body{padding:10px 12px;border-top:1px solid #242b3b}.box{background:#121722;border:1px solid #242b3b;border-radius:8px;margin-bottom:8px;overflow:hidden}.box summary{list-style:none;cursor:pointer;padding:10px;color:#eef2ff;font-size:12px;display:flex;align-items:center;gap:8px}.box summary::-webkit-details-marker{display:none}.box .payload{padding:0 10px 10px 10px}.title{font-size:12px;color:#eef2ff;margin-bottom:0}.payload{font-size:11px;color:#93a0bf;white-space:pre-wrap;word-break:break-word;line-height:1.65}.empty{padding:50px 20px;text-align:center;color:#7f8aa3}.agent-view{display:flex;flex-direction:column;gap:8px}.kv{display:grid;grid-template-columns:78px 1fr;gap:8px;align-items:start;font-size:11px;line-height:1.6;color:#dce3fb}.kv .k{color:#8ea1d8}.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;background:#1a2234;border:1px solid #2b3752;color:#d5e0ff;font-size:10px}.subsec{margin-top:2px;font-size:10px;color:#7e8ba8;text-transform:uppercase;letter-spacing:.08em}.subbox{background:#0f131c;border:1px solid #20293b;border-radius:6px;padding:8px}.mini-list{display:flex;flex-direction:column;gap:6px}.mini-item{background:#0f131c;border:1px solid #20293b;border-radius:6px;padding:8px}.mini-title{font-size:11px;color:#eef2ff;margin-bottom:4px}.muted{font-size:11px;color:#7f8aa3;line-height:1.6}.pre{font-size:11px;color:#93a0bf;white-space:pre-wrap;word-break:break-word;line-height:1.65}.json{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 #tabs{display:flex;border-bottom:1px solid #232834;background:#141923}.tab{padding:10px 14px;cursor:pointer;color:#8b96af;font-size:12px;border-bottom:2px solid transparent}.tab.active{color:#dfe6ff;border-bottom-color:#7ea2ff}
 #tc{flex:1;overflow:auto;padding:14px}.pnl{display:none}.pnl.active{display:block}.card{background:#151a23;border:1px solid #242b3b;border-radius:10px;padding:14px;margin-bottom:10px}.sec{font-size:11px;color:#7e8ba8;text-transform:uppercase;letter-spacing:.08em;margin:12px 0 8px}.row{margin:6px 0;font-size:13px;color:#dce3fb}.row strong{color:#8ea1d8;margin-right:6px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}.mini{background:#121722;border:1px solid #242b3b;border-radius:8px;padding:10px}.mini h4{margin:0 0 6px 0;color:#eef2ff;font-size:13px}.chapter,.issue{background:#121722;border:1px solid #242b3b;border-radius:8px;padding:10px;margin-bottom:8px}.block{background:#0f131c;border-left:2px solid #4e628f;border-radius:6px;padding:10px;margin:6px 0;white-space:pre-wrap;line-height:1.8}.editor label{display:block;margin:10px 0 6px;color:#8ea1d8;font-size:12px}.editor textarea{width:100%;min-height:140px;resize:vertical}.editor input{width:100%}.editor .hint{color:#7f8aa3;font-size:11px;margin-top:6px}
 </style></head><body>
@@ -578,8 +586,80 @@ async function changeMode(){mode=modeSel.value;bookId='';pendingRunId='';runsCac
 async function selectNovel(id){bookId=id;pendingRunId='';expandedRuns=new Set();boxStates={};if(!bookId){evs.innerHTML="<div class='empty'>选择小说或发起一次运行后查看过程</div>";updateStopButton();return;}await refreshNovel();}
 async function refreshNovel(){if(!bookId)return;const d=await api(`/api/novel?mode=${mode}&book_id=${bookId}`);if(!d.book)return;currentBook=d.book;renderBlueprint(d.book,d.blueprint_review);renderText(d.book);renderCritic(d.critic);stagePill.textContent=stageText(d.latest_stage);runsCache=d.runs||[];const c=runsCache.find(x=>x.is_running)||runsCache[0];if(c)expandedRuns.add(c.run_id);await renderRuns();updateStopButton();await loadNovels();}
 async function refreshPendingRun(){if(!pendingRunId)return;const d=await api(`/api/run?mode=${mode}&run_id=${pendingRunId}`);stagePill.textContent=stageText(d.stage||'writing');if(d.current_book_id){bookId=d.current_book_id;pendingRunId='';novelSel.value=bookId;return refreshNovel();}runsCache=[{run_id:pendingRunId,is_running:d.is_running!==false,stage:d.stage,updated_at:d.updated_at||new Date().toISOString(),pending_message:'运行中，等待模型返回更多内容。'}];expandedRuns.add(pendingRunId);await renderRuns({[pendingRunId]:d});updateStopButton();}
-function boxHtml(key,title,payload,isOpen){return `<details class='box' ${isOpen?'open':''} ontoggle="toggleBox('${key}', this.open)"><summary><span class='title'>${title}</span></summary><div class='payload'>${payload}</div></details>`}
+function boxHtml(key,title,payloadHtml,isOpen){return `<details class='box' ${isOpen?'open':''} ontoggle="toggleBox('${key}', this.open)"><summary><span class='title'>${title}</span></summary><div class='payload'>${payloadHtml}</div></details>`}
 function toggleBox(key,isOpen){boxStates[key]=isOpen;}
+const toArray=v=>Array.isArray(v)?v.filter(Boolean):[];
+const jsonHtml=v=>`<div class='pre json'>${esc(JSON.stringify(v??{},null,2))}</div>`;
+const chipsHtml=v=>{const items=toArray(v);return items.length?`<div class='chips'>${items.map(item=>`<span class='chip'>${esc(item)}</span>`).join('')}</div>`:`<div class='muted'>暂无</div>`};
+const linesHtml=v=>{const items=toArray(v);return items.length?`<div class='mini-list'>${items.map(item=>`<div class='mini-item'>${esc(item)}</div>`).join('')}</div>`:`<div class='muted'>暂无</div>`};
+function infoRow(label,value){if(value===undefined||value===null||value==='')return '';return `<div class='kv'><div class='k'>${esc(label)}</div><div>${esc(value)}</div></div>`}
+function sectionHtml(label,body){return `<div class='subsec'>${esc(label)}</div>${body}`}
+function renderDirectorDecision(payload){
+  const infoGaps=toArray(payload&&payload.info_gaps);
+  const toolInput=payload&&typeof payload.tool_input==='object'&&payload.tool_input?payload.tool_input:{};
+  const query=toolInput.query||'';
+  const stage=toolInput.stage||'';
+  const focus=toArray(toolInput.focus);
+  const tags=toArray(toolInput.tags);
+  const extras=Object.entries(toolInput).filter(([key])=>!['query','stage','focus','tags'].includes(key));
+  let html="<div class='agent-view'>";
+  html+=infoRow('动作', payload&&payload.action||'');
+  html+=infoRow('原因', payload&&payload.reasoning||'');
+  if(stage)html+=infoRow('阶段', stage);
+  if(query)html+=infoRow('检索词', query);
+  if(focus.length)html+=sectionHtml('关注点', chipsHtml(focus));
+  if(tags.length)html+=sectionHtml('标签', chipsHtml(tags));
+  if(infoGaps.length)html+=sectionHtml('信息缺口', linesHtml(infoGaps));
+  if(extras.length)html+=sectionHtml('工具参数', jsonHtml(Object.fromEntries(extras)));
+  html+="</div>";
+  return html;
+}
+function renderReferenceCards(payload){
+  const cards=toArray(payload&&payload.cards);
+  let html="<div class='agent-view'>";
+  html+=infoRow('阶段', payload&&payload.stage||'');
+  html+=infoRow('检索词', payload&&payload.query||'');
+  const focus=toArray(payload&&payload.focus);
+  const tags=toArray(payload&&payload.tags);
+  if(focus.length)html+=sectionHtml('命中关注点', chipsHtml(focus));
+  if(tags.length)html+=sectionHtml('附加标签', chipsHtml(tags));
+  if(cards.length){
+    html+=sectionHtml('命中卡片', `<div class='mini-list'>${cards.map(card=>`<div class='mini-item'><div class='mini-title'>${esc(card.title||card.card_id||'未命名卡片')}</div><div class='muted'>${esc(card.summary||'')}</div>${toArray(card.tags).length?`<div style='margin-top:6px'>${chipsHtml(card.tags.slice(0,5))}</div>`:''}</div>`).join('')}</div>`);
+  }else{
+    html+=sectionHtml('命中卡片', "<div class='muted'>没有命中卡片。</div>");
+  }
+  if(payload&&payload.reference_pack)html+=sectionHtml('注入 Prompt 的参考包', `<div class='subbox pre'>${esc(payload.reference_pack)}</div>`);
+  html+="</div>";
+  return html;
+}
+function renderToolObservation(payload){
+  let html="<div class='agent-view'>";
+  html+=infoRow('工具', payload&&payload.tool_name||'');
+  html+=infoRow('结果', payload&&payload.summary||'');
+  if(payload&&payload.payload&&Object.keys(payload.payload).length)html+=sectionHtml('返回数据', jsonHtml(payload.payload));
+  html+="</div>";
+  return html;
+}
+function renderStageEvent(payload){
+  let html="<div class='agent-view'>";
+  html+=infoRow('阶段', payload&&payload.stage||'');
+  html+=infoRow('动作', payload&&payload.action||'');
+  html+=infoRow('原因', payload&&payload.reason||'');
+  html+="</div>";
+  return html;
+}
+function renderErrorEvent(payload){
+  return `<div class='agent-view'>${infoRow('错误', payload&&payload.error||'未知错误')}</div>`;
+}
+function renderItemPayload(item){
+  if(item.kind==='output'&&item.outputType==='director_decision')return renderDirectorDecision(item.rawPayload);
+  if(item.kind==='output'&&item.outputType==='reference_cards')return renderReferenceCards(item.rawPayload);
+  if(item.kind==='output'&&item.outputType==='tool_observation')return renderToolObservation(item.rawPayload);
+  if(item.kind==='event'&&item.eventType==='stage')return renderStageEvent(item.rawPayload);
+  if(item.kind==='event'&&item.eventType==='error')return renderErrorEvent(item.rawPayload);
+  if(item.kind==='plain')return `<div class='pre'>${esc(item.text||'')}</div>`;
+  return jsonHtml(item.rawPayload);
+}
 function setRefreshPaused(paused,reason=''){refreshPaused=paused;refreshPauseReason=paused?reason:'';if(refreshPauseTimer){clearTimeout(refreshPauseTimer);refreshPauseTimer=null;}}
 function pauseRefreshFor(ms,reason=''){setRefreshPaused(true,reason);refreshPauseTimer=setTimeout(()=>{if(!isMouseSelecting)setRefreshPaused(false,'');},ms);}
 function isEditingElement(el){return !!(el&&(el.tagName==='TEXTAREA'||el.tagName==='INPUT'||el.isContentEditable));}
@@ -589,11 +669,11 @@ document.addEventListener('mouseup',()=>{isMouseSelecting=false;if(hasUserSelect
 document.addEventListener('selectionchange',()=>{if(hasUserSelection())pauseRefreshFor(4000,'selection');else if(!isMouseSelecting&&!isEditingElement(document.activeElement)&&refreshPauseReason==='selection')setRefreshPaused(false,'');});
 document.addEventListener('focusin',event=>{if(isEditingElement(event.target))setRefreshPaused(true,'editing');});
 document.addEventListener('focusout',event=>{if(isEditingElement(event.target)){setTimeout(()=>{if(!hasUserSelection()&&!isEditingElement(document.activeElement)&&!isMouseSelecting)setRefreshPaused(false,'');},0);}});
-async function renderRuns(pref){if(!runsCache.length){evs.innerHTML="<div class='empty'>当前还没有运行记录</div>";return;}const cache=pref||{};for(const r of runsCache){if(expandedRuns.has(r.run_id)&&!cache[r.run_id])cache[r.run_id]=await api(`/api/run?mode=${mode}&run_id=${r.run_id}`);}let h='';runsCache.forEach(r=>{const ex=expandedRuns.has(r.run_id),d=cache[r.run_id],outs=(d&&d.outputs)||[],evts=(d&&d.events)||[];const streamText=evts.filter(e=>e.event_type==='llm_stream').map(e=>e.payload?.preview||'').join('');const normalEvents=evts.filter(e=>e.event_type!=='llm_stream');const items=[];if(r.pending_message)items.push({key:`${r.run_id}:pending`,title:'系统提示',payload:esc(r.pending_message),sortTs:r.updated_at||''});if(streamText){const lastStream=evts.filter(e=>e.event_type==='llm_stream').slice(-1)[0];items.push({key:`${r.run_id}:stream`,title:'DoubaoLLM · 流式输出',payload:esc(streamText),sortTs:(lastStream&&lastStream.ts)||r.updated_at||''});}outs.forEach((o,i)=>items.push({key:`${r.run_id}:out:${i}`,title:`${esc(o.agent)} · ${esc(o.title)}`,payload:esc(JSON.stringify(o.payload,null,2)),sortTs:o.created_at||''}));normalEvents.forEach((e,i)=>{const p=e.payload?.error||e.payload?.summary||e.payload?.preview||e.payload?.premise_title||e.payload?.chapter_id||e.payload?.block_id||'';items.push({key:`${r.run_id}:evt:${i}`,title:`${esc(e.agent||'System')} · ${esc(e.title||'')}`,payload:esc(p),sortTs:e.ts||''})});items.sort((a,b)=>String(a.sortTs).localeCompare(String(b.sortTs)));h+=`<div class='run'><div class='head' onclick="toggleRun('${r.run_id}')"><span class='tag'>${esc(stageText(r.stage))}</span>${r.is_running?"<span class='tag live'>运行中</span>":''}${r.cancel_requested?"<span class='tag stop'>停止中</span>":''}<span>${esc(r.run_id)}</span><span class='ts'>${esc(shortTs(r.updated_at))}</span></div>`;if(ex){h+="<div class='body'>";if(r.is_running)h+=`<div style='margin-bottom:8px'><button class='ghost' onclick="event.stopPropagation();stopRun('${r.run_id}')">停止并删除这次运行</button></div>`;if(!items.length)h+="<div class='payload'>当前还没有过程数据。</div>";items.forEach((item,index)=>{const isLatest=index===items.length-1;const isOpen=(item.key in boxStates)?boxStates[item.key]:isLatest;h+=boxHtml(item.key,item.title,item.payload,isOpen);});h+='</div>';}h+='</div>';});evs.innerHTML=h;}
+async function renderRuns(pref){if(!runsCache.length){evs.innerHTML="<div class='empty'>当前还没有运行记录</div>";return;}const cache=pref||{};for(const r of runsCache){if(expandedRuns.has(r.run_id)&&!cache[r.run_id])cache[r.run_id]=await api(`/api/run?mode=${mode}&run_id=${r.run_id}`);}let h='';runsCache.forEach(r=>{const ex=expandedRuns.has(r.run_id),d=cache[r.run_id],outs=(d&&d.outputs)||[],evts=(d&&d.events)||[];const streamText=evts.filter(e=>e.event_type==='llm_stream').map(e=>e.payload?.preview||'').join('');const normalEvents=evts.filter(e=>e.event_type!=='llm_stream');const items=[];if(r.pending_message)items.push({key:`${r.run_id}:pending`,title:'系统提示',kind:'plain',text:r.pending_message,sortTs:r.updated_at||''});if(streamText){const lastStream=evts.filter(e=>e.event_type==='llm_stream').slice(-1)[0];items.push({key:`${r.run_id}:stream`,title:'DoubaoLLM · 流式输出',kind:'plain',text:streamText,sortTs:(lastStream&&lastStream.ts)||r.updated_at||''});}outs.forEach((o,i)=>items.push({key:`${r.run_id}:out:${i}`,title:`${esc(o.agent)} · ${esc(o.title)}`,kind:'output',outputType:o.output_type,rawPayload:o.payload,sortTs:o.created_at||''}));normalEvents.forEach((e,i)=>items.push({key:`${r.run_id}:evt:${i}`,title:`${esc(e.agent||'System')} · ${esc(e.title||'')}`,kind:'event',eventType:e.event_type,rawPayload:e.payload,sortTs:e.ts||''}));items.sort((a,b)=>String(a.sortTs).localeCompare(String(b.sortTs)));h+=`<div class='run'><div class='head' onclick="toggleRun('${r.run_id}')"><span class='tag'>${esc(stageText(r.stage))}</span>${r.is_running?"<span class='tag live'>运行中</span>":''}${r.cancel_requested?"<span class='tag stop'>停止中</span>":''}<span>${esc(r.run_id)}</span><span class='ts'>${esc(shortTs(r.updated_at))}</span></div>`;if(ex){h+="<div class='body'>";if(r.is_running)h+=`<div style='margin-bottom:8px'><button class='ghost' onclick="event.stopPropagation();stopRun('${r.run_id}')">停止并删除这次运行</button></div>`;if(!items.length)h+="<div class='payload'>当前还没有过程数据。</div>";items.forEach((item,index)=>{const isLatest=index===items.length-1;const isOpen=(item.key in boxStates)?boxStates[item.key]:isLatest;h+=boxHtml(item.key,item.title,renderItemPayload(item),isOpen);});h+='</div>';}h+='</div>';});evs.innerHTML=h;}
 function toggleRun(id){expandedRuns.has(id)?expandedRuns.delete(id):expandedRuns.add(id);renderRuns();}
 async function stopCurrentRun(){const a=runsCache.find(x=>x.is_running)||(pendingRunId?{run_id:pendingRunId}:null);if(!a)return alert('当前没有正在运行的流程。');await stopRun(a.run_id);}
 async function stopRun(id){if(!confirm('确认停止并删除这次运行过程吗？'))return;await api('/api/runs/stop',{method:'POST',body:JSON.stringify({mode,run_id:id})});expandedRuns.delete(id);if(pendingRunId===id)pendingRunId='';runsCache=runsCache.filter(x=>x.run_id!==id);bookId?await refreshNovel():renderRuns();updateStopButton();}
-async function startFormal(){const q=prompt('输入新建小说的题材/需求：');if(!q)return;const r=await api('/api/novels/start',{method:'POST',body:JSON.stringify({query:q})});pendingRunId=r.run_id||'';expandedRuns=new Set(pendingRunId?[pendingRunId]:[]);boxStates={};stagePill.textContent='启动中';runsCache=pendingRunId?[{run_id:pendingRunId,is_running:true,stage:'writing',updated_at:new Date().toISOString(),pending_message:'运行已启动，正在准备请求模型。'}]:[];await renderRuns();updateStopButton();}
+async function startFormal(){const q=prompt('输入新建小说的题材/需求：');if(!q)return;const style=prompt('输入风格要求（可留空，例如：古言权谋、轻喜剧、短篇悬疑；留空则由系统自行判断）：','')||'';const r=await api('/api/novels/start',{method:'POST',body:JSON.stringify({query:q,style_request:style})});pendingRunId=r.run_id||'';expandedRuns=new Set(pendingRunId?[pendingRunId]:[]);boxStates={};stagePill.textContent='启动中';runsCache=pendingRunId?[{run_id:pendingRunId,is_running:true,stage:'writing',updated_at:new Date().toISOString(),pending_message:style?`运行已启动，题材：${q}；风格：${style}`:'运行已启动，正在准备请求模型。'}]:[];await renderRuns();updateStopButton();}
 async function continueFormal(){if(!bookId)return alert('请先选择一部小说再续写。');const r=await api('/api/novels/continue',{method:'POST',body:JSON.stringify({book_id:bookId})});pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'writing',updated_at:new Date().toISOString(),pending_message:'续写任务已启动，正在准备请求模型。'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
 async function deleteNovel(){if(!bookId)return alert('请先选择一部小说。');if(!confirm('确认删除这部小说吗？此操作不可撤销。'))return;await api('/api/novels/delete',{method:'POST',body:JSON.stringify({mode,book_id:bookId})});bookId='';pendingRunId='';runsCache=[];expandedRuns=new Set();evs.innerHTML="<div class='empty'>选择小说或发起一次运行后查看过程</div>";stagePill.textContent='未开始';await loadNovels();updateStopButton();}
 async function testBlueprint(){const q=prompt('输入测试题材，生成大纲：');if(!q)return;const r=await api('/api/test/blueprint',{method:'POST',body:JSON.stringify({query:q})});pendingRunId=r.run_id||'';expandedRuns=new Set(pendingRunId?[pendingRunId]:[]);runsCache=pendingRunId?[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),pending_message:'测试大纲任务已启动，正在准备请求模型。'}]:[];await renderRuns();updateStopButton();}

@@ -6,7 +6,7 @@ blueprint JSON：
 重点检查：
 1. premise 是否足够具体、精妙，看点、反转链、兑现点是否清晰。
 2. characters 是否立体，是否具备行为逻辑闭环和可持续成长弧线。
-3. chapter_plans 是否能支撑长篇续写，是否不只停留在前几章。
+3. chapter_plans 是否和目标体量、目标风格匹配，是否不只停留在前几章的热闹。
 4. volume_titles、chapter_plans 与 premise 是否一致，有没有明显脱节。
 
 要求：

@@ -32,4 +32,5 @@ class ExpandTask(BaseModel):
 
 
 class MasterRunTask(BaseModel):
-    query: str = Field(default="知乎体高热度都市情感反转", min_length=1)
+    query: str = Field(default="都市情感反转", min_length=1)
+    style_request: str = ""

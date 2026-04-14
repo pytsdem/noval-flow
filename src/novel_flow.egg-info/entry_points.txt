@@ -1,0 +1,2 @@
+[console_scripts]
+novel-flow = novel_flow.cli:main

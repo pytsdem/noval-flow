@@ -1,6 +1,9 @@
 请为 block {block_id} 扩写一段正文。
 扩写目标：{expansion_goal}
 
+参考资料：
+{reference_pack}
+
 输出要求：
 1. 直接输出追加内容。
 2. 不要重复已有句子。

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "novel-flow"
 version = "0.1.0"
-description = "Multi-agent novel generation pipeline for 100k-word Zhihu-style fiction."
+description = "Multi-agent novel generation pipeline for style-flexible serialized fiction."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

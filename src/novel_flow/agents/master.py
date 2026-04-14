@@ -8,6 +8,7 @@ from novel_flow import events as ev
 from novel_flow.agents.base import BaseAgent
 from novel_flow.agents.blueprint import BlueprintAgent
 from novel_flow.agents.critic import CriticAgent
+from novel_flow.agents.director import DirectorAgent
 from novel_flow.agents.memory import MemoryAgent
 from novel_flow.agents.research import ResearchAgent
 from novel_flow.agents.writer import WriterAgent
@@ -18,12 +19,17 @@ from novel_flow.models.schemas import (
     BookDocument,
     Chapter,
     CriticReport,
+    DirectorAction,
+    DirectorDecision,
     PatchInstruction,
     ResearchReport,
     StoryPremise,
+    ToolObservation,
     WorkflowStage,
     WorkflowState,
 )
+from novel_flow.services.reference_library import ReferenceLibrary
+from novel_flow.services.story_tools import DirectedStorySession, StoryToolRegistry
 
 
 class MasterAgent(BaseAgent):
@@ -34,6 +40,8 @@ class MasterAgent(BaseAgent):
         blueprint_agent: BlueprintAgent,
         writer_agent: WriterAgent,
         critic_agent: CriticAgent,
+        director_agent: DirectorAgent | None = None,
+        reference_library: ReferenceLibrary | None = None,
     ) -> None:
         super().__init__(name="MasterAgent")
         self.memory_agent = memory_agent
@@ -41,56 +49,28 @@ class MasterAgent(BaseAgent):
         self.blueprint_agent = blueprint_agent
         self.writer_agent = writer_agent
         self.critic_agent = critic_agent
+        self.director_agent = director_agent or DirectorAgent(llm_client=self.blueprint_agent.llm_client)
+        self.reference_library = reference_library or ReferenceLibrary()
 
-    def run_mock_pipeline(self, query: str, run_id: str | None = None) -> dict[str, Any]:
-        return self.start_new_novel(query=query, run_id=run_id, mode="formal")
+    def run_mock_pipeline(self, query: str, run_id: str | None = None, style_request: str = "") -> dict[str, Any]:
+        return self.start_new_novel(query=query, run_id=run_id, mode="formal", style_request=style_request)
 
-    def start_new_novel(self, query: str, run_id: str | None = None, mode: str = "formal") -> dict[str, Any]:
+    def start_new_novel(
+        self,
+        query: str,
+        run_id: str | None = None,
+        mode: str = "formal",
+        style_request: str = "",
+    ) -> dict[str, Any]:
         run_id = run_id or f"run_{uuid4().hex[:10]}"
-        state = WorkflowState(run_id=run_id, stage=WorkflowStage.RESEARCH, context={"query": query})
+        state = WorkflowState(run_id=run_id, stage=WorkflowStage.RESEARCH, context={"query": query, "style_request": style_request})
         self._save_state(state, mode=mode)
-
-        ev.emit("stage", agent="MasterAgent", title="Stage: research", stage="research", run_id=run_id)
-        ev.check_cancelled()
-        research_report = self.research_agent.collect_report(query=query)
-        ev.check_cancelled()
-        self.memory_agent.save_research_report(research_report)
-        self._save_output(
-            run_id=run_id,
-            agent="ResearchAgent",
-            output_type="research_report",
-            title="Research report",
-            payload=research_report.model_dump(mode="json"),
-        )
-
-        self._transition(state, WorkflowStage.PLANNING, mode=mode, latest_research_report_id=research_report.report_id)
-        ev.emit("stage", agent="MasterAgent", title="Stage: blueprint", stage="planning")
-        ev.check_cancelled()
-        blueprint, blueprint_review = self._build_and_review_blueprint(run_id=run_id, query=query)
-        ev.check_cancelled()
-        book = self.writer_agent.create_book(blueprint=blueprint, source_query=query)
-        ev.check_cancelled()
-        self.memory_agent.save_book(book)
-        self._save_output(
-            run_id=run_id,
-            agent="WriterAgent",
-            output_type="book_shell",
-            title="Book shell",
-            payload=book.model_dump(mode="json"),
-        )
-
-        self._transition(state, WorkflowStage.WRITING, mode=mode, current_book_id=book.id)
-        ev.check_cancelled()
-        written_book, chapter = self.writer_agent.write_next_chapter(book=book)
-        ev.check_cancelled()
-        self.memory_agent.save_book(written_book)
-        self._save_output(
-            run_id=run_id,
-            agent="WriterAgent",
-            output_type="chapter_written",
-            title=f"Chapter written: {chapter.title}",
-            payload=chapter.model_dump(mode="json"),
-        )
+        session = self._run_directed_creation_loop(run_id=run_id, query=query, style_request=style_request, state=state, mode=mode)
+        research_report = session.research_report
+        blueprint = session.blueprint
+        blueprint_review = session.blueprint_review
+        written_book = session.book
+        chapter = session.chapter_written
 
         critique = self._critique_and_patch(run_id=run_id, state=state, book=written_book, mode=mode)
         final_book = critique["book"]
@@ -124,19 +104,9 @@ class MasterAgent(BaseAgent):
             context={"continue": True, "query": book.metadata.get("query", ""), "book_title": book.title},
         )
         self._save_state(state, mode=mode)
-
-        ev.emit("stage", agent="MasterAgent", title="Stage: continue writing", stage="writing", book_id=book.id)
-        ev.check_cancelled()
-        written_book, chapter = self.writer_agent.write_next_chapter(book=book)
-        ev.check_cancelled()
-        self.memory_agent.save_book(written_book)
-        self._save_output(
-            run_id=run_id,
-            agent="WriterAgent",
-            output_type="chapter_written",
-            title=f"Chapter written: {chapter.title}",
-            payload=chapter.model_dump(mode="json"),
-        )
+        session = self._run_directed_continue_loop(run_id=run_id, book=book, state=state, mode=mode)
+        written_book = session.book
+        chapter = session.chapter_written
 
         critique = self._critique_and_patch(run_id=run_id, state=state, book=written_book, mode=mode)
         final_book = critique["book"]
@@ -154,90 +124,219 @@ class MasterAgent(BaseAgent):
     def list_books(self, limit: int = 30) -> list[dict[str, Any]]:
         return self.memory_agent.list_books(limit=limit)
 
-    def _build_and_review_blueprint(self, *, run_id: str, query: str) -> tuple[BookBlueprint, dict[str, Any]]:
-        max_rounds = 2
-        blueprint: BookBlueprint | None = None
-        blueprint_review: dict[str, Any] = {"summary": "", "issues": []}
+    def _run_directed_creation_loop(
+        self,
+        *,
+        run_id: str,
+        query: str,
+        style_request: str,
+        state: WorkflowState,
+        mode: str,
+    ) -> DirectedStorySession:
+        session = DirectedStorySession(run_id=run_id, query=query, style_request=style_request, mode=mode)
+        registry = self._tool_registry()
+        max_steps = 6
 
-        for round_index in range(1, max_rounds + 1):
-            if round_index == 1:
-                spine = self.blueprint_agent.build_story_spine(research_query=query)
-                ev.check_cancelled()
-                premise = StoryPremise.model_validate(spine["premise"])
-                volume_titles = [str(item) for item in spine["volume_titles"]]
-                characters = self.blueprint_agent.build_character_bible(query, premise, volume_titles)
-                ev.check_cancelled()
-                chapter_plans = self.blueprint_agent.build_chapter_roadmap(query, premise, characters, volume_titles)
-                ev.check_cancelled()
-                blueprint = BookBlueprint(
-                    blueprint_id=f"blueprint_{uuid4().hex[:10]}",
-                    premise=premise,
-                    characters=characters,
-                    volume_titles=volume_titles,
-                    chapter_plans=chapter_plans,
-                )
-                self._save_output(
-                    run_id=run_id,
-                    agent="BlueprintAgent",
-                    output_type="story_spine",
-                    title=f"Story spine round {round_index}",
-                    payload={"premise": premise.model_dump(mode="json"), "volume_titles": volume_titles, "round_index": round_index},
-                )
-                self._save_output(
-                    run_id=run_id,
-                    agent="BlueprintAgent",
-                    output_type="character_bible",
-                    title=f"Character bible round {round_index}",
-                    payload={"characters": [item.model_dump(mode="json") for item in characters], "round_index": round_index},
-                )
-                self._save_output(
-                    run_id=run_id,
-                    agent="BlueprintAgent",
-                    output_type="chapter_roadmap",
-                    title=f"Chapter roadmap round {round_index}",
-                    payload={"chapter_plans": [item.model_dump(mode="json") for item in chapter_plans], "round_index": round_index},
-                )
-            else:
-                ev.emit(
-                    "stage",
-                    agent="MasterAgent",
-                    title=f"Stage: blueprint revise round {round_index - 1}",
-                    stage="planning",
-                    run_id=run_id,
-                    round_index=round_index - 1,
-                )
-                ev.check_cancelled()
-                blueprint = self.blueprint_agent.revise_blueprint(blueprint, blueprint_review)
-                ev.check_cancelled()
-                self._save_output(
-                    run_id=run_id,
-                    agent="BlueprintAgent",
-                    output_type="blueprint_revised",
-                    title=f"Blueprint revised round {round_index - 1}",
-                    payload={**blueprint.model_dump(mode="json"), "round_index": round_index - 1},
-                )
-
-            blueprint_review = self.critic_agent.review_blueprint(blueprint)
+        for _ in range(max_steps):
             ev.check_cancelled()
+            allowed_actions, stage_hint, focus_points = self._allowed_creation_actions(session)
+            style_hint = f"，风格要求为“{style_request}”" if style_request else ""
+            decision = self._director_decision(
+                goal=f"为题材“{query}”{style_hint}准备足够的资料并写出第一章。",
+                session=session,
+                observations=session.observations,
+                allowed_actions=allowed_actions,
+                stage_hint=stage_hint,
+                focus_points=focus_points,
+                run_id=run_id,
+            )
+            self._transition_for_decision(state, decision, session, mode=mode)
+            observation = registry.execute(decision=decision, session=session)
+            session.observations.append(observation)
             self._save_output(
                 run_id=run_id,
-                agent="CriticAgent",
-                output_type="blueprint_review",
-                title=f"Blueprint review round {round_index}",
-                payload={**blueprint_review, "round_index": round_index},
+                agent="MasterAgent",
+                output_type="tool_observation",
+                title=f"Observation: {observation.tool_name}",
+                payload=observation.model_dump(mode="json"),
             )
+            if session.research_report is not None:
+                state.latest_research_report_id = session.research_report.report_id
+            if session.book is not None:
+                state.current_book_id = session.book.id
+            self._save_state(state, mode=mode)
+            if session.chapter_written is not None:
+                return session
+
+        raise ValueError("Director loop ended before the first chapter was written.")
+
+    def _run_directed_continue_loop(
+        self,
+        *,
+        run_id: str,
+        book: BookDocument,
+        state: WorkflowState,
+        mode: str,
+    ) -> DirectedStorySession:
+        query = str(book.metadata.get("query", book.title))
+        session = DirectedStorySession(
+            run_id=run_id,
+            query=query,
+            style_request=str(book.metadata.get("style_request", book.premise.target_style)),
+            mode=mode,
+            book=book,
+        )
+        registry = self._tool_registry()
+        max_steps = 3
+
+        for _ in range(max_steps):
+            ev.check_cancelled()
+            allowed_actions, stage_hint, focus_points = self._allowed_continue_actions(session)
+            decision = self._director_decision(
+                goal=f"继续创作小说《{book.title}》的下一章。",
+                session=session,
+                observations=session.observations,
+                allowed_actions=allowed_actions,
+                stage_hint=stage_hint,
+                focus_points=focus_points,
+                run_id=run_id,
+            )
+            self._transition_for_decision(state, decision, session, mode=mode)
+            observation = registry.execute(decision=decision, session=session)
+            session.observations.append(observation)
             self._save_output(
                 run_id=run_id,
-                agent="BlueprintAgent",
-                output_type="blueprint",
-                title=f"Blueprint round {round_index}",
-                payload={**blueprint.model_dump(mode="json"), "round_index": round_index},
+                agent="MasterAgent",
+                output_type="tool_observation",
+                title=f"Observation: {observation.tool_name}",
+                payload=observation.model_dump(mode="json"),
             )
+            if session.book is not None:
+                state.current_book_id = session.book.id
+            self._save_state(state, mode=mode)
+            if session.chapter_written is not None:
+                return session
 
-            if not blueprint_review.get("issues") or round_index >= max_rounds:
-                return blueprint, blueprint_review
+        raise ValueError("Director loop ended before the next chapter was written.")
 
-        return blueprint, blueprint_review
+    def _allowed_creation_actions(
+        self,
+        session: DirectedStorySession,
+    ) -> tuple[list[DirectorAction], str, list[str]]:
+        if session.research_report is None:
+            focus = [session.query]
+            if session.style_request:
+                focus.append(session.style_request)
+            return [DirectorAction.RUN_RESEARCH], "planning", focus
+        if session.blueprint is None:
+            planning_focus = list(session.research_report.writing_recommendations[:3]) if session.research_report else [session.query]
+            if session.style_request:
+                planning_focus.append(session.style_request)
+            if session.reference_fetch_counts.get("planning", 0) == 0:
+                return [DirectorAction.RETRIEVE_REFERENCES, DirectorAction.BUILD_BLUEPRINT], "planning", planning_focus
+            return [DirectorAction.BUILD_BLUEPRINT], "planning", planning_focus
+        if session.book is None:
+            return [DirectorAction.CREATE_BOOK], "planning", [session.blueprint.premise.core_hook]
+        next_plan = session.next_chapter_plan()
+        writing_focus = [
+            next_plan.title if next_plan else "",
+            next_plan.objective if next_plan else "",
+            next_plan.tension if next_plan else "",
+            next_plan.cliffhanger if next_plan else "",
+        ]
+        if session.reference_fetch_counts.get("writing", 0) == 0:
+            return [DirectorAction.RETRIEVE_REFERENCES, DirectorAction.WRITE_CHAPTER], "writing", [item for item in writing_focus if item]
+        return [DirectorAction.WRITE_CHAPTER], "writing", [item for item in writing_focus if item]
+
+    def _allowed_continue_actions(
+        self,
+        session: DirectedStorySession,
+    ) -> tuple[list[DirectorAction], str, list[str]]:
+        next_plan = session.next_chapter_plan()
+        writing_focus = [
+            next_plan.title if next_plan else "",
+            next_plan.objective if next_plan else "",
+            next_plan.tension if next_plan else "",
+            next_plan.cliffhanger if next_plan else "",
+        ]
+        if session.reference_fetch_counts.get("writing", 0) == 0:
+            return [DirectorAction.RETRIEVE_REFERENCES, DirectorAction.WRITE_CHAPTER], "writing", [item for item in writing_focus if item]
+        return [DirectorAction.WRITE_CHAPTER], "writing", [item for item in writing_focus if item]
+
+    def _director_decision(
+        self,
+        *,
+        goal: str,
+        session: DirectedStorySession,
+        observations: list[ToolObservation],
+        allowed_actions: list[DirectorAction],
+        stage_hint: str,
+        focus_points: list[str],
+        run_id: str,
+    ) -> DirectorDecision:
+        decision = self.director_agent.decide(
+            goal=goal,
+            session_summary=session.summary(stage_hint=stage_hint, focus_points=focus_points),
+            observations=observations,
+            allowed_actions=allowed_actions,
+        )
+        self._save_output(
+            run_id=run_id,
+            agent="DirectorAgent",
+            output_type="director_decision",
+            title=f"Director decision: {decision.action.value}",
+            payload=decision.model_dump(mode="json"),
+        )
+        return decision
+
+    def _transition_for_decision(
+        self,
+        state: WorkflowState,
+        decision: DirectorDecision,
+        session: DirectedStorySession,
+        *,
+        mode: str,
+    ) -> None:
+        stage = self._stage_for_action(decision.action)
+        ev.emit(
+            "stage",
+            agent="MasterAgent",
+            title=f"Director step: {decision.action.value}",
+            stage=stage.value,
+            action=decision.action.value,
+            reason=decision.reasoning,
+        )
+        extra: dict[str, Any] = {}
+        if session.book is not None:
+            extra["current_book_id"] = session.book.id
+        if session.research_report is not None:
+            extra["latest_research_report_id"] = session.research_report.report_id
+        self._transition(state, stage, mode=mode, **extra)
+
+    @staticmethod
+    def _stage_for_action(action: DirectorAction) -> WorkflowStage:
+        if action == DirectorAction.RUN_RESEARCH:
+            return WorkflowStage.RESEARCH
+        if action in (DirectorAction.RETRIEVE_REFERENCES, DirectorAction.BUILD_BLUEPRINT, DirectorAction.CREATE_BOOK):
+            return WorkflowStage.PLANNING
+        if action == DirectorAction.WRITE_CHAPTER:
+            return WorkflowStage.WRITING
+        if action == DirectorAction.CRITIQUE:
+            return WorkflowStage.CRITIQUE
+        if action == DirectorAction.PATCH:
+            return WorkflowStage.PATCHING
+        return WorkflowStage.COMPLETE
+
+    def _tool_registry(self) -> StoryToolRegistry:
+        return StoryToolRegistry(
+            research_agent=self.research_agent,
+            blueprint_agent=self.blueprint_agent,
+            writer_agent=self.writer_agent,
+            critic_agent=self.critic_agent,
+            memory_agent=self.memory_agent,
+            reference_library=self.reference_library,
+            save_output=self._save_output,
+        )
 
     def _critique_and_patch(
         self,

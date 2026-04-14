@@ -1,0 +1,30 @@
+目标：
+{goal}
+
+当前会话 JSON：
+{session_json}
+
+历史观察 JSON：
+{observations_json}
+
+允许动作 JSON：
+{allowed_actions_json}
+
+请输出 JSON，对象字段必须包含：
+- action
+- reasoning
+- info_gaps
+- tool_input
+
+规则：
+1. `action` 必须从 `allowed_actions` 中选择。
+2. 只有在明显缺少参考案例、技法提醒、同类桥段经验时，才选择 `retrieve_references`。
+3. 如果当前信息已经足够推进，不要为了“更稳”而继续取资料。
+4. 如果选择 `retrieve_references`，请在 `tool_input` 中尽量提供：
+   - stage
+   - query
+   - focus
+   - tags
+5. `reasoning` 说清楚为什么这一步最合适。
+6. `info_gaps` 只写当前最关键的 1 到 3 个缺口。
+7. 只输出 JSON，不要加 Markdown。

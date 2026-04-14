@@ -28,6 +28,17 @@ class WorkflowStage(str, Enum):
     COMPLETE = "complete"
 
 
+class DirectorAction(str, Enum):
+    RUN_RESEARCH = "run_research"
+    RETRIEVE_REFERENCES = "retrieve_references"
+    BUILD_BLUEPRINT = "build_blueprint"
+    CREATE_BOOK = "create_book"
+    WRITE_CHAPTER = "write_chapter"
+    CRITIQUE = "critique"
+    PATCH = "patch"
+    FINISH = "finish"
+
+
 class TrendItem(BaseModel):
     source: str
     title: str
@@ -52,6 +63,26 @@ class ResearchReport(BaseModel):
     comment_preferences: list[str]
     writing_recommendations: list[str]
     created_at: datetime = Field(default_factory=utc_now)
+
+
+class KnowledgeCard(BaseModel):
+    card_id: str
+    kind: str
+    title: str = ""
+    summary: str
+    domain: str = ""
+    layer: str = ""
+    polarity: str = ""
+    cluster_id: str = ""
+    tags: list[str] = Field(default_factory=list)
+    applicable_stages: list[str] = Field(default_factory=list)
+    scene_types: list[str] = Field(default_factory=list)
+    emotions: list[str] = Field(default_factory=list)
+    warning_signs: list[str] = Field(default_factory=list)
+    techniques: list[str] = Field(default_factory=list)
+    dos: list[str] = Field(default_factory=list)
+    donts: list[str] = Field(default_factory=list)
+    source: str = ""
 
 
 class CharacterCard(BaseModel):
@@ -222,6 +253,20 @@ class WorkflowState(BaseModel):
     latest_critic_report_id: str | None = None
     context: dict[str, Any] = Field(default_factory=dict)
     updated_at: datetime = Field(default_factory=utc_now)
+
+
+class DirectorDecision(BaseModel):
+    action: DirectorAction
+    reasoning: str
+    info_gaps: list[str] = Field(default_factory=list)
+    tool_input: dict[str, Any] = Field(default_factory=dict)
+
+
+class ToolObservation(BaseModel):
+    tool_name: str
+    summary: str
+    payload: dict[str, Any] = Field(default_factory=dict)
+    created_at: datetime = Field(default_factory=utc_now)
 
 
 class AgentResult(BaseModel):
