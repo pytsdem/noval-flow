@@ -384,6 +384,24 @@ class SQLiteStore:
             ).fetchall()
         return [dict(row) for row in rows]
 
+    def list_recent_events(self, run_id: str, limit: int = 500) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT id, event_type, agent, title, payload_json, ts
+                FROM (
+                    SELECT id, event_type, agent, title, payload_json, ts
+                    FROM pipeline_events
+                    WHERE run_id = ?
+                    ORDER BY id DESC
+                    LIMIT ?
+                )
+                ORDER BY id ASC
+                """,
+                (run_id, limit),
+            ).fetchall()
+        return [dict(row) for row in rows]
+
     def save_run_output(
         self,
         *,

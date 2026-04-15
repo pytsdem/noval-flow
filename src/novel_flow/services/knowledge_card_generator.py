@@ -4,8 +4,8 @@ import re
 from pathlib import Path
 
 from novel_flow.config import Settings
-from novel_flow.llm.base import LLMMessage
-from novel_flow.llm.doubao import DoubaoLLMClient
+from novel_flow.llm.base import LLMClient, LLMMessage
+from novel_flow.llm.factory import build_llm_client
 from novel_flow.models.schemas import KnowledgeCard
 from novel_flow.prompting.templates import PromptLibrary
 from novel_flow.utils.json_tools import extract_json_object
@@ -37,21 +37,13 @@ class KnowledgeCardGenerator:
         "anti": "反向",
     }
 
-    def __init__(self, llm_client: DoubaoLLMClient, prompt_library: PromptLibrary | None = None) -> None:
+    def __init__(self, llm_client: LLMClient, prompt_library: PromptLibrary | None = None) -> None:
         self.llm_client = llm_client
         self.prompt_library = prompt_library or PromptLibrary()
 
     @classmethod
     def from_settings(cls, settings: Settings) -> "KnowledgeCardGenerator":
-        if not settings.doubao_api_key or not settings.doubao_model:
-            raise ValueError("Missing DOUBAO_API_KEY or DOUBAO_MODEL.")
-        return cls(
-            llm_client=DoubaoLLMClient(
-                api_key=settings.doubao_api_key,
-                model=settings.doubao_model,
-                base_url=settings.doubao_base_url,
-            )
-        )
+        return cls(llm_client=build_llm_client(settings))
 
     def generate_cards(self, *, raw_text: str, source_name: str, max_cards: int = 4) -> list[KnowledgeCard]:
         if not raw_text.strip():

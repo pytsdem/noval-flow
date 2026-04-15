@@ -30,7 +30,7 @@ class CriticAgent(BaseAgent):
         self.llm_client = llm_client
         self.prompt_library = prompt_library or PromptLibrary()
 
-    def review_book(self, book: BookDocument) -> CriticReport:
+    def review_book(self, book: BookDocument, reference_pack: str = "暂无额外参考资料。") -> CriticReport:
         ev.emit("agent_start", agent="CriticAgent", title="Review current chapter", book_id=book.id)
         current_chapter = self._current_chapter(book)
         previous_chapter = self._previous_chapter(book, current_chapter.id)
@@ -44,6 +44,7 @@ class CriticAgent(BaseAgent):
             if previous_chapter
             else "{}",
             current_chapter_json=json.dumps(current_chapter.model_dump(mode="json"), ensure_ascii=False, indent=2),
+            reference_pack=reference_pack,
         )
         raw = self._generate_json_text(prompt=prompt)
         parsed = extract_json_object(raw)
@@ -80,11 +81,12 @@ class CriticAgent(BaseAgent):
         )
         return report
 
-    def review_blueprint(self, blueprint: BookBlueprint) -> dict[str, Any]:
+    def review_blueprint(self, blueprint: BookBlueprint, reference_pack: str = "暂无额外参考资料。") -> dict[str, Any]:
         ev.emit("agent_start", agent="CriticAgent", title="Review blueprint", blueprint_id=blueprint.blueprint_id)
         prompt = self.prompt_library.render(
             "critic/review_blueprint.txt",
             blueprint_json=blueprint.model_dump_json(indent=2),
+            reference_pack=reference_pack,
         )
         parsed = extract_json_object(self._generate_json_text(prompt=prompt))
         ev.emit(
@@ -98,11 +100,12 @@ class CriticAgent(BaseAgent):
             "issues": parsed.get("issues", []),
         }
 
-    def build_patch_instruction(self, issue: IssueCard) -> PatchInstruction:
+    def build_patch_instruction(self, issue: IssueCard, reference_pack: str = "暂无额外参考资料。") -> PatchInstruction:
         ev.emit("agent_start", agent="CriticAgent", title="Build patch instruction", issue_id=issue.issue_id)
         prompt = self.prompt_library.render(
             "critic/patch_instruction.txt",
             issue_json=issue.model_dump_json(indent=2),
+            reference_pack=reference_pack,
         )
         raw = self._generate_json_text(prompt=prompt)
         parsed = extract_json_object(raw)

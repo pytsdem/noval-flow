@@ -3,6 +3,9 @@
 IssueCard JSON：
 {issue_json}
 
+参考写作技巧与反模式卡：
+{reference_pack}
+
 要求：
 1. 只输出一个 JSON 对象。
 2. 字段必须包含：operation, reason, content

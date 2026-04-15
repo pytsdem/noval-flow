@@ -224,7 +224,7 @@ class StoryToolRegistry:
                     payload={**blueprint.model_dump(mode="json"), "round_index": round_index - 1},
                 )
 
-            blueprint_review = self.critic_agent.review_blueprint(blueprint)
+            blueprint_review = self.critic_agent.review_blueprint(blueprint, reference_pack=reference_pack)
             self.save_output(
                 run_id=session.run_id,
                 agent="CriticAgent",

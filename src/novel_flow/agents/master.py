@@ -55,6 +55,72 @@ class MasterAgent(BaseAgent):
     def run_mock_pipeline(self, query: str, run_id: str | None = None, style_request: str = "") -> dict[str, Any]:
         return self.start_new_novel(query=query, run_id=run_id, mode="formal", style_request=style_request)
 
+    def start_new_outline(
+        self,
+        query: str,
+        run_id: str | None = None,
+        mode: str = "formal",
+        style_request: str = "",
+    ) -> dict[str, Any]:
+        run_id = run_id or f"run_{uuid4().hex[:10]}"
+        state = WorkflowState(run_id=run_id, stage=WorkflowStage.RESEARCH, context={"query": query, "style_request": style_request, "action": "outline"})
+        self._save_state(state, mode=mode)
+
+        ev.emit("stage", agent="MasterAgent", title="Stage: research for outline", stage="research", run_id=run_id)
+        research_report = self.research_agent.collect_report(query=query)
+        self.memory_agent.save_research_report(research_report)
+        self._save_output(
+            run_id=run_id,
+            agent="ResearchAgent",
+            output_type="research_report",
+            title="Research report",
+            payload=research_report.model_dump(mode="json"),
+        )
+        self._transition(state, WorkflowStage.PLANNING, mode=mode, latest_research_report_id=research_report.report_id)
+
+        focus = [query, style_request, "故事总策划", "情节完整", "人物成立", *research_report.writing_recommendations[:3]]
+        reference_pack = self._retrieve_reference_pack(run_id=run_id, query=query, stage="planning", focus=focus, tags=["故事结构", "人物塑造"])
+        spine = self.blueprint_agent.build_story_spine(query, style_request=style_request, reference_pack=reference_pack)
+        premise = StoryPremise.model_validate(spine["premise"])
+        volume_titles = [str(item) for item in spine["volume_titles"]]
+        blueprint = BookBlueprint(
+            blueprint_id=f"blueprint_{uuid4().hex[:10]}",
+            premise=premise,
+            characters=[],
+            volume_titles=volume_titles,
+            chapter_plans=[],
+        )
+        book = self.writer_agent.create_book(blueprint=blueprint, source_query=query, style_request=style_request)
+        book.metadata["planning_phase"] = "outline"
+        book.metadata["volume_titles"] = volume_titles
+        book.metadata["chapter_plans"] = []
+        book.metadata["next_chapter_index"] = 0
+
+        self.memory_agent.save_book(book)
+        self._save_output(
+            run_id=run_id,
+            agent="BlueprintAgent",
+            output_type="story_spine",
+            title="Story spine",
+            payload={"premise": premise.model_dump(mode="json"), "volume_titles": volume_titles},
+        )
+        self._save_output(
+            run_id=run_id,
+            agent="WriterAgent",
+            output_type="book_shell",
+            title="Outline draft book shell",
+            payload=book.model_dump(mode="json"),
+        )
+        self._transition(state, WorkflowStage.COMPLETE, mode=mode, current_book_id=book.id)
+        ev.emit("stage", agent="MasterAgent", title="Stage: outline complete", stage="complete", book_id=book.id)
+        return {
+            "run_id": run_id,
+            "research_report": research_report,
+            "blueprint": blueprint,
+            "book_after_patch": book,
+            "state": state,
+        }
+
     def start_new_novel(
         self,
         query: str,
@@ -96,6 +162,10 @@ class MasterAgent(BaseAgent):
         mode: str = "formal",
     ) -> dict[str, Any]:
         book = self._resolve_book(book_id=book_id, title=title)
+        if not book.characters:
+            raise ValueError("请先生成或填写角色设定，再续写正文。")
+        if not book.metadata.get("chapter_plans"):
+            raise ValueError("请先生成或填写章节规划，再续写正文。")
         run_id = run_id or f"run_{uuid4().hex[:10]}"
         state = WorkflowState(
             run_id=run_id,
@@ -123,6 +193,136 @@ class MasterAgent(BaseAgent):
 
     def list_books(self, limit: int = 30) -> list[dict[str, Any]]:
         return self.memory_agent.list_books(limit=limit)
+
+    def generate_characters_for_book(
+        self,
+        *,
+        book_id: str,
+        run_id: str | None = None,
+        mode: str = "formal",
+    ) -> dict[str, Any]:
+        book = self._resolve_book(book_id=book_id, title=None)
+        run_id = run_id or f"run_{uuid4().hex[:10]}"
+        state = WorkflowState(
+            run_id=run_id,
+            stage=WorkflowStage.PLANNING,
+            current_book_id=book.id,
+            context={"action": "generate_characters", "query": book.metadata.get("query", ""), "book_title": book.title},
+        )
+        self._save_state(state, mode=mode)
+
+        query = str(book.metadata.get("query") or book.title)
+        volume_titles = [str(item) for item in book.metadata.get("volume_titles", [])] or [volume.title for volume in book.volumes] or ["Volume 1"]
+        focus = [
+            query,
+            book.premise.high_concept,
+            book.premise.central_conflict,
+            "人物塑造",
+            "角色关系",
+            "人物弧光",
+            "行为逻辑",
+            *book.premise.selling_points[:3],
+        ]
+        reference_pack = self._retrieve_reference_pack(
+            run_id=run_id,
+            query=query,
+            stage="planning",
+            focus=focus,
+            tags=["人物塑造", "角色关系"],
+        )
+        characters = self.blueprint_agent.build_character_bible(query, book.premise, volume_titles, reference_pack=reference_pack)
+        book.characters = characters
+        book.metadata["planning_phase"] = "characters"
+        book.updated_at = datetime.now(timezone.utc)
+        self.memory_agent.save_book(book)
+        self._save_output(
+            run_id=run_id,
+            agent="BlueprintAgent",
+            output_type="character_bible",
+            title="Character bible",
+            payload={"characters": [item.model_dump(mode="json") for item in characters]},
+        )
+        self._transition(state, WorkflowStage.COMPLETE, mode=mode, current_book_id=book.id)
+        ev.emit("stage", agent="MasterAgent", title="Stage: characters complete", stage="complete", book_id=book.id)
+        return {"run_id": run_id, "book_after_patch": book, "state": state}
+
+    def generate_chapter_roadmap_for_book(
+        self,
+        *,
+        book_id: str,
+        run_id: str | None = None,
+        mode: str = "formal",
+    ) -> dict[str, Any]:
+        book = self._resolve_book(book_id=book_id, title=None)
+        if not book.characters:
+            raise ValueError("请先生成或填写角色设定，再生成章节规划。")
+        run_id = run_id or f"run_{uuid4().hex[:10]}"
+        state = WorkflowState(
+            run_id=run_id,
+            stage=WorkflowStage.PLANNING,
+            current_book_id=book.id,
+            context={"action": "generate_chapter_roadmap", "query": book.metadata.get("query", ""), "book_title": book.title},
+        )
+        self._save_state(state, mode=mode)
+
+        query = str(book.metadata.get("query") or book.title)
+        volume_titles = [str(item) for item in book.metadata.get("volume_titles", [])] or [volume.title for volume in book.volumes] or ["Volume 1"]
+        focus = [
+            query,
+            book.premise.core_hook,
+            book.premise.central_conflict,
+            "情节完整",
+            "章节规划",
+            "冲突升级",
+            "人物关系推进",
+            *book.premise.escalation_path[:3],
+            *book.premise.twist_blueprint[:3],
+        ]
+        reference_pack = self._retrieve_reference_pack(
+            run_id=run_id,
+            query=query,
+            stage="planning",
+            focus=focus,
+            tags=["故事结构", "章节规划", "人物关系"],
+        )
+        chapter_plans = self.blueprint_agent.build_chapter_roadmap(
+            query,
+            book.premise,
+            book.characters,
+            volume_titles,
+            reference_pack=reference_pack,
+        )
+        book.metadata["chapter_plans"] = [plan.model_dump(mode="json") for plan in chapter_plans]
+        book.metadata["next_chapter_index"] = min(int(book.metadata.get("next_chapter_index", 0)), len(chapter_plans))
+        book.metadata["planning_phase"] = "roadmap"
+        book.updated_at = datetime.now(timezone.utc)
+        self.memory_agent.save_book(book)
+
+        blueprint = BookBlueprint(
+            blueprint_id=str(book.metadata.get("blueprint_id") or f"blueprint_{uuid4().hex[:10]}"),
+            premise=book.premise,
+            characters=book.characters,
+            volume_titles=volume_titles,
+            chapter_plans=chapter_plans,
+        )
+        blueprint_review = self.critic_agent.review_blueprint(blueprint, reference_pack=reference_pack)
+        self._save_output(
+            run_id=run_id,
+            agent="BlueprintAgent",
+            output_type="chapter_roadmap",
+            title="Chapter roadmap",
+            payload={"chapter_plans": [item.model_dump(mode="json") for item in chapter_plans]},
+        )
+        self._save_output(
+            run_id=run_id,
+            agent="CriticAgent",
+            output_type="blueprint_review",
+            title="Blueprint review",
+            payload=blueprint_review,
+        )
+        self._transition(state, WorkflowStage.COMPLETE, mode=mode, current_book_id=book.id)
+        ev.emit("stage", agent="MasterAgent", title="Stage: chapter roadmap complete", stage="complete", book_id=book.id)
+        return {"run_id": run_id, "book_after_patch": book, "blueprint_review": blueprint_review, "state": state}
 
     def _run_directed_creation_loop(
         self,
@@ -233,7 +433,7 @@ class MasterAgent(BaseAgent):
             if session.style_request:
                 planning_focus.append(session.style_request)
             if session.reference_fetch_counts.get("planning", 0) == 0:
-                return [DirectorAction.RETRIEVE_REFERENCES, DirectorAction.BUILD_BLUEPRINT], "planning", planning_focus
+                return [DirectorAction.RETRIEVE_REFERENCES], "planning", planning_focus
             return [DirectorAction.BUILD_BLUEPRINT], "planning", planning_focus
         if session.book is None:
             return [DirectorAction.CREATE_BOOK], "planning", [session.blueprint.premise.core_hook]
@@ -245,7 +445,7 @@ class MasterAgent(BaseAgent):
             next_plan.cliffhanger if next_plan else "",
         ]
         if session.reference_fetch_counts.get("writing", 0) == 0:
-            return [DirectorAction.RETRIEVE_REFERENCES, DirectorAction.WRITE_CHAPTER], "writing", [item for item in writing_focus if item]
+            return [DirectorAction.RETRIEVE_REFERENCES], "writing", [item for item in writing_focus if item]
         return [DirectorAction.WRITE_CHAPTER], "writing", [item for item in writing_focus if item]
 
     def _allowed_continue_actions(
@@ -260,7 +460,7 @@ class MasterAgent(BaseAgent):
             next_plan.cliffhanger if next_plan else "",
         ]
         if session.reference_fetch_counts.get("writing", 0) == 0:
-            return [DirectorAction.RETRIEVE_REFERENCES, DirectorAction.WRITE_CHAPTER], "writing", [item for item in writing_focus if item]
+            return [DirectorAction.RETRIEVE_REFERENCES], "writing", [item for item in writing_focus if item]
         return [DirectorAction.WRITE_CHAPTER], "writing", [item for item in writing_focus if item]
 
     def _director_decision(
@@ -338,6 +538,34 @@ class MasterAgent(BaseAgent):
             save_output=self._save_output,
         )
 
+    def _retrieve_reference_pack(
+        self,
+        *,
+        run_id: str,
+        query: str,
+        stage: str,
+        focus: list[str],
+        tags: list[str] | None = None,
+        limit: int = 5,
+    ) -> str:
+        cards = self.reference_library.retrieve(query=query, stage=stage, tags=tags or [], focus=focus, limit=limit)
+        reference_pack = self.reference_library.build_reference_pack(cards)
+        self._save_output(
+            run_id=run_id,
+            agent="ReferenceLibrary",
+            output_type="reference_cards",
+            title=f"Reference retrieval: {stage}",
+            payload={
+                "stage": stage,
+                "query": query,
+                "focus": focus,
+                "tags": tags or [],
+                "reference_pack": reference_pack,
+                "cards": [card.model_dump(mode="json") for card in cards],
+            },
+        )
+        return reference_pack
+
     def _critique_and_patch(
         self,
         *,
@@ -353,6 +581,26 @@ class MasterAgent(BaseAgent):
         patch_version: BlockPatchVersion | None = None
 
         for round_index in range(1, max_review_rounds + 1):
+            current_plan = None
+            if final_book.metadata.get("last_written_chapter_id"):
+                for item in final_book.metadata.get("chapter_plans", []):
+                    if str(item.get("chapter_id", "")) == str(final_book.metadata.get("last_written_chapter_id", "")):
+                        current_plan = item
+                        break
+            reference_pack = self._retrieve_reference_pack(
+                run_id=run_id,
+                query=str(final_book.metadata.get("query") or final_book.title),
+                stage="critique",
+                focus=[
+                    final_book.premise.core_hook,
+                    final_book.premise.central_conflict,
+                    str(current_plan or ""),
+                    "审稿",
+                    "人物行为逻辑",
+                    "情节张力",
+                ],
+                tags=["审稿", "人物塑造", "情节"],
+            )
             ev.emit(
                 "stage",
                 agent="MasterAgent",
@@ -362,7 +610,7 @@ class MasterAgent(BaseAgent):
                 round_index=round_index,
             )
             ev.check_cancelled()
-            critic_report = self.critic_agent.review_book(book=final_book)
+            critic_report = self.critic_agent.review_book(book=final_book, reference_pack=reference_pack)
             ev.check_cancelled()
             self.memory_agent.save_critic_report(critic_report, book_id=final_book.id)
             self._save_output(
@@ -389,7 +637,7 @@ class MasterAgent(BaseAgent):
                 round_index=round_index,
             )
             ev.check_cancelled()
-            patch_instruction = self.critic_agent.build_patch_instruction(critic_report.issues[0])
+            patch_instruction = self.critic_agent.build_patch_instruction(critic_report.issues[0], reference_pack=reference_pack)
             ev.check_cancelled()
             final_book, patch_payload = self.writer_agent.patch_block(book=final_book, instruction=patch_instruction)
             patch_version = BlockPatchVersion.model_validate(patch_payload["patch_version"])

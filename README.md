@@ -82,11 +82,33 @@ Python: Select Interpreter
 Developer: Reload Window
 ```
 
-## 豆包模型接入
+## 模型接入
 
-项目已经接入豆包 OpenAI 兼容接口。建议统一用环境变量，不要把密钥写进代码：
+项目支持豆包和 OpenAI/GPT。建议统一用环境变量，不要把密钥写进代码。
+
+### 使用 OpenAI / GPT
+
+在 `.env` 里配置：
+
+```bash
+LLM_PROVIDER=openai
+OPENAI_API_KEY=你的 OpenAI API Key
+OPENAI_MODEL=你的模型名
+OPENAI_BASE_URL=https://api.openai.com/v1
+```
+
+说明：
+
+- `OPENAI_MODEL` 填你在 OpenAI 控制台可用的模型名。
+- `OPENAI_BASE_URL` 默认就是 `https://api.openai.com/v1`，一般不用改。
+- 当前实现走 Chat Completions 兼容接口。
+
+### 使用豆包
+
+如果继续用豆包：
 
 ```powershell
+$env:LLM_PROVIDER='doubao'
 $env:DOUBAO_API_KEY='你的 API Key'
 $env:DOUBAO_MODEL='ep-m-20260319020545-gzfvt'
 $env:DOUBAO_BASE_URL='https://ark.cn-beijing.volces.com/api/v3'
@@ -95,7 +117,8 @@ $env:DOUBAO_BASE_URL='https://ark.cn-beijing.volces.com/api/v3'
 说明：
 
 - `DOUBAO_MODEL` 是你的 endpoint id
-- 当前默认优先走真实豆包
+- `LLM_PROVIDER=doubao` 时走豆包
+- `LLM_PROVIDER=openai` 时走 OpenAI/GPT
 - 当前分支的 CLI / Web 控制台不提供 `--mock-llm` 参数
 
 ## 快速启动（后台服务 + 前端页面）
@@ -108,9 +131,21 @@ source .venv/bin/activate
 pip install -e .
 ```
 
-### 2. 配置豆包环境变量
+### 2. 配置模型环境变量
+
+如果使用 OpenAI/GPT：
 
 ```bash
+export LLM_PROVIDER='openai'
+export OPENAI_API_KEY='你的 OpenAI API Key'
+export OPENAI_MODEL='你的模型名'
+export OPENAI_BASE_URL='https://api.openai.com/v1'
+```
+
+如果使用豆包：
+
+```bash
+export LLM_PROVIDER='doubao'
 export DOUBAO_API_KEY='你的 API Key'
 export DOUBAO_MODEL='你的 endpoint id'
 export DOUBAO_BASE_URL='https://ark.cn-beijing.volces.com/api/v3'

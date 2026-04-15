@@ -34,7 +34,7 @@ class BlueprintAgent(BaseAgent):
             seed_json="{}",
             reference_pack=reference_pack,
         )
-        parsed = extract_json_object(self._generate_json_text(prompt))
+        parsed = self._generate_json_payload(prompt, label="story_spine")
         parsed["premise"] = self._normalize_premise_payload(dict(parsed["premise"]))
         ev.emit("blueprint_spine_ready", agent=self.name, title="Story spine ready", premise_title=str(parsed["premise"]["title"]))
         return parsed
@@ -54,7 +54,7 @@ class BlueprintAgent(BaseAgent):
             volume_titles_json=str(volume_titles),
             reference_pack=reference_pack,
         )
-        parsed = extract_json_object(self._generate_json_text(prompt))
+        parsed = self._generate_json_payload(prompt, label="character_bible")
         characters = [CharacterCard.model_validate(item) for item in parsed["characters"]]
         ev.emit("blueprint_characters_ready", agent=self.name, title="Character bible ready", character_count=len(characters))
         return characters
@@ -76,7 +76,7 @@ class BlueprintAgent(BaseAgent):
             volume_titles_json=str(volume_titles),
             reference_pack=reference_pack,
         )
-        parsed = extract_json_object(self._generate_json_text(prompt))
+        parsed = self._generate_json_payload(prompt, label="chapter_roadmap")
         parsed["chapter_plans"] = [self._normalize_chapter_plan_payload(dict(item)) for item in parsed["chapter_plans"]]
         chapter_plans = [ChapterPlan.model_validate(item) for item in parsed["chapter_plans"]]
         ev.emit("blueprint_roadmap_ready", agent=self.name, title="Chapter roadmap ready", chapter_count=len(chapter_plans))
@@ -111,7 +111,15 @@ class BlueprintAgent(BaseAgent):
         )
         return blueprint
 
-    def revise_concept(self, book: BookDocument, *, scope: str, target_id: str | None, guidance: str) -> BookDocument:
+    def revise_concept(
+        self,
+        book: BookDocument,
+        *,
+        scope: str,
+        target_id: str | None,
+        guidance: str,
+        reference_pack: str = "暂无额外参考资料。",
+    ) -> BookDocument:
         ev.emit("agent_start", agent=self.name, title=f"Revise concept: {scope}", book_id=book.id, target_id=target_id or "")
         prompt = self.prompt_library.render(
             "writer/revise_concept.txt",
@@ -119,15 +127,24 @@ class BlueprintAgent(BaseAgent):
             target_id=target_id or "",
             guidance=guidance,
             book_json=book.model_dump_json(indent=2),
+            reference_pack=reference_pack,
         )
-        parsed = extract_json_object(self._generate_json_text(prompt))
+        parsed = self._generate_json_payload(prompt, label=f"revise_concept:{scope}")
         updated_book = deepcopy(book)
         if scope == "all":
             updated_book.title = str(parsed["title"])
             updated_book.premise = StoryPremise.model_validate(parsed["premise"])
-            updated_book.characters = [CharacterCard.model_validate(item) for item in parsed["characters"]]
-            plans = [ChapterPlan.model_validate(item) for item in parsed["chapter_plans"]]
-            updated_book.metadata["chapter_plans"] = [plan.model_dump(mode="json") for plan in plans]
+            if book.characters:
+                if "characters" in parsed:
+                    updated_book.characters = [CharacterCard.model_validate(item) for item in parsed["characters"]]
+            else:
+                updated_book.characters = []
+            if book.metadata.get("chapter_plans"):
+                if "chapter_plans" in parsed:
+                    plans = [ChapterPlan.model_validate(item) for item in parsed["chapter_plans"]]
+                    updated_book.metadata["chapter_plans"] = [plan.model_dump(mode="json") for plan in plans]
+            else:
+                updated_book.metadata["chapter_plans"] = []
         elif scope == "premise":
             updated_book.premise = StoryPremise.model_validate(parsed["premise"])
             updated_book.title = updated_book.premise.title
@@ -166,7 +183,7 @@ class BlueprintAgent(BaseAgent):
             review_json=self._json_dump(review),
             reference_pack=reference_pack,
         )
-        parsed = extract_json_object(self._generate_json_text(prompt))
+        parsed = self._generate_json_payload(prompt, label="revise_blueprint")
         parsed["premise"] = self._normalize_premise_payload(dict(parsed["premise"]))
         parsed["chapter_plans"] = [self._normalize_chapter_plan_payload(dict(item)) for item in parsed["chapter_plans"]]
         revised = BookBlueprint(
@@ -225,7 +242,13 @@ class BlueprintAgent(BaseAgent):
             return AgentResult(agent_name=self.name, success=True, message="Blueprint revised from review.", payload={"blueprint": revised.model_dump(mode="json")})
         if action == "revise":
             book = kwargs["book"]
-            updated = self.revise_concept(book, scope=str(kwargs["scope"]), target_id=kwargs.get("target_id"), guidance=str(kwargs["guidance"]))
+            updated = self.revise_concept(
+                book,
+                scope=str(kwargs["scope"]),
+                target_id=kwargs.get("target_id"),
+                guidance=str(kwargs["guidance"]),
+                reference_pack=str(kwargs.get("reference_pack", "暂无额外参考资料。")),
+            )
             return AgentResult(agent_name=self.name, success=True, message="Concept revised.", payload={"book": updated.model_dump(mode="json")})
         raise ValueError(f"Unsupported blueprint action: {action}")
 
@@ -235,6 +258,27 @@ class BlueprintAgent(BaseAgent):
             LLMMessage(role="user", content=prompt),
         ]
         return self.llm_client.generate(messages=messages, temperature=0.7).strip()
+
+    def _generate_json_payload(self, prompt: str, *, label: str) -> dict[str, Any]:
+        raw = self._generate_json_text(prompt)
+        try:
+            return extract_json_object(raw)
+        except Exception as exc:
+            ev.emit(
+                "json_repair",
+                agent=self.name,
+                title=f"Repair JSON: {label}",
+                error=str(exc),
+                raw_preview=raw[:1000],
+            )
+            repair_prompt = self.prompt_library.render(
+                "writer/repair_json.txt",
+                source_prompt=prompt[:4000],
+                error=str(exc),
+                raw_text=raw[:12000],
+            )
+            repaired = self._generate_json_text(repair_prompt)
+            return extract_json_object(repaired)
 
     @staticmethod
     def _json_dump(payload: Any) -> str:

@@ -7,6 +7,9 @@
 - 上一章 previous_chapter
 - 当前章 current_chapter
 
+参考写作技巧与反模式卡：
+{reference_pack}
+
 重点检查：
 1. 当前章是否完成了本章规划中的 objective、story_function、key_turn、payoff。
 2. 当前章与上一章衔接是否自然，是否符合 next_route_hint 所指向的续写路线。

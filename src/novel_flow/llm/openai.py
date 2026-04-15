@@ -12,8 +12,8 @@ from novel_flow.exceptions import AgentExecutionError
 from novel_flow.llm.base import LLMClient, LLMMessage
 
 
-class DoubaoLLMClient(LLMClient):
-    def __init__(self, api_key: str, model: str, base_url: str) -> None:
+class OpenAILLMClient(LLMClient):
+    def __init__(self, api_key: str, model: str, base_url: str = "https://api.openai.com/v1") -> None:
         self.api_key = api_key
         self.model = model
         self.base_url = base_url.rstrip("/")
@@ -25,7 +25,7 @@ class DoubaoLLMClient(LLMClient):
         prompt_preview = messages[-1].content[:600] if messages else ""
         ev.emit(
             "llm_prompt",
-            agent="DoubaoLLM",
+            agent="OpenAILLM",
             title="发送 Prompt",
             call_id=call_id,
             preview=prompt_preview,
@@ -63,7 +63,7 @@ class DoubaoLLMClient(LLMClient):
                             chunk_index += 1
                             ev.emit(
                                 "llm_stream",
-                                agent="DoubaoLLM",
+                                agent="OpenAILLM",
                                 title="流式输出",
                                 call_id=call_id,
                                 preview=delta,
@@ -79,7 +79,7 @@ class DoubaoLLMClient(LLMClient):
             ev.check_cancelled()
             ev.emit(
                 "llm_reply",
-                agent="DoubaoLLM",
+                agent="OpenAILLM",
                 title="收到回复",
                 call_id=call_id,
                 preview=result[:600],
@@ -87,5 +87,5 @@ class DoubaoLLMClient(LLMClient):
             )
             return result
         except (httpx.HTTPError, TypeError) as exc:
-            self.logger.exception("Doubao request failed")
-            raise AgentExecutionError(f"Doubao generation failed: {exc}") from exc
+            self.logger.exception("OpenAI request failed")
+            raise AgentExecutionError(f"OpenAI generation failed: {exc}") from exc

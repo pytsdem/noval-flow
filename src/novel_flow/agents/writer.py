@@ -74,7 +74,15 @@ class WriterAgent(BaseAgent):
         )
         return blueprint
 
-    def revise_concept(self, book: BookDocument, *, scope: str, target_id: str | None, guidance: str) -> BookDocument:
+    def revise_concept(
+        self,
+        book: BookDocument,
+        *,
+        scope: str,
+        target_id: str | None,
+        guidance: str,
+        reference_pack: str = "暂无额外参考资料。",
+    ) -> BookDocument:
         ev.emit("agent_start", agent="WriterAgent", title=f"Revise concept: {scope}", book_id=book.id, target_id=target_id or "")
         prompt = self.prompt_library.render(
             "writer/revise_concept.txt",
@@ -82,15 +90,24 @@ class WriterAgent(BaseAgent):
             target_id=target_id or "",
             guidance=guidance,
             book_json=book.model_dump_json(indent=2),
+            reference_pack=reference_pack,
         )
         parsed = extract_json_object(self._generate_block_text(prompt=prompt))
         updated_book = deepcopy(book)
         if scope == "all":
             updated_book.title = str(parsed["title"])
             updated_book.premise = StoryPremise.model_validate(parsed["premise"])
-            updated_book.characters = [CharacterCard.model_validate(item) for item in parsed["characters"]]
-            plans = [ChapterPlan.model_validate(item) for item in parsed["chapter_plans"]]
-            updated_book.metadata["chapter_plans"] = [plan.model_dump(mode="json") for plan in plans]
+            if book.characters:
+                if "characters" in parsed:
+                    updated_book.characters = [CharacterCard.model_validate(item) for item in parsed["characters"]]
+            else:
+                updated_book.characters = []
+            if book.metadata.get("chapter_plans"):
+                if "chapter_plans" in parsed:
+                    plans = [ChapterPlan.model_validate(item) for item in parsed["chapter_plans"]]
+                    updated_book.metadata["chapter_plans"] = [plan.model_dump(mode="json") for plan in plans]
+            else:
+                updated_book.metadata["chapter_plans"] = []
         elif scope == "premise":
             updated_book.premise = StoryPremise.model_validate(parsed["premise"])
             updated_book.title = updated_book.premise.title
