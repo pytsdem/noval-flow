@@ -15,6 +15,8 @@ class Settings(BaseModel):
     openai_api_key: str | None = None
     openai_model: str | None = None
     openai_base_url: str = "https://api.openai.com/v1"
+    codex_exe: str = "codex"
+    codex_model: str | None = None
     log_level: str = "INFO"
 
     @classmethod
@@ -37,6 +39,8 @@ class Settings(BaseModel):
             openai_api_key=os.getenv("OPENAI_API_KEY"),
             openai_model=os.getenv("OPENAI_MODEL"),
             openai_base_url=os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1"),
+            codex_exe=os.getenv("CODEX_EXE", "codex"),
+            codex_model=os.getenv("CODEX_MODEL") or None,
             log_level=os.getenv("NOVEL_FLOW_LOG_LEVEL", "INFO"),
         )
 

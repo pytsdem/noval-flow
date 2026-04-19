@@ -1,31 +1,44 @@
-写当前章节的开场正文。
+你现在要为当前章节生成开头钩子场景。不要解释过程，只输出场景文本。
 
 章节标题：{chapter_title}
 场景序号：{scene_index}
 高概念：{high_concept}
-本章目标：{chapter_objective}
-本章张力：{chapter_tension}
+章节目标：{chapter_objective}
+章节张力：{chapter_tension}
 
-整体设定 JSON：
+premise JSON：
 {premise_json}
 
-本章规划 JSON：
+story_blueprint JSON：
+{story_blueprint_json}
+
+chapter_plan JSON：
 {chapter_plan_json}
 
-角色设定 JSON：
+chapter_write_brief JSON：
+{chapter_write_brief_json}
+
+scene_beat JSON：
+{scene_beat_json}
+
+characters JSON：
 {characters_json}
 
-上一章 JSON：
+previous_chapter JSON：
 {previous_chapter_json}
+
+已完成章节摘要串：
+{completed_chapter_summary_bundle}
 
 参考资料：
 {reference_pack}
 
 要求：
-1. 默认沿用当前小说已经建立的叙事视角；如果尚未建立视角，则选择最适合 premise 和 `target_style` 的视角，不要强行限定女主第一人称。
-2. 这是一章一章续写，不要重复上一章已经发生过的内容。
-3. 明确服务于本章的 `phase / story_function / key_turn / payoff / next_route_hint`。
-4. 要利用 premise 里的 `core_hook / escalation_path / twist_blueprint / stage_payoffs`，让这段开场在整本书的大路线里有位置。
-5. 角色言行必须符合 `public_persona / hidden_motive / fear / bottom_line / behavior_logic / arc`，不能 OOC。
-6. 开场要尽快把冲突、情绪和看点立起来，但表达方式要符合当前书的 `target_style`，不能空转。
-7. 直接输出正文，不要解释。
+1. 开头必须尽快把读者抛进一个正在发生的局面、错位、威胁、利益碰撞或情绪悬点里。
+2. 必须服务 `chapter_write_brief.retention_hook` 和 `scene_beat.objective`。
+3. 必须尊重角色的 `initial_state`、`motivation`、`behavior_pattern`、`arc` 和既有关系，不能 OOC。
+4. 信息释放要服从 `chapter_write_brief.reveal_strategy`，不要一开头就把该藏的真相说完。
+5. 这一场必须有清晰的动作、目标和阻力，不能只是说明背景。
+6. `story_blueprint_json` 是当前小说信息的核心结构层，里面的世界观、关系网、故事线、角色发展线、反转设计都要被尊重，不能和既有设定打架。
+7. “已完成章节摘要串”是历史正文的连续回顾，`previous_chapter_json` 是上一章完整内容；两者共同构成正文历史事实，不能断裂。
+8. 直接输出场景文本。

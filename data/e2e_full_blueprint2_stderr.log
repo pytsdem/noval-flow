@@ -1,0 +1,273 @@
+2026-04-17 01:08:40,029 | INFO | novel_flow.cli | Novel Flow console started at http://127.0.0.1:8776/
+2026-04-17 01:08:41,779 | WARNING | FallbackLLMClient | Primary LLM provider 'codex' failed, falling back to 'doubao': codex exec failed (exit 1): WARNING: proceeding, even though we could not update PATH: 拒绝访问。 (os error 5)
+Error: 拒绝访问。 (os error 5)
+
+2026-04-17 01:08:44,179 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "premise": {
+    "title": "The Weight of Unwritten Clauses",
+    "high_concept": "A ruthless corporate lawyer who built her career on ironclad contracts learns that love and vulnerability can’t be negotiated—when her ex-husband sues her firm over a contract she drafted to sabotage his business, forcing her to confront the childhood trauma that drove her need for control.",
+    "genre": "Legal Drama + Romantic Character Study",
+    "target_style": "Sharp, introspective prose balancing tight legal procedural details with raw emotional beats; think *The Devil Wears Prada* meets *Marriage Story* but centered on female agency beyond romantic validation.",
+    "emotional_hook": "What if the skills that made you unstoppable in your career are the exact ones destroying your chance at real connection?",
+    "central_conflict": "Elara’s pathological need for control vs. the messy, unnegotiable nature of human relationships—compounded by a high-stakes lawsuit that forces her to choose between winning at all costs and confronting the truth about her past mistakes.",
+    "core_hook": "When her ex-husband sues her firm over a contract she intentionally drafted to ruin his business, Elara must decide whether to defend her reputation or admit she sabotaged him out of fear of abandonment.",
+    "escalation_path": [
+      "Liam’s lawsuit forces Elara to relive her marriage’s collapse and confront her role in his ruin.",
+      "A small-business client, Kai, refuses to sign her standard control-heavy contract, challenging her professional identity.",
+      "Her firm’s senior partner threatens to demote her if she loses the case, pushing her to choose between career survival and integrity.",
+      "Kai discovers Elara’s past with Liam, shattering his trust and forcing her to prove she’s capable of change."
+    ],
+    "twist_blueprint": "Liam’s lawsuit isn’t about money—it’s about forcing Elara to admit she sabotaged his business because she feared he’d leave her, just like her mother did. He doesn’t want compensation; he wants her to confront her trauma.",
+    "stage_payoffs": {
+      "Volume 1": "Elara wins a minor legal battle but realizes her control tactics are failing her both professionally and personally.",
+      "Volume 2": "Elara lets her guard down with Kai, only to be betrayed by her own past mistakes, pushing her to the edge of professional ruin.",
+      "Volume 3": "Elara admits her mistake in court, loses the lawsuit, but gains closure with Liam and proves her growth to Kai."
+    },
+    "ending_payoff": "Elara quits her toxic firm to start a small practice focused on helping vulnerable businesses, enters an equal relationship with Kai built on mutual respect, and finds self-forgiveness for her past choices—even though she loses the lawsuit and sacrifices her elite career status.",
+    "selling_points": [
+      "Subverts 'perfect partner' tropes by framing control as a trauma response, not a 'strong' trait.",
+      "Avoids '依附型假大女主' growth by centering Elara’s independent journey to confront her trauma, with male characters as foils rather than saviors.",
+      "Uses legal procedural details to mirror emotional conflicts (contract clauses as metaphors for unspoken relationship rules).",
+      "Dynamic character relationships that shift from hostility to understanding, avoiding static roles."
+    ]
+  },
+  "volume_titles": [
+    "The Fine Print of Control",
+    "Breach of Trust",
+    "Renegotiating the Self"
+  ],
+  "story_blueprint": {
+    "positioning": {
+      "genre_mix": "Legal drama provides high-stakes plot structure, while romantic character study delves into the protagonist’s emotional growth; the two intersect as legal conflicts mirror personal trauma.",
+      "one_line_sell": "A corporate lawyer who uses contracts to control every aspect of her life learns that vulnerability isn’t weakness when her ex-husband sues her over a contract she drafted to ruin him.",
+      "hook_expansion": "Elara Voss has spent 15 years building a reputation as a lawyer who leaves no room for ambiguity—including the prenuptial agreement she made her ex-husband Liam sign, which included a hidden clause that destroyed his craft beer business when they divorced. When Liam sues her firm, she’s forced to confront the fact that her need for control wasn’t just professional—it was a defense mechanism against the abandonment she felt when her mother left at age 10.",
+      "title_rationale": "The Weight of Unwritten Clauses refers to the unspoken fears, expectations, and trauma that govern relationships—things that can’t be captured in legal language, but which ultimately shape our lives more than any contract.",
+      "reader_emotional_promise": "Readers will follow Elara as she unlearns her toxic need for control, confronts her past, and discovers that real connection requires letting go of the need to win at all costs."
+    },
+    "story_engine": {
+      "original_plot_track": "Elara is at the peak of her career when Liam sues her firm. She initially tries to win using her usual ruthless tactics, but as the case progresses, she meets Kai, a small-business owner who refuses to sign her standard contract, forcing her to rethink her approach. Meanwhile, her past mistakes catch up with her, and she must choose between her career and her integrity.",
+      "world_rules": "The corporate legal world is a cutthroat environment where winning is everything, and emotions are seen as a liability. Contracts are the ultimate tool of power, and ambiguity is a sign of weakness.",
+      "power_structure": "Elara’s firm is led by Marcus Croft, a ruthless senior partner who values results over ethics. Elara is his star protégé, but he sees her as a tool to be exploited. Small businesses are vulnerable to corporate takeovers, with legal contracts often used to strip them of their control.",
+      "structural_inertia": "Elara’s success has been built on control, so she’s reluctant to change her ways. Her firm’s culture rewards ruthlessness, making it hard for her to prioritize integrity over victory.",
+      "backlash_mechanism": "Every time Elara tries to control a situation, it backfires: Liam’s lawsuit exposes her past mistakes, Kai refuses to comply with her contract terms, and Marcus threatens to demote her if she doesn’t win the case.",
+      "story_trigger": "Liam walks into Elara’s office with a lawsuit, holding proof she intentionally drafted the contract to ruin his business."
+    },
+    "core_theme": {
+      "protagonist_misjudgment": "Elara believed that control could protect her from pain, so she sabotaged Liam’s business and their marriage to ensure she wouldn’t be left vulnerable—just like her mother left her.",
+      "hard_story_question": "Can someone who’s spent their life controlling every outcome learn to embrace vulnerability and let go of the need to win at all costs?",
+      "end_realization": "Control is an illusion; the only way to find real connection is to be honest about one’s fears and mistakes, and to accept that not everything can be negotiated.",
+      "ending_cost": "Elara loses the lawsuit, is demoted at her firm, and has to rebuild her career from scratch. She sacrifices her elite status and reputation, but gains self-forgiveness and a chance at a real, equal relationship."
+    },
+    "character_system": {
+      "Elara Voss": {
+        "structure_role": "Protagonist, flawed legal expert, trauma survivor.",
+        "current_goal": "Win the lawsuit against Liam and maintain her position as the firm’s star lawyer.",
+        "fear": "Abandonment (rooted in her mother leaving when she was 10).",
+        "bottom_line": "She will never let anyone see her cry or admit weakness; she will never be vulnerable enough to be hurt again.",
+        "behavior_logic": "She uses contracts and control to create a safe bubble around herself, avoiding any situation that could lead to emotional pain. She views relationships as transactions, with clear rules and exit clauses.",
+        "relationship_debts": "She owes Liam an apology for sabotaging his business; she owes her firm honesty about her role in the contract; she owes herself the chance to confront her childhood trauma.",
+        "growth_path": "Starts as a ruthless control freak, then begins to question her motives after meeting Kai. She relapses into control tactics multiple times, but eventually admits her mistake to Liam and chooses integrity over victory. She learns that vulnerability isn’t weakness, and that real connection requires letting go of control.",
+        "ending_positioning": "She quits her firm to start a small legal practice focused on helping vulnerable businesses. She enters an equal relationship with Kai, and finds peace with Liam—even though they don’t get back together."
+      },
+      "Liam Hale": {
+        "structure_role": "Antagonist-turned-ally, former husband, small-business owner.",
+        "current_goal": "Force Elara to admit she sabotaged his business and their marriage. He doesn’t want money; he wants the truth.",
+        "fear": "Failure (his craft beer business was his life’s work, and Elara destroyed it).",
+        "bottom_line": "He will not accept a financial settlement; he will not stop until Elara admits her mistake.",
+        "behavior_logic": "He’s driven by anger and a need for justice, but deep down he still cares about Elara. He sees the lawsuit as a way to force her to confront her trauma, just as he had to confront his own failure.",
+        "relationship_debts": "He owes Elara an understanding of why she acted the way she did; he owes himself closure from his failed marriage and business.",
+        "growth_path": "Starts out seeking revenge, but as he confronts Elara, he realizes he needs to let go of his anger to move on. He forgives Elara, not because she deserves it, but because he needs to heal.",
+        "ending_positioning": "He rebuilds his business with Elara’s pro bono help, and finds peace. He doesn’t get back together with Elara, but they develop a respectful friendship."
+      },
+      "Kai Mitchell": {
+        "structure_role": "Love interest, foil to Elara, small-business owner.",
+        "current_goal": "Save his family’s coffee roastery from being bought out by a corporate giant. He wants to keep control of his business, even if it means taking risks.",
+        "fear": "Losing the legacy his grandfather built.",
+        "bottom_line": "He will not sign a contract that gives up control of his business; he will not compromise his values for profit.",
+        "behavior_logic": "He values authenticity and connection over profit, which clashes with Elara’s transactional approach. He sees contracts as tools to protect his business, not to control others.",
+        "relationship_debts": "He owes Elara a chance to prove she can change; he owes himself to stand up for his values, even when it’s hard.",
+        "growth_path": "Starts out distrusting Elara, seeing her as just another ruthless corporate lawyer. As he works with her to save his roastery, he sees her vulnerable side and falls for her. He learns to trust again, even after discovering her past with Liam.",
+        "ending_positioning": "He keeps his coffee roastery, and enters an equal relationship with Elara built on mutual respect and vulnerability."
+      },
+      "Marcus Croft": {
+        "structure_role": "Antagonist, firm partner, toxic mentor.",
+        "current_goal": "Protect the firm’s reputation and win the lawsuit at all costs. He wants to maintain his position as senior partner.",
+        "fear": "Losing his power and status (he built his career on ruthless tactics, and fears being exposed).",
+        "bottom_line": "He will not let Elara’s personal issues damage the firm; he will do whatever it takes to win, including unethical tactics.",
+        "behavior_logic": "He’s a ruthless businessman who sees Elara as a tool to be used. He exploits her need for approval and fear of abandonment to make her do his bidding.",
+        "relationship_debts": "He owes Elara an apology for exploiting her trauma; he owes the firm honesty about his unethical practices.",
+        "collapse_path": "He doubles down on his ruthless tactics, forcing Elara to expose his unethical behavior. He is fired from the firm, and his reputation is ruined.",
+        "ending_positioning": "He is disbarred for unethical practices, and lives in obscurity, bitter and alone."
+      }
+    },
+    "relationship_network": {
+      "Elara & Liam": {
+        "pair": "Ex-spouses",
+        "essence": "A relationship destroyed by control and fear.",
+        "dynamic_stages": [
+          "Hostile adversaries (Liam sues Elara, she tries to destroy his case)",
+          "Reluctant collaborators (Elara starts to admit her mistake, Liam shares his pain)",
+          "Mutual understanding (Elara admits she sabotaged him, Liam forgives her)"
+        ],
+        "escalation_triggers": "Liam presents proof Elara intentionally drafted the contract to ruin his business; Elara discovers Liam’s business was named after his late father, making her sabotage even more personal.",
+        "break_distortion_point": "Elara admits she sabotaged Liam’s business because she feared he’d leave her, just like her mother did. This moment shatters their hostility and forces them to confront their trauma."
+      },
+      "Elara & Kai": {
+        "pair": "Lawyer & client, eventual lovers",
+        "essence": "A relationship that challenges Elara’s need for control.",
+        "dynamic_stages": [
+          "Tense negotiation (Kai refuses to sign Elara’s standard contract)",
+          "Unlikely allies (working together to fight the corporate buyout)",
+          "Romantic partners (building a relationship based on equality and vulnerability)"
+        ],
+        "escalation_triggers": "Kai discovers Elara’s past with Liam, and questions whether she can change; Elara chooses to help Kai instead of prioritizing her firm’s interests, proving she’s willing to put others before control.",
+        "break_distortion_point": "Elara admits her mistake to Kai, and shows him she’s changed by drafting a contract that protects his business without taking away his control. This moment rebuilds Kai’s trust and leads to their romantic relationship."
+      },
+      "Elara & Marcus": {
+        "pair": "Boss & employee",
+        "essence": "A toxic relationship based on exploitation and approval.",
+        "dynamic_stages": [
+          "Mentor & protégé (Marcus sees Elara’s potential, exploits her need for approval)",
+          "Adversaries (Marcus pressures Elara to win the lawsuit at all costs, she refuses to compromise her integrity)",
+          "Estranged (Elara exposes Marcus’s unethical practices, quits the firm)"
+        ],
+        "escalation_triggers": "Marcus threatens to demote Elara if she doesn’t win the lawsuit; Marcus tries to fabricate evidence to win the case, forcing Elara to choose between her career and her integrity.",
+        "break_distortion_point": "Elara exposes Marcus’s unethical practices to the firm’s board, leading to his firing. This moment marks Elara’s break from her toxic past and her embrace of integrity."
+      }
+    },
+    "structure_blueprint": {
+      "three_act_design": {
+        "Act 1": "Setup: Elara is at the peak of her career, but her personal life is empty. Inciting incident: Liam sues her firm. Rising action: Elara tries to win the case using her usual tactics, but Liam has proof she sabotaged his business. Midpoint: Elara meets Kai, who refuses to sign her standard contract, forcing her to rethink her approach. Act 1 climax: Elara realizes her control tactics are failing her both professionally and personally.",
+        "Act 2": "Rising action: Elara starts working with Kai, and begins to let her guard down. She also starts to confront her past with Liam. Midpoint loss-of-control: Kai discovers Elara’s past with Liam, shattering his trust. Meanwhile, Marcus threatens to demote her if she doesn’t win the lawsuit. Low point: Elara is alone, facing professional ruin and personal heartbreak. Act 2 climax: Elara decides to admit her mistake to Liam, even if it means losing the case.",
+        "Act 3": "Rising action: Elara works with Liam to get closure, and helps Kai save his coffee roastery. Final confrontation: Elara admits her mistake in court, losing the lawsuit but gaining closure with Liam. She also exposes Marcus’s unethical practices, leading to his firing. Resolution: Elara quits her firm to start her own practice, enters a relationship with Kai, and finds self-forgiveness."
+      },
+      "volume_blueprint": {
+        "Volume 1: The Fine Print of Control": "Establishes Elara’s control tactics, introduces Liam’s lawsuit, and sets up Kai as a foil. Ends with Elara realizing her tactics are failing.",
+        "Volume 2: Breach of Trust": "Elara works with Kai, confronts her past with Liam, and hits rock bottom when Kai discovers her secret. Ends with Elara deciding to admit her mistake.",
+        "Volume 3: Renegotiating the Self": "Elara admits her mistake, resolves the lawsuit, exposes Marcus, and builds a new life based on integrity and vulnerability. Ends with Elara starting her own practice and entering a relationship with Kai."
+      },
+      "major_turns": [
+        "Liam presents proof Elara sabotaged his business (Act 1 midpoint)",
+        "Kai discovers Elara’s past with Liam (Act 2 midpoint)",
+        "Elara decides to admit her mistake to Liam (Act 2 climax)",
+        "Elara admits her mistake in court (Act 3 climax)",
+        "Elara exposes Marcus’s unethical practices (Act 3 resolution)"
+      ],
+      "middle_loss_of_control_point": "Kai discovers Elara’s past with Liam and breaks off their working relationship. Marcus threatens to demote her if she doesn’t win the lawsuit. Elara is alone, facing professional ruin and personal heartbreak, and realizes her control tactics have destroyed everything she cares about.",
+      "final_confrontation_logic": "Elara admits her
+2026-04-17 01:11:57,479 | WARNING | FallbackLLMClient | Primary LLM provider 'codex' failed, falling back to 'doubao': codex exec failed (exit 1): WARNING: proceeding, even though we could not update PATH: 拒绝访问。 (os error 5)
+Error: 拒绝访问。 (os error 5)
+
+2026-04-17 01:11:59,760 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "premise": {
+    "title": "The Weight of Unwritten Clauses",
+    "high_concept": "A ruthless corporate lawyer who built her career on ironclad contracts learns that love and vulnerability can’t be negotiated—when her ex-husband sues her firm over a contract she drafted to sabotage his business, forcing her to confront the childhood trauma that drove her need for control.",
+    "genre": "Legal Drama + Romantic Character Study",
+    "target_style": "Sharp, introspective prose balancing tight legal procedural details with raw emotional beats; think *The Devil Wears Prada* meets *Marriage Story* but centered on female agency beyond romantic validation.",
+    "emotional_hook": "What if the skills that made you unstoppable in your career are the exact ones destroying your chance at real connection?",
+    "central_conflict": "Elara’s pathological need for control vs. the messy, unnegotiable nature of human relationships—compounded by a high-stakes lawsuit that forces her to choose between winning at all costs and confronting the truth about her past mistakes.",
+    "core_hook": "When her ex-husband sues her firm over a contract she intentionally drafted to ruin his business, Elara must decide whether to defend her reputation or admit she sabotaged him out of fear of abandonment.",
+    "escalation_path": [
+      "Liam’s lawsuit forces Elara to relive her marriage’s collapse and confront her role in his ruin.",
+      "A small-business client, Kai, refuses to sign her standard control-heavy contract, challenging her professional identity.",
+      "Her firm’s senior partner threatens to demote her if she loses the case, pushing her to choose between career survival and integrity.",
+      "Kai discovers Elara’s past with Liam, shattering his trust and forcing her to prove she’s capable of change."
+    ],
+    "twist_blueprint": "Liam’s lawsuit isn’t about money—it’s about forcing Elara to admit she sabotaged his business because she feared he’d leave her, just like her mother did. He doesn’t want compensation; he wants her to confront her trauma.",
+    "stage_payoffs": {
+      "Volume 1": "Elara wins a minor legal battle but realizes her control tactics are failing her both professionally and personally.",
+      "Volume 2": "Elara lets her guard down with Kai, only to be betrayed by her own past mistakes, pushing her to the edge of professional ruin.",
+      "Volume 3": "Elara admits her mistake in court, loses the lawsuit, but gains closure with Liam and proves her growth to Kai."
+    },
+    "ending_payoff": "Elara quits her toxic firm to start a small practice focused on helping vulnerable businesses, enters an equal relationship with Kai built on mutual respect, and finds self-forgiveness for her past choices—even though she loses the lawsuit and sacrifices her elite career status.",
+    "selling_points": [
+      "Subverts 'perfect partner' tropes by framing control as a trauma response, not a 'strong' trait.",
+      "Avoids '依附型假大女主' growth by centering Elara’s independent journey to confront her trauma, with male characters as foils rather than saviors.",
+      "Uses legal procedural details to mirror emotional conflicts (contract clauses as metaphors for unspoken relationship rules).",
+      "Dynamic character relationships that shift from hostility to understanding, avoiding static roles."
+    ]
+  },
+  "volume_titles": [
+    "The Fine Print of Control",
+    "Breach of Trust",
+    "Renegotiating the Self"
+  ],
+  "story_blueprint": {
+    "positioning": {
+      "genre_mix": "Legal drama provides high-stakes plot structure and procedural tension, while romantic character study delves into the protagonist’s emotional trauma and growth; the two intersect as legal conflicts mirror the unspoken clauses governing Elara’s personal relationships.",
+      "one_line_sell": "A corporate lawyer who uses contracts to control every part of her life must confront the unwritten traumas behind her need for power when her ex-husband sues her over a sabotaged business deal.",
+      "hook_expansion": "Elara Voss has spent 15 years eliminating ambiguity from her life—her contracts leave no room for loopholes, her prenuptial agreement with ex-husband Liam included a hidden clause that destroyed his craft beer business upon divorce. When Liam sues her firm, not for money but for the truth, Elara is forced to unpack the childhood abandonment that made control her only survival strategy, while a stubborn small-business owner challenges her belief that every relationship is a transaction.",
+      "title_rationale": "The Weight of Unwritten Clauses refers to the unspoken fears, trauma, and expectations that shape our lives more powerfully than any legal document—clauses Elara spent her career trying to erase, but which ultimately define her path to healing.",
+      "reader_emotional_promise": "Readers will witness Elara’s messy, relatable journey to unlearn toxic control, confront her past, and discover that vulnerability isn’t weakness—it’s the only way to build real connection."
+    },
+    "story_engine": {
+      "original_plot_track": "Elara is at the peak of her career when Liam sues her firm. She initially tries to win using her usual ruthless tactics, but as the case progresses, she meets Kai, a small-business owner who refuses to sign her standard contract, forcing her to rethink her approach. Meanwhile, her past mistakes catch up with her, and she must choose between her career and her integrity.",
+      "world_rules": "The corporate legal world is a cutthroat environment where winning is everything, and emotions are seen as a liability. Contracts are the ultimate tool of power, and ambiguity is a sign of weakness. Small businesses are vulnerable to corporate takeovers, with legal contracts often used to strip them of their control.",
+      "power_structure": "Elara’s firm is led by Marcus Croft, a ruthless senior partner who values results over ethics. Elara is his star protégé, but he sees her as a tool to be exploited. Small businesses operate on the margins, with limited resources to fight corporate legal tactics.",
+      "structural_inertia": "Elara’s success has been built on control, so she’s reluctant to change her ways. Her firm’s culture rewards ruthlessness, making it hard for her to prioritize integrity over victory. Her childhood trauma reinforces her belief that control is the only way to avoid pain.",
+      "backlash_mechanism": "Every time Elara tries to control a situation, it backfires: Liam’s lawsuit exposes her past mistakes, Kai refuses to comply with her contract terms, Marcus threatens to demote her if she doesn’t win the case, and her attempts to manipulate Kai’s trust lead to a rift between them.",
+      "story_trigger": "Liam walks into Elara’s office with a lawsuit, holding irrefutable proof she intentionally drafted the contract to ruin his business."
+    },
+    "core_theme": {
+      "protagonist_misjudgment": "Elara believed that control could protect her from pain, so she sabotaged Liam’s business and their marriage to ensure she wouldn’t be left vulnerable—just like her mother left her at age 10.",
+      "hard_story_question": "Can someone who’s spent their life controlling every outcome learn to embrace vulnerability and let go of the need to win at all costs?",
+      "end_realization": "Control is an illusion; the only way to find real connection is to be honest about one’s fears and mistakes, and to accept that not everything can be negotiated or fixed with a contract.",
+      "ending_cost": "Elara loses the lawsuit, is forced to quit her elite firm, and sacrifices her reputation as a ruthless corporate lawyer. She must rebuild her career from scratch, facing the challenges of running a small, ethical practice with limited resources."
+    },
+    "character_system": {
+      "Elara Voss": {
+        "structure_role": "Protagonist, flawed legal expert, trauma survivor.",
+        "current_goal": "Win the lawsuit against Liam and maintain her position as the firm’s star lawyer.",
+        "fear": "Abandonment (rooted in her mother leaving when she was 10, leaving her to fend for herself with an emotionally absent father).",
+        "bottom_line": "She will never let anyone see her cry or admit weakness; she will never be vulnerable enough to be hurt again.",
+        "behavior_logic": "She uses contracts and control to create a safe bubble around herself, avoiding any situation that could lead to emotional pain. She views relationships as transactions, with clear rules and exit clauses to minimize risk.",
+        "relationship_debts": "She owes Liam an unreserved apology for sabotaging his business and marriage out of fear; she owes herself the chance to confront her trauma instead of hiding behind control; she owes her firm’s junior associates accountability for normalizing ruthless tactics.",
+        "growth_path": "Starts as a ruthless control freak, then begins to question her motives after meeting Kai and facing Liam’s lawsuit. She relapses into control tactics multiple times (e.g., trying to manipulate Kai’s trust after he discovers her past) but eventually chooses integrity over victory. She learns that vulnerability isn’t weakness, and that real connection requires letting go of the need to win.",
+        "ending_positioning": "She quits her toxic firm to start a small legal practice focused on helping vulnerable businesses. She enters an equal relationship with Kai built on mutual respect and vulnerability, and finds peace with her past through ongoing therapy and self-reflection."
+      },
+      "Liam Hale": {
+        "structure_role": "Antagonist-turned-ally, former husband, small-business owner.",
+        "current_goal": "Force Elara to admit she sabotaged his business and their marriage. He doesn’t want money; he wants the truth to help both of them heal.",
+        "fear": "Failure (his craft beer business was his life’s work, and Elara destroyed it, leaving him feeling worthless).",
+        "bottom_line": "He will not accept a financial settlement; he will not stop until Elara admits her mistake and confronts her trauma.",
+        "behavior_logic": "He’s driven by anger and a need for justice, but deep down he still cares about Elara. He sees the lawsuit as a way to force her to confront her trauma, just as he had to confront his own failure and grief.",
+        "relationship_debts": "He owes Elara an understanding of why she acted the way she did, instead of just seeking revenge; he owes himself closure from his failed marriage and business.",
+        "growth_path": "Starts out seeking revenge, but as he confronts Elara, he realizes he needs to let go of his anger to move on. He forgives Elara not because she deserves it, but because he needs to heal. He learns that holding onto resentment only hurts him.",
+        "ending_positioning": "He rebuilds his craft beer business with Elara’s pro bono help, focusing on sustainable, community-focused practices. He doesn’t get back together with Elara, but they develop a respectful friendship based on mutual accountability."
+      },
+      "Kai Mitchell": {
+        "structure_role": "Love interest, foil to Elara, small-business owner.",
+        "current_goal": "Save his family’s coffee roastery from being bought out by a corporate giant. He wants to keep control of his business, even if it means taking financial risks.",
+        "fear": "Losing the legacy his grandfather built, and failing his family by letting the roastery be taken over.",
+        "bottom_line": "He will not sign a contract that gives up control of his business; he will not compromise his values for profit or convenience.",
+        "behavior_logic": "He values authenticity and connection over profit, which clashes with Elara’s transactional approach. He sees contracts as tools to protect his business, not to control others or eliminate risk entirely.",
+        "relationship_debts": "He owes Elara a chance to prove she can change, instead of writing her off as just another ruthless corporate lawyer; he owes himself to stand up for his values, even when it’s financially difficult.",
+        "growth_path": "Starts out distrusting Elara, seeing her as a threat to his roastery. As he works with her to save his business, he sees her vulnerable side and falls for her. He learns to trust again, even after discovering her past with Liam, and realizes that growth requires giving people second chances.",
+        "ending_positioning": "He keeps his family’s coffee roastery, expanding it with a focus on ethical sourcing and community engagement. He enters an equal relationship with Elara built on mutual respect, vulnerability, and shared values."
+      },
+      "Marcus Croft": {
+        "structure_role": "Antagonist, firm partner, toxic mentor.",
+        "current_goal": "Protect the firm’s reputation and win the lawsuit at all costs. He wants to maintain his position as senior partner and continue exploiting his protégés for profit.",
+        "fear": "Losing his power and status (he built his career on ruthless tactics, and fears being exposed and disgraced).",
+        "bottom_line": "He will not let Elara’s personal issues damage the firm; he will do whatever it takes to win, including fabricating evidence or pressuring junior associates to take unethical risks.",
+        "behavior_logic": "He’s a ruthless businessman who sees everyone as a tool to be used. He exploited Elara’s childhood trauma to mold her into his perfect protégé, teaching her that control and victory are the only things that matter.",
+        "relationship_debts": "He owes Elara an apology for exploiting her trauma to advance his own career; he owes the firm’s junior associates accountability for normalizing unethical legal tactics; he owes the legal profession at large for undermining ethical standards.",
+        "collapse_path": "He doubles down on unethical strategies to win Liam’s lawsuit, pressuring Elara to fabricate evidence. When Elara quits and submits proof of his past misconduct to the bar association, he loses his partnership and is disbarred for professional misconduct.",
+        "ending_positioning": "Disgraced and stripped of his legal license, he’s forced to take low-paying consulting jobs, a shadow of his former powerful self. He becomes a cautionary tale of ruthless ambition without ethics."
+      }
+    },
+    "relationship_network": {
+      "Elara & Liam": {
+        "pair": "Ex-spouses",
+        "essence": "Trauma mirror; Elara’s past mistake comes to haunt her, forcing her to confront the root of her control issues.",
+        "dynamic_stages": [
+          "Hostile adversaries (Liam sues Elara’s firm, Elara tries to destroy his case)",
+          "Reluctant collaborators (Elara starts to admit her mistake, Liam shares his own grief)",
+          "Respectful friends (both find closure, support each other’s healing)"
+        ],
+        "escalation_triggers": "Liam reveals he doesn’t want money, just the truth; Elara discovers Liam has been attending therapy to process his grief.",
+        "break_distortion_point": "Elara admits her sabotage in court, breaking the cycle of anger and control between them."
+      },
+      "Elara & Kai":

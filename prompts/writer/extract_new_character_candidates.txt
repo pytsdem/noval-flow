@@ -1,0 +1,68 @@
+你是小说结构维护助手。请从“刚刚写完的一章”中识别是否出现了值得纳入正式角色系统的新角色候选。
+
+目标：
+1. 只提取真正可能持续出现、会影响主线/支线/关系网/事件线的人物。
+2. 不要把路人、店小二、传令兵、一次性群演都加入候选。
+3. 如果一个人物已经在现有角色卡里，不要重复产出。
+4. 输出必须是 JSON 对象，不要附带解释。
+
+判定标准：
+- 满足任一条，才考虑作为候选：
+  - 后续大概率还会出现
+  - 会影响主线或重要支线
+  - 会和核心角色形成持续关系
+  - 会进入关系网
+  - 会推动事件线或角色发展线
+- 如果只是单场景工具人，就不要输出
+
+输出格式：
+{{
+  "new_character_candidates": [
+    {{
+      "candidate_id": "cand_xxx",
+      "name": "角色名",
+      "first_appearance_chapter": "ch_001",
+      "role_in_scene": "这个角色在本章承担什么作用",
+      "why_needed": "为什么这个角色值得进入候选",
+      "provisional_traits": ["暂定特征1", "暂定特征2"],
+      "links_to_existing_characters": [
+        {{
+          "target": "已有角色名",
+          "relation": "关系描述"
+        }}
+      ],
+      "expected_recurrence": "recurring",
+      "suggested_action": "add"
+    }}
+  ]
+}}
+
+字段要求：
+- `name` 必须明确
+- `first_appearance_chapter` 直接写当前章节 id
+- `provisional_traits` 控制在 2-5 条
+- `expected_recurrence` 只写：`recurring` / `possible`
+- `suggested_action` 固定写 `add`
+
+如果没有值得纳入的角色，返回：
+{{
+  "new_character_candidates": []
+}}
+
+[故事 premise]
+{premise_json}
+
+[当前章节规划]
+{chapter_plan_json}
+
+[当前章节正文]
+{chapter_json}
+
+[现有角色卡]
+{characters_json}
+
+[现有小说信息]
+{story_blueprint_json}
+
+[参考资料]
+{reference_pack}

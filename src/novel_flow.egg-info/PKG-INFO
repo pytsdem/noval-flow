@@ -1,7 +1,7 @@
 Metadata-Version: 2.4
 Name: novel-flow
 Version: 0.1.0
-Summary: Multi-agent novel generation pipeline for 100k-word Zhihu-style fiction.
+Summary: Multi-agent novel generation pipeline for style-flexible serialized fiction.
 Requires-Python: >=3.11
 Description-Content-Type: text/markdown
 Requires-Dist: pydantic<3.0,>=2.7
@@ -9,7 +9,7 @@ Requires-Dist: httpx<0.29,>=0.27
 
 # Novel Flow
 
-一个基于 Python 3.11 的 4+1 多 Agent 小说生成项目骨架，面向“多 Agent 协作生成 10 万字知乎风格小说”。当前版本优先把协议、Pydantic schema、SQLite 存储、block 级 patch、版本记录和单 Agent 调试入口打稳。
+一个基于 Python 3.11 的 4+1 多 Agent 小说生成项目骨架，面向“多 Agent 协作生成可持续续写的小说项目”。当前版本优先把协议、Pydantic schema、SQLite 存储、block 级 patch、版本记录和单 Agent 调试入口打稳。
 
 ## 架构
 
@@ -91,11 +91,33 @@ Python: Select Interpreter
 Developer: Reload Window
 ```
 
-## 豆包模型接入
+## 模型接入
 
-项目已经接入豆包 OpenAI 兼容接口。建议统一用环境变量，不要把密钥写进代码：
+项目支持豆包和 OpenAI/GPT。建议统一用环境变量，不要把密钥写进代码。
+
+### 使用 OpenAI / GPT
+
+在 `.env` 里配置：
+
+```bash
+LLM_PROVIDER=openai
+OPENAI_API_KEY=你的 OpenAI API Key
+OPENAI_MODEL=你的模型名
+OPENAI_BASE_URL=https://api.openai.com/v1
+```
+
+说明：
+
+- `OPENAI_MODEL` 填你在 OpenAI 控制台可用的模型名。
+- `OPENAI_BASE_URL` 默认就是 `https://api.openai.com/v1`，一般不用改。
+- 当前实现走 Chat Completions 兼容接口。
+
+### 使用豆包
+
+如果继续用豆包：
 
 ```powershell
+$env:LLM_PROVIDER='doubao'
 $env:DOUBAO_API_KEY='你的 API Key'
 $env:DOUBAO_MODEL='ep-m-20260319020545-gzfvt'
 $env:DOUBAO_BASE_URL='https://ark.cn-beijing.volces.com/api/v3'
@@ -104,7 +126,8 @@ $env:DOUBAO_BASE_URL='https://ark.cn-beijing.volces.com/api/v3'
 说明：
 
 - `DOUBAO_MODEL` 是你的 endpoint id
-- 当前默认优先走真实豆包
+- `LLM_PROVIDER=doubao` 时走豆包
+- `LLM_PROVIDER=openai` 时走 OpenAI/GPT
 - 当前分支的 CLI / Web 控制台不提供 `--mock-llm` 参数
 
 ## 快速启动（后台服务 + 前端页面）
@@ -117,9 +140,21 @@ source .venv/bin/activate
 pip install -e .
 ```
 
-### 2. 配置豆包环境变量
+### 2. 配置模型环境变量
+
+如果使用 OpenAI/GPT：
 
 ```bash
+export LLM_PROVIDER='openai'
+export OPENAI_API_KEY='你的 OpenAI API Key'
+export OPENAI_MODEL='你的模型名'
+export OPENAI_BASE_URL='https://api.openai.com/v1'
+```
+
+如果使用豆包：
+
+```bash
+export LLM_PROVIDER='doubao'
 export DOUBAO_API_KEY='你的 API Key'
 export DOUBAO_MODEL='你的 endpoint id'
 export DOUBAO_BASE_URL='https://ark.cn-beijing.volces.com/api/v3'
@@ -127,8 +162,22 @@ export DOUBAO_BASE_URL='https://ark.cn-beijing.volces.com/api/v3'
 
 ### 3. 启动服务（后端 + 前端一体）
 
+先确认你已经进入项目虚拟环境：
+
+```bash
+source .venv/bin/activate
+```
+
+然后启动：
+
 ```bash
 novel-flow run --db data/novel_flow.db --test-db data/novel_flow_test.db --port 8765 --no-browser
+```
+
+如果你的 shell 提示 `novel-flow: command not found`，说明当前没有激活 `.venv`。也可以直接这样启动：
+
+```bash
+.venv/bin/novel-flow run --db data/novel_flow.db --test-db data/novel_flow_test.db --port 8765 --no-browser
 ```
 
 ### 4. 打开前端页面
@@ -235,7 +284,7 @@ python examples/01_storage_demo.py
 
 ```bash
 python examples/02_research_demo.py
-python examples/07_debug_research_agent.py --query "知乎体高热度都市情感反转"
+python examples/07_debug_research_agent.py --query "都市情感反转"
 ```
 
 ### 3. 验证 Writer
@@ -262,6 +311,14 @@ python examples/05_master_demo.py
 
 ### 6. CLI
 
+推荐先激活虚拟环境：
+
+```bash
+source .venv/bin/activate
+```
+
+再运行：
+
 ```bash
 novel-flow run --db data/novel_flow.db --test-db data/novel_flow_test.db --port 8765
 ```
@@ -270,6 +327,12 @@ novel-flow run --db data/novel_flow.db --test-db data/novel_flow_test.db --port 
 
 ```bash
 novel-flow run --db data/novel_flow.db --test-db data/novel_flow_test.db --port 8765 --no-browser
+```
+
+如果未激活虚拟环境，也可以直接调用：
+
+```bash
+.venv/bin/novel-flow run --db data/novel_flow.db --test-db data/novel_flow_test.db --port 8765 --no-browser
 ```
 
 ## Agent 与可调试能力

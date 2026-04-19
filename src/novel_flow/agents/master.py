@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+
 from datetime import datetime, timezone
 from typing import Any
 from uuid import uuid4
@@ -18,6 +20,7 @@ from novel_flow.models.schemas import (
     BookBlueprint,
     BookDocument,
     Chapter,
+    ChapterPlan,
     CriticReport,
     DirectorAction,
     DirectorDecision,
@@ -25,6 +28,7 @@ from novel_flow.models.schemas import (
     ResearchReport,
     StoryPremise,
     ToolObservation,
+    Volume,
     WorkflowStage,
     WorkflowState,
 )
@@ -83,6 +87,7 @@ class MasterAgent(BaseAgent):
         spine = self.blueprint_agent.build_story_spine(query, style_request=style_request, reference_pack=reference_pack)
         premise = StoryPremise.model_validate(spine["premise"])
         volume_titles = [str(item) for item in spine["volume_titles"]]
+        story_blueprint = dict(spine.get("story_blueprint", {}))
         blueprint = BookBlueprint(
             blueprint_id=f"blueprint_{uuid4().hex[:10]}",
             premise=premise,
@@ -93,6 +98,7 @@ class MasterAgent(BaseAgent):
         book = self.writer_agent.create_book(blueprint=blueprint, source_query=query, style_request=style_request)
         book.metadata["planning_phase"] = "outline"
         book.metadata["volume_titles"] = volume_titles
+        book.metadata["story_blueprint"] = story_blueprint
         book.metadata["chapter_plans"] = []
         book.metadata["next_chapter_index"] = 0
 
@@ -102,7 +108,14 @@ class MasterAgent(BaseAgent):
             agent="BlueprintAgent",
             output_type="story_spine",
             title="Story spine",
-            payload={"premise": premise.model_dump(mode="json"), "volume_titles": volume_titles},
+            payload={"premise": premise.model_dump(mode="json"), "volume_titles": volume_titles, "story_blueprint": story_blueprint},
+        )
+        self._save_output(
+            run_id=run_id,
+            agent="BlueprintAgent",
+            output_type="story_blueprint",
+            title="Full story blueprint",
+            payload={"story_blueprint": story_blueprint},
         )
         self._save_output(
             run_id=run_id,
@@ -132,24 +145,14 @@ class MasterAgent(BaseAgent):
         state = WorkflowState(run_id=run_id, stage=WorkflowStage.RESEARCH, context={"query": query, "style_request": style_request})
         self._save_state(state, mode=mode)
         session = self._run_directed_creation_loop(run_id=run_id, query=query, style_request=style_request, state=state, mode=mode)
-        research_report = session.research_report
-        blueprint = session.blueprint
-        blueprint_review = session.blueprint_review
-        written_book = session.book
-        chapter = session.chapter_written
-
-        critique = self._critique_and_patch(run_id=run_id, state=state, book=written_book, mode=mode)
-        final_book = critique["book"]
+        self._transition(state, WorkflowStage.COMPLETE, mode=mode, current_book_id=session.book.id if session.book else None)
+        ev.emit("stage", agent="MasterAgent", title="Stage: novel created", stage="complete", book_id=session.book.id if session.book else "")
         return {
             "run_id": run_id,
-            "research_report": research_report,
-            "blueprint": blueprint,
-            "chapter_written": chapter,
-            "blueprint_review": blueprint_review,
-            "critic_report": critique["critic_report"],
-            "patch_instruction": critique["patch_instruction"],
-            "patch_version": critique["patch_version"],
-            "book_after_patch": final_book,
+            "research_report": session.research_report,
+            "blueprint": session.blueprint,
+            "blueprint_review": session.blueprint_review,
+            "book_after_patch": session.book,
             "state": state,
         }
 
@@ -177,6 +180,8 @@ class MasterAgent(BaseAgent):
         session = self._run_directed_continue_loop(run_id=run_id, book=book, state=state, mode=mode)
         written_book = session.book
         chapter = session.chapter_written
+        if written_book is None:
+            raise ValueError("Director continue loop ended without writing a chapter.")
 
         critique = self._critique_and_patch(run_id=run_id, state=state, book=written_book, mode=mode)
         final_book = critique["book"]
@@ -211,7 +216,9 @@ class MasterAgent(BaseAgent):
         )
         self._save_state(state, mode=mode)
 
-        query = str(book.metadata.get("query") or book.title)
+        topic = str(book.metadata.get("user_topic") or "").strip()
+        base_query = str(book.metadata.get("query") or book.title)
+        query = f"题材：{topic}\n需求：{base_query}" if topic and base_query else (topic or base_query)
         volume_titles = [str(item) for item in book.metadata.get("volume_titles", [])] or [volume.title for volume in book.volumes] or ["Volume 1"]
         focus = [
             query,
@@ -230,6 +237,7 @@ class MasterAgent(BaseAgent):
             focus=focus,
             tags=["人物塑造", "角色关系"],
         )
+        reference_pack = self._augment_reference_pack(book, reference_pack)
         characters = self.blueprint_agent.build_character_bible(query, book.premise, volume_titles, reference_pack=reference_pack)
         book.characters = characters
         book.metadata["planning_phase"] = "characters"
@@ -265,7 +273,9 @@ class MasterAgent(BaseAgent):
         )
         self._save_state(state, mode=mode)
 
-        query = str(book.metadata.get("query") or book.title)
+        topic = str(book.metadata.get("user_topic") or "").strip()
+        base_query = str(book.metadata.get("query") or book.title)
+        query = f"题材：{topic}\n需求：{base_query}" if topic and base_query else (topic or base_query)
         volume_titles = [str(item) for item in book.metadata.get("volume_titles", [])] or [volume.title for volume in book.volumes] or ["Volume 1"]
         focus = [
             query,
@@ -285,6 +295,7 @@ class MasterAgent(BaseAgent):
             focus=focus,
             tags=["故事结构", "章节规划", "人物关系"],
         )
+        reference_pack = self._augment_reference_pack(book, reference_pack)
         chapter_plans = self.blueprint_agent.build_chapter_roadmap(
             query,
             book.premise,
@@ -365,10 +376,10 @@ class MasterAgent(BaseAgent):
             if session.book is not None:
                 state.current_book_id = session.book.id
             self._save_state(state, mode=mode)
-            if session.chapter_written is not None:
+            if session.book is not None:
                 return session
 
-        raise ValueError("Director loop ended before the first chapter was written.")
+        raise ValueError("Director loop ended before the book was created.")
 
     def _run_directed_continue_loop(
         self,
@@ -435,18 +446,7 @@ class MasterAgent(BaseAgent):
             if session.reference_fetch_counts.get("planning", 0) == 0:
                 return [DirectorAction.RETRIEVE_REFERENCES], "planning", planning_focus
             return [DirectorAction.BUILD_BLUEPRINT], "planning", planning_focus
-        if session.book is None:
-            return [DirectorAction.CREATE_BOOK], "planning", [session.blueprint.premise.core_hook]
-        next_plan = session.next_chapter_plan()
-        writing_focus = [
-            next_plan.title if next_plan else "",
-            next_plan.objective if next_plan else "",
-            next_plan.tension if next_plan else "",
-            next_plan.cliffhanger if next_plan else "",
-        ]
-        if session.reference_fetch_counts.get("writing", 0) == 0:
-            return [DirectorAction.RETRIEVE_REFERENCES], "writing", [item for item in writing_focus if item]
-        return [DirectorAction.WRITE_CHAPTER], "writing", [item for item in writing_focus if item]
+        return [DirectorAction.CREATE_BOOK], "planning", [session.blueprint.premise.core_hook]
 
     def _allowed_continue_actions(
         self,
@@ -527,6 +527,20 @@ class MasterAgent(BaseAgent):
             return WorkflowStage.PATCHING
         return WorkflowStage.COMPLETE
 
+    @staticmethod
+    def _story_blueprint_json(book: BookDocument | None) -> str:
+        if book is None:
+            return "{}"
+        story_blueprint = book.metadata.get("story_blueprint", {})
+        return json.dumps(story_blueprint, ensure_ascii=False, indent=2) if story_blueprint else "{}"
+
+    @classmethod
+    def _augment_reference_pack(cls, book: BookDocument | None, reference_pack: str) -> str:
+        story_blueprint_json = cls._story_blueprint_json(book)
+        if story_blueprint_json == "{}":
+            return reference_pack
+        return f"{reference_pack}\n\n[Full Story Blueprint - Must Be Respected]\n{story_blueprint_json}"
+
     def _tool_registry(self) -> StoryToolRegistry:
         return StoryToolRegistry(
             research_agent=self.research_agent,
@@ -601,6 +615,7 @@ class MasterAgent(BaseAgent):
                 ],
                 tags=["审稿", "人物塑造", "情节"],
             )
+            reference_pack = self._augment_reference_pack(final_book, reference_pack)
             ev.emit(
                 "stage",
                 agent="MasterAgent",

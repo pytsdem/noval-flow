@@ -1,78 +1,96 @@
-请基于以下调研查询，生成一份符合目标风格的结构化创作蓝图。
+你现在要生成一份可直接用于创作规划的完整蓝图 JSON。不要写正文，不要输出 Markdown，只输出合法 JSON。
 
-调研查询：{research_query}
-风格要求：{style_request}
-参考种子信息（只作风格参考，不要机械照抄）：
+用户需求：
+{research_query}
+
+风格要求：
+{style_request}
+
+参考种子：
 {seed_json}
 
-请输出一个 JSON 对象，字段必须严格包含：
+输出顶层必须包含：
 - premise
 - characters
 - volume_titles
 - chapter_plans
 
-你要重点解决以下问题：
-1. 小说构思要具体、精妙，明确写出这本书最抓人的看点、反转链、情绪升级路线和最终兑现点。
-2. 人物必须立体，每一个人都要有行为逻辑闭环，不能只是标签组合。
-3. 章节路线必须和目标体量匹配：长篇要能持续升级，短篇或中篇要更集中，不是只把前几章写热闹。
-4. 标题必须先成立：要有画面、记忆点和题材气味，能暗示核心困局或人物命运；避免“XX逆袭”“XX觉醒”“命运之XX”“重生之XX”这类泛标题。
+premise 必须包含：
+- title
+- high_concept
+- theme_statement
+- story_summary
+- genre
+- target_style
+- emotional_hook
+- central_conflict
+- core_hook
+- escalation_path
+- twist_blueprint
+- ending_payoff
+- selling_points
 
-字段要求：
-1. `premise` 必须包含：
-   - title
-   - high_concept
-   - genre
-   - target_style
-   - emotional_hook
-   - central_conflict
-   - core_hook
-   - escalation_path
-   - twist_blueprint
-   - stage_payoffs
-   - ending_payoff
-   - selling_points
-2. `characters` 是数组，每项必须包含：
-   - name
-   - role
-   - goal
-   - flaw
-   - public_persona
-   - hidden_motive
-   - fear
-   - soft_spot
-   - bottom_line
-   - backstory
-   - behavior_logic
-   - arc
-   - relationship_hooks
-3. `volume_titles` 是字符串数组，至少 3 个。
-4. `chapter_plans` 默认至少 12 章；如果风格要求明确是短篇或中篇，可以少于 12 章，但每项仍必须包含：
-   - chapter_id
-   - title
-   - objective
-   - tension
-   - cliffhanger
-   - phase
-   - story_function
-   - key_turn
-   - payoff
-   - next_route_hint
-   - planned_scene_count
+characters 中每个角色都必须包含：
+- name
+- role
+- social_background
+- education_background
+- occupation
+- appearance
+- personality
+- career
+- initial_state
+- motivation
+- behavior_pattern
+- arc
+- relationships
+- development_axes
 
-创作原则：
-1. 风格必须服从用户要求：如果用户指定风格，就按该风格组织叙事；如果未指定，再根据题材自行判断，不要默认知乎体、女频或短篇。
-2. 开局必须尽快抛出最有戏剧性的关系局面或利益局面，让读者立刻站队。
-3. 所有“爽点”“虐点”“反转点”都要具体，不要写抽象概括。
-4. 不要使用土味表达和廉价宣言，例如“我偏不按剧本走”“命运由我改写”“狠狠打脸所有人”这种句式。
-5. 不要用“每章结尾生成钩子”这种 AI 说明书式表达；应该直接写出这一章的具体悬念或爆点。
-6. 人设不要只堆砌“疯批、清冷、偏执、腹黑、白切黑”等标签，必须写清人物为什么这样、会怎么做、会付出什么代价。
-7. 章节路线既要符合体量要求，也要给后续“续写下一章”留下明确路径；短篇不要硬拉长，长篇不要只靠开头热闹。
-8. 不要只写“女性觉醒/成长/救赎/权谋博弈”等主题词，要把主题压成一个硬故事问题：主角做过什么不可轻易原谅的选择，为什么当时非做不可，现在这个选择如何回来索债。
-9. 主角不能只是“被体系伤害的无辜者”。要给她一个真实的原罪、私心、误判或代价；后续成长应来自承认选择、承担后果，而不是被洗白。
-10. 至少让 2-3 个关键人物具备主动目标和利益冲突，避免所有人物都只是服务主角觉醒或恋爱线。
-11. 自由结局必须有真实代价，不要写成所有人轻易原谅、主角自动获得幸福。
+另外请补充 story_blueprint.relationship_network。relationship_network 中每一项都必须是对象，至少包含：
+- line_name
+- subject
+- target
+- surface_relation
+- true_relation
+- relation_stage_summary
+- core_emotion
+- psychological_basis
+- key_tensions
+- desire_vs_fear
+- power_dynamic
+- relationship_debt
+- turning_points
+- story_function
+- contrast_targets
+- payoff
 
-格式要求：
-1. 所有字段必须是合法 JSON。
-2. `escalation_path`、`twist_blueprint`、`stage_payoffs`、`selling_points`、`relationship_hooks` 必须是数组。
-3. 只输出 JSON，不要解释，不要加 Markdown。
+chapter_plans 中每章必须包含：
+- chapter_id
+- title
+- objective
+- tension
+- cliffhanger
+- phase
+- story_function
+- key_turn
+- payoff
+- next_route_hint
+- planned_scene_count
+
+硬性要求：
+1. premise 不能只是主题口号或设定摘要，必须是能支撑长线写作的硬故事问题。
+2. story_summary 必须说清主角是谁、被什么困住、做错过什么、后续会被什么追债。
+3. 主角不能只是被害者，必须有误判、私心、妅协或原罪。
+4. 角色不能只是人设标签，必须同时有主观欲望、客观处境、结构位置和可预见的变化方向。
+5. relationships 不能只写谁和谁有感情，要写出关系债务、权力错位、依附或对照关系。
+6. story_blueprint.relationship_network 必须写成详细关系卡：每条关系线都要包含心理基础、关键张力、欲望与恐惧、权力变化、关系债务、阶段转折、剧情作用和最终兑现。
+7. chapter_plans 不能是流水账目录，每章要有明确的任务、拐点、代价或兑现。
+8. volume_titles 要有结构感，不要写成第一卷、第二卷这种低信息标题。
+9. 所有抽象词都必须落成具体局面、具体运作方式和具体代价。
+
+输出前自检：
+1. 如果去掉“成长、觉醒、救赎、爱恨”这些词，故事是否仍然成立？
+2. 如果去掉主角，其他关键角色是否仍然有自己的目标和损失？
+3. 如果只看 chapter_plans，是否能看出明确升级与后期兑现？
+
+只输出 JSON。

@@ -88,22 +88,42 @@ class KnowledgeCard(BaseModel):
 class CharacterCard(BaseModel):
     name: str
     role: str
-    goal: str
-    flaw: str
-    public_persona: str = ""
-    hidden_motive: str = ""
-    fear: str = ""
-    soft_spot: str = ""
-    bottom_line: str = ""
-    backstory: str = ""
-    behavior_logic: str = ""
+    social_background: str = ""
+    education_background: str = ""
+    occupation: str = ""
+    appearance: str = ""
+    personality: str = ""
+    career: str = ""
+    initial_state: str = ""
+    motivation: str = ""
+    behavior_pattern: str = ""
     arc: str = ""
-    relationship_hooks: list[str] = Field(default_factory=list)
+    relationships: str = ""
+    development_axes: list[str] = Field(default_factory=list)
+
+
+class CharacterCandidateLink(BaseModel):
+    target: str
+    relation: str = ""
+
+
+class NewCharacterCandidate(BaseModel):
+    candidate_id: str
+    name: str
+    first_appearance_chapter: str = ""
+    role_in_scene: str = ""
+    why_needed: str = ""
+    provisional_traits: list[str] = Field(default_factory=list)
+    links_to_existing_characters: list[CharacterCandidateLink] = Field(default_factory=list)
+    expected_recurrence: str = "unknown"
+    suggested_action: str = "add"
 
 
 class StoryPremise(BaseModel):
     title: str
     high_concept: str
+    theme_statement: str = ""
+    story_summary: str = ""
     genre: str
     target_style: str
     emotional_hook: str
@@ -111,7 +131,6 @@ class StoryPremise(BaseModel):
     core_hook: str = ""
     escalation_path: list[str] = Field(default_factory=list)
     twist_blueprint: list[str] = Field(default_factory=list)
-    stage_payoffs: list[str] = Field(default_factory=list)
     ending_payoff: str = ""
     selling_points: list[str] = Field(default_factory=list)
 
@@ -127,6 +146,9 @@ class ChapterPlan(BaseModel):
     key_turn: str = ""
     payoff: str = ""
     next_route_hint: str = ""
+    target_words: str = ""
+    scene_density: str = ""
+    scene_beats: list[dict[str, str]] = Field(default_factory=list)
     planned_scene_count: int = Field(ge=1, default=2)
 
 

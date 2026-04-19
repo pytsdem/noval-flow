@@ -1,0 +1,59 @@
+你现在要为当前章节生成一份“章节写作简报”。不要写正文，不要输出 Markdown，只输出合法 JSON。
+
+premise JSON：
+{premise_json}
+
+chapter_plan JSON：
+{chapter_plan_json}
+
+chapter_briefs JSON：
+{chapter_briefs_json}
+
+recent_chapter_briefs JSON：
+{recent_chapter_briefs_json}
+
+story_lines JSON：
+{story_lines_json}
+
+relationship_network JSON：
+{relationship_network_json}
+
+twist_designs JSON：
+{twist_designs_json}
+
+character_milestones JSON：
+{character_milestones_json}
+
+previous_chapter JSON：
+{previous_chapter_json}
+
+已完成章节摘要串：
+{completed_chapter_summary_bundle}
+
+参考资料：
+{reference_pack}
+
+输出 JSON 必须包含：
+- chapter_goal
+- narrative_mode
+- viewpoint_strategy
+- reveal_strategy
+- must_land
+- must_avoid
+- retention_hook
+- language_notes
+- scene_focus
+
+规则：
+1. 这份简报是正文生成前的收口层，要把章节真正要完成的戏剧任务说清。
+2. `chapter_goal` 用一句话说明这一章真正要完成什么，不要重复标题。
+3. `narrative_mode`、`viewpoint_strategy`、`reveal_strategy` 要继承全书成文策略，并结合本章具体化。
+4. `must_land` 写本章必须兑现的 3-6 个点，例如关系变化、信息揭示、情绪代价、转折落点。
+5. `must_avoid` 写本章不能犯的错误，例如过度解释、提前泄露、人物失真、无功能场景。
+6. `retention_hook` 写本章结尾为什么能把读者留到下一章。
+7. `language_notes` 写本章语言和节奏提醒，例如压抑克制、快速推进、悬疑遮蔽。
+8. `scene_focus` 写 3-5 条场景层提醒，让正文生成知道每场戏最该抓什么。
+9. `recent_chapter_briefs` 用来提醒最近最多 10 章原本打算如何推进，不能和当前章冲突，也不能忘掉前面埋下的债务。
+10. “已完成章节摘要串”来自已经存在的章节摘要与章节规划信息，不额外生成新摘要；它代表最近最多 10 章的连续事实回顾，是比 `previous_chapter` 更长程的上下文，你必须把它当成硬事实，避免角色状态、关系温度、事件后果断裂。
+11. 如果 `recent_chapter_briefs` 和“已完成章节摘要串”存在轻微偏差，优先尊重已经写出来的事实，同时尽量向既定规划靠拢。
+12. 只输出 JSON。

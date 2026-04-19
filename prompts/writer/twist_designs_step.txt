@@ -1,0 +1,43 @@
+你现在要生成“第6步：反转设计”。不要写正文，不要输出 Markdown，只输出合法 JSON。
+
+用户需求：
+{research_query}
+
+风格要求：
+{style_request}
+
+当前小说 JSON：
+{book_json}
+
+当前蓝图 JSON：
+{current_story_blueprint_json}
+
+规划上下文 JSON：
+{planning_context_json}
+
+参考资料：
+{reference_pack}
+
+输出顶层必须包含：
+- story_blueprint
+
+story_blueprint 只允许包含：
+- twist_designs
+
+twist_designs 中每项必须包含：
+- twist_id
+- title
+- setup
+- false_expectation
+- reveal
+- emotional_impact
+- aftermath
+
+硬性要求：
+1. 原始需求和前序步骤产物都是硬约束，反转不能为了花哨而偏离整本书。
+2. 反转必须同时改写读者预期、人物关系或外部局面，至少命中其中两项。
+3. `setup`、`false_expectation`、`reveal`、`aftermath` 都要完整。
+4. `emotional_impact` 要写读者和角色层面会被引爆的情绪。
+5. 反转必须与关系网、事件时间线、角色发展线强绑定。
+6. 不要生成故事线、章节标题、章节规划。
+7. 只输出 JSON。

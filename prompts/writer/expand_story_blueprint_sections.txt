@@ -1,0 +1,32 @@
+你现在要为小说规划流程的某一个步骤扩写指定蓝图模块。不要写正文，不要输出 Markdown，只输出合法 JSON。
+
+任务名：
+{task_name}
+
+用户需求：
+{research_query}
+
+风格要求：
+{style_request}
+
+当前小说 JSON：
+{book_json}
+
+当前蓝图 JSON：
+{current_story_blueprint_json}
+
+参考资料：
+{reference_pack}
+
+任务要求：
+{task_requirements}
+
+输出契约：
+{output_contract}
+
+规则：
+1. 只输出符合 output_contract 的 JSON，不要多写顶层键。
+2. 这是局部扩写，不是推翻重做。
+3. 结果必须能直接支撑下一步生成和人工编辑。
+4. 不要写空泛对话，要回答“这个模块在这本书里具体怎么起作用”。
+5. 只输出 JSON。

@@ -1,0 +1,42 @@
+你是小说策划编辑。请只做“单角色改写”，不要改其他角色，不要改关系网，不要输出 Markdown。
+只输出合法 JSON。
+
+前序步骤结果（仅供约束）：
+step_1 结果：
+{step1_json}
+
+step_2 结果：
+{step2_json}
+
+当前角色参数（只改这个角色）：
+{current_character_json}
+
+用户指令：
+{user_guidance}
+
+目标：
+1. 在保留角色核心定位的前提下，按用户指令优化该角色。
+2. 角色必须与 step_1/step_2 的世界观与主冲突一致。
+3. 不要引入与前序结果冲突的新设定。
+4. 不要输出其他角色，也不要输出 relationship_network。
+
+输出 JSON 结构必须是：
+{
+  "review_notes": ["建议1", "建议2"],
+  "revised_character": {
+    "name": "",
+    "role": "",
+    "social_background": "",
+    "education_background": "",
+    "occupation": "",
+    "appearance": "",
+    "personality": "",
+    "career": "",
+    "initial_state": "",
+    "motivation": "",
+    "behavior_pattern": "",
+    "arc": "",
+    "relationships": "",
+    "development_axes": []
+  }
+}

@@ -1,38 +1,50 @@
-请按用户要求重写整章内容。
+你现在要整章重写。不要解释思路，只输出合法 JSON。
 
 章节 ID：{chapter_id}
-用户修改要求：{guidance}
+修改要求：{guidance}
 
-当前章节 JSON：
+当前 chapter JSON：
 {chapter_json}
 
-当前章节规划：
+chapter_plan JSON：
 {chapter_plan_json}
 
-上一章 JSON：
+story_blueprint JSON：
+{story_blueprint_json}
+
+previous_chapter JSON：
 {previous_chapter_json}
 
-小说 premise：
+premise JSON：
 {premise_json}
 
-角色设定：
+characters JSON：
 {characters_json}
 
 参考资料：
 {reference_pack}
 
-输出要求：
-1. 输出 JSON 对象，格式为：
-{{
-  "chapter": {{
+任务目标：
+你不是在润色，而是在重建这一章的戏剧逻辑、信息路线、情绪结构和角色因果。
+
+硬性要求：
+1. 重写后必须更好地兑现 relationship_network、twist_designs、story_lines、chapter_briefs 和 chapter_plan。
+2. 要说清这一章到底在完成什么 objective，为什么这种完成方式最有戏剧性。
+3. 每个 scene 都必须有功能，至少推进一项：冲突、信息、关系、反转、情绪。
+4. 不允许无功能场景、重复信息场景、只有氛围没有推进的场景。
+5. 角色必须符合角色卡，不得 OOC；推进必须有角色动机基础。
+6. 必须检查信息释放是否合理，不能把该后置的真相提前说完，也不能因为遮蔽导致读者完全摸不着线索。
+7. 如果 guidance 要求增强情绪或戏剧性，必须通过具体局面、关系错位、选择与代价来完成，不能靠空喊。
+8. 结尾要能为下一章或下一个场景留下有效推进力。
+
+输出格式：
+{
+  "chapter": {
     "id": "...",
     "title": "...",
     "summary": "...",
     "scenes": [...]
-  }}
-}}
-2. scene id、block id 必须保留原有结构和数量，不要乱改。
-3. block 的 purpose 必须保留。
-4. 重点根据用户要求优化节奏、冲突、人物动机、衔接和情绪密度。
-5. 保持与 premise、角色设定、上一章、本章规划一致，不要 OOC。
-6. 只输出 JSON，不要解释。
+  }
+}
+
+只输出 JSON。

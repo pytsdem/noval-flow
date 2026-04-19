@@ -1,27 +1,4 @@
-请审阅“当前章节”，不是整本书，并输出一个 JSON 对象。
-
-你会拿到这些上下文：
-- 整体设定 premise
-- 角色设定 characters
-- 当前章节规划 chapter_plan
-- 上一章 previous_chapter
-- 当前章 current_chapter
-
-参考写作技巧与反模式卡：
-{reference_pack}
-
-重点检查：
-1. 当前章是否完成了本章规划中的 objective、story_function、key_turn、payoff。
-2. 当前章与上一章衔接是否自然，是否符合 next_route_hint 所指向的续写路线。
-3. 当前章是否真正服务于 premise 中的 core_hook、escalation_path、twist_blueprint、stage_payoffs，而不是只在写局部热闹。
-4. 角色言行、情绪、决策是否符合人物卡中的 public_persona、hidden_motive、fear、soft_spot、bottom_line、behavior_logic、arc。
-   如果出现人物 OOC、行为逻辑断裂、关系跳变、成长弧线失真，要优先指出。
-5. 当前章是否存在明显的节奏、冲突、逻辑、信息重复、看点不足、反转无力的问题。
-
-要求：
-1. 只找最重要的 1 到 3 个问题。
-2. 每个问题必须具体、可定位、可修改。
-3. 如果没有明显问题，也必须返回 `issues: []`。
+你现在要审阅当前章节成稿，输出 JSON。不要写 Markdown，不要写散文式点评。
 
 premise JSON：
 {premise_json}
@@ -32,17 +9,38 @@ characters JSON：
 chapter_plan JSON：
 {chapter_plan_json}
 
+story_blueprint JSON：
+{story_blueprint_json}
+
 previous_chapter JSON：
 {previous_chapter_json}
 
 current_chapter JSON：
 {current_chapter_json}
 
-请严格输出 JSON 对象，字段必须包含：
+参考资料：
+{reference_pack}
+
+检查重点：
+1. 是否真正完成 objective、story_function、key_turn、payoff。
+2. 是否给出有效的 next_route_hint 或结尾牵引。
+3. 是否推进了重要关系线或长线，而不是原地解释。
+4. 角色是否符合角色卡，不得 OOC。
+5. 是否出现信息重复、无功能场景、情绪口号化、硬拗反转等问题。
+6. 是否存在信息释放失衡：该前置的信息没给，该后置的真相却提前泄露。
+7. 是否具备阅读牵引，尤其前三章能不能留住读者。
+8. 场景是否真的发生了局面变化，而不是只换措辞。
+9. 如果这是前三章，还要额外检查：
+   - 第一章是否太晚才进入困局。
+   - 第二章是否真的把局面变大。
+   - 第三章是否给出了小兑现，而不只是继续吊着。
+10. 如果前三章缺少 `reader_hook`、`core_question_left`、`small_payoff` 对应的兑现，要明确指出。
+
+输出 JSON 必须包含：
 - summary
 - issues
 
-issues 中每一项必须包含：
+issues 每项必须包含：
 - severity
 - title
 - problem_type
@@ -52,10 +50,4 @@ issues 中每一项必须包含：
 - recommendation
 - acceptance_criteria
 
-location 中必须包含：
-- volume_id
-- chapter_id
-- scene_id
-- block_id
-
-只输出 JSON，不要解释。
+只输出 JSON。

@@ -30,7 +30,7 @@ class CriticAgent(BaseAgent):
         self.llm_client = llm_client
         self.prompt_library = prompt_library or PromptLibrary()
 
-    def review_book(self, book: BookDocument, reference_pack: str = "暂无额外参考资料。") -> CriticReport:
+    def review_book(self, book: BookDocument, reference_pack: str = "No extra reference material.") -> CriticReport:
         ev.emit("agent_start", agent="CriticAgent", title="Review current chapter", book_id=book.id)
         current_chapter = self._current_chapter(book)
         previous_chapter = self._previous_chapter(book, current_chapter.id)
@@ -40,6 +40,7 @@ class CriticAgent(BaseAgent):
             premise_json=book.premise.model_dump_json(indent=2),
             characters_json=json.dumps([item.model_dump(mode="json") for item in book.characters], ensure_ascii=False, indent=2),
             chapter_plan_json=current_plan.model_dump_json(indent=2) if current_plan else "{}",
+            story_blueprint_json=json.dumps(book.metadata.get("story_blueprint", {}), ensure_ascii=False, indent=2),
             previous_chapter_json=json.dumps(previous_chapter.model_dump(mode="json"), ensure_ascii=False, indent=2)
             if previous_chapter
             else "{}",
@@ -51,15 +52,15 @@ class CriticAgent(BaseAgent):
         issues = [
             IssueCard(
                 issue_id=f"issue_{uuid4().hex[:10]}",
-                severity=IssueSeverity(item["severity"]),
+                severity=self._normalize_severity(item.get("severity")),
                 title=str(item["title"]),
                 problem_type=str(item["problem_type"]),
                 location=IssueLocation(
                     book_id=book.id,
-                    volume_id=str(item["location"]["volume_id"]),
-                    chapter_id=str(item["location"]["chapter_id"]),
-                    scene_id=str(item["location"]["scene_id"]),
-                    block_id=str(item["location"]["block_id"]),
+                    volume_id=self._normalize_location_value(item.get("location", {}).get("volume_id")),
+                    chapter_id=self._normalize_location_value(item.get("location", {}).get("chapter_id")),
+                    scene_id=self._normalize_location_value(item.get("location", {}).get("scene_id")),
+                    block_id=self._normalize_location_value(item.get("location", {}).get("block_id")),
                 ),
                 evidence=str(item["evidence"]),
                 impact=str(item["impact"]),
@@ -81,7 +82,7 @@ class CriticAgent(BaseAgent):
         )
         return report
 
-    def review_blueprint(self, blueprint: BookBlueprint, reference_pack: str = "暂无额外参考资料。") -> dict[str, Any]:
+    def review_blueprint(self, blueprint: BookBlueprint, reference_pack: str = "No extra reference material.") -> dict[str, Any]:
         ev.emit("agent_start", agent="CriticAgent", title="Review blueprint", blueprint_id=blueprint.blueprint_id)
         prompt = self.prompt_library.render(
             "critic/review_blueprint.txt",
@@ -100,7 +101,7 @@ class CriticAgent(BaseAgent):
             "issues": parsed.get("issues", []),
         }
 
-    def build_patch_instruction(self, issue: IssueCard, reference_pack: str = "暂无额外参考资料。") -> PatchInstruction:
+    def build_patch_instruction(self, issue: IssueCard, reference_pack: str = "No extra reference material.") -> PatchInstruction:
         ev.emit("agent_start", agent="CriticAgent", title="Build patch instruction", issue_id=issue.issue_id)
         prompt = self.prompt_library.render(
             "critic/patch_instruction.txt",
@@ -182,3 +183,17 @@ class CriticAgent(BaseAgent):
             if str(item.get("chapter_id", "")) == chapter_id:
                 return ChapterPlan.model_validate(item)
         return None
+
+    @staticmethod
+    def _normalize_severity(value: Any) -> IssueSeverity:
+        normalized = str(value or "medium").strip().lower()
+        try:
+            return IssueSeverity(normalized)
+        except ValueError:
+            return IssueSeverity.MEDIUM
+
+    @staticmethod
+    def _normalize_location_value(value: Any) -> str:
+        if isinstance(value, list):
+            return str(value[0]) if value else ""
+        return str(value or "")

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+
 from dataclasses import dataclass, field
 from typing import Any, Callable
 from uuid import uuid4
@@ -36,7 +38,9 @@ class DirectedStorySession:
     research_report: ResearchReport | None = None
     blueprint: BookBlueprint | None = None
     blueprint_review: dict[str, Any] = field(default_factory=lambda: {"summary": "", "issues": []})
+    character_milestones: list[dict[str, Any]] = field(default_factory=list)
     chapter_written: Chapter | None = None
+    story_blueprint: dict[str, Any] = field(default_factory=dict)
     critic_report: Any | None = None
     patch_instruction: Any | None = None
     patch_version: BlockPatchVersion | None = None
@@ -79,6 +83,15 @@ class DirectedStorySession:
 
 
 class StoryToolRegistry:
+    @staticmethod
+    def _augment_reference_pack(book: BookDocument | None, reference_pack: str) -> str:
+        if book is None:
+            return reference_pack
+        story_blueprint = book.metadata.get("story_blueprint", {})
+        if not story_blueprint:
+            return reference_pack
+        return f"{reference_pack}\n\n[Full Story Blueprint - Must Be Respected]\n{json.dumps(story_blueprint, ensure_ascii=False, indent=2)}"
+
     def __init__(
         self,
         *,
@@ -173,6 +186,10 @@ class StoryToolRegistry:
                 )
                 premise = StoryPremise.model_validate(spine["premise"])
                 volume_titles = [str(item) for item in spine["volume_titles"]]
+                session.story_blueprint = dict(spine.get("story_blueprint", {}))
+                reference_pack = self._augment_reference_pack(session.book, reference_pack) if session.book else reference_pack
+                if session.story_blueprint:
+                    reference_pack = f"{reference_pack}\n\n[Full Story Blueprint - Must Be Respected]\n{json.dumps(session.story_blueprint, ensure_ascii=False, indent=2)}"
                 characters = self.blueprint_agent.build_character_bible(
                     session.query,
                     premise,
@@ -198,7 +215,14 @@ class StoryToolRegistry:
                     agent="BlueprintAgent",
                     output_type="story_spine",
                     title=f"Story spine round {round_index}",
-                    payload={"premise": premise.model_dump(mode="json"), "volume_titles": volume_titles, "round_index": round_index},
+                    payload={"premise": premise.model_dump(mode="json"), "volume_titles": volume_titles, "story_blueprint": session.story_blueprint, "round_index": round_index},
+                )
+                self.save_output(
+                    run_id=session.run_id,
+                    agent="BlueprintAgent",
+                    output_type="story_blueprint",
+                    title=f"Full story blueprint round {round_index}",
+                    payload={"story_blueprint": session.story_blueprint, "round_index": round_index},
                 )
                 self.save_output(
                     run_id=session.run_id,
@@ -242,12 +266,28 @@ class StoryToolRegistry:
             if not blueprint_review.get("issues") or round_index >= max_rounds:
                 break
 
+        milestones = self.blueprint_agent.build_character_milestones(
+            session.query,
+            blueprint.premise,
+            blueprint.characters,
+            blueprint.chapter_plans,
+            reference_pack=reference_pack,
+        )
+        session.character_milestones = milestones
+        self.save_output(
+            run_id=session.run_id,
+            agent="BlueprintAgent",
+            output_type="character_milestones",
+            title="Character milestones",
+            payload={"character_milestones": milestones},
+        )
+
         session.blueprint = blueprint
         session.blueprint_review = blueprint_review
         return ToolObservation(
             tool_name="build_blueprint",
-            summary=f"Built blueprint with {len(blueprint.chapter_plans)} chapter plans.",
-            payload={"blueprint_id": blueprint.blueprint_id, "issue_count": len(blueprint_review.get('issues', []))},
+            summary=f"Built blueprint with {len(blueprint.chapter_plans)} chapter plans and {len(milestones)} character milestone maps.",
+            payload={"blueprint_id": blueprint.blueprint_id, "issue_count": len(blueprint_review.get('issues', [])), "milestone_count": len(milestones)},
         )
 
     def _create_book(self, session: DirectedStorySession) -> ToolObservation:
@@ -258,6 +298,10 @@ class StoryToolRegistry:
             source_query=session.query,
             style_request=session.style_request,
         )
+        if session.character_milestones:
+            book.metadata["character_milestones"] = session.character_milestones
+        if session.story_blueprint:
+            book.metadata["story_blueprint"] = session.story_blueprint
         session.book = book
         self.memory_agent.save_book(book)
         self.save_output(

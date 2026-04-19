@@ -1,0 +1,348 @@
+2026-04-17 01:02:26,831 | INFO | novel_flow.cli | Novel Flow console started at http://127.0.0.1:8775/
+2026-04-17 01:02:28,563 | WARNING | FallbackLLMClient | Primary LLM provider 'codex' failed, falling back to 'doubao': codex exec failed (exit 1): WARNING: proceeding, even though we could not update PATH: ¾Ü¾ø·ÃÎÊ¡£ (os error 5)
+Error: ¾Ü¾ø·ÃÎÊ¡£ (os error 5)
+
+2026-04-17 01:02:31,003 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "premise": {
+    "title": "Iron Lotus and the Unbreakable Bargain",
+    "high_concept": "A disgraced imperial blacksmith, once ruined by her obsession with control, strikes a bargain with a rogue warlord to save her family¡ªonly to discover that redemption and love require letting go of the illusion of power she¡¯s clung to her whole life.",
+    "genre": "Historical Romance + Political Thriller",
+    "target_style": "Gritty, lyrical, and emotionally unflinching; grounded in historical detail, with sharp, realistic power dynamics and no sugarcoated relationships.",
+    "emotional_hook": "What do you do when the only way to fix the damage you caused is to trust the person who could destroy everything you¡¯ve left? When your greatest strength¡ªyour ability to control every detail¡ªbecomes your greatest weakness?",
+    "central_conflict": "Li Mengyao must navigate between her quest to clear her family¡¯s name (by forging a legendary blade for warlord Feng Yuzhu) and her growing feelings for him, while confronting the truth that her past downfall was rooted in her need for dominance, not just ambition.",
+    "core_hook": "Can a woman who¡¯s always used her craft to manipulate and control learn to let go long enough to build a real, equal relationship, or will her obsession with power destroy both her redemption and her chance at love?",
+    "escalation_path": [
+      "Mengyao is forced into the bargain after her family¡¯s workshop is seized, with her sister¡¯s safety on the line.",
+      "She clashes with Feng over every detail of the blade, but discovers shared traumas that blur the line between transaction and connection.",
+      "Corrupt imperial officials target them, forcing Mengyao to choose between protecting her sister and fulfilling the bargain.",
+      "A betrayal reveals Mengyao¡¯s father wasn¡¯t killed by accident¡ªhe was murdered by the official she once tried to impress with her 'perfect' weapons.",
+      "Mengyao must decide whether to use the legendary blade for vengeance or forge a new future free from her need for control."
+    ],
+    "twist_blueprint": "Feng Yuzhu knew the truth about Mengyao¡¯s father¡¯s murder all along, but hid it to force her to confront her own role in the tragedy: her obsession with imperial approval made her an easy pawn for the corrupt official.",
+    "stage_payoffs": {
+      "Volume 1": "Mengyao proves her craft to Feng, secures temporary safety for her family, and realizes Feng is not the brute she assumed¡ªhe¡¯s a man with his own scars.",
+      "Volume 2": "Mengyao and Feng grow closer, but his secret plan to overthrow the imperial court and her discovery of his hidden knowledge about her father¡¯s death shatter their trust.",
+      "Volume 3": "Mengyao uncovers the full truth about her father¡¯s murder, confronts the corrupt official, and chooses to prioritize community and connection over vengeance and control."
+    },
+    "ending_payoff": "Mengyao melts the legendary blade to forge farming tools for her village, abandoning her dream of imperial redemption. She and Feng build an equal partnership: she runs a community blacksmith workshop independently, while he leads his border territory with her counsel. They don¡¯t erase their pasts, but they learn to live with them together.",
+    "selling_points": [
+      "Subverts 'female strong, male stronger' tropes: Mengyao¡¯s blacksmithing expertise is irreplaceable, while Feng¡¯s strength lies in strategy¡ªthey complement, not dominate, each other.",
+      "Avoids perfect partner clich¨¦s: Both leads are flawed (Mengyao is control-obsessed, Feng is vengeful) and their relationship is messy, built on compromise and sacrifice.",
+      "Grounded female empowerment: Mengyao¡¯s growth comes from confronting her own mistakes, not a man¡¯s guidance; Feng is a catalyst, not a savior.",
+      "Realistic cost of love: Both characters give up core desires (Mengyao¡¯s control and imperial ambition, Feng¡¯s revenge) to make their relationship work.",
+      "Dynamic character relationships: No static bonds¡ªevery relationship evolves as the story progresses, from hostile bargains to equal partnerships."
+    ]
+  },
+  "volume_titles": [
+    "The Blacksmith¡¯s Bargain",
+    "Sparks and Secrets",
+    "The Melted Blade"
+  ],
+  "story_blueprint": {
+    "positioning": {
+      "genre_mix": "Historical Romance anchored in political thriller stakes, with a focus on character-driven growth and realistic power dynamics.",
+      "one_line_sell": "A disgraced imperial blacksmith strikes a bargain with a rogue warlord to save her family, only to learn that redemption and love require letting go of the control she¡¯s hidden behind her whole life.",
+      "hook_expansion": "Mengyao¡¯s downfall began when she ignored her father¡¯s warnings to forge a 'perfect' imperial sword¡ªher obsession with control led her to cut corners, and a corrupt official used the blade¡¯s flaw to frame her family for soldier deaths. Now, she must work with a warlord she distrusts to reclaim her honor, but every attempt to take control of the situation backfires, forcing her to confront the truth about her own weaknesses.",
+      "title_rationale": "'Iron Lotus' refers to Mengyao¡¯s outer strength (iron) and hidden vulnerability (lotus), while 'Unbreakable Bargain' evolves from a transactional deal to a relationship built on mutual sacrifice and trust.",
+      "reader_emotional_promise": "You¡¯ll witness a woman confront her deepest flaws, grow without being saved by a man, and find love that¡¯s based on equality, not dominance¡ªall set against a gritty, vivid backdrop of imperial corruption and border conflict."
+    },
+    "story_engine": {
+      "original_plot_track": "Mengyao seeks to clear her family¡¯s name by recreating the blade that ruined them, but needs resources only Feng Yuzhu can provide; their bargain evolves into a relationship that challenges both their core beliefs.",
+      "world_rules": "In late imperial China, blacksmiths are either bound to the court (and its corruption) or outcasts; warlords control border territories, clashing with the court while protecting their people from bandits and famine.",
+      "power_structure": "Corrupt imperial court (obsessed with control and wealth), autonomous warlords (fighting for survival and reform), and common people (caught in the crossfire, relying on local leaders for protection).",
+      "structural_inertia": "Mengyao can¡¯t clear her family¡¯s name without imperial approval, which she¡¯ll never get because the court wants to cover up its own role in the blade¡¯s flaw.",
+      "backlash_mechanism": "Every time Mengyao tries to manipulate or control a situation, it backfires: sabotaging Feng¡¯s plans puts her sister in danger, refusing to compromise on the blade delays her family¡¯s safety, and clinging to her pride pushes Feng away.",
+      "story_trigger": "Feng¡¯s soldiers seize Mengyao¡¯s workshop, offering her a deal: forge a legendary blade for his army, and he¡¯ll protect her sister and help her uncover the truth about her father¡¯s death."
+    },
+    "core_theme": {
+      "protagonist_original_sin": "Mengyao¡¯s misjudgment was believing control (over her craft, her family, her reputation) was the only way to survive. She sacrificed her father¡¯s wishes and her own integrity to pursue imperial glory, making her an easy pawn for corruption.",
+      "hard_story_question": "Is letting go of control a sign of weakness, or the only path to true strength and redemption?",
+      "end_realization": "Control is an illusion. True strength lies in accepting vulnerability, trusting others, and using your gifts to lift up your community, not dominate others.",
+      "ending_cost": "Mengyao gives up her lifelong dream of being reinstated as an imperial blacksmith and must live with the guilt of her role in her father¡¯s death. Feng abandons his plan to overthrow the court, choosing incremental reform instead of violent revenge."
+    },
+    "character_system": {
+      "Li Mengyao (Protagonist)": {
+        "structure_role": "Flawed hero seeking redemption, whose growth drives the story¡¯s emotional core.",
+        "current_goal": "Clear her family¡¯s name, restore their workshop, and protect her younger sister.",
+        "fear": "Losing control of her life and being powerless to protect her loved ones.",
+        "bottom_line": "She will never let anyone harm her sister, even if it means sacrificing her own goals.",
+        "behavior_logic": "She uses her blacksmithing expertise as leverage, distrusts others because of past betrayal, and micromanages every detail to avoid failure.",
+        "relationship_debts": "She owes her father an apology for ignoring his warnings, and her sister for years of overprotection that stifled her independence.",
+        "growth_path": "Starts as a control-obsessed survivor, learns to trust Feng and her sister, confronts her role in her family¡¯s downfall, and chooses community over personal glory.",
+        "ending_positioning": "Runs a thriving community blacksmith workshop, partners with Feng as an equal, and uses her craft to help her village instead of serving the court."
+      },
+      "Feng Yuzhu (Male Lead)": {
+        "structure_role": "Enigmatic anti-hero with a hidden agenda, who acts as a catalyst for Mengyao¡¯s growth.",
+        "current_goal": "Overthrow the corrupt imperial court to avenge his family¡¯s murder and create a fairer system for his people.",
+        "fear": "Being betrayed by those he trusts, as his family was betrayed by the court.",
+        "bottom_line": "He will never harm innocent civilians, even if it means delaying his revenge.",
+        "behavior_logic": "Uses manipulation and strategy to achieve his goals, but has a strict code of honor; he sees Mengyao as a tool at first, but grows to respect her strength.",
+        "relationship_debts": "He owes his family revenge, but also owes his people stable leadership instead of violent conflict.",
+        "growth_path": "Starts as a vengeful warlord, learns to prioritize connection over revenge, confronts his own tendency to control others, and builds an equal partnership with Mengyao.",
+        "ending_positioning": "Leads his border territory with Mengyao¡¯s counsel, abandons violent revolution to push for incremental court reform, and lives with Mengyao in mutual respect."
+      },
+      "Wei Ling (Antagonist)": {
+        "structure_role": "Corrupt imperial official, whose manipulation caused Mengyao¡¯s downfall and drives the story¡¯s political stakes.",
+        "current_goal": "Maintain his power in the court by eliminating threats (Feng and Mengyao) and covering up his crimes.",
+        "fear": "Losing his position and being exposed for embezzlement and murder.",
+        "bottom_line": "He will do anything to stay in power, including killing innocent people.",
+        "behavior_logic": "Uses others¡¯ weaknesses (like Mengyao¡¯s need for control) to manipulate them; he¡¯s motivated by a deep insecurity from his poor childhood.",
+        "relationship_debts": "He owes the emperor loyalty, but has been embezzling court funds for years.",
+        "collapse_path": "His crimes are exposed by Mengyao and Feng, he¡¯s arrested and executed for treason and murder.",
+        "ending_positioning": "A cautionary tale of how obsession with power corrupts even those who started with good intentions."
+      },
+      "Li Xiaowen (Mengyao¡¯s Sister)": {
+        "structure_role": "Moral compass and motivation for Mengyao, whose independence challenges her sister¡¯s control.",
+        "current_goal": "Protect her sister, help restore their family¡¯s workshop, and build her own life.",
+        "fear": "Losing Mengyao to her obsession with control and redemption.",
+        "bottom_line": "She will never let Mengyao sacrifice herself for a goal that doesn¡¯t prioritize their family¡¯s happiness.",
+        "behavior_logic": "Kind and empathetic, she often reminds Mengyao to focus on what¡¯s truly important; she¡¯s tired of being a passive victim and wants to contribute to their family¡¯s future.",
+        "relationship_debts": "She owes Mengyao for years of protection, but also owes herself the chance to be independent.",
+        "growth_path": "Starts as an obedient younger sister, learns to stand up to Mengyao, helps uncover the truth about their father¡¯s death, and becomes a co-owner of the community workshop.",
+        "ending_positioning": "Co-runs the community workshop with Mengyao, marries a local merchant, and lives a stable, happy life."
+      }
+    },
+    "relationship_network": {
+      "Mengyao & Feng Yuzhu": {
+        "pair": "Protagonist & Male Lead",
+        "essence": "A transactional bargain that evolves into an equal relationship built on mutual respect and sacrifice.",
+        "dynamic_stages": [
+          "Hostile bargain: Mengyao sees Feng as a brute, Feng sees Mengyao as a tool to get the blade.",
+          "Cautious alliance: They clash over the blade¡¯s design, but share stories of their traumas and start to trust each other.",
+          "Romantic tension: They share intimate moments, but their conflicting goals (Mengyao¡¯s redemption vs. Feng¡¯s revenge) create friction.",
+          "Betrayal and reconciliation: Feng reveals he knew about Mengyao¡¯s father¡¯s murder but hid it; Mengyao cuts ties, but they reconcile when they realize they need each other to expose Wei Ling."
+        ],
+        "escalation_triggers": [
+          "Feng saves Mengyao from imperial assassins, showing he cares about her beyond the bargain.",
+          "Mengyao discovers Feng¡¯s plan to overthrow the court, fearing he¡¯ll use her blade to kill innocent people."
+        ],
+        "break_distortion_point": "Feng admits he knew about Wei Ling¡¯s role in Mengyao¡¯s father¡¯s death but didn¡¯t tell her, leading Mengyao to believe he¡¯s just using her for his own goals."
+      },
+      "Mengyao & Li Xiaowen": {
+        "pair": "Protagonist & Sister",
+        "essence": "A protective bond that challenges Mengyao¡¯s control and pushes her to grow.",
+        "dynamic_stages": [
+          "Overprotective control: Mengyao makes all decisions for Xiaowen, treating her like a child.",
+          "Tension and rebellion: Xiaowen starts to question Mengyao¡¯s choices, arguing that her obsession with redemption is hurting their family.",
+          "Equal partnership: Xiaowen helps Mengyao uncover the truth about their father¡¯s death, proving she¡¯s capable of taking care of herself and their family."
+        ],
+        "escalation_triggers": "Xiaowen is kidnapped by Wei Ling¡¯s men, forcing Mengyao to choose between saving her and finishing the blade.",
+        "break_distortion_point": "Mengyao almost sacrifices Xiaowen to finish the blade, making Xiaowen realize her sister¡¯s control has become dangerous."
+      },
+      "Mengyao & Wei Ling": {
+        "pair": "Protagonist & Antagonist",
+        "essence": "A toxic dynamic where Wei Ling uses Mengyao¡¯s flaws against her to maintain his power.",
+        "dynamic_stages": [
+          "Manipulation: Wei Ling convinces Mengyao to forge the flawed blade, promising her imperial approval.",
+          "Betrayal: He frames Mengyao¡¯s family for the blade¡¯s failure, ruining their reputation.",
+          "Confrontation: Mengyao uncovers the truth about her father¡¯s murder and confronts Wei Ling to expose his crimes."
+        ],
+        "escalation_triggers": "Wei Ling discovers Mengyao is working with Feng, so he sends assassins to kill her and kidnap Xiaowen.",
+        "break_distortion_point": "Mengyao finds a letter from her father proving Wei Ling murdered him, turning her quest for redemption into a quest for justice."
+      }
+    },
+    "structure_blueprint": {
+      "three_act_design": {
+        "Act 1 (Volume 1: The Blacksmith¡¯s Bargain)": {
+          "setup": "Mengyao¡¯s workshop is seized, her sister¡¯s safety is threatened, and she makes the bargain with Feng.",
+          "inciting_incident": "Feng gives Mengyao the rare metal needed to forge the blade, setting strict deadlines and conditions.",
+          "first_plot_point": "Mengyao finishes a prototype, but Feng rejects it, telling her to let go of her obsession with perfection and forge a blade that¡¯s truly strong, not just 'perfect'."
+        },
+        "Act 2 (Volume 2: Sparks and Secrets)": {
+          "rising_action": "Mengyao and Feng grow closer, but she discovers his plan to overthrow the court; Wei Ling starts targeting them, sending assassins and spreading rumors.",
+          "midpoint_loss_of_control": "Xiaowen is kidnapped by Wei Ling¡¯s men, forcing Mengyao to choose between saving her and finishing the blade. She chooses to save Xiaowen, but Feng is angry because it delays his plan.",
+          "second_plot_point": "Feng reveals he knew about Mengyao¡¯s father¡¯s murder but hid it, leading Mengyao to cut ties with him and work alone to uncover the truth."
+        },
+        "Act 3 (Volume 3: The Melted Blade)": {
+          "falling_action": "Mengyao works with Xiaowen to find evidence of Wei Ling¡¯s crimes; Feng realizes his revenge is destroying his chance at happiness and reaches out to reconcile.",
+          "climax": "Mengyao and Feng confront Wei Ling in the imperial court, presenting evidence of his murder and embezzlement. The emperor has Wei Ling arrested and executed.",
+          "resolution": "Mengyao melts the legendary blade to forge farming tools for her village; she and Feng build an equal partnership, running their respective domains with mutual respect."
+        }
+      },
+      "volume_blueprint": {
+        "Volume 1": "Establish stakes, introduce core characters, and set up the bargain between Mengyao and Feng.",
+        "Volume 2": "Deepen the relationship between Mengyao and Feng, introduce the political conflict, and push Mengyao to confront her fear of losing control.",
+        "Volume 3": "Uncover the twist about Mengyao¡¯s father¡¯s death, resolve the political conflict, and complete Mengyao¡¯s growth arc."
+      },
+      "major_turns": [
+        "Mengyao realizes Feng is not a brute (Volume 1)",
+        "Mengyao discovers Feng¡¯s plan to overthrow the court (Volume 2)",
+2026-04-17 01:05:54,112 | WARNING | FallbackLLMClient | Primary LLM provider 'codex' failed, falling back to 'doubao': codex exec failed (exit 1): WARNING: proceeding, even though we could not update PATH: ¾Ü¾ø·ÃÎÊ¡£ (os error 5)
+Error: ¾Ü¾ø·ÃÎÊ¡£ (os error 5)
+
+2026-04-17 01:05:56,385 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "premise": {
+    "title": "Iron Lotus and the Unbreakable Bargain",
+    "high_concept": "A disgraced imperial blacksmith, once ruined by her obsession with control, strikes a bargain with a rogue warlord to save her family¡ªonly to discover that redemption and love require letting go of the illusion of power she¡¯s clung to her whole life.",
+    "genre": "Historical Romance + Political Thriller",
+    "target_style": "Gritty, lyrical, and emotionally unflinching; grounded in historical detail, with sharp, realistic power dynamics and no sugarcoated relationships.",
+    "emotional_hook": "What do you do when the only way to fix the damage you caused is to trust the person who could destroy everything you¡¯ve left? When your greatest strength¡ªyour ability to control every detail¡ªbecomes your greatest weakness?",
+    "central_conflict": "Li Mengyao must navigate between her quest to clear her family¡¯s name (by forging a legendary blade for warlord Feng Yuzhu) and her growing feelings for him, while confronting the truth that her past downfall was rooted in her need for dominance, not just ambition.",
+    "core_hook": "Can a woman who¡¯s always used her craft to manipulate and control learn to let go long enough to build a real, equal relationship, or will her obsession with power destroy both her redemption and her chance at love?",
+    "escalation_path": [
+      "Mengyao is forced into the bargain after her family¡¯s workshop is seized, with her sister¡¯s safety on the line.",
+      "She clashes with Feng over every detail of the blade, but discovers shared traumas that blur the line between transaction and connection.",
+      "Corrupt imperial officials target them, forcing Mengyao to choose between protecting her sister and fulfilling the bargain.",
+      "A betrayal reveals Mengyao¡¯s father wasn¡¯t killed by accident¡ªhe was murdered by the official she once tried to impress with her 'perfect' weapons.",
+      "Mengyao must decide whether to use the legendary blade for vengeance or forge a new future free from her need for control."
+    ],
+    "twist_blueprint": "Feng Yuzhu knew the truth about Mengyao¡¯s father¡¯s murder all along, but hid it to force her to confront her own role in the tragedy: her obsession with imperial approval made her an easy pawn for the corrupt official.",
+    "stage_payoffs": {
+      "Volume 1": "Mengyao proves her craft to Feng, secures temporary safety for her family, and realizes Feng is not the brute she assumed¡ªhe¡¯s a man with his own scars.",
+      "Volume 2": "Mengyao and Feng grow closer, but his secret plan to overthrow the imperial court and her discovery of his hidden knowledge about her father¡¯s death shatter their trust.",
+      "Volume 3": "Mengyao uncovers the full truth about her father¡¯s murder, confronts the corrupt official, and chooses to prioritize community and connection over vengeance and control."
+    },
+    "ending_payoff": "Mengyao melts the legendary blade to forge farming tools for her village, abandoning her dream of imperial redemption. She and Feng build an equal partnership: she runs a community blacksmith workshop independently, while he leads his border territory with her counsel. They don¡¯t erase their pasts, but they learn to live with them together.",
+    "selling_points": [
+      "Subverts 'female strong, male stronger' tropes: Mengyao¡¯s blacksmithing expertise is irreplaceable, while Feng¡¯s strength lies in strategy¡ªthey complement, not dominate, each other.",
+      "Avoids perfect partner clich¨¦s: Both leads are flawed (Mengyao is control-obsessed, Feng is vengeful) and their relationship is messy, built on compromise and sacrifice.",
+      "Grounded female empowerment: Mengyao¡¯s growth comes from confronting her own mistakes, not a man¡¯s guidance; Feng is a catalyst, not a savior.",
+      "Realistic cost of love: Both characters give up core desires (Mengyao¡¯s control and imperial ambition, Feng¡¯s revenge) to make their relationship work.",
+      "Dynamic character relationships: No static bonds¡ªevery relationship evolves as the story progresses, from hostile bargains to equal partnerships."
+    ]
+  },
+  "volume_titles": [
+    "The Blacksmith¡¯s Bargain",
+    "Sparks and Secrets",
+    "The Melted Blade"
+  ],
+  "story_blueprint": {
+    "positioning": {
+      "genre_mix": "Historical Romance anchored in political thriller stakes, with a focus on character-driven growth and realistic power dynamics.",
+      "one_line_sell": "A disgraced imperial blacksmith strikes a bargain with a rogue warlord to save her family, only to learn that redemption and love require letting go of the control she¡¯s hidden behind her whole life.",
+      "hook_expansion": "Mengyao¡¯s downfall began when she ignored her father¡¯s warnings to forge a 'perfect' imperial sword¡ªher obsession with control led her to cut corners, and a corrupt official used the blade¡¯s flaw to frame her family for soldier deaths. Now, she must work with a warlord she distrusts to reclaim her honor, but every attempt to take control of the situation backfires, forcing her to confront the truth about her own weaknesses.",
+      "title_rationale": "'Iron Lotus' refers to Mengyao¡¯s outer strength (iron) and hidden vulnerability (lotus), while 'Unbreakable Bargain' evolves from a transactional deal to a relationship built on mutual sacrifice and trust.",
+      "reader_emotional_promise": "You¡¯ll witness a woman confront her deepest flaws, grow without being saved by a man, and find love that¡¯s based on equality, not dominance¡ªall set against a gritty, vivid backdrop of imperial corruption and border conflict."
+    },
+    "story_engine": {
+      "original_plot_track": "Mengyao seeks to clear her family¡¯s name by recreating the blade that ruined them, but needs resources only Feng Yuzhu can provide; their bargain evolves into a relationship that challenges both their core beliefs.",
+      "world_rules": "In late imperial China, blacksmiths are either bound to the court (and its corruption) or outcasts; warlords control border territories, clashing with the court while protecting their people from bandits and famine.",
+      "power_structure": "Corrupt imperial court (obsessed with control and wealth), autonomous warlords (fighting for survival and reform), and common people (caught in the crossfire, relying on local leaders for protection).",
+      "structural_inertia": "Mengyao can¡¯t clear her family¡¯s name without imperial approval, which she¡¯ll never get because the court wants to cover up its own role in the blade¡¯s flaw.",
+      "backlash_mechanism": "Every time Mengyao tries to manipulate or control a situation, it backfires: sabotaging Feng¡¯s plans puts her sister in danger, refusing to compromise on the blade delays her family¡¯s safety, and clinging to her pride pushes Feng away.",
+      "story_trigger": "Feng¡¯s soldiers seize Mengyao¡¯s workshop, offering her a deal: forge a legendary blade for his army, and he¡¯ll protect her sister and help her uncover the truth about her father¡¯s death."
+    },
+    "core_theme": {
+      "protagonist_original_sin": "Mengyao¡¯s misjudgment was believing control (over her craft, her family, her reputation) was the only way to survive. She sacrificed her father¡¯s wishes and her own integrity to pursue imperial glory, making her an easy pawn for corruption.",
+      "hard_story_question": "Is letting go of control a sign of weakness, or the only path to true strength and redemption?",
+      "end_realization": "Control is an illusion. True strength lies in accepting vulnerability, trusting others, and using your gifts to lift up your community, not dominate others.",
+      "ending_cost": "Mengyao gives up her lifelong dream of being reinstated as an imperial blacksmith and must live with the guilt of her role in her father¡¯s death. Feng abandons his plan to overthrow the court, choosing incremental reform instead of violent revenge."
+    },
+    "character_system": {
+      "Li Mengyao (Protagonist)": {
+        "structure_role": "Flawed hero seeking redemption, whose growth drives the story¡¯s emotional core.",
+        "current_goal": "Clear her family¡¯s name, restore their workshop, and protect her younger sister.",
+        "fear": "Losing control of her life and being powerless to protect her loved ones.",
+        "bottom_line": "She will never let anyone harm her sister, even if it means sacrificing her own goals.",
+        "behavior_logic": "She uses her blacksmithing expertise as leverage, distrusts others because of past betrayal, and micromanages every detail to avoid failure.",
+        "relationship_debts": "She owes her father an apology for ignoring his warnings, and her sister for years of overprotection that stifled her independence.",
+        "growth_path": "Starts as a control-obsessed survivor, learns to trust Feng and her sister, confronts her role in her family¡¯s downfall, and chooses community over personal glory.",
+        "ending_positioning": "Runs a thriving community blacksmith workshop, partners with Feng as an equal, and uses her craft to help her village instead of serving the court."
+      },
+      "Feng Yuzhu (Male Lead)": {
+        "structure_role": "Enigmatic anti-hero with a hidden agenda, who acts as a catalyst for Mengyao¡¯s growth.",
+        "current_goal": "Overthrow the corrupt imperial court to avenge his family¡¯s murder and create a fairer system for his people.",
+        "fear": "Being betrayed by those he trusts, as his family was betrayed by the court.",
+        "bottom_line": "He will never harm innocent civilians, even if it means delaying his revenge.",
+        "behavior_logic": "Uses manipulation and strategy to achieve his goals, but has a strict code of honor; he sees Mengyao as a tool at first, but grows to respect her strength.",
+        "relationship_debts": "He owes his family revenge, but also owes his people stable leadership instead of violent conflict.",
+        "growth_path": "Starts as a vengeful warlord, learns to prioritize connection over revenge, confronts his own tendency to control others, and builds an equal partnership with Mengyao.",
+        "ending_positioning": "Leads his border territory with Mengyao¡¯s counsel, abandons violent revolution to push for incremental court reform, and lives with Mengyao in mutual respect."
+      },
+      "Wei Ling (Antagonist)": {
+        "structure_role": "Corrupt imperial official, whose manipulation caused Mengyao¡¯s downfall and drives the story¡¯s political stakes.",
+        "current_goal": "Maintain his power in the court by eliminating threats (Feng and Mengyao) and covering up his crimes.",
+        "fear": "Losing his position and being exposed for embezzlement and murder.",
+        "bottom_line": "He will do anything to stay in power, including killing innocent people.",
+        "behavior_logic": "Uses others¡¯ weaknesses (like Mengyao¡¯s need for control) to manipulate them; he¡¯s motivated by a deep insecurity from his poor childhood.",
+        "relationship_debts": "He owes the emperor loyalty, but has been embezzling court funds for years.",
+        "collapse_path": "His crimes are exposed by Mengyao and Feng, he¡¯s arrested and executed for treason and murder.",
+        "ending_positioning": "A cautionary tale of how obsession with power corrupts even those who started with good intentions."
+      },
+      "Li Xiaowen (Mengyao¡¯s Sister)": {
+        "structure_role": "Moral compass and motivation for Mengyao, whose independence challenges her sister¡¯s control.",
+        "current_goal": "Protect her sister, help restore their family¡¯s workshop, and build her own life.",
+        "fear": "Losing Mengyao to her obsession with control and redemption.",
+        "bottom_line": "She will never let Mengyao sacrifice herself for a goal that doesn¡¯t prioritize their family¡¯s happiness.",
+        "behavior_logic": "Kind and empathetic, she often reminds Mengyao to focus on what¡¯s truly important; she¡¯s tired of being a passive victim and wants to take an active role in shaping her family¡¯s future and helping their community.",
+        "relationship_debts": "She owes Mengyao gratitude for protecting her throughout their hardship, but also resents being treated as a helpless child who can¡¯t contribute to their family¡¯s recovery.",
+        "growth_path": "Starts as a quiet, dependent sibling, learns to assert herself, helps Mengyao uncover key clues about their father¡¯s murder, and gains the confidence to pursue her own interests in herbal medicine.",
+        "ending_positioning": "Works alongside Mengyao in the community blacksmith shop, uses her herbal knowledge to care for village residents, and builds a loving relationship with a local farmer who shares her commitment to the community."
+      }
+    },
+    "relationship_network": {
+      "Mengyao & Feng Yuzhu": {
+        "pair": "Li Mengyao and Feng Yuzhu",
+        "essence": "A transactional bargain that evolves into an equal partnership built on mutual vulnerability and shared trauma.",
+        "dynamic_stages": [
+          "Hostile adversaries bound by a deal",
+          "Reluctant allies discovering shared pain",
+          "Fragile lovers torn apart by secrets",
+          "Equal partners united by a common purpose"
+        ],
+        "escalation_triggers": [
+          "Mengyao discovers Feng knows her father¡¯s murder truth",
+          "Imperial forces attack Feng¡¯s territory, forcing them to rely on each other",
+          "Mengyao refuses to finish the blade for revenge, challenging Feng¡¯s core goal"
+        ],
+        "break_or_distortion_point": "Mengyao learns Feng hid her father¡¯s murder details to manipulate her into confronting her own flaws; she cuts ties with him, believing he¡¯s just another manipulator."
+      },
+      "Mengyao & Xiaowen": {
+        "pair": "Li Mengyao and Li Xiaowen",
+        "essence": "A protective bond strained by overcontrol, evolving into a collaborative sisterhood.",
+        "dynamic_stages": [
+          "Mengyao as overprotective guardian, Xiaowen as passive dependent",
+          "Xiaowen pushes back against Mengyao¡¯s control, demanding to contribute",
+          "Sisters united in uncovering their father¡¯s murder",
+          "Equal partners running the community workshop"
+        ],
+        "escalation_triggers": [
+          "Xiaowen secretly helps Feng gather information, defying Mengyao¡¯s orders",
+          "Mengyao risks Xiaowen¡¯s safety to pursue imperial redemption",
+          "Xiaowen discovers Mengyao¡¯s role in their father¡¯s death"
+        ],
+        "break_or_distortion_point": "Xiaowen confronts Mengyao about her overcontrol and reveals she¡¯s been hiding clues about their father; Mengyao realizes she¡¯s been stifling Xiaowen instead of protecting her."
+      },
+      "Mengyao & Wei Ling": {
+        "pair": "Li Mengyao and Wei Ling",
+        "essence": "A predator-prey dynamic where Mengyao was once the willing pawn, evolving into a fight for justice.",
+        "dynamic_stages": [
+          "Mengyao as ambitious blacksmith seeking Wei Ling¡¯s approval",
+          "Mengyao as framed outcast hunting Wei Ling for revenge",
+          "Mengyao as justice-seeker choosing redemption over vengeance"
+        ],
+        "escalation_triggers": [
+          "Wei Ling orders soldiers to seize Mengyao¡¯s workshop and threaten Xiaowen",
+          "Mengyao discovers Wei Ling murdered her father",
+          "Wei Ling tries to frame Feng for a court assassination"
+        ],
+        "break_or_distortion_point": "Mengyao holds the legendary blade to Wei Ling¡¯s throat but chooses to arrest him instead of killing him, rejecting her old obsession with control through vengeance."
+      }
+    },
+    "structure_blueprint": {
+      "three_act_design": {
+        "Act 1 (Setup)": "Mengyao¡¯s workshop is seized, she strikes the bargain with Feng, clashes with him while forging the blade, and discovers he¡¯s not the brute she thought.",
+        "Act 2 (Confrontation)": "Mengyao and Feng grow closer, but his secret plan to overthrow the court and his hidden knowledge about her father¡¯s death shatter their trust; Wei Ling targets them, forcing Mengyao to choose between her sister and her revenge.",
+        "Act 3 (Resolution)": "Mengyao uncovers the full truth about her father¡¯s murder, confronts Wei Ling, chooses redemption over vengeance, and builds an equal life with Feng and her sister."
+      },
+      "volume_blueprint": {
+        "Volume 1: The Blacksmith¡¯s Bargain": "Act 1 setup, establishes core conflicts and character dynamics, ends with Mengyao proving her craft to Feng and securing her sister¡¯s temporary safety.",
+        "Volume 2: Sparks and Secrets": "Act 2 midpoint, Mengyao and Feng¡¯s relationship deepens, secrets are revealed, trust is broken, ends with Mengyao discovering Feng knew her father¡¯s murder truth.",
+        "Volume 3: The Melted Blade": "Act 3 resolution, Mengyao uncovers the full truth, confronts Wei Ling, makes her final choice, ends with her melting the blade and building a new life."
+      },
+      "major_turns": [
+        "Mengyao realizes Feng has a tragic past, shifting her perception of him from enemy to ally",
+        "Mengyao discovers Feng knows her father¡¯s murder truth, breaking their trust",
+        "Mengyao learns her own obsession with control contributed to her father¡¯s death, forcing her to reevaluate her goals"
+      ],
+      "middle_loss_of_control_point": "Wei Ling captures Xiaowen, threatening to kill her unless Mengyao delivers the legendary blade to him; Mengyao loses control of both her bargain with Feng and her sister¡¯s safety, forcing her to make an impossible choice.",
+      "final_confrontation_logic": "Mengyao teams up with Feng to expose Wei Ling¡¯s crimes, using the blade (unfinished, to avoid being a tool of vengeance) as evidence of his corruption; she chooses to arrest Wei Ling instead of killing him, proving she¡¯s let go of her need for control."
+    },
+    "setpiece_library": [
+      {
+        "title": "The Workshop Seizure",
+        "trigger": "Feng¡¯s soldiers arrive at Mengyao¡¯s workshop to seize her tools and arrest her sister.",
+        "function": "Establishes the story¡¯s central bargain and stakes, introduces Mengyao¡¯s control obsession and Feng¡¯s enigmatic nature.",
+

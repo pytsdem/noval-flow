@@ -1,0 +1,46 @@
+你现在要生成“第4步：客观事件时间线”。不要写正文，不要输出 Markdown，只输出合法 JSON。
+
+用户需求：
+{research_query}
+
+风格要求：
+{style_request}
+
+当前小说 JSON：
+{book_json}
+
+当前蓝图 JSON：
+{current_story_blueprint_json}
+
+规划上下文 JSON：
+{planning_context_json}
+
+参考资料：
+{reference_pack}
+
+输出顶层必须包含：
+- story_blueprint
+
+story_blueprint 只允许包含：
+- event_timeline
+
+event_timeline 是数组，每项必须包含：
+- event_id
+- title
+- time_label
+- description
+- trigger
+- consequence
+- affected_characters
+
+硬性要求：
+1. 这一步写客观发生过或即将发生的事，不写主观感受。
+2. 原始需求必须贯穿事件链，事件不能脱离题材、赛道和核心冲突。
+3. 时间线必须覆盖前史、故事启动、主线推进和关键外部变化。
+4. 事件之间必须有因果链，不能只是事件目录。
+5. `description` 像史书记录一样客观。
+6. `trigger` 要说明这件事为什么会发生。
+7. `consequence` 要说明它直接改变了什么局面。
+8. `affected_characters` 要能和角色发展线、关系网、反转设计挂钩。
+9. 不要生成角色节点、反转、故事线、章节信息。
+10. 只输出 JSON。

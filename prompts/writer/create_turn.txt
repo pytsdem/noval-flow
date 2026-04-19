@@ -1,32 +1,42 @@
-继续写当前章节的下一段正文。
+你现在要为章节生成关键推进场景。不要解释过程，只输出场景文本。
 
 章节标题：{chapter_title}
-本章目标：{chapter_objective}
-本章悬念：{chapter_cliffhanger}
+章节目标：{chapter_objective}
+章节悬念：{chapter_cliffhanger}
 
-整体设定 JSON：
+premise JSON：
 {premise_json}
 
-本章规划 JSON：
+story_blueprint JSON：
+{story_blueprint_json}
+
+chapter_plan JSON：
 {chapter_plan_json}
 
-角色设定 JSON：
+chapter_write_brief JSON：
+{chapter_write_brief_json}
+
+scene_beat JSON：
+{scene_beat_json}
+
+characters JSON：
 {characters_json}
 
-上一章 JSON：
+previous_chapter JSON：
 {previous_chapter_json}
+
+已完成章节摘要串：
+{completed_chapter_summary_bundle}
 
 参考资料：
 {reference_pack}
 
 要求：
-1. 继续推进当前章节，而不是复述上一章。
-2. 不只是推进情节，还要推进整本书的长线：
-   - 本章处于哪个 phase
-   - 本章承担什么 story_function
-   - 这段要落什么 key_turn / payoff
-   - 下一章该往哪条路线推进
-3. 角色行为必须符合人物小传与行为逻辑，尤其注意 hidden_motive、fear、bottom_line、arc。
-4. 这一段要推动关系、局势或信息发生明显变化，不能平，表达方式要符合当前书的 `target_style`。
-5. 结尾要为后续场景或下一章留下钩子，和 premise 的 twist_blueprint / stage_payoffs 保持一致。
-6. 直接输出正文，不要解释。
+1. 这场戏必须推进局面，不是解释局面。
+2. 必须至少命中一项：冲突升级、信息揭示、关系偏移、代价落下、转折发生。
+3. 必须优先兑现 `scene_beat`，尤其是 `conflict`、`info_reveal`、`emotional_shift`、`end_state`。
+4. 必须服从 `chapter_write_brief.must_land`，并避免 `must_avoid` 中的问题。
+5. 场景结尾要为下一场或下一章留下有效推进力。
+6. `story_blueprint JSON` 里的设定背景、关系网、故事线、发展线和反转，是正文推进时必须尊重的结构事实。
+7. “已完成章节摘要串”加上 `previous_chapter JSON` 共同代表历史正文事实，不能写出与前文状态、关系温度、事件后果冲突的内容。
+8. 直接输出场景文本。

@@ -1,29 +1,31 @@
-请按用户要求重写这个 block。
+你现在要重写一个正文 block。不要解释修改思路，只输出重写后的正文文本。
 
 block_id：{block_id}
 block 作用：{block_purpose}
-用户修改要求：{guidance}
+修改要求：{guidance}
 
 当前 block 文本：
 {block_text}
 
-当前章节 JSON：
+chapter JSON：
 {chapter_json}
 
-当前章节规划：
+chapter_plan JSON：
 {chapter_plan_json}
 
-小说 premise：
+premise JSON：
 {premise_json}
 
-角色设定：
+characters JSON：
 {characters_json}
 
 参考资料：
 {reference_pack}
 
-输出要求：
-1. 直接输出改写后的 block 正文。
-2. 不要解释修改理由。
-3. 保持与本章剧情、角色设定、章节规划一致。
-4. 优先优化情绪密度、冲突力度、表达清晰度和钩子感。
+规则：
+1. 重写必须服务 objective、story_function、key_turn、payoff。
+2. 必须尊重 twist_designs、story_lines、chapter_briefs、relationship_network。
+3. 必须保证角色一致性，不得 OOC。
+4. 不能只堆气氛，要让这个 block 对场景推进有实际作用。
+5. 不能重复前文已经说过的信息，除非是故意做关系错位或误读。
+6. 只输出重写后的文本。

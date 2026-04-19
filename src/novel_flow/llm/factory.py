@@ -1,9 +1,34 @@
 from __future__ import annotations
 
+import logging
+
 from novel_flow.config import Settings
+from novel_flow.exceptions import AgentExecutionError
 from novel_flow.llm.base import LLMClient
+from novel_flow.llm.codex_cli import CodexCLIClient
 from novel_flow.llm.doubao import DoubaoLLMClient
 from novel_flow.llm.openai import OpenAILLMClient
+
+
+class FallbackLLMClient(LLMClient):
+    def __init__(self, primary: LLMClient, fallback: LLMClient, *, primary_name: str, fallback_name: str) -> None:
+        self.primary = primary
+        self.fallback = fallback
+        self.primary_name = primary_name
+        self.fallback_name = fallback_name
+        self.logger = logging.getLogger(self.__class__.__name__)
+
+    def generate(self, messages, temperature: float = 0.7) -> str:
+        try:
+            return self.primary.generate(messages=messages, temperature=temperature)
+        except AgentExecutionError as exc:
+            self.logger.warning(
+                "Primary LLM provider '%s' failed, falling back to '%s': %s",
+                self.primary_name,
+                self.fallback_name,
+                exc,
+            )
+            return self.fallback.generate(messages=messages, temperature=temperature)
 
 
 def build_llm_client(settings: Settings) -> LLMClient:
@@ -24,4 +49,34 @@ def build_llm_client(settings: Settings) -> LLMClient:
             model=settings.doubao_model,
             base_url=settings.doubao_base_url,
         )
-    raise ValueError(f"Unsupported LLM_PROVIDER: {settings.llm_provider}. Use 'doubao' or 'openai'.")
+    if provider == "codex":
+        primary = CodexCLIClient(
+            exe=settings.codex_exe,
+            model=settings.codex_model,
+        )
+        if settings.doubao_api_key and settings.doubao_model:
+            fallback = DoubaoLLMClient(
+                api_key=settings.doubao_api_key,
+                model=settings.doubao_model,
+                base_url=settings.doubao_base_url,
+            )
+            return FallbackLLMClient(
+                primary=primary,
+                fallback=fallback,
+                primary_name="codex",
+                fallback_name="doubao",
+            )
+        if settings.openai_api_key and settings.openai_model:
+            fallback = OpenAILLMClient(
+                api_key=settings.openai_api_key,
+                model=settings.openai_model,
+                base_url=settings.openai_base_url,
+            )
+            return FallbackLLMClient(
+                primary=primary,
+                fallback=fallback,
+                primary_name="codex",
+                fallback_name="openai",
+            )
+        return primary
+    raise ValueError(f"Unsupported LLM_PROVIDER: {settings.llm_provider}. Use 'doubao', 'openai', or 'codex'.")

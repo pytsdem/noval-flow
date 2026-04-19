@@ -1,6 +1,7 @@
-请基于已有小说总策划和人物系统，生成与目标体量相匹配的章节路线图。
+你现在要生成“第8步：章节规划+大纲”。不要写正文，不要输出 Markdown，只输出合法 JSON。
 
-调研查询：{research_query}
+用户需求：
+{research_query}
 
 premise JSON：
 {premise_json}
@@ -8,16 +9,25 @@ premise JSON：
 characters JSON：
 {characters_json}
 
-volume_titles：
+volume_titles JSON：
 {volume_titles_json}
+
+story_blueprint JSON：
+{story_blueprint_json}
+
+character_milestones JSON：
+{character_milestones_json}
+
+规划上下文 JSON：
+{planning_context_json}
 
 参考资料：
 {reference_pack}
 
-请输出 JSON，对象字段必须包含：
+输出顶层必须包含：
 - chapter_plans
 
-`chapter_plans` 默认至少 12 章；如果 `premise.target_style` 明确是短篇或中篇，可以适当减少，但每项必须包含：
+chapter_plans 中每项必须包含：
 - chapter_id
 - title
 - objective
@@ -28,24 +38,48 @@ volume_titles：
 - key_turn
 - payoff
 - next_route_hint
+- target_words
+- scene_density
+- scene_beats
 - planned_scene_count
 
-章节规划要求：
-1. 这不是列标题清单，而是给后续逐章续写提供可靠路线。
-2. 前若干章必须足够具体，能直接看出每章在做什么、制造什么情绪、留下什么钩子；章节数要和目标体量匹配。
-3. 每章都要承担明确功能，`story_function` 不要写成“推进剧情”“加深感情”这种空话，要写清楚推进哪条关系、哪条秘密、哪场博弈。
-4. `title` 要符合这本书自己的风格，简洁、具体、可区分；避免口号式土味标题。
-5. `objective` 要写主动作和主要目标，而不是主题概括。
-6. `tension` 要写这一章最主要的压迫、误解、对抗、倒计时或关系撕扯。
-7. `cliffhanger` 必须是能逼读者点下一章的具体悬念，不要写“留下悬念”“矛盾升级”。
-8. `key_turn` 要写清这章最关键的一次信息变化、立场变化或局势变化。
-9. `payoff` 要写这一章兑现了前文什么期待，哪怕只是一小步兑现。
-10. `next_route_hint` 要清楚说明下一章该往哪条线继续，不允许“自由发挥”。
-11. 章节路线要和 `escalation_path`、`twist_blueprint`、`stage_payoffs` 对应，确保体量和节奏都匹配目标风格，不是前面热闹后面发散。
-12. 章节推进必须建立在人物行为逻辑上：每一章至少要有一个关键人物因目标、恐惧、底线或误判做出具体行动，不能让剧情自己往前滚。
-13. 避免 AI 味章纲：不要反复出现“关系升温”“产生误会”“迎来挑战”“揭开真相的一角”这种模板句，必须把事件写具体。
+scene_beats 中每项必须包含：
+- scene_id
+- objective
+- conflict
+- info_reveal
+- emotional_shift
+- end_state
 
-格式要求：
-1. `chapter_id` 使用 `ch_001` 这种格式。
-2. `planned_scene_count` 是整数。
-3. 只输出 JSON，不要解释，不要加 Markdown。
+硬性要求：
+1. 原始需求和前七步产物都是硬约束，尤其要服从关系网、事件时间线、角色发展线、反转、故事线和章节标题。
+2. `planning_context_json.writing_requirements` 也是硬约束，必须把总字数目标、总章节目标、单章字数和节奏要求翻译进章节规划。
+3. 每章都要说清本章完成什么、打破什么、兑现什么、给下一章留下什么。
+4. `objective`、`tension`、`cliffhanger`、`story_function`、`key_turn`、`payoff`、`next_route_hint` 都必须可执行，不能空泛。
+5. 每章必须补出 `target_words` 和 `scene_density`：
+   - `target_words` 写本章建议字数或字数字区间
+   - `scene_density` 写本章场景密度，例如“高密度短场景推进”“中密度拉扯”“低密度长场景对峙”
+6. 章节规划不能前面热闹、后面发虚，必须保持长期升级和兑现。
+7. `planned_scene_count` 要合理，符合本章任务密度。
+8. `scene_beats` 是正文质量的关键，必须把一章拆成 3-5 个可写场景节拍，说明每场戏要完成什么。
+9. 每个 `scene_beats` 都必须体现：场景目标、冲突点、信息释放、情绪变化、场景结束后的新局面。
+10. 前三章必须按不同章型单独保障质量：
+   - 第一章：必须尽快建立异常感、当前困局、立即风险，不能先大段讲背景。
+   - 第二章：必须让局面扩大，读者要意识到这不是局部麻烦，而是更大的结构困境。
+   - 第三章：必须出现一次明确的小兑现，让读者感到“主角拿回一点主动权”或“关系真的发生了一次偏移”。
+11. 前三章的 `scene_beats` 必须更具体，优先服务留人、异常感、局面扩大和小兑现。
+12. 前三章的最后一个 `scene_beats` 必须能直接支撑结尾牵引，不能软掉。
+13. 前三章的 `target_words` 和 `scene_density` 必须与留人目标一致：节奏可以更狠、更短促、更高密，但不能混乱失控。
+14. 前三章必须尽早打出强烈情感冲突，而且冲突要进场景，不要只写在概述里。至少要明确：
+   - 谁被刺痛
+   - 谁在争夺
+   - 谁误会了谁
+   - 谁因为爱、恨、羞耻、亏欠、控制欲、嫉妒或背叛而做出动作
+15. 前三章不要写成安全、标准、均匀推进的模板，要敢于让开局更锋利、更失衡、更让人坐立不安。
+16. 每一章尤其前三章，都要尽量避免“解释型场景”占主导。设定、背景、世界规则必须通过冲突和选择露出来。
+17. 如果一场戏没有改变局面、关系温度、读者认知或情绪强度，就说明这场戏不够格。
+18. 如果作品偏言情、婚恋、禁忌关系、强暧昧或关系驱动，至少部分 `scene_beats` 还要体现“性张力 / 亲密张力 / 欲望压抑”的推进，但不能写成低级挑逗或露骨场面。
+19. 这里的“性张力”应尽量落在具体动作和局面里，例如：危险靠近、克制后撤、越界试探、权力差下的身体压迫感、误认后的占有欲、嫉妒触发的失控、明明想碰却必须停手。
+20. 如果是偏言情作品，前三章至少要有 1-2 个 `scene_beats` 明确承担这类高压亲密情绪场，并且必须同时推动关系与剧情，而不是只制造暧昧气氛。
+21. 不要输出正文。
+22. 只输出 JSON。

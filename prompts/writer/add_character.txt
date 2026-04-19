@@ -1,0 +1,42 @@
+你现在要为现有小说新增一个角色。不要写正文，不要输出 Markdown，只输出合法 JSON。
+
+用户需求：
+{research_query}
+
+补充方向：
+{guidance}
+
+premise JSON：
+{premise_json}
+
+existing_characters JSON：
+{existing_characters_json}
+
+参考资料：
+{reference_pack}
+
+输出一个 JSON 对象，顶层只包含：
+- character
+
+character 必须包含：
+- name
+- role
+- social_background
+- education_background
+- occupation
+- appearance
+- personality
+- career
+- initial_state
+- motivation
+- behavior_pattern
+- arc
+- relationships
+- development_axes
+
+要求：
+1. 新角色要能补现有角色体系的缺口，不能和已有角色功能重叠。
+2. 必须改变故事结构、关系格局或推进效率。
+3. 要明确他带来的变量、压迫或推进作用。
+4. 必须与至少一个已有核心角色形成强关系。
+5. 只输出 JSON。

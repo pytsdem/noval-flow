@@ -1,14 +1,17 @@
-请根据下面的 IssueCard，为目标 block 生成一个可直接执行的 PatchInstruction 内容。
+你现在要根据 IssueCard 生成修补指令。只输出 JSON。
 
 IssueCard JSON：
 {issue_json}
 
-参考写作技巧与反模式卡：
+参考资料：
 {reference_pack}
 
+输出必须包含：
+- target
+- instruction
+- acceptance_criteria
+
 要求：
-1. 只输出一个 JSON 对象。
-2. 字段必须包含：operation, reason, content
-3. operation 只能是 replace
-4. content 必须是可直接替换到目标 block 的正文
-5. 不要解释，不要包含额外字段
+1. 修补指令要具体可执行。
+2. 不要写太宽泛的正确废话。
+3. 只输出一个 JSON 对象。
