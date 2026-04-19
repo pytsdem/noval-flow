@@ -4,11 +4,8 @@
 章节目标：{chapter_objective}
 章节悬念：{chapter_cliffhanger}
 
-premise JSON：
-{premise_json}
-
-story_blueprint JSON：
-{story_blueprint_json}
+步骤1-8产物 JSON（去重后）：
+{step_outputs_json}
 
 chapter_plan JSON：
 {chapter_plan_json}
@@ -18,9 +15,6 @@ chapter_write_brief JSON：
 
 scene_beat JSON：
 {scene_beat_json}
-
-characters JSON：
-{characters_json}
 
 previous_chapter JSON：
 {previous_chapter_json}
@@ -37,6 +31,6 @@ previous_chapter JSON：
 3. 必须优先兑现 `scene_beat`，尤其是 `conflict`、`info_reveal`、`emotional_shift`、`end_state`。
 4. 必须服从 `chapter_write_brief.must_land`，并避免 `must_avoid` 中的问题。
 5. 场景结尾要为下一场或下一章留下有效推进力。
-6. `story_blueprint JSON` 里的设定背景、关系网、故事线、发展线和反转，是正文推进时必须尊重的结构事实。
+6. “步骤1-8产物 JSON（去重后）”里的设定背景、关系网、故事线、发展线和反转，是正文推进时必须尊重的结构事实。
 7. “已完成章节摘要串”加上 `previous_chapter JSON` 共同代表历史正文事实，不能写出与前文状态、关系温度、事件后果冲突的内容。
 8. 直接输出场景文本。

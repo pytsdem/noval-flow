@@ -1,0 +1,21 @@
+Polish one scene. Output polished prose only.
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Scene card]
+{scene_card_text}
+
+[Style card]
+{style_card_text}
+
+[Original draft]
+{draft_text}
+
+Goals:
+1. Keep facts and information boundaries unchanged.
+2. Increase pressure, restraint, misreading, and relationship tension.
+3. Remove explanatory narration.
+4. Convert blunt emotion into gesture, pause, object, distance, title, or etiquette pressure.
+5. Do not add clues, truth, proof, people, or setting.
+6. Do not break forbidden boundaries.

@@ -21,9 +21,9 @@ step_2 结果：
 4. 不要输出其他角色，也不要输出 relationship_network。
 
 输出 JSON 结构必须是：
-{
+{{
   "review_notes": ["建议1", "建议2"],
-  "revised_character": {
+  "revised_character": {{
     "name": "",
     "role": "",
     "social_background": "",
@@ -38,5 +38,5 @@ step_2 结果：
     "arc": "",
     "relationships": "",
     "development_axes": []
-  }
-}
+  }}
+}}

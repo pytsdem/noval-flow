@@ -1,0 +1,27 @@
+Check plot logic and authority limits. Output JSON only.
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Relevant world rules]
+{relevant_world_rules_text}
+
+[Text to check]
+{scene_or_chapter_text}
+
+Output format:
+{{
+  "passed": false,
+  "level": "high",
+  "issues": ["Example issue"],
+  "rewrite_guidance": "Example rewrite guidance"
+}}
+
+Check:
+1. world_limit violations.
+2. Power overreach.
+3. Imperial verdict overturned too easily.
+4. Institutions cooperate without reason.
+5. Key information gained for free.
+6. Direct action where only indirect action should be possible.
+7. Etiquette and hierarchy mismatch.

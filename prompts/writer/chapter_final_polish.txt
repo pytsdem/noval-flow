@@ -1,0 +1,19 @@
+Do final polish for the whole chapter. Output polished chapter prose only.
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Style card]
+{style_card_text}
+
+[Original chapter]
+{chapter_text}
+
+Rules:
+1. Do not change plot facts.
+2. Do not add clues, people, truth, or setting.
+3. Do not reveal forbidden content early.
+4. Do not explain the true meaning of allowed clues.
+5. Unify POV and forms of address.
+6. Strengthen scene transitions and chapter ending pull.
+7. Keep restrained, pressurized, misread historical-romance tone.

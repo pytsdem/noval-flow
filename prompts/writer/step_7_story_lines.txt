@@ -1,0 +1,38 @@
+Generate step 7 story_lines only. Output valid JSON only. No markdown, no prose.
+
+User request:
+{research_query}
+
+Planning context JSON:
+{planning_context_json}
+
+Reference pack:
+{reference_pack}
+
+Output format:
+{{
+  "story_lines": [
+    {{
+      "line_id": "line_case",
+      "name": "Old case revenge line",
+      "line_type": "mystery / power",
+      "visibility": "visible",
+      "core_question": "How the hero approaches the truth without openly reopening the imperial case",
+      "reader_hook_mode": "pressure from rules and status",
+      "start_state": "The hero returns with hatred but cannot openly challenge the verdict.",
+      "midpoint_shift": "Midway clues force readers to re-price a key relationship.",
+      "end_state": "The case truth is re-evaluated.",
+      "carried_twists": ["twist_01"],
+      "line_rules": ["Only indirect investigation early."]
+    }}
+  ]
+}}
+
+Rules:
+1. Output only story_lines.
+2. visibility must be visible, hidden, misdirection, or mixed.
+3. Include line_id, name, line_type, visibility, core_question, reader_hook_mode, start_state, midpoint_shift, end_state, carried_twists, line_rules.
+4. carried_twists must reference existing twist ids.
+5. Do not copy twist truth into story lines.
+6. line_rules max 4.
+7. Do not output chapter briefs or scenes.

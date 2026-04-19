@@ -1,43 +1,222 @@
 
-let mode='formal',bookId='',pendingRunId='',runsCache=[],expandedRuns=new Set(),boxStates={},detailStates={},currentBook=null,pendingStepRevision=null;
+let mode='formal',llmProvider='doubao',bookId='',pendingRunId='',runsCache=[],expandedRuns=new Set(),boxStates={},detailStates={},currentBook=null,pendingStepRevision=null,lastRightRenderKey='';
 let refreshPaused=false,refreshPauseReason='',refreshPauseTimer=null,isMouseSelecting=false;
+const LLM_PROVIDER_STORAGE_KEY='novel_flow_llm_provider';
 const STAGES={research:'调研中',planning:'大纲中',writing:'写作中',critique:'评价中',patching:'修改中',complete:'已完成'};
 const stageText=v=>STAGES[v]||v||'未开始',esc=v=>String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'),shortTs=v=>v?String(v).replace('T',' ').slice(0,19):'';
 async function api(path,opt){const r=await fetch(path,Object.assign({headers:{'Content-Type':'application/json'}},opt||{}));return await r.json();}
 function ensureOk(r){if(r&&r.ok===false){alert(r.error||'请求失败');return false;}return true;}
+const validLlmProvider=v=>['doubao','openai','codex'].includes(String(v||'').toLowerCase());
+function currentLlmProvider(){return validLlmProvider(llmProvider)?llmProvider:'doubao';}
+function withLlmProvider(payload){return Object.assign({},payload||{}, {llm_provider:currentLlmProvider()});}
+function changeModel(){llmProvider=validLlmProvider(modelSel.value)?modelSel.value:'doubao';try{localStorage.setItem(LLM_PROVIDER_STORAGE_KEY,llmProvider);}catch{}}
 let stepDrafts={},stepDraftDirty={},stepReviewNotes={},stepDraftBookId='';
 let stepDraftObjects={};
 function deepClone(value){return JSON.parse(JSON.stringify(value??{}));}
 function resetStepDraftCache(targetBookId=''){stepDraftBookId=targetBookId;stepDrafts={};stepDraftDirty={};stepReviewNotes={};stepDraftObjects={};}
-function stepPayloadFromBook(book,stepKey){const storyBlueprint=book?.metadata?.story_blueprint||{};if(stepKey==='step_1')return{premise:book?.premise||{},story_engine:storyBlueprint.story_engine||{}};if(stepKey==='step_2')return{story_engine:storyBlueprint.story_engine||{}};if(stepKey==='step_3')return{characters:book?.characters||[],relationship_network:Array.isArray(storyBlueprint.relationship_network)?storyBlueprint.relationship_network:[]};if(stepKey==='step_4')return{event_timeline:Array.isArray(storyBlueprint.event_timeline)?storyBlueprint.event_timeline:[]};if(stepKey==='step_5')return{character_milestones:Array.isArray(book?.metadata?.character_milestones)?book.metadata.character_milestones:[]};if(stepKey==='step_6')return{twist_designs:Array.isArray(storyBlueprint.twist_designs)?storyBlueprint.twist_designs:[]};if(stepKey==='step_7')return{story_lines:Array.isArray(storyBlueprint.story_lines)?storyBlueprint.story_lines:[],chapter_briefs:Array.isArray(storyBlueprint.chapter_briefs)?storyBlueprint.chapter_briefs:[]};if(stepKey==='step_8')return{chapter_plans:Array.isArray(book?.metadata?.chapter_plans)?book.metadata.chapter_plans:[]};return{};}
+function stepPayloadFromBook(book,stepKey){const storyBlueprint=book?.metadata?.story_blueprint||{};if(stepKey==='step_1')return{premise:book?.premise||{},story_engine:storyBlueprint.story_engine||{}};if(stepKey==='step_2')return{story_engine:storyBlueprint.story_engine||{}};if(stepKey==='step_3')return{characters:book?.characters||[]};if(stepKey==='step_4')return{event_timeline:Array.isArray(storyBlueprint.event_timeline)?storyBlueprint.event_timeline:[]};if(stepKey==='step_5')return{character_milestones:Array.isArray(book?.metadata?.character_milestones)?book.metadata.character_milestones:[]};if(stepKey==='step_6')return{twist_designs:Array.isArray(storyBlueprint.twist_designs)?storyBlueprint.twist_designs:[]};if(stepKey==='step_7')return{story_lines:Array.isArray(storyBlueprint.story_lines)?storyBlueprint.story_lines:[]};if(stepKey==='step_8')return{chapter_briefs:Array.isArray(storyBlueprint.chapter_briefs)?storyBlueprint.chapter_briefs:[]};return{};}
+function emptyStepPayload(stepKey){if(stepKey==='step_1')return{premise:{},story_engine:{}};if(stepKey==='step_2')return{story_engine:{}};if(stepKey==='step_3')return{characters:[]};if(stepKey==='step_4')return{event_timeline:[]};if(stepKey==='step_5')return{character_milestones:[]};if(stepKey==='step_6')return{twist_designs:[]};if(stepKey==='step_7')return{story_lines:[]};if(stepKey==='step_8')return{chapter_briefs:[]};return{};}
 function ensureStepDraft(stepKey,payloadObj){if(stepDraftBookId!==bookId)resetStepDraftCache(bookId);const serialized=JSON.stringify(payloadObj??{},null,2);if(!(stepKey in stepDrafts)||!stepDraftDirty[stepKey]){stepDrafts[stepKey]=serialized;stepDraftObjects[stepKey]=deepClone(payloadObj??{});}return stepDrafts[stepKey];}
 function ensureStepObject(stepKey,payloadObj){ensureStepDraft(stepKey,payloadObj);if(!(stepKey in stepDraftObjects))stepDraftObjects[stepKey]=deepClone(payloadObj??{});return stepDraftObjects[stepKey];}
 function updateStepDraft(stepKey,value){if(stepDraftBookId!==bookId)resetStepDraftCache(bookId);stepDrafts[stepKey]=value;stepDraftDirty[stepKey]=true;try{stepDraftObjects[stepKey]=JSON.parse(value);}catch{}}
 function markStepDraftSaved(stepKey,payloadObj,notes){if(stepDraftBookId!==bookId)resetStepDraftCache(bookId);stepDrafts[stepKey]=JSON.stringify(payloadObj??{},null,2);stepDraftObjects[stepKey]=deepClone(payloadObj??{});stepDraftDirty[stepKey]=false;stepReviewNotes[stepKey]=Array.isArray(notes)?notes:[];}
-function applyStepRevisionDraft(result){if(!result||!result.step_key)return;const stepKey=result.step_key;const revisedText=result.draft_json||JSON.stringify(result.step_payload||{},null,2);stepDrafts[stepKey]=revisedText;try{stepDraftObjects[stepKey]=JSON.parse(revisedText);}catch{stepDraftObjects[stepKey]=deepClone(result.step_payload||{});}stepDraftDirty[stepKey]=true;stepReviewNotes[stepKey]=Array.isArray(result.review_notes)?result.review_notes:[];if(currentBook){renderBlueprint(currentBook);autoSizeTextareas('pnl-blueprint');}}
+function sanitizeCharactersDraft(chars){if(!Array.isArray(chars))return[];return chars.filter(item=>item&&typeof item==='object'&&Object.keys(item).length>0&&(String(item.name||'').trim()||String(item.role||'').trim()));}
+function sanitizeStep3DraftObject(obj){if(!obj||typeof obj!=='object')return obj;const next=deepClone(obj);if(Array.isArray(next.characters))next.characters=sanitizeCharactersDraft(next.characters);return next;}
+function applyStepRevisionDraft(result){if(!result||!result.step_key)return;const stepKey=result.step_key;const revisedText=result.draft_json||JSON.stringify(result.step_payload||{},null,2);stepDrafts[stepKey]=revisedText;try{stepDraftObjects[stepKey]=JSON.parse(revisedText);}catch{stepDraftObjects[stepKey]=deepClone(result.step_payload||{});}if(stepKey==='step_3'){stepDraftObjects[stepKey]=sanitizeStep3DraftObject(stepDraftObjects[stepKey]||{});stepDrafts[stepKey]=JSON.stringify(stepDraftObjects[stepKey]||{},null,2);}stepDraftDirty[stepKey]=true;stepReviewNotes[stepKey]=Array.isArray(result.review_notes)?result.review_notes:[];if(currentBook){renderBlueprint(currentBook);autoSizeTextareas('pnl-blueprint');}}
 function latestOutputByType(runData,outputType){const outs=Array.isArray(runData?.outputs)?runData.outputs:[];for(let i=outs.length-1;i>=0;i-=1){if(outs[i]?.output_type===outputType)return outs[i].payload||null;}return null;}
-function stepFieldLabel(key){const labels={premise:'大纲主体',story_engine:'写作架构',characters:'角色卡',relationship_network:'关系网',event_timeline:'客观事件时间线',character_milestones:'角色发展线',twist_designs:'反转设计',story_lines:'故事线',chapter_briefs:'章节标题与摘要',chapter_plans:'章节规划',title:'标题',high_concept:'高概念',theme_statement:'立意',story_summary:'故事简介',genre:'题材',target_style:'风格',emotional_hook:'情绪钩子',central_conflict:'核心冲突',core_hook:'核心看点',escalation_path:'升级路径',twist_blueprint:'反转蓝图',ending_payoff:'结尾兑现',selling_points:'卖点',engine_sentence:'故事驱动句',narrative_mode:'叙事结构',viewpoint_strategy:'视角策略',reveal_strategy:'信息揭示策略',hook_strategy:'前三章留人策略',default_track:'默认轨道',world_rules:'世界规则',power_structure:'权力结构',world_map:'世界地图',structural_inertia:'结构惯性',rebound_mechanism:'反弹机制',story_trigger:'故事启动条件',objective_conditions:'客观条件与机会结构',name:'名称',line_type:'线类型',start_state:'起点状态',midpoint_shift:'中段变化',end_state:'终点状态',core_question:'核心问题',chapter_id:'章节编号',active_lines:'挂线',summary:'摘要',turn:'转折',cliffhanger:'悬念',chapter_type:'章型',core_question_left:'留给读者的问题',small_payoff:'小兑现',reader_hook:'读者钩子',new_information:'新信息',relationship_shift:'关系变化',ending_pull:'结尾牵引',objective:'本章任务',tension:'张力',phase:'阶段',story_function:'剧情功能',key_turn:'关键转折',payoff:'兑现',next_route_hint:'下一步提示',target_words:'目标字数',scene_density:'场景密度',scene_beats:'场景节拍',planned_scene_count:'场景数量',scene_id:'场景编号',conflict:'冲突',info_reveal:'信息释放',emotional_shift:'情绪变化'};return labels[key]||String(key).replaceAll('_',' ');}
+function stepFieldLabel(key){const labels={premise:'大纲主体',story_engine:'写作架构',characters:'角色卡',event_timeline:'客观事件时间线',character_milestones:'角色发展线',twist_designs:'反转设计',story_lines:'故事线',chapter_briefs:'章节摘要',title:'标题',high_concept:'高概念',theme_statement:'立意',story_summary:'故事简介',genre:'题材',target_style:'风格',emotional_hook:'情绪钩子',central_conflict:'核心冲突',core_hook:'核心看点',escalation_path:'升级路径',twist_blueprint:'反转蓝图',ending_payoff:'结尾兑现',selling_points:'卖点',engine_sentence:'故事驱动句',narrative_mode:'叙事结构',viewpoint_strategy:'视角策略',reveal_strategy:'信息揭示策略',hook_strategy:'前三章留人策略',default_track:'默认轨道',world_rules:'世界规则',power_structure:'权力结构',world_map:'世界地图',structural_inertia:'结构惯性',rebound_mechanism:'反弹机制',story_trigger:'故事启动条件',objective_conditions:'客观条件与机会结构',name:'名称',visibility:'明暗线',line_type:'线类型',line_goal:'线目标',key_progressions:'关键推进章节',plot:'关键情节',start_state:'起点状态',midpoint_shift:'中段变化',end_state:'终点状态',core_question:'核心问题',chapter_id:'章节编号',active_lines:'挂线',summary:'章节摘要',chapter_type:'章型',small_payoff:'小兑现',ending_pull:'结尾牵引',objective:'章节摘要',tension:'张力',phase:'阶段',story_function:'剧情功能',key_turn:'关键转折',payoff:'兑现',next_route_hint:'下一步提示',target_words:'目标字数',scene_density:'场景密度',scene_id:'场景编号',conflict:'冲突',info_reveal:'信息释放',emotional_shift:'情绪变化',appearance:'外貌'};return labels[key]||String(key).replaceAll('_',' ');}
 function parseStepPath(pathText){return String(pathText||'').split('.').filter(Boolean).map(part=>/^[0-9]+$/.test(part)?Number(part):part);}
-function setStepValueByPath(root,path,value){if(!path.length)return value;let cursor=root;for(let i=0;i<path.length-1;i+=1){const key=path[i],nextKey=path[i+1];if(Array.isArray(cursor)&&typeof key==='number'){while(cursor.length<=key)cursor.push(typeof nextKey==='number'?[]:{});if(cursor[key]===null||cursor[key]===undefined)cursor[key]=typeof nextKey==='number'?[]:{};cursor=cursor[key];continue;}if(cursor[key]===undefined||cursor[key]===null){cursor[key]=typeof nextKey==='number'?[]:{};}cursor=cursor[key];}const finalKey=path[path.length-1];if(Array.isArray(cursor)&&typeof finalKey==='number'){while(cursor.length<finalKey)cursor.push({});while(cursor.length<=finalKey)cursor.push('');cursor[finalKey]=value;return root;}cursor[finalKey]=value;return root;}
-function updateStepEditorValue(stepKey,pathText,kind,rawValue){if(stepDraftBookId!==bookId)resetStepDraftCache(bookId);const state=ensureStepObject(stepKey,{});const path=parseStepPath(pathText);let value=rawValue;if(kind==='string_array'){value=normalizeMultiline(rawValue).split('\\n').map(item=>item.trim()).filter(Boolean);}else if(kind==='number'){const trimmed=String(rawValue??'').trim();value=trimmed===''?'':Number(trimmed);}else if(kind==='boolean'){value=!!rawValue;}setStepValueByPath(state,path,value);stepDrafts[stepKey]=JSON.stringify(state,null,2);stepDraftDirty[stepKey]=true;}
-function renderStepEditorField(stepKey,path,value){const pathText=path.join('.');if(Array.isArray(value)){if(!value.length)return `<div class='step-inline-empty'>当前为空。</div>`;const primitiveArray=value.every(item=>item===null||['string','number','boolean'].includes(typeof item));if(primitiveArray){return `<textarea class='step-inline-textarea' oninput="updateStepEditorValue('${stepKey}','${pathText}','string_array', this.value)">${esc(value.map(item=>String(item??'')).join('\\n'))}</textarea>`;}return `<div class='step-inline-stack'>${value.map((item,index)=>`<details class='step-inline-card'><summary class='step-inline-card-title'>${esc(stepFieldLabel(String(path[path.length-1]||'item')))} ${index+1}</summary>${renderStepEditorField(stepKey,[...path,index],item)}</details>`).join('')}</div>`;}if(value&&typeof value==='object'){const entries=Object.entries(value);if(!entries.length)return `<div class='step-inline-empty'>当前为空。</div>`;return `<div class='step-inline-root'>${entries.map(([key,val])=>`<div class='step-inline-field'><label>${esc(stepFieldLabel(key))}</label>${renderStepEditorField(stepKey,[...path,key],val)}</div>`).join('')}</div>`;}if(typeof value==='number'){return `<input class='step-inline-input' type='number' value='${esc(value)}' oninput="updateStepEditorValue('${stepKey}','${pathText}','number', this.value)" />`;}if(typeof value==='boolean'){return `<label class='row'><input type='checkbox' ${value?'checked':''} onchange="updateStepEditorValue('${stepKey}','${pathText}','boolean', this.checked)" /> ${value?'是':'否'}</label>`;}return `<textarea class='step-inline-textarea' oninput="updateStepEditorValue('${stepKey}','${pathText}','string', this.value)">${esc(value??'')}</textarea>`;}
+function setStepValueByPath(root,path,value){if(!path.length)return value;let cursor=root;for(let i=0;i<path.length-1;i+=1){const key=path[i],nextKey=path[i+1];if(Array.isArray(cursor)&&typeof key==='number'){while(cursor.length<=key)cursor.push(typeof nextKey==='number'?[]:{});if(cursor[key]===null||cursor[key]===undefined)cursor[key]=typeof nextKey==='number'?[]:{};cursor=cursor[key];continue;}if(cursor[key]===undefined||cursor[key]===null){cursor[key]=typeof nextKey==='number'?[]:{};}cursor=cursor[key];}const finalKey=path[path.length-1];if(Array.isArray(cursor)&&typeof finalKey==='number'){while(cursor.length<finalKey)cursor.push(null);while(cursor.length<=finalKey)cursor.push('');cursor[finalKey]=value;return root;}cursor[finalKey]=value;return root;}
+function updateStepEditorValue(stepKey,pathText,kind,rawValue){if(stepDraftBookId!==bookId)resetStepDraftCache(bookId);const basePayload=stepPayloadFromBook(currentBook,stepKey);const state=ensureStepObject(stepKey,basePayload);const path=parseStepPath(pathText);let value=rawValue;if(kind==='string_array'){value=normalizeMultiline(rawValue).split('\\n').map(item=>item.trim()).filter(Boolean);}else if(kind==='number'){const trimmed=String(rawValue??'').trim();value=trimmed===''?'':Number(trimmed);}else if(kind==='boolean'){value=!!rawValue;}setStepValueByPath(state,path,value);stepDrafts[stepKey]=JSON.stringify(state,null,2);stepDraftDirty[stepKey]=true;}
+function characterKey(item,index){const name=String(item?.name||'').trim();if(name)return `name:${name}`;const role=String(item?.role||'').trim();if(role)return `role:${role}:${index}`;return `index:${index}`;}
+function summarizeStep3Diff(oldChars,newChars){const safeOld=Array.isArray(oldChars)?oldChars.filter(x=>x&&typeof x==='object'):[];const safeNew=Array.isArray(newChars)?newChars.filter(x=>x&&typeof x==='object'):[];const oldMap=new Map();safeOld.forEach((item,index)=>oldMap.set(characterKey(item,index),item));const newMap=new Map();safeNew.forEach((item,index)=>newMap.set(characterKey(item,index),item));const removed=[];const added=[];let changed=0;for(const [k,v] of oldMap.entries()){if(!newMap.has(k)){removed.push(String(v?.name||v?.role||k));continue;}if(JSON.stringify(v)!==JSON.stringify(newMap.get(k)))changed+=1;}for(const [k,v] of newMap.entries()){if(!oldMap.has(k))added.push(String(v?.name||v?.role||k));}return{oldCount:safeOld.length,newCount:safeNew.length,removed,added,changed};}
+function step3DiffConfirmMessage(diff){const cap=(arr)=>arr.slice(0,5).join('、');let msg=`即将保存角色卡\\n原有：${diff.oldCount} 个\\n当前：${diff.newCount} 个\\n修改：${diff.changed} 个\\n新增：${diff.added.length} 个\\n删除：${diff.removed.length} 个`;if(diff.added.length)msg+=`\\n新增示例：${cap(diff.added)}${diff.added.length>5?' …':''}`;if(diff.removed.length)msg+=`\\n删除示例：${cap(diff.removed)}${diff.removed.length>5?' …':''}`;msg+='\\n\\n确认保存吗？';return msg;}
+function stepArrayItemTitle(stepKey,path,item,index){
+  const fallback=`${stepFieldLabel(String(path[path.length-1]||'item'))} ${index+1}`;
+  if(!(item&&typeof item==='object'))return fallback;
+  if(stepKey==='step_4'&&path.length===1&&String(path[0])==='event_timeline'){
+    const timeLabel=String(item.time_label||'').trim()||'未标注时间';
+    const title=String(item.title||'').trim()||'未命名事件';
+    return `${timeLabel}：${title}`;
+  }
+  if(stepKey==='step_5'){
+    const tail=String(path[path.length-1]||'');
+    if(path.length===1&&String(path[0])==='character_milestones'){
+      return String(item.character_name||'未命名角色').trim()||`角色 ${index+1}`;
+    }
+    if(tail==='axes'){
+      return String(item.axis||'未命名线').trim()||`线 ${index+1}`;
+    }
+    if(tail==='phases'){
+      const phaseNo=String(item.phase||'').trim();
+      const label=String(item.label||'').trim();
+      return `${phaseNo?`阶段${phaseNo}`:`阶段${index+1}`}${label?`：${label}`:''}`;
+    }
+  }
+  if(stepKey==='step_6'&&path.length===1&&String(path[0])==='twist_designs'){
+    return String(item.title||'').trim()||`反转设计 ${index+1}`;
+  }
+  if(stepKey==='step_7'&&path.length===1&&String(path[0])==='story_lines'){
+    const name=String(item.name||'').trim();
+    if(name)return name;
+    const visibility=String(item.visibility||'').trim();
+    return visibility?`${visibility} ${index+1}`:`明线暗线 ${index+1}`;
+  }
+  if(stepKey==='step_8'&&path.length===1&&String(path[0])==='chapter_briefs'){
+    const chapterId=String(item.chapter_id||'').trim()||`ch_${String(index+1).padStart(3,'0')}`;
+    const title=String(item.title||'').trim();
+    return title?`${chapterId} · ${title}`:chapterId;
+  }
+  return fallback;
+}
+function renderStepEditorField(stepKey,path,value){
+  const pathText=path.join('.');
+  if(
+    stepKey==='step_5' &&
+    Array.isArray(value) &&
+    String(path[path.length-1]||'')==='phases'
+  ){
+    if(!value.length)return `<div class='step-inline-empty'>当前为空。</div>`;
+    return `<div class='step-inline-stack'>${value.map((phase,phaseIndex)=>{
+      const phaseNo=String(phase?.phase||'').trim();
+      const phaseLabel=String(phase?.label||'').trim();
+      const scenes=Array.isArray(phase?.scenes)?phase.scenes:[];
+      const blockLines=[`${phaseNo?`阶段${phaseNo}`:`阶段${phaseIndex+1}`}${phaseLabel?`：${phaseLabel}`:''}`];
+      scenes.forEach((scene)=>{
+        const title=String(scene?.title||'未命名场景').trim();
+        const trigger=String(scene?.trigger||'').trim();
+        const psychology=String(scene?.psychology||'').trim();
+        const outcome=String(scene?.outcome||'').trim();
+        blockLines.push(`• ${title}`);
+        if(trigger)blockLines.push(`  - 触发：${trigger}`);
+        if(psychology)blockLines.push(`  - 心理：${psychology}`);
+        if(outcome)blockLines.push(`  - 结果：${outcome}`);
+      });
+      return `<div class='step-inline-card'><div class='pre'>${esc(blockLines.join('\\n'))}</div></div>`;
+    }).join('')}</div>`;
+  }
+  if(Array.isArray(value)){
+    if(!value.length)return `<div class='step-inline-empty'>当前为空。</div>`;
+    if(stepKey==='step_8'&&path.length===1&&String(path[0])==='chapter_briefs'){
+      return `<div class='step-inline-stack'>${value.map((item,index)=>{
+        const detailKey=`inline:${stepKey}:${[...path,index].join('.')}`;
+        const title=stepArrayItemTitle(stepKey,path,item,index);
+        const toolbar=`<div style='display:flex;justify-content:flex-end;gap:8px;padding:8px 0 0 0'><button class='ghost' onclick='event.stopPropagation();saveSingleChapterBrief(${index})'>保存</button><button class='ghost' onclick='event.stopPropagation();reviseSingleChapterBriefByInstruction(${index})'>指令调整</button><button class='ghost' onclick='event.stopPropagation();deleteSingleChapterBrief(${index})'>删除</button></div>`;
+        return `<details class='step-inline-card' data-detail-key='${esc(detailKey)}' ${isDetailOpen(detailKey,false)?'open':''} ontoggle="toggleDetailState('${esc(detailKey)}', this.open)"><summary class='step-inline-card-title'>${esc(title)}</summary>${toolbar}${renderStepEditorField(stepKey,[...path,index],item)}</details>`;
+      }).join('')}</div>`;
+    }
+    const primitiveArray=value.every(item=>item===null||['string','number','boolean'].includes(typeof item));
+    if(primitiveArray){
+      return `<textarea class='step-inline-textarea' oninput="updateStepEditorValue('${stepKey}','${pathText}','string_array', this.value)">${esc(value.map(item=>String(item??'')).join('\\n'))}</textarea>`;
+    }
+    return `<div class='step-inline-stack'>${value.map((item,index)=>{
+      const detailKey=`inline:${stepKey}:${[...path,index].join('.')}`;
+      const defaultOpen = stepKey==='step_5';
+      return `<details class='step-inline-card' data-detail-key='${esc(detailKey)}' ${isDetailOpen(detailKey,defaultOpen)?'open':''} ontoggle="toggleDetailState('${esc(detailKey)}', this.open)"><summary class='step-inline-card-title'>${esc(stepArrayItemTitle(stepKey,path,item,index))}</summary>${renderStepEditorField(stepKey,[...path,index],item)}</details>`;
+    }).join('')}</div>`;
+  }
+  if(value&&typeof value==='object'){
+    if(
+      stepKey==='step_5' &&
+      path.length===2 &&
+      String(path[0])==='character_milestones' &&
+      typeof path[1]==='number'
+    ){
+      const axesVal=Array.isArray(value.axes)?value.axes:[];
+      return `<div class='step-inline-root'><div class='step-inline-field'><label>axes</label>${renderStepEditorField(stepKey,[...path,'axes'],axesVal)}</div></div>`;
+    }
+    if(
+      stepKey==='step_5' &&
+      path.length===4 &&
+      String(path[0])==='character_milestones' &&
+      String(path[2])==='axes' &&
+      typeof path[1]==='number' &&
+      typeof path[3]==='number'
+    ){
+      const phasesVal=Array.isArray(value.phases)?value.phases:[];
+      return `<div class='step-inline-root'><div class='step-inline-field'><label>phases</label>${renderStepEditorField(stepKey,[...path,'phases'],phasesVal)}</div></div>`;
+    }
+    if(
+      stepKey==='step_8' &&
+      path.length===2 &&
+      String(path[0])==='chapter_briefs' &&
+      typeof path[1]==='number'
+    ){
+      const visibleEntries=[
+        ['chapter_id', value?.chapter_id??''],
+        ['title', value?.title??''],
+        ['objective', value?.objective??value?.summary??''],
+      ];
+      return `<div class='step-inline-root'>${visibleEntries.map(([key,val])=>`<div class='step-inline-field'><label>${esc(stepFieldLabel(String(key)))}</label>${renderStepEditorField(stepKey,[...path,String(key)],val)}</div>`).join('')}</div>`;
+    }
+    const entries=Object.entries(value);
+    if(!entries.length)return `<div class='step-inline-empty'>当前为空。</div>`;
+    return `<div class='step-inline-root'>${entries.map(([key,val])=>`<div class='step-inline-field'><label>${esc(stepFieldLabel(key))}</label>${renderStepEditorField(stepKey,[...path,key],val)}</div>`).join('')}</div>`;
+  }
+  if(typeof value==='number'){
+    return `<input class='step-inline-input' type='number' value='${esc(value)}' oninput="updateStepEditorValue('${stepKey}','${pathText}','number', this.value)" />`;
+  }
+  if(typeof value==='boolean'){
+    return `<label class='row'><input type='checkbox' ${value?'checked':''} onchange="updateStepEditorValue('${stepKey}','${pathText}','boolean', this.checked)" /> ${value?'是':'否'}</label>`;
+  }
+  return `<textarea class='step-inline-textarea' oninput="updateStepEditorValue('${stepKey}','${pathText}','string', this.value)">${esc(value??'')}</textarea>`;
+}
 function renderStepEditor(stepKey,stepTitle,payloadObj){const notes=Array.isArray(stepReviewNotes[stepKey])?stepReviewNotes[stepKey]:[];const state=ensureStepObject(stepKey,payloadObj);return `<div class='step-editor'><div class='step-editor-toolbar'><div class='step-editor-title'>${esc(stepTitle)} 直接编辑</div><div class='step-editor-actions'><button class='ghost' onclick="saveStepDraft('${stepKey}')">保存修改</button><button class='ghost' onclick="reviseStepDraft('${stepKey}','review')">质检修改</button><button class='ghost' onclick="reviseStepDraft('${stepKey}','instruction')">指令修改</button></div></div><div class='step-editor-body'>${notes.length?`<ul class='step-editor-notes'>${notes.map(item=>`<li>${esc(item)}</li>`).join('')}</ul>`:`<div class='step-editor-empty'>可以直接在这个模块里改内容；按 Enter 会换行，点右上角“保存修改”才会真正写回。</div>`}${renderStepEditorField(stepKey,[],state)}<div class='step-editor-hint'>这里是当前步骤的结构化编辑区。质检修改和指令修改会先生成建议稿并回填到这里，确认后再保存。</div></div></div>`;}
 function getStepPayloadText(stepKey,payloadObj){const state=ensureStepObject(stepKey,payloadObj);return JSON.stringify(state??{},null,2);}
-async function saveStepDraft(stepKey){if(!bookId)return alert('请先选择一部小说。');const payload_text=getStepPayloadText(stepKey,stepPayloadFromBook(currentBook,stepKey));const result=await api('/api/novels/save_step_result',{method:'POST',body:JSON.stringify({mode,book_id:bookId,step_key:stepKey,payload_text})});if(!ensureOk(result))return;currentBook=result.book;markStepDraftSaved(stepKey,result.step_payload||stepPayloadFromBook(result.book,stepKey),stepReviewNotes[stepKey]||[]);renderInputPanel(currentBook);renderBlueprint(currentBook);renderText(currentBook);await loadNovels();alert('当前步骤修改已保存。');}
-async function reviseStepDraft(stepKey,revisionMode){if(!bookId)return alert('请先选择一部小说。');const payload_text=getStepPayloadText(stepKey,stepPayloadFromBook(currentBook,stepKey));let guidance='';if(revisionMode==='instruction'){guidance=prompt('描述你希望这一步结果怎么改：');if(!guidance)return;}const r=await api('/api/novels/revise_step_result_run',{method:'POST',body:JSON.stringify({mode,book_id:bookId,step_key:stepKey,payload_text,revision_mode:revisionMode,guidance})});if(!ensureOk(r))return;pendingRunId=r.run_id||'';pendingStepRevision={run_id:pendingRunId,step_key:stepKey,revision_mode:revisionMode,payload_text,guidance};expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),pending_message:revisionMode==='review'?'步骤质检修改已启动。':'步骤指令修改已启动。'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
-async function regenerateRelationshipNetwork(index){if(!bookId)return alert('请先选择一部小说。');const payload_text=getStepPayloadText('step_3',stepPayloadFromBook(currentBook,'step_3'));let guidance;if(index!=null){const item=(currentBook?.blueprint?.relationship_network||[])[index];const label=item?`${item.line_name||''}（${item.subject||''}→${item.target||''}）`:`第 ${index+1} 条`;guidance=`保留当前角色卡 characters 不变，只重新生成 relationship_network 中的第 ${index+1} 条关系：${label}。保留其他条目不动，仅对该条目重新创作，输出完整 relationship_network 数组。不要改动 characters。`;}else{guidance='保留当前角色卡 characters 不变，只重新生成 relationship_network。基于现有角色卡、步骤一和步骤二结果，输出完整详细关系卡，不要改动 characters。';}const r=await api('/api/novels/revise_step_result_run',{method:'POST',body:JSON.stringify({mode,book_id:bookId,step_key:'step_3',payload_text,revision_mode:'instruction',guidance})});if(!ensureOk(r))return;pendingRunId=r.run_id||'';pendingStepRevision={run_id:pendingRunId,step_key:'step_3',revision_mode:'instruction',payload_text,guidance};expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),pending_message:index!=null?`关系网第 ${index+1} 条重新生成任务已启动。`:'关系网重新生成任务已启动。'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
-async function reviseRelationshipNetworkByInstruction(){if(!bookId)return alert('请先选择一部小说。');const extra=prompt('描述你希望关系网怎么改：');if(!extra)return;const payload_text=getStepPayloadText('step_3',stepPayloadFromBook(currentBook,'step_3'));const guidance=`保留当前角色卡 characters 不变，只调整 relationship_network。必须基于现有角色卡展开，不要改动 characters。\n用户要求：${extra}`;const r=await api('/api/novels/revise_step_result_run',{method:'POST',body:JSON.stringify({mode,book_id:bookId,step_key:'step_3',payload_text,revision_mode:'instruction',guidance})});if(!ensureOk(r))return;pendingRunId=r.run_id||'';pendingStepRevision={run_id:pendingRunId,step_key:'step_3',revision_mode:'instruction',payload_text,guidance};expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),pending_message:'关系网按指令调整任务已启动。'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
-async function addCharacterByInstruction(){if(!bookId)return alert('请先选择一部小说。');const extra=prompt('描述新角色需求（身份、作用、和谁形成关系）：');if(!extra)return;const payload_text=getStepPayloadText('step_3',stepPayloadFromBook(currentBook,'step_3'));const guidance=`仅在 characters 中新增 1 个角色，不要删除或重写现有角色；relationship_network 保持不变。新增角色要与现有核心角色形成明确关系，并能推动后续剧情。\n用户要求：${extra}`;const r=await api('/api/novels/revise_step_result_run',{method:'POST',body:JSON.stringify({mode,book_id:bookId,step_key:'step_3',payload_text,revision_mode:'instruction',guidance})});if(!ensureOk(r))return;pendingRunId=r.run_id||'';pendingStepRevision={run_id:pendingRunId,step_key:'step_3',revision_mode:'instruction',payload_text,guidance};expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),pending_message:'新增角色任务已启动。'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
-async function reviseSingleCharacterByInstruction(index){if(!bookId)return alert('请先选择一部小说。');const extra=prompt('描述你希望这个角色如何调整：');if(!extra)return;const payload_text=getStepPayloadText('step_3',stepPayloadFromBook(currentBook,'step_3'));const r=await api('/api/novels/revise_single_character',{method:'POST',body:JSON.stringify({mode,book_id:bookId,payload_text,character_index:index,guidance:extra})});if(!ensureOk(r))return;applyStepRevisionDraft(r);alert('该角色的建议稿已生成，请点“保存修改”后生效。');}
+async function saveConcept(){
+  if(!bookId)return alert('请先选择一部小说。');
+  const title=(document.getElementById('concept-title')?.value||'').trim();
+  const query=normalizeMultiline(document.getElementById('concept-query')?.value||'');
+  const user_topic=normalizeMultiline(document.getElementById('concept-user-topic')?.value||'');
+  const style_request=normalizeMultiline(document.getElementById('concept-style-request')?.value||'');
+  const assistant_persona_prompt=normalizeMultiline(document.getElementById('concept-assistant-persona')?.value||'');
+  const total_word_target=(document.getElementById('concept-total-word-target')?.value||'').trim();
+  const chapter_count_target=(document.getElementById('concept-chapter-count-target')?.value||'').trim();
+  const chapter_word_target=(document.getElementById('concept-chapter-word-target')?.value||'').trim();
+  const pace_notes=normalizeMultiline(document.getElementById('concept-pace-notes')?.value||'');
+  const result=await api('/api/novels/update_concept',{
+    method:'POST',
+    body:JSON.stringify({
+      mode,
+      book_id:bookId,
+      title,
+      query,
+      user_topic,
+      style_request,
+      assistant_persona_prompt,
+      total_word_target,
+      chapter_count_target,
+      chapter_word_target,
+      pace_notes
+    })
+  });
+  if(!ensureOk(result))return;
+  currentBook=result.book;
+  renderInputPanel(currentBook);
+  renderBlueprint(currentBook);
+  renderText(currentBook);
+  await loadNovels();
+  alert('小说基础信息已保存。');
+}
+async function saveStepDraft(stepKey){if(!bookId)return alert('请先选择一部小说。');if(stepKey==='step_3'){const draft=ensureStepObject('step_3',stepPayloadFromBook(currentBook,'step_3'));const sanitized=sanitizeStep3DraftObject(draft||{});stepDraftObjects['step_3']=sanitized||{};stepDrafts['step_3']=JSON.stringify(stepDraftObjects['step_3'],null,2);const oldChars=Array.isArray(currentBook?.characters)?currentBook.characters:[];const newChars=Array.isArray(stepDraftObjects['step_3']?.characters)?stepDraftObjects['step_3'].characters:[];const diff=summarizeStep3Diff(oldChars,newChars);if(diff.changed>0||diff.added.length>0||diff.removed.length>0||diff.oldCount!==diff.newCount){if(!confirm(step3DiffConfirmMessage(diff)))return;}}const payload_text=getStepPayloadText(stepKey,stepPayloadFromBook(currentBook,stepKey));const result=await api('/api/novels/save_step_result',{method:'POST',body:JSON.stringify({mode,book_id:bookId,step_key:stepKey,payload_text})});if(!ensureOk(result))return;currentBook=result.book;markStepDraftSaved(stepKey,result.step_payload||stepPayloadFromBook(result.book,stepKey),stepReviewNotes[stepKey]||[]);renderInputPanel(currentBook);renderBlueprint(currentBook);renderText(currentBook);await loadNovels();alert('当前步骤修改已保存。');}
+function clearStepDraft(stepKey){if(!bookId)return alert('请先选择一部小说。');if(!confirm('确认清空当前步骤草稿？该操作不会立即写库，需点击保存才生效。'))return;const empty=emptyStepPayload(stepKey);stepDraftObjects[stepKey]=deepClone(empty);stepDrafts[stepKey]=JSON.stringify(empty,null,2);stepDraftDirty[stepKey]=true;if(currentBook){renderBlueprint(currentBook);autoSizeTextareas('pnl-blueprint');}}
+async function reviseStepDraft(stepKey,revisionMode){if(!bookId)return alert('请先选择一部小说。');const payload_text=getStepPayloadText(stepKey,stepPayloadFromBook(currentBook,stepKey));let guidance='';if(revisionMode==='instruction'){guidance=prompt('描述你希望这一步结果怎么改：');if(!guidance)return;}const r=await api('/api/novels/revise_step_result_run',{method:'POST',body:JSON.stringify({mode,book_id:bookId,step_key:stepKey,payload_text,revision_mode:revisionMode,guidance})});if(!ensureOk(r))return;pendingRunId=r.run_id||'';pendingStepRevision={run_id:pendingRunId,step_key:stepKey,revision_mode:revisionMode,payload_text,guidance};expandedRuns.add(pendingRunId);boxStates={};const taskLabel=`${stepKey.toUpperCase()} ${revisionMode==='review'?'质检修改':'指令修改'}`;runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),task_label:taskLabel,pending_message:revisionMode==='review'?'步骤质检修改已启动。':'步骤指令修改已启动。'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
+async function addCharacterByInstruction(){if(!bookId)return alert('请先选择一部小说。');const extra=prompt('描述新角色需求（身份、作用、和谁形成关系）：');if(!extra)return;const guidance=`仅新增 1 个角色，不要改写已有角色；新角色要与现有核心角色形成明确关系并推动后续剧情。\n用户要求：${extra}`;const r=await api('/api/novels/add_character',{method:'POST',body:JSON.stringify({mode,book_id:bookId,guidance})});if(!ensureOk(r))return;pendingRunId=r.run_id||'';pendingStepRevision=null;expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),task_label:'步骤3 增加角色',pending_message:'新增角色任务已启动（仅追加新角色，不重算整包）。'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
+async function addMilestoneLine(){if(!bookId)return alert('请先选择一部小说。');const guidance=String(prompt('描述新增角色发展线需求（角色名、线名、阶段重点）：')||'').trim();if(!guidance)return;const r=await api('/api/novels/add_character_milestone',{method:'POST',body:JSON.stringify({mode,book_id:bookId,guidance})});if(!ensureOk(r))return;pendingRunId=r.run_id||'';pendingStepRevision={run_id:pendingRunId,step_key:'step_5',revision_mode:'instruction',payload_text:'',guidance};expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),task_label:'步骤5 增加角色发展线',pending_message:'新增角色发展线任务已启动。'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
+async function reviseSingleCharacterByInstruction(index){if(!bookId)return alert('请先选择一部小说。');const extra=prompt('描述你希望这个角色如何调整：');if(!extra)return;const payload_text=getStepPayloadText('step_3',stepPayloadFromBook(currentBook,'step_3'));const r=await api('/api/novels/revise_single_character_run',{method:'POST',body:JSON.stringify({mode,book_id:bookId,payload_text,character_index:index,guidance:extra})});if(!ensureOk(r))return;pendingRunId=r.run_id||'';pendingStepRevision={run_id:pendingRunId,step_key:'step_3',revision_mode:'instruction',payload_text,guidance:extra};expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),task_label:`步骤3 单角色指令修改（角色 ${index+1}）`,pending_message:`角色 ${index+1} 指令修改任务已启动。`},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
+async function reviseSingleMilestoneByInstruction(index){if(!bookId)return alert('请先选择一部小说。');const extra=prompt('描述你希望这个角色发展线如何调整：');if(!extra)return;const payload_text=getStepPayloadText('step_5',stepPayloadFromBook(currentBook,'step_5'));const r=await api('/api/novels/revise_single_character_milestone_run',{method:'POST',body:JSON.stringify({mode,book_id:bookId,payload_text,character_index:index,guidance:extra})});if(!ensureOk(r))return;pendingRunId=r.run_id||'';pendingStepRevision={run_id:pendingRunId,step_key:'step_5',revision_mode:'instruction',payload_text,guidance:extra};expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),task_label:`步骤5 单角色发展线指令调整（角色 ${index+1}）`,pending_message:`角色 ${index+1} 发展线指令调整任务已启动。`},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
+async function saveSingleChapterBrief(index){if(!bookId)return alert('请先选择一部小说。');const step8=stepPayloadFromBook(currentBook,'step_8');const plans=Array.isArray(step8?.chapter_briefs)?step8.chapter_briefs:[];if(index<0||index>=plans.length)return alert('章节索引无效。');await saveStepDraft('step_8');}
+async function reviseSingleChapterBriefByInstruction(index){if(!bookId)return alert('请先选择一部小说。');const step8=stepPayloadFromBook(currentBook,'step_8');const plans=Array.isArray(step8?.chapter_briefs)?step8.chapter_briefs:[];const target=plans[index]||{};const chapterId=String(target?.chapter_id||'').trim()||`第${index+1}章`;const chapterTitle=String(target?.title||'').trim();const extra=prompt(`描述你希望如何调整 ${chapterTitle?`《${chapterTitle}》`:chapterId} 的章节摘要：`);if(!extra)return;const payload_text=getStepPayloadText('step_8',step8);const guidance=`只调整 chapter_briefs 中第 ${index+1} 条（chapter_id=${chapterId}${chapterTitle?`, title=${chapterTitle}`:''}），其他章节保持不变。\n用户要求：${extra}`;const r=await api('/api/novels/revise_step_result_run',{method:'POST',body:JSON.stringify({mode,book_id:bookId,step_key:'step_8',payload_text,revision_mode:'instruction',guidance})});if(!ensureOk(r))return;pendingRunId=r.run_id||'';pendingStepRevision={run_id:pendingRunId,step_key:'step_8',revision_mode:'instruction',payload_text,guidance};expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),task_label:`步骤8 单章指令调整（第 ${index+1} 章）`,pending_message:`第 ${index+1} 章指令调整任务已启动。`},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
+function deleteSingleChapterBrief(index){if(!bookId)return alert('请先选择一部小说。');const step8=stepPayloadFromBook(currentBook,'step_8');const plans=Array.isArray(step8?.chapter_briefs)?step8.chapter_briefs:[];if(index<0||index>=plans.length)return alert('章节索引无效。');const target=plans[index]||{};const label=String(target?.title||target?.chapter_id||`第${index+1}章`);if(!confirm(`确认删除章节摘要：${label}？`))return;const draft=ensureStepObject('step_8',step8);if(!Array.isArray(draft.chapter_briefs))draft.chapter_briefs=[];draft.chapter_briefs.splice(index,1);stepDraftObjects['step_8']=draft;stepDrafts['step_8']=JSON.stringify(draft,null,2);stepDraftDirty['step_8']=true;if(currentBook){renderBlueprint(currentBook);autoSizeTextareas('pnl-blueprint');}}
 function toggleButtons(){const t=mode==='test';btnNew.style.display=t?'none':'inline-block';btnStep1.style.display=t?'none':'inline-block';btnStep2.style.display=t?'none':'inline-block';btnStep3.style.display=t?'none':'inline-block';btnStep4.style.display=t?'none':'inline-block';btnStep5.style.display=t?'none':'inline-block';btnStep6.style.display=t?'none':'inline-block';btnStep7.style.display=t?'none':'inline-block';btnStep8.style.display=t?'none':'inline-block';btnBlueprintReview.style.display=t?'none':'inline-block';btnContinue.style.display=t?'none':'inline-block';btnBlueprint.style.display=t?'inline-block':'none';btnWrite.style.display=t?'inline-block':'none';btnCritique.style.display=t?'inline-block':'none';btnPatch.style.display=t?'inline-block':'none';}
 function updateStopButton(){const a=runsCache.find(x=>x.is_running)||(pendingRunId?{run_id:pendingRunId}:null);btnStop.style.display=a?'inline-block':'none';}
 async function loadNovels(){const novels=await api('/api/novels?mode='+mode);novelSel.innerHTML="<option value=''>选择小说</option>";novels.forEach(n=>{const o=document.createElement('option');o.value=n.book_id;o.textContent=n.title||n.book_id;novelSel.appendChild(o);});if(bookId)novelSel.value=bookId;}
 async function loadRuns(){if(!bookId){runsCache=pendingRunId?[{run_id:pendingRunId,is_running:true,stage:'writing',updated_at:new Date().toISOString(),pending_message:'运行已启动，正在准备请求模型。'}]:[];return renderRuns();}runsCache=await api(`/api/runs?mode=${mode}&book_id=${bookId}`);const c=runsCache.find(x=>x.is_running)||runsCache[0];if(c)expandedRuns.add(c.run_id);await renderRuns();updateStopButton();}
 function renderEmptyRightPanels(){document.getElementById('pnl-input').innerHTML="<div class='empty'>等待加载用户输入</div>";document.getElementById('pnl-blueprint').innerHTML="<div class='empty'>等待加载小说信息</div>";document.getElementById('pnl-text').innerHTML="<div class='empty'>等待加载小说正文</div>";document.getElementById('pnl-critic').innerHTML="<div class='empty'>等待加载评价结果</div>";showTab('input');}
-async function changeMode(){mode=modeSel.value;bookId='';currentBook=null;pendingRunId='';pendingStepRevision=null;runsCache=[];expandedRuns=new Set();boxStates={};resetStepDraftCache('');evs.innerHTML="<div class='empty'>选择小说或发起一次运行后查看过程</div>";renderEmptyRightPanels();stagePill.textContent='未开始';toggleButtons();updateStopButton();await loadNovels();}
-async function selectNovel(id){bookId=id;currentBook=null;pendingRunId='';pendingStepRevision=null;expandedRuns=new Set();boxStates={};resetStepDraftCache(id||'');if(!bookId){evs.innerHTML="<div class='empty'>选择小说或发起一次运行后查看过程</div>";renderEmptyRightPanels();stagePill.textContent='未开始';updateStopButton();return;}await refreshNovel();}
-async function refreshNovel(){if(!bookId)return;const d=await api(`/api/novel?mode=${mode}&book_id=${bookId}`);if(!d.book)return;if(stepDraftBookId!==d.book.id)resetStepDraftCache(d.book.id);const editingInRight=!!document.activeElement&&document.getElementById('right')?.contains(document.activeElement)&&isEditingElement(document.activeElement);const scrollState=captureScrollState();currentBook=d.book;if(!editingInRight){renderInputPanel(d.book);renderBlueprint(d.book,d.blueprint_review);renderText(d.book);renderCritic(d.critic);}stagePill.textContent=stageText(d.latest_stage);runsCache=d.runs||[];const c=runsCache.find(x=>x.is_running)||runsCache[0];if(c)expandedRuns.add(c.run_id);await renderRuns();updateStopButton();await loadNovels();restoreScrollState(scrollState);}
-async function refreshPendingRun(){if(!pendingRunId)return;const trackedRunId=pendingRunId;const d=await api(`/api/run?mode=${mode}&run_id=${trackedRunId}`);stagePill.textContent=stageText(d.stage||'writing');const running=d.is_running!==false;if(running){runsCache=[{run_id:trackedRunId,is_running:true,stage:d.stage,updated_at:d.updated_at||new Date().toISOString(),pending_message:'运行中，等待模型返回更多内容。'},...runsCache.filter(x=>x.run_id!==trackedRunId)];expandedRuns.add(trackedRunId);await renderRuns({[trackedRunId]:d});updateStopButton();return;}let revisionPayload=latestOutputByType(d,'step_revision_draft');const completedRevision=pendingStepRevision&&pendingStepRevision.run_id===trackedRunId?pendingStepRevision:null;pendingRunId='';pendingStepRevision=null;if(!revisionPayload&&completedRevision&&completedRevision.step_key&&completedRevision.payload_text){const fallback=await api('/api/novels/revise_step_result',{method:'POST',body:JSON.stringify({mode,book_id:bookId,step_key:completedRevision.step_key,payload_text:completedRevision.payload_text,revision_mode:completedRevision.revision_mode||'instruction',guidance:completedRevision.guidance||''})});if(ensureOk(fallback)){revisionPayload=fallback;}}if(revisionPayload)applyStepRevisionDraft(revisionPayload);if(d.current_book_id){bookId=d.current_book_id;novelSel.value=bookId;await refreshNovel();if(completedRevision){if(revisionPayload)alert(completedRevision.revision_mode==='review'?'已生成质检后的建议稿，请确认后再点保存修改。':'已按你的指令生成建议稿，请确认后再点保存修改。');else alert('修改任务已结束，但没有返回建议稿，请查看左侧运行记录。');}return;}runsCache=[{run_id:trackedRunId,is_running:false,stage:d.stage,updated_at:d.updated_at||new Date().toISOString(),pending_message:'运行已结束，查看下方最新事件。'}];expandedRuns.add(trackedRunId);await renderRuns({[trackedRunId]:d});updateStopButton();if(completedRevision){if(revisionPayload)alert(completedRevision.revision_mode==='review'?'已生成质检后的建议稿，请确认后再点保存修改。':'已按你的指令生成建议稿，请确认后再点保存修改。');else alert('修改任务已结束，但没有返回建议稿，请查看左侧运行记录。');}}
+async function changeMode(){mode=modeSel.value;bookId='';currentBook=null;pendingRunId='';pendingStepRevision=null;runsCache=[];expandedRuns=new Set();boxStates={};lastRightRenderKey='';resetStepDraftCache('');evs.innerHTML="<div class='empty'>选择小说或发起一次运行后查看过程</div>";renderEmptyRightPanels();stagePill.textContent='未开始';toggleButtons();updateStopButton();await loadNovels();}
+async function selectNovel(id){bookId=id;currentBook=null;pendingRunId='';pendingStepRevision=null;expandedRuns=new Set();boxStates={};lastRightRenderKey='';resetStepDraftCache(id||'');if(!bookId){evs.innerHTML="<div class='empty'>选择小说或发起一次运行后查看过程</div>";renderEmptyRightPanels();stagePill.textContent='未开始';updateStopButton();return;}await refreshNovel();}
+async function refreshNovel(){if(!bookId)return;const d=await api(`/api/novel?mode=${mode}&book_id=${bookId}`);if(!d.book)return;if(stepDraftBookId!==d.book.id)resetStepDraftCache(d.book.id);const editingInRight=!!document.activeElement&&document.getElementById('right')?.contains(document.activeElement)&&isEditingElement(document.activeElement);const scrollState=captureScrollState();currentBook=d.book;const rightRenderKey=[String(d.book?.id||''),String(d.book?.updated_at||''),String(d.latest_run_id||''),String(d.latest_stage||''),String(d.critic?.report_id||d.critic?.created_at||''),String(d.blueprint_review?.summary||'')].join('|');if(!editingInRight&&rightRenderKey!==lastRightRenderKey){snapshotPanelDetailStates('pnl-input');snapshotPanelDetailStates('pnl-blueprint');snapshotPanelDetailStates('pnl-text');snapshotPanelDetailStates('pnl-critic');renderInputPanel(d.book);renderBlueprint(d.book,d.blueprint_review);renderText(d.book);renderCritic(d.critic);lastRightRenderKey=rightRenderKey;}stagePill.textContent=stageText(d.latest_stage);runsCache=d.runs||[];const c=runsCache.find(x=>x.is_running)||runsCache[0];if(c)expandedRuns.add(c.run_id);await renderRuns();updateStopButton();await loadNovels();restoreScrollState(scrollState);}
+async function refreshPendingRun(){if(!pendingRunId)return;const trackedRunId=pendingRunId;const prev=runsCache.find(x=>x.run_id===trackedRunId)||{};const d=await api(`/api/run?mode=${mode}&run_id=${trackedRunId}`);stagePill.textContent=stageText(d.stage||'writing');const running=d.is_running!==false;if(running){runsCache=[{run_id:trackedRunId,is_running:true,stage:d.stage,updated_at:d.updated_at||new Date().toISOString(),task_label:prev.task_label||'',pending_message:'运行中，等待模型返回更多内容。'},...runsCache.filter(x=>x.run_id!==trackedRunId)];expandedRuns.add(trackedRunId);await renderRuns({[trackedRunId]:d});updateStopButton();return;}let revisionPayload=latestOutputByType(d,'step_revision_draft');const completedRevision=pendingStepRevision&&pendingStepRevision.run_id===trackedRunId?pendingStepRevision:null;pendingRunId='';pendingStepRevision=null;if(!revisionPayload&&completedRevision&&completedRevision.step_key&&completedRevision.payload_text){const fallback=await api('/api/novels/revise_step_result',{method:'POST',body:JSON.stringify({mode,book_id:bookId,step_key:completedRevision.step_key,payload_text:completedRevision.payload_text,revision_mode:completedRevision.revision_mode||'instruction',guidance:completedRevision.guidance||''})});if(ensureOk(fallback)){revisionPayload=fallback;}}if(revisionPayload)applyStepRevisionDraft(revisionPayload);if(d.current_book_id){bookId=d.current_book_id;novelSel.value=bookId;await refreshNovel();if(completedRevision){if(revisionPayload)alert(completedRevision.revision_mode==='review'?'已生成质检后的建议稿，请确认后再点保存修改。':'已按你的指令生成建议稿，请确认后再点保存修改。');else alert('修改任务已结束，但没有返回建议稿，请查看左侧运行记录。');}return;}runsCache=[{run_id:trackedRunId,is_running:false,stage:d.stage,updated_at:d.updated_at||new Date().toISOString(),task_label:prev.task_label||'',pending_message:'运行已结束，查看下方最新事件。'}];expandedRuns.add(trackedRunId);await renderRuns({[trackedRunId]:d});updateStopButton();if(completedRevision){if(revisionPayload)alert(completedRevision.revision_mode==='review'?'已生成质检后的建议稿，请确认后再点保存修改。':'已按你的指令生成建议稿，请确认后再点保存修改。');else alert('修改任务已结束，但没有返回建议稿，请查看左侧运行记录。');}}
 function boxHtml(key,title,payloadHtml,isOpen){return `<details class='box' ${isOpen?'open':''} ontoggle="toggleBox('${key}', this.open)"><summary><span class='title'>${title}</span></summary><div class='payload'>${payloadHtml}</div></details>`}
 function toggleBox(key,isOpen){boxStates[key]=isOpen;}
 const toArray=v=>Array.isArray(v)?v.filter(Boolean):[];
@@ -121,14 +300,131 @@ document.addEventListener('mouseup',()=>{isMouseSelecting=false;if(hasUserSelect
 document.addEventListener('selectionchange',()=>{if(hasUserSelection())pauseRefreshFor(4000,'selection');else if(!isMouseSelecting&&!isEditingElement(document.activeElement)&&refreshPauseReason==='selection')setRefreshPaused(false,'');});
 document.addEventListener('focusin',event=>{if(isEditingElement(event.target))setRefreshPaused(true,'editing');});
 document.addEventListener('focusout',event=>{if(isEditingElement(event.target)){setTimeout(()=>{if(!hasUserSelection()&&!isEditingElement(document.activeElement)&&!isMouseSelecting)setRefreshPaused(false,'');},0);}});
-function buildStreamItems(runId,evts){const groups=[],byId={};let active=null,seq=0;function ensureGroup(callId,ts,agent){const key=callId||`legacy_${++seq}`;if(byId[key]){if(agent&&!byId[key].agent)byId[key].agent=agent;return byId[key];}const group={key,text:'',reply:'',sortTs:ts||'',done:false,agent:agent||''};byId[key]=group;groups.push(group);return group;}evts.forEach(e=>{const payload=e.payload||{},callId=payload.call_id||'';if(e.event_type==='llm_prompt'){active=ensureGroup(callId||`prompt_${e.id||++seq}`,e.ts,e.agent);active.prompt=payload.preview||'';}else if(e.event_type==='llm_stream'){const group=callId?ensureGroup(callId,e.ts,e.agent):(active&&!active.done?active:ensureGroup(`stream_${e.id||++seq}`,e.ts,e.agent));group.text+=payload.preview||'';group.sortTs=e.ts||group.sortTs;if(e.agent&&!group.agent)group.agent=e.agent;}else if(e.event_type==='llm_reply'){const group=callId?ensureGroup(callId,e.ts,e.agent):active;if(group){group.reply=payload.preview||'';group.done=true;group.sortTs=e.ts||group.sortTs;if(e.agent&&!group.agent)group.agent=e.agent;}}});return groups.filter(group=>group.text||group.reply).map((group,index)=>({key:`${runId}:stream:${group.key}`,title:`${group.agent||'LLM'} · 流式输出 #${index+1}`,kind:'plain',text:group.text||group.reply||'',sortTs:group.sortTs||''}));}
-async function renderRuns(pref){const scrollState=captureLeftScrollState();if(!runsCache.length){evs.innerHTML="<div class='empty'>??????</div>";restoreLeftScrollState(scrollState);return;}const cache=pref||{};for(const r of runsCache){if(expandedRuns.has(r.run_id)&&!cache[r.run_id])cache[r.run_id]=await api(`/api/run?mode=${mode}&run_id=${r.run_id}`);}let html='';runsCache.forEach(r=>{const ex=expandedRuns.has(r.run_id),d=cache[r.run_id],outs=(d&&d.outputs)||[],evts=(d&&d.events)||[];const streamItems=buildStreamItems(r.run_id,evts);const normalEvents=evts.filter(e=>!['llm_stream','llm_prompt','llm_reply'].includes(e.event_type));const items=[];if(r.pending_message)items.push({key:`${r.run_id}:pending`,title:'???',kind:'plain',text:r.pending_message,sortTs:r.updated_at||''});streamItems.forEach(item=>items.push(item));outs.forEach(o=>items.push({key:`${r.run_id}:out:${o.id}`,title:`${esc(o.agent)} ? ${esc(o.title)}`,kind:'output',outputType:o.output_type,rawPayload:o.payload,sortTs:o.created_at||''}));normalEvents.forEach(e=>items.push({key:`${r.run_id}:evt:${e.id}`,title:`${esc(e.agent||'System')} ? ${esc(e.title||'')}`,kind:'event',eventType:e.event_type,rawPayload:e.payload,sortTs:e.ts||''}));items.sort((a,b)=>String(a.sortTs).localeCompare(String(b.sortTs)));html+=`<div class='run'><div class='head' onclick="toggleRun('${r.run_id}')"><span class='tag'>${esc(stageText(r.stage))}</span>${r.is_running?"<span class='tag live'>???</span>":''}${r.cancel_requested?"<span class='tag stop'>???</span>":''}<span>${esc(r.run_id)}</span><span class='ts'>${esc(shortTs(r.updated_at))}</span></div>`;if(ex){html+="<div class='body'>";if(r.is_running)html+=`<div style='margin-bottom:8px'><button class='ghost' onclick="event.stopPropagation();stopRun('${r.run_id}')">?????</button></div>`;if(!items.length)html+="<div class='payload'>??????</div>";items.forEach((item,index)=>{const isLatest=index===items.length-1;const isOpen=(item.key in boxStates)?boxStates[item.key]:isLatest;html+=boxHtml(item.key,item.title,renderItemPayload(item),isOpen);});html+='</div>';}html+='</div>';});evs.innerHTML=html;restoreLeftScrollState(scrollState);}
+function buildStreamItems(runId,evts){
+  const groups=[],byId={};let active=null,seq=0;
+  const MAX_STREAM_CHARS=24000;
+  function ensureGroup(callId,ts,agent){
+    const key=callId||`legacy_${++seq}`;
+    if(byId[key]){if(agent&&!byId[key].agent)byId[key].agent=agent;return byId[key];}
+    const group={key,text:'',reply:'',sortTs:ts||'',done:false,agent:agent||''};
+    byId[key]=group;groups.push(group);return group;
+  }
+  evts.forEach(e=>{
+    const payload=e.payload||{},callId=payload.call_id||'';
+    if(e.event_type==='llm_prompt'){
+      active=ensureGroup(callId||`prompt_${e.id||++seq}`,e.ts,e.agent);
+      active.prompt=payload.preview||'';
+    }else if(e.event_type==='llm_stream'){
+      const group=callId?ensureGroup(callId,e.ts,e.agent):(active&&!active.done?active:ensureGroup(`stream_${e.id||++seq}`,e.ts,e.agent));
+      group.text+=payload.preview||'';
+      group.sortTs=e.ts||group.sortTs;
+      if(e.agent&&!group.agent)group.agent=e.agent;
+    }else if(e.event_type==='llm_reply'){
+      const group=callId?ensureGroup(callId,e.ts,e.agent):active;
+      if(group){
+        group.reply=payload.preview||'';
+        group.done=true;
+        group.sortTs=e.ts||group.sortTs;
+        if(e.agent&&!group.agent)group.agent=e.agent;
+      }
+    }
+  });
+  const usable=groups.filter(group=>group.text||group.reply);
+  if(!usable.length)return[];
+  const latestTs=usable.reduce((acc,g)=>String(g.sortTs||'')>String(acc)?String(g.sortTs||''):acc,'');
+  const mergedRaw=usable.map((g,index)=>`[${g.agent||'LLM'} #${index+1}]\\n${g.text||g.reply||''}`).join('\\n\\n');
+  const merged=mergedRaw.length>MAX_STREAM_CHARS
+    ? `[流式输出过长，仅展示最近 ${MAX_STREAM_CHARS} 字]\\n`+mergedRaw.slice(-MAX_STREAM_CHARS)
+    : mergedRaw;
+  return [{key:`${runId}:stream:all`,title:'模型流式输出',kind:'plain',text:merged,sortTs:latestTs}];
+}
+function outputTaskLabel(out){const t=String(out?.output_type||'');if(t==='outline_blueprint')return'步骤1 大纲+蓝图';if(t==='worldbuilding')return'步骤2 背景体系+世界观';if(t==='character_bible')return'步骤3 角色卡';if(t==='character_added')return'步骤3 增加角色';if(t==='event_timeline')return'步骤4 客观事件时间线';if(t==='character_milestones')return'步骤5 角色发展线';if(t==='twist_designs')return'步骤6 反转设计';if(t==='story_lines')return'步骤7 明线暗线发展线';if(t==='chapter_briefs')return'步骤8 章节摘要规划';if(t==='step_revision_draft'){const p=out?.payload||{};const stepKey=String(p?.step_key||'');const idx=p?.character_index;if(stepKey==='step_3'&&Number.isInteger(idx))return`步骤3 单角色指令修改（角色 ${Number(idx)+1}）`;if(stepKey==='step_5'&&Number.isInteger(idx))return`步骤5 单角色发展线指令调整（角色 ${Number(idx)+1}）`;if(stepKey)return`${stepKey.toUpperCase()} 结果修订`;return'步骤结果修订';}if(t==='blueprint_review')return'Critic Blueprint 评审';if(t==='text_updated')return'正文AI修改';return'';}
+function inferTaskLabel(run,detail){
+  if(run?.task_label)return String(run.task_label);
+  const ctx=detail?.context||{};
+  const action=String(ctx?.action||'');
+  const stepKey=String(ctx?.step_key||'');
+  const revisionMode=String(ctx?.revision_mode||'');
+  const idx=ctx?.character_index;
+  const stepName=(key)=>({step_1:'步骤1 大纲+蓝图',step_2:'步骤2 背景体系+世界观',step_3:'步骤3 角色卡',step_4:'步骤4 客观事件时间线',step_5:'步骤5 角色发展线',step_6:'步骤6 反转设计',step_7:'步骤7 明线暗线发展线',step_8:'步骤8 章节摘要规划'}[key]||key.toUpperCase());
+  if(action==='generate_outline')return'步骤1 大纲+蓝图';
+  if(action==='generate_worldbuilding')return'步骤2 背景体系+世界观';
+  if(action==='generate_characters')return'步骤3 角色卡';
+  if(action==='generate_event_timeline')return'步骤4 客观事件时间线';
+  if(action==='generate_milestones')return'步骤5 角色发展线';
+  if(action==='generate_twist_designs')return'步骤6 反转设计';
+  if(action==='generate_story_lines')return'步骤7 明线暗线发展线';
+  if(action==='generate_chapter_briefs')return'步骤8 章节摘要规划';
+  if(action==='generate_chapter_briefs_batch')return'步骤8 续生成章节摘要';
+  if(action==='review_blueprint')return'Critic Blueprint 评审';
+  if(action==='add_character')return'步骤3 增加角色';
+  if(action==='add_character_milestone')return'步骤5 增加角色发展线';
+  if(action==='continue_formal_novel' || action==='write_chapter')return'正文生成';
+  if(action==='revise_single_character')return Number.isInteger(idx)?`步骤3 单角色指令修改（角色 ${Number(idx)+1}）`:'步骤3 单角色指令修改';
+  if(action==='revise_single_character_milestone')return Number.isInteger(idx)?`步骤5 单角色发展线指令调整（角色 ${Number(idx)+1}）`:'步骤5 单角色发展线指令调整';
+  if(action==='revise_step_result')return `${stepName(stepKey)} ${revisionMode==='review'?'质检修改':'指令修改'}`;
+  if(action==='ai_update_concept')return'小说信息 AI 修改';
+  if(action==='ai_update_text')return'正文 AI 修改';
+  const outs=Array.isArray(detail?.outputs)?detail.outputs:[];
+  for(let i=outs.length-1;i>=0;i-=1){const label=outputTaskLabel(outs[i]);if(label)return label;}
+  const msg=String(run?.pending_message||'');
+  if(msg.includes('大纲'))return'步骤1 大纲+蓝图';
+  if(msg.includes('世界观')||msg.includes('背景'))return'步骤2 背景体系+世界观';
+  if(msg.includes('角色卡')||msg.includes('关系网'))return'步骤3 角色卡';
+  if(msg.includes('事件时间线'))return'步骤4 客观事件时间线';
+  if(msg.includes('角色发展线'))return'步骤5 角色发展线';
+  if(msg.includes('反转'))return'步骤6 反转设计';
+  if(msg.includes('故事线')||msg.includes('明线')||msg.includes('暗线'))return'步骤7 明线暗线发展线';
+  if(msg.includes('章节规划')||msg.includes('章节摘要'))return'步骤8 章节摘要规划';
+  if(msg.includes('写下一章'))return'正文生成';
+  if(String(run?.run_id||'').startsWith('edit_'))return'编辑任务';
+  return'';
+}
+async function renderRuns(pref){
+  const scrollState=captureLeftScrollState();
+  if(!runsCache.length){evs.innerHTML="<div class='empty'>选择小说或发起一次运行后查看过程</div>";restoreLeftScrollState(scrollState);return;}
+  const cache=pref||{};
+  for(const r of runsCache){
+    if((expandedRuns.has(r.run_id)||r.is_running)&&!cache[r.run_id])cache[r.run_id]=await api(`/api/run?mode=${mode}&run_id=${r.run_id}`);
+  }
+  let html='';
+  runsCache.forEach(r=>{
+    const ex=expandedRuns.has(r.run_id),d=cache[r.run_id],outs=(d&&d.outputs)||[],evts=(d&&d.events)||[];
+    const taskLabel=inferTaskLabel(r,d);
+    const streamItems=buildStreamItems(r.run_id,evts);
+    const normalEvents=evts.filter(e=>!['llm_stream','llm_prompt','llm_reply'].includes(e.event_type));
+    const items=[];
+    if(r.pending_message)items.push({key:`${r.run_id}:pending`,title:'任务状态',kind:'plain',text:r.pending_message,sortTs:r.updated_at||''});
+    streamItems.forEach(item=>items.push(item));
+    outs.forEach(o=>items.push({key:`${r.run_id}:out:${o.id}`,title:`${esc(o.agent)} · ${esc(o.title)}`,kind:'output',outputType:o.output_type,rawPayload:o.payload,sortTs:o.created_at||''}));
+    normalEvents.forEach(e=>items.push({key:`${r.run_id}:evt:${e.id}`,title:`${esc(e.agent||'System')} · ${esc(e.title||'')}`,kind:'event',eventType:e.event_type,rawPayload:e.payload,sortTs:e.ts||''}));
+    items.sort((a,b)=>String(a.sortTs).localeCompare(String(b.sortTs)));
+    html+=`<div class='run'><div class='head' onclick="toggleRun('${r.run_id}')"><span class='tag'>${esc(stageText(r.stage))}</span>${taskLabel?`<span class='tag'>${esc(taskLabel)}</span>`:''}${r.is_running?"<span class='tag live'>运行中</span>":''}${r.cancel_requested?"<span class='tag stop'>停止中</span>":''}<span>${esc(r.run_id)}</span><span class='ts'>${esc(shortTs(r.updated_at))}</span></div>`;
+    if(ex){
+      html+="<div class='body'>";
+      if(r.is_running)html+=`<div style='margin-bottom:8px'><button class='ghost' onclick="event.stopPropagation();stopRun('${r.run_id}')">停止并删除这次运行</button></div>`;
+      if(!items.length)html+="<div class='payload'>暂无运行输出</div>";
+      items.forEach((item)=>{const isOpen=(item.key in boxStates)?boxStates[item.key]:(item.key===`${r.run_id}:stream:all`);html+=boxHtml(item.key,item.title,renderItemPayload(item),isOpen);});
+      html+='</div>';
+    }
+    html+='</div>';
+  });
+  evs.innerHTML=html;
+  restoreLeftScrollState(scrollState);
+}
 function toggleRun(id){expandedRuns.has(id)?expandedRuns.delete(id):expandedRuns.add(id);renderRuns();}
 async function stopCurrentRun(){const a=runsCache.find(x=>x.is_running)||(pendingRunId?{run_id:pendingRunId}:null);if(!a)return alert('当前没有运行中的任务。');await stopRun(a.run_id);}
 async function stopRun(id){if(!confirm('确认删除此运行记录？'))return;await api('/api/runs/stop',{method:'POST',body:JSON.stringify({mode,run_id:id})});expandedRuns.delete(id);if(pendingRunId===id){pendingRunId='';pendingStepRevision=null;}runsCache=runsCache.filter(x=>x.run_id!==id);bookId?await refreshNovel():renderRuns();updateStopButton();}
 function summarizeBlock(text){const cleaned=String(text||'').replaceAll(String.fromCharCode(13),' ').replaceAll(String.fromCharCode(10),' ').split(' ').filter(Boolean).join(' ');return cleaned||'（空白内容）';}
 function isDetailOpen(key,defaultOpen=true){return key in detailStates?detailStates[key]:defaultOpen;}
-function toggleDetailState(key,isOpen){detailStates[key]=isOpen;}
+function toggleDetailState(key,isOpen){
+  detailStates[key]=isOpen;
+  requestAnimationFrame(()=>{
+    autoSizeTextareas('pnl-input');
+    autoSizeTextareas('pnl-blueprint');
+    autoSizeTextareas('pnl-text');
+  });
+}
 function autoSizeTextareas(rootId){document.querySelectorAll(`#${rootId} textarea`).forEach(el=>{const resize=()=>{el.style.height='auto';el.style.height=`${el.scrollHeight}px`;el.style.overflow='hidden';};if(!el.dataset.autosizeBound){el.addEventListener('input',resize);el.dataset.autosizeBound='1';}resize();});}
 function captureScrollState(){const activePanel=document.querySelector('.pnl.active');const tc=document.getElementById('tc');return{windowX:window.scrollX,windowY:window.scrollY,leftScrollTop:evs?evs.scrollTop:0,rightScrollTop:tc?tc.scrollTop:0,activePanelId:activePanel?activePanel.id:'',activePanelScrollTop:activePanel?activePanel.scrollTop:0};}
 function captureLeftScrollState(){return{leftScrollTop:evs?evs.scrollTop:0};}
@@ -136,28 +432,32 @@ function restoreScrollState(state){if(!state)return;requestAnimationFrame(()=>{w
 function restoreLeftScrollState(state){if(!state)return;requestAnimationFrame(()=>{if(evs)evs.scrollTop=state.leftScrollTop||0;});}
 function setAllInputBlocks(open){document.querySelectorAll('#pnl-input details.input-block').forEach(el=>{el.open=open;detailStates[el.dataset.detailKey]=open;});autoSizeTextareas('pnl-input');}
 function setPanelSections(panelId,open){document.querySelectorAll(`#${panelId} details.section-card`).forEach(el=>{el.open=open;detailStates[el.dataset.detailKey]=open;});autoSizeTextareas(panelId);}
+function snapshotPanelDetailStates(panelId){const root=document.getElementById(panelId);if(!root)return;root.querySelectorAll('details[data-detail-key]').forEach(el=>{const key=el.dataset.detailKey;if(key)detailStates[key]=!!el.open;});}
 function normalizeMultiline(value){const cr=String.fromCharCode(13),lf=String.fromCharCode(10);return String(value??'').split(cr+lf).join(lf).split(cr).join(lf).trimEnd();}
 function openNewNovelDialog(){newNovelModal.style.display='flex';newTitleInput.focus();}
 function closeNewNovelDialog(){newNovelModal.style.display='none';}
-async function startFormalFromDialog(){const title=newTitleInput.value.trim();const q=normalizeMultiline(newQueryInput.value);if(!q)return alert('请输入题材/需求。');const style=normalizeMultiline(newStyleInput.value);const r=await api('/api/novels/create',{method:'POST',body:JSON.stringify({mode,title,query:q,style_request:style})});if(!ensureOk(r))return;closeNewNovelDialog();bookId=r.book.id;pendingRunId='';pendingStepRevision=null;runsCache=[];expandedRuns=new Set();currentBook=r.book;stagePill.textContent='未开始';await loadNovels();novelSel.value=bookId;await refreshNovel();updateStopButton();}
-async function startPlanningRun(path,message){if(!bookId)return alert('请先选择一部小说。');const r=await api(path,{method:'POST',body:JSON.stringify({book_id:bookId})});if(!ensureOk(r))return;pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),pending_message:message},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
-async function generateOutline(){await startPlanningRun('/api/novels/generate_outline','大纲+蓝图生成中');}
-async function generateWorldbuilding(){await startPlanningRun('/api/novels/generate_worldbuilding','世界观+背景体系生成中');}
-async function generateCharacters(){if(!bookId)return alert('请先选择一部小说。');const r=await api('/api/novels/generate_characters',{method:'POST',body:JSON.stringify({book_id:bookId})});if(!ensureOk(r))return;pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),pending_message:'角色卡+关系网生成中'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
-async function generateMilestones(){await startPlanningRun('/api/novels/generate_milestones','角色发展线生成中');}
-async function generateEventTimeline(){await startPlanningRun('/api/novels/generate_event_timeline','事件时间线生成中');}
-async function generateTwistDesigns(){await startPlanningRun('/api/novels/generate_twist_designs','反转设计生成中');}
-async function generateStoryLines(){await startPlanningRun('/api/novels/generate_story_lines','故事线+章节标题生成中');}
-async function generateChapterPlans(){if(!bookId)return alert('请先选择一部小说。');const r=await api('/api/novels/generate_chapter_plans',{method:'POST',body:JSON.stringify({book_id:bookId})});if(!ensureOk(r))return;pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),pending_message:'章节规划+大纲生成中'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
-async function reviewBlueprint(){await startPlanningRun('/api/novels/review_blueprint','Blueprint Critic 评审中');}
-async function continueFormal(){if(!bookId)return alert('请先选择一部小说。');const r=await api('/api/novels/continue',{method:'POST',body:JSON.stringify({book_id:bookId})});if(!ensureOk(r))return;pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'writing',updated_at:new Date().toISOString(),pending_message:'正在写下一章，请稍候...'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
+async function startFormalFromDialog(){const title=newTitleInput.value.trim();const q=normalizeMultiline(newQueryInput.value);if(!q)return alert('请输入题材/需求。');const style=normalizeMultiline(newStyleInput.value);const r=await api('/api/novels/create',{method:'POST',body:JSON.stringify({mode,title,query:q,style_request:style})});if(!ensureOk(r))return;closeNewNovelDialog();bookId=r.book.id;pendingRunId='';pendingStepRevision=null;runsCache=[];expandedRuns=new Set();lastRightRenderKey='';currentBook=r.book;stagePill.textContent='未开始';await loadNovels();novelSel.value=bookId;await refreshNovel();updateStopButton();}
+async function startPlanningRun(path,message,taskLabel){if(!bookId)return alert('请先选择一部小说。');const r=await api(path,{method:'POST',body:JSON.stringify(withLlmProvider({book_id:bookId}))});if(!ensureOk(r))return;pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),task_label:taskLabel||message,pending_message:message},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
+async function generateOutline(){await startPlanningRun('/api/novels/generate_outline','大纲+蓝图生成中','步骤1 大纲+蓝图');}
+async function generateWorldbuilding(){await startPlanningRun('/api/novels/generate_worldbuilding','世界观+背景体系生成中','步骤2 背景体系+世界观');}
+async function generateCharacters(){if(!bookId)return alert('请先选择一部小说。');const r=await api('/api/novels/generate_characters',{method:'POST',body:JSON.stringify(withLlmProvider({book_id:bookId}))});if(!ensureOk(r))return;pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),task_label:'步骤3 角色卡',pending_message:'角色卡生成中'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
+async function generateMilestones(){await startPlanningRun('/api/novels/generate_milestones','角色发展线生成中','步骤5 角色发展线');}
+async function generateEventTimeline(){await startPlanningRun('/api/novels/generate_event_timeline','事件时间线生成中','步骤4 客观事件时间线');}
+async function generateTwistDesigns(){await startPlanningRun('/api/novels/generate_twist_designs','反转设计生成中','步骤6 反转设计');}
+async function generateStoryLines(){await startPlanningRun('/api/novels/generate_story_lines','明线暗线发展线生成中','步骤7 明线暗线发展线');}
+async function generateChapterBriefs(){if(!bookId)return alert('请先选择一部小说。');const r=await api('/api/novels/generate_chapter_briefs_batch',{method:'POST',body:JSON.stringify(withLlmProvider({book_id:bookId,batch_size:1}))});if(!ensureOk(r))return;pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),task_label:'步骤8 续写一章摘要',pending_message:'步骤8 生成中（当前 1 章）'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
+async function generateChapterBriefsBatch10(){if(!bookId)return alert('请先选择一部小说。');const r=await api('/api/novels/generate_chapter_briefs_batch',{method:'POST',body:JSON.stringify(withLlmProvider({book_id:bookId,batch_size:10}))});if(!ensureOk(r))return;pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),task_label:'步骤8 分批生成（每次10章）',pending_message:'步骤8 分批生成中（当前批次 10 章）'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
+async function reviewBlueprint(){await startPlanningRun('/api/novels/review_blueprint','Blueprint Critic 评审中','Critic Blueprint 评审');}
+async function continueFormal(){if(!bookId)return alert('请先选择一部小说。');const r=await api('/api/novels/continue',{method:'POST',body:JSON.stringify(withLlmProvider({book_id:bookId}))});if(!ensureOk(r))return;pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'writing',updated_at:new Date().toISOString(),task_label:'正文生成',pending_message:'正在写下一章，请稍候...'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
 async function deleteNovel(){if(!bookId)return alert('请先选择一部小说。');if(!confirm('确认删除此小说？该操作不可撤销。'))return;await api('/api/novels/delete',{method:'POST',body:JSON.stringify({mode,book_id:bookId})});bookId='';currentBook=null;pendingRunId='';pendingStepRevision=null;runsCache=[];expandedRuns=new Set();evs.innerHTML="<div class='empty'>????????????????</div>";renderEmptyRightPanels();stagePill.textContent='未开始';await loadNovels();updateStopButton();}
 async function testBlueprint(){const q=prompt('输入题材需求（测试大纲）：');if(!q)return;const r=await api('/api/test/blueprint',{method:'POST',body:JSON.stringify({query:q})});pendingRunId=r.run_id||'';expandedRuns=new Set(pendingRunId?[pendingRunId]:[]);runsCache=pendingRunId?[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),pending_message:'测试大纲运行中'}]:[];await renderRuns();updateStopButton();}
 async function testWrite(){let r;if(bookId)r=await api('/api/test/write',{method:'POST',body:JSON.stringify({book_id:bookId})});else{const q=prompt('输入题材需求（测试写作）：');if(!q)return;r=await api('/api/test/write',{method:'POST',body:JSON.stringify({query:q})});}pendingRunId=r.run_id||'';expandedRuns=new Set(pendingRunId?[pendingRunId]:[]);runsCache=pendingRunId?[{run_id:pendingRunId,is_running:true,stage:'writing',updated_at:new Date().toISOString(),pending_message:'测试写作运行中'}]:[];await renderRuns();updateStopButton();}
 async function testCritique(){if(!bookId)return alert('请先选择一部小说。');const r=await api('/api/test/critique',{method:'POST',body:JSON.stringify({book_id:bookId})});pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);runsCache=[{run_id:pendingRunId,is_running:true,stage:'critique',updated_at:new Date().toISOString(),pending_message:'测试评价运行中'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
 async function testPatch(){if(!bookId)return alert('请先选择一部小说。');const blockId=prompt('请输入 block_id：');if(!blockId)return;const operation=prompt('操作类型 replace / append / prepend','replace')||'replace';const patchContent=prompt('补丁内容：');if(!patchContent)return;const reason=prompt('修改原因：','manual test patch')||'manual test patch';const r=await api('/api/test/patch',{method:'POST',body:JSON.stringify({book_id:bookId,block_id:blockId,operation,patch_content:patchContent,reason})});pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);runsCache=[{run_id:pendingRunId,is_running:true,stage:'patching',updated_at:new Date().toISOString(),pending_message:'测试补丁运行中'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
-async function aiReviseConcept(scope,targetId){if(!bookId)return alert('请先选择一部小说。');const guidance=prompt('描述你希望 AI 怎么修改概念：');if(!guidance)return;const r=await api('/api/novels/ai_update_concept',{method:'POST',body:JSON.stringify({mode,book_id:bookId,scope,target_id:targetId,guidance})});if(!ensureOk(r))return;pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),pending_message:'AI 修改中'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
-async function aiReviseText(scope,targetId){if(!bookId)return alert('请先选择一部小说。');const guidance=prompt(scope==='chapter'?'描述你希望 AI 怎么修改这章：':'描述你希望 AI 怎么修改这段：');if(!guidance)return;const r=await api('/api/novels/ai_update_text',{method:'POST',body:JSON.stringify({mode,book_id:bookId,scope,target_id:targetId,guidance})});if(!ensureOk(r))return;pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);runsCache=[{run_id:pendingRunId,is_running:true,stage:'patching',updated_at:new Date().toISOString(),pending_message:'AI 修改文本中'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
+async function aiReviseConcept(scope,targetId){if(!bookId)return alert('请先选择一部小说。');const guidance=prompt('描述你希望 AI 怎么修改概念：');if(!guidance)return;const r=await api('/api/novels/ai_update_concept',{method:'POST',body:JSON.stringify(withLlmProvider({mode,book_id:bookId,scope,target_id:targetId,guidance}))});if(!ensureOk(r))return;pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),pending_message:'AI 修改中'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
+async function aiReviseText(scope,targetId){if(!bookId)return alert('请先选择一部小说。');const guidance=prompt(scope==='chapter'?'描述你希望 AI 怎么修改这章：':'描述你希望 AI 怎么修改这段：');if(!guidance)return;const r=await api('/api/novels/ai_update_text',{method:'POST',body:JSON.stringify(withLlmProvider({mode,book_id:bookId,scope,target_id:targetId,guidance}))});if(!ensureOk(r))return;pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);runsCache=[{run_id:pendingRunId,is_running:true,stage:'patching',updated_at:new Date().toISOString(),pending_message:'AI 修改文本中'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
+async function saveTextEdit(scope,targetId,text){if(!bookId)return alert('请先选择一部小说。');const payload={mode,book_id:bookId,scope,target_id:targetId,text:String(text||'')};const result=await api('/api/novels/save_text_edit',{method:'POST',body:JSON.stringify(payload)});if(!ensureOk(result))return;currentBook=result.book;renderInputPanel(currentBook);renderBlueprint(currentBook);renderText(currentBook);await loadNovels();alert(scope==='chapter'?'章节正文已保存。':'段落已保存。');}
+async function deleteChapter(chapterId,chapterTitle){if(!bookId)return alert('请先选择一部小说。');const label=String(chapterTitle||chapterId||'该章节');if(!confirm(`确认删除章节：${label}？`))return;const result=await api('/api/novels/delete_chapter',{method:'POST',body:JSON.stringify({mode,book_id:bookId,chapter_id:chapterId})});if(!ensureOk(result))return;currentBook=result.book;renderInputPanel(currentBook);renderBlueprint(currentBook);renderText(currentBook);await loadNovels();alert('章节已删除。');}
 
 async function resolveCharacterCandidate(candidateId,action){
   if(!bookId)return alert('请先选择一部小说。');
@@ -175,6 +475,7 @@ function renderInputPanel(book){
   const currentQuery=book?.metadata?.query||'';
   const userTopic=book?.metadata?.user_topic||'';
   const styleRequest=book?.metadata?.style_request||'';
+  const assistantPersonaPrompt=book?.metadata?.assistant_persona_prompt||'';
   const totalWordTarget=book?.metadata?.total_word_target||'';
   const chapterCountTarget=book?.metadata?.chapter_count_target||'';
   const chapterWordTarget=book?.metadata?.chapter_word_target||'';
@@ -188,7 +489,7 @@ function renderInputPanel(book){
   ].filter(Boolean).join(' / ')||'暂无写作要求';
   const writingBlock=`<details class='input-block' data-detail-key='input-writing-requirements' ${isDetailOpen('input-writing-requirements',false)?'open':''} ontoggle="toggleDetailState('input-writing-requirements', this.open)"><summary><div class='summary-text'><div class='summary-title'>写作要求</div><div class='summary-desc'>${esc(writingSummary)}</div></div><div class='summary-arrow'>›</div></summary><div class='block-body'><div class='writing-req-grid'><div class='field'><label>总字数目标</label><input id='concept-total-word-target' value='${esc(totalWordTarget)}' placeholder='约80-100万字' /></div><div class='field'><label>章节数目标</label><input id='concept-chapter-count-target' value='${esc(chapterCountTarget)}' placeholder='约180-220章' /></div><div class='field'><label>章节字数</label><input id='concept-chapter-word-target' value='${esc(chapterWordTarget)}' placeholder='约2500-3500字' /></div></div><div class='writing-req-full'><label>节奏备注</label><textarea id='concept-pace-notes' placeholder='描述各阶段节奏安排'>${esc(paceNotes)}</textarea></div><div class='block-help'>写作要求会影响步骤 1-8 的生成结果</div></div></details>`;
   const heroSummary='在这里填写小说的基础信息，修改后记得点保存。';
-  const html=`<div class='card'><div class='sec'>用户输入</div><div class='input-hero'><div class='input-hero-copy'><div class='input-hero-kicker'>小说基础设置</div><div class='input-hero-title-row'><h2 class='input-hero-title'>${esc(book?.title||'未命名小说')}</h2><span class='input-hero-badge'>写作控制台</span></div><div class='input-hero-desc'>${heroSummary}</div></div><div class='input-toolbar'><div class='actions'><button class='ghost' onclick='setAllInputBlocks(true)'>全部展开</button><button class='ghost' onclick='setAllInputBlocks(false)'>全部折叠</button><button onclick='saveConcept()'>保存所有修改</button></div></div></div><div class='title-field'><label>书名标题</label><input id='concept-title' value='${esc(book?.title||'')}' placeholder='输入小说书名' /></div><div class='input-blocks'>${block('input-query','concept-query','题材与需求',currentQuery,'支持 Markdown 详细描述题材','此内容影响步骤 1-8 的生成',true)}${block('input-topic','concept-user-topic','用户主题',userTopic,'可选填写用户关注的主题方向','仅在明确时填写',false)}${block('input-style','concept-style-request','风格要求',styleRequest,'留空则由系统判断风格','明确时填写，不填则自动决策',false)}${writingBlock}</div></div>`;
+  const html=`<div class='card'><div class='sec'>用户输入</div><div class='input-hero'><div class='input-hero-copy'><div class='input-hero-kicker'>小说基础设置</div><div class='input-hero-title-row'><h2 class='input-hero-title'>${esc(book?.title||'未命名小说')}</h2><span class='input-hero-badge'>写作控制台</span></div><div class='input-hero-desc'>${heroSummary}</div></div><div class='input-toolbar'><div class='actions'><button class='ghost' onclick='setAllInputBlocks(true)'>全部展开</button><button class='ghost' onclick='setAllInputBlocks(false)'>全部折叠</button><button onclick='saveConcept()'>保存所有修改</button></div></div></div><div class='title-field'><label>书名标题</label><input id='concept-title' value='${esc(book?.title||'')}' placeholder='输入小说书名' /></div><div class='input-blocks'>${block('input-query','concept-query','题材与需求',currentQuery,'支持 Markdown 详细描述题材','此内容影响步骤 1-8 的生成',true)}${block('input-topic','concept-user-topic','用户主题',userTopic,'可选填写用户关注的主题方向','仅在明确时填写',false)}${block('input-style','concept-style-request','风格要求',styleRequest,'留空则由系统判断风格','明确时填写，不填则自动决策',false)}${block('input-assistant-persona','concept-assistant-persona','小说助手人设',assistantPersonaPrompt,'例如：你是一名擅长古风权谋禁忌言情的长篇作者……','会动态插入“写正文”提示词。可留空。',false)}${writingBlock}</div></div>`;
   document.getElementById('pnl-input').innerHTML=html;
   autoSizeTextareas('pnl-input');
 }
@@ -200,7 +501,7 @@ function renderBlueprint(book, blueprintReview){
   const toolbarSection=(key,title,summary,actions,body,defaultOpen=false)=>`<details class='section-card' data-detail-key='${key}' ${isDetailOpen(key,defaultOpen)?'open':''} ontoggle="toggleDetailState('${key}', this.open)"><summary><div class='summary-text'><div class='summary-title'>${title}</div><div class='summary-desc'>${esc(summary)}</div></div><div class='summary-toolbar' onclick='event.stopPropagation()'>${actions}</div></summary><div class='section-body'>${body}</div></details>`;
   const listHtml=(items, emptyText='暂无内容')=>{const arr=toArray(items);return arr.length?`<div class='mini-list'>${arr.map(item=>`<div class='mini-item'>${esc(typeof item==='string'?item:JSON.stringify(item,null,2))}</div>`).join('')}</div>`:`<div class='relationship-empty'>${emptyText}</div>`;};
   const detailRowsHtml=(title,items,emptyText)=>{const arr=toArray(items);if(!arr.length)return `<div class='field-block'><div class='field-row'><span class='field-dot'>·</span><span class='field-label'>${esc(title)}：</span><span class='field-val'>${esc(emptyText)}</span></div></div>`;return `<div class='field-block'><div class='field-row'><span class='field-dot'>·</span><span class='field-label'>${esc(title)}：</span><span class='field-val'>共 ${arr.length} 条</span></div>${arr.map((item,index)=>`<div class='field-row'><span class='field-dot'>${index+1}.</span><span class='field-val'>${esc(typeof item==='string'?item:JSON.stringify(item,null,2))}</span></div>`).join('')}</div>`;};
-  const stepSection=(stepKey,title,summary,body,defaultOpen=false)=>{const badge=stepDraftDirty[stepKey]?`<span class='dirty-dot'>●未保存</span>`:'';const acts=`${badge}<button class='ghost' onclick="reviseStepDraft('${stepKey}','review')">质检修改</button><button class='ghost' onclick="reviseStepDraft('${stepKey}','instruction')">指令修改</button><button class='ghost' onclick="saveStepDraft('${stepKey}')">保存</button>`;return toolbarSection(stepKey,title,summary,acts,body,defaultOpen);};
+  const stepSection=(stepKey,title,summary,body,defaultOpen=false)=>{const badge=stepDraftDirty[stepKey]?`<span class='dirty-dot'>●未保存</span>`:'';const extra=stepKey==='step_5'?`<button class='ghost' onclick="addMilestoneLine()">增加角色</button>`:'';const acts=`${badge}${extra}<button class='ghost' onclick="clearStepDraft('${stepKey}')">清空</button><button class='ghost' onclick="reviseStepDraft('${stepKey}','review')">质检修改</button><button class='ghost' onclick="reviseStepDraft('${stepKey}','instruction')">指令修改</button><button class='ghost' onclick="saveStepDraft('${stepKey}')">保存</button>`;return toolbarSection(stepKey,title,summary,acts,body,defaultOpen);};
   const subStepEditor=(stepKey,subKey,label)=>{const s=ensureStepObject(stepKey,stepPayloadFromBook(book,stepKey));return `<div class='step-editor'><div class='step-editor-body'><div class='step-editor-empty'>可以直接在这个模块里改内容，点右上角"保存"才会真正写回。</div>${renderStepEditorField(stepKey,[subKey],s[subKey]??[])}</div></div>`;};
   const step3DraftObj=stepDraftDirty['step_3']?(stepDraftObjects['step_3']||{}):null;
   const rawStep3Chars=Array.isArray(step3DraftObj?.characters)?step3DraftObj.characters:(book?.characters||[]);
@@ -213,14 +514,34 @@ function renderBlueprint(book, blueprintReview){
   html+=stepSection('step_2','2 背景体系+世界观',storyEngine.engine_sentence||'暂无引擎句',subStepEditor('step_2','story_engine','世界观'));
   const fieldRows=(pairs)=>pairs.filter(([,v])=>v).map(([k,v])=>`<div class='field-row'><span class='field-dot'>·</span><span class='field-label'>${esc(k)}：</span><span class='field-val'>${esc(v)}</span></div>`).join('')||"<div class='field-row'>（暂无信息）</div>";
   const charField=(idx,key,label,val)=>`<div class='step-inline-field'><label>${esc(label)}</label><textarea class='step-inline-textarea' oninput="updateStepEditorValue('step_3','characters.${idx}.${key}','string',this.value)">${esc(val||'')}</textarea></div>`;
-  const characterCards=displayCharacters.map((item,index)=>{const title=item.name||item.role||`角色 ${index+1}`;const summary=[item.role,item.personality,item.occupation].filter(Boolean).join(' · ')||'暂无信息';const editFields=[charField(index,'name','名称',item.name),charField(index,'role','角色定位',item.role),charField(index,'occupation','职业',item.occupation),charField(index,'personality','性格',item.personality),charField(index,'social_background','社会背景',item.social_background),charField(index,'education_background','教育背景',item.education_background),charField(index,'career','事业',item.career),charField(index,'initial_state','初始状态',item.initial_state),charField(index,'motivation','动机',item.motivation),charField(index,'behavior_pattern','行为模式',item.behavior_pattern),charField(index,'arc','成长弧',item.arc),charField(index,'relationships','关系',item.relationships)].join('');const axes=toArray(item.development_axes||[]);const body=`<div class='step-inline-root'>${editFields}</div>${axes.length?`<div style='margin-top:8px'>${listHtml(axes,'')}</div>`:''}<div style='display:flex;justify-content:flex-end;gap:8px;margin-top:12px'><button class='ghost' onclick='reviseSingleCharacterByInstruction(${index})'>指令修改</button><button class='ghost' onclick="saveStepDraft('step_3')">保存修改</button></div>`;return sectionCard(`step3-character-${index}`,title,summary,body,false);}).join('')||"<div class='relationship-empty'>暂无角色</div>";
-  const charActions=`${dirtyBadge}<button class='ghost' onclick="addCharacterByInstruction()">增加角色</button><button class='ghost' onclick="reviseStepDraft('step_3','review')">质检修改</button><button class='ghost' onclick="reviseStepDraft('step_3','instruction')">指令修改</button><button class='ghost' onclick="saveStepDraft('step_3')">保存</button>`;
+  const characterCards=displayCharacters.map((item,index)=>{const title=item.name||item.role||`角色 ${index+1}`;const summary=[item.role,item.personality,item.occupation].filter(Boolean).join(' · ')||'暂无信息';const editFields=[charField(index,'name','名称',item.name),charField(index,'role','角色定位',item.role),charField(index,'occupation','职业',item.occupation),charField(index,'appearance','外貌',item.appearance),charField(index,'personality','性格',item.personality),charField(index,'social_background','社会背景',item.social_background),charField(index,'education_background','教育背景',item.education_background),charField(index,'career','事业',item.career),charField(index,'initial_state','初始状态',item.initial_state),charField(index,'motivation','动机',item.motivation),charField(index,'behavior_pattern','行为模式',item.behavior_pattern),charField(index,'arc','成长弧',item.arc),charField(index,'relationships','关系',item.relationships)].join('');const axes=toArray(item.development_axes||[]);const body=`<div class='step-inline-root'>${editFields}</div>${axes.length?`<div style='margin-top:8px'>${listHtml(axes,'')}</div>`:''}<div style='display:flex;justify-content:flex-end;gap:8px;margin-top:12px'><button class='ghost' onclick='reviseSingleCharacterByInstruction(${index})'>指令修改</button><button class='ghost' onclick="saveStepDraft('step_3')">保存修改</button></div>`;return sectionCard(`step3-character-${index}`,title,summary,body,false);}).join('')||"<div class='relationship-empty'>暂无角色</div>";
+  const charActions=`${dirtyBadge}<button class='ghost' onclick="clearStepDraft('step_3')">清空</button><button class='ghost' onclick="addCharacterByInstruction()">增加角色</button><button class='ghost' onclick="reviseStepDraft('step_3','review')">质检修改</button><button class='ghost' onclick="reviseStepDraft('step_3','instruction')">指令修改</button><button class='ghost' onclick="saveStepDraft('step_3')">保存</button>`;
   html+=toolbarSection('step3-characters','3 角色卡',`${displayCharacters.length} 个角色`,charActions,characterCards,false);
   html+=stepSection('step_4','4 客观事件时间线',`${(blueprint.event_timeline||[]).length} 条`,subStepEditor('step_4','event_timeline','事件时间线'));
-  html+=stepSection('step_5','5 角色发展线',`${(book?.metadata?.character_milestones||[]).length} 条发展线`,subStepEditor('step_5','character_milestones','角色发展线'));
+  const step5State=ensureStepObject('step_5',stepPayloadFromBook(book,'step_5'));
+  const milestoneItems=Array.isArray(step5State?.character_milestones)?step5State.character_milestones:[];
+  const characterCardMap=new Map(displayCharacters.map(item=>[String(item?.name||'').trim(),item]));
+  const milestoneCards=milestoneItems.map((item,index)=>{
+    const name=String(item?.character_name||'').trim()||`角色 ${index+1}`;
+    const card=characterCardMap.get(name)||null;
+    const summary=card?[card.role,card.personality,card.occupation].filter(Boolean).join(' · ')||'已匹配角色卡':'未匹配到角色卡，请先确认角色名与角色卡一致';
+    const detailKey=`step5-character-${index}`;
+    const toolbar=`<button class='ghost' onclick='event.stopPropagation();saveStepDraft(\"step_5\")'>保存修改</button><button class='ghost' onclick='event.stopPropagation();reviseSingleMilestoneByInstruction(${index})'>指令调整</button>`;
+    const body=`<div class='step-editor'><div class='step-editor-body'>${renderStepEditorField('step_5',['character_milestones',index],item)}</div></div>`;
+    return `<details class='section-card' data-detail-key='${detailKey}' ${isDetailOpen(detailKey,true)?'open':''} ontoggle="toggleDetailState('${detailKey}', this.open)"><summary><div class='summary-text'><div class='summary-title'>${esc(name)}</div><div class='summary-desc'>${esc(summary)}</div></div><div class='summary-toolbar' onclick='event.stopPropagation()'>${toolbar}</div></summary><div class='section-body'>${body}</div></details>`;
+  }).join('')||"<div class='relationship-empty'>暂无角色发展线</div>";
+  html+=stepSection('step_5','5 角色发展线',`${milestoneItems.length} 条发展线`,milestoneCards);
   html+=stepSection('step_6','6 反转设计',`${(blueprint.twist_designs||[]).length} 个反转`,subStepEditor('step_6','twist_designs','反转设计'));
-  html+=stepSection('step_7','7 故事线+章节标题',`${(blueprint.story_lines||[]).length} 条故事线 / ${(blueprint.chapter_briefs||[]).length} 章`,subStepEditor('step_7','story_lines','故事线')+subStepEditor('step_7','chapter_briefs','章节标题'));
-  html+=stepSection('step_8','8 章节规划+大纲',`${(book?.metadata?.chapter_plans||[]).length} 章`,subStepEditor('step_8','chapter_plans','章节规划'));
+  const step8State=ensureStepObject('step_8',stepPayloadFromBook(book,'step_8'));
+  const step8Inline=`<div class='step-editor'><div class='step-editor-body'>${renderStepEditorField('step_8',['chapter_briefs'],step8State.chapter_briefs??[])}</div></div>`;
+  const step7Summary=`${(blueprint.story_lines||[]).length} 条故事线`;
+  const step8Summary=`${(blueprint.chapter_briefs||[]).length} 章摘要`;
+  html+=stepSection('step_7','7 明线暗线发展线',step7Summary,subStepEditor('step_7','story_lines','明线暗线（含关键章节推进）'));
+  html+=stepSection('step_8','8 章节摘要（点一次生成一章）',step8Summary,step8Inline);
+  const actualSummaries=Array.isArray(book?.metadata?.actual_chapter_summaries)?book.metadata.actual_chapter_summaries:[];
+  const latestCritic=book?.metadata?.latest_critic_report||null;
+  html+=sectionCard('actual-summaries','已完成章节 actual summaries',`${actualSummaries.length} 章`,listHtml(actualSummaries.map(item=>`${item.chapter_id||''}：${(item.actual_events||[]).join('；')}`),'暂无已完成章节'),false);
+  if(latestCritic){html+=sectionCard('latest-critics','最近一次章节 critic',latestCritic.summary||'暂无总结',`<div class='relationship-stack'><div class='relationship-card'><div class='subsec'>总结</div>${infoRow('摘要', latestCritic.summary||'')}</div><div class='relationship-card'><div class='subsec'>问题列表</div>${listHtml((latestCritic.issues||[]).map(item=>`${item.severity||'未知'}·${item.title||'未命名问题'}：${item.evidence||item.recommendation||''}`),'暂无问题')}</div></div>`,false);}
   if(blueprintReview){html+=sectionCard('blueprint-review','Critic Blueprint',blueprintReview.summary||'暂无评审结论',`<div class='relationship-stack'><div class='relationship-card'><div class='subsec'>总结</div>${infoRow('摘要', blueprintReview.summary||'')}</div><div class='relationship-card'><div class='subsec'>问题列表</div>${listHtml((blueprintReview.issues||[]).map(item=>`${item.severity||'未知'}·${item.title||'未命名问题'}`),'暂无问题')}</div></div>`,false);}
   document.getElementById('pnl-blueprint').innerHTML=html;
   autoSizeTextareas('pnl-blueprint');
@@ -245,11 +566,12 @@ function renderText(book){
   chapters.forEach(({volume,chapter},index)=>{
     const title=chapter.title||chapter.id||`第${index+1}章`;
     const summary=chapter.summary||'暂无摘要';
+    const chapterToolbar=`<div style='display:flex;justify-content:flex-end;gap:8px;margin-bottom:8px'><button class='ghost' onclick="aiReviseText('chapter','${esc(chapter.id||'')}')">整章指令修改</button><button class='ghost' onclick="deleteChapter('${esc(chapter.id||'')}')">删除章节</button></div>`;
     const scenes=(chapter.scenes||[]).map((scene,sceneIndex)=>{
-      const blocks=(scene.blocks||[]).map((block,blockIndex)=>`<div class='block' style='margin-top:8px'><div class='row'><strong>块 ${blockIndex+1}</strong>${block.purpose?` <span class='muted'>${esc(block.purpose)}</span>`:''}</div><div>${esc(block.text||'')}</div></div>`).join('')||"<div class='relationship-empty'>暂无段落内容</div>";
+      const blocks=(scene.blocks||[]).map((block,blockIndex)=>`<div class='block' style='margin-top:8px'><div class='row'><strong>段落 ${blockIndex+1}</strong>${block.purpose?` <span class='muted'>${esc(block.purpose)}</span>`:''}${block.id?` <span class='muted'>${esc(block.id)}</span>`:''}</div><div>${esc(block.text||'')}</div></div>`).join('')||"<div class='relationship-empty'>暂无段落内容</div>";
       return `<div class='relationship-card'><div class='subsec'>场景 ${sceneIndex+1}${scene.title?` · ${esc(scene.title)}`:''}</div>${infoRow('场景概述', scene.summary||'')}${blocks}</div>`;
     }).join('')||"<div class='relationship-empty'>暂无场景</div>";
-    const body=`<div class='relationship-stack'><div class='relationship-card'><div class='subsec'>基础信息</div>${infoRow('卷名', volume.title||volume.id||'')}${infoRow('章节标题', title)}${infoRow('章节概述', summary)}</div><div class='relationship-card'><div class='subsec'>场景</div><div class='relationship-stack'>${scenes}</div></div></div>`;
+    const body=`<div class='relationship-stack'><div class='relationship-card'><div class='subsec'>基础信息</div>${infoRow('卷名', volume.title||volume.id||'')}${infoRow('章节标题', title)}${infoRow('章节概述', summary)}</div>${chapterToolbar}<div class='relationship-card'><div class='subsec'>正文展示</div><div class='relationship-stack'>${scenes}</div></div></div>`;
     html+=sectionCard(`text-chapter-${chapter.id||index}`,title,summary,body,false);
   });
   document.getElementById('pnl-text').innerHTML=html;
@@ -267,7 +589,7 @@ function renderCritic(c){
 }
 
 function showTab(name){document.querySelectorAll('.tab').forEach((e,i)=>e.classList.toggle('active',['input','blueprint','text','critic'][i]===name));document.querySelectorAll('.pnl').forEach(e=>e.classList.remove('active'));document.getElementById('pnl-'+name).classList.add('active');}
-const btnNew=document.getElementById('btnNew'),btnStep1=document.getElementById('btnStep1'),btnStep2=document.getElementById('btnStep2'),btnStep3=document.getElementById('btnStep3'),btnStep4=document.getElementById('btnStep4'),btnStep5=document.getElementById('btnStep5'),btnStep6=document.getElementById('btnStep6'),btnStep7=document.getElementById('btnStep7'),btnStep8=document.getElementById('btnStep8'),btnBlueprintReview=document.getElementById('btnBlueprintReview'),btnContinue=document.getElementById('btnContinue'),btnBlueprint=document.getElementById('btnBlueprint'),btnWrite=document.getElementById('btnWrite'),btnCritique=document.getElementById('btnCritique'),btnPatch=document.getElementById('btnPatch'),btnStop=document.getElementById('btnStop'),stagePill=document.getElementById('stage-pill'),bootPill=document.getElementById('boot-pill'),novelSel=document.getElementById('novelSel'),modeSel=document.getElementById('modeSel'),evs=document.getElementById('evs'),newNovelModal=document.getElementById('newNovelModal'),newTitleInput=document.getElementById('newTitleInput'),newQueryInput=document.getElementById('newQueryInput'),newStyleInput=document.getElementById('newStyleInput');
+const btnNew=document.getElementById('btnNew'),btnStep1=document.getElementById('btnStep1'),btnStep2=document.getElementById('btnStep2'),btnStep3=document.getElementById('btnStep3'),btnStep4=document.getElementById('btnStep4'),btnStep5=document.getElementById('btnStep5'),btnStep6=document.getElementById('btnStep6'),btnStep7=document.getElementById('btnStep7'),btnStep8=document.getElementById('btnStep8'),btnBlueprintReview=document.getElementById('btnBlueprintReview'),btnContinue=document.getElementById('btnContinue'),btnBlueprint=document.getElementById('btnBlueprint'),btnWrite=document.getElementById('btnWrite'),btnCritique=document.getElementById('btnCritique'),btnPatch=document.getElementById('btnPatch'),btnStop=document.getElementById('btnStop'),stagePill=document.getElementById('stage-pill'),bootPill=document.getElementById('boot-pill'),novelSel=document.getElementById('novelSel'),modeSel=document.getElementById('modeSel'),modelSel=document.getElementById('modelSel'),evs=document.getElementById('evs'),newNovelModal=document.getElementById('newNovelModal'),newTitleInput=document.getElementById('newTitleInput'),newQueryInput=document.getElementById('newQueryInput'),newStyleInput=document.getElementById('newStyleInput');
 function showFrontendError(message){
   if(bootPill)bootPill.textContent=`前端失败：${String(message||'未知错误').slice(0,40)}`;
   if(evs){
@@ -285,14 +607,24 @@ window.addEventListener('unhandledrejection',event=>{
 async function initApp(){
   try{
     if(bootPill)bootPill.textContent='前端初始化中';
+    try{
+      const savedProvider=String(localStorage.getItem(LLM_PROVIDER_STORAGE_KEY)||'').toLowerCase();
+      llmProvider=validLlmProvider(savedProvider)?savedProvider:'doubao';
+    }catch{llmProvider='doubao';}
+    if(modelSel)modelSel.value=llmProvider;
     toggleButtons();
     await loadNovels();
     if(bootPill)bootPill.textContent=`前端已加载 ${Math.max((novelSel?.options?.length||1)-1,0)} 本`;
     updateStopButton();
     setInterval(async()=>{
       if(refreshPaused)return;
+      // Avoid double re-render during active runs: polling both endpoints in one tick
+      // causes the left run panel to redraw twice and appear as flicker.
+      if(pendingRunId){
+        await refreshPendingRun();
+        return;
+      }
       if(bookId)await refreshNovel();
-      if(pendingRunId)await refreshPendingRun();
     },1500);
   }catch(err){
     showFrontendError(err?.message||String(err));

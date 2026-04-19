@@ -1,0 +1,787 @@
+2026-04-20 22:01:58,936 | INFO | novel_flow.cli | Novel Flow console started at http://127.0.0.1:7869/
+2026-04-20 22:02:42,872 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "character_milestone": {
+    "character_name": "苏蘅",
+    "axes": [
+      {
+        "axis": "事业线",
+        "phases": [
+          {
+            "phase": "第一阶段：内宅守成期",
+            "label": "以宗法名分与流程控制稳固王府，沦为舆论中的‘薄情继室’",
+            "scenes": [
+              {
+                "title": "整肃王府内外账目与人手",
+                "trigger": "萧渊病逝，南川王府权力真空，内宅争权与外部渗透加剧",
+                "psychology": "从被动接受继室身份的少女，意识到唯有掌控资源才能自保与护子；情绪从慌乱转为冷静，认知到‘名分是盾牌而非枷锁’；选择倾向从‘守礼顺从’转为‘抓流程、控口径’",
+                "outcome": "统一王府信息流与资源调度，获得实际决策权；被士林与旧人贴上‘善算薄情’标签，为后续告密事件的舆论定性埋下伏笔；同时为感情线中对萧湛的规训提供了权力基础"
+              },
+              {
+                "title": "拖延世子册封流程",
+                "trigger": "朝廷启动南川王府世子册封程序，将萧湛纳入北伐人选讨论",
+                "psychology": "认知到‘正统身份是催命符’，情绪从担忧转为焦虑；明白公开抗拒朝廷会引火烧身，选择倾向从‘直接反对’转为‘以礼序为名拖延’",
+                "outcome": "暂时延缓册封节奏，但未能改变朝议方向；迫使自己与卫朔走向‘切割旧部、转移杀心’的极端方案，直接触发感情线的背叛节点"
+              }
+            ]
+          },
+          {
+            "phase": "第二阶段：赈务破局期",
+            "label": "从内宅主母转向赈务执行者，建立制度性抓手摆脱名分束缚",
+            "scenes": [
+              {
+                "title": "接管都城义仓与赈务账目",
+                "trigger": "萧湛被外放边地，王府名声因‘告密事件’受损，需以赈务维持对外合法性",
+                "psychology": "认知到‘名声可被利用而非只能被动承受’，情绪从舆论压力下的压抑转为主动破局的坚定；选择倾向从‘守着王府名分’转为‘抓可落地的赈务资源’",
+                "outcome": "建立与漕运、药材商的稳定合作网络；获得民间执行层的信任，为后续与顾行微的联盟埋下伏笔；同时让萧湛在边地听闻她的赈务行动，对‘薄情继室’的认知产生隐秘动摇"
+              },
+              {
+                "title": "应对江淮流民涌入的赈务危机",
+                "trigger": "江淮水灾导致流民涌入都城周边，中枢要求地方提交赈务账册",
+                "psychology": "认知到‘战后治理才是真正的山河归位’，情绪从单纯的自保转向对民生的共情；选择倾向从‘为王府遮羞’转为‘优先保障流民生存’",
+                "outcome": "优化赈务流程与账册核验机制，获得中枢的暂时认可；与顾行微正式建立协作关系，事业线从‘个人自保’转向‘制度建设’；同时让萧湛意识到她并非只懂内宅算计，感情线的对峙开始出现裂缝"
+              }
+            ]
+          },
+          {
+            "phase": "第三阶段：联盟重构期",
+            "label": "脱离权力中心，与顾行微建立治理联盟，推动战后归民安置体系",
+            "scenes": [
+              {
+                "title": "与顾行微联手推进归民籍帐制度",
+                "trigger": "北伐阶段性胜利，旧都失地进入接管期，归民登记与土地分配成为核心议题",
+                "psychology": "认知到‘权力中心的胜利需要人间治理兜底’，情绪从对萧湛命运的担忧转为对制度建设的专注；选择倾向从‘依附名分或皇权’转为‘建立独立的执行体系’",
+                "outcome": "建立归民籍帐与资源匹配机制，解决战后安置的核心矛盾；彻底摆脱王府与宗室名分的束缚，获得独立的事业主体性；同时让萧湛看到她的价值，感情线从‘恨与对峙’转向‘理解与共生’"
+              },
+              {
+                "title": "推动妇孺救济与工坊体系建设",
+                "trigger": "战后妇孺流离失所问题凸显，中枢未给予足够重视",
+                "psychology": "认知到‘女性生存权是战后秩序的基础’，情绪从个人创伤的隐忍转为主动发声的坚定；选择倾向从‘只做合规之事’转为‘突破礼制边界推动女性保障’",
+                "outcome": "建立妇孺收容所与女工工坊，形成可持续的救济体系；成为民间女性权益的代表人物；同时让萧湛彻底理解她当年的选择，感情线最终走向‘放手与相望’"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "axis": "感情线（与萧湛）",
+        "phases": [
+          {
+            "phase": "第一阶段：养护与规训期",
+            "label": "以母亲之名过度控制，将保护异化为规训，埋下禁忌情感的种子",
+            "scenes": [
+              {
+                "title": "教萧湛应对朝堂礼制场合",
+                "trigger": "朝廷公开抬举萧湛，要求其参与高规格宗室讲学与祭祀",
+                "psychology": "认知到‘萧湛的暴露会引来杀身之祸’，情绪从对少年的怜惜转为过度保护的焦虑；选择倾向从‘正常教养’转为‘严格规训其言行，减少暴露风险’",
+                "outcome": "萧湛形成对她的依赖与叛逆并存的复杂情感；两人的关系超越普通继母继子，埋下禁忌情感的伏笔；同时让萧湛对‘母亲’的认知绑定了‘控制’，为后续背叛的痛苦放大埋下基础"
+              },
+              {
+                "title": "阻止萧湛接触卫朔旧部",
+                "trigger": "卫朔频繁带萧湛参与军中旧部聚会，引起中枢警惕",
+                "psychology": "认知到‘旧部联结会加速萧湛的死局’，情绪从担忧转为恐惧；选择倾向从‘允许正常交往’转为‘以家法为名切断联系’",
+                "outcome": "萧湛对她产生怨恨，但也更依赖她的保护；禁忌情感在叛逆与依赖中发酵；同时为后续告密事件中‘切割旧部’的合理性提供了铺垫"
+              }
+            ]
+          },
+          {
+            "phase": "第二阶段：背叛与切割期",
+            "label": "为救萧湛主动策划告密，亲手毁掉两人关系，钉死自己的反派形象",
+            "scenes": [
+              {
+                "title": "册封前夜递交告发材料",
+                "trigger": "朝廷确定萧湛为世子与北伐总指挥人选，卫朔旧部被中枢列为清理对象",
+                "psychology": "认知到‘唯有毁掉萧湛的名分才能让他活’，情绪从痛苦决断转为麻木自持；明白自己会成为萧湛的仇人，但选择以‘反派’身份承担代价；选择倾向从‘保护’转为‘毁灭式拯救’",
+                "outcome": "册封中止，萧湛被外放边地；两人关系彻底破裂，萧湛视她为此生最大仇人；同时获得中枢暂时的信任，保住萧湛的性命；事业线也因此陷入舆论困境，被迫转向赈务"
+              },
+              {
+                "title": "拒绝萧湛临行前的质问",
+                "trigger": "萧湛离京前闯入王府，质问她告密的原因",
+                "psychology": "认知到‘解释会让萧湛更难脱离死局’，情绪从愧疚转为决绝；选择倾向从‘想解释’转为‘以薄情姿态彻底斩断他的念想’",
+                "outcome": "萧湛的恨意彻底固化；她自己也陷入情感自我封闭；事业线的舆论压力达到顶峰，只能靠赈务维持生存空间"
+              }
+            ]
+          },
+          {
+            "phase": "第三阶段：对峙与撕裂期",
+            "label": "萧湛归京追债，在恨海中暴露隐秘眷恋，感情陷入拉扯",
+            "scenes": [
+              {
+                "title": "公开场合的冷遇与对峙",
+                "trigger": "萧湛携军功归京，在礼制场合当众以‘母亲’称谓冷遇她",
+                "psychology": "认知到‘萧湛已不再是当年可被控制的少年’，情绪从恐惧转为冷静；明白恨意之下藏着未断的羁绊，选择倾向从‘逃避’转为‘直面对峙’",
+                "outcome": "两人的关系成为朝局焦点；她的事业线因旧案被牵连，被迫加快赈务布局；萧湛的恨意开始出现动摇，禁忌情感的张力达到顶峰"
+              },
+              {
+                "title": "旧案调查中的隐秘保护",
+                "trigger": "萧湛重启旧案调查，证据指向她的贴身侍女柳鸢",
+                "psychology": "认知到‘柳鸢的身份会牵连萧湛的北地线索’，情绪从担忧转为隐秘的保护欲；选择倾向从‘自保’转为‘暗中引导调查方向，避免萧湛陷入更大危机’",
+                "outcome": "萧湛察觉到她的隐秘保护，对旧案真相产生怀疑；两人的关系从‘单纯恨’转为‘恨与眷恋交织’；事业线因她的暗中操作获得喘息空间，得以推进赈务体系"
+              }
+            ]
+          },
+          {
+            "phase": "第四阶段：理解与放手期",
+            "label": "真相大白后达成和解，以各自的方式守山河，感情归于克制的共生",
+            "scenes": [
+              {
+                "title": "真相摊牌与和解",
+                "trigger": "萧湛查明卫朔之死的真相，得知她告密是为了救他",
+                "psychology": "认知到‘萧湛已能承担自己的命运’，情绪从愧疚转为释然；选择倾向从‘控制’转为‘放手’",
+                "outcome": "两人达成和解，但因礼制与身份无法走到一起；萧湛接受北伐指挥，她专注于战后治理；事业线与感情线彻底联动，各自承担山河归位的责任"
+              },
+              {
+                "title": "战后的相望与共生",
+                "trigger": "北伐胜利，萧湛留在权力中心重整朝局，她离京推进归民安置",
+                "psychology": "认知到‘最好的爱不是占有，而是各自承担使命’，情绪从隐忍转为平静；选择倾向从‘想靠近’转为‘以事业相望’",
+                "outcome": "两人形成跨越身份的精神共生；她的事业线成为战后秩序的核心支撑；萧湛的权力地位因她的治理成果更加稳固；感情线最终以‘克制的理解’收尾，完成人物弧光"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+2026-04-20 22:04:21,194 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "character_milestone": {
+    "character_name": "萧湛",
+    "axes": [
+      {
+        "axis": "事业线",
+        "phases": [
+          {
+            "phase": "第一阶段",
+            "label": "符号化生存：被推的正统棋子，被动承受命运",
+            "scenes": [
+              {
+                "title": "朝堂被抬举，成为北伐符号",
+                "trigger": "景和六年春，朝廷在朝会上以“肖似亡父、有父风”为口径公开抬举萧湛，安排其参与宗室讲学与礼制活动",
+                "psychology": "从之前谨小慎微的宗室嫡子心态转为兴奋与期待，误以为终于能继承父志、获得士林与军中认可，选择主动配合朝廷的北伐话语，刻意展现“忠烈之后”的姿态",
+                "outcome": "成为朝局与舆论焦点，旧太子旧部开始暗中归附；触发皇帝萧弈的深层警惕，将其纳入“可控北伐”的备选名单；苏蘅与卫朔启动拖延册封的计划，他的生存风险大幅提升"
+              }
+            ]
+          },
+          {
+            "phase": "第二阶段",
+            "label": "边地破局：剥离符号，以军功自证生存",
+            "scenes": [
+              {
+                "title": "边地守隘立功，建立军中信任",
+                "trigger": "景和八年秋，边地隘口遭袭，萧湛被派去守隘，后方军需延迟三日未到",
+                "psychology": "从依赖名分的宗室心态转为绝望与清醒，明白只有靠战功才能活下去，放弃宗室体面，亲自带队抢修工事、组织当地民兵协同防御",
+                "outcome": "成功守住隘口，获得边军基层士兵的信任；建立不依赖王府的军中人脉；顾行微因军需调度与他产生交集，为后续协作埋下伏笔"
+              }
+            ]
+          },
+          {
+            "phase": "第三阶段",
+            "label": "归京博弈：夺回话语权，重构信任网络",
+            "scenes": [
+              {
+                "title": "重启旧案调查，撬动朝局平衡",
+                "trigger": "景和十二年夏，中枢以“安抚军心、正本清源”为由，允许萧湛以军功核验名义调查卫朔之死及册封前夜旧事",
+                "psychology": "从边地隐忍的生存心态转为复仇的愤怒，同时怀疑旧案的“单一背叛叙事”，选择一边收集证据一边在公开场合试探苏蘅，借旧案凝聚旧部人心",
+                "outcome": "旧案从私域恩怨转为可被利用的政治事件；他获得军中舆论支持，萧弈被迫调整对他的控制策略；苏蘅的“告密继室”形象被进一步固化，两人关系公开对立"
+              }
+            ]
+          },
+          {
+            "phase": "第四阶段",
+            "label": "主动承担：重构北伐逻辑，摆脱结构性控制",
+            "scenes": [
+              {
+                "title": "接受北伐指挥，重构后勤链条",
+                "trigger": "景和十五年春，前线军需卡点导致战事吃紧，朝廷被迫让萧湛接手北伐指挥权",
+                "psychology": "从之前抗拒被推的心态转为主动选择，明白只有自己掌控战局才能避免重蹈父亲的覆辙，选择以军需、漕运与赏罚兑现为抓手，削弱监军体系的权力",
+                "outcome": "北伐推进顺利，他获得真正的军权合法性；萧弈的控制被大幅削弱；苏蘅在后方动用义仓与漕运资源暗中支持他，两人形成隐性协作"
+              }
+            ]
+          },
+          {
+            "phase": "第五阶段",
+            "label": "权力承接：战后重整，稳固秩序",
+            "scenes": [
+              {
+                "title": "承王爵留中枢，主导战后治理",
+                "trigger": "景和十八年春，朝廷册封萧湛为南川王，要求其留京承担重整朝局与战后接管职责",
+                "psychology": "从渴望脱离权力中心的心态转为接受责任，明白自己必须承担战后秩序重建的使命，选择放弃去地方寻找苏蘅的念头，专注于中枢权力平衡与制度搭建",
+                "outcome": "成为权力中心的核心人物，战后治理体系逐步搭建；他与苏蘅的行动场域被制度性分离，两人关系进入“分离但互相铭记”的状态"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "axis": "感情线",
+        "phases": [
+          {
+            "phase": "第一阶段",
+            "label": "依恋与规训：少年依赖，禁忌情感萌芽",
+            "scenes": [
+              {
+                "title": "苏蘅替他挡罚，成为唯一庇护",
+                "trigger": "景和二年冬，萧湛因违反王府礼仪被太妃沈氏责罚，苏蘅以“嫡长子需维持宗室体面”为由替他求情，并私下以家规责罚他",
+                "psychology": "从对继母的抵触与疏离转为依赖，意识到苏蘅是唯一真心保护他不被政治漩涡吞噬的人，开始极度在意她的看法，情感超越普通母子边界",
+                "outcome": "对苏蘅产生隐秘的爱慕，为后续的背叛痛苦埋下伏笔；卫朔注意到两人的特殊关系，开始暗中观察与提醒"
+              }
+            ]
+          },
+          {
+            "phase": "第二阶段",
+            "label": "背叛与决裂：恨意爆发，情感彻底冰封",
+            "scenes": [
+              {
+                "title": "得知册封前夜告发，与苏蘅决裂",
+                "trigger": "景和七年冬，萧湛从王府旧人处得知苏蘅向中枢递交告发卫朔的材料，导致册封程序中止",
+                "psychology": "从之前的信任与依赖转为极致的愤怒与背叛感，认定苏蘅为了亲生儿子萧宁毁掉他的前程，选择与她彻底决裂，离京时未与她道别",
+                "outcome": "两人关系公开对立；萧湛在边地期间从未主动联系王府；苏蘅被士林与王府旧人贴上“恶毒继母”的标签"
+              }
+            ]
+          },
+          {
+            "phase": "第三阶段",
+            "label": "追索与动摇：恨意松动，真相疑云浮现",
+            "scenes": [
+              {
+                "title": "发现卫朔遗书，怀疑旧案真相",
+                "trigger": "景和十四年冬，萧湛在卫朔遗留的军帐遗物中找到一封未寄出的遗书，表明卫朔主动赴死是为了切断旧部与他的联系，避免他被皇帝视为威胁",
+                "psychology": "从之前坚定的恨意转为动摇与困惑，开始怀疑苏蘅的告发另有隐情，选择暂停对苏蘅的公开指责，暗中调查册封前夜的文书流程",
+                "outcome": "两人关系从公开对立转为暗流涌动；萧弈察觉到他的动摇，加大对他的控制；苏蘅开始意识到他已接近真相，调整应对策略"
+              }
+            ]
+          },
+          {
+            "phase": "第四阶段",
+            "label": "理解与克制：爱恨交织，选择责任优先",
+            "scenes": [
+              {
+                "title": "前线收到匿名粮援，明白苏蘅的苦心",
+                "trigger": "景和十五年秋，北伐前线粮道被断，萧湛意外收到一批匿名粮援，经查实来自苏蘅动用的王府义仓与漕运资源",
+                "psychology": "从之前的怀疑转为彻底理解，明白苏蘅当年的背叛是为了保护他不被推上必死的北伐祭台，情感从恨意转为复杂的爱恨交织，选择克制自己的情感，专注于北伐战事",
+                "outcome": "两人形成隐性的信任协作；萧湛在北伐中更加坚定，刻意避开“功高震主”的陷阱；苏蘅的赈务事业得到他的暗中支持"
+              }
+            ]
+          },
+          {
+            "phase": "第五阶段",
+            "label": "放手与铭记：分离相守，情感终身刻痕",
+            "scenes": [
+              {
+                "title": "城门口送别苏蘅，未说破情感",
+                "trigger": "景和十八年春，苏蘅与顾行微离京投入归民安置，萧湛在城门口相送",
+                "psychology": "从之前的克制转为释然，明白两人的身份与责任不允许他们在一起，选择放手，把情感藏在心底，以“君臣”“母子”的名分维持体面",
+                "outcome": "两人正式分离，萧湛留京重整朝局，苏蘅去地方推进重建；他们的情感成为彼此终身的刻痕，影响后续的决策（萧湛优先支持苏蘅的赈务政策，苏蘅始终关注中枢的秩序稳定）"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+2026-04-20 22:06:13,176 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "character_milestone": {
+    "character_name": "顾行微",
+    "axes": [
+      {
+        "axis": "事业线",
+        "phases": [
+          {
+            "phase": "第一阶段：边地生存与民间网络搭建",
+            "label": "以边地流民、军需链条为核心，建立靠执行力说话的民间生存网络，不依附任何官方或宗室力量",
+            "scenes": [
+              {
+                "title": "边地粮站护流民",
+                "trigger": "萧湛到边地军镇任职，下令征用流民储备粮充军粮（对应EVT_0017）",
+                "psychology": "初始认定萧湛是只会拿名分压人的宗室子弟，愤怒对峙后发现他是为避免全军断粮且承诺事后补粮；认知从「宗室皆无情」转向「有人懂生存底线」，情绪从敌意转为试探性信任，选择倾向从「硬抗到底」转为「谈条件合作」",
+                "outcome": "与萧湛达成「军需优先、流民补粮」的互助协议，获得军中临时通行权，流民网络得到稳定粮源支持，初步进入军中视野"
+              }
+            ]
+          },
+          {
+            "phase": "第二阶段：随军入京，进入官方赈务体系",
+            "label": "因边地军需调度能力被中枢注意，随军入京参与江淮灾情赈务，接触官方制度与权力运作",
+            "scenes": [
+              {
+                "title": "江淮赈务怼官僚",
+                "trigger": "江淮灾荒，漕运官周叙白以「程序合规」为由拖延流民粮拨付（对应EVT_0020）",
+                "psychology": "从民间「活下去优先」的视角冲击官方「程序优先」的规则，愤怒后意识到制度掣肘的本质；认知从「官僚皆贪腐」转向「制度本身有漏洞」，情绪从急躁转为冷静，选择倾向从「硬怼」转为「找漏洞破局」",
+                "outcome": "联合苏蘅调出王府私仓粮应急，获得苏蘅的认可与资源支持，被纳入官方赈务体系，获得「赈务协理」的正式名分"
+              }
+            ]
+          },
+          {
+            "phase": "第三阶段：与苏蘅深度结盟，重构赈务规则",
+            "label": "与苏蘅形成「制度设计-落地执行」的互补联盟，推动赈务从「临时施粥」转向「可持续安置」",
+            "scenes": [
+              {
+                "title": "流民籍帐改革",
+                "trigger": "中枢要求流民登记，但旧籍帐只认士族身份，流民无法获得救济资格（对应EVT_0020延伸事件）",
+                "psychology": "发现苏蘅的制度设计能力与自己的执行力可完美互补，认知从「苏蘅是只会算计的宗室主母」转向「她懂制度的本质是服务人」，情绪从鄙夷转为敬佩，选择倾向从「单打独斗」转为「深度结盟」",
+                "outcome": "共同推出「流民临时籍」制度，让流民凭劳动或亲属证明获得救济资格，赈务效率提升30%；两人的联盟成为中枢不可忽视的民生力量，获得漕运与药材的调配权限"
+              }
+            ]
+          },
+          {
+            "phase": "第四阶段：主导战后重建，建立民生保障体系",
+            "label": "离开都城，在失地与西南建立归民安置、妇孺救济、工坊体系，形成独立于宗室与门阀的民生治理网络",
+            "scenes": [
+              {
+                "title": "旧都归民安置",
+                "trigger": "北伐胜利后，旧都归民无家可归，中枢以「资源不足」为由拖延安置（对应EVT_0027）",
+                "psychology": "意识到战后治理比战争更重要，认知从「活下去」转向「活得有尊严」，情绪从焦虑转为坚定，选择倾向从「依附官方」转为「自建体系」",
+                "outcome": "联合苏蘅建立归民安置坊、妇孺救济院与手工工坊，让归民获得稳定生计；形成可复制的民生治理模式，成为地方治理的标杆，获得西南地方豪强的资源支持"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "axis": "感情线（与萧宁）",
+        "phases": [
+          {
+            "phase": "第一阶段：初见鄙夷，不屑为伍",
+            "label": "初见被苏蘅过度保护的萧宁，认定其是软弱无能的宗室子弟，不愿与其产生交集",
+            "scenes": [
+              {
+                "title": "都城赈点初见",
+                "trigger": "萧宁奉苏蘅之命到赈点送药，因怕流民而躲在护卫身后（对应EVT_0020）",
+                "psychology": "从边地生存视角看萧宁的软弱，认知为「宗室子弟都是被宠坏的废物」，情绪从鄙夷转为不耐烦，选择倾向从「避开」转为「无视」",
+                "outcome": "萧宁对她的强硬产生好奇，开始主动关注她的行动，为后续共事埋下伏笔"
+              }
+            ]
+          },
+          {
+            "phase": "第二阶段：被迫共事，发现温柔底色",
+            "label": "因赈务需要与萧宁共事，发现其并非软弱，而是有共情心与细致的观察力",
+            "scenes": [
+              {
+                "title": "妇孺院共事",
+                "trigger": "妇孺院爆发疫病，萧宁主动留下照顾患儿，且能准确记住每个孩子的名字与病情（对应EVT_0020延伸事件）",
+                "psychology": "发现萧宁的共情能力是自己缺乏的，认知从「软弱废物」转向「有温柔力量」，情绪从鄙夷转为惊讶，选择倾向从「无视」转为「接纳」",
+                "outcome": "两人形成「执行-共情」的互补，妇孺院疫病得到控制；萧宁开始向她学习生存技能，情感纽带初步建立"
+              }
+            ]
+          },
+          {
+            "phase": "第三阶段：成为师父，情感萌芽",
+            "label": "萧宁主动拜她为师学习武艺与生存技能，相处中产生超越师徒的暧昧情感",
+            "scenes": [
+              {
+                "title": "深夜授艺",
+                "trigger": "萧宁怕被苏蘅发现，深夜偷偷找她学武艺，因紧张摔倒被她扶住（对应EVT_0021期间事件）",
+                "psychology": "近距离接触中感受到萧宁的真诚与依赖，认知从「徒弟」转向「值得珍惜的人」，情绪从平静转为心动，选择倾向从「只教技能」转为「关心其成长」",
+                "outcome": "两人的师徒关系变得亲密，萧宁开始反抗苏蘅的过度保护，尝试独立处理赈务事务；苏蘅察觉到两人的异常，开始介入干预"
+              }
+            ]
+          },
+          {
+            "phase": "第四阶段：直面身份差距，确认心意",
+            "label": "苏蘅发现两人的关系并提出反对，两人直面宗室与民间的身份差距，确认彼此心意",
+            "scenes": [
+              {
+                "title": "王府对峙",
+                "trigger": "苏蘅找到顾行微，要求她远离萧宁，避免影响萧宁的宗室前途（对应EVT_0024期间事件）",
+                "psychology": "意识到身份差距的现实，但不愿放弃这段感情；认知从「感情可以隐藏」转向「感情需要正视」，情绪从纠结转为坚定，选择倾向从「隐藏」转为「争取」",
+                "outcome": "萧宁公开表示要和顾行微在一起，苏蘅被迫妥协，两人的关系获得有限认可；萧宁开始参与民生事务，为顾行微的事业线提供宗室背书"
+              }
+            ]
+          },
+          {
+            "phase": "第五阶段：战后选择，克制同行",
+            "label": "北伐胜利后，萧宁留在都城承担宗室职责，顾行微主导战后重建，两人选择克制的同行关系，不追求名分，只在民生事业上互相支持",
+            "scenes": [
+              {
+                "title": "城郊送别",
+                "trigger": "顾行微要离开都城前往旧都主持重建，萧宁到城郊送别（对应EVT_0028）",
+                "psychology": "意识到两人的道路不同，但感情不会因此消失；认知从「必须在一起」转向「互相成就」，情绪从不舍转为释然，选择倾向从「占有」转为「守护」",
+                "outcome": "两人保持书信往来，萧宁在中枢为民生体系争取资源，顾行微在地方推进重建，形成跨域的民生支持网络；感情线成为事业线的重要支撑"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+2026-04-20 22:08:05,556 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "character_milestone": {
+    "character_name": "萧湛",
+    "axes": [
+      {
+        "axis": "事业线",
+        "phases": [
+          {
+            "phase": "第一阶段：符号化生存",
+            "label": "作为旧正统符号被朝廷操控，在礼法与监视中被动成长",
+            "scenes": [
+              {
+                "title": "朝堂抬举的枷锁",
+                "trigger": "景和六年春，朝廷公开以“肖似亡父、有父风”口径抬举萧湛，安排其参与高规格礼制与讲学（EVT_0011）",
+                "psychology": "认知上从“终于获得认可”的兴奋，转为发现自己一举一动都被朝堂舆论、门阀与皇帝监视的恐慌；情绪上从渴望继承父志的热血，变成对“被当成工具”的抵触；选择倾向从配合朝廷安排，转为暗中向卫朔求助，寻求自保路径",
+                "outcome": "与卫朔、苏蘅形成隐秘的内部同盟，共同拖延世子册封流程；在军中旧部建立初步信任，为后续边地发展埋下伏笔；被朝廷标记为“需严格管控的正统变量”"
+              }
+            ]
+          },
+          {
+            "phase": "第二阶段：边地突围",
+            "label": "脱离都城权力桎梏，以军功与生存建立独立话语权",
+            "scenes": [
+              {
+                "title": "边地军镇的立足",
+                "trigger": "景和八年春，萧湛被撤去册封安排并外放边地军镇（EVT_0016）",
+                "psychology": "认知上从“被背叛的受害者”转为“必须靠自己活下去的执行者”；情绪上从对苏蘅的恨意转化为专注军功的隐忍；选择倾向从依赖王府资源，转为主动承担守隘、护粮等苦差，积累军中口碑",
+                "outcome": "建立不依赖王府的军中人脉与军功记录；结识顾行微，获得民间执行体系的支持；摆脱“正统符号”的单一标签，成为具备实操能力的将领"
+              }
+            ]
+          },
+          {
+            "phase": "第三阶段：归京博弈",
+            "label": "携军功重返中枢，以旧案追索为抓手争夺权力主动权",
+            "scenes": [
+              {
+                "title": "旧案重启的试探",
+                "trigger": "景和十二年夏，萧湛以军功核验为由向中枢追索卫朔之死与册封前夜旧案（EVT_0019）",
+                "psychology": "认知上从“复仇是唯一目标”转为“利用旧案打破朝廷对自己的控制”；情绪上从纯粹的恨意转为带着利益考量的克制；选择倾向从直接对峙苏蘅，转为联合旧部与清流，用程序合法的方式施压中枢",
+                "outcome": "旧案从私域恩怨转为公共政治事件；迫使朝廷给出“可交代的程序”，获得部分军中旧部的归附；重新成为朝局不可忽视的力量，被纳入北伐人选讨论"
+              }
+            ]
+          },
+          {
+            "phase": "第四阶段：主动承接",
+            "label": "看清权力操控逻辑后，主动承担北伐指挥，重构后勤与军报链条",
+            "scenes": [
+              {
+                "title": "北伐指挥的抉择",
+                "trigger": "景和十五年春，北伐推进出现军需卡点与军报口径冲突，朝廷被迫放权（EVT_0025）",
+                "psychology": "认知上从“避免被操控”转为“主动掌控命运”，理解苏蘅当年的恐惧并非夺权而是保护；情绪上从对朝廷的抵触转为对家国责任的承担；选择倾向从拒绝北伐，转为接受指挥权并调整后勤链条，削弱中枢的程序性掣肘",
+                "outcome": "掌握前线实际军权，建立独立的军需与军报网络；获得士林与军中的广泛支持；成为北伐胜利的核心执行者，战后权力分配的关键人物"
+              }
+            ]
+          },
+          {
+            "phase": "第五阶段：权力重构",
+            "label": "承爵留京，承担战后朝局重整与秩序构建",
+            "scenes": [
+              {
+                "title": "战后的责任承接",
+                "trigger": "景和十七年夏，北伐阶段性成功，旧都与失地进入接管期（EVT_0027）",
+                "psychology": "认知上从“战功荣耀”转为“治理责任”，意识到胜利后的秩序重建比战争更重要；情绪上从意气风发转为沉稳克制；选择倾向从争夺权力，转为与皇帝、门阀达成平衡，推进战后归民与赋役制度改革",
+                "outcome": "正式承南川王爵，留在中枢主持朝局重整；与苏蘅的事业线形成间接协作，支持其归民安置工作；成为南渡政权稳定的核心支柱"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "axis": "感情线",
+        "phases": [
+          {
+            "phase": "第一阶段：依赖与错位",
+            "label": "将继母苏蘅视为唯一庇护，青春期情感逐渐超越母子边界",
+            "scenes": [
+              {
+                "title": "深夜书房的温暖",
+                "trigger": "景和元年秋，苏蘅为萧湛整理书房并讲解朝政文书（EVT_0009）",
+                "psychology": "认知上从“继母是礼法规定的长辈”转为“唯一真心关心自己的人”；情绪上从孤独无依转为依赖与眷恋；选择倾向从回避苏蘅的管教，转为主动寻求她的认可，甚至在青春期出现隐秘的占有欲",
+                "outcome": "形成超越母子的依恋关系；与亲弟萧宁产生隐性竞争；为后续决裂埋下情感伏笔"
+              }
+            ]
+          },
+          {
+            "phase": "第二阶段：决裂与执念",
+            "label": "册封前夜的告密事件导致信任崩塌，恨意成为生存与复仇的动力",
+            "scenes": [
+              {
+                "title": "册封前夜的背叛",
+                "trigger": "景和七年冬，苏蘅向中枢递交告发材料，卫朔死亡，册封流程中止（EVT_0014、EVT_0015）",
+                "psychology": "认知上从“苏蘅是庇护者”转为“夺权的背叛者”；情绪上从信任转为滔天恨意，夹杂着被抛弃的羞耻；选择倾向从依赖苏蘅，转为将复仇作为人生目标，拒绝与她有任何沟通",
+                "outcome": "与苏蘅公开对立；离京外放期间刻意断绝与王府的联系；将对苏蘅的恨意转化为军功积累的动力"
+              }
+            ]
+          },
+          {
+            "phase": "第三阶段：真相反噬",
+            "label": "旧案调查中发现反常细节，恨意动摇，陷入情感撕裂",
+            "scenes": [
+              {
+                "title": "旧案文书的疑点",
+                "trigger": "景和十四年冬，旧案复核中发现卫朔死亡动机与苏蘅告密材料的结构性反常（EVT_0024）",
+                "psychology": "认知上从“苏蘅纯粹夺权”转为“她的行为可能另有隐情”；情绪上从坚定的恨意转为困惑与痛苦，夹杂着对过往依恋的残留；选择倾向从直接报复苏蘅，转为暗中追查真相，同时刻意回避与她的直面冲突",
+                "outcome": "情感陷入“恨与放不下”的撕裂；与苏蘅的关系从公开对立转为暗流涌动；影响其对北伐的态度，开始理解苏蘅当年的恐惧"
+              }
+            ]
+          },
+          {
+            "phase": "第四阶段：理解与克制",
+            "label": "看清真相后接受无法相守的现实，将情感转化为克制的支持",
+            "scenes": [
+              {
+                "title": "战后的分道扬镳",
+                "trigger": "景和十八年春，萧湛承爵留京，苏蘅与顾行微离京投入归民安置（EVT_0028）",
+                "psychology": "认知上从“渴望情感救赎”转为“接受礼法与责任的束缚”，理解苏蘅的选择是为了自我救赎与人间治理；情绪上从爱恨交织转为平静克制；选择倾向从试图挽回关系，转为在朝局中支持苏蘅的重建事业，维持远距离的理解",
+                "outcome": "两人形成“各司其职、彼此理解”的克制关系；萧湛将对苏蘅的情感转化为对民生治理的重视；苏蘅的重建工作获得中枢的隐性支持"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+2026-04-20 22:09:25,483 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:09:25,485 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:09:26,784 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:09:26,786 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:09:28,070 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:09:28,073 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:09:29,361 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:09:29,364 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:09:30,623 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:09:30,626 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:09:31,774 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:09:31,776 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:09:32,906 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:09:32,908 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:09:34,041 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:09:34,046 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:09:35,175 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:09:35,178 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:09:36,333 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:09:36,336 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:53:38,250 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:53:38,252 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:53:39,910 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:53:39,913 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:53:41,200 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:53:41,202 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:53:42,517 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:53:42,519 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:53:43,821 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:53:43,823 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:53:45,104 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:53:45,106 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:53:46,396 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:53:46,399 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:53:47,668 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:53:47,670 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:53:48,957 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:53:48,960 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:53:50,107 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:53:50,109 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:53:51,279 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:53:51,281 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:53:52,421 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:53:52,424 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:53:53,558 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:53:53,561 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:53:54,692 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:53:54,694 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:53:55,833 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:53:55,836 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:53:56,966 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:53:56,968 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:53:58,127 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:53:58,129 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+2026-04-20 22:53:59,288 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 403 Forbidden"
+2026-04-20 22:53:59,291 | ERROR | DoubaoLLMClient | Doubao request failed
+Traceback (most recent call last):
+  File "C:\Users\19237\workspace\noval-flow\src\novel_flow\llm\doubao.py", line 50, in generate
+    response.raise_for_status()
+  File "C:\Users\19237\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '403 Forbidden' for url 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403

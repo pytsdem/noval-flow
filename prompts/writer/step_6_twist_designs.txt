@@ -1,0 +1,40 @@
+Generate step 6 twist_designs only. Output valid JSON only. No markdown, no prose.
+
+User request:
+{research_query}
+
+Planning context JSON:
+{planning_context_json}
+
+Reference pack:
+{reference_pack}
+
+Output format:
+{{
+  "twist_designs": [
+    {{
+      "twist_id": "twist_01",
+      "title": "True reason behind the betrayal",
+      "false_belief": "Readers should believe the heroine betrayed the hero for power or self-protection.",
+      "truth": "Author-only truth kept hidden before reveal_at.",
+      "reader_alignment": "Before reveal, readers should stand with the hero and misjudge the heroine.",
+      "seed_from": "ch_001",
+      "reveal_at": "ch_018",
+      "allowed_clues": ["brief pause", "avoid old object"],
+      "forbidden_reveals": ["do not say she saved him", "do not say she had hidden pain"],
+      "pov_lock": "No access to true inner thought before reveal.",
+      "related_characters": ["Hero", "Heroine"],
+      "payoff_effect": "The relationship is re-priced after reveal."
+    }}
+  ]
+}}
+
+Rules:
+1. Output only twist_designs.
+2. Each twist must include twist_id, title, false_belief, truth, reader_alignment, seed_from, reveal_at, allowed_clues, forbidden_reveals, pov_lock, related_characters, payoff_effect.
+3. JSON depth must stay shallow.
+4. allowed_clues max 3. They may create doubt, not solve truth.
+5. forbidden_reveals max 5 and must be concrete.
+6. Use chapter ids like ch_001.
+7. truth is author-only truth and must not be written directly before reveal_at.
+8. Keep strings compact.

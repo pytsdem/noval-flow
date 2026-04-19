@@ -1,46 +1,43 @@
-你现在要审阅当前章节成稿，输出 JSON。不要写 Markdown，不要写散文式点评。
+Review the current chapter and output valid JSON only.
+Do not output markdown. Do not write prose commentary outside JSON.
 
-premise JSON：
+premise JSON:
 {premise_json}
 
-characters JSON：
+characters JSON:
 {characters_json}
 
-chapter_plan JSON：
-{chapter_plan_json}
+chapter context JSON:
+{chapter_context_json}
 
-story_blueprint JSON：
+story_blueprint JSON:
 {story_blueprint_json}
 
-previous_chapter JSON：
+previous_chapter JSON:
 {previous_chapter_json}
 
-current_chapter JSON：
+current_chapter JSON:
 {current_chapter_json}
 
-参考资料：
+reference pack:
 {reference_pack}
 
-检查重点：
-1. 是否真正完成 objective、story_function、key_turn、payoff。
-2. 是否给出有效的 next_route_hint 或结尾牵引。
-3. 是否推进了重要关系线或长线，而不是原地解释。
-4. 角色是否符合角色卡，不得 OOC。
-5. 是否出现信息重复、无功能场景、情绪口号化、硬拗反转等问题。
-6. 是否存在信息释放失衡：该前置的信息没给，该后置的真相却提前泄露。
-7. 是否具备阅读牵引，尤其前三章能不能留住读者。
-8. 场景是否真的发生了局面变化，而不是只换措辞。
-9. 如果这是前三章，还要额外检查：
-   - 第一章是否太晚才进入困局。
-   - 第二章是否真的把局面变大。
-   - 第三章是否给出了小兑现，而不只是继续吊着。
-10. 如果前三章缺少 `reader_hook`、`core_question_left`、`small_payoff` 对应的兑现，要明确指出。
+Review focus:
+1. Check whether the chapter fulfills the chapter objective, structural function, key turn, and payoff implied by the current chapter context.
+2. Check whether the ending creates a valid next pull instead of simply stopping.
+3. Check whether the chapter moves an important story line, relationship, clue trail, or pressure structure forward instead of restating known information.
+4. Check whether the characters stay consistent with their cards and prior behavior.
+5. Check for repeated information beats, empty scenes, slogan-like emotion, or forced reversals.
+6. Check whether information release is controlled properly, without missing setup or premature truth disclosure.
+7. Check whether the chapter has real retention power, especially in the first three chapters.
+8. Check whether scenes create actual state change rather than only changing wording or mood.
+9. In the first three chapters, also check whether trouble arrives early enough, whether pressure escalates clearly, and whether there is at least one small payoff.
 
-输出 JSON 必须包含：
+Output JSON must contain:
 - summary
 - issues
 
-issues 每项必须包含：
+Each item in `issues` must contain:
 - severity
 - title
 - problem_type
@@ -49,5 +46,3 @@ issues 每项必须包含：
 - impact
 - recommendation
 - acceptance_criteria
-
-只输出 JSON。

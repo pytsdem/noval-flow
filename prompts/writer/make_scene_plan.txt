@@ -1,0 +1,41 @@
+Generate a scene_plan for the current chapter. Output JSON only.
+
+[Completed chapter memory]
+{completed_chapter_memory_text}
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Relevant world rules]
+{relevant_world_rules_text}
+
+[Style card]
+{style_card_text}
+
+[Chapter brief JSON]
+{chapter_brief_json}
+
+Output format:
+{{
+  "scenes": [
+    {{
+      "scene_id": "sc_001",
+      "purpose": "What this scene must achieve",
+      "pov": "limited POV name",
+      "location": "place",
+      "visible_goal": "surface goal",
+      "obstacle": "main obstacle",
+      "must_show": ["item 1"],
+      "must_not_show": ["item 1"],
+      "reader_proxy": "optional proxy",
+      "proxy_function": "why this proxy exists",
+      "exit_state": "irreversible change at the end"
+    }}
+  ]
+}}
+
+Rules:
+1. Short chapter 2-3 scenes, regular 3-4, key chapter 4-5, opening chapter usually 3-5.
+2. Every scene must create irreversible change in information, relationship, risk, emotion, or situation.
+3. Respect incoming_hook, chapter_object, scene_engine, relationship_reprice, emotional_turn, and forbidden boundaries.
+4. Do not reveal hidden truth early.

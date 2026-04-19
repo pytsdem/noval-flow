@@ -1,0 +1,56 @@
+Generate step 8 chapter_briefs only. Output valid JSON only. No markdown.
+
+User request:
+{research_query}
+
+Volume titles JSON:
+{volume_titles_json}
+
+Planning context JSON:
+{planning_context_json}
+
+Reference pack:
+{reference_pack}
+
+Output format:
+{{
+  "chapter_briefs": [
+    {{
+      "chapter_id": "ch_001",
+      "title": "Return to the capital",
+      "chapter_type": "opening",
+      "active_lines": ["line_case"],
+      "active_twists": ["twist_01"],
+      "summary": "Hero wants X, faces limit Y, and advances indirectly through Z.",
+      "incoming_hook": "",
+      "opening_hook": "A current order, blow, object, or crisis starts the chapter.",
+      "chapter_object": "A concrete object, order, document, clue, task, ritual, or place that carries conflict.",
+      "reader_emotion": "State who readers should side with, pity, hate, doubt, and anticipate.",
+      "reader_belief": "Maintain the intended false belief when needed.",
+      "allowed_info": ["visible fact 1"],
+      "allowed_clues": ["question-raising clue 1"],
+      "forbidden": ["concrete forbidden item"],
+      "world_limit": "Concrete world or power boundary that blocks direct success.",
+      "character_focus": ["Hero", "Heroine"],
+      "character_shift": "Concrete role or state shift within the chapter.",
+      "relationship_reprice": "Which relationship gets re-priced and how.",
+      "emotional_turn": "How emotion flips across the chapter.",
+      "backstory_trigger": "",
+      "scene_engine": "opening_pressure",
+      "small_payoff": "A small reward, not a major truth.",
+      "ending_pull": "A new question, obstacle, cost, arrival, or choice.",
+      "info_budget": "new roles<=3; new clues=1"
+    }}
+  ]
+}}
+
+Rules:
+1. Output only chapter_briefs. Do not output scene_beats or chapter_plans.
+2. Use only active_lines from step 7 and active_twists from step 6.
+3. active_lines and active_twists max 3 each.
+4. allowed_info max 4, allowed_clues max 3, forbidden max 5, character_focus max 5.
+5. From chapter 2 onward, incoming_hook must continue the previous ending_pull.
+6. opening_hook must be current action or pressure, not backstory exposition.
+7. chapter_object must have real plot function.
+8. scene_engine must be one of: opening_pressure, disruptor_arrival, drunken_truth, private_to_public_interruption, earned_flashback, investigation_pressure, court_pressure, relationship_collision, clue_reversal, aftermath_choice.
+9. Early chapters must not explain hidden motives, wash characters white early, fully replay the old case, or drop core hard proof.

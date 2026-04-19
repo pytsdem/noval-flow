@@ -1,31 +1,30 @@
-你现在要重写一个正文 block。不要解释修改思路，只输出重写后的正文文本。
+Rewrite the target prose block.
+Output prose only. No explanation.
 
-block_id：{block_id}
-block 作用：{block_purpose}
-修改要求：{guidance}
+block_id: {block_id}
+block purpose: {block_purpose}
+revision request: {guidance}
 
-当前 block 文本：
+Current block text:
 {block_text}
 
-chapter JSON：
+Chapter JSON:
 {chapter_json}
 
-chapter_plan JSON：
-{chapter_plan_json}
-
-premise JSON：
+Premise JSON:
 {premise_json}
 
-characters JSON：
+Characters JSON:
 {characters_json}
 
-参考资料：
+Reference pack:
 {reference_pack}
 
-规则：
-1. 重写必须服务 objective、story_function、key_turn、payoff。
-2. 必须尊重 twist_designs、story_lines、chapter_briefs、relationship_network。
-3. 必须保证角色一致性，不得 OOC。
-4. 不能只堆气氛，要让这个 block 对场景推进有实际作用。
-5. 不能重复前文已经说过的信息，除非是故意做关系错位或误读。
-6. 只输出重写后的文本。
+Rules:
+1. Keep the rewritten block aligned with the chapter's existing facts and direction.
+2. Respect twist_designs, story_lines, chapter_briefs, and the current written continuity.
+3. Do not introduce relationship_network, chapter_plan, or any deprecated structure.
+4. Keep characters consistent and in character.
+5. The rewrite must improve dramatic function, not just add atmosphere.
+6. Avoid repeating information already established unless the repetition itself creates tension, misunderstanding, or re-pricing of a relationship.
+7. Output prose only.

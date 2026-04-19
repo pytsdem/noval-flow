@@ -1,0 +1,84 @@
+from __future__ import annotations
+
+import unittest
+
+from novel_flow.prompting.templates import PromptLibrary
+
+
+class PromptRenderingTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.library = PromptLibrary()
+        self.common = {
+            "research_query": "test query",
+            "planning_context_json": "{}",
+            "reference_pack": "none",
+            "volume_titles_json": '["Volume 1"]',
+            "completed_chapter_memory_text": "none",
+            "chapter_payload_text": "payload",
+            "relevant_world_rules_text": "rules",
+            "style_card_text": "style",
+            "chapter_brief_json": "{}",
+            "scene_character_context_text": "characters",
+            "relationship_state_text": "relationships",
+            "scene_card_text": "scene",
+            "previous_scene_tail": "prev",
+            "current_chapter_draft_tail": "tail",
+            "draft_text": "draft",
+            "chapter_text": "chapter",
+            "original_text": "original",
+            "rewrite_guidance": "guidance",
+            "active_twists_json": "[]",
+            "story_lines_json": "[]",
+            "schema_name": "schema",
+            "bad_json": '{"x": 1}',
+            "scene_or_chapter_text": "text",
+            "scope": "premise",
+            "target_id": "ch_001",
+            "guidance": "tighten the logic",
+            "book_json": "{}",
+            "block_id": "ch_001.sc_001.b001",
+            "block_purpose": "pressure beat",
+            "block_text": "old block",
+            "chapter_json": "{}",
+            "premise_json": "{}",
+            "characters_json": "[]",
+            "story_blueprint_json": "{}",
+            "previous_chapter_json": "{}",
+            "current_chapter_json": "{}",
+            "chapter_id": "ch_001",
+            "chapter_context_json": "{}",
+            "blueprint_json": "{}",
+            "review_json": "{}",
+        }
+
+    def test_new_prompts_render_without_format_errors(self) -> None:
+        prompt_paths = [
+            "writer/step_6_twist_designs.txt",
+            "writer/step_7_story_lines.txt",
+            "writer/step_8_chapter_briefs.txt",
+            "writer/make_scene_plan.txt",
+            "writer/write_scene_draft.txt",
+            "writer/polish_scene.txt",
+            "writer/chapter_final_polish.txt",
+            "writer/rewrite_scene.txt",
+            "writer/summarize_actual_chapter.txt",
+            "writer/repair_json.txt",
+            "writer/revise_concept.txt",
+            "writer/rewrite_unit.txt",
+            "writer/rewrite_chapter.txt",
+            "writer/revise_blueprint.txt",
+            "critic/check_reveal_leak.txt",
+            "critic/check_plot_logic.txt",
+            "critic/check_clue_origin.txt",
+            "critic/check_prose_quality.txt",
+            "critic/check_chapter_engine.txt",
+            "critic/review.txt",
+        ]
+        for path in prompt_paths:
+            rendered = self.library.render(path, **self.common)
+            self.assertIsInstance(rendered, str, path)
+            self.assertTrue(rendered.strip(), path)
+
+
+if __name__ == "__main__":
+    unittest.main()

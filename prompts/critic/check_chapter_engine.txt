@@ -1,0 +1,32 @@
+Check chapter engine execution. Output JSON only.
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Chapter brief JSON]
+{chapter_brief_json}
+
+[Text to check]
+{scene_or_chapter_text}
+
+Output format:
+{{
+  "passed": false,
+  "level": "medium",
+  "issues": ["Example issue"],
+  "rewrite_guidance": "Example rewrite guidance"
+}}
+
+Check:
+1. incoming_hook fulfilled.
+2. scene_engine executed.
+3. relationship_reprice happened.
+4. emotional_turn is visible.
+5. backstory_trigger used correctly.
+6. No flashback when trigger is empty.
+7. Important entrances show environmental impact first.
+8. Instinctive priority-revealing action exists.
+9. Reader proxy or supporting reaction exists.
+10. Opening chapter enters present conflict quickly.
+11. chapter_object has double duty.
+12. Ending introduces a new question, obstacle, cost, arrival, or choice.

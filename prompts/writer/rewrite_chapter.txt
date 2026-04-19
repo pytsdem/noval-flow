@@ -1,50 +1,46 @@
-你现在要整章重写。不要解释思路，只输出合法 JSON。
+Rewrite the target chapter.
+Output valid JSON only. No markdown.
 
-章节 ID：{chapter_id}
-修改要求：{guidance}
+chapter_id: {chapter_id}
+revision request: {guidance}
 
-当前 chapter JSON：
+Current chapter JSON:
 {chapter_json}
 
-chapter_plan JSON：
-{chapter_plan_json}
-
-story_blueprint JSON：
+Story blueprint JSON:
 {story_blueprint_json}
 
-previous_chapter JSON：
+Previous chapter JSON:
 {previous_chapter_json}
 
-premise JSON：
+Premise JSON:
 {premise_json}
 
-characters JSON：
+Characters JSON:
 {characters_json}
 
-参考资料：
+Reference pack:
 {reference_pack}
 
-任务目标：
-你不是在润色，而是在重建这一章的戏剧逻辑、信息路线、情绪结构和角色因果。
+Task:
+Rebuild the chapter's dramatic logic, information flow, emotional movement, and character causality without breaking continuity.
 
-硬性要求：
-1. 重写后必须更好地兑现 relationship_network、twist_designs、story_lines、chapter_briefs 和 chapter_plan。
-2. 要说清这一章到底在完成什么 objective，为什么这种完成方式最有戏剧性。
-3. 每个 scene 都必须有功能，至少推进一项：冲突、信息、关系、反转、情绪。
-4. 不允许无功能场景、重复信息场景、只有氛围没有推进的场景。
-5. 角色必须符合角色卡，不得 OOC；推进必须有角色动机基础。
-6. 必须检查信息释放是否合理，不能把该后置的真相提前说完，也不能因为遮蔽导致读者完全摸不着线索。
-7. 如果 guidance 要求增强情绪或戏剧性，必须通过具体局面、关系错位、选择与代价来完成，不能靠空喊。
-8. 结尾要能为下一章或下一个场景留下有效推进力。
+Hard rules:
+1. The rewrite must better fulfill twist_designs, story_lines, and chapter_briefs.
+2. Do not introduce relationship_network, chapter_plan, scene_beats, or any deprecated structure.
+3. Every scene must perform at least one concrete function: conflict, information change, relationship shift, reversal, cost, or emotional turn.
+4. No empty atmosphere scenes and no duplicate-information scenes.
+5. Characters must remain consistent and motivated.
+6. Preserve timing and reveal logic. Do not disclose truths too early and do not make clues meaningless.
+7. If the user asks for more tension or emotion, achieve it through concrete beats, choices, pressure, and consequences.
+8. The chapter ending must create forward pull.
 
-输出格式：
-{
-  "chapter": {
+Output format:
+{{
+  "chapter": {{
     "id": "...",
     "title": "...",
     "summary": "...",
     "scenes": [...]
-  }
-}
-
-只输出 JSON。
+  }}
+}}

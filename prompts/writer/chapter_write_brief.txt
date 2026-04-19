@@ -1,28 +1,15 @@
 你现在要为当前章节生成一份“章节写作简报”。不要写正文，不要输出 Markdown，只输出合法 JSON。
 
-premise JSON：
-{premise_json}
+步骤1-8产物 JSON（去重后）：
+{step_outputs_json}
 
 chapter_plan JSON：
 {chapter_plan_json}
 
-chapter_briefs JSON：
-{chapter_briefs_json}
-
 recent_chapter_briefs JSON：
 {recent_chapter_briefs_json}
 
-story_lines JSON：
-{story_lines_json}
-
-relationship_network JSON：
-{relationship_network_json}
-
-twist_designs JSON：
-{twist_designs_json}
-
-character_milestones JSON：
-{character_milestones_json}
+说明：上方 JSON 仅包含步骤1-8产物，并已做去重。
 
 previous_chapter JSON：
 {previous_chapter_json}

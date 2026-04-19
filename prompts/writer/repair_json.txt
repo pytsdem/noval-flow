@@ -1,16 +1,19 @@
-Repair the previous model output so it becomes valid JSON.
+Repair the JSON so it becomes valid and matches the target schema.
 
-Original task summary:
-{source_prompt}
+Target schema:
+{schema_name}
 
-Parsing error:
-{error}
-
-Text to repair:
-{raw_text}
+Broken JSON:
+{bad_json}
 
 Rules:
-1. Preserve the original content and structure as much as possible.
-2. Only fix JSON syntax, broken nesting, missing commas, trailing commas, quote issues, and obviously malformed arrays or objects.
-3. Do not add markdown. Do not explain.
-4. Output exactly one JSON object that can be parsed by json.loads.
+1. Output valid JSON only.
+2. No markdown.
+3. No explanation.
+4. Do not change story meaning.
+5. Do not add new plot content.
+6. Fill missing fields with empty string, empty array, or default values.
+7. Remove extra fields.
+8. Keep arrays as arrays.
+9. Keep strings as strings.
+10. The final JSON must pass schema validation.

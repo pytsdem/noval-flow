@@ -1,0 +1,21 @@
+Check clue origin. Output JSON only.
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Scene card]
+{scene_card_text}
+
+[Text to check]
+{scene_or_chapter_text}
+
+Output format:
+{{
+  "passed": false,
+  "level": "high",
+  "issues": ["Example issue"],
+  "rewrite_guidance": "Example rewrite guidance"
+}}
+
+Check clue sources for ledgers, letters, witnesses, relics, archives, tokens, testimony, jade pieces, prescriptions, remains, or registers.
+Every key clue must answer source, holder, timing, surface relevance, current function, allowed_clues fit, forbidden violation, and double-duty function.

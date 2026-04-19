@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Any
+from typing import Any, Literal
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 def utc_now() -> datetime:
@@ -85,6 +86,10 @@ class KnowledgeCard(BaseModel):
     source: str = ""
 
 
+class StrictBaseModel(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+
 class CharacterCard(BaseModel):
     name: str
     role: str
@@ -150,6 +155,129 @@ class ChapterPlan(BaseModel):
     scene_density: str = ""
     scene_beats: list[dict[str, str]] = Field(default_factory=list)
     planned_scene_count: int = Field(ge=1, default=2)
+
+
+class TwistDesign(StrictBaseModel):
+    twist_id: str
+    title: str
+    false_belief: str
+    truth: str
+    reader_alignment: str
+    seed_from: str
+    reveal_at: str
+    allowed_clues: list[str] = Field(default_factory=list, max_length=3)
+    forbidden_reveals: list[str] = Field(default_factory=list, max_length=5)
+    pov_lock: str
+    related_characters: list[str] = Field(default_factory=list)
+    payoff_effect: str
+
+
+class StoryLine(StrictBaseModel):
+    line_id: str
+    name: str
+    line_type: str
+    visibility: Literal["visible", "hidden", "misdirection", "mixed"]
+    core_question: str
+    reader_hook_mode: str
+    start_state: str
+    midpoint_shift: str
+    end_state: str
+    carried_twists: list[str] = Field(default_factory=list)
+    line_rules: list[str] = Field(default_factory=list, max_length=4)
+
+
+class ChapterBrief(StrictBaseModel):
+    chapter_id: str
+    title: str
+    chapter_type: str
+    active_lines: list[str] = Field(default_factory=list, max_length=3)
+    active_twists: list[str] = Field(default_factory=list, max_length=3)
+    summary: str
+    incoming_hook: str
+    opening_hook: str
+    chapter_object: str
+    reader_emotion: str
+    reader_belief: str
+    allowed_info: list[str] = Field(default_factory=list, max_length=4)
+    allowed_clues: list[str] = Field(default_factory=list, max_length=3)
+    forbidden: list[str] = Field(default_factory=list, max_length=5)
+    world_limit: str
+    character_focus: list[str] = Field(default_factory=list, max_length=5)
+    character_shift: str
+    relationship_reprice: str
+    emotional_turn: str
+    backstory_trigger: str
+    scene_engine: Literal[
+        "opening_pressure",
+        "disruptor_arrival",
+        "drunken_truth",
+        "private_to_public_interruption",
+        "earned_flashback",
+        "investigation_pressure",
+        "court_pressure",
+        "relationship_collision",
+        "clue_reversal",
+        "aftermath_choice",
+    ]
+    small_payoff: str
+    ending_pull: str
+    info_budget: str
+
+
+class SceneCard(StrictBaseModel):
+    scene_id: str
+    purpose: str
+    pov: str
+    location: str
+    visible_goal: str
+    obstacle: str
+    must_show: list[str] = Field(default_factory=list, max_length=4)
+    must_not_show: list[str] = Field(default_factory=list, max_length=4)
+    reader_proxy: str
+    proxy_function: str
+    exit_state: str
+
+
+class ScenePlan(StrictBaseModel):
+    scenes: list[SceneCard] = Field(default_factory=list, min_length=1, max_length=5)
+
+
+class ActualChapterSummary(StrictBaseModel):
+    chapter_id: str
+    actual_events: list[str] = Field(default_factory=list, max_length=8)
+    reader_now_knows: list[str] = Field(default_factory=list, max_length=8)
+    reader_now_believes: list[str] = Field(default_factory=list, max_length=6)
+    open_questions: list[str] = Field(default_factory=list, max_length=8)
+    character_states: list[str] = Field(default_factory=list)
+    relationship_state: list[str] = Field(default_factory=list)
+    seeded_clues: list[str] = Field(default_factory=list, max_length=8)
+    locked_truths: list[str] = Field(default_factory=list, max_length=8)
+
+
+class TwistDesignsPayload(StrictBaseModel):
+    twist_designs: list[TwistDesign] = Field(default_factory=list)
+
+
+class StoryLinesPayload(StrictBaseModel):
+    story_lines: list[StoryLine] = Field(default_factory=list)
+
+
+class ChapterBriefsPayload(StrictBaseModel):
+    chapter_briefs: list[ChapterBrief] = Field(default_factory=list)
+
+
+class ScenePlanPayload(StrictBaseModel):
+    scenes: list[SceneCard] = Field(default_factory=list, min_length=1, max_length=5)
+
+
+@dataclass
+class WriterContext:
+    completed_chapter_memory_text: str
+    chapter_payload_text: str
+    relevant_world_rules_text: str
+    style_card_text: str
+    active_twists: list[TwistDesign]
+    active_story_lines: list[StoryLine]
 
 
 class BookBlueprint(BaseModel):

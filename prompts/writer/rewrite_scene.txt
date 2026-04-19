@@ -1,0 +1,26 @@
+Rewrite the scene according to critic guidance. Output rewritten prose only.
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Scene card]
+{scene_card_text}
+
+[Style card]
+{style_card_text}
+
+[Rewrite guidance]
+{rewrite_guidance}
+
+[Original text]
+{original_text}
+
+Rules:
+1. Fix the critic issues.
+2. Do not add clues, truth, people, or setting.
+3. Do not break forbidden boundaries.
+4. Do not explain the true meaning of allowed clues.
+5. Do not enter forbidden POV.
+6. If a clue appears without source, add a legal source or delete it.
+7. If power overreach appears, replace it with indirect advancement.
+8. Keep scene exit_state intact.

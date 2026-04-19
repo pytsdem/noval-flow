@@ -6,11 +6,8 @@
 章节目标：{chapter_objective}
 章节张力：{chapter_tension}
 
-premise JSON：
-{premise_json}
-
-story_blueprint JSON：
-{story_blueprint_json}
+步骤1-8产物 JSON（去重后）：
+{step_outputs_json}
 
 chapter_plan JSON：
 {chapter_plan_json}
@@ -20,9 +17,6 @@ chapter_write_brief JSON：
 
 scene_beat JSON：
 {scene_beat_json}
-
-characters JSON：
-{characters_json}
 
 previous_chapter JSON：
 {previous_chapter_json}
@@ -39,6 +33,6 @@ previous_chapter JSON：
 3. 必须尊重角色的 `initial_state`、`motivation`、`behavior_pattern`、`arc` 和既有关系，不能 OOC。
 4. 信息释放要服从 `chapter_write_brief.reveal_strategy`，不要一开头就把该藏的真相说完。
 5. 这一场必须有清晰的动作、目标和阻力，不能只是说明背景。
-6. `story_blueprint_json` 是当前小说信息的核心结构层，里面的世界观、关系网、故事线、角色发展线、反转设计都要被尊重，不能和既有设定打架。
+6. 必须尊重“步骤1-8产物 JSON（去重后）”中的既有设定，不能和既有设定打架。
 7. “已完成章节摘要串”是历史正文的连续回顾，`previous_chapter_json` 是上一章完整内容；两者共同构成正文历史事实，不能断裂。
 8. 直接输出场景文本。

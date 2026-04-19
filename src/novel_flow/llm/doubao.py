@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import sys
+import time
 from uuid import uuid4
 
 import httpx
@@ -13,6 +14,9 @@ from novel_flow.llm.base import LLMClient, LLMMessage
 
 
 class DoubaoLLMClient(LLMClient):
+    _STREAM_EMIT_MIN_CHARS = 120
+    _STREAM_EMIT_MAX_WAIT_SECONDS = 0.4
+
     def __init__(self, api_key: str, model: str, base_url: str) -> None:
         self.api_key = api_key
         self.model = model
@@ -26,7 +30,7 @@ class DoubaoLLMClient(LLMClient):
         ev.emit(
             "llm_prompt",
             agent="DoubaoLLM",
-            title="发送 Prompt",
+            title="?? Prompt",
             call_id=call_id,
             preview=prompt_preview,
             total_chars=sum(len(m.content) for m in messages),
@@ -46,6 +50,25 @@ class DoubaoLLMClient(LLMClient):
         try:
             chunks: list[str] = []
             chunk_index = 0
+            stream_buffer = ""
+            last_emit_ts = time.monotonic()
+
+            def flush_stream_buffer() -> None:
+                nonlocal stream_buffer, chunk_index, last_emit_ts
+                if not stream_buffer:
+                    return
+                chunk_index += 1
+                ev.emit(
+                    "llm_stream",
+                    agent="DoubaoLLM",
+                    title="????",
+                    call_id=call_id,
+                    preview=stream_buffer,
+                    chunk_index=chunk_index,
+                )
+                stream_buffer = ""
+                last_emit_ts = time.monotonic()
+
             with httpx.stream("POST", endpoint, headers=headers, json=payload, timeout=180.0) as response:
                 response.raise_for_status()
                 for line in response.iter_lines():
@@ -60,19 +83,19 @@ class DoubaoLLMClient(LLMClient):
                         delta = data["choices"][0]["delta"].get("content", "")
                         if delta:
                             chunks.append(delta)
-                            chunk_index += 1
-                            ev.emit(
-                                "llm_stream",
-                                agent="DoubaoLLM",
-                                title="流式输出",
-                                call_id=call_id,
-                                preview=delta,
-                                chunk_index=chunk_index,
-                            )
+                            stream_buffer += delta
+                            now_ts = time.monotonic()
+                            if (
+                                len(stream_buffer) >= self._STREAM_EMIT_MIN_CHARS
+                                or (now_ts - last_emit_ts) >= self._STREAM_EMIT_MAX_WAIT_SECONDS
+                            ):
+                                flush_stream_buffer()
                             sys.stderr.write(delta)
                             sys.stderr.flush()
                     except (KeyError, IndexError, json.JSONDecodeError):
                         continue
+                flush_stream_buffer()
+
             sys.stderr.write("\n")
             sys.stderr.flush()
             result = "".join(chunks)
@@ -80,7 +103,7 @@ class DoubaoLLMClient(LLMClient):
             ev.emit(
                 "llm_reply",
                 agent="DoubaoLLM",
-                title="收到回复",
+                title="????",
                 call_id=call_id,
                 preview=result[:600],
                 length=len(result),

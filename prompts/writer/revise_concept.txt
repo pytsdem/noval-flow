@@ -1,20 +1,27 @@
-你现在要根据用户要求修改小说构思。不要输出 Markdown，只输出合法 JSON。
+You are revising structured novel planning data.
+Output valid JSON only. No markdown.
 
-修改范围：{scope}
-目标对象：{target_id}
-用户要求：{guidance}
+Scope:
+{scope}
 
-当前小说 JSON：
+Target id:
+{target_id}
+
+User request:
+{guidance}
+
+Current book JSON:
 {book_json}
 
-参考资料：
+Reference pack:
 {reference_pack}
 
-输出规则：
-1. scope = all 时，输出 title、premise、characters、chapter_plans。
-2. scope = premise 时，只输出 premise。
-3. scope = character 时，只输出 character。
-4. scope = chapter_plan 时，只输出 chapter_plan。
-5. 只能修改当前 JSON 中已经存在的部分。
-6. 修改要真正响应用户要求，不是只换一下语序。
-7. 只输出 JSON。
+Output rules:
+1. If `scope = all`, output `title`, `premise`, and `characters`. Only include `chapter_briefs` when the current book already has them and the user clearly asked to revise them together.
+2. If `scope = premise`, output `premise` only.
+3. If `scope = character`, output `character` only.
+4. If `scope = chapter_brief`, output `chapter_brief` only.
+5. Only revise parts that already exist in the current JSON.
+6. The revision must materially respond to the user's request instead of merely rephrasing.
+7. Do not introduce `chapter_plans`, `scene_beats`, or `relationship_network`.
+8. Output valid JSON only.

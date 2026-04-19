@@ -1,22 +1,25 @@
-你现在要根据 blueprint review 结果整体修订小说蓝图。不要输出 Markdown，只输出合法 JSON。
+Revise the novel blueprint based on the blueprint review.
+Output valid JSON only. No markdown.
 
-当前 blueprint JSON：
+Current blueprint JSON:
 {blueprint_json}
 
-review JSON：
+Review JSON:
 {review_json}
 
-参考资料：
+Reference pack:
 {reference_pack}
 
-输出顶层必须包含：
+Top-level output must contain:
 - premise
 - characters
 - volume_titles
-- chapter_plans
+- chapter_briefs
 
-要求：
-1. 优先解决 review 中最重要的 1 到 5 个问题。
-2. 保留已经成立的亮点。
-3. 如果问题出在结构、关系、角色动机或主题兑现，就从根上修。
-4. 只输出 JSON。
+Rules:
+1. Prioritize fixing the most important 1-5 review issues.
+2. Preserve existing strengths instead of flattening everything.
+3. If the review points to structural, motivational, or payoff problems, fix them at the source.
+4. Do not introduce `relationship_network`, `chapter_plans`, or deprecated step8 structures.
+5. `chapter_briefs` should be a compact chapter-brief sequence that can later be converted into a drafting sequence.
+6. Output valid JSON only.

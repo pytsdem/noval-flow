@@ -10,8 +10,20 @@ from uuid import uuid4
 from novel_flow import events as ev
 from novel_flow.agents.base import BaseAgent
 from novel_flow.llm.base import LLMClient, LLMMessage
-from novel_flow.models.schemas import AgentResult, BookBlueprint, BookDocument, ChapterPlan, CharacterCard, StoryPremise
+from novel_flow.models.schemas import (
+    AgentResult,
+    BookBlueprint,
+    BookDocument,
+    ChapterBrief,
+    ChapterBriefsPayload,
+    ChapterPlan,
+    CharacterCard,
+    StoryLinesPayload,
+    StoryPremise,
+    TwistDesignsPayload,
+)
 from novel_flow.prompting.templates import PromptLibrary
+from novel_flow.utils.json_generation import safe_json_generate
 from novel_flow.utils.json_tools import extract_json_object
 
 
@@ -38,7 +50,7 @@ class BlueprintAgent(BaseAgent):
             reference_pack=reference_pack,
         )
         prompt = self.prompt_library.render(
-            "writer/story_spine.txt",
+            "writer/step_1_story_spine.txt",
             research_query=research_query,
             style_request=style_request or "未指定",
             planning_context_json=planning_context_json,
@@ -73,11 +85,9 @@ class BlueprintAgent(BaseAgent):
             reference_pack=reference_pack,
         )
         prompt = self.prompt_library.render(
-            "writer/character_bible.txt",
+            "writer/step_3_character_bible.txt",
             research_query=research_query,
-            premise_json=premise.model_dump_json(indent=2),
             volume_titles_json=str(volume_titles),
-            story_blueprint_json=self._json_dump(story_blueprint or {}),
             planning_context_json=planning_context_json,
             reference_pack=reference_pack,
         )
@@ -107,7 +117,7 @@ class BlueprintAgent(BaseAgent):
         )
         return [CharacterCard.model_validate(item) for item in payload.get("characters", [])]
 
-    def build_chapter_roadmap(
+    def build_chapter_briefs_compat_plans(
         self,
         research_query: str,
         premise: StoryPremise,
@@ -118,9 +128,9 @@ class BlueprintAgent(BaseAgent):
         planning_context_json: str = "{}",
         reference_pack: str = "暂无额外参考资料。",
     ) -> list[ChapterPlan]:
-        ev.emit("agent_start", agent=self.name, title="Build chapter roadmap", query=research_query)
+        ev.emit("agent_start", agent=self.name, title="Build chapter briefs compat plans", query=research_query)
         self._emit_agent_input(
-            "chapter roadmap",
+            "chapter briefs compat plans",
             research_query=research_query,
             premise=premise.model_dump(mode="json"),
             characters=[item.model_dump(mode="json") for item in characters],
@@ -131,20 +141,24 @@ class BlueprintAgent(BaseAgent):
             reference_pack=reference_pack,
         )
         prompt = self.prompt_library.render(
-            "writer/chapter_roadmap.txt",
+            "writer/step_8_chapter_briefs.txt",
             research_query=research_query,
-            premise_json=premise.model_dump_json(indent=2),
-            characters_json=self._json_dump([item.model_dump(mode="json") for item in characters]),
             volume_titles_json=str(volume_titles),
-            story_blueprint_json=self._json_dump(story_blueprint or {}),
-            character_milestones_json=self._json_dump(character_milestones or []),
             planning_context_json=planning_context_json,
             reference_pack=reference_pack,
         )
-        parsed = self._generate_json_payload(prompt, label="chapter_roadmap")
-        parsed["chapter_plans"] = [self._normalize_chapter_plan_payload(dict(item)) for item in parsed["chapter_plans"]]
+        parsed = self._generate_json_payload(
+            prompt,
+            label="chapter_briefs_compat_plans",
+            schema_model=ChapterBriefsPayload,
+        )
+        parsed["chapter_plans"] = [
+            self._normalize_chapter_plan_payload(self._chapter_plan_from_brief(dict(item)))
+            for item in parsed.get("chapter_briefs", [])
+            if isinstance(item, dict)
+        ]
         chapter_plans = [ChapterPlan.model_validate(item) for item in parsed["chapter_plans"]]
-        ev.emit("blueprint_roadmap_ready", agent=self.name, title="Chapter roadmap ready", chapter_count=len(chapter_plans))
+        ev.emit("blueprint_chapter_briefs_ready", agent=self.name, title="Chapter briefs compat plans ready", chapter_count=len(chapter_plans))
         return chapter_plans
 
     def build_blueprint(
@@ -170,7 +184,7 @@ class BlueprintAgent(BaseAgent):
             planning_context_json="{}",
             reference_pack=reference_pack,
         )
-        chapter_plans = self.build_chapter_roadmap(
+        chapter_plans = self.build_chapter_briefs_compat_plans(
             research_query,
             premise,
             characters,
@@ -239,7 +253,7 @@ class BlueprintAgent(BaseAgent):
             reference_pack=reference_pack,
         )
         prompt = self.prompt_library.render(
-            "writer/character_milestones.txt",
+            "writer/step_5_character_milestones.txt",
             research_query=research_query,
             premise_json=premise.model_dump_json(indent=2),
             characters_json=self._json_dump([item.model_dump(mode="json") for item in characters]),
@@ -258,12 +272,115 @@ class BlueprintAgent(BaseAgent):
         )
         return milestones
 
+    def build_single_character_milestone(
+        self,
+        *,
+        research_query: str,
+        character: CharacterCard,
+        premise: StoryPremise,
+        story_engine: dict[str, Any],
+        user_guidance: str = "",
+        reference_pack: str = "暂无额外参考资料。",
+    ) -> dict[str, Any]:
+        name = str(character.name or "").strip() or "未命名"
+        ev.emit("agent_start", agent=self.name, title=f"Build milestone: {name}", query=research_query)
+        self._emit_agent_input(
+            f"single character milestone: {name}",
+            research_query=research_query,
+            user_guidance=user_guidance or "无",
+            character=character.model_dump(mode="json"),
+            premise=premise.model_dump(mode="json"),
+            story_engine=story_engine,
+        )
+        prompt = self.prompt_library.render(
+            "writer/step_5_single_character_milestone.txt",
+            research_query=research_query,
+            user_guidance=user_guidance or "无",
+            character_json=self._json_dump(character.model_dump(mode="json")),
+            premise_json=premise.model_dump_json(indent=2),
+            story_engine_json=self._json_dump(story_engine),
+            reference_pack=reference_pack,
+        )
+        parsed = self._generate_json_payload(prompt, label="single_character_milestone", allow_repair=False)
+        candidate = parsed.get("character_milestone")
+        if candidate is None and isinstance(parsed.get("character_milestones"), list):
+            items = parsed["character_milestones"]
+            candidate = next((i for i in items if isinstance(i, dict) and str(i.get("character_name", "")).strip() == name), None) or (items[0] if items else None)
+        if candidate is None:
+            candidate = parsed
+        normalized = self._normalize_character_milestones([candidate] if isinstance(candidate, dict) else [])
+        if not normalized:
+            raise ValueError(f"角色 {name} 的发展线为空，模型未返回有效数据。")
+        milestone = dict(normalized[0])
+        milestone["character_name"] = name
+        ev.emit(
+            "blueprint_milestone_ready",
+            agent=self.name,
+            title=f"Milestone ready: {name}",
+            character_name=name,
+        )
+        return milestone
+
+    def add_character_milestone(
+        self,
+        *,
+        research_query: str,
+        premise: StoryPremise,
+        characters: list[CharacterCard],
+        story_blueprint: dict[str, Any],
+        character_milestones: list[dict[str, Any]] | None = None,
+        guidance: str = "",
+        planning_context_json: str = "{}",
+        reference_pack: str = "暂无额外参考资料。",
+    ) -> dict[str, Any]:
+        ev.emit("agent_start", agent=self.name, title="Add character milestone", query=research_query)
+        self._emit_agent_input(
+            "add character milestone",
+            research_query=research_query,
+            premise=premise.model_dump(mode="json"),
+            characters=[item.model_dump(mode="json") for item in characters],
+            story_blueprint=story_blueprint,
+            character_milestones=character_milestones or [],
+            guidance=guidance,
+            planning_context=self._safe_json_loads(planning_context_json),
+            reference_pack=reference_pack,
+        )
+        prompt = self.prompt_library.render(
+            "writer/step_5_add_character_milestone.txt",
+            research_query=research_query,
+            premise_json=premise.model_dump_json(indent=2),
+            characters_json=self._json_dump([item.model_dump(mode="json") for item in characters]),
+            story_blueprint_json=self._json_dump(story_blueprint),
+            character_milestones_json=self._json_dump(character_milestones or []),
+            user_guidance=guidance,
+            planning_context_json=planning_context_json,
+            reference_pack=reference_pack,
+        )
+        parsed = self._generate_json_payload(prompt, label="add_character_milestone")
+        candidate = parsed.get("character_milestone")
+        if candidate is None:
+            candidate = parsed.get("milestone")
+        if candidate is None and isinstance(parsed.get("character_milestones"), list):
+            items = parsed.get("character_milestones") or []
+            candidate = items[0] if items else None
+        if candidate is None:
+            candidate = parsed
+        normalized = self._normalize_character_milestones([candidate])
+        if not normalized:
+            raise ValueError("新增角色发展线为空，请调整指令后重试。")
+        milestone = normalized[0]
+        ev.emit(
+            "blueprint_milestone_added",
+            agent=self.name,
+            title=f"Character milestone added: {milestone.get('character_name') or '未命名角色'}",
+            character_name=milestone.get("character_name", ""),
+        )
+        return milestone
+
     def build_worldbuilding_step(
         self,
         *,
         research_query: str,
-        style_request: str = "",
-        book: BookDocument,
         planning_context_json: str = "{}",
         reference_pack: str = "暂无额外参考资料。",
     ) -> dict[str, Any]:
@@ -271,18 +388,12 @@ class BlueprintAgent(BaseAgent):
         self._emit_agent_input(
             "worldbuilding step",
             research_query=research_query,
-            style_request=style_request or "未指定",
-            book=book.model_dump(mode="json"),
-            current_story_blueprint=(book.metadata or {}).get("story_blueprint", {}),
             planning_context=self._safe_json_loads(planning_context_json),
             reference_pack=reference_pack,
         )
         prompt = self.prompt_library.render(
-            "writer/worldbuilding_step.txt",
+            "writer/step_2_worldbuilding.txt",
             research_query=research_query,
-            style_request=style_request or "未指定",
-            book_json=book.model_dump_json(indent=2),
-            current_story_blueprint_json=self._json_dump((book.metadata or {}).get("story_blueprint", {})),
             planning_context_json=planning_context_json,
             reference_pack=reference_pack,
         )
@@ -295,8 +406,6 @@ class BlueprintAgent(BaseAgent):
         self,
         *,
         research_query: str,
-        style_request: str = "",
-        book: BookDocument,
         planning_context_json: str = "{}",
         reference_pack: str = "暂无额外参考资料。",
     ) -> dict[str, Any]:
@@ -304,18 +413,12 @@ class BlueprintAgent(BaseAgent):
         self._emit_agent_input(
             "event timeline step",
             research_query=research_query,
-            style_request=style_request or "未指定",
-            book=book.model_dump(mode="json"),
-            current_story_blueprint=(book.metadata or {}).get("story_blueprint", {}),
             planning_context=self._safe_json_loads(planning_context_json),
             reference_pack=reference_pack,
         )
         prompt = self.prompt_library.render(
-            "writer/event_timeline_step.txt",
+            "writer/step_4_event_timeline.txt",
             research_query=research_query,
-            style_request=style_request or "未指定",
-            book_json=book.model_dump_json(indent=2),
-            current_story_blueprint_json=self._json_dump((book.metadata or {}).get("story_blueprint", {})),
             planning_context_json=planning_context_json,
             reference_pack=reference_pack,
         )
@@ -328,8 +431,6 @@ class BlueprintAgent(BaseAgent):
         self,
         *,
         research_query: str,
-        style_request: str = "",
-        book: BookDocument,
         planning_context_json: str = "{}",
         reference_pack: str = "暂无额外参考资料。",
     ) -> dict[str, Any]:
@@ -337,23 +438,20 @@ class BlueprintAgent(BaseAgent):
         self._emit_agent_input(
             "twist designs step",
             research_query=research_query,
-            style_request=style_request or "未指定",
-            book=book.model_dump(mode="json"),
-            current_story_blueprint=(book.metadata or {}).get("story_blueprint", {}),
             planning_context=self._safe_json_loads(planning_context_json),
             reference_pack=reference_pack,
         )
         prompt = self.prompt_library.render(
-            "writer/twist_designs_step.txt",
+            "writer/step_6_twist_designs.txt",
             research_query=research_query,
-            style_request=style_request or "未指定",
-            book_json=book.model_dump_json(indent=2),
-            current_story_blueprint_json=self._json_dump((book.metadata or {}).get("story_blueprint", {})),
             planning_context_json=planning_context_json,
             reference_pack=reference_pack,
         )
-        parsed = self._generate_json_payload(prompt, label="twist_designs_step")
-        parsed["story_blueprint"] = self._normalize_story_blueprint_payload(parsed.get("story_blueprint"))
+        parsed = self._generate_json_payload(
+            prompt,
+            label="twist_designs_step",
+            schema_model=TwistDesignsPayload,
+        )
         ev.emit("blueprint_sections_ready", agent=self.name, title="Twist designs step ready")
         return parsed
 
@@ -361,8 +459,6 @@ class BlueprintAgent(BaseAgent):
         self,
         *,
         research_query: str,
-        style_request: str = "",
-        book: BookDocument,
         planning_context_json: str = "{}",
         reference_pack: str = "暂无额外参考资料。",
     ) -> dict[str, Any]:
@@ -370,24 +466,57 @@ class BlueprintAgent(BaseAgent):
         self._emit_agent_input(
             "story lines step",
             research_query=research_query,
-            style_request=style_request or "未指定",
-            book=book.model_dump(mode="json"),
-            current_story_blueprint=(book.metadata or {}).get("story_blueprint", {}),
             planning_context=self._safe_json_loads(planning_context_json),
             reference_pack=reference_pack,
         )
         prompt = self.prompt_library.render(
-            "writer/story_lines_step.txt",
+            "writer/step_7_story_lines.txt",
             research_query=research_query,
-            style_request=style_request or "未指定",
-            book_json=book.model_dump_json(indent=2),
-            current_story_blueprint_json=self._json_dump((book.metadata or {}).get("story_blueprint", {})),
             planning_context_json=planning_context_json,
             reference_pack=reference_pack,
         )
-        parsed = self._generate_json_payload(prompt, label="story_lines_step")
-        parsed["story_blueprint"] = self._normalize_story_blueprint_payload(parsed.get("story_blueprint"))
+        parsed = self._generate_json_payload(
+            prompt,
+            label="story_lines_step",
+            schema_model=StoryLinesPayload,
+        )
         ev.emit("blueprint_sections_ready", agent=self.name, title="Story lines step ready")
+        return parsed
+
+    def build_chapter_briefs_step(
+        self,
+        *,
+        research_query: str,
+        volume_titles: list[str],
+        planning_context_json: str = "{}",
+        reference_pack: str = "暂无额外参考资料。",
+    ) -> dict[str, Any]:
+        ev.emit("agent_start", agent=self.name, title="Build chapter briefs step", query=research_query)
+        self._emit_agent_input(
+            "chapter briefs step",
+            research_query=research_query,
+            volume_titles=volume_titles,
+            planning_context=self._safe_json_loads(planning_context_json),
+            reference_pack=reference_pack,
+        )
+        prompt = self.prompt_library.render(
+            "writer/step_8_chapter_briefs.txt",
+            research_query=research_query,
+            volume_titles_json=self._json_dump(volume_titles),
+            planning_context_json=planning_context_json,
+            reference_pack=reference_pack,
+        )
+        parsed = self._generate_json_payload(
+            prompt,
+            label="chapter_briefs_step",
+            schema_model=ChapterBriefsPayload,
+        )
+        ev.emit(
+            "blueprint_chapter_briefs_ready",
+            agent=self.name,
+            title="Chapter briefs ready",
+            chapter_count=len(parsed.get("chapter_briefs", [])),
+        )
         return parsed
 
     def expand_story_blueprint_sections(
@@ -487,15 +616,18 @@ class BlueprintAgent(BaseAgent):
                 CharacterCard.model_validate(parsed["character"]) if item.name == target_id else item
                 for item in updated_book.characters
             ]
-        elif scope == "chapter_plan":
+        elif scope == "chapter_brief":
             if not target_id:
-                raise ValueError("target_id is required for chapter plan revision.")
-            updated_book.metadata["chapter_plans"] = [
-                ChapterPlan.model_validate(parsed["chapter_plan"]).model_dump(mode="json")
+                raise ValueError("target_id is required for chapter brief revision.")
+            story_blueprint = dict(updated_book.metadata.get("story_blueprint", {}) or {})
+            existing_briefs = list(story_blueprint.get("chapter_briefs", []) or [])
+            story_blueprint["chapter_briefs"] = [
+                ChapterBrief.model_validate(parsed["chapter_brief"]).model_dump(mode="json")
                 if str(item.get("chapter_id", "")) == target_id
                 else item
-                for item in updated_book.metadata.get("chapter_plans", [])
+                for item in existing_briefs
             ]
+            updated_book.metadata["story_blueprint"] = story_blueprint
         else:
             raise ValueError(f"Unsupported concept revision scope: {scope}")
         updated_book.updated_at = datetime.now(timezone.utc)
@@ -517,7 +649,15 @@ class BlueprintAgent(BaseAgent):
         )
         parsed = self._generate_json_payload(prompt, label="revise_blueprint")
         parsed["premise"] = self._normalize_premise_payload(dict(parsed["premise"]))
-        parsed["chapter_plans"] = [self._normalize_chapter_plan_payload(dict(item)) for item in parsed["chapter_plans"]]
+        chapter_briefs: list[dict[str, Any]] = []
+        if "chapter_briefs" in parsed and isinstance(parsed["chapter_briefs"], list):
+            chapter_briefs = [item for item in self._normalize_chapter_briefs(parsed["chapter_briefs"]) if isinstance(item, dict)]
+            parsed["chapter_plans"] = [
+                self._normalize_chapter_plan_payload(self._chapter_plan_from_brief(dict(item)))
+                for item in chapter_briefs
+            ]
+        else:
+            parsed["chapter_plans"] = [self._normalize_chapter_plan_payload(dict(item)) for item in parsed["chapter_plans"]]
         revised = BookBlueprint(
             blueprint_id=f"blueprint_{uuid4().hex[:10]}",
             premise=StoryPremise.model_validate(parsed["premise"]),
@@ -546,17 +686,17 @@ class BlueprintAgent(BaseAgent):
                 reference_pack=str(kwargs.get("reference_pack", "暂无额外参考资料。")),
             )
             return AgentResult(agent_name=self.name, success=True, message="Character bible built.", payload={"characters": [item.model_dump(mode="json") for item in characters]})
-        if action == "chapter_roadmap":
+        if action == "chapter_briefs":
             premise = StoryPremise.model_validate(kwargs["premise"])
             characters = [CharacterCard.model_validate(item) for item in kwargs["characters"]]
-            plans = self.build_chapter_roadmap(
+            plans = self.build_chapter_briefs_compat_plans(
                 str(kwargs["research_query"]),
                 premise,
                 characters,
                 list(kwargs["volume_titles"]),
                 reference_pack=str(kwargs.get("reference_pack", "暂无额外参考资料。")),
             )
-            return AgentResult(agent_name=self.name, success=True, message="Chapter roadmap built.", payload={"chapter_plans": [item.model_dump(mode="json") for item in plans]})
+            return AgentResult(agent_name=self.name, success=True, message="Chapter briefs compatibility plans built.", payload={"chapter_plans": [item.model_dump(mode="json") for item in plans]})
         if action == "build":
             blueprint = self.build_blueprint(
                 research_query=str(kwargs["research_query"]),
@@ -584,12 +724,12 @@ class BlueprintAgent(BaseAgent):
             return AgentResult(agent_name=self.name, success=True, message="Concept revised.", payload={"book": updated.model_dump(mode="json")})
         raise ValueError(f"Unsupported blueprint action: {action}")
 
-    def _generate_json_text(self, prompt: str) -> str:
+    def _generate_json_text(self, prompt: str, *, temperature: float = 0.2) -> str:
         messages = [
             LLMMessage(role="system", content=self.prompt_library.load("writer/system.txt")),
             LLMMessage(role="user", content=prompt),
         ]
-        return self.llm_client.generate(messages=messages, temperature=0.7).strip()
+        return self.llm_client.generate(messages=messages, temperature=temperature).strip()
 
     @classmethod
     def _normalize_story_blueprint_payload(cls, payload: Any) -> dict[str, Any]:
@@ -598,7 +738,6 @@ class BlueprintAgent(BaseAgent):
         return {
             "story_engine": cls._normalize_story_engine(payload.get("story_engine", {})),
             "core_theme": payload.get("core_theme", {}),
-            "relationship_network": cls._normalize_relationship_network(payload.get("relationship_network", [])),
             "event_timeline": cls._normalize_event_timeline(payload.get("event_timeline", [])),
             "structure_blueprint": payload.get("structure_blueprint", {}),
             "setpiece_library": payload.get("setpiece_library", []),
@@ -608,32 +747,65 @@ class BlueprintAgent(BaseAgent):
             "chapter_briefs": cls._normalize_chapter_briefs(payload.get("chapter_briefs", [])),
         }
 
-    def _generate_json_payload(self, prompt: str, *, label: str) -> dict[str, Any]:
-        raw = self._generate_json_text(prompt)
-        try:
+    def _generate_json_payload(
+        self,
+        prompt: str,
+        *,
+        label: str,
+        allow_repair: bool = True,
+        schema_model: type[Any] | None = None,
+    ) -> dict[str, Any]:
+        messages = [
+            LLMMessage(role="system", content=self.prompt_library.load("writer/system.txt")),
+            LLMMessage(role="user", content=prompt),
+        ]
+        if not allow_repair:
+            raw = self.llm_client.generate(messages=messages, temperature=0.2).strip()
             return extract_json_object(raw)
-        except Exception as exc:
-            ev.emit(
-                "json_repair",
-                agent=self.name,
-                title=f"Repair JSON: {label}",
-                error=str(exc),
-                raw_preview=raw[:1000],
-            )
-            repair_prompt = self.prompt_library.render(
-                "writer/repair_json.txt",
-                source_prompt=prompt[:4000],
-                error=str(exc),
-                raw_text=raw[:12000],
-            )
-            repaired = self._generate_json_text(repair_prompt)
-            return extract_json_object(repaired)
+        return safe_json_generate(
+            self.llm_client,
+            messages,
+            schema_name=label,
+            schema_model=schema_model,
+        )
 
     @staticmethod
     def _json_dump(payload: Any) -> str:
         import json
 
         return json.dumps(payload, ensure_ascii=False, indent=2)
+
+    @staticmethod
+    def _strip_code_fence(text: str) -> str:
+        cleaned = (text or "").strip()
+        if cleaned.startswith("```"):
+            lines = cleaned.splitlines()
+            if len(lines) >= 3:
+                cleaned = "\n".join(lines[1:-1]).strip()
+        return cleaned
+
+    @classmethod
+    def _coerce_non_object_json(cls, text: str, *, label: str) -> dict[str, Any] | None:
+        import json
+
+        candidate = cls._strip_code_fence(text)
+        try:
+            parsed = json.loads(candidate)
+        except Exception:
+            return None
+        if isinstance(parsed, dict):
+            return parsed
+        if isinstance(parsed, list):
+            if label in {"character_milestones", "add_character_milestone"}:
+                key = "character_milestones" if label == "character_milestones" else "character_milestone"
+                if key == "character_milestone":
+                    first = parsed[0] if parsed else {}
+                    return {"character_milestone": first if isinstance(first, dict) else {}}
+                return {"character_milestones": [item for item in parsed if isinstance(item, dict)]}
+            if label == "chapter_briefs_compat_plans":
+                return {"chapter_plans": [item for item in parsed if isinstance(item, dict)]}
+            return {"items": parsed}
+        return None
 
     @classmethod
     def _normalize_premise_payload(cls, premise: dict[str, Any]) -> dict[str, Any]:
@@ -656,6 +828,14 @@ class BlueprintAgent(BaseAgent):
 
     @classmethod
     def _normalize_chapter_plan_payload(cls, plan: dict[str, Any]) -> dict[str, Any]:
+        summary_text = cls._ensure_text(plan.get("summary"))
+        if not cls._ensure_text(plan.get("objective")) and summary_text:
+            plan["objective"] = summary_text
+        plan["chapter_id"] = cls._ensure_text(plan.get("chapter_id"))
+        plan["title"] = cls._ensure_text(plan.get("title"))
+        plan["objective"] = cls._ensure_text(plan.get("objective"))
+        plan["tension"] = cls._ensure_text(plan.get("tension"))
+        plan["cliffhanger"] = cls._ensure_text(plan.get("cliffhanger"))
         for key in ("phase", "story_function", "key_turn", "payoff", "next_route_hint", "target_words", "scene_density"):
             if key in plan and plan[key] is None:
                 plan[key] = ""
@@ -680,6 +860,29 @@ class BlueprintAgent(BaseAgent):
             )
         plan["scene_beats"] = normalized_beats
         return plan
+
+    @classmethod
+    def _chapter_plan_from_brief(cls, brief: dict[str, Any]) -> dict[str, Any]:
+        chapter_id = cls._ensure_text(brief.get("chapter_id"))
+        title = cls._ensure_text(brief.get("title"))
+        objective = cls._ensure_text(brief.get("summary"))
+        tension = cls._ensure_text(brief.get("reader_emotion") or brief.get("emotional_turn") or brief.get("world_limit"))
+        cliffhanger = cls._ensure_text(brief.get("ending_pull"))
+        return {
+            "chapter_id": chapter_id,
+            "title": title,
+            "objective": objective,
+            "tension": tension,
+            "cliffhanger": cliffhanger,
+            "phase": cls._ensure_text(brief.get("chapter_type")),
+            "story_function": cls._ensure_text(brief.get("scene_engine")),
+            "key_turn": cls._ensure_text(brief.get("relationship_reprice") or brief.get("character_shift")),
+            "payoff": cls._ensure_text(brief.get("small_payoff")),
+            "next_route_hint": cliffhanger,
+            "target_words": cls._ensure_text(brief.get("info_budget")),
+            "scene_density": "",
+            "scene_beats": [],
+        }
 
     @staticmethod
     def _ensure_list(value: Any) -> list[str]:
@@ -778,20 +981,36 @@ class BlueprintAgent(BaseAgent):
         return normalized
 
     @classmethod
-    def _normalize_story_lines(cls, value: Any) -> list[dict[str, str]]:
+    def _normalize_story_lines(cls, value: Any) -> list[dict[str, Any]]:
         items = value if isinstance(value, list) else [value] if isinstance(value, dict) else []
-        normalized: list[dict[str, str]] = []
+        normalized: list[dict[str, Any]] = []
         for item in items:
             if not isinstance(item, dict):
                 continue
+            key_progressions_raw = item.get("key_progressions", [])
+            if not isinstance(key_progressions_raw, list):
+                key_progressions_raw = []
+            key_progressions: list[dict[str, str]] = []
+            for index, progression in enumerate(key_progressions_raw, start=1):
+                if not isinstance(progression, dict):
+                    continue
+                key_progressions.append(
+                    {
+                        "chapter_id": cls._ensure_text(progression.get("chapter_id") or f"ch_{index:03d}"),
+                        "plot": cls._ensure_text(progression.get("plot") or progression.get("milestone") or progression.get("event")),
+                    }
+                )
             normalized.append(
                 {
                     "name": cls._ensure_text(item.get("name") or item.get("line_name")),
+                    "visibility": cls._ensure_text(item.get("visibility") or item.get("line_visibility")),
                     "line_type": cls._ensure_text(item.get("line_type")),
+                    "line_goal": cls._ensure_text(item.get("line_goal")),
                     "start_state": cls._ensure_text(item.get("start_state")),
                     "midpoint_shift": cls._ensure_text(item.get("midpoint_shift")),
                     "end_state": cls._ensure_text(item.get("end_state")),
                     "core_question": cls._ensure_text(item.get("core_question")),
+                    "key_progressions": key_progressions,
                 }
             )
         return normalized
@@ -808,16 +1027,6 @@ class BlueprintAgent(BaseAgent):
                     "chapter_id": cls._ensure_text(item.get("chapter_id") or f"ch_{index:03d}"),
                     "title": cls._ensure_text(item.get("title")),
                     "active_lines": cls._ensure_list(item.get("active_lines")),
-                    "summary": cls._ensure_text(item.get("summary")),
-                    "turn": cls._ensure_text(item.get("turn")),
-                    "cliffhanger": cls._ensure_text(item.get("cliffhanger")),
-                    "chapter_type": cls._ensure_text(item.get("chapter_type")),
-                    "core_question_left": cls._ensure_text(item.get("core_question_left")),
-                    "small_payoff": cls._ensure_text(item.get("small_payoff")),
-                    "reader_hook": cls._ensure_text(item.get("reader_hook")),
-                    "new_information": cls._ensure_text(item.get("new_information")),
-                    "relationship_shift": cls._ensure_text(item.get("relationship_shift")),
-                    "ending_pull": cls._ensure_text(item.get("ending_pull")),
                 }
             )
         return normalized
@@ -832,7 +1041,34 @@ class BlueprintAgent(BaseAgent):
             axes_raw = item.get("axes", [])
             if not isinstance(axes_raw, list):
                 axes_raw = []
+            # Compatibility: allow compact schema
+            # {"character_name":"A","milestone_list":[{"axis":"情感","stages":["阶段一","阶段二","阶段三"]}]}
+            if not axes_raw:
+                milestone_list = item.get("milestone_list", [])
+                if isinstance(milestone_list, list):
+                    converted_axes: list[dict[str, Any]] = []
+                    for milestone in milestone_list:
+                        if not isinstance(milestone, dict):
+                            continue
+                        axis_name = cls._ensure_text(milestone.get("axis"))
+                        stages_raw = milestone.get("stages", [])
+                        if isinstance(stages_raw, str):
+                            stages_raw = cls._ensure_list(stages_raw)
+                        if not isinstance(stages_raw, list):
+                            stages_raw = []
+                        phases = [
+                            {
+                                "phase": f"阶段{idx}",
+                                "label": cls._ensure_text(stage),
+                                "scenes": [],
+                            }
+                            for idx, stage in enumerate(stages_raw, start=1)
+                            if cls._ensure_text(stage)
+                        ]
+                        converted_axes.append({"axis": axis_name, "phases": phases})
+                    axes_raw = converted_axes
             axes: list[dict[str, Any]] = []
+            milestone_list: list[dict[str, Any]] = []
             for axis_item in axes_raw:
                 if not isinstance(axis_item, dict):
                     continue
@@ -866,100 +1102,23 @@ class BlueprintAgent(BaseAgent):
                         }
                     )
                 axes.append({"axis": cls._ensure_text(axis_item.get("axis")), "phases": phases})
-            normalized.append({"character_name": cls._ensure_text(item.get("character_name")), "axes": axes})
-        return normalized
-
-    @classmethod
-    def _normalize_relationship_network(cls, value: Any) -> list[dict[str, Any]]:
-        if isinstance(value, list):
-            items = value
-        elif isinstance(value, dict):
-            items = [value]
-        else:
-            text_items = cls._ensure_list(value)
-            items = [{"relation_stage_summary": item} for item in text_items]
-
-        normalized: list[dict[str, Any]] = []
-        for item in items:
-            if isinstance(item, str):
-                item = {"relation_stage_summary": item}
-            if not isinstance(item, dict):
-                continue
-
-            desire_vs_fear = item.get("desire_vs_fear", {})
-            if not isinstance(desire_vs_fear, dict):
-                desire_vs_fear = {"desire": cls._ensure_text(desire_vs_fear), "fear": ""}
-
-            power_dynamic = item.get("power_dynamic", {})
-            if not isinstance(power_dynamic, dict):
-                power_dynamic = {"early": cls._ensure_text(power_dynamic), "middle": "", "late": ""}
-
-            turning_points_raw = item.get("turning_points", [])
-            if not isinstance(turning_points_raw, list):
-                turning_points_raw = cls._ensure_list(turning_points_raw)
-            turning_points: list[dict[str, str]] = []
-            for point in turning_points_raw:
-                if isinstance(point, str):
-                    turning_points.append(
-                        {
-                            "phase": "",
-                            "event": point.strip(),
-                            "effect": "",
-                        }
-                    )
-                    continue
-                if isinstance(point, dict):
-                    turning_points.append(
-                        {
-                            "phase": cls._ensure_text(point.get("phase") or point.get("stage")),
-                            "event": cls._ensure_text(point.get("event")),
-                            "effect": cls._ensure_text(point.get("effect")),
-                        }
-                    )
-
-            contrast_targets_raw = item.get("contrast_targets", [])
-            if not isinstance(contrast_targets_raw, list):
-                contrast_targets_raw = cls._ensure_list(contrast_targets_raw)
-            contrast_targets: list[dict[str, str]] = []
-            for contrast in contrast_targets_raw:
-                if isinstance(contrast, str):
-                    contrast_targets.append({"target": "", "contrast": contrast.strip()})
-                    continue
-                if isinstance(contrast, dict):
-                    contrast_targets.append(
-                        {
-                            "target": cls._ensure_text(contrast.get("target")),
-                            "contrast": cls._ensure_text(contrast.get("contrast")),
-                        }
-                    )
-
+                milestone_list.append(
+                    {
+                        "axis": cls._ensure_text(axis_item.get("axis")),
+                        "stages": [cls._ensure_text(phase_item.get("label")) for phase_item in phases if cls._ensure_text(phase_item.get("label"))],
+                    }
+                )
+            card_name = cls._ensure_text(item.get("character_card_name"))
+            card_index_raw = item.get("character_card_index")
+            card_index = card_index_raw if isinstance(card_index_raw, int) else -1
             normalized.append(
                 {
-                    "line_name": cls._ensure_text(item.get("line_name") or item.get("line") or item.get("category") or "未命名关系线"),
-                    "subject": cls._ensure_text(item.get("subject") or item.get("from") or item.get("source")),
-                    "target": cls._ensure_text(item.get("target") or item.get("to")),
-                    "surface_relation": cls._ensure_text(item.get("surface_relation") or item.get("surface")),
-                    "true_relation": cls._ensure_text(item.get("true_relation") or item.get("core_relation") or item.get("relation_type")),
-                    "relation_stage_summary": cls._ensure_text(item.get("relation_stage_summary") or item.get("summary")),
-                    "core_emotion": cls._ensure_list(item.get("core_emotion") or item.get("emotions") or item.get("emotion_curve")),
-                    "psychological_basis": cls._ensure_text(item.get("psychological_basis") or item.get("basis")),
-                    "key_tensions": cls._ensure_list(item.get("key_tensions") or item.get("tensions")),
-                    "desire_vs_fear": {
-                        "desire": cls._ensure_text(desire_vs_fear.get("desire") or desire_vs_fear.get("subject_desire")),
-                        "fear": cls._ensure_text(desire_vs_fear.get("fear") or desire_vs_fear.get("subject_fear")),
-                        "target_desire": cls._ensure_text(desire_vs_fear.get("target_desire")),
-                        "target_fear": cls._ensure_text(desire_vs_fear.get("target_fear")),
-                    },
-                    "power_dynamic": {
-                        "early": cls._ensure_text(power_dynamic.get("early")),
-                        "middle": cls._ensure_text(power_dynamic.get("middle") or power_dynamic.get("mid")),
-                        "late": cls._ensure_text(power_dynamic.get("late")),
-                    },
-                    "relationship_debt": cls._ensure_text(item.get("relationship_debt") or item.get("debt")),
-                    "turning_points": turning_points,
-                    "story_function": cls._ensure_list(item.get("story_function") or item.get("functions")),
-                    "contrast_targets": contrast_targets,
-                    "payoff": cls._ensure_text(item.get("payoff")),
+                    "character_name": cls._ensure_text(item.get("character_name")),
+                    "character_card_name": card_name,
+                    "character_card_index": card_index,
+                    "milestone_list": milestone_list,
+                    "axes": axes,
                 }
             )
         return normalized
+

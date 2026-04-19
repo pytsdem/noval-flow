@@ -12,7 +12,7 @@ from novel_flow.models.schemas import (
     BookBlueprint,
     BookDocument,
     Chapter,
-    ChapterPlan,
+    ChapterBrief,
     CriticReport,
     IssueCard,
     IssueLocation,
@@ -34,12 +34,12 @@ class CriticAgent(BaseAgent):
         ev.emit("agent_start", agent="CriticAgent", title="Review current chapter", book_id=book.id)
         current_chapter = self._current_chapter(book)
         previous_chapter = self._previous_chapter(book, current_chapter.id)
-        current_plan = self._current_chapter_plan(book, current_chapter.id)
+        chapter_context = self._current_chapter_context(book, current_chapter.id)
         prompt = self.prompt_library.render(
             "critic/review.txt",
             premise_json=book.premise.model_dump_json(indent=2),
             characters_json=json.dumps([item.model_dump(mode="json") for item in book.characters], ensure_ascii=False, indent=2),
-            chapter_plan_json=current_plan.model_dump_json(indent=2) if current_plan else "{}",
+            chapter_context_json=json.dumps(chapter_context, ensure_ascii=False, indent=2) if chapter_context else "{}",
             story_blueprint_json=json.dumps(book.metadata.get("story_blueprint", {}), ensure_ascii=False, indent=2),
             previous_chapter_json=json.dumps(previous_chapter.model_dump(mode="json"), ensure_ascii=False, indent=2)
             if previous_chapter
@@ -178,10 +178,28 @@ class CriticAgent(BaseAgent):
         return None
 
     @staticmethod
-    def _current_chapter_plan(book: BookDocument, chapter_id: str) -> ChapterPlan | None:
-        for item in book.metadata.get("chapter_plans", []):
+    def _current_chapter_context(book: BookDocument, chapter_id: str) -> dict[str, Any] | None:
+        story_blueprint = dict(book.metadata.get("story_blueprint", {}) or {})
+        for item in story_blueprint.get("chapter_briefs", []):
             if str(item.get("chapter_id", "")) == chapter_id:
-                return ChapterPlan.model_validate(item)
+                brief = ChapterBrief.model_validate(item)
+                return {
+                    "chapter_id": brief.chapter_id,
+                    "title": brief.title,
+                    "summary": brief.summary,
+                    "chapter_type": brief.chapter_type,
+                    "active_lines": brief.active_lines,
+                    "active_twists": brief.active_twists,
+                    "reader_emotion": brief.reader_emotion,
+                    "reader_belief": brief.reader_belief,
+                    "world_limit": brief.world_limit,
+                    "relationship_reprice": brief.relationship_reprice,
+                    "emotional_turn": brief.emotional_turn,
+                    "scene_engine": brief.scene_engine,
+                    "small_payoff": brief.small_payoff,
+                    "ending_pull": brief.ending_pull,
+                    "info_budget": brief.info_budget,
+                }
         return None
 
     @staticmethod

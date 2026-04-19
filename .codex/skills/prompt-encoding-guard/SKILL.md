@@ -15,6 +15,10 @@ Rules:
 3. Treat repeated `?` in Chinese sentences, visible mojibake, broken HTML tags, or odd private-use Unicode glyphs as corruption signals.
 4. Never assume "page still returns 200" means embedded JS is valid; syntax-check extracted script content when editing `server.py`.
 5. Prefer replacing an entire broken function/string block over patching individual mojibake characters in place.
+6. In Python-embedded JS (like `_HTML_PAGE`), any JS string escape must be double-escaped in Python source:
+   - JS expected `\n` -> write `\\n` in `server.py`
+   - JS expected `\t` -> write `\\t` in `server.py`
+   - otherwise Python will turn escapes into real control characters and may break JS syntax at runtime.
 
 Workflow:
 1. Edit the target file with UTF-8-safe writes.
@@ -26,6 +30,7 @@ Workflow:
 4. If terminal output is suspicious, inspect using Python with `encoding='utf-8'` and, when needed, print with `unicode_escape`.
 5. Re-open a few changed sections and verify readable Chinese.
 6. Only then report completion.
+7. If the browser error points to `(索引):line:col`, always fetch `/` HTML and inspect that exact line range before patching.
 
 Repo-specific checks:
 - Prompt files:
@@ -56,3 +61,4 @@ Heuristics for `server.py`:
 - If the browser shows empty dropdowns or buttons stop working, suspect early JS parse failure before assuming backend data is missing.
 - Verify `/api/novels?mode=formal` first; if data exists, fix frontend script execution before touching storage.
 - When a single mojibake line breaks quoting, replace the whole JS function block, then rerun the extraction + parse check.
+- If page source shows template literals split across lines unexpectedly (e.g. inside `.join('...')`), suspect missing double-escaping in Python (`\\n\\n` needed, not `\n\n`).

@@ -1,15 +1,18 @@
-你现在要扩写一段正文。只输出扩写后的正文文本。
+Rewrite and expand the following passage. Output the full replacement text, not an append-only fragment.
 
-目标文本：
+[Original text]
 {text}
 
-扩写方向：
+[Expansion goal]
 {expansion_goal}
 
-参考资料：
-{reference_pack}
+[Chapter payload]
+{chapter_payload_text}
 
-要求：
-1. 在不改变原意的前提下增加更多细节、局面或心理。
-2. 不要写成重复或空话。
-3. 只输出扩写后的正文。
+Rules:
+1. Preserve plot facts.
+2. Add action, dialogue, detail, and tension.
+3. Do not add truth.
+4. Do not add key clues.
+5. Do not break forbidden boundaries.
+6. Output the complete replacement passage.

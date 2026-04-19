@@ -1,0 +1,40 @@
+Write one fiction scene. Output scene prose only.
+
+[Completed chapter memory]
+{completed_chapter_memory_text}
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Relevant world rules]
+{relevant_world_rules_text}
+
+[Scene character context]
+{scene_character_context_text}
+
+[Relationship state]
+{relationship_state_text}
+
+[Scene card]
+{scene_card_text}
+
+[Previous scene tail]
+{previous_scene_tail}
+
+[Current chapter draft tail]
+{current_chapter_draft_tail}
+
+[Style card]
+{style_card_text}
+
+Rules:
+1. Respect completed chapter memory, previous scene tail, and current chapter draft tail.
+2. Write only allowed information. Never break forbidden boundaries.
+3. Obey world limits and power structure.
+4. Do not expose masked hidden motives.
+5. Allowed clues may raise questions but must not explain truth.
+6. Do not use exposition blocks for setting. Use action, address terms, ritual pressure, object handling, and conflict.
+7. Complete the scene exit_state.
+8. Any backstory must be triggered by current action, object, speech, scar, rule, or choice.
+9. No parachuted key clues such as ledgers, letters, witnesses, archives, tokens, or testimony.
+10. Dialogue must contain probing, concealment, misunderstanding, threat, etiquette pressure, or unspoken feeling.

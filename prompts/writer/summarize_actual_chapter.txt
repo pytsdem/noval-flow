@@ -1,0 +1,36 @@
+Summarize what actually happened in the chapter. Output JSON only.
+
+[Chapter text]
+{chapter_text}
+
+[Chapter brief JSON]
+{chapter_brief_json}
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Active twists JSON]
+{active_twists_json}
+
+[Story lines JSON]
+{story_lines_json}
+
+Output format:
+{{
+  "chapter_id": "ch_001",
+  "actual_events": ["event 1"],
+  "reader_now_knows": ["fact 1"],
+  "reader_now_believes": ["belief 1"],
+  "open_questions": ["question 1"],
+  "character_states": ["state 1"],
+  "relationship_state": ["relationship state 1"],
+  "seeded_clues": ["clue 1"],
+  "locked_truths": ["truth still locked 1"]
+}}
+
+Rules:
+1. Summarize only what the prose actually wrote.
+2. Do not include planned-but-unwritten content.
+3. seeded_clues are present but unexplained clues.
+4. locked_truths are major truths still hidden.
+5. reader_now_believes should preserve current reader misreading when relevant.

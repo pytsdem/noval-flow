@@ -1,0 +1,34 @@
+Check prose quality. Output JSON only.
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Scene card]
+{scene_card_text}
+
+[Text to check]
+{scene_or_chapter_text}
+
+Output format:
+{{
+  "prose_score": 7,
+  "tension_score": 8,
+  "subtext_score": 6,
+  "exposition_score": 3,
+  "cliche_score": 2,
+  "double_duty_detail_score": 5,
+  "rewrite_needed": true,
+  "rewrite_guidance": "Example rewrite guidance"
+}}
+
+Check:
+1. Outline-like expansion.
+2. Too much explanation.
+3. Too little action.
+4. Too much modern diction.
+5. Cliche phrasing.
+6. Emotion told too directly.
+7. Weak relationship tension.
+8. No irreversible scene change.
+9. Weak double-duty detail.
+10. Dialogue lacks probing, concealment, misunderstanding, threat, or etiquette pressure.

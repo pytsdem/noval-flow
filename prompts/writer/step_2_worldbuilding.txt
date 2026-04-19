@@ -1,0 +1,43 @@
+你现在要生成“第2步：背景系+世界观”。不要写正文，不要输出 Markdown，只输出合法 JSON。
+
+用户需求：
+{research_query}
+
+规划上下文 JSON：
+{planning_context_json}
+
+参考资料：
+{reference_pack}
+
+输出顶层必须包含：
+- story_blueprint
+
+story_blueprint 只允许包含：
+- story_engine
+
+story_engine 必须包含：
+- engine_sentence
+- default_track
+- world_rules
+- power_structure
+- world_map
+- structural_inertia
+- rebound_mechanism
+- story_trigger
+- objective_conditions
+
+硬性要求：
+1. 原始需求是硬约束，后续细化不能偏离题材、人物根问题和核心情绪。
+2. 必须优先读取 `planning_context_json.previous_step_outputs` 的前序完整产物，并与前序结果保持一致，不得覆盖或重写已确定结论。
+3. 这一步只负责解释世界如何运行、结构如何筛人、偏离会遭遇什么反弹。
+4. `default_track` 写世界默认奖励什么、惩罚什么。
+5. `world_rules` 写故事真正会用到的世界规则，不要写摆设设定。
+6. `power_structure` 写权力如何流动、谁有决定权、谁承担成本。
+7. `world_map` 写这个世界里最重要的地方版图：有哪些主要区域、城市、势力据点；它们当前是什么状态；谁在主导此地；此地的机会、资源、风险分别是什么；主角们当前在什么地方、后续可以去哪些地方开展事业。
+8. `structural_inertia` 写为什么结构难以改变。
+9. `rebound_mechanism` 写角色偏离轨道后会遭遇什么系统性反弹。
+10. `story_trigger` 写故事为何在这个时点被引爆。
+11. `objective_conditions` 写客观条件与机会结构如何限制或塑造人物。
+12. `world_map` 重点服务后续角色行动与事业展开，不要只写地名列表，要写“此地能做什么、为什么重要、谁卡着门”。
+13. 不要生成角色卡、关系网、事件时间线、反转、故事线、章节信息。
+14. 只输出 JSON。
