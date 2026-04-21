@@ -26,15 +26,15 @@ class FormatAdjustmentSuggestionTool(LLMChapterTool):
             adjusted.extend(normalized_parts)
             if len(normalized_parts) > 1:
                 if len(cleaned) > 180:
-                    format_issues.append("Split one overlong paragraph without changing story facts.")
+                    format_issues.append("Split one paragraph over 180 Chinese characters at a dialogue, action, or reaction boundary when possible.")
                 else:
-                    format_issues.append("Separated a dense paragraph to keep dialogue and action readable.")
+                    format_issues.append("Separated a dense paragraph to keep dialogue or reaction beats readable without changing plot facts.")
             elif len(cleaned) > 180:
                 format_issues.append("One paragraph still looks long after conservative formatting.")
 
         final_text = "\n\n".join(adjusted).strip()
         if final_text != raw:
-            format_issues.append("Normalized blank lines and preserved readable paragraph rhythm.")
+            format_issues.append("Normalized blank lines while preserving short-paragraph rhythm and emotional pacing.")
         return FormatAdjustmentPayload.model_validate(
             {
                 "text": final_text,
@@ -86,21 +86,51 @@ class FormatAdjustmentSuggestionTool(LLMChapterTool):
     @classmethod
     def _split_long_paragraph(cls, paragraph: str) -> list[str]:
         parts: list[str] = []
-        current = ""
-        for char in paragraph:
-            current += char
-            if len(current) >= 90 and char in SPLIT_PUNCTUATION:
-                parts.append(current.strip())
-                current = ""
-                continue
-            if len(current) >= 120 and char in SOFT_SPLIT_PUNCTUATION:
-                parts.append(current.strip())
-                current = ""
-        if current.strip():
-            parts.append(current.strip())
+        remaining = paragraph.strip()
+        while remaining:
+            if len(remaining) <= 180:
+                parts.append(remaining)
+                break
+            split_index = cls._choose_split_index(remaining)
+            if split_index <= 0 or split_index >= len(remaining):
+                midpoint = len(remaining) // 2
+                left = remaining[:midpoint].strip()
+                right = remaining[midpoint:].strip()
+                parts.extend(item for item in [left, right] if item)
+                break
+            head = remaining[:split_index].strip()
+            remaining = remaining[split_index:].strip()
+            if head:
+                parts.append(head)
         if len(parts) <= 1:
             midpoint = len(paragraph) // 2
             left = paragraph[:midpoint].strip()
             right = paragraph[midpoint:].strip()
             return [item for item in [left, right] if item]
         return parts
+
+    @classmethod
+    def _choose_split_index(cls, paragraph: str) -> int:
+        preferred_min = 60
+        preferred_max = 120
+        fallback_max = 160
+        candidates: list[tuple[int, int]] = []
+        for index, char in enumerate(paragraph):
+            cut = index + 1
+            if cut < preferred_min:
+                continue
+            if char in DIALOGUE_CLOSERS and paragraph[cut:].strip():
+                candidates.append((0, cut))
+            elif char in SPLIT_PUNCTUATION:
+                candidates.append((1, cut))
+            elif char in SOFT_SPLIT_PUNCTUATION:
+                candidates.append((2, cut))
+        for priority in (0, 1, 2):
+            preferred = [cut for score, cut in candidates if score == priority and preferred_min <= cut <= preferred_max]
+            if preferred:
+                return preferred[-1]
+        for priority in (0, 1, 2):
+            fallback = [cut for score, cut in candidates if score == priority and preferred_min <= cut <= fallback_max]
+            if fallback:
+                return fallback[-1]
+        return 0

@@ -18,6 +18,21 @@
 前置步骤产出（仅步骤1-7）JSON：
 {step_1_to_7_outputs_json}
 
+[Chapter payload]
+{chapter_payload_text}
+
+[Timeline anchor facts]
+{timeline_anchor_facts_text}
+
+[Scene character context]
+{scene_character_context_text}
+
+[Relationship state]
+{relationship_state_text}
+
+[Style card]
+{style_card_text}
+
 上一章原文（全文）：
 {previous_chapter_full_text}
 

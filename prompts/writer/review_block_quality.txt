@@ -21,6 +21,39 @@ Review whether this content block works as a live fiction unit. Output JSON only
 [Committed chapter tail before this block]
 {prior_chapter_text_tail}
 
+【当前章节已写内容块】
+{current_chapter_written_blocks_json}
+
+【当前章节已写正文末尾】
+{current_chapter_draft_tail}
+
+【本块人物反应目标】
+{human_reaction_target}
+
+【本块代价变化】
+{cost_shift}
+
+【本块读者感受目标】
+{reader_feeling_target}
+
+【本块段落预算】
+{paragraph_budget}
+
+【本块段落形状】
+{paragraph_shape}
+
+【本块角色锚句】
+{character_anchor_line}
+
+【本块风格避坑】
+{style_risk_guard}
+
+【本块线索露出机制（如有）】
+{clue_reveal_mechanism}
+
+【本块人物再出场方式（如有）】
+{character_reentry_mode}
+
 [Block draft]
 {block_text}
 
@@ -36,7 +69,7 @@ Output format:
   "paragraphs_readable": true,
   "issues": [
     {{
-      "category": "block_flat",
+      "category": "paragraph_too_long",
       "severity": "medium",
       "evidence": "Concrete evidence in Simplified Chinese.",
       "reason": "Why this weakens the block in Simplified Chinese.",
@@ -52,27 +85,55 @@ Check only these things:
 3. Check whether it realizes the `human_reaction_target` with something specifically human on the page.
 4. Check whether the `cost_shift` actually lands.
 5. Check whether the intended `reader_feeling_target` can be felt from the block.
-6. Check whether any paragraphs are too long for front-end reading, or ignore the stated `paragraph_budget`.
-7. Check whether the block violates `style_risk_guard`.
-8. Check whether emotion is too directly stated instead of externalized through action, pause, body, object, or consequence.
-9. If `clue_reveal_mechanism` exists, check whether the clue appears naturally rather than as an author-arranged drop.
-10. If `character_reentry_mode` exists, check whether the re-entry feels natural instead of re-explaining identity.
+6. Check whether any paragraph is over 180 Chinese characters.
+7. Check whether any paragraph carries too many functions at once.
+8. Check whether dialogue that should stand alone is buried inside a dense paragraph.
+9. Check whether an important side-character reaction that should stand alone is buried inside a dense paragraph.
+10. Check whether the block violates chapter-internal continuity and reads like a restart instead of a continuation.
+11. Check whether the block violates `style_risk_guard`.
+12. Check whether emotion is too directly stated instead of externalized through action, pause, body, object, or consequence.
+13. Check whether the block contains a character anchor line.
+14. Check whether the anchor line is merely functional instead of also revealing character.
+15. Check whether the anchor line is immediately over-explained by following narration.
+16. Check whether the anchor line is memorable enough to help the character stand up on the page.
+17. If `clue_reveal_mechanism` exists, check whether the clue appears naturally rather than as an author-arranged drop.
+18. If `character_reentry_mode` exists, check whether the re-entry feels natural instead of re-explaining identity.
+
+Required issue categories:
+- `paragraph_too_long`
+- `paragraph_function_overloaded`
+- `dialogue_not_separated`
+- `side_reaction_not_separated`
+- `continuity_restart`
+- `missing_human_reaction_target`
+- `missing_cost_shift`
+- `weak_reader_feeling_target`
+- `missing_character_anchor_line`
+- `anchor_line_too_functional`
+- `anchor_line_overexplained`
+- `anchor_line_not_memorable`
+- `forced_clue_drop`
+- `flat_character_reentry`
+
+Optional categories when needed:
+- `scene_goal`
+- `outline_prose`
+- `style_risk_violation`
+
+Trigger rule:
+- If one paragraph contains 3 or more of these functions at once, flag `paragraph_function_overloaded`:
+  `main action / inner reaction / side-character reaction / explanation / world-rule reminder / clue / object emphasis`
 
 Evidence rules:
 1. Never say only "flat", "weak", "not human enough", or "hook is weak".
 2. Every issue must include:
-   - `evidence`: a concrete beat, sentence pattern, paragraph problem, or an important missing beat
+   - `evidence`: a concrete beat, paragraph problem, or an important missing beat
    - `reason`: why that evidence hurts the block
    - `fix`: how to fix this block without rewriting the whole chapter
-3. Prefer 0 to 3 issues. Keep the review light and local.
-4. Good categories include:
-   - `scene_goal`
-   - `block_flat`
-   - `outline_prose`
-   - `human_reaction_missing`
-   - `cost_shift_missing`
-   - `reader_feeling_missing`
-   - `paragraph_overlong`
-   - `style_risk_violation`
-   - `clue_reveal_forced`
-   - `character_reentry_forced`
+3. Prefer 0 to 4 issues. Keep the review light and local.
+4. Evidence should mention paragraph position or concrete content whenever possible.
+5. Anchor-line fixes should prefer:
+   - 增加一句短而锋利的角色锚句
+   - 把功能句改成“表层功能 + 深层揭示人物”的句子
+   - 删掉锚句后立刻跟着的解释性旁白
+   - 用配角反应或停顿来托住锚句

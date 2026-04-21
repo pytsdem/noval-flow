@@ -21,8 +21,47 @@ Write one chapter content block. Output prose only in Simplified Chinese.
 [Earlier committed block summary]
 {prior_block_summary_text}
 
-[Current chapter text tail]
+[Current chapter text tail before this block]
 {prior_chapter_text_tail}
+
+【当前章节已写内容块】
+{current_chapter_written_blocks_json}
+
+【当前章节已写正文末尾】
+{current_chapter_draft_tail}
+
+【本块人物反应目标】
+{human_reaction_target}
+
+【本块代价变化】
+{cost_shift}
+
+【本块读者感受目标】
+{reader_feeling_target}
+
+【本块段落预算】
+{paragraph_budget}
+
+【本块局部转折类型】
+{turn_type}
+
+【本块微钩子】
+{micro_hook}
+
+【本块段落形状】
+{paragraph_shape}
+
+【本块角色锚句】
+{character_anchor_line}
+
+【本块风格避坑】
+{style_risk_guard}
+
+【本块线索露出机制（如有）】
+{clue_reveal_mechanism}
+
+【本块人物再出场方式（如有）】
+{character_reentry_mode}
 
 [Style card]
 {style_card_text}
@@ -36,6 +75,45 @@ Priority order:
 3. Third: make the `cost_shift` land.
 4. Fourth: leave the requested `reader_feeling_target`.
 5. Last: polish atmosphere and style.
+
+CHAPTER-INTERNAL CONTINUITY RULES:
+1. This block must continue naturally from the already written blocks of the current chapter.
+2. Do not restart the chapter tone, scene position, or conflict.
+3. Do not repeat information, actions, or reactions that already appeared in the current chapter unless repetition is dramatically intentional.
+4. Respect the previous block's `end_state` as the starting condition of this block.
+5. Maintain continuity of:
+   - character position
+   - emotional temperature
+   - naming / titles
+   - objects already in hand
+   - unfinished gestures or interrupted actions
+6. 中文补充：
+   - 这一块必须承接本章已写 blocks，不得写得像重新开场。
+   - 不要重复前面已经出现过的动作、反应、线索、物件，除非这种重复本身有戏剧目的。
+   - 必须把上一块的 `end_state` 当作当前块的起点。
+   - 必须保持人物位置、情绪温度、称谓、手中物件、未完成动作的连续性。
+
+PARAGRAPH RULES:
+1. One paragraph should focus on only one dominant action, one dominant reaction, or one dominant observation.
+2. Do not stack movement, psychology, explanation, and side-character reactions into a single paragraph.
+3. Keep each paragraph usually between 30 and 120 Chinese characters.
+4. Any paragraph over 180 Chinese characters is considered too long and should be split.
+5. Dialogue should usually stand as its own paragraph.
+6. Important side-character reactions should usually stand as their own paragraph.
+7. Short emotional leakage sentences, short movement sentences, and title/calling-name moments should often stand alone.
+8. If one paragraph contains `main action + side-character reaction + world explanation`, it must be split into at least two paragraphs.
+9. Chinese web-fiction readability is more important than dense literary compression.
+10. Prefer more short visual paragraphs over fewer dense explanatory paragraphs.
+11. 中文补充：
+   - 一个自然段只写一个主动作、一个主反应，或一个主观察。
+   - 不要把动作、心理、解释、配角反应全塞进同一段。
+   - 单个自然段尽量控制在 30~120 中文字。
+   - 超过 180 中文字的自然段视为过长，必须主动拆段。
+   - 对话尽量单独成段。
+   - 配角的重要反应尽量单独成段。
+   - 强情绪句、短动作句、称谓变化句优先单独成段。
+   - 如果一段里同时出现“人物动作 + 他人反应 + 作者解释”，必须拆段。
+   - 场面可读性优先，不要为了“文气”把段落压得太满。
 
 HUMANITY RULES:
 1. Strong feelings must be tied to a concrete life cost, bodily reaction, or self-judgment.
@@ -52,7 +130,7 @@ HUMANITY RULES:
 NATURAL CLUE REVEAL RULES:
 1. Important clues should not appear as author-arranged information drops.
 2. Prefer revealing clues through a chain of pressure:
-   relationship pressure -> avoidance -> bodily slip or object accident -> another person intervenes or notices -> the clue becomes visible.
+   relationship pressure -> avoidance -> bodily slip / object accident -> another person intervenes -> clue becomes visible.
 3. If a clue is emotionally painful, the character should try not to explain it directly.
 4. Another person noticing the clue first is often better than the character deliberately presenting it.
 5. After the clue appears, do not immediately over-explain its full meaning.
@@ -61,12 +139,28 @@ CHARACTER REENTRY RULES:
 1. If a character has already been established earlier, do not re-introduce their identity with explanatory narration.
 2. Re-entry should rely on recognition signals:
    - familiar subordinates
-   - familiar objects or symbols
+   - familiar objects / symbols
    - familiar power arrangements
    - familiar tone of voice
    - a single high-value line
 3. The first line or first reaction of the returning character should reveal what they currently care about most.
 4. For powerful characters, prefer showing emotion through order, restraint, cold questions, or controlled reactions rather than direct confession.
+
+CHARACTER ANCHOR LINE RULES:
+1. Each block should contain one character anchor line.
+2. It may be dialogue, inner thought, narrative judgment, or reaction line.
+3. It should do two things at once:
+   - serve the scene on the surface,
+   - reveal something deep and specific about the character underneath.
+4. Prefer short, sharp, memorable lines over long explanatory ones.
+5. Do not explain the meaning of the anchor line immediately after it appears.
+6. Use surrounding pause, side-character reaction, or atmosphere to carry its weight.
+7. 中文补充：
+   - 每个内容块里尽量有一句角色锚句，让角色真正立住。
+   - 锚句不一定是台词，也可以是心理活动、贴近人物视角的判断、动作里的文字感。
+   - 锚句不能只是推进剧情，必须揭示人物。
+   - 锚句要短、准、留余味。
+   - 锚句出现后，不要马上解释它，让停顿、反应、气氛托住它。
 
 Rules:
 1. Write only the current block, not the whole chapter.
@@ -77,14 +171,13 @@ Rules:
 6. Treat the block as a content unit, not a single paragraph.
 7. If `clue_reveal_mechanism` exists, follow it naturally on the page rather than turning it into explanation.
 8. If `character_reentry_mode` exists, use its recognition signals and avoid identity recap.
-9. Keep front-end reading comfortable:
-   - Follow the block's `paragraph_budget`.
-   - Usually keep one paragraph around 30 to 120 Chinese characters.
-   - Treat paragraphs over 180 Chinese characters as risky and usually split them.
-   - Dialogue, short action, and emotional leakage lines may stand alone.
-   - Do not stack long internal monologue without action, object, reaction, or consequence.
-10. Avoid outline-like summary prose. Let the block unfold through action, perception, speech, silence, object handling, interruption, and consequence.
-11. If exposition is necessary, break it into short action + reaction + explanation beats.
-12. Do not let a character act while delivering a long strategic recap.
-13. Do not let a role become the author's plot explainer.
-14. Keep the prose in natural Simplified Chinese.
+9. Let `turn_type` determine the local movement of this block, so the block contains a real shift rather than static continuation.
+10. Let the ending beat hand off naturally into `micro_hook`, so the reader has a local reason to keep moving.
+11. Make the `character_anchor_line` land clearly inside the block, but do not force it to become a slogan.
+12. If pretty language conflicts with the anchor line, prioritize the anchor line.
+13. Follow the block's `paragraph_budget` and `paragraph_shape`, but keep the prose natural rather than schematic.
+14. Avoid outline-like summary prose. Let the block unfold through action, perception, speech, silence, object handling, interruption, and consequence.
+15. If exposition is necessary, break it into short action + reaction + explanation beats.
+16. Do not let a character act while delivering a long strategic recap.
+17. Do not let a role become the author's plot explainer.
+18. Keep the prose in natural Simplified Chinese.

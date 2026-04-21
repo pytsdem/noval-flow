@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from dataclasses import replace
 from datetime import datetime, timezone
 import json
 from typing import Any
@@ -80,6 +81,12 @@ class WriterAgent(BaseAgent):
                 "style": effective_style,
                 "style_request": style_request,
                 "query": source_query,
+                "user_topic": "",
+                "assistant_persona_prompt": "",
+                "total_word_target": "",
+                "chapter_count_target": "",
+                "chapter_word_target": "",
+                "pace_notes": "",
                 "blueprint_id": blueprint.blueprint_id,
                 "next_chapter_index": 0,
                 "completed_chapter_ids": [],
@@ -97,18 +104,22 @@ class WriterAgent(BaseAgent):
     def write_next_chapter(
         self,
         book: BookDocument,
-        reference_pack: str = "暂无额外参考资料。",
+        reference_pack: str = "No extra reference material.",
         *,
         runtime_store: Any | None = None,
         run_id: str | None = None,
     ) -> tuple[BookDocument, Chapter]:
-        del reference_pack
         chapter_briefs = self._chapter_briefs_from_book(book)
         next_index = int(book.metadata.get("next_chapter_index", 0))
         if next_index >= len(chapter_briefs):
             raise ValueError("没有可继续生成的章节。")
         chapter_brief = chapter_briefs[next_index]
-        writer_context = self._writer_context_for_chapter(book, chapter_brief.chapter_id, strict_for_chapter_loop=True)
+        writer_context = self._writer_context_for_chapter(
+            book,
+            chapter_brief.chapter_id,
+            strict_for_chapter_loop=True,
+            reference_pack=reference_pack,
+        )
         actual_summaries = self._actual_summaries_from_book(book)
         def _persist_committed_block(block: ContentBlock) -> None:
             if runtime_store is None or not run_id:
@@ -152,11 +163,16 @@ class WriterAgent(BaseAgent):
             on_block_committed=_persist_committed_block,
             on_chapter_preview_updated=_persist_chapter_preview,
         )
+        scene = (
+            self._chapter_scene_from_content_blocks(chapter_id=chapter_brief.chapter_id, blocks=execution.content_blocks)
+            if any(str(item.text or "").strip() for item in execution.content_blocks)
+            else self._chapter_scene_from_text(chapter_id=chapter_brief.chapter_id, text=execution.chapter_text)
+        )
         chapter = Chapter(
             id=chapter_brief.chapter_id,
             title=chapter_brief.title,
             summary=chapter_brief.summary,
-            scenes=[self._chapter_scene_from_content_blocks(chapter_id=chapter_brief.chapter_id, blocks=execution.content_blocks)],
+            scenes=[scene],
             content_blocks=execution.content_blocks,
             final_text=execution.chapter_text,
             final_version=1,
@@ -189,6 +205,10 @@ class WriterAgent(BaseAgent):
             "scene_character_context_text": writer_context.scene_character_context_text,
             "relationship_state_text": writer_context.relationship_state_text,
             "style_card_text": writer_context.style_card_text,
+            "assistant_persona_prompt": getattr(writer_context, "assistant_persona_prompt", ""),
+            "writing_requirements_json": getattr(writer_context, "writing_requirements_json", "{}"),
+            "previous_chapter_full_text": getattr(writer_context, "previous_chapter_full_text", ""),
+            "reference_pack": getattr(writer_context, "reference_pack", ""),
         }
         critic_report = self._aggregate_loop_critic_report(
             book_id=book.id,
@@ -219,7 +239,7 @@ class WriterAgent(BaseAgent):
         book: BookDocument,
         block_id: str,
         guidance: str,
-        reference_pack: str = "暂无额外参考资料。",
+        reference_pack: str = "No extra reference material.",
     ) -> BookDocument:
         del reference_pack
         block, chapter, _ = self._locate_block(book, block_id)
@@ -343,6 +363,7 @@ class WriterAgent(BaseAgent):
         *,
         strict_for_chapter_loop: bool = False,
         sanitize_for_prose: bool = True,
+        reference_pack: str = "暂无额外参考资料。",
     ) -> WriterContext:
         chapter_brief = next((item for item in self._chapter_briefs_from_book(book) if item.chapter_id == chapter_id), None)
         if chapter_brief is None:
@@ -358,7 +379,7 @@ class WriterAgent(BaseAgent):
             if coverage_issues:
                 detail = "；".join(coverage_issues)
                 raise ValueError(f"{UPGRADE_ERROR} 缺失信息：{detail}")
-        return ChapterContextAssembler.build(
+        context = ChapterContextAssembler.build(
             chapter_brief=chapter_brief,
             premise=book.premise,
             twist_designs=self._twists_from_book(book),
@@ -370,6 +391,41 @@ class WriterAgent(BaseAgent):
             current_chapter_id=chapter_id,
             context_sanitizer=self.context_sanitizer if sanitize_for_prose else None,
         )
+        return replace(
+            context,
+            assistant_persona_prompt=str(book.metadata.get("assistant_persona_prompt") or "").strip(),
+            writing_requirements_json=json.dumps(self._writing_requirements_payload(book), ensure_ascii=False, indent=2),
+            completed_chapter_summary_bundle=context.completed_chapter_memory_text,
+            previous_chapter_full_text=self._previous_chapter_full_text(book=book, chapter_id=chapter_id),
+            reference_pack=str(reference_pack or "No extra reference material."),
+        )
+
+    @staticmethod
+    def _writing_requirements_payload(book: BookDocument) -> dict[str, Any]:
+        metadata = dict(book.metadata or {})
+        return {
+            "query": str(metadata.get("query") or "").strip(),
+            "user_topic": str(metadata.get("user_topic") or "").strip(),
+            "style_request": str(metadata.get("style_request") or "").strip(),
+            "assistant_persona_prompt": str(metadata.get("assistant_persona_prompt") or "").strip(),
+            "total_word_target": str(metadata.get("total_word_target") or "").strip(),
+            "chapter_count_target": str(metadata.get("chapter_count_target") or "").strip(),
+            "chapter_word_target": str(metadata.get("chapter_word_target") or "").strip(),
+            "pace_notes": str(metadata.get("pace_notes") or "").strip(),
+            "target_words": metadata.get("target_words"),
+        }
+
+    def _previous_chapter_full_text(self, *, book: BookDocument, chapter_id: str) -> str:
+        chapter_briefs = self._chapter_briefs_from_book(book)
+        target_index = next((index for index, item in enumerate(chapter_briefs) if item.chapter_id == chapter_id), -1)
+        if target_index <= 0:
+            return ""
+        previous_chapter_id = chapter_briefs[target_index - 1].chapter_id
+        for volume in book.volumes:
+            for chapter in volume.chapters:
+                if chapter.id == previous_chapter_id:
+                    return self._chapter_full_text(chapter)
+        return ""
 
     def _make_scene_plan(self, *, writer_context: WriterContext, chapter_brief: ChapterBrief) -> ScenePlan:
         payload = safe_json_generate(
@@ -766,7 +822,13 @@ class WriterAgent(BaseAgent):
                     "cost_shift": block.cost_shift,
                     "reader_feeling_target": block.reader_feeling_target,
                     "paragraph_budget": block.paragraph_budget,
+                    "micro_hook": block.micro_hook,
+                    "turn_type": block.turn_type,
+                    "paragraph_shape": list(block.paragraph_shape),
+                    "character_anchor_line": block.character_anchor_line.model_dump(mode="json") if block.character_anchor_line else None,
                     "style_risk_guard": list(block.style_risk_guard),
+                    "character_reentry_mode": block.character_reentry_mode.model_dump(mode="json") if block.character_reentry_mode else None,
+                    "clue_reveal_mechanism": block.clue_reveal_mechanism.model_dump(mode="json") if block.clue_reveal_mechanism else None,
                     "status": block.status,
                     "version": block.version,
                 },

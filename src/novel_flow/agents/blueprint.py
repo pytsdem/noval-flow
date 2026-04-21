@@ -1066,6 +1066,14 @@ class BlueprintAgent(BaseAgent):
             reentry_focus = item.get("character_reentry_focus", {})
             if not isinstance(reentry_focus, dict):
                 reentry_focus = {}
+            clue_reveal_mechanism = item.get("clue_reveal_mechanism", {})
+            if not isinstance(clue_reveal_mechanism, dict):
+                clue_reveal_mechanism = {}
+            else:
+                clue_reveal_mechanism = dict(clue_reveal_mechanism)
+            legacy_style = cls._ensure_text(item.get("clue_reveal_style"))
+            if legacy_style and not cls._ensure_text(clue_reveal_mechanism.get("style")):
+                clue_reveal_mechanism["style"] = legacy_style
             normalized.append(
                 {
                     "chapter_id": cls._ensure_text(item.get("chapter_id") or f"ch_{index:03d}"),
@@ -1090,13 +1098,20 @@ class BlueprintAgent(BaseAgent):
                     "emotional_turn": cls._ensure_text(item.get("emotional_turn")),
                     "backstory_trigger": cls._ensure_text(item.get("backstory_trigger")),
                     "scene_engine": cls._ensure_text(item.get("scene_engine") or "opening_pressure"),
-                    "clue_reveal_style": cls._ensure_text(item.get("clue_reveal_style")),
+                    "clue_reveal_mechanism": {
+                        "style": cls._ensure_text(clue_reveal_mechanism.get("style")),
+                        "pressure_source": cls._ensure_text(clue_reveal_mechanism.get("pressure_source")),
+                        "surface_trigger": cls._ensure_text(clue_reveal_mechanism.get("surface_trigger")),
+                        "first_noticer": cls._ensure_text(clue_reveal_mechanism.get("first_noticer")),
+                        "owner_reaction": cls._ensure_text(clue_reveal_mechanism.get("owner_reaction")),
+                    },
                     "character_reentry_focus": {
                         cls._ensure_text(key): cls._ensure_text(value)
                         for key, value in reentry_focus.items()
                         if cls._ensure_text(key) and cls._ensure_text(value)
                     },
                     "human_pain_anchor": cls._ensure_text(item.get("human_pain_anchor")),
+                    "romance_seed": cls._ensure_text(item.get("romance_seed")),
                     "small_payoff": cls._ensure_text(item.get("small_payoff")),
                     "ending_pull": cls._ensure_text(item.get("ending_pull")),
                     "info_budget": cls._ensure_text(item.get("info_budget")),

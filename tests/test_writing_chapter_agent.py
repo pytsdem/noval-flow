@@ -20,6 +20,7 @@ from novel_flow.models.schemas import (
     StoryPremise,
     TwistDesign,
 )
+from novel_flow.services.chapter_context import build_current_chapter_context
 from novel_flow.services.patcher import PatchExecutor
 from novel_flow.services.skill_manager import SkillManager
 from novel_flow.services.skill_registry import SkillRegistry
@@ -150,7 +151,7 @@ class WritingChapterAgentTests(unittest.TestCase):
         )
 
     def _planned_blocks_json(self) -> str:
-        paragraph_budget = "Use 2-4 natural paragraphs, usually 30-120 Chinese characters each, with 180 as a danger line."
+        paragraph_budget = "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长"
         blocks = [
             {
                 "block_id": "ch_002.sc_001.b001",
@@ -172,6 +173,26 @@ class WritingChapterAgentTests(unittest.TestCase):
                 "cost_shift": "He loses the chance to choose his own opening move.",
                 "reader_feeling_target": "Readers should feel the public pressure close around him immediately.",
                 "paragraph_budget": paragraph_budget,
+                "micro_hook": "He now has to answer the public pressure before he can reclaim the opening move.",
+                "turn_type": "pressure_rise",
+                "paragraph_shape": [
+                    "主动作",
+                    "配角反应",
+                    "人物细节/情绪泄露",
+                    "礼法或环境补压",
+                ],
+                "character_anchor_line": {
+                    "owner": "Hero",
+                    "form": "reaction_line",
+                    "surface_function": "Let the public pressure land in one short beat.",
+                    "hidden_function": "Show that he protects his own bearing before he explains anything.",
+                    "must_reveal_about_character": "He is still trying to hold dignity under pressure.",
+                    "must_not_do": [
+                        "Do not turn it into a slogan.",
+                        "Do not explain it immediately after it appears.",
+                    ],
+                    "preferred_shape": "短、准、能留余味",
+                },
                 "style_risk_guard": [
                     "Do not open with background summary.",
                     "Do not let the prose sound like an outline.",
@@ -208,6 +229,26 @@ class WritingChapterAgentTests(unittest.TestCase):
                 "cost_shift": "He must ask through the same court order that humiliates him.",
                 "reader_feeling_target": "Readers should feel that even progress comes with humiliation and constraint.",
                 "paragraph_budget": paragraph_budget,
+                "micro_hook": "The register can move the case, but asking for it exposes him further.",
+                "turn_type": "pressure_rise",
+                "paragraph_shape": [
+                    "主动作",
+                    "礼法或程序阻力",
+                    "配角反应",
+                    "代价落点",
+                ],
+                "character_anchor_line": {
+                    "owner": "Hero",
+                    "form": "dialogue",
+                    "surface_function": "Carry the negotiation through one short line.",
+                    "hidden_function": "Show his restraint and practical calculation.",
+                    "must_reveal_about_character": "He is already choosing controlled method over raw anger.",
+                    "must_not_do": [
+                        "Do not make it pure exposition.",
+                        "Do not let the next sentence unpack it completely.",
+                    ],
+                    "preferred_shape": "短、准、能留余味",
+                },
                 "style_risk_guard": [
                     "Do not explain why the register matters in abstract summary.",
                     "Do not let dialogue become pure information transfer.",
@@ -240,18 +281,37 @@ class WritingChapterAgentTests(unittest.TestCase):
                 "cost_shift": "The old case moves one step closer while their relationship becomes harder to read and harder to trust.",
                 "reader_feeling_target": "Readers should remember the pause and feel the relationship has become more dangerous.",
                 "paragraph_budget": paragraph_budget,
+                "micro_hook": "The pause becomes visible, but nobody in the room will explain it cleanly.",
+                "turn_type": "clue_shift",
+                "paragraph_shape": [
+                    "关系压力",
+                    "回避与失手",
+                    "他人先发现",
+                    "当事人回避解释",
+                ],
+                "character_anchor_line": {
+                    "owner": "Hero",
+                    "form": "narrative_judgment",
+                    "surface_function": "Mark the changed relationship pressure in one close judgment.",
+                    "hidden_function": "Reveal his mistrust and the way he reads her restraint as threat.",
+                    "must_reveal_about_character": "He is more prepared to believe danger than innocence.",
+                    "must_not_do": [
+                        "Do not turn it into omniscient summary.",
+                        "Do not explain the clue right after it lands.",
+                    ],
+                    "preferred_shape": "短、准、能留余味",
+                },
                 "style_risk_guard": [
                     "Do not explain the clue after showing it.",
                     "Do not summarize the relationship change in narrator voice.",
                 ],
                 "clue_reveal_mechanism": {
                     "clue": "She pauses at the old case term.",
+                    "style": "natural_exposure",
+                    "pressure_source": "He presses her in public where she cannot answer freely.",
                     "surface_trigger": "The old case title is spoken aloud in a formal setting.",
-                    "relationship_pressure": "He presses her in public where she cannot answer freely.",
-                    "body_or_object_failure": "Her breath and hand both catch for one beat.",
-                    "who_notices": "Hero",
-                    "who_avoids_explaining": "Heroine",
-                    "after_effect": "The room grows more suspicious without anyone naming the truth.",
+                    "first_noticer": "Hero",
+                    "owner_reaction": "Heroine avoids explaining and lets the room grow more suspicious.",
                 },
                 "text": "",
                 "status": "draft",
@@ -277,6 +337,26 @@ class WritingChapterAgentTests(unittest.TestCase):
                 "cost_shift": "He loses the first witness before the investigation can even begin.",
                 "reader_feeling_target": "Readers should feel the next step has become both urgent and harder.",
                 "paragraph_budget": paragraph_budget,
+                "micro_hook": "The case can still move, but only through a worse and narrower path.",
+                "turn_type": "false_relief",
+                "paragraph_shape": [
+                    "结果落地",
+                    "短反应",
+                    "额外代价",
+                    "尾钩或未竟动作",
+                ],
+                "character_anchor_line": {
+                    "owner": "Hero",
+                    "form": "inner_thought",
+                    "surface_function": "Pin the ending cost through one short internal beat.",
+                    "hidden_function": "Reveal what failure or loss hits him first.",
+                    "must_reveal_about_character": "He feels the case through personal cost before strategy.",
+                    "must_not_do": [
+                        "Do not write it like trailer copy.",
+                        "Do not explain the hook in the next sentence.",
+                    ],
+                    "preferred_shape": "短、准、能留余味",
+                },
                 "style_risk_guard": [
                     "Do not force a trailer-like ending sentence.",
                     "Do not flatten the final beat into explanation.",
@@ -445,19 +525,41 @@ class WritingChapterAgentTests(unittest.TestCase):
         self.assertIn("Instruction compliance did not pass.", result["blocking_reasons"])
         self.assertIn("Prose score is below 7.", result["blocking_reasons"])
 
+    def test_build_current_chapter_context_keeps_recent_blocks_and_tail(self) -> None:
+        blocks = [
+            ContentBlock(
+                block_id=f"ch_002.sc_001.b{index:03d}",
+                chapter_id="ch_002",
+                block_index=index,
+                purpose=f"Block {index}",
+                characters=["Hero"],
+                active_lines=[],
+                active_twists=[],
+                scene_goal=f"Goal {index}",
+                must_reveal=[],
+                must_hide=[],
+                emotional_tone="tight",
+                end_state=f"End {index}",
+                text=f"第{index}块正文。这里是连续内容{index}。",
+                status="committed",
+                version=1,
+            )
+            for index in range(1, 6)
+        ]
+
+        payload = build_current_chapter_context("ch_002", blocks, max_blocks=4, tail_chars=20)
+
+        self.assertEqual(len(payload["current_chapter_written_blocks_json"]), 4)
+        self.assertEqual(payload["current_chapter_written_blocks_json"][0]["block_id"], "ch_002.sc_001.b002")
+        self.assertEqual(payload["current_chapter_written_blocks_json"][-1]["block_id"], "ch_002.sc_001.b005")
+        self.assertTrue(payload["current_chapter_draft_tail"].endswith("第5块正文。这里是连续内容5。"))
+
     def test_writing_chapter_agent_happy_path(self) -> None:
         llm = RecordingSequenceLLM(
             [
                 self.sanitized_context_json,
                 self._planned_blocks_json(),
-                "Cold wind pressed against the vermilion steps. He bowed, but not low enough to forget himself. The order had arrived before his first breath settled.",
-                *self._block_review_pass_once(),
-                "The transfer register stayed tucked beneath the eunuch's sleeve. He asked for it in a level voice, as if the request cost him nothing at all.",
-                *self._block_review_pass_once(),
-                "When the old case title surfaced, she paused only once. That single hesitation tightened every gaze in the hall and turned restraint into suspicion.",
-                *self._block_review_pass_once(),
-                "He left with the legal opening in hand, but the courtyard had already changed its face. Before he reached the lower steps, he learned the first witness was dead.",
-                *self._block_review_pass_once(),
+                "Cold wind pressed against the vermilion steps. He bowed, but not low enough to forget himself. The order arrived before his first breath settled. The transfer register stayed tucked beneath the eunuch's sleeve, and when the old case title surfaced, she paused only once. By the time he reached the lower steps again, he already knew the first witness was dead.",
                 *self._chapter_review_pass_sequence(),
                 "Cold wind pressed against the vermilion steps. He bowed, counted the breaths between orders, and saw her pause only once at the old case title.",
                 json.dumps(
@@ -489,24 +591,20 @@ class WritingChapterAgentTests(unittest.TestCase):
         self.assertEqual(result.actual_chapter_summary.chapter_id, "ch_002")
         self.assertTrue(result.final_judge["passed"])
         self.assertIn("vermilion steps", result.chapter_text)
-        first_block_prompt = llm.calls[2][-1].content
-        self.assertNotIn(self.twist.truth, first_block_prompt)
-        self.assertIn(self.twist.false_belief, first_block_prompt)
-        self.assertIn("character_reentry_mode:", first_block_prompt)
+        full_chapter_prompt = llm.calls[2][-1].content
+        self.assertNotIn(self.twist.truth, full_chapter_prompt)
+        self.assertIn(self.twist.false_belief, full_chapter_prompt)
+        self.assertIn('"block_id": "ch_002.sc_001.b001"', full_chapter_prompt)
+        self.assertIn('"turn_type": "pressure_rise"', full_chapter_prompt)
+        self.assertIn('"micro_hook": "He now has to answer the public pressure before he can reclaim the opening move."', full_chapter_prompt)
+        self.assertIn('"character_reentry_mode"', full_chapter_prompt)
 
     def test_writing_chapter_agent_emits_live_stage_events(self) -> None:
         llm = RecordingSequenceLLM(
             [
                 self.sanitized_context_json,
                 self._planned_blocks_json(),
-                "Cold wind pressed against the vermilion steps. He bowed, but not low enough to forget himself. The order had arrived before his first breath settled.",
-                *self._block_review_pass_once(),
-                "The transfer register stayed tucked beneath the eunuch's sleeve. He asked for it in a level voice, as if the request cost him nothing at all.",
-                *self._block_review_pass_once(),
-                "When the old case title surfaced, she paused only once. That single hesitation tightened every gaze in the hall and turned restraint into suspicion.",
-                *self._block_review_pass_once(),
-                "He left with the legal opening in hand, but the courtyard had already changed its face. Before he reached the lower steps, he learned the first witness was dead.",
-                *self._block_review_pass_once(),
+                "Cold wind pressed against the vermilion steps. He bowed, but not low enough to forget himself. The order arrived before his first breath settled. The transfer register stayed tucked beneath the eunuch's sleeve, and when the old case title surfaced, she paused only once. Before he reached the lower steps, he learned the first witness was dead.",
                 *self._chapter_review_pass_sequence(),
                 "Cold wind pressed against the vermilion steps. He bowed, counted the breaths between orders, and saw her pause only once at the old case title.",
                 json.dumps(
@@ -539,7 +637,7 @@ class WritingChapterAgentTests(unittest.TestCase):
         stage_payloads = [call.kwargs for call in emit_mock.call_args_list if call.args and call.args[0] == "stage"]
         stage_names = [payload.get("stage") for payload in stage_payloads]
         self.assertIn("plan_content_blocks_start", stage_names)
-        self.assertIn("block_1_committed", stage_names)
+        self.assertIn("write_chapter_full_done", stage_names)
         self.assertIn("review_iteration_1_plan", stage_names)
         self.assertIn("review_iteration_1_tool_done", stage_names)
         self.assertIn("final_polish_done", stage_names)
@@ -554,14 +652,7 @@ class WritingChapterAgentTests(unittest.TestCase):
             [
                 self.sanitized_context_json,
                 self._planned_blocks_json(),
-                "He returned in silence, but the hall refused him even that small mercy. Every eye counted what he no longer had.",
-                *self._block_review_pass_once(),
-                "The clerk would not touch the register until the eunuch nodded. He understood then that even procedure had become a guarded door.",
-                *self._block_review_pass_once(),
-                "She paused at the old case name and looked away too quickly. That small break in her calm made the room colder, not kinder.",
-                *self._block_review_pass_once(),
-                "By the time he stepped back into the wind, he had found the indirect route he needed. It came with the news that the first witness would never speak again.",
-                *self._block_review_pass_once(),
+                "He returned in silence, but the hall refused him even that small mercy. Every eye counted what he no longer had. The clerk would not touch the register until the eunuch nodded. She paused at the old case name and looked away too quickly. By the time he stepped back into the wind, he had found the indirect route he needed, and it came with the news that the first witness would never speak again.",
                 *self._chapter_review_pass_sequence(),
                 "He returned in silence, and the hall gave him no mercy.",
                 json.dumps(
@@ -633,14 +724,28 @@ class WritingChapterAgentTests(unittest.TestCase):
             {"character_name": "Hero", "milestone_list": [{"axis": "Revenge", "stages": ["Return under pressure", "Shift to indirect investigation"]}], "axes": []},
             {"character_name": "Heroine", "milestone_list": [{"axis": "Relationship", "stages": ["Misread", "Relationship repriced"]}], "axes": []},
         ]
+        book.metadata["assistant_persona_prompt"] = "你要盯住场面压力，不要写成剧情说明。"
+        book.metadata["style_request"] = "多视角"
+        book.metadata["user_topic"] = "复仇与误解并行"
+        book.metadata["total_word_target"] = "100万字左右"
+        book.metadata["chapter_count_target"] = "120章左右"
+        book.metadata["chapter_word_target"] = "5000字"
+        book.metadata["pace_notes"] = "每章一个小钩子，2到3章一个关系/利益小冲突。"
         updated_book, chapter = writer.write_next_chapter(book=book)
         self.assertEqual(chapter.id, "ch_002")
         self.assertTrue(chapter.is_finalized)
         self.assertIn("hall gave him no mercy", chapter.final_text)
+        self.assertEqual(chapter.scenes[0].summary, "Full chapter prose")
+        self.assertIn("hall gave him no mercy", chapter.scenes[0].blocks[0].text)
         self.assertGreaterEqual(len(chapter.content_blocks), 4)
         self.assertEqual(updated_book.metadata["actual_chapter_summaries"][-1]["chapter_id"], "ch_002")
         self.assertIn("ch_002", updated_book.metadata["writing_chapter_runs"])
         self.assertGreaterEqual(len(updated_book.metadata["writing_chapter_runs"]["ch_002"]["content_blocks"]), 4)
+        full_chapter_prompt = llm.calls[2][-1].content
+        self.assertIn("你要盯住场面压力，不要写成剧情说明。", full_chapter_prompt)
+        self.assertIn("多视角", full_chapter_prompt)
+        self.assertIn("5000字", full_chapter_prompt)
+        self.assertIn("每章一个小钩子", full_chapter_prompt)
 
     def test_writer_persists_live_preview_to_runtime_store(self) -> None:
         writer = WriterAgent(llm_client=RecordingSequenceLLM([]), patch_executor=PatchExecutor())

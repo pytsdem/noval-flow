@@ -24,6 +24,7 @@ from novel_flow.tools.review_time_consistency import ReviewTimeConsistencyTool
 from novel_flow.tools.revise_block import ReviseBlockTool
 from novel_flow.tools.rewrite_by_plan import RewriteByPlanTool
 from novel_flow.tools.summarize_actual_chapter import SummarizeActualChapterTool
+from novel_flow.tools.write_chapter_full import WriteChapterFullTool
 
 
 class ToolProtocol(Protocol):
@@ -42,6 +43,7 @@ class ToolRegistry:
         library = prompt_library or PromptLibrary()
         tool_list: list[ToolProtocol] = [
             PlanContentBlocksTool(llm_client=llm_client, prompt_library=library),
+            WriteChapterFullTool(llm_client=llm_client, prompt_library=library),
             DraftBlockTool(llm_client=llm_client, prompt_library=library),
             ReviewBlockQualityTool(llm_client=llm_client, prompt_library=library),
             ReviseBlockTool(llm_client=llm_client, prompt_library=library),

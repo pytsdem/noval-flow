@@ -14,6 +14,7 @@ from novel_flow.tools.review_reveal_leak import ReviewRevealLeakTool
 from novel_flow.tools.revise_block import ReviseBlockTool
 from novel_flow.tools.rewrite_by_plan import RewriteByPlanTool
 from novel_flow.tools.summarize_actual_chapter import SummarizeActualChapterTool
+from novel_flow.tools.write_chapter_full import WriteChapterFullTool
 
 __all__ = [
     "DraftBlockTool",
@@ -32,4 +33,5 @@ __all__ = [
     "ReviseBlockTool",
     "RewriteByPlanTool",
     "SummarizeActualChapterTool",
+    "WriteChapterFullTool",
 ]

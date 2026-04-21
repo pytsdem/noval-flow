@@ -29,19 +29,37 @@ Plan the chapter as a sequence of content blocks. Return valid JSON only.
 
 Definition:
 - A content block is a writing-design unit, not one physical paragraph.
-- One block should usually contain 2 to 4 natural paragraphs.
-- Plan blocks as if you are a novelist designing scene pressure before writing the prose.
+- A block may contain multiple natural paragraphs.
+- A block should feel like one scene push, one emotional turn, one pressure move, or one clue movement.
+- Plan blocks as if you are a novelist designing live dramatic pressure before writing prose.
 
-Core shift:
-- Do not flatten the chapter brief into information chunks.
-- Design each block around human reaction, cost, relationship pressure, and reader feeling.
-- A good block plan should already make the later prose harder to write flatly.
+Core planning shift:
+- Do not flatten the chapter into information chunks.
+- Do not think like an outline summarizer.
+- Think in terms of scene pressure, human reaction, local turns, hidden cost, and reader momentum.
+- Every block must help make later prose less flat and less explanatory.
+
+Block count rules:
+- 1500~2500 Chinese chars: 3~5 blocks
+- 2500~4000 Chinese chars: 4~6 blocks
+- 4000~5500 Chinese chars: 6~8 blocks
+- 5500~7000 Chinese chars: 7~10 blocks
+
+For a target around 5000 Chinese characters, prefer 6 to 8 blocks unless the chapter is intentionally highly compressed.
 
 Requirements:
-1. Plan 3 to 6 blocks only.
-2. Each block should do one main job: opening pressure, relationship collision, clue movement, emotional reprice, ending pull, and so on.
-3. Adjacent blocks must clearly change the situation, the cost, the relationship angle, or the reader's emotional state.
-4. Respect hidden truths, allowed clues, forbidden reveals, and reader belief.
+1. Each block must have:
+   - one dominant job,
+   - one local turn / complication / pressure rise / reveal / emotional slip,
+   - one clear landing state.
+2. Do not design flat blocks. Even a quiet block must contain a shift.
+3. Adjacent blocks must clearly change:
+   - the situation,
+   - the cost,
+   - the relationship angle,
+   - the clue pressure,
+   - or the reader's emotional state.
+4. Respect hidden truths, allowed clues, forbidden reveals, and current reader belief.
 5. Keep `text` as an empty string, `status` as `draft`, and `version` as `1`.
 6. Use stable ids like `ch_002.sc_001.b001`.
 7. Every block must include these fields:
@@ -61,40 +79,98 @@ Requirements:
    - `cost_shift`
    - `reader_feeling_target`
    - `paragraph_budget`
+   - `paragraph_shape`
+   - `micro_hook`
+   - `turn_type`
+   - `character_anchor_line`
    - `style_risk_guard`
    - `text`
    - `status`
    - `version`
-8. Add `character_reentry_mode` only when an important already-established character is re-entering the page.
+8. Add `character_reentry_mode` only when an important already-established character is re-entering.
 9. Add `clue_reveal_mechanism` only when this block is responsible for naturally exposing a clue.
 
-Field guidance:
-- `human_reaction_target`:
-  Write concrete living-human reactions, not abstract plot function.
+Required field guidance:
+- `human_reaction_target`
+  Define the specifically human reaction that must land on the page.
   Good targets include bodily leakage, practical calculation, self-mockery, startled witness reaction, social embarrassment, or a small failure of composure.
-- `cost_shift`:
-  At the end of the block, someone must pay a little more.
-  The cost may be bodily, social, emotional, financial, political, or relational.
-- `reader_feeling_target`:
+
+- `cost_shift`
+  Define who becomes worse off by the end of this block and what extra price they pay.
+
+- `reader_feeling_target`
   Say what the reader should directly feel when the block ends, not only what the reader should know.
-- `paragraph_budget`:
-  Usually 2-4 natural paragraphs, each around 30-120 Chinese characters. Treat 180 Chinese characters as a danger line.
-- `style_risk_guard`:
+
+- `paragraph_budget`
+  Use this default style unless the block truly needs a variation:
+  `建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长`
+  For high-tension or clue-reveal blocks, prefer 3~5 shorter paragraphs.
+
+- `paragraph_shape`
+  Give a short ordered list describing how the natural paragraphs should be shaped inside this block.
+  Examples:
+  - `["主动作", "配角反应", "人物细节/情绪泄露", "礼法或环境补压"]`
+  - `["关系压力", "回避与失手", "他人先发现", "当事人回避解释"]`
+  - `["排场建立", "下属回话", "关键一句", "留白反应"]`
+
+- `micro_hook`
+  Define the small carry-forward pull at the end of this block.
+  It is not the final chapter hook. It is the local reason the reader keeps moving.
+
+- `turn_type`
+  Use one of:
+  - `pressure_rise`
+  - `clue_shift`
+  - `emotional_slip`
+  - `relationship_cut`
+  - `ritual_embarrassment`
+  - `witness_reaction`
+  - `false_relief`
+  - `withheld_answer`
+
+- `character_anchor_line`
+  Use this structure:
+  `{{"owner":"", "form":"dialogue | inner_thought | narrative_judgment | reaction_line", "surface_function":"", "hidden_function":"", "must_reveal_about_character":"", "must_not_do":[], "preferred_shape":"短、准、能留余味"}}`
+  Each block should preferably generate one character anchor line.
+  It does not have to be the first line, and it does not have to be dialogue.
+  It must serve the scene on the surface while making the character stand underneath.
+  It cannot be only a plot-function sentence.
+  It should not explain too much.
+  Prefer short, sharp, memorable lines.
+
+- `style_risk_guard`
   Name the two to four easiest ways this block could be written badly.
-  Examples: repeating one cold/blood image, summary psychology instead of scene, dialogue that only explains plot, turning a person into a puzzle device.
-- `character_reentry_mode`:
-  Use this only for re-entry, not first introduction.
-  Prefer recognition signals such as familiar subordinates, objects, symbols, power arrangements, tone of voice, or one high-value line.
-  The returning character's first line or reaction should reveal what they currently care about most.
-- `clue_reveal_mechanism`:
-  Do not treat clue reveal as author handout.
-  Prefer this chain:
-  relationship pressure -> avoidance -> bodily slip or object accident -> another person notices -> the clue becomes visible.
-  After the clue appears, do not explain its full meaning immediately.
+  Examples:
+  - repeating one image family,
+  - summary psychology instead of scene,
+  - dialogue that only explains plot,
+  - turning a person into a puzzle device,
+  - overpacking one paragraph.
+
+Optional field guidance:
+- `clue_reveal_mechanism`
+  Use this structure when needed:
+  `{{"clue":"", "style":"natural_exposure / object_accident / ritual_trigger / subordinate_report / withheld_reveal", "pressure_source":"", "surface_trigger":"", "first_noticer":"", "owner_reaction":""}}`
+  Important clues should emerge through pressure, avoidance, accident, witness reaction, and refusal to over-explain.
+
+- `character_reentry_mode`
+  Use this structure when needed:
+  `{{"target_character":"", "identity_already_known":true, "reentry_strategy":"", "first_signal":"", "first_emotional_focus":"", "must_avoid":[]}}`
+  Do not use this for first introductions. Re-entry should rely on recognition signals, not narrator recap.
 
 Planning style:
-1. Prefer pain, price, friction, residue, and relationship re-pricing over flat information delivery.
-2. Each block should make at least one person harder pressed by the end.
-3. If a clue appears, design the scene pressure and the refusal to explain around it.
+1. The opening block must have a concrete hook, not abstract setup.
+2. Every 1~2 blocks, create a new wave:
+   - new pressure,
+   - new clue,
+   - new embarrassment,
+   - new misreading,
+   - new cost,
+   - new relationship change,
+   - or a withheld answer.
+3. If a clue appears, design the chain of pressure around it instead of treating it like an author handout.
 4. If the block is quiet, give the quiet a concrete unease, etiquette pressure, money pressure, bodily strain, or practical concern.
-5. If the chapter ends on a hook, land that hook through a changed situation or a person's reaction, not a trailer sentence.
+5. If the chapter ends on a hook, land that hook through changed situation, bodily hit, or relationship cost, not a trailer sentence.
+6. Do not design blocks that read like summary bullets waiting to be expanded.
+7. The full sequence of blocks should feel like a serialized chapter, not like five flat outline segments.
+8. Prefer `character_anchor_line` over decorative flourish when they compete. If necessary, choose a sharper character anchor instead of prettier diction.

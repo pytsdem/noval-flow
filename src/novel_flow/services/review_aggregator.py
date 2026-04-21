@@ -17,6 +17,8 @@ class ReviewAggregator:
         "Fix only the current block.",
         "Do not add new facts, clues, reveals, or chapter-level turns.",
         "Keep the block aligned with scene_goal, must_reveal, must_hide, end_state, cost_shift, and reader_feeling_target.",
+        "Keep continuity with already committed blocks inside the current chapter.",
+        "Prefer a stronger character anchor line over ornamental phrasing when they conflict.",
         "Keep paragraph rhythm readable for front-end display.",
         "Obey paragraph_budget and style_risk_guard while revising.",
     ]
@@ -235,8 +237,25 @@ class ReviewAggregator:
             "reader_feeling_missing",
             "clue_reveal_forced",
             "character_reentry_forced",
+            "continuity_restart",
+            "missing_human_reaction_target",
+            "missing_cost_shift",
+            "weak_reader_feeling_target",
+            "forced_clue_drop",
+            "flat_character_reentry",
+            "missing_character_anchor_line",
+            "anchor_line_too_functional",
+            "anchor_line_overexplained",
+            "anchor_line_not_memorable",
+            "paragraph_function_overloaded",
         }:
             return "p1"
+        if category in {
+            "paragraph_too_long",
+            "dialogue_not_separated",
+            "side_reaction_not_separated",
+        }:
+            return "p2"
         return "p2"
 
     @classmethod

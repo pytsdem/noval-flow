@@ -7,6 +7,7 @@ from novel_flow.models.schemas import (
     ActualChapterSummary,
     ChapterBrief,
     CharacterCard,
+    ContentBlock,
     StoryLine,
     StoryPremise,
     TwistDesign,
@@ -41,6 +42,47 @@ def _chapter_order(chapter_id: str) -> int:
 
 def _is_revealed(current_chapter_id: str, reveal_at: str) -> bool:
     return _chapter_order(current_chapter_id) >= _chapter_order(reveal_at)
+
+
+def build_current_chapter_context(
+    chapter_id: str,
+    committed_blocks: list[ContentBlock],
+    *,
+    max_blocks: int = 4,
+    tail_chars: int = 1000,
+) -> dict[str, Any]:
+    relevant_blocks = [
+        item
+        for item in committed_blocks
+        if item.chapter_id == chapter_id and str(item.status or "").strip() == "committed"
+    ]
+    if not relevant_blocks:
+        return {
+            "current_chapter_written_blocks_json": [],
+            "current_chapter_draft_tail": "",
+        }
+
+    recent_blocks = relevant_blocks[-max_blocks:] if max_blocks > 0 else list(relevant_blocks)
+    written_blocks = [
+        {
+            "block_id": item.block_id,
+            "block_index": item.block_index,
+            "purpose": item.purpose,
+            "end_state": item.end_state,
+            "text": str(item.text or "").strip(),
+        }
+        for item in recent_blocks
+    ]
+    chapter_text = "\n\n".join(
+        str(item.text or "").strip()
+        for item in relevant_blocks
+        if str(item.text or "").strip()
+    ).strip()
+    tail = chapter_text[-tail_chars:] if chapter_text and tail_chars > 0 else chapter_text
+    return {
+        "current_chapter_written_blocks_json": written_blocks,
+        "current_chapter_draft_tail": tail,
+    }
 
 
 @dataclass
@@ -255,7 +297,7 @@ class ChapterContextAssembler:
             f"Core scene: {chapter_brief.core_scene or 'None.'}",
             f"Chapter object: {chapter_brief.chapter_object}",
             f"Scene engine: {chapter_brief.scene_engine}",
-            f"Clue reveal style: {chapter_brief.clue_reveal_style or 'None.'}",
+            f"Clue reveal mechanism: {chapter_brief.clue_reveal_mechanism.model_dump(mode='json') if chapter_brief.clue_reveal_mechanism else {}}",
             f"Character reentry focus: {chapter_brief.character_reentry_focus or {}}",
             f"Reader emotion target: {chapter_brief.reader_emotion}",
             f"Reader belief to preserve: {chapter_brief.reader_belief}",
@@ -264,6 +306,7 @@ class ChapterContextAssembler:
             f"Emotional turn: {chapter_brief.emotional_turn}",
             f"Backstory trigger: {chapter_brief.backstory_trigger or 'None.'}",
             f"Human pain anchor: {chapter_brief.human_pain_anchor or 'None.'}",
+            f"Romance seed: {chapter_brief.romance_seed or 'None.'}",
             f"Small payoff: {chapter_brief.small_payoff}",
             f"Ending pull: {chapter_brief.ending_pull}",
             f"Info budget: {chapter_brief.info_budget}",
@@ -383,9 +426,10 @@ class ChapterContextAssembler:
             f"Emotional turn: {chapter_brief.emotional_turn}",
             f"Backstory trigger: {chapter_brief.backstory_trigger or 'None.'}",
             f"Scene engine: {chapter_brief.scene_engine}",
-            f"Clue reveal style: {chapter_brief.clue_reveal_style or 'None.'}",
+            f"Clue reveal mechanism: {chapter_brief.clue_reveal_mechanism.model_dump(mode='json') if chapter_brief.clue_reveal_mechanism else {}}",
             f"Character reentry focus: {chapter_brief.character_reentry_focus or {}}",
             f"Human pain anchor: {chapter_brief.human_pain_anchor or 'None.'}",
+            f"Romance seed: {chapter_brief.romance_seed or 'None.'}",
             f"Small payoff: {chapter_brief.small_payoff}",
             f"Ending pull: {chapter_brief.ending_pull}",
             f"Info budget: {chapter_brief.info_budget}",

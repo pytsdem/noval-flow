@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 
 def utc_now() -> datetime:
@@ -186,6 +186,23 @@ class StoryLine(StrictBaseModel):
     line_rules: list[str] = Field(default_factory=list, max_length=4)
 
 
+class ChapterClueRevealMechanism(StrictBaseModel):
+    style: Literal[
+        "",
+        "direct_pressure",
+        "natural_exposure",
+        "object_accident",
+        "overheard",
+        "ritual_trigger",
+        "subordinate_report",
+        "withheld_reveal",
+    ] = ""
+    pressure_source: str = ""
+    surface_trigger: str = ""
+    first_noticer: str = ""
+    owner_reaction: str = ""
+
+
 class ChapterBrief(StrictBaseModel):
     chapter_id: str
     title: str
@@ -220,21 +237,30 @@ class ChapterBrief(StrictBaseModel):
         "clue_reversal",
         "aftermath_choice",
     ]
-    clue_reveal_style: Literal[
-        "",
-        "direct_pressure",
-        "natural_exposure",
-        "object_accident",
-        "overheard",
-        "ritual_trigger",
-        "subordinate_report",
-        "withheld_reveal",
-    ] = ""
+    clue_reveal_mechanism: ChapterClueRevealMechanism = Field(default_factory=ChapterClueRevealMechanism)
     character_reentry_focus: dict[str, str] = Field(default_factory=dict)
     human_pain_anchor: str = ""
+    romance_seed: str = ""
     small_payoff: str
     ending_pull: str
     info_budget: str
+
+    @model_validator(mode="before")
+    @classmethod
+    def upgrade_legacy_clue_reveal_style(cls, value: Any) -> Any:
+        if not isinstance(value, dict):
+            return value
+        payload = dict(value)
+        mechanism = payload.get("clue_reveal_mechanism")
+        if not isinstance(mechanism, dict):
+            mechanism = {}
+        else:
+            mechanism = dict(mechanism)
+        legacy_style = str(payload.pop("clue_reveal_style", "") or "").strip()
+        if legacy_style and not str(mechanism.get("style", "") or "").strip():
+            mechanism["style"] = legacy_style
+        payload["clue_reveal_mechanism"] = mechanism
+        return payload
 
 
 class SceneCard(StrictBaseModel):
@@ -279,12 +305,49 @@ class CharacterReentryMode(StrictBaseModel):
 
 class ClueRevealMechanism(StrictBaseModel):
     clue: str = ""
+    style: Literal[
+        "",
+        "natural_exposure",
+        "object_accident",
+        "ritual_trigger",
+        "subordinate_report",
+        "withheld_reveal",
+    ] = ""
+    pressure_source: str = ""
     surface_trigger: str = ""
-    relationship_pressure: str = ""
-    body_or_object_failure: str = ""
-    who_notices: str = ""
-    who_avoids_explaining: str = ""
-    after_effect: str = ""
+    first_noticer: str = ""
+    owner_reaction: str = ""
+
+    @model_validator(mode="before")
+    @classmethod
+    def upgrade_legacy_fields(cls, value: Any) -> Any:
+        if not isinstance(value, dict):
+            return value
+        payload = dict(value)
+        relationship_pressure = str(payload.pop("relationship_pressure", "") or "").strip()
+        body_or_object_failure = str(payload.pop("body_or_object_failure", "") or "").strip()
+        who_notices = str(payload.pop("who_notices", "") or "").strip()
+        who_avoids_explaining = str(payload.pop("who_avoids_explaining", "") or "").strip()
+        after_effect = str(payload.pop("after_effect", "") or "").strip()
+        if not str(payload.get("pressure_source") or "").strip():
+            payload["pressure_source"] = relationship_pressure
+        if not str(payload.get("surface_trigger") or "").strip():
+            payload["surface_trigger"] = body_or_object_failure
+        if not str(payload.get("first_noticer") or "").strip():
+            payload["first_noticer"] = who_notices
+        if not str(payload.get("owner_reaction") or "").strip():
+            payload["owner_reaction"] = who_avoids_explaining or after_effect
+        return payload
+
+
+class CharacterAnchorLine(StrictBaseModel):
+    owner: str = ""
+    form: Literal["dialogue", "inner_thought", "narrative_judgment", "reaction_line"] = "dialogue"
+    surface_function: str = ""
+    hidden_function: str = ""
+    must_reveal_about_character: str = ""
+    must_not_do: list[str] = Field(default_factory=list)
+    preferred_shape: str = "短、准、能留余味"
 
 
 class ContentBlock(StrictBaseModel):
@@ -304,6 +367,19 @@ class ContentBlock(StrictBaseModel):
     cost_shift: str = ""
     reader_feeling_target: str = ""
     paragraph_budget: str = ""
+    paragraph_shape: list[str] = Field(default_factory=list)
+    micro_hook: str = ""
+    turn_type: Literal[
+        "pressure_rise",
+        "clue_shift",
+        "emotional_slip",
+        "relationship_cut",
+        "ritual_embarrassment",
+        "witness_reaction",
+        "false_relief",
+        "withheld_answer",
+    ] = "pressure_rise"
+    character_anchor_line: CharacterAnchorLine | None = None
     style_risk_guard: list[str] = Field(default_factory=list)
     character_reentry_mode: CharacterReentryMode | None = None
     clue_reveal_mechanism: ClueRevealMechanism | None = None
@@ -320,7 +396,7 @@ class ContentBlock(StrictBaseModel):
 
 
 class ContentBlockPlanPayload(StrictBaseModel):
-    blocks: list[ContentBlock] = Field(default_factory=list, min_length=3, max_length=6)
+    blocks: list[ContentBlock] = Field(default_factory=list, min_length=3, max_length=10)
 
 
 class BlockQualityReviewPayload(StrictBaseModel):
@@ -525,6 +601,11 @@ class WriterContext:
     active_story_lines: list[StoryLine]
     scene_character_context_text: str = ""
     relationship_state_text: str = ""
+    assistant_persona_prompt: str = ""
+    writing_requirements_json: str = "{}"
+    completed_chapter_summary_bundle: str = ""
+    previous_chapter_full_text: str = ""
+    reference_pack: str = ""
 
 
 class BookBlueprint(BaseModel):

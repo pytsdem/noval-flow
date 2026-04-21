@@ -19,7 +19,7 @@ from novel_flow.models.schemas import (
     TwistDesign,
 )
 from novel_flow.prompting.templates import PromptLibrary
-from novel_flow.services.chapter_context import ChapterContextAssembler
+from novel_flow.services.chapter_context import ChapterContextAssembler, build_current_chapter_context
 from novel_flow.services.context_sanitization_task import ContextSanitizationTask
 from novel_flow.services.dynamic_instruction_builder import DynamicInstructionBuilder
 from novel_flow.services.review_aggregator import ReviewAggregator
@@ -29,6 +29,7 @@ from novel_flow.services.tool_registry import ToolRegistry
 
 
 class WritingChapterAgent(BaseAgent):
+    INCREMENTAL_BLOCK_DRAFTING_ENABLED = False
     BLOCK_REVIEW_TOOLS = [
         "review_reveal_leak",
         "review_character_integrity",
@@ -52,6 +53,9 @@ class WritingChapterAgent(BaseAgent):
         "Keep one blank line between paragraphs.",
         "Avoid page-sized paragraphs in front-end reading.",
         "Do not flatten deliberate short lines or pauses.",
+        "Let one paragraph usually carry one main action, one main reaction, or one main observation.",
+        "Do not pack action, another person's reaction, and author explanation into one paragraph.",
+        "Important supporting-character reactions should usually stand alone as their own paragraph.",
         "Usually keep each paragraph around 30-120 Chinese characters.",
         "Treat paragraphs longer than 180 Chinese characters as a formatting risk.",
     ]
@@ -147,126 +151,167 @@ class WritingChapterAgent(BaseAgent):
             planned_blocks=[block.model_dump(mode="json") for block in planned_blocks],
         )
 
-        committed_blocks: list[ContentBlock] = []
+        committed_blocks = [block.model_copy(deep=True) for block in planned_blocks]
         chapter_text = ""
-        for block in planned_blocks:
-            block_context = self._fetch_block_context(
-                context=context,
-                block=block,
-                committed_blocks=committed_blocks,
-            )
-            block_card_text = self._block_card_text(block)
-            self._emit_stage(
-                stage=f"block_{block.block_index}_draft_start",
-                action="Draft block",
-                reason="Write the current content block before any chapter-level rewrite.",
-                chapter_id=chapter_brief.chapter_id,
-                block_id=block.block_id,
-                block_index=block.block_index,
-            )
-            draft_result = self.tool_registry.execute(
-                "draft_block",
-                {
-                    **block_context,
-                    "block_card_text": block_card_text,
-                    "loaded_skill_instructions_text": block_skill_text,
-                },
-            )
-            block_text = str(draft_result.get("block_text") or "").strip()
-            block_review_reports = self._run_block_review_tools(
-                context=context,
-                block=block,
-                block_text=block_text,
-                block_context=block_context,
-                block_card_text=block_card_text,
-            )
-            block_revision_plan = ReviewAggregator.aggregate_block(
-                review_reports=block_review_reports,
-                triggered_skills=[skill.skill_id for skill in block_skills],
-                block_id=block.block_id,
-            )
-            revised = False
-            if self._needs_block_revision(block_review_reports):
+        if self.INCREMENTAL_BLOCK_DRAFTING_ENABLED:
+            committed_blocks = []
+            for block in planned_blocks:
+                block_context = self._fetch_block_context(
+                    context=context,
+                    block=block,
+                    committed_blocks=committed_blocks,
+                )
+                block_card_text = self._block_card_text(block)
                 self._emit_stage(
-                    stage=f"block_{block.block_index}_revise_start",
-                    action="Revise block",
-                    reason="The block-level light review found issues that should be fixed before commit.",
+                    stage=f"block_{block.block_index}_draft_start",
+                    action="Draft block",
+                    reason="Write the current content block before any chapter-level rewrite.",
                     chapter_id=chapter_brief.chapter_id,
                     block_id=block.block_id,
                     block_index=block.block_index,
-                    block_revision_plan=block_revision_plan.model_dump(mode="json"),
                 )
-                revise_result = self.tool_registry.execute(
-                    "revise_block_if_needed",
+                draft_result = self.tool_registry.execute(
+                    "draft_block",
                     {
                         **block_context,
+                        **self._block_prompt_fields(block),
                         "block_card_text": block_card_text,
-                        "block_text": block_text,
-                        "review_json": json.dumps(block_review_reports, ensure_ascii=False, indent=2),
-                        "block_revision_plan_json": json.dumps(block_revision_plan.model_dump(mode="json"), ensure_ascii=False, indent=2),
                         "loaded_skill_instructions_text": block_skill_text,
                     },
                 )
-                block_text = str(revise_result.get("block_text") or block_text).strip()
-                revised = True
-            committed_block = block.model_copy(
-                update={
-                    "text": block_text,
-                    "status": "committed",
-                    "version": max(int(block.version), 1) + (1 if revised else 0),
-                }
+                block_text = str(draft_result.get("block_text") or "").strip()
+                block_review_reports = self._run_block_review_tools(
+                    context=context,
+                    block=block,
+                    block_text=block_text,
+                    block_context=block_context,
+                    block_card_text=block_card_text,
+                )
+                block_revision_plan = ReviewAggregator.aggregate_block(
+                    review_reports=block_review_reports,
+                    triggered_skills=[skill.skill_id for skill in block_skills],
+                    block_id=block.block_id,
+                )
+                revised = False
+                if self._needs_block_revision(block_review_reports):
+                    self._emit_stage(
+                        stage=f"block_{block.block_index}_revise_start",
+                        action="Revise block",
+                        reason="The block-level light review found issues that should be fixed before commit.",
+                        chapter_id=chapter_brief.chapter_id,
+                        block_id=block.block_id,
+                        block_index=block.block_index,
+                        block_revision_plan=block_revision_plan.model_dump(mode="json"),
+                    )
+                    revise_result = self.tool_registry.execute(
+                        "revise_block_if_needed",
+                        {
+                            **block_context,
+                            **self._block_prompt_fields(block),
+                            "block_card_text": block_card_text,
+                            "block_text": block_text,
+                            "review_json": json.dumps(block_review_reports, ensure_ascii=False, indent=2),
+                            "block_revision_plan_json": json.dumps(block_revision_plan.model_dump(mode="json"), ensure_ascii=False, indent=2),
+                            "loaded_skill_instructions_text": block_skill_text,
+                        },
+                    )
+                    block_text = str(revise_result.get("block_text") or block_text).strip()
+                    revised = True
+                committed_block = block.model_copy(
+                    update={
+                        "text": block_text,
+                        "status": "committed",
+                        "version": max(int(block.version), 1) + (1 if revised else 0),
+                    }
+                )
+                committed_blocks.append(committed_block)
+                chapter_text = self._merge_blocks_to_chapter(committed_blocks)
+                stage_log.append(
+                    {
+                        "stage": f"commit_block_{block.block_index}",
+                        "block_id": committed_block.block_id,
+                        "block_index": committed_block.block_index,
+                        "status": committed_block.status,
+                        "version": committed_block.version,
+                        "block_review_reports": block_review_reports,
+                        "block_revision_plan": block_revision_plan.model_dump(mode="json"),
+                        "chapter_length": len(chapter_text),
+                    }
+                )
+                if on_block_committed is not None:
+                    on_block_committed(committed_block)
+                self._emit_chapter_preview(
+                    chapter_brief=chapter_brief,
+                    content_blocks=committed_blocks,
+                    final_text="",
+                    final_version=0,
+                    is_finalized=False,
+                    preview_mode="content_blocks",
+                    callback=on_chapter_preview_updated,
+                )
+                self._emit_stage(
+                    stage=f"block_{block.block_index}_committed",
+                    action="Committed block",
+                    reason="The current content block is committed and can be shown incrementally.",
+                    chapter_id=chapter_brief.chapter_id,
+                    block_id=committed_block.block_id,
+                    block_index=committed_block.block_index,
+                    committed_block=committed_block.model_dump(mode="json"),
+                    current_chapter_draft_tail=self._tail_text(chapter_text, max_chars=500),
+                )
+
+            self._emit_stage(
+                stage="merge_blocks_to_chapter_done",
+                action="Merged content blocks",
+                reason="All content blocks are committed and ready for chapter-level review.",
+                chapter_id=chapter_brief.chapter_id,
+                block_count=len(committed_blocks),
+                chapter_length=len(chapter_text),
             )
-            committed_blocks.append(committed_block)
-            chapter_text = self._merge_blocks_to_chapter(committed_blocks)
             stage_log.append(
                 {
-                    "stage": f"commit_block_{block.block_index}",
-                    "block_id": committed_block.block_id,
-                    "block_index": committed_block.block_index,
-                    "status": committed_block.status,
-                    "version": committed_block.version,
-                    "block_review_reports": block_review_reports,
-                    "block_revision_plan": block_revision_plan.model_dump(mode="json"),
+                    "stage": "merge_blocks_to_chapter",
+                    "block_count": len(committed_blocks),
                     "chapter_length": len(chapter_text),
                 }
             )
-            if on_block_committed is not None:
-                on_block_committed(committed_block)
+        else:
+            self._emit_stage(
+                stage="write_chapter_full_start",
+                action="Write full chapter from plan",
+                reason="Use the planned content blocks as the chapter skeleton and draft the full prose in one pass.",
+                chapter_id=chapter_brief.chapter_id,
+                block_count=len(committed_blocks),
+            )
+            chapter_text = self._draft_chapter_from_plan(
+                chapter_brief=chapter_brief,
+                context=context,
+                planned_blocks=committed_blocks,
+            )
+            stage_log.append(
+                {
+                    "stage": "write_chapter_full",
+                    "block_count": len(committed_blocks),
+                    "chapter_length": len(chapter_text),
+                }
+            )
             self._emit_chapter_preview(
                 chapter_brief=chapter_brief,
                 content_blocks=committed_blocks,
-                final_text="",
-                final_version=0,
+                final_text=chapter_text,
+                final_version=1,
                 is_finalized=False,
-                preview_mode="content_blocks",
+                preview_mode="chapter_draft",
                 callback=on_chapter_preview_updated,
             )
             self._emit_stage(
-                stage=f"block_{block.block_index}_committed",
-                action="Committed block",
-                reason="The current content block is committed and can be shown incrementally.",
+                stage="write_chapter_full_done",
+                action="Finished chapter draft from plan",
+                reason="The chapter prose now follows the planned content block list and is ready for chapter-level review.",
                 chapter_id=chapter_brief.chapter_id,
-                block_id=committed_block.block_id,
-                block_index=committed_block.block_index,
-                committed_block=committed_block.model_dump(mode="json"),
-                current_chapter_draft_tail=self._tail_text(chapter_text, max_chars=500),
+                block_count=len(committed_blocks),
+                chapter_length=len(chapter_text),
             )
-
-        self._emit_stage(
-            stage="merge_blocks_to_chapter_done",
-            action="Merged content blocks",
-            reason="All content blocks are committed and ready for chapter-level review.",
-            chapter_id=chapter_brief.chapter_id,
-            block_count=len(committed_blocks),
-            chapter_length=len(chapter_text),
-        )
-        stage_log.append(
-            {
-                "stage": "merge_blocks_to_chapter",
-                "block_count": len(committed_blocks),
-                "chapter_length": len(chapter_text),
-            }
-        )
 
         active_skills = self.skill_manager.initial_skills(stage="chapter")
         best_snapshot = {
@@ -595,6 +640,35 @@ class WritingChapterAgent(BaseAgent):
             payload=result.model_dump(mode="json"),
         )
 
+    def _draft_chapter_from_plan(
+        self,
+        *,
+        chapter_brief: ChapterBrief,
+        context: Any,
+        planned_blocks: list[ContentBlock],
+    ) -> str:
+        payload = self.tool_registry.execute(
+            "write_chapter_full",
+            {
+                "assistant_persona_prompt": getattr(context, "assistant_persona_prompt", ""),
+                "chapter_id": chapter_brief.chapter_id,
+                "chapter_title": chapter_brief.title,
+                "chapter_summary": chapter_brief.summary,
+                "chapter_plan_json": self._chapter_plan_json(planned_blocks),
+                "step_1_to_7_outputs_json": self._step_1_to_7_outputs_json(context),
+                "chapter_payload_text": context.chapter_payload_text,
+                "timeline_anchor_facts_text": context.timeline_anchor_facts_text,
+                "scene_character_context_text": context.scene_character_context_text,
+                "relationship_state_text": context.relationship_state_text,
+                "style_card_text": context.style_card_text,
+                "previous_chapter_full_text": getattr(context, "previous_chapter_full_text", ""),
+                "completed_chapter_summary_bundle": getattr(context, "completed_chapter_summary_bundle", context.completed_chapter_memory_text),
+                "writing_requirements_json": getattr(context, "writing_requirements_json", "{}"),
+                "reference_pack": getattr(context, "reference_pack", ""),
+            },
+        )
+        return str(payload.get("chapter_text") or "").strip()
+
     def _plan_content_blocks(self, *, chapter_brief: ChapterBrief, context: Any) -> list[ContentBlock]:
         payload = self.tool_registry.execute(
             "plan_content_blocks",
@@ -615,6 +689,24 @@ class WritingChapterAgent(BaseAgent):
             raise ValueError("plan_content_blocks returned no blocks")
         return blocks
 
+    @classmethod
+    def _chapter_plan_json(cls, planned_blocks: list[ContentBlock]) -> str:
+        return cls._json_text({"blocks": [block.model_dump(mode="json") for block in planned_blocks]})
+
+    @classmethod
+    def _step_1_to_7_outputs_json(cls, context: Any) -> str:
+        return cls._json_text(
+            {
+                "step_1_story_foundation_text": context.step_1_story_foundation_text,
+                "step_2_worldbuilding_text": context.step_2_worldbuilding_text,
+                "step_3_character_packets_text": context.step_3_character_packets_text,
+                "step_4_event_timeline_text": context.step_4_event_timeline_text,
+                "step_5_character_milestones_text": context.step_5_character_milestones_text,
+                "step_6_twists_text": context.step_6_twists_text,
+                "step_7_story_lines_text": context.step_7_story_lines_text,
+            }
+        )
+
     def _fetch_block_context(
         self,
         *,
@@ -622,17 +714,22 @@ class WritingChapterAgent(BaseAgent):
         block: ContentBlock,
         committed_blocks: list[ContentBlock],
     ) -> dict[str, Any]:
+        current_chapter_context = build_current_chapter_context(
+            block.chapter_id,
+            committed_blocks,
+            max_blocks=4,
+            tail_chars=1000,
+        )
         prior_summary_lines = ["[Earlier committed blocks]"]
-        if committed_blocks:
-            for item in committed_blocks[-3:]:
+        current_written_blocks = list(current_chapter_context["current_chapter_written_blocks_json"])
+        if current_written_blocks:
+            for item in current_written_blocks:
                 prior_summary_lines.extend(
                     [
                         "",
-                        f"{item.block_id} / {item.purpose}",
-                        f"- End state: {item.end_state}",
-                        f"- Cost shift: {item.cost_shift}",
-                        f"- Reader feeling target: {item.reader_feeling_target}",
-                        f"- Text tail: {self._tail_text(item.text, max_chars=220)}",
+                        f"{item['block_id']} / {item['purpose']}",
+                        f"- End state: {item['end_state']}",
+                        f"- Text tail: {self._tail_text(str(item['text']), max_chars=220)}",
                     ]
                 )
         else:
@@ -644,8 +741,10 @@ class WritingChapterAgent(BaseAgent):
             "relevant_world_rules_text": context.relevant_world_rules_text,
             "scene_character_context_text": context.scene_character_context_text,
             "relationship_state_text": context.relationship_state_text,
+            "current_chapter_written_blocks_json": self._json_text(current_written_blocks),
+            "current_chapter_draft_tail": str(current_chapter_context["current_chapter_draft_tail"] or ""),
             "prior_block_summary_text": "\n".join(prior_summary_lines).strip(),
-            "prior_chapter_text_tail": self._tail_text(self._merge_blocks_to_chapter(committed_blocks), max_chars=900),
+            "prior_chapter_text_tail": str(current_chapter_context["current_chapter_draft_tail"] or ""),
             "style_card_text": context.style_card_text,
         }
 
@@ -687,10 +786,13 @@ class WritingChapterAgent(BaseAgent):
                         "relevant_world_rules_text": context.relevant_world_rules_text,
                         "scene_character_context_text": context.scene_character_context_text,
                         "relationship_state_text": context.relationship_state_text,
+                        "current_chapter_written_blocks_json": block_context["current_chapter_written_blocks_json"],
+                        "current_chapter_draft_tail": block_context["current_chapter_draft_tail"],
                         "block_card_text": block_card_text,
                         "prior_block_summary_text": block_context["prior_block_summary_text"],
                         "prior_chapter_text_tail": block_context["prior_chapter_text_tail"],
                         "block_text": block_text,
+                        **self._block_prompt_fields(block),
                     },
                 )
                 continue
@@ -723,8 +825,34 @@ class WritingChapterAgent(BaseAgent):
             f"cost_shift: {block.cost_shift}",
             f"reader_feeling_target: {block.reader_feeling_target}",
             f"paragraph_budget: {block.paragraph_budget}",
-            "characters:",
+            f"micro_hook: {block.micro_hook}",
+            f"turn_type: {block.turn_type}",
+            "paragraph_shape:",
         ]
+        for item in block.paragraph_shape or ["None."]:
+            lines.append(f"- {item}")
+        lines.append("character_anchor_line:")
+        if block.character_anchor_line is None:
+            lines.append("- None.")
+        else:
+            lines.extend(
+                [
+                    f"- owner: {block.character_anchor_line.owner or 'None.'}",
+                    f"- form: {block.character_anchor_line.form or 'None.'}",
+                    f"- surface_function: {block.character_anchor_line.surface_function or 'None.'}",
+                    f"- hidden_function: {block.character_anchor_line.hidden_function or 'None.'}",
+                    f"- must_reveal_about_character: {block.character_anchor_line.must_reveal_about_character or 'None.'}",
+                    f"- preferred_shape: {block.character_anchor_line.preferred_shape or 'None.'}",
+                    "- must_not_do:",
+                ]
+            )
+            for item in block.character_anchor_line.must_not_do or ["None."]:
+                lines.append(f"  - {item}")
+        lines.extend(
+            [
+            "characters:",
+            ]
+        )
         for item in block.characters or ["None."]:
             lines.append(f"- {item}")
         lines.append("active_lines:")
@@ -768,15 +896,46 @@ class WritingChapterAgent(BaseAgent):
             lines.extend(
                 [
                     f"- clue: {block.clue_reveal_mechanism.clue or 'None.'}",
+                    f"- style: {block.clue_reveal_mechanism.style or 'None.'}",
+                    f"- pressure_source: {block.clue_reveal_mechanism.pressure_source or 'None.'}",
                     f"- surface_trigger: {block.clue_reveal_mechanism.surface_trigger or 'None.'}",
-                    f"- relationship_pressure: {block.clue_reveal_mechanism.relationship_pressure or 'None.'}",
-                    f"- body_or_object_failure: {block.clue_reveal_mechanism.body_or_object_failure or 'None.'}",
-                    f"- who_notices: {block.clue_reveal_mechanism.who_notices or 'None.'}",
-                    f"- who_avoids_explaining: {block.clue_reveal_mechanism.who_avoids_explaining or 'None.'}",
-                    f"- after_effect: {block.clue_reveal_mechanism.after_effect or 'None.'}",
+                    f"- first_noticer: {block.clue_reveal_mechanism.first_noticer or 'None.'}",
+                    f"- owner_reaction: {block.clue_reveal_mechanism.owner_reaction or 'None.'}",
                 ]
             )
         return "\n".join(lines).strip()
+
+    @staticmethod
+    def _json_text(value: Any) -> str:
+        return json.dumps(value, ensure_ascii=False, indent=2)
+
+    @classmethod
+    def _block_prompt_fields(cls, block: ContentBlock) -> dict[str, str]:
+        return {
+            "human_reaction_target": cls._json_text(list(block.human_reaction_target or [])),
+            "cost_shift": str(block.cost_shift or "").strip(),
+            "reader_feeling_target": str(block.reader_feeling_target or "").strip(),
+            "paragraph_budget": str(block.paragraph_budget or "").strip(),
+            "micro_hook": str(block.micro_hook or "").strip(),
+            "turn_type": str(block.turn_type or "").strip(),
+            "paragraph_shape": cls._json_text(list(block.paragraph_shape or [])),
+            "character_anchor_line": (
+                cls._json_text(block.character_anchor_line.model_dump(mode="json"))
+                if block.character_anchor_line is not None
+                else ""
+            ),
+            "style_risk_guard": cls._json_text(list(block.style_risk_guard or [])),
+            "clue_reveal_mechanism": (
+                cls._json_text(block.clue_reveal_mechanism.model_dump(mode="json"))
+                if block.clue_reveal_mechanism is not None
+                else ""
+            ),
+            "character_reentry_mode": (
+                cls._json_text(block.character_reentry_mode.model_dump(mode="json"))
+                if block.character_reentry_mode is not None
+                else ""
+            ),
+        }
 
     @staticmethod
     def _merge_blocks_to_chapter(blocks: list[ContentBlock]) -> str:
@@ -905,6 +1064,9 @@ class WritingChapterAgent(BaseAgent):
             "scene_character_context_text": context.scene_character_context_text,
             "relationship_state_text": context.relationship_state_text,
             "style_card_text": context.style_card_text,
+            "assistant_persona_prompt": getattr(context, "assistant_persona_prompt", ""),
+            "writing_requirements_json": getattr(context, "writing_requirements_json", "{}"),
+            "previous_chapter_full_text": getattr(context, "previous_chapter_full_text", ""),
         }
 
     @staticmethod
