@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import unittest
 from unittest.mock import patch
 
@@ -121,43 +122,262 @@ class WritingChapterAgentTests(unittest.TestCase):
                 locked_truths=["Her real motive is still hidden."],
             )
         ]
-        self.sanitized_context_json = """{
-  "chapter_id": "ch_002",
-  "selection_summary_text": "[Selection]\\n- Relevant roles: Hero, Heroine\\n- Relevant twists: twist_01\\n- Relevant lines: line_case\\n- Current time anchor: return day, morning",
-  "time_anchor_text": "[Time anchor]\\n- Absolute: return day, morning\\n- Relative to previous chapter: immediately after the return\\n- Must not conflict: keep travel dust, fatigue, and unfinished court pressure on the body.",
-  "chapter_visible_context_text": "[Chapter visible context]\\n- Reader should know: the old verdict still stands.\\n- Reader should believe: she betrayed him.\\n- Reader should not know: her true motive.\\n- Allowed clues: a pause at the old case term.",
-  "completed_chapter_memory_text": "[Completed chapter memory]\\n\\nch_001\\n- Actual events: He returned to the capital.\\n- Reader now knows: The old verdict still stands.\\n- Reader now believes: She betrayed him.\\n- Open questions: Why did she testify?\\n- Character states: He is under public pressure.\\n- Relationship state: They face each other like enemies.\\n- Seeded clues: She paused once.\\n- Locked truths: Her real motive is still hidden.",
-  "step_1_story_foundation_text": "[Step 1 story foundation]\\n\\nTitle: Test\\nHigh concept: Preserve the surface conflict, pressure source, and reader misread without stating unrevealed truth.",
-  "step_3_character_packets_text": "[Scene character context]\\n\\nHero\\n- Public identity: dismissed commander / former general\\n- Surface goal in this chapter: He wants revenge but cannot act directly.",
-  "step_5_character_milestones_text": "[Step 5 relevant character milestones]\\n\\nHero\\n- 复仇线: 归京受压 -> 转向间接追查",
-  "step_6_twists_text": "[Step 6 active twist packets]\\n\\ntwist_01 / Hidden motive\\n- False belief: Readers think she betrayed him.\\n- Reader alignment: Readers side with him before reveal.\\n- Seed from: ch_001\\n- Reveal at: ch_018\\n- Allowed clues: She pauses at the case term.\\n- Forbidden reveals: Do not reveal she saved him.\\n- POV lock: No true inner thought before reveal.\\n- Related characters: Heroine\\n- Payoff effect: Relationship gets re-priced after reveal.\\n- Truth: hidden until reveal chapter; do not narrate it directly.",
-  "step_7_story_lines_text": "[Step 7 active story line packets]\\n\\nline_case / Old case\\n- Type: mystery\\n- Visibility: visible\\n- Core question: How can he reopen the case indirectly?\\n- Reader hook mode: pressure\\n- Start state: He is blocked publicly.\\n- Midpoint shift: Preserve the line's later re-pricing and payoff direction without stating concealed truth in advance.\\n- End state: Preserve the line's later re-pricing and payoff direction without stating concealed truth in advance.\\n- Carried twists: twist_01\\n- Line rules: Only indirect routes early.",
-  "step_8_chapter_brief_text": "[Step 8 current chapter brief]\\n\\nChapter id: ch_002\\nTitle: Cold Return\\nChapter type: opening\\nSummary: He returns under pressure and chooses an indirect path.",
-  "scene_character_context_text": "[Scene character context]\\n\\nHero\\n- Public identity: dismissed commander / former general\\n- Surface goal in this chapter: He wants revenge but cannot act directly.",
-  "relationship_state_text": "[Relationship state]\\n\\nHero -> Heroine\\n- Current public relationship: She feels less like a simple traitor and more like a controlled threat.\\n- Emotional temperature: Hatred turns into cold strategic pressure.\\n- This chapter should move toward: Hatred turns into cold strategic pressure.\\n- Forbidden shortcut: do not skip misreading, cost, or unrevealed truth."
-}"""
+        self.sanitized_context_json = json.dumps(
+            {
+                "chapter_id": "ch_002",
+                "selection_summary_text": "[Selection]\n- Relevant roles: Hero, Heroine\n- Relevant twists: twist_01\n- Relevant lines: line_case\n- Current time anchor: return day, morning",
+                "time_anchor_text": "[Time anchor]\n- Absolute: return day, morning\n- Relative to previous chapter: immediately after the return\n- Must not conflict: keep travel dust, fatigue, and unfinished court pressure on the body.",
+                "chapter_visible_context_text": "[Chapter visible context]\n- Reader should know: the old verdict still stands.\n- Reader should believe: she betrayed him.\n- Reader should not know: her true motive.\n- Allowed clues: a pause at the old case term.",
+                "completed_chapter_memory_text": "[Completed chapter memory]\n\nch_001\n- Actual events: He returned to the capital.\n- Reader now knows: The old verdict still stands.\n- Reader now believes: She betrayed him.\n- Open questions: Why did she testify?\n- Character states: He is under public pressure.\n- Relationship state: They face each other like enemies.\n- Seeded clues: She paused once.\n- Locked truths: Her real motive is still hidden.",
+                "step_1_story_foundation_text": "[Step 1 story foundation]\n\nTitle: Test\nHigh concept: Preserve the surface conflict, pressure source, and reader misread without stating unrevealed truth.",
+                "step_3_character_packets_text": "[Scene character context]\n\nHero\n- Public identity: dismissed commander / former general\n- Surface goal in this chapter: He wants revenge but cannot act directly.",
+                "step_5_character_milestones_text": "[Step 5 relevant character milestones]\n\nHero\n- Revenge line: return under pressure -> shift to indirect investigation",
+                "step_6_twists_text": "[Step 6 active twist packets]\n\ntwist_01 / Hidden motive\n- False belief: Readers think she betrayed him.\n- Reader alignment: Readers side with him before reveal.\n- Seed from: ch_001\n- Reveal at: ch_018\n- Allowed clues: She pauses at the case term.\n- Forbidden reveals: Do not reveal she saved him.\n- POV lock: No true inner thought before reveal.\n- Related characters: Heroine\n- Payoff effect: Relationship gets re-priced after reveal.\n- Truth: hidden until reveal chapter; do not narrate it directly.",
+                "step_7_story_lines_text": "[Step 7 active story line packets]\n\nline_case / Old case\n- Type: mystery\n- Visibility: visible\n- Core question: How can he reopen the case indirectly?\n- Reader hook mode: pressure\n- Start state: He is blocked publicly.\n- Midpoint shift: Preserve later re-pricing without stating concealed truth.\n- End state: Preserve later re-pricing without stating concealed truth.\n- Carried twists: twist_01\n- Line rules: Only indirect routes early.",
+                "step_8_chapter_brief_text": "[Step 8 current chapter brief]\n\nChapter id: ch_002\nTitle: Cold Return\nChapter type: opening\nSummary: He returns under pressure and chooses an indirect path.",
+                "scene_character_context_text": "[Scene character context]\n\nHero\n- Public identity: dismissed commander / former general\n- Surface goal in this chapter: He wants revenge but cannot act directly.",
+                "relationship_state_text": "[Relationship state]\n\nHero -> Heroine\n- Current public relationship: She feels less like a simple traitor and more like a controlled threat.\n- Emotional temperature: Hatred turns into cold strategic pressure.\n- This chapter should move toward: Hatred turns into cold strategic pressure.\n- Forbidden shortcut: do not skip misreading, cost, or unrevealed truth.",
+            },
+            ensure_ascii=False,
+        )
+
+    def _planned_blocks_json(self) -> str:
+        paragraph_budget = "Use 2-4 natural paragraphs, usually 30-120 Chinese characters each, with 180 as a danger line."
+        blocks = [
+            {
+                "block_id": "ch_002.sc_001.b001",
+                "chapter_id": "ch_002",
+                "block_index": 1,
+                "purpose": "Open with immediate court pressure.",
+                "characters": ["Hero", "Heroine"],
+                "active_lines": ["line_case"],
+                "active_twists": ["twist_01"],
+                "scene_goal": "Land the imperial order before he can settle himself.",
+                "must_reveal": ["An imperial order lands before he can speak."],
+                "must_hide": ["Do not explain her true motive."],
+                "emotional_tone": "Readers should side with him and distrust her restraint.",
+                "end_state": "He is forced into the chapter's pressure without room to recover.",
+                "human_reaction_target": [
+                    "Show the hero's bodily restraint before he speaks.",
+                    "Let the room react to the order as a real public threat.",
+                ],
+                "cost_shift": "He loses the chance to choose his own opening move.",
+                "reader_feeling_target": "Readers should feel the public pressure close around him immediately.",
+                "paragraph_budget": paragraph_budget,
+                "style_risk_guard": [
+                    "Do not open with background summary.",
+                    "Do not let the prose sound like an outline.",
+                ],
+                "text": "",
+                "status": "draft",
+                "version": 1,
+            },
+            {
+                "block_id": "ch_002.sc_001.b002",
+                "chapter_id": "ch_002",
+                "block_index": 2,
+                "purpose": "Push the chapter object into a live negotiation.",
+                "characters": ["Hero", "Heroine"],
+                "active_lines": ["line_case"],
+                "active_twists": ["twist_01"],
+                "scene_goal": "Make the transfer register matter through scene pressure.",
+                "must_reveal": ["Transfer register", "He finds a procedural opening."],
+                "must_hide": ["Do not explain her true motive."],
+                "emotional_tone": "Hatred turns into cold strategic pressure.",
+                "end_state": "He gains a procedural path, but it costs him leverage.",
+                "human_reaction_target": [
+                    "Show practical calculation under etiquette pressure.",
+                    "Let another person's reaction make the pressure legible.",
+                ],
+                "cost_shift": "He must ask through the same court order that humiliates him.",
+                "reader_feeling_target": "Readers should feel that even progress comes with humiliation and constraint.",
+                "paragraph_budget": paragraph_budget,
+                "style_risk_guard": [
+                    "Do not explain why the register matters in abstract summary.",
+                    "Do not let dialogue become pure information transfer.",
+                ],
+                "text": "",
+                "status": "draft",
+                "version": 1,
+            },
+            {
+                "block_id": "ch_002.sc_001.b003",
+                "chapter_id": "ch_002",
+                "block_index": 3,
+                "purpose": "Reprice the relationship through a visible hesitation.",
+                "characters": ["Hero", "Heroine"],
+                "active_lines": ["line_case"],
+                "active_twists": ["twist_01"],
+                "scene_goal": "Turn her pause into relationship pressure.",
+                "must_reveal": [
+                    "He turns from fury to disciplined action.",
+                    "She feels less like a simple traitor and more like a controlled threat.",
+                    "She pauses at the old case term.",
+                ],
+                "must_hide": ["Do not explain her true motive."],
+                "emotional_tone": "Hatred turns into cold strategic pressure.",
+                "end_state": "Her restraint becomes more threatening than a direct answer.",
+                "human_reaction_target": [
+                    "Show a small failure of composure instead of direct confession.",
+                    "Let witnesses react to the pause like real people in the room.",
+                ],
+                "cost_shift": "The old case moves one step closer while their relationship becomes harder to read and harder to trust.",
+                "reader_feeling_target": "Readers should remember the pause and feel the relationship has become more dangerous.",
+                "paragraph_budget": paragraph_budget,
+                "style_risk_guard": [
+                    "Do not explain the clue after showing it.",
+                    "Do not summarize the relationship change in narrator voice.",
+                ],
+                "text": "",
+                "status": "draft",
+                "version": 1,
+            },
+            {
+                "block_id": "ch_002.sc_001.b004",
+                "chapter_id": "ch_002",
+                "block_index": 4,
+                "purpose": "End with a concrete next-step loss.",
+                "characters": ["Hero"],
+                "active_lines": ["line_case"],
+                "active_twists": ["twist_01"],
+                "scene_goal": "Make the ending pull land through a changed situation.",
+                "must_reveal": ["The first witness is already dead."],
+                "must_hide": ["Do not explain her true motive."],
+                "emotional_tone": "Readers should side with him and distrust her restraint.",
+                "end_state": "The chapter closes on a harder route and a sharper cost.",
+                "human_reaction_target": [
+                    "Let the hook strike the hero's body or breathing before it becomes a plot point.",
+                    "Do not end on summary language alone.",
+                ],
+                "cost_shift": "He loses the first witness before the investigation can even begin.",
+                "reader_feeling_target": "Readers should feel the next step has become both urgent and harder.",
+                "paragraph_budget": paragraph_budget,
+                "style_risk_guard": [
+                    "Do not force a trailer-like ending sentence.",
+                    "Do not flatten the final beat into explanation.",
+                ],
+                "text": "",
+                "status": "draft",
+                "version": 1,
+            },
+        ]
+        return json.dumps({"blocks": blocks}, ensure_ascii=False)
+
+    @staticmethod
+    def _block_quality_pass() -> str:
+        return json.dumps(
+            {
+                "tool_id": "review_block_quality",
+                "passed": True,
+                "severity": "low",
+                "scene_goal_completed": True,
+                "human_reaction_target_hit": True,
+                "cost_shift_landed": True,
+                "reader_feeling_landed": True,
+                "paragraphs_readable": True,
+                "issues": [],
+                "rewrite_guidance": "",
+            },
+            ensure_ascii=False,
+        )
+
+    @staticmethod
+    def _evidence_review_pass() -> str:
+        return json.dumps({"passed": True, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}, ensure_ascii=False)
+
+    @staticmethod
+    def _humanity_review_pass() -> str:
+        return json.dumps(
+            {
+                "passed": True,
+                "level": "low",
+                "human_warmth_score": 8,
+                "character_has_real_world_tradeoff": True,
+                "emotion_is_grounded_in_specific_loss": True,
+                "supporting_character_reacts_humanly": True,
+                "self_talk_feels_specific": True,
+                "pain_is_not_generic": True,
+                "issues": [],
+                "rewrite_guidance": "",
+            },
+            ensure_ascii=False,
+        )
+
+    @staticmethod
+    def _prose_review_pass() -> str:
+        return json.dumps(
+            {
+                "prose_score": 8,
+                "tension_score": 8,
+                "subtext_score": 7,
+                "exposition_score": 3,
+                "cliche_score": 2,
+                "double_duty_detail_score": 7,
+                "scene_texture_score": 8,
+                "emotion_externalization_score": 8,
+                "dialogue_subtext_score": 8,
+                "human_warmth_score": 8,
+                "memorability_score": 8,
+                "pressure_authenticity_score": 8,
+                "rewrite_needed": False,
+                "rewrite_guidance": "",
+                "issues": [],
+                "evidence_notes": ["detail works", "emotion lands"],
+            },
+            ensure_ascii=False,
+        )
+
+    def _block_review_pass_once(self) -> list[str]:
+        return [
+            self._evidence_review_pass(),
+            self._evidence_review_pass(),
+            self._evidence_review_pass(),
+            self._block_quality_pass(),
+        ]
+
+    def _chapter_review_pass_sequence(self) -> list[str]:
+        return [
+            self._evidence_review_pass(),
+            self._prose_review_pass(),
+            self._evidence_review_pass(),
+            self._evidence_review_pass(),
+            self._humanity_review_pass(),
+            self._evidence_review_pass(),
+            self._evidence_review_pass(),
+            self._evidence_review_pass(),
+        ]
 
     def test_skill_manager_discovers_guard_skills(self) -> None:
         manager = SkillManager(registry=SkillRegistry())
         review_reports = {
-            "review_prose_quality": {"prose_score": 6, "tension_score": 6, "exposition_score": 5, "rewrite_needed": True},
+            "review_prose_quality": {
+                "prose_score": 6,
+                "tension_score": 6,
+                "memorability_score": 6,
+                "pressure_authenticity_score": 6,
+                "exposition_score": 5,
+                "rewrite_needed": True,
+            },
             "review_reveal_leak": {"passed": False, "level": "high", "issues": ["Leak"]},
             "review_plot_logic": {"passed": False, "level": "high", "issues": ["Logic"]},
             "review_clue_origin": {"passed": False, "level": "high", "issues": ["Clue"]},
             "review_humanity": {"passed": False, "level": "medium", "human_warmth_score": 5, "issues": []},
-            "review_character_integrity": {"passed": False, "level": "high", "issues": []},
-            "review_time_consistency": {"passed": False, "level": "high", "issues": []},
             "review_chapter_engine": {"passed": False, "level": "medium", "issues": ["Opening is weak."]},
         }
-        skills = [item.skill_id for item in manager.discover(chapter_brief=self.chapter_brief, review_reports=review_reports)]
-        self.assertIn("prose_improvement", skills)
-        self.assertIn("reveal_guard", skills)
-        self.assertIn("plot_guard", skills)
-        self.assertIn("clue_consistency", skills)
-        self.assertIn("opening_boost", skills)
-        self.assertIn("humanity_boost", skills)
-        self.assertIn("character_integrity", skills)
-        self.assertIn("time_consistency_guard", skills)
+        chapter_skills = [item.skill_id for item in manager.discover(chapter_brief=self.chapter_brief, review_reports=review_reports)]
+        block_skills = [item.skill_id for item in manager.initial_skills(stage="block")]
+
+        self.assertIn("base_style", block_skills)
+        self.assertIn("reveal_guard", block_skills)
+        self.assertIn("character_integrity", block_skills)
+        self.assertIn("time_consistency_guard", block_skills)
+
+        self.assertIn("prose_improvement", chapter_skills)
+        self.assertIn("reveal_guard", chapter_skills)
+        self.assertIn("plot_guard", chapter_skills)
+        self.assertIn("clue_consistency", chapter_skills)
+        self.assertIn("opening_boost", chapter_skills)
+        self.assertIn("humanity_boost", chapter_skills)
 
     def test_final_judge_blocks_failed_reports(self) -> None:
         result = FinalJudgeTool().run(
@@ -180,23 +400,32 @@ class WritingChapterAgentTests(unittest.TestCase):
         llm = RecordingSequenceLLM(
             [
                 self.sanitized_context_json,
+                self._planned_blocks_json(),
                 "Cold wind pressed against the vermilion steps. He bowed, but not low enough to forget himself. The order had arrived before his first breath settled.",
+                *self._block_review_pass_once(),
                 "The transfer register stayed tucked beneath the eunuch's sleeve. He asked for it in a level voice, as if the request cost him nothing at all.",
+                *self._block_review_pass_once(),
                 "When the old case title surfaced, she paused only once. That single hesitation tightened every gaze in the hall and turned restraint into suspicion.",
+                *self._block_review_pass_once(),
                 "He left with the legal opening in hand, but the courtyard had already changed its face. Before he reached the lower steps, he learned the first witness was dead.",
-                '{"tool_calls":[{"tool_name":"review_instruction_compliance","reason":"hard gate"},{"tool_name":"review_continuity","reason":"hard gate"},{"tool_name":"review_time_consistency","reason":"time"},{"tool_name":"review_character_integrity","reason":"behavior"},{"tool_name":"review_humanity","reason":"humanity"},{"tool_name":"review_hook_appearance","reason":"hook and appearance"},{"tool_name":"review_reveal_leak","reason":"reveal safety"},{"tool_name":"review_plot_logic","reason":"logic"},{"tool_name":"review_clue_origin","reason":"clue source"},{"tool_name":"review_prose_quality","reason":"style"}]}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": ""}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"passed": true, "level": "low", "human_warmth_score": 8, "character_has_real_world_tradeoff": true, "emotion_is_grounded_in_specific_loss": true, "supporting_character_reacts_humanly": true, "self_talk_feels_specific": true, "pain_is_not_generic": true, "issues": [], "rewrite_guidance": ""}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"prose_score": 8, "tension_score": 8, "subtext_score": 7, "exposition_score": 3, "cliche_score": 2, "double_duty_detail_score": 7, "scene_texture_score": 8, "emotion_externalization_score": 8, "dialogue_subtext_score": 8, "human_warmth_score": 8, "rewrite_needed": false, "rewrite_guidance": "", "evidence_notes": ["detail works", "emotion lands"]}',
+                *self._block_review_pass_once(),
+                *self._chapter_review_pass_sequence(),
                 "Cold wind pressed against the vermilion steps. He bowed, counted the breaths between orders, and saw her pause only once at the old case title.",
-                '{"chapter_id":"ch_002","actual_events":["He returns to court under pressure.","He finds a procedural opening."],"reader_now_knows":["The old verdict still stands.","A transfer register may help him move indirectly."],"reader_now_believes":["She betrayed him but is hiding something."],"open_questions":["Why did she pause?"],"character_states":["He chooses disciplined action."],"relationship_state":["Their hostility gains a layer of calculation."],"seeded_clues":["She pauses at the old case term."],"locked_truths":["Her true motive remains hidden."],"time_state":{"chapter_end_time":"回京当日，午后","continuity_note":"他仍带着入宫时的疲态，旧案名目已经压在心头。"}}',
+                json.dumps(
+                    {
+                        "chapter_id": "ch_002",
+                        "actual_events": ["He returns to court under pressure.", "He finds a procedural opening."],
+                        "reader_now_knows": ["The old verdict still stands.", "A transfer register may help him move indirectly."],
+                        "reader_now_believes": ["She betrayed him but is hiding something."],
+                        "open_questions": ["Why did she pause?"],
+                        "character_states": ["He chooses disciplined action."],
+                        "relationship_state": ["Their hostility gains a layer of calculation."],
+                        "seeded_clues": ["She pauses at the old case term."],
+                        "locked_truths": ["Her true motive remains hidden."],
+                        "time_state": {"chapter_end_time": "return day, noon", "continuity_note": "He still carries the return pressure in his body."},
+                    },
+                    ensure_ascii=False,
+                ),
             ]
         )
         agent = WritingChapterAgent(llm_client=llm)
@@ -211,31 +440,40 @@ class WritingChapterAgentTests(unittest.TestCase):
         self.assertEqual(result.actual_chapter_summary.chapter_id, "ch_002")
         self.assertTrue(result.final_judge["passed"])
         self.assertIn("vermilion steps", result.chapter_text)
-        first_prompt = llm.calls[1][-1].content
-        self.assertNotIn(self.twist.truth, first_prompt)
-        self.assertIn(self.twist.false_belief, first_prompt)
+        first_block_prompt = llm.calls[2][-1].content
+        self.assertNotIn(self.twist.truth, first_block_prompt)
+        self.assertIn(self.twist.false_belief, first_block_prompt)
 
     def test_writing_chapter_agent_emits_live_stage_events(self) -> None:
         llm = RecordingSequenceLLM(
             [
                 self.sanitized_context_json,
+                self._planned_blocks_json(),
                 "Cold wind pressed against the vermilion steps. He bowed, but not low enough to forget himself. The order had arrived before his first breath settled.",
+                *self._block_review_pass_once(),
                 "The transfer register stayed tucked beneath the eunuch's sleeve. He asked for it in a level voice, as if the request cost him nothing at all.",
+                *self._block_review_pass_once(),
                 "When the old case title surfaced, she paused only once. That single hesitation tightened every gaze in the hall and turned restraint into suspicion.",
+                *self._block_review_pass_once(),
                 "He left with the legal opening in hand, but the courtyard had already changed its face. Before he reached the lower steps, he learned the first witness was dead.",
-                '{"tool_calls":[{"tool_name":"review_instruction_compliance","reason":"hard gate"},{"tool_name":"review_continuity","reason":"hard gate"},{"tool_name":"review_time_consistency","reason":"time"},{"tool_name":"review_character_integrity","reason":"behavior"},{"tool_name":"review_humanity","reason":"humanity"},{"tool_name":"review_hook_appearance","reason":"hook and appearance"},{"tool_name":"review_reveal_leak","reason":"reveal safety"},{"tool_name":"review_plot_logic","reason":"logic"},{"tool_name":"review_clue_origin","reason":"clue source"},{"tool_name":"review_prose_quality","reason":"style"}]}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": ""}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"passed": true, "level": "low", "human_warmth_score": 8, "character_has_real_world_tradeoff": true, "emotion_is_grounded_in_specific_loss": true, "supporting_character_reacts_humanly": true, "self_talk_feels_specific": true, "pain_is_not_generic": true, "issues": [], "rewrite_guidance": ""}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"prose_score": 8, "tension_score": 8, "subtext_score": 7, "exposition_score": 3, "cliche_score": 2, "double_duty_detail_score": 7, "scene_texture_score": 8, "emotion_externalization_score": 8, "dialogue_subtext_score": 8, "human_warmth_score": 8, "rewrite_needed": false, "rewrite_guidance": "", "evidence_notes": ["detail works", "emotion lands"]}',
+                *self._block_review_pass_once(),
+                *self._chapter_review_pass_sequence(),
                 "Cold wind pressed against the vermilion steps. He bowed, counted the breaths between orders, and saw her pause only once at the old case title.",
-                '{"chapter_id":"ch_002","actual_events":["He returns to court under pressure.","He finds a procedural opening."],"reader_now_knows":["The old verdict still stands.","A transfer register may help him move indirectly."],"reader_now_believes":["She betrayed him but is hiding something."],"open_questions":["Why did she pause?"],"character_states":["He chooses disciplined action."],"relationship_state":["Their hostility gains a layer of calculation."],"seeded_clues":["She pauses at the old case term."],"locked_truths":["Her true motive remains hidden."],"time_state":{"chapter_end_time":"回京当日，午后","continuity_note":"他仍带着入宫时的疲态。"}}',
+                json.dumps(
+                    {
+                        "chapter_id": "ch_002",
+                        "actual_events": ["He returns to court under pressure.", "He finds a procedural opening."],
+                        "reader_now_knows": ["The old verdict still stands."],
+                        "reader_now_believes": ["She betrayed him but is hiding something."],
+                        "open_questions": ["Why did she pause?"],
+                        "character_states": ["He chooses disciplined action."],
+                        "relationship_state": ["Their hostility gains a layer of calculation."],
+                        "seeded_clues": ["She pauses at the old case term."],
+                        "locked_truths": ["Her true motive remains hidden."],
+                        "time_state": {"chapter_end_time": "return day, noon"},
+                    },
+                    ensure_ascii=False,
+                ),
             ]
         )
         agent = WritingChapterAgent(llm_client=llm)
@@ -265,23 +503,32 @@ class WritingChapterAgentTests(unittest.TestCase):
         llm = RecordingSequenceLLM(
             [
                 self.sanitized_context_json,
+                self._planned_blocks_json(),
                 "He returned in silence, but the hall refused him even that small mercy. Every eye counted what he no longer had.",
+                *self._block_review_pass_once(),
                 "The clerk would not touch the register until the eunuch nodded. He understood then that even procedure had become a guarded door.",
+                *self._block_review_pass_once(),
                 "She paused at the old case name and looked away too quickly. That small break in her calm made the room colder, not kinder.",
+                *self._block_review_pass_once(),
                 "By the time he stepped back into the wind, he had found the indirect route he needed. It came with the news that the first witness would never speak again.",
-                '{"tool_calls":[{"tool_name":"review_instruction_compliance","reason":"hard gate"},{"tool_name":"review_continuity","reason":"hard gate"},{"tool_name":"review_time_consistency","reason":"time"},{"tool_name":"review_character_integrity","reason":"behavior"},{"tool_name":"review_humanity","reason":"humanity"},{"tool_name":"review_hook_appearance","reason":"hook and appearance"},{"tool_name":"review_reveal_leak","reason":"reveal safety"},{"tool_name":"review_plot_logic","reason":"logic"},{"tool_name":"review_clue_origin","reason":"clue source"},{"tool_name":"review_prose_quality","reason":"style"}]}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": ""}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"passed": true, "level": "low", "human_warmth_score": 8, "character_has_real_world_tradeoff": true, "emotion_is_grounded_in_specific_loss": true, "supporting_character_reacts_humanly": true, "self_talk_feels_specific": true, "pain_is_not_generic": true, "issues": [], "rewrite_guidance": ""}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"passed": true, "level": "low", "issues": [], "rewrite_guidance": "", "evidence_focus": []}',
-                '{"prose_score": 8, "tension_score": 8, "subtext_score": 7, "exposition_score": 3, "cliche_score": 2, "double_duty_detail_score": 7, "scene_texture_score": 8, "emotion_externalization_score": 8, "dialogue_subtext_score": 8, "human_warmth_score": 8, "rewrite_needed": false, "rewrite_guidance": "", "evidence_notes": ["detail works", "emotion lands"]}',
+                *self._block_review_pass_once(),
+                *self._chapter_review_pass_sequence(),
                 "He returned in silence, and the hall gave him no mercy.",
-                '{"chapter_id":"ch_002","actual_events":["He returns."],"reader_now_knows":["The hall is hostile."],"reader_now_believes":["She betrayed him."],"open_questions":["What is she hiding?"],"character_states":["He stays disciplined."],"relationship_state":["They stand on cold terms."],"seeded_clues":["A brief pause."],"locked_truths":["Her motive is hidden."],"time_state":{"chapter_end_time":"回京当日，午后","continuity_note":"他仍在敌意未散的殿中。"}}',
+                json.dumps(
+                    {
+                        "chapter_id": "ch_002",
+                        "actual_events": ["He returns."],
+                        "reader_now_knows": ["The hall is hostile."],
+                        "reader_now_believes": ["She betrayed him."],
+                        "open_questions": ["What is she hiding?"],
+                        "character_states": ["He stays disciplined."],
+                        "relationship_state": ["They stand on cold terms."],
+                        "seeded_clues": ["A brief pause."],
+                        "locked_truths": ["Her motive is hidden."],
+                        "time_state": {"chapter_end_time": "return day, noon", "continuity_note": "He still stands inside unresolved hostility."},
+                    },
+                    ensure_ascii=False,
+                ),
             ]
         )
         writer = WriterAgent(llm_client=llm, patch_executor=PatchExecutor())
@@ -312,7 +559,7 @@ class WritingChapterAgentTests(unittest.TestCase):
                 {
                     "event_id": "EVT_0016",
                     "title": "Hero is forced out of the capital",
-                    "time_label": "景和七年冬—景和八年春",
+                    "time_label": "year 7 winter to year 8 spring",
                     "description": "He is forced away from the capital.",
                     "trigger": "Court pressure cuts him off.",
                     "consequence": "He loses his place and goes to the frontier.",
@@ -321,7 +568,7 @@ class WritingChapterAgentTests(unittest.TestCase):
                 {
                     "event_id": "EVT_0000",
                     "title": "Hero returns to the capital",
-                    "time_label": "景和十二年春",
+                    "time_label": "year 12 spring",
                     "description": "He returns with frontier merit.",
                     "trigger": "Years of service bring him back.",
                     "consequence": "The old case regains pressure.",
@@ -333,8 +580,8 @@ class WritingChapterAgentTests(unittest.TestCase):
             "chapter_briefs": [self.chapter_brief.model_dump(mode="json")],
         }
         book.metadata["character_milestones"] = [
-            {"character_name": "Hero", "milestone_list": [{"axis": "复仇线", "stages": ["归京受压", "转向间接追查"]}], "axes": []},
-            {"character_name": "Heroine", "milestone_list": [{"axis": "关系线", "stages": ["被误解", "关系重估"]}], "axes": []},
+            {"character_name": "Hero", "milestone_list": [{"axis": "Revenge", "stages": ["Return under pressure", "Shift to indirect investigation"]}], "axes": []},
+            {"character_name": "Heroine", "milestone_list": [{"axis": "Relationship", "stages": ["Misread", "Relationship repriced"]}], "axes": []},
         ]
         updated_book, chapter = writer.write_next_chapter(book=book)
         self.assertEqual(chapter.id, "ch_002")

@@ -28,21 +28,23 @@ Plan the chapter as a sequence of content blocks. Return valid JSON only.
 {target_word_count_text}
 
 Definition:
-- A content block is a writing unit with one clear narrative purpose.
-- It is not a physical paragraph.
-- One block may contain 1 to 3 paragraphs, sometimes more, but each paragraph should remain comfortable for front-end reading.
+- A content block is a content unit with one writing purpose, not one physical paragraph.
+- One block may contain 1 to 3 natural paragraphs.
+- Each natural paragraph should remain comfortable for front-end reading.
+
+Core shift:
+- Do not only split the chapter brief into information chunks.
+- Design each block around how it will make the characters feel more human, more pressured, more costly, and more memorable.
+- Think in terms of scene design before drafting prose.
 
 Requirements:
-1. Plan 3 to 8 blocks depending on chapter complexity.
-2. Each block must do one main thing only.
-3. Adjacent blocks must clearly push the situation forward.
-4. Each block must end with a changed situation, pressure, belief, or relationship angle.
-5. Keep hidden truths hidden. Respect allowed clues and forbidden reveals.
-6. Prefer precise, actionable purposes rather than vague labels like "continue scene".
-7. Set `text` to an empty string.
-8. Set `status` to `draft` and `version` to `1`.
-9. Use stable ids like `ch_002.sc_001.b001`.
-10. Fill every block with:
+1. Plan 3 to 6 blocks only.
+2. Each block should do one main job: opening pressure, relationship collision, clue movement, emotional reprice, ending pull, and so on.
+3. Adjacent blocks must clearly change the situation, the cost, the relationship angle, or the reader's emotional state.
+4. Respect hidden truths, allowed clues, forbidden reveals, and reader belief.
+5. Keep `text` as an empty string, `status` as `draft`, and `version` as `1`.
+6. Use stable ids like `ch_002.sc_001.b001`.
+7. Every block must include all of these fields:
    - `block_id`
    - `chapter_id`
    - `block_index`
@@ -55,4 +57,33 @@ Requirements:
    - `must_hide`
    - `emotional_tone`
    - `end_state`
+   - `human_reaction_target`
+   - `cost_shift`
+   - `reader_feeling_target`
+   - `paragraph_budget`
+   - `style_risk_guard`
+   - `text`
+   - `status`
+   - `version`
 
+Field guidance:
+- `human_reaction_target`:
+  Write concrete living-human reactions, not abstract plot function.
+  Examples: bodily leakage, practical calculation, self-mockery, startled witness reaction, small failure of composure.
+- `cost_shift`:
+  At the end of the block, someone must pay a little more.
+  The cost may be social, bodily, emotional, financial, political, or relational.
+- `reader_feeling_target`:
+  Say what the reader should directly feel when the block ends.
+- `paragraph_budget`:
+  Usually 2-4 natural paragraphs, each around 30-120 Chinese characters, with 180 as a danger line.
+- `style_risk_guard`:
+  Name the two to four easiest ways this block could be written badly.
+  Examples: repeating one cold/blood image, summary psychology instead of scene, dialogue that only explains plot.
+
+Planning style:
+1. A good block plan is not generic.
+2. Prefer pain, price, friction, residue, and relationship re-pricing over flat information delivery.
+3. If a clue appears, design the human reaction around it instead of explaining it.
+4. If the block is quiet, give the quiet a concrete unease or social pressure.
+5. If the chapter ends on a hook, land that hook through a person's reaction or changed situation, not a trailer sentence.

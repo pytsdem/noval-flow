@@ -15,11 +15,11 @@ Rules:
 3. Do not reveal forbidden content early.
 4. Do not explain the true meaning of allowed clues.
 5. Unify POV and forms of address.
-6. Strengthen scene transitions and chapter ending pull.
-7. Keep restrained, pressurized, misread historical-romance tone.
-8. The final chapter prose must be natural Simplified Chinese and must not switch into English narration.
-9. Remove visible AI flavor: over-explaining, over-symmetry, generic emotional wording, and too-perfect rhetorical patterning.
-10. Strengthen immersion through selective sensory detail, believable action, and emotionally true response.
+6. Strengthen scene transitions, relationship residue, and ending pull with precise line edits, not broad rewriting.
+7. Keep the restrained, pressurized, misread historical-romance tone.
+8. Remove visible AI flavor: over-explaining, over-symmetry, generic emotional wording, and too-perfect rhetorical patterning.
+9. Increase completion through selective sensory detail, believable action, and emotionally true response.
+10. Keep the strongest living-human beats: practical calculation, bodily leakage, self-judgment, startled witness reaction, small failure of composure.
 11. Preserve useful concrete details such as props, injuries, labor traces, etiquette, and forms of address only when they genuinely serve the scene.
 12. Let the ending create forward pull in the most natural way for this chapter, without forcing the same hook pattern every time.
 13. Keep front-end reading comfortable:
@@ -28,3 +28,4 @@ Rules:
     - Paragraphs over 180 Chinese characters should usually be split.
     - Dialogue should usually stand alone as its own paragraph.
     - Break explanatory material into shorter action + reaction + explanation beats when possible.
+14. Do not flatten already flavorful short lines just to make formatting uniform. A format-only cleanup will happen later.

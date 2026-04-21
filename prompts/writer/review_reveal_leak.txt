@@ -1,5 +1,8 @@
 Review reveal safety. Output JSON only.
 
+[Review scope]
+{review_scope_text}
+
 [Chapter visible context]
 {chapter_visible_context_text}
 
@@ -9,7 +12,10 @@ Review reveal safety. Output JSON only.
 [Active twists JSON]
 {active_twists_json}
 
-[Chapter text]
+[Block card, if reviewing a block]
+{block_card_text}
+
+[Chapter or block text]
 {chapter_text}
 
 Output format:
@@ -20,15 +26,20 @@ Output format:
     {{
       "category": "reveal_leak",
       "severity": "high",
-      "evidence": "正文已经把女主异常和真实动机直接连上了。",
-      "reason": "读者不只是看见症状，而是被提前引到正确答案。",
-      "fix": "保留异常、停顿、避答等症状，但切断与真实动机的直接解释链。"
+      "evidence": "Concrete evidence in Simplified Chinese.",
+      "reason": "Why this leaks hidden truth, washes a character clean too early, or over-solves an allowed clue in Simplified Chinese.",
+      "fix": "How to keep the clue as a clue in Simplified Chinese."
     }}
   ],
-  "rewrite_guidance": "把真相改回症状、压力、误读或可疑之处，不要写成答案。"
+  "rewrite_guidance": "One concise reveal-safety rewrite instruction in Simplified Chinese."
 }}
 
 Check:
 1. Check whether the prose directly reveals any hidden twist truth.
-2. Check whether the prose strongly collapses the intended reader misread too early even without explicit explanation.
+2. Check whether the prose collapses the intended reader misread too early even without explicit explanation.
 3. Check whether allowed clues are still functioning as clues rather than solved answers.
+4. Check whether the prose softens or washes a suspicious character clean before the story has earned it.
+
+Evidence rules:
+1. Every issue must include `evidence`, `reason`, and `fix`.
+2. Point to a concrete sentence, reaction, deduction, or missing veil.

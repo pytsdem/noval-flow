@@ -18,5 +18,6 @@ class DraftBlockTool(LLMChapterTool):
             prior_block_summary_text=payload.get("prior_block_summary_text", ""),
             prior_chapter_text_tail=payload.get("prior_chapter_text_tail", ""),
             style_card_text=payload["style_card_text"],
+            loaded_skill_instructions_text=payload.get("loaded_skill_instructions_text", ""),
         )
         return {"block_text": self.generate_text(prompt=prompt, temperature=0.6)}

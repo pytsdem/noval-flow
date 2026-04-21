@@ -23,15 +23,19 @@ Output format:
     {{
       "category": "continuity",
       "severity": "medium",
-      "evidence": "上一章男主刚受罚未歇，本章开头却像已经恢复从容，没有承接。",
-      "reason": "前后章状态没有延续，读者会感觉断片。",
-      "fix": "在开头补上身体、情绪、物件或关系状态的延续。"
+      "evidence": "Concrete evidence in Simplified Chinese.",
+      "reason": "Why this breaks continuity with prior chapters in Simplified Chinese.",
+      "fix": "How to repair continuity in Simplified Chinese."
     }}
   ],
-  "rewrite_guidance": "优先修复前后章状态衔接：身体、物件、情绪、关系。"
+  "rewrite_guidance": "One concise continuity rewrite instruction in Simplified Chinese."
 }}
 
 Check:
 1. Check whether the chapter continues prior chapter memory and relationship state.
 2. Check whether body state, emotional residue, object state, and unresolved pressure are carried over.
 3. Check whether the chapter contradicts already-written facts or reader memory.
+
+Evidence rules:
+1. Every issue must include `evidence`, `reason`, and `fix`.
+2. Point to a specific carry-over break or contradiction.

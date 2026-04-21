@@ -8,7 +8,13 @@ class ReviewTimeConsistencyTool(LLMChapterTool):
     name = "review_time_consistency"
 
     def run(self, payload: dict[str, object]) -> dict[str, object]:
-        prompt = self.render_prompt("writer/review_time_consistency.txt", **payload)
+        prompt_payload = dict(payload)
+        prompt_payload.setdefault("review_scope_text", "Review the whole chapter.")
+        prompt_payload.setdefault("block_card_text", "")
+        prompt = self.render_prompt(
+            "writer/review_time_consistency.txt",
+            **prompt_payload,
+        )
         return self.generate_json(
             prompt=prompt,
             schema_name=self.name,

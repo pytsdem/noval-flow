@@ -20,16 +20,20 @@ Output format:
     {{
       "category": "plot_logic",
       "severity": "high",
-      "evidence": "男主没有铺垫就获得了推进旧案的关键入口。",
-      "reason": "因果链缺了一步，结果像被作者直接发放。",
-      "fix": "补出入口来源、代价或试探过程，让结果由场景推出来。"
+      "evidence": "Concrete evidence in Simplified Chinese.",
+      "reason": "Why the causal chain feels skipped or author-convenient in Simplified Chinese.",
+      "fix": "How to restore the causal chain in Simplified Chinese."
     }}
   ],
-  "rewrite_guidance": "把关键转折补成清晰因果链，不要直接把结果发给人物。"
+  "rewrite_guidance": "One concise plot-logic rewrite instruction in Simplified Chinese."
 }}
 
 Check:
 1. Check whether major turns come from written causes inside this chapter.
 2. Check whether any convenience, coincidence, or shortcut replaces scene-earned progression.
-3. Check whether constraints from the chapter brief and world limit are still binding the characters.
+3. Check whether chapter-brief constraints and world limits are still binding the characters.
 4. Check whether each clue, object, or reveal-stage movement is justified by visible cause.
+
+Evidence rules:
+1. Every issue must include `evidence`, `reason`, and `fix`.
+2. Point to a specific missing cause, unsupported shortcut, or forced convenience.

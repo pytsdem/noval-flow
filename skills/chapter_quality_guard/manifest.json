@@ -2,11 +2,9 @@
   "skill_id": "chapter_quality_guard",
   "tools": [
     "review_instruction_compliance",
-    "review_time_consistency",
     "review_continuity",
-    "review_character_integrity",
+    "review_plot_logic",
     "review_humanity",
-    "review_hook_appearance",
     "review_chapter_engine",
     "final_judge"
   ],

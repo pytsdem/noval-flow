@@ -268,6 +268,11 @@ class ContentBlock(StrictBaseModel):
     must_hide: list[str] = Field(default_factory=list)
     emotional_tone: str = ""
     end_state: str
+    human_reaction_target: list[str] = Field(default_factory=list)
+    cost_shift: str = ""
+    reader_feeling_target: str = ""
+    paragraph_budget: str = ""
+    style_risk_guard: list[str] = Field(default_factory=list)
     text: str = ""
     status: Literal["draft", "committed", "replaced"] = "draft"
     version: int = Field(default=1, ge=1)
@@ -281,18 +286,19 @@ class ContentBlock(StrictBaseModel):
 
 
 class ContentBlockPlanPayload(StrictBaseModel):
-    blocks: list[ContentBlock] = Field(default_factory=list, min_length=1, max_length=8)
+    blocks: list[ContentBlock] = Field(default_factory=list, min_length=3, max_length=6)
 
 
-class BlockQuickReviewPayload(StrictBaseModel):
+class BlockQualityReviewPayload(StrictBaseModel):
+    tool_id: Literal["review_block_quality"] = "review_block_quality"
     passed: bool = False
-    purpose_completed: bool = False
-    leak_risk: Literal["low", "medium", "high"] = "medium"
-    time_conflict: bool = False
-    too_outline_like: bool = False
-    paragraph_warnings: list[str] = Field(default_factory=list)
-    issues: list[str] = Field(default_factory=list)
-    rewrite_needed: bool = False
+    severity: Literal["low", "medium", "high", "critical"] = "medium"
+    scene_goal_completed: bool = False
+    human_reaction_target_hit: bool = False
+    cost_shift_landed: bool = False
+    reader_feeling_landed: bool = False
+    paragraphs_readable: bool = True
+    issues: list["EvidenceIssue"] = Field(default_factory=list)
     rewrite_guidance: str = ""
 
 
@@ -335,8 +341,11 @@ class ProseQualityPayload(StrictBaseModel):
     emotion_externalization_score: int = Field(default=0, ge=0, le=10)
     dialogue_subtext_score: int = Field(default=0, ge=0, le=10)
     human_warmth_score: int = Field(default=0, ge=0, le=10)
+    memorability_score: int = Field(default=0, ge=0, le=10)
+    pressure_authenticity_score: int = Field(default=0, ge=0, le=10)
     rewrite_needed: bool = False
     rewrite_guidance: str = ""
+    issues: list[EvidenceIssue] = Field(default_factory=list)
     evidence_notes: list[str] = Field(default_factory=list)
 
 
@@ -379,7 +388,12 @@ class ContextSanitizationPayload(StrictBaseModel):
 
 
 class RevisionPlan(StrictBaseModel):
+    scope: Literal["block", "chapter"] = "chapter"
+    target_id: str = ""
     summary: str
+    p0: list[str] = Field(default_factory=list)
+    p1: list[str] = Field(default_factory=list)
+    p2: list[str] = Field(default_factory=list)
     must_fix: list[str] = Field(default_factory=list)
     should_fix: list[str] = Field(default_factory=list)
     keep: list[str] = Field(default_factory=list)

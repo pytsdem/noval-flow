@@ -16,14 +16,12 @@ from novel_flow.models.schemas import (
     ContentBlock,
     StoryPremise,
     StoryLine,
-    ToolPlanPayload,
     TwistDesign,
 )
 from novel_flow.prompting.templates import PromptLibrary
 from novel_flow.services.chapter_context import ChapterContextAssembler
 from novel_flow.services.context_sanitization_task import ContextSanitizationTask
 from novel_flow.services.dynamic_instruction_builder import DynamicInstructionBuilder
-from novel_flow.services.json_generation import safe_json_generate
 from novel_flow.services.review_aggregator import ReviewAggregator
 from novel_flow.services.skill_manager import SkillManager
 from novel_flow.services.skill_registry import SkillRegistry
@@ -31,30 +29,34 @@ from novel_flow.services.tool_registry import ToolRegistry
 
 
 class WritingChapterAgent(BaseAgent):
-    REVIEW_TOOLS = [
-        "review_instruction_compliance",
-        "review_time_consistency",
+    BLOCK_REVIEW_TOOLS = [
         "review_reveal_leak",
-        "review_plot_logic",
-        "review_clue_origin",
-        "review_continuity",
         "review_character_integrity",
-        "review_humanity",
-        "review_hook_appearance",
+        "review_time_consistency",
+        "review_block_quality",
+    ]
+    CHAPTER_REVIEW_TOOLS = [
+        "review_instruction_compliance",
         "review_prose_quality",
+        "review_plot_logic",
+        "review_continuity",
+        "review_humanity",
         "review_chapter_engine",
     ]
+    OPTIONAL_CHAPTER_REVIEW_TOOLS = [
+        "review_reveal_leak",
+        "review_clue_origin",
+        "review_time_consistency",
+        "review_character_integrity",
+    ]
     OUTPUT_FORMAT_RULES = [
-        "使用中文全角标点为主",
-        "对话单独成段",
-        "情绪外化句、短促动作句可单独成段",
-        "避免一整页超长大段",
-        "不要把原本故意保留的停顿句强行合并",
-        "段落间只保留一个空行",
-        "清理尾随空格和重复空白",
-        "保持中文网文阅读节奏，不要格式化成论文",
-        "单个自然段尽量控制在 30 ~ 120 中文字之间",
-        "若超过 180 中文字，应尝试拆分",
+        "Prefer Chinese full-width punctuation.",
+        "Keep dialogue on its own paragraph when possible.",
+        "Keep one blank line between paragraphs.",
+        "Avoid page-sized paragraphs in front-end reading.",
+        "Do not flatten deliberate short lines or pauses.",
+        "Usually keep each paragraph around 30-120 Chinese characters.",
+        "Treat paragraphs longer than 180 Chinese characters as a formatting risk.",
     ]
 
     def __init__(
@@ -109,41 +111,23 @@ class WritingChapterAgent(BaseAgent):
         review_reports: dict[str, Any] = {}
         final_judge: dict[str, Any] = {}
         requires_human_review = False
+
         self._emit_stage(
             stage="context_ready",
-            action="组装正文固定信息包",
-            reason="正文写作所需的 selection、sanitization、time anchor 和章节上下文已经准备完成。",
+            action="Context ready",
+            reason="The chapter context package is ready for block planning and drafting.",
             chapter_id=chapter_brief.chapter_id,
-            context_keys=[
-                "selection_summary_text",
-                "time_anchor_text",
-                "chapter_visible_context_text",
-                "completed_chapter_memory_text",
-                "step_1_story_foundation_text",
-                "step_2_worldbuilding_text",
-                "step_3_character_packets_text",
-                "step_4_event_timeline_text",
-                "step_5_character_milestones_text",
-                "step_6_twists_text",
-                "step_7_story_lines_text",
-                "step_8_chapter_brief_text",
-                "chapter_payload_text",
-                "timeline_anchor_facts_text",
-                "relevant_world_rules_text",
-                "scene_character_context_text",
-                "relationship_state_text",
-                "style_card_text",
-            ],
             context_bundle=self._context_bundle(context),
         )
 
-        active_skills = self.skill_manager.initial_skills()
+        block_skills = self.skill_manager.initial_skills(stage="block")
+        block_skill_text = self.skill_manager.format_for_model(block_skills)
         self._emit_stage(
             stage="plan_content_blocks_start",
-            action="规划 content blocks",
-            reason="正文先拆成内容块，再逐块写作、逐块提交。",
+            action="Plan content blocks",
+            reason="Plan the chapter as content blocks before drafting.",
             chapter_id=chapter_brief.chapter_id,
-            skill_ids=[skill.skill_id for skill in active_skills],
+            skill_ids=[skill.skill_id for skill in block_skills],
         )
         planned_blocks = self._plan_content_blocks(
             chapter_brief=chapter_brief,
@@ -152,18 +136,16 @@ class WritingChapterAgent(BaseAgent):
         stage_log.append(
             {
                 "stage": "plan_content_blocks",
-                "skill_ids": [skill.skill_id for skill in active_skills],
+                "skill_ids": [skill.skill_id for skill in block_skills],
                 "block_count": len(planned_blocks),
                 "blocks": [block.model_dump(mode="json") for block in planned_blocks],
             }
         )
         self._emit_stage(
             stage="plan_content_blocks_done",
-            action="完成 content block 规划",
-            reason="接下来按 block 顺序逐块写、逐块轻审校、逐块落库。",
+            action="Planned content blocks",
+            reason="The chapter now has a block-level writing design.",
             chapter_id=chapter_brief.chapter_id,
-            skill_ids=[skill.skill_id for skill in active_skills],
-            block_count=len(planned_blocks),
             planned_blocks=[block.model_dump(mode="json") for block in planned_blocks],
         )
 
@@ -175,58 +157,65 @@ class WritingChapterAgent(BaseAgent):
                 block=block,
                 committed_blocks=committed_blocks,
             )
+            block_card_text = self._block_card_text(block)
             self._emit_stage(
                 stage=f"block_{block.block_index}_draft_start",
-                action="生成内容块草稿",
-                reason="当前 block 只处理一个明确写作目的，写完后立即进入轻审校。",
+                action="Draft block",
+                reason="Write the current content block before any chapter-level rewrite.",
                 chapter_id=chapter_brief.chapter_id,
                 block_id=block.block_id,
                 block_index=block.block_index,
-                block_purpose=block.purpose,
             )
             draft_result = self.tool_registry.execute(
                 "draft_block",
                 {
                     **block_context,
-                    "block_card_text": self._block_card_text(block),
+                    "block_card_text": block_card_text,
+                    "loaded_skill_instructions_text": block_skill_text,
                 },
             )
             block_text = str(draft_result.get("block_text") or "").strip()
-            quick_review = self.tool_registry.execute(
-                "review_block_quick",
-                {
-                    "chapter_payload_text": context.chapter_payload_text,
-                    "relevant_world_rules_text": context.relevant_world_rules_text,
-                    "block_card_text": self._block_card_text(block),
-                    "prior_chapter_text_tail": block_context["prior_chapter_text_tail"],
-                    "block_text": block_text,
-                },
+            block_review_reports = self._run_block_review_tools(
+                context=context,
+                block=block,
+                block_text=block_text,
+                block_context=block_context,
+                block_card_text=block_card_text,
             )
-            if bool(quick_review.get("rewrite_needed")):
+            block_revision_plan = ReviewAggregator.aggregate_block(
+                review_reports=block_review_reports,
+                triggered_skills=[skill.skill_id for skill in block_skills],
+                block_id=block.block_id,
+            )
+            revised = False
+            if self._needs_block_revision(block_review_reports):
                 self._emit_stage(
                     stage=f"block_{block.block_index}_revise_start",
-                    action="修正文内容块",
-                    reason="block quick review 标记需要修订，先局部修，再提交。",
+                    action="Revise block",
+                    reason="The block-level light review found issues that should be fixed before commit.",
                     chapter_id=chapter_brief.chapter_id,
                     block_id=block.block_id,
                     block_index=block.block_index,
-                    tool_result=quick_review,
+                    block_revision_plan=block_revision_plan.model_dump(mode="json"),
                 )
                 revise_result = self.tool_registry.execute(
                     "revise_block_if_needed",
                     {
                         **block_context,
-                        "block_card_text": self._block_card_text(block),
+                        "block_card_text": block_card_text,
                         "block_text": block_text,
-                        "review_json": json.dumps(quick_review, ensure_ascii=False, indent=2),
+                        "review_json": json.dumps(block_review_reports, ensure_ascii=False, indent=2),
+                        "block_revision_plan_json": json.dumps(block_revision_plan.model_dump(mode="json"), ensure_ascii=False, indent=2),
+                        "loaded_skill_instructions_text": block_skill_text,
                     },
                 )
                 block_text = str(revise_result.get("block_text") or block_text).strip()
+                revised = True
             committed_block = block.model_copy(
                 update={
                     "text": block_text,
                     "status": "committed",
-                    "version": max(int(block.version), 1),
+                    "version": max(int(block.version), 1) + (1 if revised else 0),
                 }
             )
             committed_blocks.append(committed_block)
@@ -236,36 +225,33 @@ class WritingChapterAgent(BaseAgent):
                     "stage": f"commit_block_{block.block_index}",
                     "block_id": committed_block.block_id,
                     "block_index": committed_block.block_index,
-                    "purpose": committed_block.purpose,
                     "status": committed_block.status,
                     "version": committed_block.version,
+                    "block_review_reports": block_review_reports,
+                    "block_revision_plan": block_revision_plan.model_dump(mode="json"),
                     "chapter_length": len(chapter_text),
-                    "quick_review": quick_review,
                 }
             )
             if on_block_committed is not None:
                 on_block_committed(committed_block)
             self._emit_stage(
                 stage=f"block_{block.block_index}_committed",
-                action="内容块已提交",
-                reason="该 block 已落库，可供前端实时追加展示。",
+                action="Committed block",
+                reason="The current content block is committed and can be shown incrementally.",
                 chapter_id=chapter_brief.chapter_id,
                 block_id=committed_block.block_id,
                 block_index=committed_block.block_index,
-                block_purpose=committed_block.purpose,
-                chapter_length=len(chapter_text),
                 committed_block=committed_block.model_dump(mode="json"),
                 current_chapter_draft_tail=self._tail_text(chapter_text, max_chars=500),
             )
 
         self._emit_stage(
             stage="merge_blocks_to_chapter_done",
-            action="合并已提交 content blocks",
-            reason="所有 block 已完成，进入整章级 review / rewrite / polish。",
+            action="Merged content blocks",
+            reason="All content blocks are committed and ready for chapter-level review.",
             chapter_id=chapter_brief.chapter_id,
             block_count=len(committed_blocks),
             chapter_length=len(chapter_text),
-            current_chapter_draft_tail=self._tail_text(chapter_text, max_chars=500),
         )
         stage_log.append(
             {
@@ -275,6 +261,7 @@ class WritingChapterAgent(BaseAgent):
             }
         )
 
+        active_skills = self.skill_manager.initial_skills(stage="chapter")
         best_snapshot = {
             "chapter_text": chapter_text,
             "review_reports": review_reports,
@@ -287,29 +274,27 @@ class WritingChapterAgent(BaseAgent):
                 active_skills = self.skill_manager.discover(
                     chapter_brief=chapter_brief,
                     review_reports=review_reports,
+                    stage="chapter",
                 )
             self._emit_stage(
                 stage=f"review_iteration_{iteration}_skills",
-                action="确定当前轮次 skills",
-                reason="根据上一轮 review 结果选择要加载的 skill 说明包。",
+                action="Select chapter skills",
+                reason="Use focused chapter-level skills for the current review cycle.",
                 chapter_id=chapter_brief.chapter_id,
                 iteration=iteration,
                 skill_ids=[skill.skill_id for skill in active_skills],
             )
             planned_tools = self._plan_review_tools(
                 chapter_brief=chapter_brief,
-                context=context,
-                chapter_text=chapter_text,
                 review_reports=review_reports,
                 active_skills=active_skills,
             )
             self._emit_stage(
                 stage=f"review_iteration_{iteration}_plan",
-                action="规划 review tool 调用顺序",
-                reason="模型已根据当前 skills 和已有报告生成本轮 review 计划。",
+                action="Plan chapter reviews",
+                reason="Keep the chapter-level heavy review set focused and deterministic.",
                 chapter_id=chapter_brief.chapter_id,
                 iteration=iteration,
-                skill_ids=[skill.skill_id for skill in active_skills],
                 tool_calls=planned_tools,
             )
             review_reports = self._run_review_tools(
@@ -320,23 +305,24 @@ class WritingChapterAgent(BaseAgent):
                 chapter_id=chapter_brief.chapter_id,
                 iteration=iteration,
             )
-            revision_plan = ReviewAggregator.aggregate(
+            chapter_revision_plan = ReviewAggregator.aggregate_chapter(
                 review_reports=review_reports,
                 triggered_skills=[skill.skill_id for skill in active_skills],
+                chapter_id=chapter_brief.chapter_id,
             )
             dynamic_instruction = DynamicInstructionBuilder.build(
                 review_reports=review_reports,
-                revision_plan=revision_plan,
+                revision_plan=chapter_revision_plan,
                 active_skill_ids=[skill.skill_id for skill in active_skills],
             )
             self._emit_stage(
                 stage=f"review_iteration_{iteration}_aggregate",
-                action="汇总 review 结果并生成 revision_plan",
-                reason="ReviewAggregator 已合并各 tool 的问题、证据和硬约束。",
+                action="Aggregate chapter reviews",
+                reason="Build a chapter-only revision plan from chapter-level review evidence.",
                 chapter_id=chapter_brief.chapter_id,
                 iteration=iteration,
                 review_reports=review_reports,
-                revision_plan=revision_plan.model_dump(mode="json"),
+                chapter_revision_plan=chapter_revision_plan.model_dump(mode="json"),
                 dynamic_instruction=dynamic_instruction.model_dump(mode="json"),
             )
             final_judge = self.tool_registry.execute(
@@ -345,8 +331,8 @@ class WritingChapterAgent(BaseAgent):
             )
             self._emit_stage(
                 stage=f"review_iteration_{iteration}_judge",
-                action="执行 Final Judge",
-                reason="检查是否达到放行门槛，或继续 rewrite 闭环。",
+                action="Run final judge",
+                reason="Decide whether the chapter can pass or needs a focused rewrite.",
                 chapter_id=chapter_brief.chapter_id,
                 iteration=iteration,
                 final_judge=final_judge,
@@ -357,7 +343,7 @@ class WritingChapterAgent(BaseAgent):
                     "skill_ids": [skill.skill_id for skill in active_skills],
                     "tool_calls": planned_tools,
                     "review_reports": review_reports,
-                    "revision_plan": revision_plan.model_dump(mode="json"),
+                    "chapter_revision_plan": chapter_revision_plan.model_dump(mode="json"),
                     "dynamic_instruction": dynamic_instruction.model_dump(mode="json"),
                     "final_judge": final_judge,
                 }
@@ -372,8 +358,8 @@ class WritingChapterAgent(BaseAgent):
             if bool(final_judge.get("passed")):
                 self._emit_stage(
                     stage=f"review_iteration_{iteration}_passed",
-                    action="本轮通过",
-                    reason="Final Judge 已放行，进入 final polish。",
+                    action="Chapter review passed",
+                    reason="Proceed to final polish and format cleanup.",
                     chapter_id=chapter_brief.chapter_id,
                     iteration=iteration,
                     final_judge=final_judge,
@@ -394,8 +380,8 @@ class WritingChapterAgent(BaseAgent):
                 )
                 self._emit_stage(
                     stage="max_iterations_reached",
-                    action="达到最大重写轮次",
-                    reason="保留当前最佳版本，并标记 requires_human_review=true。",
+                    action="Reached max iterations",
+                    reason="Keep the best available chapter version and mark it for human review.",
                     chapter_id=chapter_brief.chapter_id,
                     final_judge=final_judge,
                 )
@@ -403,12 +389,11 @@ class WritingChapterAgent(BaseAgent):
 
             self._emit_stage(
                 stage=f"rewrite_iteration_{iteration}_start",
-                action="按 revision_plan 重写正文",
-                reason="本轮未过 judge，开始 rewrite_by_plan。",
+                action="Rewrite chapter by plan",
+                reason="Use the chapter-only revision plan to improve prose, humanity, and chapter engine.",
                 chapter_id=chapter_brief.chapter_id,
                 iteration=iteration,
-                revision_plan=revision_plan.model_dump(mode="json"),
-                dynamic_instruction=dynamic_instruction.model_dump(mode="json"),
+                chapter_revision_plan=chapter_revision_plan.model_dump(mode="json"),
             )
             rewrite_result = self.tool_registry.execute(
                 "rewrite_by_plan",
@@ -435,7 +420,7 @@ class WritingChapterAgent(BaseAgent):
                     "chapter_text": chapter_text,
                     "current_chapter_draft_tail": self._tail_text(chapter_text),
                     "previous_scene_tail": "",
-                    "revision_plan": revision_plan.model_dump(mode="json"),
+                    "revision_plan": chapter_revision_plan.model_dump(mode="json"),
                     "dynamic_instruction_text": json.dumps(dynamic_instruction.model_dump(mode="json"), ensure_ascii=False, indent=2),
                     "loaded_skill_instructions_text": self.skill_manager.format_for_model(active_skills),
                 },
@@ -446,26 +431,22 @@ class WritingChapterAgent(BaseAgent):
                     "stage": f"rewrite_iteration_{iteration}",
                     "skill_ids": [skill.skill_id for skill in active_skills],
                     "chapter_length": len(chapter_text),
-                    "previous_scene_tail": "",
-                    "current_chapter_draft_tail": self._tail_text(chapter_text),
                 }
             )
             self._emit_stage(
                 stage=f"rewrite_iteration_{iteration}_done",
-                action="完成正文重写",
-                reason="rewrite_by_plan 已返回新稿，准备进入下一轮 review。",
+                action="Finished chapter rewrite",
+                reason="The chapter rewrite is ready for another focused heavy review pass.",
                 chapter_id=chapter_brief.chapter_id,
                 iteration=iteration,
-                skill_ids=[skill.skill_id for skill in active_skills],
                 chapter_length=len(chapter_text),
-                current_chapter_draft_tail=self._tail_text(chapter_text, max_chars=500),
             )
 
         finalize_skills = self.skill_manager.finalize_skills()
         self._emit_stage(
             stage="final_polish_start",
-            action="执行 final polish",
-            reason="正文已通过 judge 或保留最佳版本，开始做终稿润色。",
+            action="Final polish",
+            reason="The best chapter draft is ready for final polish.",
             chapter_id=chapter_brief.chapter_id,
             skill_ids=[skill.skill_id for skill in finalize_skills],
         )
@@ -487,17 +468,8 @@ class WritingChapterAgent(BaseAgent):
         )
         self._emit_stage(
             stage="final_polish_done",
-            action="完成 final polish",
-            reason="终稿润色完成，接着做只改格式不改事实的最终整理。",
-            chapter_id=chapter_brief.chapter_id,
-            skill_ids=[skill.skill_id for skill in finalize_skills],
-            chapter_length=len(chapter_text),
-            current_chapter_draft_tail=self._tail_text(chapter_text, max_chars=500),
-        )
-        self._emit_stage(
-            stage="format_adjustment_start",
-            action="执行 format adjustment",
-            reason="统一段落、对话换行和空白，保持前端阅读舒适度。",
+            action="Final polish complete",
+            reason="Do a format-only cleanup before the actual chapter summary.",
             chapter_id=chapter_brief.chapter_id,
             chapter_length=len(chapter_text),
         )
@@ -519,18 +491,11 @@ class WritingChapterAgent(BaseAgent):
         )
         self._emit_stage(
             stage="format_adjustment_done",
-            action="完成 format adjustment",
-            reason="最终正文格式已整理完成，接下来生成 actual_chapter_summary。",
+            action="Format adjustment complete",
+            reason="Formatting is cleaned without changing facts or emotional logic.",
             chapter_id=chapter_brief.chapter_id,
             chapter_length=len(chapter_text),
             format_issues=list(formatted.get("format_issues") or []),
-            current_chapter_draft_tail=self._tail_text(chapter_text, max_chars=500),
-        )
-        self._emit_stage(
-            stage="summarize_actual_chapter_start",
-            action="生成 actual_chapter_summary",
-            reason="基于格式整理后的最终文本，整理本章真实发生、读者认知与锁住的真相。",
-            chapter_id=chapter_brief.chapter_id,
         )
         summary_payload = self.tool_registry.execute(
             "summarize_actual_chapter",
@@ -560,8 +525,8 @@ class WritingChapterAgent(BaseAgent):
         )
         self._emit_stage(
             stage="summarize_actual_chapter_done",
-            action="actual_chapter_summary 已生成",
-            reason="正文 agent 闭环完成。",
+            action="Actual chapter summary complete",
+            reason="The chapter writing loop is complete.",
             chapter_id=actual_summary.chapter_id,
             summary=actual_summary.model_dump(mode="json"),
         )
@@ -629,6 +594,8 @@ class WritingChapterAgent(BaseAgent):
                         "",
                         f"{item.block_id} / {item.purpose}",
                         f"- End state: {item.end_state}",
+                        f"- Cost shift: {item.cost_shift}",
+                        f"- Reader feeling target: {item.reader_feeling_target}",
                         f"- Text tail: {self._tail_text(item.text, max_chars=220)}",
                     ]
                 )
@@ -637,6 +604,7 @@ class WritingChapterAgent(BaseAgent):
         return {
             "completed_chapter_memory_text": context.completed_chapter_memory_text,
             "chapter_payload_text": context.chapter_payload_text,
+            "chapter_visible_context_text": context.chapter_visible_context_text,
             "relevant_world_rules_text": context.relevant_world_rules_text,
             "scene_character_context_text": context.scene_character_context_text,
             "relationship_state_text": context.relationship_state_text,
@@ -644,6 +612,65 @@ class WritingChapterAgent(BaseAgent):
             "prior_chapter_text_tail": self._tail_text(self._merge_blocks_to_chapter(committed_blocks), max_chars=900),
             "style_card_text": context.style_card_text,
         }
+
+    def _run_block_review_tools(
+        self,
+        *,
+        context: Any,
+        block: ContentBlock,
+        block_text: str,
+        block_context: dict[str, Any],
+        block_card_text: str,
+    ) -> dict[str, Any]:
+        reports: dict[str, Any] = {}
+        review_scope_text = (
+            "Review only the current content block. "
+            "Keep the review light and local: catch reveal leakage, character-forced behavior, "
+            "time carry-over conflicts, and whether the block actually feels like a live fiction beat."
+        )
+        common = {
+            "chapter_payload_text": context.chapter_payload_text,
+            "chapter_visible_context_text": context.chapter_visible_context_text,
+            "completed_chapter_memory_text": context.completed_chapter_memory_text,
+            "time_anchor_text": context.time_anchor_text,
+            "timeline_anchor_facts_text": context.timeline_anchor_facts_text,
+            "relevant_world_rules_text": context.relevant_world_rules_text,
+            "scene_character_context_text": context.scene_character_context_text,
+            "relationship_state_text": context.relationship_state_text,
+            "chapter_text": block_text,
+            "block_card_text": block_card_text,
+            "active_twists_json": json.dumps([item.model_dump(mode="json") for item in context.active_twists], ensure_ascii=False, indent=2),
+            "review_scope_text": review_scope_text,
+        }
+        for tool_name in self.BLOCK_REVIEW_TOOLS:
+            if tool_name == "review_block_quality":
+                reports[tool_name] = self.tool_registry.execute(
+                    tool_name,
+                    {
+                        "chapter_payload_text": context.chapter_payload_text,
+                        "relevant_world_rules_text": context.relevant_world_rules_text,
+                        "scene_character_context_text": context.scene_character_context_text,
+                        "relationship_state_text": context.relationship_state_text,
+                        "block_card_text": block_card_text,
+                        "prior_block_summary_text": block_context["prior_block_summary_text"],
+                        "prior_chapter_text_tail": block_context["prior_chapter_text_tail"],
+                        "block_text": block_text,
+                    },
+                )
+                continue
+            reports[tool_name] = self.tool_registry.execute(tool_name, common)
+        return reports
+
+    @staticmethod
+    def _needs_block_revision(review_reports: dict[str, Any]) -> bool:
+        for report in review_reports.values():
+            if not isinstance(report, dict):
+                continue
+            if not bool(report.get("passed", True)):
+                return True
+            if report.get("issues"):
+                return True
+        return False
 
     @staticmethod
     def _block_card_text(block: ContentBlock) -> str:
@@ -657,6 +684,9 @@ class WritingChapterAgent(BaseAgent):
             f"scene_goal: {block.scene_goal}",
             f"emotional_tone: {block.emotional_tone}",
             f"end_state: {block.end_state}",
+            f"cost_shift: {block.cost_shift}",
+            f"reader_feeling_target: {block.reader_feeling_target}",
+            f"paragraph_budget: {block.paragraph_budget}",
             "characters:",
         ]
         for item in block.characters or ["None."]:
@@ -673,6 +703,12 @@ class WritingChapterAgent(BaseAgent):
         lines.append("must_hide:")
         for item in block.must_hide or ["None."]:
             lines.append(f"- {item}")
+        lines.append("human_reaction_target:")
+        for item in block.human_reaction_target or ["None."]:
+            lines.append(f"- {item}")
+        lines.append("style_risk_guard:")
+        for item in block.style_risk_guard or ["None."]:
+            lines.append(f"- {item}")
         return "\n".join(lines).strip()
 
     @staticmethod
@@ -683,62 +719,31 @@ class WritingChapterAgent(BaseAgent):
         self,
         *,
         chapter_brief: ChapterBrief,
-        context: Any,
-        chapter_text: str,
         review_reports: dict[str, Any],
         active_skills: list[Any],
     ) -> list[str]:
-        fallback = self.skill_manager.recommended_tools(active_skills)
-        fallback = [tool for tool in fallback if tool in self.REVIEW_TOOLS]
-        if not fallback:
-            fallback = list(self.REVIEW_TOOLS)
-
-        review_summary = json.dumps(review_reports, ensure_ascii=False, indent=2) if review_reports else "No previous review reports yet."
-        prompt = self._render_prompt(
-            "writer/plan_review_tools.txt",
-            skills_text=self.skill_manager.format_for_model(active_skills),
-            allowed_tools=", ".join(self.REVIEW_TOOLS),
-            recommended_tools=", ".join(fallback),
-            chapter_brief_json=chapter_brief.model_dump_json(indent=2),
-            chapter_payload_text=context.chapter_payload_text,
-            chapter_visible_context_text=context.chapter_visible_context_text,
-            time_anchor_text=context.time_anchor_text,
-            review_summary=review_summary,
-            chapter_excerpt=self._tail_text(chapter_text, max_chars=1800),
-        )
-        try:
-            payload = safe_json_generate(
-                self.llm_client,
-                self._messages(prompt),
-                schema_name="tool_plan",
-                schema_model=ToolPlanPayload,
-            )
-            planned = [
-                str(item.get("tool_name") or "").strip()
-                for item in payload.get("tool_calls", [])
-                if str(item.get("tool_name") or "").strip() in self.REVIEW_TOOLS
-            ]
-        except Exception:
-            planned = []
-
         ordered: list[str] = []
-        for tool_name in [*planned, *fallback, *self.REVIEW_TOOLS]:
-            if tool_name not in self.REVIEW_TOOLS or tool_name in ordered:
-                continue
-            ordered.append(tool_name)
-        for required in reversed(
-            (
-                "review_instruction_compliance",
-                "review_continuity",
-                "review_time_consistency",
-                "review_character_integrity",
-                "review_humanity",
-            )
-        ):
-            if required in ordered:
-                ordered.remove(required)
-            ordered.insert(0, required)
-        return ordered[:10]
+        active_skill_ids = {skill.skill_id for skill in active_skills}
+
+        for tool_name in self.CHAPTER_REVIEW_TOOLS:
+            if tool_name not in ordered:
+                ordered.append(tool_name)
+
+        if chapter_brief.active_twists or review_reports.get("review_reveal_leak") or "reveal_guard" in active_skill_ids:
+            ordered.append("review_reveal_leak")
+        if chapter_brief.allowed_clues or review_reports.get("review_clue_origin") or "clue_consistency" in active_skill_ids:
+            ordered.append("review_clue_origin")
+        if review_reports.get("review_time_consistency") or "time_consistency_guard" in active_skill_ids:
+            ordered.append("review_time_consistency")
+        if review_reports.get("review_character_integrity") or "character_integrity" in active_skill_ids:
+            ordered.append("review_character_integrity")
+
+        deduped: list[str] = []
+        allowed = {*(self.CHAPTER_REVIEW_TOOLS), *(self.OPTIONAL_CHAPTER_REVIEW_TOOLS)}
+        for tool_name in ordered:
+            if tool_name in allowed and tool_name not in deduped:
+                deduped.append(tool_name)
+        return deduped
 
     def _run_review_tools(
         self,
@@ -778,8 +783,8 @@ class WritingChapterAgent(BaseAgent):
         for tool_name in tool_names:
             self._emit_stage(
                 stage=f"review_iteration_{iteration}_tool_start",
-                action="调用 review tool",
-                reason=f"开始执行 {tool_name}。",
+                action="Run review tool",
+                reason=f"Start {tool_name}.",
                 chapter_id=chapter_id,
                 iteration=iteration,
                 tool_name=tool_name,
@@ -787,8 +792,8 @@ class WritingChapterAgent(BaseAgent):
             reports[tool_name] = self.tool_registry.execute(tool_name, payload)
             self._emit_stage(
                 stage=f"review_iteration_{iteration}_tool_done",
-                action="review tool 返回结果",
-                reason=f"{tool_name} 已完成。",
+                action="Review tool finished",
+                reason=f"{tool_name} returned its report.",
                 chapter_id=chapter_id,
                 iteration=iteration,
                 tool_name=tool_name,
@@ -831,11 +836,13 @@ class WritingChapterAgent(BaseAgent):
         score = 0
         if bool(result.get("passed")):
             score += 1000
-        score -= len(result.get("blocking_reasons", []) or []) * 10
+        score -= len(result.get("blocking_reasons", []) or []) * 20
         metrics = dict(result.get("metrics", {}) or {})
         score += int(metrics.get("prose_score") or 0)
         score += int(metrics.get("tension_score") or 0)
         score += int(metrics.get("human_warmth_score") or 0)
+        score += int(metrics.get("memorability_score") or 0)
+        score += int(metrics.get("pressure_authenticity_score") or 0)
         score -= int(metrics.get("exposition_score") or 0)
         return score
 

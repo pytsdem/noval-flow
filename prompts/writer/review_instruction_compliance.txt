@@ -26,16 +26,20 @@ Output format:
     {{
       "category": "instruction_violation",
       "severity": "high",
-      "evidence": "正文直接解释了女主真实动机。",
-      "reason": "违反 chapter brief forbidden 和 unrevealed twist protection。",
-      "fix": "删去动机解释，只保留当前章允许出现的表层反应或线索症状。"
+      "evidence": "Concrete evidence in Simplified Chinese.",
+      "reason": "Why this violates the brief, reader belief, clue boundary, or twist boundary in Simplified Chinese.",
+      "fix": "How to repair it in Simplified Chinese."
     }}
   ],
-  "rewrite_guidance": "仅修复违反 brief、reader belief、allowed clues、time anchor 的地方，不扩大内容。"
+  "rewrite_guidance": "One concise instruction-compliance rewrite instruction in Simplified Chinese."
 }}
 
 Check:
-1. Check whether the chapter obeys chapter brief allowed_info, allowed_clues, forbidden, world_limit, and reader_belief.
-2. Check whether it avoids revealing unrevealed twist truth or over-explaining allowed clues.
-3. Check whether it obeys the provided time anchor.
-4. Check whether it remains scene prose rather than slipping into outline summary.
+1. Check whether the chapter obeys `allowed_info`, `allowed_clues`, `forbidden`, `world_limit`, and `reader_belief`.
+2. Check whether it avoids revealing hidden twist truth or over-explaining allowed clues.
+3. Check whether it obeys the time anchor.
+4. Check whether it remains scene prose instead of slipping into outline summary.
+
+Evidence rules:
+1. Each issue must include `evidence`, `reason`, and `fix`.
+2. `evidence` must cite a concrete beat or a clearly missing boundary.

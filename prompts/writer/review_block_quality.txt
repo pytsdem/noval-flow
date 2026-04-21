@@ -1,0 +1,64 @@
+Review whether this content block works as a live fiction unit. Output JSON only.
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Relevant world rules]
+{relevant_world_rules_text}
+
+[Scene character context]
+{scene_character_context_text}
+
+[Relationship state]
+{relationship_state_text}
+
+[Block card]
+{block_card_text}
+
+[Earlier committed block summary]
+{prior_block_summary_text}
+
+[Committed chapter tail before this block]
+{prior_chapter_text_tail}
+
+[Block draft]
+{block_text}
+
+Output format:
+{{
+  "tool_id": "review_block_quality",
+  "passed": false,
+  "severity": "medium",
+  "scene_goal_completed": false,
+  "human_reaction_target_hit": false,
+  "cost_shift_landed": false,
+  "reader_feeling_landed": false,
+  "paragraphs_readable": true,
+  "issues": [
+    {{
+      "category": "block_flat",
+      "severity": "medium",
+      "evidence": "Explain in Simplified Chinese what is flat or missing in the block.",
+      "reason": "Explain in Simplified Chinese why this weakens the block as fiction.",
+      "fix": "Explain in Simplified Chinese how to revise this block locally."
+    }}
+  ],
+  "rewrite_guidance": "One concise block-level rewrite instruction in Simplified Chinese."
+}}
+
+Check only these things:
+1. Check whether the block completes the stated `scene_goal` and reaches the `end_state`.
+2. Check whether the block feels like a scene unit instead of a summary or outline.
+3. Check whether it realizes the `human_reaction_target` with something specifically human on the page.
+4. Check whether the `cost_shift` actually lands.
+5. Check whether the intended `reader_feeling_target` can be felt from the block.
+6. Check whether any paragraphs are too long for front-end reading.
+7. Check whether the block obeys the `paragraph_budget` and `style_risk_guard`.
+
+Evidence rules:
+1. Never say only "flat", "weak", "not human enough", or "hook is weak".
+2. Every issue must include:
+   - `evidence`: a concrete beat, sentence pattern, or missing on-page action
+   - `reason`: why that evidence hurts the block
+   - `fix`: how to fix this block without rewriting the whole chapter
+3. Prefer 0 to 3 issues. Keep the review light and local.

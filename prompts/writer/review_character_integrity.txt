@@ -1,5 +1,8 @@
 Review whether character behavior is internally justified instead of author-forced. Output JSON only.
 
+[Review scope]
+{review_scope_text}
+
 [Chapter visible context]
 {chapter_visible_context_text}
 
@@ -12,7 +15,10 @@ Review whether character behavior is internally justified instead of author-forc
 [Chapter payload]
 {chapter_payload_text}
 
-[Chapter text]
+[Block card, if reviewing a block]
+{block_card_text}
+
+[Chapter or block text]
 {chapter_text}
 
 Output format:
@@ -23,16 +29,20 @@ Output format:
     {{
       "category": "character_integrity",
       "severity": "high",
-      "evidence": "男主刚刚还被礼法压制，却突然在公开场合直指核心旧案，没有前置支撑。",
-      "reason": "这个举动超出他当前知道的信息，也违背了他此刻的风险处境。",
-      "fix": "改成试探、旁敲、借人借物推进，或先补能支撑他冒险的触发点。"
+      "evidence": "Concrete evidence in Simplified Chinese.",
+      "reason": "Why the action feels author-forced in Simplified Chinese.",
+      "fix": "How to revise the behavior in Simplified Chinese."
     }}
   ],
-  "rewrite_guidance": "检查每个关键行为是否符合角色此刻知道什么、怕什么、能做什么。"
+  "rewrite_guidance": "One concise character-integrity rewrite instruction in Simplified Chinese."
 }}
 
 Check:
 1. Check whether each major action fits what the character currently knows.
-2. Check whether it fits the character's present pressure, status, fear, and available options.
-3. Check whether any behavior feels like the author moving clues forward through the character's body.
+2. Check whether it fits the character's pressure, status, fear, and available options.
+3. Check whether any behavior feels like the author moving clues or plot through the character's body.
 4. If a character takes an unusual risk, check whether the trigger is sufficiently written on the page.
+
+Evidence rules:
+1. Every issue must include `evidence`, `reason`, and `fix`.
+2. Point to a concrete action, decision, line, or missing trigger.

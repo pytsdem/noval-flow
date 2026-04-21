@@ -29,17 +29,23 @@ Output format:
     {{
       "category": "humanity",
       "severity": "medium",
-      "evidence": "女主只被写成‘很痛’‘很难受’，没有落到生活账、身体反应或具体念头。",
-      "reason": "情绪停留在抽象层，读者难以感到真实代价。",
-      "fix": "把痛苦落到现实损失、身体露馅、自责或自嘲，以及旁人的反应上。"
+      "evidence": "Concrete evidence in Simplified Chinese.",
+      "reason": "Why this makes the character feel less alive in Simplified Chinese.",
+      "fix": "How to revise it in Simplified Chinese without changing hidden truth."
     }}
   ],
-  "rewrite_guidance": "把抽象情绪改成具体代价、具体动作、具体念头和配角反应。"
+  "rewrite_guidance": "One concise humanity rewrite instruction in Simplified Chinese."
 }}
 
 Check:
 1. Check whether major emotions are tied to real-world loss, cost, or tradeoff.
 2. Check whether at least one character has a specific self-judgment, self-mockery, or recognizably human private thought.
 3. Check whether body reactions leak what the mouth hides.
-4. Check whether supporting characters react like real people rather than neutral furniture.
-5. Check whether pain or affection is concrete rather than generic.
+4. Check whether supporting characters react like people rather than furniture.
+5. Check whether pain, guilt, affection, fear, or tenderness is concrete rather than generic.
+6. If a character is suffering, check whether the reader can tell what this suffering has cost in body, status, money, family, or choice.
+
+Evidence rules:
+1. Never output only "not human enough" or "emotion is weak."
+2. Each issue must include `evidence`, `reason`, and `fix`.
+3. `evidence` must point to a concrete beat or an important missing beat.

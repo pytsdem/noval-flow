@@ -11,12 +11,11 @@ from novel_flow.tools.final_polish import FinalPolishTool
 from novel_flow.tools.format_adjustment_suggestion import FormatAdjustmentSuggestionTool
 from novel_flow.tools.plan_content_blocks import PlanContentBlocksTool
 from novel_flow.tools.review_chapter_engine import ReviewChapterEngineTool
-from novel_flow.tools.review_block_quick import ReviewBlockQuickTool
+from novel_flow.tools.review_block_quality import ReviewBlockQualityTool
 from novel_flow.tools.review_character_integrity import ReviewCharacterIntegrityTool
 from novel_flow.tools.review_clue_origin import ReviewClueOriginTool
 from novel_flow.tools.review_continuity import ReviewContinuityTool
 from novel_flow.tools.review_humanity import ReviewHumanityTool
-from novel_flow.tools.review_hook_appearance import ReviewHookAppearanceTool
 from novel_flow.tools.review_instruction import ReviewInstructionComplianceTool
 from novel_flow.tools.review_plot_logic import ReviewPlotLogicTool
 from novel_flow.tools.review_prose_quality import ReviewProseQualityTool
@@ -44,7 +43,7 @@ class ToolRegistry:
         tool_list: list[ToolProtocol] = [
             PlanContentBlocksTool(llm_client=llm_client, prompt_library=library),
             DraftBlockTool(llm_client=llm_client, prompt_library=library),
-            ReviewBlockQuickTool(llm_client=llm_client, prompt_library=library),
+            ReviewBlockQualityTool(llm_client=llm_client, prompt_library=library),
             ReviseBlockTool(llm_client=llm_client, prompt_library=library),
             ReviewInstructionComplianceTool(llm_client=llm_client),
             ReviewProseQualityTool(llm_client=llm_client),
@@ -55,7 +54,6 @@ class ToolRegistry:
             ReviewTimeConsistencyTool(llm_client=llm_client, prompt_library=library),
             ReviewHumanityTool(llm_client=llm_client, prompt_library=library),
             ReviewCharacterIntegrityTool(llm_client=llm_client, prompt_library=library),
-            ReviewHookAppearanceTool(llm_client=llm_client, prompt_library=library),
             ReviewChapterEngineTool(llm_client=llm_client, prompt_library=library),
             RewriteByPlanTool(llm_client=llm_client),
             FinalPolishTool(llm_client=llm_client, prompt_library=library),

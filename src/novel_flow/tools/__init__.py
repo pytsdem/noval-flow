@@ -3,7 +3,7 @@ from novel_flow.tools.final_judge import FinalJudgeTool
 from novel_flow.tools.final_polish import FinalPolishTool
 from novel_flow.tools.format_adjustment_suggestion import FormatAdjustmentSuggestionTool
 from novel_flow.tools.plan_content_blocks import PlanContentBlocksTool
-from novel_flow.tools.review_block_quick import ReviewBlockQuickTool
+from novel_flow.tools.review_block_quality import ReviewBlockQualityTool
 from novel_flow.tools.review_chapter_engine import ReviewChapterEngineTool
 from novel_flow.tools.review_clue_origin import ReviewClueOriginTool
 from novel_flow.tools.review_continuity import ReviewContinuityTool
@@ -21,7 +21,7 @@ __all__ = [
     "FinalPolishTool",
     "FormatAdjustmentSuggestionTool",
     "PlanContentBlocksTool",
-    "ReviewBlockQuickTool",
+    "ReviewBlockQualityTool",
     "ReviewChapterEngineTool",
     "ReviewClueOriginTool",
     "ReviewContinuityTool",

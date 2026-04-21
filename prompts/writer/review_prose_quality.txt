@@ -1,4 +1,4 @@
-Review prose quality. Output JSON only.
+Review chapter prose quality. Output JSON only.
 
 [Chapter payload]
 {chapter_payload_text}
@@ -24,26 +24,40 @@ Output format:
   "emotion_externalization_score": 7,
   "dialogue_subtext_score": 7,
   "human_warmth_score": 7,
+  "memorability_score": 7,
+  "pressure_authenticity_score": 7,
   "rewrite_needed": false,
   "rewrite_guidance": "",
+  "issues": [
+    {{
+      "category": "weak_memorability",
+      "severity": "medium",
+      "evidence": "Concrete evidence in Simplified Chinese.",
+      "reason": "Why this prose issue lowers completion in Simplified Chinese.",
+      "fix": "How to revise the prose in Simplified Chinese."
+    }}
+  ],
   "evidence_notes": [
-    "一处场景细节如何同时承担人物、关系、压力三种功能。",
-    "一处情绪写法为什么过于抽象。"
+    "Concrete strength or weakness note in Simplified Chinese."
   ]
 }}
 
 Score with evidence:
-1. prose_score: overall chapter prose control and readability.
-2. tension_score: whether pressure, desire, and obstacle are active on the page.
-3. subtext_score: whether dialogue and action carry what cannot be spoken directly.
-4. exposition_score: how much the chapter explains instead of dramatizes. Lower is better.
-5. cliche_score: how generic or formulaic the diction feels. Lower is better.
-6. double_duty_detail_score: whether details also serve plot, emotion, class, power, or relationship work.
-7. scene_texture_score: whether place, objects, labor, etiquette, weather, money, and body create presence.
-8. emotion_externalization_score: whether feeling appears through action, pause, avoidance, body, and consequence.
-9. dialogue_subtext_score: whether dialogue contains concealment, pressure, status, and misread.
-10. human_warmth_score: whether the prose carries concrete cost, self-judgment, and recognizably human reaction.
+1. `prose_score`: overall prose control and readability.
+2. `tension_score`: whether pressure, desire, and obstacle stay active on the page.
+3. `subtext_score`: whether dialogue and action carry what cannot be spoken directly.
+4. `exposition_score`: how much the chapter explains instead of dramatizes. Lower is better.
+5. `cliche_score`: how generic or formulaic the diction feels. Lower is better.
+6. `double_duty_detail_score`: whether details also serve plot, emotion, class, power, or relationship work.
+7. `scene_texture_score`: whether place, objects, labor, etiquette, weather, money, and body create presence.
+8. `emotion_externalization_score`: whether feeling appears through action, pause, avoidance, body, and consequence.
+9. `dialogue_subtext_score`: whether dialogue contains concealment, pressure, status, and misread.
+10. `human_warmth_score`: whether the prose carries concrete cost, self-judgment, and recognizably human reaction.
+11. `memorability_score`: whether the chapter leaves behind lines, images, or beats the reader can remember.
+12. `pressure_authenticity_score`: whether pressure feels real because it binds body, status, money, family, institution, or choice.
 
-Guidance:
-- `rewrite_guidance` should be concise and actionable.
-- `evidence_notes` must point to concrete strengths or weaknesses, not generic praise.
+Evidence rules:
+1. Do not return vague comments like "the prose is ordinary" or "the emotions are weak."
+2. If there is a meaningful weakness, include an `issues` item with `evidence`, `reason`, and `fix`.
+3. `evidence_notes` should still be concrete, but may capture strengths as well as weaknesses.
+4. Keep `rewrite_guidance` concise and actionable.

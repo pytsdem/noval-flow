@@ -1,4 +1,4 @@
-Review whether the chapter engine promised by the brief is actually functioning in scene. Output JSON only.
+Review whether the chapter engine promised by the brief is actually functioning on the page. Output JSON only.
 
 [Step 8 chapter brief]
 {step_8_chapter_brief_text}
@@ -15,25 +15,31 @@ Output format:
   "level": "medium",
   "issues": [
     {{
-      "category": "chapter_engine",
+      "category": "chapter_object",
       "severity": "medium",
-      "evidence": "章节目标只是被口头提到，没有真正推动场景和关系变化。",
-      "reason": "chapter_object 没有承担剧情推进与关系重估的双重功能。",
-      "fix": "让 chapter_object 同时推动外部动作和人物关系变化。"
+      "evidence": "Concrete evidence in Simplified Chinese.",
+      "reason": "Why the chapter engine is not landing in Simplified Chinese.",
+      "fix": "How to fix the engine on the page in Simplified Chinese."
     }}
   ],
-  "rewrite_guidance": "让 chapter_object 至少承担两个功能，并把 emotional_turn 和 relationship_reprice 写实。",
+  "rewrite_guidance": "One concise chapter-engine rewrite instruction in Simplified Chinese.",
   "evidence_focus": [
-    "opening_hook 是否落地",
-    "chapter_object 是否双重功能",
-    "relationship_reprice 是否发生",
-    "emotional_turn 是否可读"
+    "opening_hook",
+    "chapter_object",
+    "relationship_reprice",
+    "emotional_turn",
+    "ending_pull"
   ]
 }}
 
 Check:
-1. Confirm whether the written opening actually delivers the promised opening hook.
-2. Confirm whether chapter_object does at least two jobs: plot movement plus relationship or emotional pressure or clue-value shift.
-3. Confirm whether relationship_reprice happens on the page rather than in summary language.
-4. Confirm whether the emotional turn is readable from behavior, dialogue, or scene consequence.
-5. If there is backstory_trigger, confirm whether it arises naturally from present action rather than inserted explanation.
+1. Check whether the written opening actually delivers the promised `opening_hook`.
+2. Check whether `chapter_object` does at least two jobs: plot movement plus relationship or emotional pressure or clue-value shift.
+3. Check whether `relationship_reprice` happens on the page rather than in summary language.
+4. Check whether the `emotional_turn` is readable from behavior, dialogue, silence, object handling, or consequence.
+5. Check whether the ending creates a real `ending_pull` into the next chapter.
+6. If there is `backstory_trigger`, check whether it grows naturally from present action instead of arriving as explanation.
+
+Evidence rules:
+1. Every issue must use `evidence`, `reason`, and `fix`.
+2. Do not say only "the hook is weak" or "the chapter engine is weak."

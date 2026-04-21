@@ -34,7 +34,7 @@ Rules:
 4. Always include review_instruction_compliance, review_continuity, and review_time_consistency somewhere in the plan.
 5. Include review_humanity when the prose may be emotionally abstract, too clean, or lacking concrete life cost.
 6. Include review_character_integrity when behavior, deduction, or scene decisions may feel author-forced.
-7. Include review_hook_appearance when opening hook, ending pull, appearance timing, or exact time-gap wording may be at risk.
+7. Use review_chapter_engine for opening hook, chapter object, relationship reprice, emotional turn, and ending pull risk.
 8. Return 6 to 10 tool calls.
 
 Output format:

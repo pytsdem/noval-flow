@@ -27,19 +27,41 @@ Write one chapter content block. Output prose only in Simplified Chinese.
 [Style card]
 {style_card_text}
 
+[Loaded block skill instructions]
+{loaded_skill_instructions_text}
+
+Priority order:
+1. First: complete the block's `scene_goal`.
+2. Second: realize the `human_reaction_target`.
+3. Third: make the `cost_shift` land.
+4. Fourth: leave the requested `reader_feeling_target`.
+5. Last: polish atmosphere and style.
+
+HUMANITY RULES:
+1. Strong feelings must be tied to a concrete life cost, bodily reaction, or self-judgment.
+2. Do not only write abstract pain, hatred, tenderness, guilt, or grief.
+3. At least once per content block, show a specifically human reaction:
+   - a practical calculation
+   - an involuntary bodily reaction
+   - a self-mocking thought
+   - a supporting character's startled or heartbroken reaction
+   - a small failure of composure
+4. Characters should not sound like they are summarizing the plot.
+5. If a character is suffering, show what this suffering has cost them in daily life, status, body, money, family, or choice.
+
 Rules:
 1. Write only the current block, not the whole chapter.
-2. Finish the block purpose and reach the requested end_state.
-3. Respect chapter payload hard constraints, allowed clues, and forbidden content.
+2. Reach the requested `end_state`.
+3. Respect chapter payload hard constraints, allowed clues, forbidden content, and current reader belief.
 4. Never leak hidden truth or explain an allowed clue too early.
-5. The block is a content unit, not a single paragraph.
-6. Keep front-end reading comfortable:
-   - One paragraph should usually stay around 30 to 120 Chinese characters.
-   - Strong emotion, action, and dialogue paragraphs may be shorter.
-   - Paragraphs over 180 Chinese characters should usually be split.
-   - Dialogue should usually stand alone as its own paragraph.
-   - Do not stack long internal monologue without action, object, or reaction.
-7. Avoid outline-like summary prose. Let the block unfold through action, perception, speech, silence, and consequence.
-8. If exposition is needed, break it into short action + reaction + explanation beats.
-9. Keep the prose in natural Simplified Chinese.
-
+5. Read and obey the block's `style_risk_guard` literally.
+6. Treat the block as a content unit, not a single paragraph.
+7. Keep front-end reading comfortable:
+   - Follow the block's `paragraph_budget`.
+   - Usually keep one paragraph around 30 to 120 Chinese characters.
+   - Treat paragraphs over 180 Chinese characters as risky and usually split them.
+   - Dialogue, short action, and emotional leakage lines may stand alone.
+   - Do not stack long internal monologue without action, object, reaction, or consequence.
+8. Avoid outline-like summary prose. Let the block unfold through action, perception, speech, silence, and consequence.
+9. If exposition is necessary, break it into short action + reaction + explanation beats.
+10. Keep the prose in natural Simplified Chinese.

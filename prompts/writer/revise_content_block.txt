@@ -18,8 +18,11 @@ Revise one content block. Output prose only in Simplified Chinese.
 [Current block draft]
 {block_text}
 
-[Quick review JSON]
+[Block review reports JSON]
 {review_json}
+
+[Block revision plan JSON]
+{block_revision_plan_json}
 
 [Current chapter text tail before this block]
 {prior_chapter_text_tail}
@@ -27,14 +30,30 @@ Revise one content block. Output prose only in Simplified Chinese.
 [Style card]
 {style_card_text}
 
+[Loaded block skill instructions]
+{loaded_skill_instructions_text}
+
+HUMANITY RULES:
+1. Strong feelings must be tied to a concrete life cost, bodily reaction, or self-judgment.
+2. Do not only write abstract pain, hatred, tenderness, guilt, or grief.
+3. At least once per content block, show a specifically human reaction:
+   - a practical calculation
+   - an involuntary bodily reaction
+   - a self-mocking thought
+   - a supporting character's startled or heartbroken reaction
+   - a small failure of composure
+4. Characters should not sound like they are summarizing the plot.
+5. If a character is suffering, show what this suffering has cost them in daily life, status, body, money, family, or choice.
+
 Rules:
 1. Revise only this block. Do not rewrite the whole chapter.
-2. Fix the issues from the quick review while preserving good lines that already work.
-3. Keep the block purpose, must_reveal, must_hide, emotional tone, and end_state aligned.
-4. Respect the same paragraph-length rules:
+2. Fix the issues in the block review reports and block revision plan while preserving good lines that already work.
+3. Keep the block aligned with `scene_goal`, `must_reveal`, `must_hide`, `emotional_tone`, `end_state`, `cost_shift`, and `reader_feeling_target`.
+4. Read and obey the block's `style_risk_guard`.
+5. Respect the block's `paragraph_budget`:
    - Usually 30 to 120 Chinese characters per paragraph.
-   - Over 180 Chinese characters should usually be split.
+   - Over 180 Chinese characters is a risk.
    - Dialogue should usually stand alone.
-5. Do not add new plot facts, new clues, or new reveals.
-6. Keep the prose natural and readable in Simplified Chinese.
-
+6. Do not add new plot facts, new clues, or new reveals.
+7. Reduce summary language, abstract psychology, and author explanation when possible.
+8. Keep the prose natural and readable in Simplified Chinese.

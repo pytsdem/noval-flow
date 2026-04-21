@@ -1,4 +1,7 @@
-Review chapter time consistency. Output JSON only.
+Review time consistency. Output JSON only.
+
+[Review scope]
+{review_scope_text}
 
 [Time anchor]
 {time_anchor_text}
@@ -12,7 +15,10 @@ Review chapter time consistency. Output JSON only.
 [Chapter payload]
 {chapter_payload_text}
 
-[Chapter text]
+[Block card, if reviewing a block]
+{block_card_text}
+
+[Chapter or block text]
 {chapter_text}
 
 Output format:
@@ -23,22 +29,26 @@ Output format:
     {{
       "category": "time_jump",
       "severity": "high",
-      "evidence": "上一章收在深夜饮酒，本章开头直接写成午后，没有过渡。",
-      "reason": "违反 time_anchor.relative_to_previous_chapter 和 must_not_conflict。",
-      "fix": "改成宿醉后的清晨，或补上明确的时间过渡和身体恢复过程。"
+      "evidence": "Concrete evidence in Simplified Chinese.",
+      "reason": "Why this conflicts with the time anchor or carry-over state in Simplified Chinese.",
+      "fix": "How to fix the time or carry-over state in Simplified Chinese."
     }}
   ],
-  "rewrite_guidance": "所有场景都要服从 time_anchor；若要跳时，必须写明过渡。",
+  "rewrite_guidance": "One concise time-consistency rewrite instruction in Simplified Chinese.",
   "evidence_focus": [
-    "昼夜是否连续",
-    "人物身体状态是否延续",
-    "物件状态是否延续"
+    "day-night rhythm",
+    "body carry-over",
+    "object carry-over"
   ]
 }}
 
 Check:
-1. Check whether the chapter obeys the provided absolute time and relative-to-previous-chapter time.
+1. Check whether the text obeys the provided absolute time and relative-to-previous-chapter time.
 2. Check whether it conflicts with previous chapter ending state, including body state, object state, and scene aftermath.
 3. Check whether the text jumps from one time-of-day to another without a written transition.
-4. If the chapter contains multiple scenes, check whether transitions are explicit and plausible.
-5. Check whether bodily states like injury, fatigue, hunger, drunkenness, wet clothes, or unfinished business carry through naturally.
+4. If there are multiple scenes, check whether transitions are explicit and plausible.
+5. Check whether bodily states such as injury, fatigue, hunger, drunkenness, wet clothes, or unfinished business carry through naturally.
+
+Evidence rules:
+1. Every issue must include `evidence`, `reason`, and `fix`.
+2. Use concrete continuity or timing evidence, not generic warnings.
