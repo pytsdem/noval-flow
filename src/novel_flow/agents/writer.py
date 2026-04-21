@@ -123,6 +123,18 @@ class WriterAgent(BaseAgent):
                 updated_at=now_text,
             )
 
+        def _persist_chapter_preview(preview_payload: dict[str, Any]) -> None:
+            if runtime_store is None or not run_id:
+                return
+            runtime_store.save_run_output(
+                run_id=run_id,
+                agent="WritingChapterAgent",
+                output_type="chapter_live_preview",
+                title="Chapter live preview",
+                payload=preview_payload,
+                created_at=datetime.now(timezone.utc).isoformat(),
+            )
+
         chapter_agent = WritingChapterAgent(
             llm_client=self.llm_client,
             prompt_library=self.prompt_library,
@@ -138,6 +150,7 @@ class WriterAgent(BaseAgent):
             actual_chapter_summaries=actual_summaries,
             prebuilt_context=writer_context,
             on_block_committed=_persist_committed_block,
+            on_chapter_preview_updated=_persist_chapter_preview,
         )
         chapter = Chapter(
             id=chapter_brief.chapter_id,

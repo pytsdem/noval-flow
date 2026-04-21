@@ -44,10 +44,7 @@ class WritingChapterAgent(BaseAgent):
         "review_chapter_engine",
     ]
     OPTIONAL_CHAPTER_REVIEW_TOOLS = [
-        "review_reveal_leak",
         "review_clue_origin",
-        "review_time_consistency",
-        "review_character_integrity",
     ]
     OUTPUT_FORMAT_RULES = [
         "Prefer Chinese full-width punctuation.",
@@ -94,6 +91,7 @@ class WritingChapterAgent(BaseAgent):
         character_milestones: list[dict[str, Any]] | None = None,
         prebuilt_context: Any | None = None,
         on_block_committed: Callable[[ContentBlock], None] | None = None,
+        on_chapter_preview_updated: Callable[[dict[str, Any]], None] | None = None,
     ) -> ChapterExecutionResult:
         context = prebuilt_context or ChapterContextAssembler.build(
             chapter_brief=chapter_brief,
@@ -234,6 +232,15 @@ class WritingChapterAgent(BaseAgent):
             )
             if on_block_committed is not None:
                 on_block_committed(committed_block)
+            self._emit_chapter_preview(
+                chapter_brief=chapter_brief,
+                content_blocks=committed_blocks,
+                final_text="",
+                final_version=0,
+                is_finalized=False,
+                preview_mode="content_blocks",
+                callback=on_chapter_preview_updated,
+            )
             self._emit_stage(
                 stage=f"block_{block.block_index}_committed",
                 action="Committed block",
@@ -288,6 +295,7 @@ class WritingChapterAgent(BaseAgent):
                 chapter_brief=chapter_brief,
                 review_reports=review_reports,
                 active_skills=active_skills,
+                content_blocks=committed_blocks,
             )
             self._emit_stage(
                 stage=f"review_iteration_{iteration}_plan",
@@ -426,6 +434,15 @@ class WritingChapterAgent(BaseAgent):
                 },
             )
             chapter_text = str(rewrite_result.get("chapter_text") or "").strip()
+            self._emit_chapter_preview(
+                chapter_brief=chapter_brief,
+                content_blocks=committed_blocks,
+                final_text=chapter_text,
+                final_version=iteration,
+                is_finalized=False,
+                preview_mode="chapter_rewrite",
+                callback=on_chapter_preview_updated,
+            )
             stage_log.append(
                 {
                     "stage": f"rewrite_iteration_{iteration}",
@@ -456,9 +473,19 @@ class WritingChapterAgent(BaseAgent):
                 "chapter_payload_text": context.chapter_payload_text,
                 "style_card_text": context.style_card_text,
                 "chapter_text": chapter_text,
+                "loaded_skill_instructions_text": self.skill_manager.format_for_model(finalize_skills),
             },
         )
         chapter_text = str(polished.get("chapter_text") or "").strip()
+        self._emit_chapter_preview(
+            chapter_brief=chapter_brief,
+            content_blocks=committed_blocks,
+            final_text=chapter_text,
+            final_version=max(int(final_judge.get("metrics", {}).get("prose_score") or 0), 1),
+            is_finalized=False,
+            preview_mode="final_polish",
+            callback=on_chapter_preview_updated,
+        )
         stage_log.append(
             {
                 "stage": "final_polish",
@@ -482,6 +509,15 @@ class WritingChapterAgent(BaseAgent):
             },
         )
         chapter_text = str(formatted.get("text") or chapter_text).strip()
+        self._emit_chapter_preview(
+            chapter_brief=chapter_brief,
+            content_blocks=committed_blocks,
+            final_text=chapter_text,
+            final_version=max(int(final_judge.get("metrics", {}).get("prose_score") or 0), 1),
+            is_finalized=True,
+            preview_mode="final_text",
+            callback=on_chapter_preview_updated,
+        )
         stage_log.append(
             {
                 "stage": "format_adjustment",
@@ -709,6 +745,37 @@ class WritingChapterAgent(BaseAgent):
         lines.append("style_risk_guard:")
         for item in block.style_risk_guard or ["None."]:
             lines.append(f"- {item}")
+        lines.append("character_reentry_mode:")
+        if block.character_reentry_mode is None:
+            lines.append("- None.")
+        else:
+            lines.extend(
+                [
+                    f"- target_character: {block.character_reentry_mode.target_character or 'None.'}",
+                    f"- identity_already_known: {block.character_reentry_mode.identity_already_known}",
+                    f"- reentry_strategy: {block.character_reentry_mode.reentry_strategy or 'None.'}",
+                    f"- first_signal: {block.character_reentry_mode.first_signal or 'None.'}",
+                    f"- first_emotional_focus: {block.character_reentry_mode.first_emotional_focus or 'None.'}",
+                    "- must_avoid:",
+                ]
+            )
+            for item in block.character_reentry_mode.must_avoid or ["None."]:
+                lines.append(f"  - {item}")
+        lines.append("clue_reveal_mechanism:")
+        if block.clue_reveal_mechanism is None:
+            lines.append("- None.")
+        else:
+            lines.extend(
+                [
+                    f"- clue: {block.clue_reveal_mechanism.clue or 'None.'}",
+                    f"- surface_trigger: {block.clue_reveal_mechanism.surface_trigger or 'None.'}",
+                    f"- relationship_pressure: {block.clue_reveal_mechanism.relationship_pressure or 'None.'}",
+                    f"- body_or_object_failure: {block.clue_reveal_mechanism.body_or_object_failure or 'None.'}",
+                    f"- who_notices: {block.clue_reveal_mechanism.who_notices or 'None.'}",
+                    f"- who_avoids_explaining: {block.clue_reveal_mechanism.who_avoids_explaining or 'None.'}",
+                    f"- after_effect: {block.clue_reveal_mechanism.after_effect or 'None.'}",
+                ]
+            )
         return "\n".join(lines).strip()
 
     @staticmethod
@@ -721,22 +788,20 @@ class WritingChapterAgent(BaseAgent):
         chapter_brief: ChapterBrief,
         review_reports: dict[str, Any],
         active_skills: list[Any],
+        content_blocks: list[ContentBlock],
     ) -> list[str]:
         ordered: list[str] = []
-        active_skill_ids = {skill.skill_id for skill in active_skills}
 
         for tool_name in self.CHAPTER_REVIEW_TOOLS:
             if tool_name not in ordered:
                 ordered.append(tool_name)
 
-        if chapter_brief.active_twists or review_reports.get("review_reveal_leak") or "reveal_guard" in active_skill_ids:
-            ordered.append("review_reveal_leak")
-        if chapter_brief.allowed_clues or review_reports.get("review_clue_origin") or "clue_consistency" in active_skill_ids:
+        if self._chapter_needs_clue_review(
+            chapter_brief=chapter_brief,
+            review_reports=review_reports,
+            content_blocks=content_blocks,
+        ):
             ordered.append("review_clue_origin")
-        if review_reports.get("review_time_consistency") or "time_consistency_guard" in active_skill_ids:
-            ordered.append("review_time_consistency")
-        if review_reports.get("review_character_integrity") or "character_integrity" in active_skill_ids:
-            ordered.append("review_character_integrity")
 
         deduped: list[str] = []
         allowed = {*(self.CHAPTER_REVIEW_TOOLS), *(self.OPTIONAL_CHAPTER_REVIEW_TOOLS)}
@@ -744,6 +809,19 @@ class WritingChapterAgent(BaseAgent):
             if tool_name in allowed and tool_name not in deduped:
                 deduped.append(tool_name)
         return deduped
+
+    @staticmethod
+    def _chapter_needs_clue_review(
+        *,
+        chapter_brief: ChapterBrief,
+        review_reports: dict[str, Any],
+        content_blocks: list[ContentBlock],
+    ) -> bool:
+        if chapter_brief.allowed_clues:
+            return True
+        if review_reports.get("review_clue_origin"):
+            return True
+        return any(block.clue_reveal_mechanism is not None for block in content_blocks)
 
     def _run_review_tools(
         self,
@@ -862,6 +940,31 @@ class WritingChapterAgent(BaseAgent):
             action=action,
             reason=reason,
             **payload,
+        )
+
+    @staticmethod
+    def _emit_chapter_preview(
+        *,
+        chapter_brief: ChapterBrief,
+        content_blocks: list[ContentBlock],
+        final_text: str,
+        final_version: int,
+        is_finalized: bool,
+        preview_mode: str,
+        callback: Callable[[dict[str, Any]], None] | None,
+    ) -> None:
+        if callback is None:
+            return
+        callback(
+            {
+                "chapter_id": chapter_brief.chapter_id,
+                "chapter_title": chapter_brief.title,
+                "content_blocks": [item.model_dump(mode="json") for item in content_blocks],
+                "final_text": str(final_text or "").strip(),
+                "final_version": max(int(final_version), 0),
+                "is_finalized": bool(is_finalized),
+                "preview_mode": preview_mode,
+            }
         )
 
     def _render_prompt(self, relative_path: str, **kwargs: Any) -> str:

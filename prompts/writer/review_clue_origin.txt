@@ -17,15 +17,16 @@ Output format:
     {{
       "category": "clue_origin",
       "severity": "high",
-      "evidence": "这章突然出现了能推进旧案的新军册，但前文没有任何来源或承接。",
-      "reason": "线索像空降，不是从现有场景、角色或制度链里长出来的。",
-      "fix": "补上线索来源、递送路径或场景触发；若补不出，就删掉这个线索。"
+      "evidence": "Explain in Simplified Chinese where the clue, object, or detail appears too suddenly or lacks an entry path.",
+      "reason": "Explain in Simplified Chinese why this feels like an author-arranged drop instead of a natural outgrowth of the scene.",
+      "fix": "Explain in Simplified Chinese how to add source, pressure chain, delivery path, or remove the abrupt clue."
     }}
   ],
-  "rewrite_guidance": "所有线索都要有来源、载体和进入场景的路径。"
+  "rewrite_guidance": "One concise clue-origin rewrite instruction in Simplified Chinese."
 }}
 
 Check:
 1. Check whether each clue or key object has an on-page source.
 2. Check whether it grows from prior memory, current scene, existing relationship, or institution rather than appearing from nowhere.
 3. If a clue is new, check whether the delivery path is visible enough.
+4. Prefer clue exposure that comes through relationship pressure, avoidance, bodily slip, object failure, or another person noticing.

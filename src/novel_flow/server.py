@@ -23,8 +23,11 @@ from novel_flow.models.schemas import (
     BookBlueprint,
     BookDocument,
     Chapter,
+    ChapterBatchWindow,
     ChapterBrief,
+    ChapterBriefGenerationInput,
     CharacterCard,
+    CriticReport,
     NewCharacterCandidate,
     PatchInstruction,
     PatchOperation,
@@ -70,6 +73,81 @@ class NovelApp:
         self._run_handles: dict[str, RunHandle] = {}
         self._lock = threading.Lock()
 
+    @staticmethod
+    def _chapter_ids_from_book(book: BookDocument) -> list[str]:
+        chapter_ids: list[str] = []
+        for volume in book.volumes:
+            for chapter in volume.chapters:
+                chapter_id = str(chapter.id or "").strip()
+                if chapter_id:
+                    chapter_ids.append(chapter_id)
+        return chapter_ids
+
+    @classmethod
+    def _prune_book_chapter_metadata(cls, book: BookDocument) -> bool:
+        existing_ids = cls._chapter_ids_from_book(book)
+        existing_set = set(existing_ids)
+        changed = False
+
+        def _set_meta(key: str, value: Any) -> None:
+            nonlocal changed
+            if book.metadata.get(key) != value:
+                book.metadata[key] = value
+                changed = True
+
+        completed_ids = [str(item) for item in book.metadata.get("completed_chapter_ids", []) if str(item).strip()]
+        _set_meta("completed_chapter_ids", [item for item in completed_ids if item in existing_set])
+
+        actual_summaries = list(book.metadata.get("actual_chapter_summaries", []) or [])
+        _set_meta(
+            "actual_chapter_summaries",
+            [
+                item
+                for item in actual_summaries
+                if isinstance(item, dict) and str(item.get("chapter_id", "")).strip() in existing_set
+            ],
+        )
+
+        for metadata_key in ("writing_chapter_runs", "writer_context_debug", "scene_plans", "critic_reports"):
+            existing = book.metadata.get(metadata_key)
+            if isinstance(existing, dict):
+                cleaned = {
+                    str(key): value
+                    for key, value in existing.items()
+                    if str(key).strip() in existing_set
+                }
+                _set_meta(metadata_key, cleaned)
+
+        last_written = str(book.metadata.get("last_written_chapter_id", "")).strip()
+        if last_written not in existing_set:
+            _set_meta("last_written_chapter_id", existing_ids[-1] if existing_ids else "")
+
+        critic_reports_map = (
+            dict(book.metadata.get("critic_reports", {}) or {})
+            if isinstance(book.metadata.get("critic_reports"), dict)
+            else {}
+        )
+        latest_critic_payload = None
+        preferred_ids: list[str] = []
+        current_last_written = str(book.metadata.get("last_written_chapter_id", "")).strip()
+        if current_last_written:
+            preferred_ids.append(current_last_written)
+        preferred_ids.extend(chapter_id for chapter_id in reversed(existing_ids) if chapter_id not in preferred_ids)
+        for chapter_id in preferred_ids:
+            report_bundle = critic_reports_map.get(chapter_id)
+            if not isinstance(report_bundle, dict):
+                continue
+            aggregate = report_bundle.get("aggregate")
+            if isinstance(aggregate, dict):
+                latest_critic_payload = aggregate
+                break
+        if latest_critic_payload is None and existing_ids:
+            current_latest_critic = book.metadata.get("latest_critic_report")
+            if isinstance(current_latest_critic, dict):
+                latest_critic_payload = current_latest_critic
+        _set_meta("latest_critic_report", latest_critic_payload)
+        return changed
+
     def list_novels(self, mode: str) -> list[dict[str, Any]]:
         store = self._store(mode)
         novels = store.list_books()
@@ -82,6 +160,10 @@ class NovelApp:
         book = store.load_book(book_id)
         if book is None:
             return {}
+        if self._prune_book_chapter_metadata(book):
+            book.updated_at = datetime.now(timezone.utc)
+            store.save_book(book)
+        chapter_ids = self._chapter_ids_from_book(book)
         latest_run_id = store.latest_run_for_book(book_id)
         latest_stage = None
         if latest_run_id:
@@ -94,7 +176,15 @@ class NovelApp:
                 if row["output_type"] == "blueprint_review":
                     blueprint_review = self._parse_json(row["payload_json"])
                     break
-        critic = store.load_latest_critic_report(book_id)
+        critic = None
+        metadata_critic = book.metadata.get("latest_critic_report")
+        if isinstance(metadata_critic, dict):
+            try:
+                critic = CriticReport.model_validate(metadata_critic)
+            except Exception:  # noqa: BLE001
+                critic = None
+        if critic is None and chapter_ids:
+            critic = store.load_latest_critic_report(book_id)
         return {
             "book": book.model_dump(mode="json"),
             "critic": critic.model_dump(mode="json") if critic else None,
@@ -133,17 +223,7 @@ class NovelApp:
             item["payload"] = self._parse_json(item["payload_json"])
             events.append(item)
         chapter_blocks = store.list_chapter_blocks(run_id=run_id, latest_only=True)
-        chapter_preview = None
-        if chapter_blocks:
-            first = chapter_blocks[0]
-            chapter_preview = {
-                "chapter_id": first["chapter_id"],
-                "chapter_title": first["chapter_title"],
-                "is_finalized": False,
-                "final_text": "",
-                "final_version": 0,
-                "content_blocks": [item["payload"] for item in chapter_blocks],
-            }
+        chapter_preview = self._build_chapter_preview(outputs=outputs, chapter_blocks=chapter_blocks)
         return {
             "run_id": run_id,
             "stage": state.stage.value if state else None,
@@ -157,6 +237,48 @@ class NovelApp:
             "chapter_blocks": chapter_blocks,
             "chapter_preview": chapter_preview,
         }
+
+    @staticmethod
+    def _build_chapter_preview(
+        *,
+        outputs: list[dict[str, Any]],
+        chapter_blocks: list[dict[str, Any]],
+    ) -> dict[str, Any] | None:
+        for item in reversed(outputs):
+            if str(item.get("output_type") or "") != "chapter_live_preview":
+                continue
+            payload = item.get("payload")
+            if not isinstance(payload, dict):
+                continue
+            content_blocks = payload.get("content_blocks")
+            if not isinstance(content_blocks, list):
+                content_blocks = []
+            final_version_raw = payload.get("final_version", 0)
+            try:
+                final_version = max(int(final_version_raw), 0)
+            except (TypeError, ValueError):
+                final_version = 0
+            return {
+                "chapter_id": str(payload.get("chapter_id") or ""),
+                "chapter_title": str(payload.get("chapter_title") or payload.get("chapter_id") or ""),
+                "is_finalized": bool(payload.get("is_finalized")),
+                "final_text": str(payload.get("final_text") or ""),
+                "final_version": final_version,
+                "content_blocks": content_blocks,
+                "preview_mode": str(payload.get("preview_mode") or ""),
+            }
+        if chapter_blocks:
+            first = chapter_blocks[0]
+            return {
+                "chapter_id": first["chapter_id"],
+                "chapter_title": first["chapter_title"],
+                "is_finalized": False,
+                "final_text": "",
+                "final_version": 0,
+                "content_blocks": [item["payload"] for item in chapter_blocks],
+                "preview_mode": "content_blocks",
+            }
+        return None
 
     def delete_novel(self, mode: str, book_id: str) -> None:
         self._store(mode).delete_book(book_id)
@@ -413,6 +535,162 @@ class NovelApp:
         return json.dumps(payload, ensure_ascii=False, indent=2)
 
     @staticmethod
+    def _resolve_target_chapter_count(book: BookDocument, story_blueprint: dict[str, Any] | None = None) -> int:
+        story_blueprint = dict(story_blueprint or book.metadata.get("story_blueprint", {}) or {})
+
+        def parse_count(text: str) -> int | None:
+            digits = "".join(ch for ch in str(text or "") if ch.isdigit())
+            if not digits:
+                return None
+            try:
+                return max(1, int(digits))
+            except Exception:
+                return None
+
+        for candidate in (
+            book.metadata.get("chapter_count_target"),
+            book.metadata.get("query"),
+            book.metadata.get("original_query"),
+            book.metadata.get("user_topic"),
+        ):
+            parsed = parse_count(str(candidate or "").strip())
+            if parsed is not None:
+                return parsed
+        existing_count = len(story_blueprint.get("chapter_briefs", []) or [])
+        return max(existing_count, 1)
+
+    @staticmethod
+    def _volume_titles_for_book(book: BookDocument) -> list[str]:
+        return [str(item) for item in book.metadata.get("volume_titles", []) if str(item).strip()] or [
+            getattr(volume, "title", "Volume 1") for volume in book.volumes
+        ] or ["Volume 1"]
+
+    @staticmethod
+    def _step8_batch_window(*, total_chapters: int, start_index: int, batch_size: int) -> dict[str, Any]:
+        safe_total = max(int(total_chapters or 1), 1)
+        safe_start = max(int(start_index or 0), 0)
+        safe_batch = max(int(batch_size or 1), 1)
+        if safe_start >= safe_total:
+            raise ValueError("章节摘要已全部生成完成。")
+        end_exclusive = min(safe_start + safe_batch, safe_total)
+        return ChapterBatchWindow.model_validate(
+            {
+                "start_index": safe_start,
+                "end_index": end_exclusive - 1,
+                "batch_size": end_exclusive - safe_start,
+                "total_chapters": safe_total,
+                "chapter_ids": [f"ch_{index + 1:03d}" for index in range(safe_start, end_exclusive)],
+            }
+        ).model_dump(mode="json")
+
+    @classmethod
+    def _step8_input_payload(cls, book: BookDocument, *, batch: dict[str, Any], reference_pack: str) -> dict[str, Any]:
+        story_blueprint = dict(book.metadata.get("story_blueprint", {}) or {})
+        batch_model = ChapterBatchWindow.model_validate(batch)
+        story_engine = dict(story_blueprint.get("story_engine", {}) or {})
+        premise = book.premise
+
+        story_engine_signals = {
+            key: value
+            for key, value in {
+                "engine_sentence": story_engine.get("engine_sentence", ""),
+                "default_track": story_engine.get("default_track", ""),
+                "narrative_mode": story_engine.get("narrative_mode", ""),
+                "viewpoint_strategy": story_engine.get("viewpoint_strategy", ""),
+                "reveal_strategy": story_engine.get("reveal_strategy", ""),
+                "hook_strategy": story_engine.get("hook_strategy", ""),
+            }.items()
+            if value
+        }
+        story_spine = {
+            "title": premise.title,
+            "high_concept": premise.high_concept,
+            "theme_statement": premise.theme_statement,
+            "story_summary": premise.story_summary,
+            "genre": premise.genre,
+            "target_style": premise.target_style,
+            "emotional_hook": premise.emotional_hook,
+            "central_conflict": premise.central_conflict,
+            "core_hook": premise.core_hook,
+            "escalation_path": premise.escalation_path,
+            "twist_blueprint": premise.twist_blueprint,
+            "ending_payoff": premise.ending_payoff,
+            "selling_points": premise.selling_points,
+            "story_engine_signals": story_engine_signals,
+        }
+
+        worldbuilding = {
+            key: value
+            for key, value in {
+                "world_rules": story_engine.get("world_rules", ""),
+                "power_structure": story_engine.get("power_structure", ""),
+                "world_map": story_engine.get("world_map", ""),
+                "structural_inertia": story_engine.get("structural_inertia", ""),
+                "rebound_mechanism": story_engine.get("rebound_mechanism", ""),
+                "story_trigger": story_engine.get("story_trigger", ""),
+                "objective_conditions": story_engine.get("objective_conditions", ""),
+            }.items()
+            if value
+        }
+        for key in ("core_theme", "structure_blueprint"):
+            value = story_blueprint.get(key)
+            if value:
+                worldbuilding[key] = value
+
+        character_bible = {
+            "characters": [
+                {
+                    "name": card.name,
+                    "identity": card.role,
+                    "age_range": "",
+                    "occupation": card.occupation,
+                    "social_background": card.social_background,
+                    "appearance_anchor": card.appearance,
+                    "personality_base": card.personality,
+                    "speaking_style": "",
+                    "behavior_rule": card.behavior_pattern,
+                    "initial_state": card.initial_state,
+                    "motivation": card.motivation,
+                }
+                for card in book.characters
+            ]
+        }
+
+        def chapter_order(chapter_id: str) -> int:
+            digits = "".join(ch for ch in str(chapter_id or "") if ch.isdigit())
+            return int(digits or "0")
+
+        previous_chapter_briefs: list[dict[str, Any]] = []
+        for item in story_blueprint.get("chapter_briefs", []) or []:
+            if not isinstance(item, dict):
+                continue
+            try:
+                brief = ChapterBrief.model_validate(item)
+            except Exception:
+                continue
+            if chapter_order(brief.chapter_id) <= batch_model.start_index:
+                previous_chapter_briefs.append(brief.model_dump(mode="json"))
+        previous_chapter_briefs.sort(key=lambda item: chapter_order(str(item.get("chapter_id", ""))))
+
+        return ChapterBriefGenerationInput.model_validate(
+            {
+                "batch": batch_model.model_dump(mode="json"),
+                "research_query": cls._planning_query(book)[:500],
+                "volume_titles_json": cls._volume_titles_for_book(book),
+                "story_spine_json": story_spine,
+                "worldbuilding_json": worldbuilding,
+                "character_bible_json": character_bible,
+                "event_timeline_json": [item for item in story_blueprint.get("event_timeline", []) or [] if isinstance(item, dict)],
+                "character_milestones_json": [item for item in book.metadata.get("character_milestones", []) or [] if isinstance(item, dict)],
+                "twist_designs_json": [item for item in story_blueprint.get("twist_designs", []) or [] if isinstance(item, dict)],
+                "story_lines_json": [item for item in story_blueprint.get("story_lines", []) or [] if isinstance(item, dict)],
+                "previous_chapter_briefs_json": previous_chapter_briefs,
+                "target_chapter_count": batch_model.total_chapters,
+                "reference_pack": reference_pack,
+            }
+        ).model_dump(mode="json")
+
+    @staticmethod
     def _step_title(step_key: str) -> str:
         titles = {
             "step_1": "1 大纲+蓝图",
@@ -664,8 +942,8 @@ class NovelApp:
 
         completed_ids = [str(item) for item in book.metadata.get("completed_chapter_ids", []) if str(item).strip()]
         book.metadata["completed_chapter_ids"] = [item for item in completed_ids if item != target_chapter_id]
+        all_written_ids = [chapter.id for volume in book.volumes for chapter in volume.chapters if chapter.id]
         if str(book.metadata.get("last_written_chapter_id", "")) == target_chapter_id:
-            all_written_ids = [chapter.id for volume in book.volumes for chapter in volume.chapters if chapter.id]
             book.metadata["last_written_chapter_id"] = all_written_ids[-1] if all_written_ids else ""
 
         chapter_order_ids: list[str] = []
@@ -683,6 +961,7 @@ class NovelApp:
             book.metadata["next_chapter_index"] = min(current_next, target_index)
         else:
             book.metadata["next_chapter_index"] = min(current_next, len(chapter_order_ids))
+        self._prune_book_chapter_metadata(book)
 
         book.updated_at = datetime.now(timezone.utc)
         store.save_book(book)
@@ -1482,27 +1761,40 @@ class NovelApp:
                 raise ValueError(f"Book not found: {book_id}")
             if not book.characters:
                 raise ValueError("请先生成角色卡，再生成章节摘要。")
-            query = self._planning_query(book)
-            query_500 = query[:500]
-            volume_titles = [str(item) for item in book.metadata.get("volume_titles", []) if str(item).strip()] or [getattr(volume, "title", "Volume 1") for volume in book.volumes] or ["Volume 1"]
+            story_blueprint = dict(book.metadata.get("story_blueprint", {}) or {})
+            planning_query = self._planning_query(book)[:500]
+            total_target_chapters = self._resolve_target_chapter_count(book, story_blueprint)
+            batch = self._step8_batch_window(total_chapters=total_target_chapters, start_index=0, batch_size=total_target_chapters)
             state = WorkflowState(run_id=run_id, stage=WorkflowStage.PLANNING, current_book_id=book.id, context={"action": "generate_chapter_briefs", "llm_provider": provider or self.stores.settings.llm_provider})
             memory.save_state(state, mode="formal")
             with EventBus(run_id=run_id, store=store, cancel_event=handle.cancel_event):
-                reference_pack = self._reference_pack_for_book(memory, run_id=run_id, book=book, stage="planning", focus=[query_500, "chapter briefs", "chapter sequencing"], tags=["chapter briefs", "story structure", "plot"])
+                reference_pack = self._reference_pack_for_book(memory, run_id=run_id, book=book, stage="planning", focus=[planning_query, "chapter briefs", "chapter sequencing"], tags=["chapter briefs", "story structure", "plot"])
+                step8_input = self._step8_input_payload(book, batch=batch, reference_pack=reference_pack)
                 payload = blueprint_agent.build_chapter_briefs_step(
-                    research_query=query_500,
-                    volume_titles=volume_titles,
+                    research_query=str(step8_input.get("research_query", "")),
+                    volume_titles=[str(item) for item in step8_input.get("volume_titles_json", [])],
+                    batch=dict(step8_input.get("batch", {}) or {}),
+                    story_spine=dict(step8_input.get("story_spine_json", {}) or {}),
+                    worldbuilding=dict(step8_input.get("worldbuilding_json", {}) or {}),
+                    character_bible=dict(step8_input.get("character_bible_json", {}) or {}),
+                    event_timeline=[item for item in step8_input.get("event_timeline_json", []) if isinstance(item, dict)],
+                    character_milestones=[item for item in step8_input.get("character_milestones_json", []) if isinstance(item, dict)],
+                    twist_designs=[item for item in step8_input.get("twist_designs_json", []) if isinstance(item, dict)],
+                    story_lines=[item for item in step8_input.get("story_lines_json", []) if isinstance(item, dict)],
+                    previous_chapter_briefs=[item for item in step8_input.get("previous_chapter_briefs_json", []) if isinstance(item, dict)],
+                    target_chapter_count=int(step8_input.get("target_chapter_count") or total_target_chapters),
                     planning_context_json=self._planning_context_json_for_step(book, "step_8", lean=True),
-                    reference_pack=reference_pack,
+                    reference_pack=str(step8_input.get("reference_pack", reference_pack)),
                 )
-                story_blueprint = dict(book.metadata.get("story_blueprint", {}) or {})
                 story_blueprint["chapter_briefs"] = payload.get("chapter_briefs", [])
                 book.metadata["story_blueprint"] = story_blueprint
                 book.metadata.pop("chapter_plans", None)
                 book.metadata["next_chapter_index"] = min(int(book.metadata.get("next_chapter_index", 0)), len(payload.get("chapter_briefs", [])))
                 book.updated_at = datetime.now(timezone.utc)
                 memory.save_book(book)
-                self._save_output(memory, run_id, "BlueprintAgent", "chapter_briefs", "Step 8 chapter briefs", payload)
+                saved_payload = dict(payload)
+                saved_payload["merged_chapter_brief_count"] = len(payload.get("chapter_briefs", []))
+                self._save_output(memory, run_id, "BlueprintAgent", "chapter_briefs", "Step 8 chapter briefs", saved_payload)
                 state.stage = WorkflowStage.COMPLETE
                 state.updated_at = datetime.now(timezone.utc)
                 memory.save_state(state, mode="formal")
@@ -1531,31 +1823,7 @@ class NovelApp:
                 raise ValueError("请先生成角色卡，再生成章节摘要。")
 
             story_blueprint = dict(book.metadata.get("story_blueprint", {}) or {})
-
-            def resolve_target_chapter_count() -> int:
-                def parse_count(text: str) -> int | None:
-                    digits = "".join(ch for ch in str(text or "") if ch.isdigit())
-                    if not digits:
-                        return None
-                    try:
-                        return max(1, int(digits))
-                    except Exception:
-                        return None
-
-                # Priority: explicit chapter_count_target, then user requirements text fields.
-                for candidate in (
-                    book.metadata.get("chapter_count_target"),
-                    book.metadata.get("query"),
-                    book.metadata.get("original_query"),
-                    book.metadata.get("user_topic"),
-                ):
-                    parsed = parse_count(str(candidate or "").strip())
-                    if parsed is not None:
-                        return parsed
-                existing_count = len(story_blueprint.get("chapter_briefs", []) or [])
-                return max(existing_count, 1)
-
-            total_target_chapters = resolve_target_chapter_count()
+            total_target_chapters = self._resolve_target_chapter_count(book, story_blueprint)
 
             existing_by_id: dict[str, ChapterBrief] = {}
             for item in story_blueprint.get("chapter_briefs", []) or []:
@@ -1575,14 +1843,8 @@ class NovelApp:
             start = int(start_index) if start_index is not None else first_missing_index
             if start < 0:
                 start = 0
-            if start >= total_target_chapters:
-                raise ValueError("章节摘要已全部生成完成。")
-            end = min(start + safe_batch_size, total_target_chapters)
-            batch_chapter_ids = [f"ch_{idx + 1:03d}" for idx in range(start, end)]
-
-            query = self._planning_query(book)
-            query_500 = query[:500]
-            volume_titles = [str(item) for item in book.metadata.get("volume_titles", []) if str(item).strip()] or [getattr(volume, "title", "Volume 1") for volume in book.volumes] or ["Volume 1"]
+            batch = self._step8_batch_window(total_chapters=total_target_chapters, start_index=start, batch_size=safe_batch_size)
+            batch_chapter_ids = [str(item) for item in batch.get("chapter_ids", [])]
             state = WorkflowState(
                 run_id=run_id,
                 stage=WorkflowStage.PLANNING,
@@ -1590,40 +1852,40 @@ class NovelApp:
                 context={
                     "action": "generate_chapter_briefs_batch",
                     "llm_provider": provider or self.stores.settings.llm_provider,
-                    "batch_size": safe_batch_size,
-                    "start_index": start,
-                    "end_index": end - 1,
+                    "batch_size": int(batch.get("batch_size", safe_batch_size)),
+                    "start_index": int(batch.get("start_index", start)),
+                    "end_index": int(batch.get("end_index", start)),
                     "total_chapters": total_target_chapters,
                 },
             )
             memory.save_state(state, mode="formal")
             with EventBus(run_id=run_id, store=store, cancel_event=handle.cancel_event):
+                end = int(batch.get("end_index", start)) + 1
+                planning_query = self._planning_query(book)[:500]
                 reference_pack = self._reference_pack_for_book(
                     memory,
                     run_id=run_id,
                     book=book,
                     stage="planning",
-                    focus=[query_500, f"chapter briefs batch {start + 1}-{end}", "chapter sequencing"],
+                    focus=[planning_query, f"chapter briefs batch {start + 1}-{end}", "chapter sequencing"],
                     tags=["chapter briefs", "story structure", "plot"],
                 )
-                planning_context_payload = json.loads(self._planning_context_json_for_step(book, "step_8", lean=True))
-                previous = planning_context_payload.get("previous_step_outputs")
-                if not isinstance(previous, dict):
-                    previous = {}
-                    planning_context_payload["previous_step_outputs"] = previous
-                planning_context_payload["batch_generation"] = {
-                    "start_index": start,
-                    "end_index": end - 1,
-                    "batch_size": safe_batch_size,
-                    "total_chapters": total_target_chapters,
-                    "chapter_ids": batch_chapter_ids,
-                    "instruction": "只生成当前批次 chapter_ids 对应章节的 chapter_briefs。",
-                }
+                step8_input = self._step8_input_payload(book, batch=batch, reference_pack=reference_pack)
                 payload = blueprint_agent.build_chapter_briefs_step(
-                    research_query=query_500,
-                    volume_titles=volume_titles,
-                    planning_context_json=json.dumps(planning_context_payload, ensure_ascii=False, indent=2),
-                    reference_pack=reference_pack,
+                    research_query=str(step8_input.get("research_query", "")),
+                    volume_titles=[str(item) for item in step8_input.get("volume_titles_json", [])],
+                    batch=dict(step8_input.get("batch", {}) or {}),
+                    story_spine=dict(step8_input.get("story_spine_json", {}) or {}),
+                    worldbuilding=dict(step8_input.get("worldbuilding_json", {}) or {}),
+                    character_bible=dict(step8_input.get("character_bible_json", {}) or {}),
+                    event_timeline=[item for item in step8_input.get("event_timeline_json", []) if isinstance(item, dict)],
+                    character_milestones=[item for item in step8_input.get("character_milestones_json", []) if isinstance(item, dict)],
+                    twist_designs=[item for item in step8_input.get("twist_designs_json", []) if isinstance(item, dict)],
+                    story_lines=[item for item in step8_input.get("story_lines_json", []) if isinstance(item, dict)],
+                    previous_chapter_briefs=[item for item in step8_input.get("previous_chapter_briefs_json", []) if isinstance(item, dict)],
+                    target_chapter_count=int(step8_input.get("target_chapter_count") or total_target_chapters),
+                    planning_context_json=self._planning_context_json_for_step(book, "step_8", lean=True),
+                    reference_pack=str(step8_input.get("reference_pack", reference_pack)),
                 )
                 generated_briefs = [ChapterBrief.model_validate(item) for item in payload.get("chapter_briefs", []) if isinstance(item, dict)]
                 briefs_by_chapter_id = {str(item.chapter_id): item for item in generated_briefs if str(item.chapter_id).strip()}
@@ -1659,13 +1921,7 @@ class NovelApp:
                     "chapter_briefs",
                     f"Step 8 chapter briefs batch {start + 1}-{end}",
                     {
-                        "batch": {
-                            "start_index": start,
-                            "end_index": end - 1,
-                            "batch_size": safe_batch_size,
-                            "total_chapters": total_target_chapters,
-                            "chapter_ids": batch_chapter_ids,
-                        },
+                        "batch": dict(payload.get("batch", batch)),
                         "chapter_briefs": [plan.model_dump(mode="json") for plan in batch_briefs],
                         "merged_chapter_brief_count": len(merged_briefs),
                     },
@@ -1675,6 +1931,7 @@ class NovelApp:
                 memory.save_state(state, mode="formal")
 
         return self._launch_run("formal", run_id, task)
+
     def generate_formal_milestones(self, *, book_id: str, llm_provider: str | None = None) -> str:
         run_id = f"run_{uuid4().hex[:10]}"
         provider = self._normalize_llm_provider(llm_provider)
@@ -2632,8 +2889,21 @@ textarea:focus,input:focus,select:focus,button:focus{outline:none;border-color:#
 .box summary{list-style:none;cursor:pointer;padding:11px 12px;color:#eef2ff;font-size:12px;display:flex;align-items:center;gap:8px}
 .box summary::-webkit-details-marker{display:none}
 .box .payload{padding:0 12px 12px 12px}
+.box.task-box{border-color:#28324a;transition:border-color .16s ease,box-shadow .16s ease}
+.box.task-box.active{border-color:#4e628f;box-shadow:0 0 0 1px rgba(78,98,143,.22)}
+.box.task-box.active summary{background:#182031}
 .title{font-size:12px;color:#eef2ff;margin-bottom:0}
 .payload{font-size:11px;color:#93a0bf;white-space:pre-wrap;word-break:break-word;line-height:1.7}
+.stream-shell{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.stream-card{background:#0d1220;border:1px solid #28324a;border-radius:8px;padding:10px}
+.stream-card.live{border-color:#315b4b;background:linear-gradient(135deg,#111b24,#102018)}
+.stream-meta{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:6px}
+.stream-title{font-size:11px;color:#eef2ff;font-weight:600}
+.stream-status{font-size:10px;color:#8fb8a0}
+.stream-card.live .stream-status{color:#a7e0b8}
+.stream-prompt{margin-bottom:6px;font-size:10px;line-height:1.6;color:#8ea1d8}
+.stream-text{font-size:11px;color:#dce3fb;white-space:pre-wrap;word-break:break-word;line-height:1.75;max-height:420px;overflow:auto}
+.chapter-live-blocks{margin-top:12px;padding-top:12px;border-top:1px dashed #2a3448}
 .empty{padding:56px 24px;text-align:center;color:#7f8aa3;border:1px dashed #273247;border-radius:14px;background:#121722}
 .agent-view{display:flex;flex-direction:column;gap:8px}
 .kv{display:grid;grid-template-columns:78px 1fr;gap:8px;align-items:start;font-size:11px;line-height:1.6;color:#dce3fb}
@@ -2762,7 +3032,7 @@ textarea:focus,input:focus,select:focus,button:focus{outline:none;border-color:#
 <div id='newNovelModal' class='modal'><div class='modal-card'><div class='modal-head'><div class='modal-title'>新建小说</div><div class='modal-desc'>这里先保存小说标题、原始题材需求和可选风格，不会自动继续到大纲生成。创建后请手动点击“1 大纲+蓝图”。</div></div><div class='modal-body'><div class='modal-section'><div class='modal-section-title'>基础信息</div><div class='field-grid'><div class='field full'><label>小说标题</label><input id='newTitleInput' placeholder='例如：她非良母' /><div class='field-help'>这里是书名，后续会显示在左上角小说切换列表里，也可以在用户输入页继续修改。</div></div><div class='field full'><label>题材/需求</label><textarea id='newQueryInput' placeholder='例如：都市情感反转，女主发现丈夫隐藏身份后反击'></textarea><div class='field-help'>写清题材、主角处境、核心冲突，或者你最想看到的关键局面。</div></div><div class='field full'><label>风格要求（可留空）</label><textarea id='newStyleInput' placeholder='例如：古言权谋、轻喜剧、短篇悬疑、第三人称群像；留空则由系统自行判断'></textarea><div class='field-help'>这里只在你明确填写时生效，不再默认固定文风或人称。</div></div></div></div><div class='modal-section'><div class='modal-section-title'>扩展配置</div><div class='config-placeholder'>后续可以在这里增加目标体量、章节数、叙事视角、禁用元素、参考卡片范围等配置。当前版本先使用系统默认决策。</div></div></div><div class='modal-actions'><button class='ghost' onclick='closeNewNovelDialog()'>取消</button><button onclick='startFormalFromDialog()'>保存需求</button></div></div></div>
 <div id='main'><div id='left'><div id='subhdr'>左侧显示当前小说的历史运行记录，当前运行默认展开</div><div id='evs'><div class='empty'>选择小说或发起一次运行后查看过程</div></div></div><div id='right'><div id='tabs'><div class='tab active' onclick="showTab('input')">用户输入</div><div class='tab' onclick="showTab('blueprint')">小说信息</div><div class='tab' onclick="showTab('text')">小说正文</div><div class='tab' onclick="showTab('critic')">评价结果</div></div><div id='tc'><div id='pnl-input' class='pnl active'><div class='empty'>等待加载用户输入</div></div><div id='pnl-blueprint' class='pnl'><div class='empty'>等待加载小说信息</div></div><div id='pnl-text' class='pnl'><div class='empty'>等待加载小说正文</div></div><div id='pnl-critic' class='pnl'><div class='empty'>等待加载评价结果</div></div></div></div></div>
 <script>
-let mode='formal',llmProvider='doubao',bookId='',pendingRunId='',runsCache=[],expandedRuns=new Set(),boxStates={},detailStates={},currentBook=null,pendingStepRevision=null,lastRightRenderKey='';
+let mode='formal',llmProvider='doubao',bookId='',pendingRunId='',runsCache=[],expandedRuns=new Set(),boxStates={},detailStates={},currentBook=null,pendingStepRevision=null,lastRightRenderKey='',lastLivePreviewKey='',runActiveItemKeys={};
 let refreshPaused=false,refreshPauseReason='',refreshPauseTimer=null,isMouseSelecting=false;
 const LLM_PROVIDER_STORAGE_KEY='novel_flow_llm_provider';
 const STAGES={research:'调研中',planning:'大纲中',writing:'写作中',critique:'评价中',patching:'修改中',complete:'已完成'};
@@ -2787,13 +3057,13 @@ function sanitizeCharactersDraft(chars){if(!Array.isArray(chars))return[];return
 function sanitizeStep3DraftObject(obj){if(!obj||typeof obj!=='object')return obj;const next=deepClone(obj);if(Array.isArray(next.characters))next.characters=sanitizeCharactersDraft(next.characters);return next;}
 function applyStepRevisionDraft(result){if(!result||!result.step_key)return;const stepKey=result.step_key;const revisedText=result.draft_json||JSON.stringify(result.step_payload||{},null,2);stepDrafts[stepKey]=revisedText;try{stepDraftObjects[stepKey]=JSON.parse(revisedText);}catch{stepDraftObjects[stepKey]=deepClone(result.step_payload||{});}if(stepKey==='step_3'){stepDraftObjects[stepKey]=sanitizeStep3DraftObject(stepDraftObjects[stepKey]||{});stepDrafts[stepKey]=JSON.stringify(stepDraftObjects[stepKey]||{},null,2);}stepDraftDirty[stepKey]=true;stepReviewNotes[stepKey]=Array.isArray(result.review_notes)?result.review_notes:[];if(currentBook){renderBlueprint(currentBook);autoSizeTextareas('pnl-blueprint');}}
 function latestOutputByType(runData,outputType){const outs=Array.isArray(runData?.outputs)?runData.outputs:[];for(let i=outs.length-1;i>=0;i-=1){if(outs[i]?.output_type===outputType)return outs[i].payload||null;}return null;}
-function stepFieldLabel(key){const labels={premise:'大纲主体',story_engine:'写作架构',characters:'角色卡',event_timeline:'客观事件时间线',character_milestones:'角色发展线',twist_designs:'反转设计',story_lines:'故事线',chapter_briefs:'章节摘要',title:'标题',high_concept:'高概念',theme_statement:'立意',story_summary:'故事简介',genre:'题材',target_style:'风格',emotional_hook:'情绪钩子',central_conflict:'核心冲突',core_hook:'核心看点',escalation_path:'升级路径',twist_blueprint:'反转蓝图',ending_payoff:'结尾兑现',selling_points:'卖点',engine_sentence:'故事驱动句',narrative_mode:'叙事结构',viewpoint_strategy:'视角策略',reveal_strategy:'信息揭示策略',hook_strategy:'前三章留人策略',default_track:'默认轨道',world_rules:'世界规则',power_structure:'权力结构',world_map:'世界地图',structural_inertia:'结构惯性',rebound_mechanism:'反弹机制',story_trigger:'故事启动条件',objective_conditions:'客观条件与机会结构',twist_id:'反转编号',false_belief:'表层误导认知',truth:'真实真相',reader_alignment:'读者站位',seed_from:'埋线起点',reveal_at:'揭示章节',allowed_clues:'允许埋下的线索',forbidden_reveals:'禁止提前揭示',pov_lock:'视角锁',related_characters:'关联角色',payoff_effect:'兑现效果',line_id:'故事线编号',name:'名称',visibility:'明暗线',line_type:'线类型',reader_hook_mode:'读者钩子方式',line_rules:'线规则',carried_twists:'承载反转',line_goal:'线目标',key_progressions:'关键推进章节',plot:'关键情节',start_state:'起点状态',midpoint_shift:'中段变化',end_state:'终点状态',core_question:'核心问题',chapter_id:'章节编号',active_lines:'挂线',active_twists:'激活反转',summary:'章节摘要',chapter_type:'章型',incoming_hook:'承接钩子',opening_hook:'开篇钩子',chapter_object:'章节目标物',reader_emotion:'读者情绪',reader_belief:'读者当前认知',allowed_info:'允许释放的信息',forbidden:'禁止出现',world_limit:'世界/规则限制',character_focus:'角色焦点',character_shift:'角色变化',relationship_reprice:'关系重估',emotional_turn:'情绪转折',backstory_trigger:'触发的前史',scene_engine:'场景引擎',small_payoff:'小兑现',ending_pull:'结尾牵引',info_budget:'信息预算',objective:'章节摘要',tension:'张力',phase:'阶段',story_function:'剧情功能',key_turn:'关键转折',payoff:'兑现',next_route_hint:'下一步提示',target_words:'目标字数',scene_density:'场景密度',scene_id:'场景编号',conflict:'冲突',info_reveal:'信息释放',emotional_shift:'情绪变化',appearance:'外貌'};return labels[key]||String(key).replaceAll('_',' ');}
+function stepFieldLabel(key){const labels={premise:'大纲主体',story_engine:'写作架构',characters:'角色卡',event_timeline:'客观事件时间线',character_milestones:'角色发展线',twist_designs:'反转设计',story_lines:'故事线',chapter_briefs:'章节摘要',title:'标题',high_concept:'高概念',theme_statement:'立意',story_summary:'故事简介',genre:'题材',target_style:'风格',emotional_hook:'情绪钩子',central_conflict:'核心冲突',core_hook:'核心看点',escalation_path:'升级路径',twist_blueprint:'反转蓝图',ending_payoff:'结尾兑现',selling_points:'卖点',engine_sentence:'故事驱动句',narrative_mode:'叙事结构',viewpoint_strategy:'视角策略',reveal_strategy:'信息揭示策略',hook_strategy:'前三章留人策略',default_track:'默认轨道',world_rules:'世界规则',power_structure:'权力结构',world_map:'世界地图',structural_inertia:'结构惯性',rebound_mechanism:'反弹机制',story_trigger:'故事启动条件',objective_conditions:'客观条件与机会结构',twist_id:'反转编号',false_belief:'表层误导认知',truth:'真实真相',reader_alignment:'读者站位',seed_from:'埋线起点',reveal_at:'揭示章节',allowed_clues:'允许埋下的线索',forbidden_reveals:'禁止提前揭示',pov_lock:'视角锁',related_characters:'关联角色',payoff_effect:'兑现效果',line_id:'故事线编号',name:'名称',visibility:'明暗线',line_type:'线类型',reader_hook_mode:'读者钩子方式',line_rules:'线规则',carried_twists:'承载反转',line_goal:'线目标',key_progressions:'关键推进章节',plot:'关键情节',start_state:'起点状态',midpoint_shift:'中段变化',end_state:'终点状态',core_question:'核心问题',chapter_id:'章节编号',active_lines:'挂线',active_twists:'激活反转',summary:'章节摘要',chapter_type:'章型',incoming_hook:'承接钩子',opening_hook:'开篇钩子',core_scene:'核心场面',chapter_object:'章节目标物',reader_emotion:'读者情绪',reader_belief:'读者当前认知',allowed_info:'允许释放的信息',forbidden:'禁止出现',world_limit:'世界/规则限制',character_focus:'角色焦点',character_shift:'角色变化',relationship_reprice:'关系重估',emotional_turn:'情绪转折',backstory_trigger:'触发的前史',scene_engine:'场景引擎',clue_reveal_style:'线索露出方式',character_reentry_focus:'人物再出场锚点',human_pain_anchor:'人味痛点锚',small_payoff:'小兑现',ending_pull:'结尾牵引',info_budget:'信息预算',objective:'章节摘要',tension:'张力',phase:'阶段',story_function:'剧情功能',key_turn:'关键转折',payoff:'兑现',next_route_hint:'下一步提示',target_words:'目标字数',scene_density:'场景密度',scene_id:'场景编号',conflict:'冲突',info_reveal:'信息释放',emotional_shift:'情绪变化',appearance:'外貌'};return labels[key]||String(key).replaceAll('_',' ');}
 function orderedStepObjectEntries(stepKey,path,obj){
   const rawEntries=Object.entries(obj||{});
   const orderMap={
     step_6:['twist_id','title','false_belief','truth','reader_alignment','seed_from','reveal_at','allowed_clues','forbidden_reveals','pov_lock','related_characters','payoff_effect'],
     step_7:['line_id','name','line_type','visibility','core_question','reader_hook_mode','start_state','midpoint_shift','end_state','carried_twists','line_rules'],
-    step_8:['chapter_id','title','chapter_type','active_lines','active_twists','summary','incoming_hook','opening_hook','chapter_object','reader_emotion','reader_belief','allowed_info','allowed_clues','forbidden','world_limit','character_focus','character_shift','relationship_reprice','emotional_turn','backstory_trigger','scene_engine','small_payoff','ending_pull','info_budget']
+    step_8:['chapter_id','title','chapter_type','active_lines','active_twists','summary','incoming_hook','opening_hook','core_scene','chapter_object','reader_emotion','reader_belief','allowed_info','allowed_clues','forbidden','world_limit','character_focus','character_shift','relationship_reprice','emotional_turn','backstory_trigger','scene_engine','clue_reveal_style','character_reentry_focus','human_pain_anchor','small_payoff','ending_pull','info_budget']
   };
   const isStep6Item=stepKey==='step_6'&&path.length===2&&String(path[0])==='twist_designs'&&typeof path[1]==='number';
   const isStep7Item=stepKey==='step_7'&&path.length===2&&String(path[0])==='story_lines'&&typeof path[1]==='number';
@@ -2981,11 +3251,11 @@ function updateStopButton(){const a=runsCache.find(x=>x.is_running)||(pendingRun
 async function loadNovels(){const novels=await api('/api/novels?mode='+mode);novelSel.innerHTML="<option value=''>选择小说</option>";novels.forEach(n=>{const o=document.createElement('option');o.value=n.book_id;o.textContent=n.title||n.book_id;novelSel.appendChild(o);});if(bookId)novelSel.value=bookId;}
 async function loadRuns(){if(!bookId){runsCache=pendingRunId?[{run_id:pendingRunId,is_running:true,stage:'writing',updated_at:new Date().toISOString(),pending_message:'运行已启动，正在准备请求模型。'}]:[];return renderRuns();}runsCache=await api(`/api/runs?mode=${mode}&book_id=${bookId}`);const c=runsCache.find(x=>x.is_running)||runsCache[0];if(c)expandedRuns.add(c.run_id);await renderRuns();updateStopButton();}
 function renderEmptyRightPanels(){document.getElementById('pnl-input').innerHTML="<div class='empty'>等待加载用户输入</div>";document.getElementById('pnl-blueprint').innerHTML="<div class='empty'>等待加载小说信息</div>";document.getElementById('pnl-text').innerHTML="<div class='empty'>等待加载小说正文</div>";document.getElementById('pnl-critic').innerHTML="<div class='empty'>等待加载评价结果</div>";showTab('input');}
-async function changeMode(){mode=modeSel.value;bookId='';currentBook=null;pendingRunId='';pendingStepRevision=null;runsCache=[];expandedRuns=new Set();boxStates={};lastRightRenderKey='';resetStepDraftCache('');evs.innerHTML="<div class='empty'>选择小说或发起一次运行后查看过程</div>";renderEmptyRightPanels();stagePill.textContent='未开始';toggleButtons();updateStopButton();await loadNovels();}
-async function selectNovel(id){bookId=id;currentBook=null;pendingRunId='';pendingStepRevision=null;expandedRuns=new Set();boxStates={};lastRightRenderKey='';resetStepDraftCache(id||'');if(!bookId){evs.innerHTML="<div class='empty'>选择小说或发起一次运行后查看过程</div>";renderEmptyRightPanels();stagePill.textContent='未开始';updateStopButton();return;}await refreshNovel();}
-async function refreshNovel(){if(!bookId)return;const d=await api(`/api/novel?mode=${mode}&book_id=${bookId}`);if(!d.book)return;if(stepDraftBookId!==d.book.id)resetStepDraftCache(d.book.id);const editingInRight=!!document.activeElement&&document.getElementById('right')?.contains(document.activeElement)&&isEditingElement(document.activeElement);const scrollState=captureScrollState();currentBook=d.book;const rightRenderKey=[String(d.book?.id||''),String(d.book?.updated_at||''),String(d.latest_run_id||''),String(d.latest_stage||''),String(d.critic?.report_id||d.critic?.created_at||''),String(d.blueprint_review?.summary||'')].join('|');if(!editingInRight&&rightRenderKey!==lastRightRenderKey){snapshotPanelDetailStates('pnl-input');snapshotPanelDetailStates('pnl-blueprint');snapshotPanelDetailStates('pnl-text');snapshotPanelDetailStates('pnl-critic');renderInputPanel(d.book);renderBlueprint(d.book,d.blueprint_review);renderText(d.book,null);renderCritic(d.critic);lastRightRenderKey=rightRenderKey;}stagePill.textContent=stageText(d.latest_stage);runsCache=d.runs||[];const c=runsCache.find(x=>x.is_running)||runsCache[0];if(c)expandedRuns.add(c.run_id);await renderRuns();updateStopButton();await loadNovels();restoreScrollState(scrollState);}
-async function refreshPendingRun(){if(!pendingRunId)return;const trackedRunId=pendingRunId;const prev=runsCache.find(x=>x.run_id===trackedRunId)||{};const d=await api(`/api/run?mode=${mode}&run_id=${trackedRunId}`);stagePill.textContent=stageText(d.stage||'writing');const running=d.is_running!==false;if(running){runsCache=[{run_id:trackedRunId,is_running:true,stage:d.stage,updated_at:d.updated_at||new Date().toISOString(),task_label:prev.task_label||'',pending_message:'运行中，等待模型返回更多内容。'},...runsCache.filter(x=>x.run_id!==trackedRunId)];expandedRuns.add(trackedRunId);if(currentBook&&d.chapter_preview){snapshotPanelDetailStates('pnl-text');renderText(currentBook,d.chapter_preview);}await renderRuns({[trackedRunId]:d});updateStopButton();return;}let revisionPayload=latestOutputByType(d,'step_revision_draft');const completedRevision=pendingStepRevision&&pendingStepRevision.run_id===trackedRunId?pendingStepRevision:null;pendingRunId='';pendingStepRevision=null;if(!revisionPayload&&completedRevision&&completedRevision.step_key&&completedRevision.payload_text){const fallback=await api('/api/novels/revise_step_result',{method:'POST',body:JSON.stringify({mode,book_id:bookId,step_key:completedRevision.step_key,payload_text:completedRevision.payload_text,revision_mode:completedRevision.revision_mode||'instruction',guidance:completedRevision.guidance||''})});if(ensureOk(fallback)){revisionPayload=fallback;}}if(revisionPayload)applyStepRevisionDraft(revisionPayload);if(d.current_book_id){bookId=d.current_book_id;novelSel.value=bookId;await refreshNovel();if(completedRevision){if(revisionPayload)alert(completedRevision.revision_mode==='review'?'已生成质检后的建议稿，请确认后再点保存修改。':'已按你的指令生成建议稿，请确认后再点保存修改。');else alert('修改任务已结束，但没有返回建议稿，请查看左侧运行记录。');}return;}runsCache=[{run_id:trackedRunId,is_running:false,stage:d.stage,updated_at:d.updated_at||new Date().toISOString(),task_label:prev.task_label||'',pending_message:'运行已结束，查看下方最新事件。'}];expandedRuns.add(trackedRunId);await renderRuns({[trackedRunId]:d});updateStopButton();if(completedRevision){if(revisionPayload)alert(completedRevision.revision_mode==='review'?'已生成质检后的建议稿，请确认后再点保存修改。':'已按你的指令生成建议稿，请确认后再点保存修改。');else alert('修改任务已结束，但没有返回建议稿，请查看左侧运行记录。');}}
-function boxHtml(key,title,payloadHtml,isOpen){return `<details class='box' ${isOpen?'open':''} ontoggle="toggleBox('${key}', this.open)"><summary><span class='title'>${title}</span></summary><div class='payload'>${payloadHtml}</div></details>`}
+async function changeMode(){mode=modeSel.value;bookId='';currentBook=null;pendingRunId='';pendingStepRevision=null;runsCache=[];expandedRuns=new Set();boxStates={};lastRightRenderKey='';lastLivePreviewKey='';runActiveItemKeys={};resetStepDraftCache('');evs.innerHTML="<div class='empty'>选择小说或发起一次运行后查看过程</div>";renderEmptyRightPanels();stagePill.textContent='未开始';toggleButtons();updateStopButton();await loadNovels();}
+async function selectNovel(id){bookId=id;currentBook=null;pendingRunId='';pendingStepRevision=null;expandedRuns=new Set();boxStates={};lastRightRenderKey='';lastLivePreviewKey='';runActiveItemKeys={};resetStepDraftCache(id||'');if(!bookId){evs.innerHTML="<div class='empty'>选择小说或发起一次运行后查看过程</div>";renderEmptyRightPanels();stagePill.textContent='未开始';updateStopButton();return;}await refreshNovel();}
+async function refreshNovel(){if(!bookId)return;const d=await api(`/api/novel?mode=${mode}&book_id=${bookId}`);if(!d.book)return;if(stepDraftBookId!==d.book.id)resetStepDraftCache(d.book.id);const editingInRight=!!document.activeElement&&document.getElementById('right')?.contains(document.activeElement)&&isEditingElement(document.activeElement);const scrollState=captureScrollState();currentBook=d.book;lastLivePreviewKey='';const rightRenderKey=[String(d.book?.id||''),String(d.book?.updated_at||''),String(d.latest_run_id||''),String(d.latest_stage||''),String(d.critic?.report_id||d.critic?.created_at||''),String(d.blueprint_review?.summary||'')].join('|');if(!editingInRight&&rightRenderKey!==lastRightRenderKey){snapshotPanelDetailStates('pnl-input');snapshotPanelDetailStates('pnl-blueprint');snapshotPanelDetailStates('pnl-text');snapshotPanelDetailStates('pnl-critic');renderInputPanel(d.book);renderBlueprint(d.book,d.blueprint_review);renderText(d.book,null);renderCritic(d.critic);lastRightRenderKey=rightRenderKey;}stagePill.textContent=stageText(d.latest_stage);runsCache=d.runs||[];const c=runsCache.find(x=>x.is_running)||runsCache[0];if(c)expandedRuns.add(c.run_id);await renderRuns();updateStopButton();await loadNovels();restoreScrollState(scrollState);}
+async function refreshPendingRun(){if(!pendingRunId)return;const trackedRunId=pendingRunId;const prev=runsCache.find(x=>x.run_id===trackedRunId)||{};const d=await api(`/api/run?mode=${mode}&run_id=${trackedRunId}`);const scrollState=captureScrollState();const editingInRight=!!document.activeElement&&document.getElementById('right')?.contains(document.activeElement)&&isEditingElement(document.activeElement);stagePill.textContent=stageText(d.stage||'writing');const running=d.is_running!==false;if(running){runsCache=[{run_id:trackedRunId,is_running:true,stage:d.stage,updated_at:d.updated_at||new Date().toISOString(),task_label:prev.task_label||'',pending_message:'运行中，等待模型返回更多内容。'},...runsCache.filter(x=>x.run_id!==trackedRunId)];expandedRuns.add(trackedRunId);if(currentBook&&d.chapter_preview){const previewKey=JSON.stringify(d.chapter_preview||null);if(!editingInRight&&previewKey!==lastLivePreviewKey){snapshotPanelDetailStates('pnl-text');renderText(currentBook,d.chapter_preview);lastLivePreviewKey=previewKey;}}await renderRuns({[trackedRunId]:d});updateStopButton();restoreScrollState(scrollState);return;}let revisionPayload=latestOutputByType(d,'step_revision_draft');const completedRevision=pendingStepRevision&&pendingStepRevision.run_id===trackedRunId?pendingStepRevision:null;pendingRunId='';pendingStepRevision=null;lastLivePreviewKey='';delete runActiveItemKeys[trackedRunId];if(!revisionPayload&&completedRevision&&completedRevision.step_key&&completedRevision.payload_text){const fallback=await api('/api/novels/revise_step_result',{method:'POST',body:JSON.stringify({mode,book_id:bookId,step_key:completedRevision.step_key,payload_text:completedRevision.payload_text,revision_mode:completedRevision.revision_mode||'instruction',guidance:completedRevision.guidance||''})});if(ensureOk(fallback)){revisionPayload=fallback;}}if(revisionPayload)applyStepRevisionDraft(revisionPayload);if(d.current_book_id){bookId=d.current_book_id;novelSel.value=bookId;await refreshNovel();if(completedRevision){if(revisionPayload)alert(completedRevision.revision_mode==='review'?'已生成质检后的建议稿，请确认后再点保存修改。':'已按你的指令生成建议稿，请确认后再点保存修改。');else alert('修改任务已结束，但没有返回建议稿，请查看左侧运行记录。');}return;}runsCache=[{run_id:trackedRunId,is_running:false,stage:d.stage,updated_at:d.updated_at||new Date().toISOString(),task_label:prev.task_label||'',pending_message:'运行已结束，查看下方最新事件。'}];expandedRuns.add(trackedRunId);await renderRuns({[trackedRunId]:d});updateStopButton();restoreScrollState(scrollState);if(completedRevision){if(revisionPayload)alert(completedRevision.revision_mode==='review'?'已生成质检后的建议稿，请确认后再点保存修改。':'已按你的指令生成建议稿，请确认后再点保存修改。');else alert('修改任务已结束，但没有返回建议稿，请查看左侧运行记录。');}}
+function boxHtml(key,title,payloadHtml,isOpen,extraClass=''){const klass=['box',extraClass].filter(Boolean).join(' ');return `<details class='${klass}' ${isOpen?'open':''} ontoggle="toggleBox('${key}', this.open)"><summary><span class='title'>${title}</span></summary><div class='payload'>${payloadHtml}</div></details>`}
 function toggleBox(key,isOpen){boxStates[key]=isOpen;}
 const toArray=v=>Array.isArray(v)?v.filter(Boolean):[];
 const jsonHtml=v=>`<div class='pre json'>${esc(JSON.stringify(v??{},null,2))}</div>`;
@@ -3175,16 +3445,58 @@ function renderStageEvent(payload){
 function renderErrorEvent(payload){
   return `<div class='agent-view'>${infoRow('错误', payload&&payload.error||'未知错误')}</div>`;
 }
+function clipDisplayText(text,maxChars){
+  const raw=String(text||'');
+  if(!raw)return '';
+  if(raw.length<=maxChars)return raw;
+  return `[内容较长，仅展示最近 ${maxChars} 字]\\n${raw.slice(-maxChars)}`;
+}
+function mergeStreamText(current,incoming){
+  const prev=String(current||''),next=String(incoming||'');
+  if(!next)return prev;
+  if(!prev)return next;
+  if(next.startsWith(prev))return next;
+  if(prev.endsWith(next))return prev;
+  return prev+next;
+}
+function summarizeStreamPrompt(prompt){
+  const cleaned=String(prompt||'').replaceAll(String.fromCharCode(13),' ').replaceAll(String.fromCharCode(10),' ').trim();
+  if(!cleaned)return '';
+  return cleaned.length>160?`${cleaned.slice(0,160)}…`:cleaned;
+}
+function renderEmbeddedStreams(streamGroups){
+  const groups=Array.isArray(streamGroups)?streamGroups.filter(Boolean):[];
+  if(!groups.length)return '';
+  return `<div class='stream-shell'>${groups.map((group,index)=>{
+    const streamTitle=esc(group.agent||`模型调用 ${index+1}`);
+    const streamStatus=group.done?'已完成':'流式输出中';
+    const promptSummary=summarizeStreamPrompt(group.prompt||'');
+    const streamText=clipDisplayText(group.displayText||group.reply||group.text||'',18000);
+    return `<div class='stream-card ${group.done?'':'live'}'><div class='stream-meta'><div class='stream-title'>${streamTitle}</div><div class='stream-status'>${esc(streamStatus)}</div></div>${promptSummary?`<div class='stream-prompt'>${esc(promptSummary)}</div>`:''}${streamText?`<div class='stream-text'>${esc(streamText)}</div>`:`<div class='muted'>流式输出暂未返回内容</div>`}</div>`;
+  }).join('')}</div>`;
+}
 function renderItemPayload(item){
-  if(item.kind==='output'&&item.outputType==='director_decision')return renderDirectorDecision(item.rawPayload);
-  if(item.kind==='output'&&item.outputType==='reference_cards')return renderReferenceCards(item.rawPayload);
-  if(item.kind==='output'&&item.outputType==='tool_observation')return renderToolObservation(item.rawPayload);
-  if(item.kind==='output'&&item.outputType==='actual_chapter_summary')return renderActualChapterSummary(item.rawPayload);
-  if(item.kind==='output'&&item.outputType==='chapter_stage_log')return renderChapterStageLog(item.rawPayload);
-  if(item.kind==='event'&&item.eventType==='stage')return renderStageEvent(item.rawPayload);
-  if(item.kind==='event'&&item.eventType==='error')return renderErrorEvent(item.rawPayload);
-  if(item.kind==='plain')return `<div class='pre'>${esc(item.text||'')}</div>`;
-  return jsonHtml(item.rawPayload);
+  const streamHtml=renderEmbeddedStreams(item.streamGroups);
+  let body='';
+  if(item.kind==='output'&&item.outputType==='director_decision')body=renderDirectorDecision(item.rawPayload);
+  else if(item.kind==='output'&&item.outputType==='reference_cards')body=renderReferenceCards(item.rawPayload);
+  else if(item.kind==='output'&&item.outputType==='tool_observation')body=renderToolObservation(item.rawPayload);
+  else if(item.kind==='output'&&item.outputType==='actual_chapter_summary')body=renderActualChapterSummary(item.rawPayload);
+  else if(item.kind==='output'&&item.outputType==='chapter_stage_log')body=renderChapterStageLog(item.rawPayload);
+  else if(item.kind==='event'&&item.eventType==='stage')body=renderStageEvent(item.rawPayload);
+  else if(item.kind==='event'&&item.eventType==='error')body=renderErrorEvent(item.rawPayload);
+  else if(item.kind==='plain'&&item.text)body=`<div class='pre'>${esc(item.text||'')}</div>`;
+  else if(item.streamOnly)body='';
+  else body=jsonHtml(item.rawPayload);
+  if(item.streamOnly)return streamHtml||"<div class='muted'>等待模型返回内容</div>";
+  return `${streamHtml}${body}`;
+}
+function sortTimelineItems(items){
+  return items.sort((a,b)=>{
+    const ta=String(a?.sortTs||''),tb=String(b?.sortTs||'');
+    if(ta===tb)return String(a?.key||'').localeCompare(String(b?.key||''));
+    return ta.localeCompare(tb);
+  });
 }
 function setRefreshPaused(paused,reason=''){refreshPaused=paused;refreshPauseReason=paused?reason:'';if(refreshPauseTimer){clearTimeout(refreshPauseTimer);refreshPauseTimer=null;}}
 function pauseRefreshFor(ms,reason=''){setRefreshPaused(true,reason);refreshPauseTimer=setTimeout(()=>{if(!isMouseSelecting)setRefreshPaused(false,'');},ms);}
@@ -3195,43 +3507,94 @@ document.addEventListener('mouseup',()=>{isMouseSelecting=false;if(hasUserSelect
 document.addEventListener('selectionchange',()=>{if(hasUserSelection())pauseRefreshFor(4000,'selection');else if(!isMouseSelecting&&!isEditingElement(document.activeElement)&&refreshPauseReason==='selection')setRefreshPaused(false,'');});
 document.addEventListener('focusin',event=>{if(isEditingElement(event.target))setRefreshPaused(true,'editing');});
 document.addEventListener('focusout',event=>{if(isEditingElement(event.target)){setTimeout(()=>{if(!hasUserSelection()&&!isEditingElement(document.activeElement)&&!isMouseSelecting)setRefreshPaused(false,'');},0);}});
-function buildStreamItems(runId,evts){
-  const groups=[],byId={};let active=null,seq=0;
-  const MAX_STREAM_CHARS=24000;
+function collectStreamGroups(evts){
+  const groups=[],byId={};let activeKey='',seq=0;
   function ensureGroup(callId,ts,agent){
     const key=callId||`legacy_${++seq}`;
     if(byId[key]){if(agent&&!byId[key].agent)byId[key].agent=agent;return byId[key];}
-    const group={key,text:'',reply:'',sortTs:ts||'',done:false,agent:agent||''};
+    const group={groupKey:key,prompt:'',text:'',reply:'',displayText:'',sortTs:ts||'',done:false,agent:agent||''};
     byId[key]=group;groups.push(group);return group;
   }
   evts.forEach(e=>{
-    const payload=e.payload||{},callId=payload.call_id||'';
+    const payload=e.payload||{};
+    const callId=String(payload.call_id||'').trim();
     if(e.event_type==='llm_prompt'){
-      active=ensureGroup(callId||`prompt_${e.id||++seq}`,e.ts,e.agent);
-      active.prompt=payload.preview||'';
-    }else if(e.event_type==='llm_stream'){
-      const group=callId?ensureGroup(callId,e.ts,e.agent):(active&&!active.done?active:ensureGroup(`stream_${e.id||++seq}`,e.ts,e.agent));
-      group.text+=payload.preview||'';
+      const group=ensureGroup(callId||`prompt_${e.id||++seq}`,e.ts,e.agent);
+      group.prompt=String(payload.preview||'');
       group.sortTs=e.ts||group.sortTs;
       if(e.agent&&!group.agent)group.agent=e.agent;
-    }else if(e.event_type==='llm_reply'){
-      const group=callId?ensureGroup(callId,e.ts,e.agent):active;
+      activeKey=group.groupKey;
+      return;
+    }
+    if(e.event_type==='llm_stream'){
+      const group=callId?ensureGroup(callId,e.ts,e.agent):(activeKey&&byId[activeKey]&&!byId[activeKey].done?byId[activeKey]:ensureGroup(`stream_${e.id||++seq}`,e.ts,e.agent));
+      group.text=mergeStreamText(group.text,payload.preview||'');
+      group.displayText=group.text||group.displayText;
+      group.sortTs=e.ts||group.sortTs;
+      if(e.agent&&!group.agent)group.agent=e.agent;
+      activeKey=group.groupKey;
+      return;
+    }
+    if(e.event_type==='llm_reply'){
+      const group=callId?ensureGroup(callId,e.ts,e.agent):(activeKey?byId[activeKey]:null);
       if(group){
-        group.reply=payload.preview||'';
+        group.reply=mergeStreamText(group.reply,payload.preview||'');
+        if(!group.text&&group.reply)group.displayText=group.reply;
         group.done=true;
         group.sortTs=e.ts||group.sortTs;
         if(e.agent&&!group.agent)group.agent=e.agent;
+        if(activeKey===group.groupKey)activeKey='';
       }
     }
   });
-  const usable=groups.filter(group=>group.text||group.reply);
-  if(!usable.length)return[];
-  const latestTs=usable.reduce((acc,g)=>String(g.sortTs||'')>String(acc)?String(g.sortTs||''):acc,'');
-  const mergedRaw=usable.map((g,index)=>`[${g.agent||'LLM'} #${index+1}]\\n${g.text||g.reply||''}`).join('\\n\\n');
-  const merged=mergedRaw.length>MAX_STREAM_CHARS
-    ? `[流式输出过长，仅展示最近 ${MAX_STREAM_CHARS} 字]\\n`+mergedRaw.slice(-MAX_STREAM_CHARS)
-    : mergedRaw;
-  return [{key:`${runId}:stream:all`,title:'模型流式输出',kind:'plain',text:merged,sortTs:latestTs}];
+  return groups.filter(group=>group.displayText||group.reply||group.prompt).map(group=>({
+    ...group,
+    prompt:String(group.prompt||'').slice(0,800),
+    displayText:clipDisplayText(group.displayText||group.reply||'',24000),
+  }));
+}
+function attachStreamGroupsToItems(runId,items,streamGroups,fallbackTitle=''){
+  const bound=items.map(item=>({...item,streamGroups:Array.isArray(item.streamGroups)?item.streamGroups.slice():[]}));
+  let index=0;
+  bound.forEach(item=>{
+    while(index<streamGroups.length){
+      const group=streamGroups[index];
+      if(String(group.sortTs||'')<=String(item.sortTs||'')){
+        item.streamGroups.push(group);
+        index+=1;
+        continue;
+      }
+      break;
+    }
+  });
+  while(index<streamGroups.length){
+    const group=streamGroups[index];
+    bound.push({
+      key:`${runId}:stream:${group.groupKey}`,
+      title:esc(fallbackTitle?`${fallbackTitle} · 流式输出`:(group.agent||'模型流式输出')),
+      kind:'plain',
+      text:'',
+      sortTs:group.sortTs||'',
+      streamGroups:[group],
+      streamOnly:true,
+    });
+    index+=1;
+  }
+  return sortTimelineItems(bound);
+}
+function findActiveRunItemKey(items){
+  for(let i=items.length-1;i>=0;i-=1){
+    const groups=Array.isArray(items[i]?.streamGroups)?items[i].streamGroups:[];
+    if(groups.some(group=>!group.done))return String(items[i].key||'');
+  }
+  return '';
+}
+function syncActiveRunCard(runId,activeKey){
+  const prevKey=String(runActiveItemKeys[runId]||'');
+  if(prevKey&&prevKey!==activeKey)boxStates[prevKey]=false;
+  if(activeKey&&prevKey!==activeKey)boxStates[activeKey]=true;
+  if(activeKey)runActiveItemKeys[runId]=activeKey;
+  else delete runActiveItemKeys[runId];
 }
 function outputTaskLabel(out){const t=String(out?.output_type||'');if(t==='outline_blueprint')return'步骤1 大纲+蓝图';if(t==='worldbuilding')return'步骤2 背景体系+世界观';if(t==='character_bible')return'步骤3 角色卡';if(t==='character_added')return'步骤3 增加角色';if(t==='event_timeline')return'步骤4 客观事件时间线';if(t==='character_milestones')return'步骤5 角色发展线';if(t==='twist_designs')return'步骤6 反转设计';if(t==='story_lines')return'步骤7 明线暗线发展线';if(t==='chapter_briefs')return'步骤8 章节摘要规划';if(t==='step_revision_draft'){const p=out?.payload||{};const stepKey=String(p?.step_key||'');const idx=p?.character_index;if(stepKey==='step_3'&&Number.isInteger(idx))return`步骤3 单角色指令修改（角色 ${Number(idx)+1}）`;if(stepKey==='step_5'&&Number.isInteger(idx))return`步骤5 单角色发展线指令调整（角色 ${Number(idx)+1}）`;if(stepKey)return`${stepKey.toUpperCase()} 结果修订`;return'步骤结果修订';}if(t==='blueprint_review')return'Critic Blueprint 评审';if(t==='text_updated')return'正文AI修改';if(t==='chapter_blocks')return'正文 content blocks';if(t==='chapter_final_text')return'正文最终稿';if(t==='actual_chapter_summary')return'正文 actual summary';if(t==='chapter_stage_log')return'正文 agent 闭环';return'';}
 function inferTaskLabel(run,detail){
@@ -3284,22 +3647,24 @@ async function renderRuns(pref){
   }
   let html='';
   runsCache.forEach(r=>{
-    const ex=expandedRuns.has(r.run_id),d=cache[r.run_id],outs=(d&&d.outputs)||[],evts=(d&&d.events)||[];
+    const ex=expandedRuns.has(r.run_id),d=cache[r.run_id],outs=((d&&d.outputs)||[]).filter(o=>o?.output_type!=='chapter_live_preview'),evts=(d&&d.events)||[];
     const taskLabel=inferTaskLabel(r,d);
-    const streamItems=buildStreamItems(r.run_id,evts);
+    const streamGroups=collectStreamGroups(evts);
     const normalEvents=evts.filter(e=>!['llm_stream','llm_prompt','llm_reply'].includes(e.event_type));
-    const items=[];
-    if(r.pending_message)items.push({key:`${r.run_id}:pending`,title:'任务状态',kind:'plain',text:r.pending_message,sortTs:r.updated_at||''});
-    streamItems.forEach(item=>items.push(item));
-    outs.forEach(o=>items.push({key:`${r.run_id}:out:${o.id}`,title:`${esc(o.agent)} · ${esc(o.title)}`,kind:'output',outputType:o.output_type,rawPayload:o.payload,sortTs:o.created_at||''}));
-    normalEvents.forEach(e=>items.push({key:`${r.run_id}:evt:${e.id}`,title:`${esc(e.agent||'System')} · ${esc(e.title||'')}`,kind:'event',eventType:e.event_type,rawPayload:e.payload,sortTs:e.ts||''}));
-    items.sort((a,b)=>String(a.sortTs).localeCompare(String(b.sortTs)));
+    const timelineItems=[];
+    if(r.pending_message)timelineItems.push({key:`${r.run_id}:pending`,title:'任务状态',kind:'plain',text:r.pending_message,sortTs:''});
+    outs.forEach(o=>timelineItems.push({key:`${r.run_id}:out:${o.id}`,title:`${esc(o.agent)} · ${esc(o.title)}`,kind:'output',outputType:o.output_type,rawPayload:o.payload,sortTs:o.created_at||''}));
+    normalEvents.forEach(e=>timelineItems.push({key:`${r.run_id}:evt:${e.id}`,title:`${esc(e.agent||'System')} · ${esc(e.title||'')}`,kind:'event',eventType:e.event_type,rawPayload:e.payload,sortTs:e.ts||''}));
+    sortTimelineItems(timelineItems);
+    const items=attachStreamGroupsToItems(r.run_id,timelineItems,streamGroups,taskLabel||'当前任务');
+    const activeKey=findActiveRunItemKey(items);
+    syncActiveRunCard(r.run_id,activeKey);
     html+=`<div class='run'><div class='head' onclick="toggleRun('${r.run_id}')"><span class='tag'>${esc(stageText(r.stage))}</span>${taskLabel?`<span class='tag'>${esc(taskLabel)}</span>`:''}${r.is_running?"<span class='tag live'>运行中</span>":''}${r.cancel_requested?"<span class='tag stop'>停止中</span>":''}<span>${esc(r.run_id)}</span><span class='ts'>${esc(shortTs(r.updated_at))}</span></div>`;
     if(ex){
       html+="<div class='body'>";
       if(r.is_running)html+=`<div style='margin-bottom:8px'><button class='ghost' onclick="event.stopPropagation();stopRun('${r.run_id}')">停止并删除这次运行</button></div>`;
       if(!items.length)html+="<div class='payload'>暂无运行输出</div>";
-      items.forEach((item)=>{const isOpen=(item.key in boxStates)?boxStates[item.key]:(item.key===`${r.run_id}:stream:all`);html+=boxHtml(item.key,item.title,renderItemPayload(item),isOpen);});
+      items.forEach((item)=>{const isActive=item.key===activeKey;const isOpen=(item.key in boxStates)?boxStates[item.key]:isActive;html+=boxHtml(item.key,item.title,renderItemPayload(item),isOpen,`task-box${isActive?' active':''}`);});
       html+='</div>';
     }
     html+='</div>';
@@ -3309,7 +3674,7 @@ async function renderRuns(pref){
 }
 function toggleRun(id){expandedRuns.has(id)?expandedRuns.delete(id):expandedRuns.add(id);renderRuns();}
 async function stopCurrentRun(){const a=runsCache.find(x=>x.is_running)||(pendingRunId?{run_id:pendingRunId}:null);if(!a)return alert('当前没有运行中的任务。');await stopRun(a.run_id);}
-async function stopRun(id){if(!confirm('确认删除此运行记录？'))return;await api('/api/runs/stop',{method:'POST',body:JSON.stringify({mode,run_id:id})});expandedRuns.delete(id);if(pendingRunId===id){pendingRunId='';pendingStepRevision=null;}runsCache=runsCache.filter(x=>x.run_id!==id);bookId?await refreshNovel():renderRuns();updateStopButton();}
+async function stopRun(id){if(!confirm('确认删除此运行记录？'))return;await api('/api/runs/stop',{method:'POST',body:JSON.stringify({mode,run_id:id})});expandedRuns.delete(id);delete runActiveItemKeys[id];if(pendingRunId===id){pendingRunId='';pendingStepRevision=null;lastLivePreviewKey='';}runsCache=runsCache.filter(x=>x.run_id!==id);bookId?await refreshNovel():renderRuns();updateStopButton();}
 function summarizeBlock(text){const cleaned=String(text||'').replaceAll(String.fromCharCode(13),' ').replaceAll(String.fromCharCode(10),' ').split(' ').filter(Boolean).join(' ');return cleaned||'（空白内容）';}
 function isDetailOpen(key,defaultOpen=true){return key in detailStates?detailStates[key]:defaultOpen;}
 function toggleDetailState(key,isOpen){
@@ -3331,7 +3696,7 @@ function snapshotPanelDetailStates(panelId){const root=document.getElementById(p
 function normalizeMultiline(value){const cr=String.fromCharCode(13),lf=String.fromCharCode(10);return String(value??'').split(cr+lf).join(lf).split(cr).join(lf).trimEnd();}
 function openNewNovelDialog(){newNovelModal.style.display='flex';newTitleInput.focus();}
 function closeNewNovelDialog(){newNovelModal.style.display='none';}
-async function startFormalFromDialog(){const title=newTitleInput.value.trim();const q=normalizeMultiline(newQueryInput.value);if(!q)return alert('请输入题材/需求。');const style=normalizeMultiline(newStyleInput.value);const r=await api('/api/novels/create',{method:'POST',body:JSON.stringify({mode,title,query:q,style_request:style})});if(!ensureOk(r))return;closeNewNovelDialog();bookId=r.book.id;pendingRunId='';pendingStepRevision=null;runsCache=[];expandedRuns=new Set();lastRightRenderKey='';currentBook=r.book;stagePill.textContent='未开始';await loadNovels();novelSel.value=bookId;await refreshNovel();updateStopButton();}
+async function startFormalFromDialog(){const title=newTitleInput.value.trim();const q=normalizeMultiline(newQueryInput.value);if(!q)return alert('请输入题材/需求。');const style=normalizeMultiline(newStyleInput.value);const r=await api('/api/novels/create',{method:'POST',body:JSON.stringify({mode,title,query:q,style_request:style})});if(!ensureOk(r))return;closeNewNovelDialog();bookId=r.book.id;pendingRunId='';pendingStepRevision=null;runsCache=[];expandedRuns=new Set();lastRightRenderKey='';lastLivePreviewKey='';runActiveItemKeys={};currentBook=r.book;stagePill.textContent='未开始';await loadNovels();novelSel.value=bookId;await refreshNovel();updateStopButton();}
 async function startPlanningRun(path,message,taskLabel){if(!bookId)return alert('请先选择一部小说。');const r=await api(path,{method:'POST',body:JSON.stringify(withLlmProvider({book_id:bookId}))});if(!ensureOk(r))return;pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),task_label:taskLabel||message,pending_message:message},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
 async function generateOutline(){await startPlanningRun('/api/novels/generate_outline','大纲+蓝图生成中','步骤1 大纲+蓝图');}
 async function generateWorldbuilding(){await startPlanningRun('/api/novels/generate_worldbuilding','世界观+背景体系生成中','步骤2 背景体系+世界观');}
@@ -3343,8 +3708,8 @@ async function generateStoryLines(){await startPlanningRun('/api/novels/generate
 async function generateChapterBriefs(){if(!bookId)return alert('请先选择一部小说。');const r=await api('/api/novels/generate_chapter_briefs_batch',{method:'POST',body:JSON.stringify(withLlmProvider({book_id:bookId,batch_size:1}))});if(!ensureOk(r))return;pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),task_label:'步骤8 续写一章摘要',pending_message:'步骤8 生成中（当前 1 章）'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
 async function generateChapterBriefsBatch10(){if(!bookId)return alert('请先选择一部小说。');const r=await api('/api/novels/generate_chapter_briefs_batch',{method:'POST',body:JSON.stringify(withLlmProvider({book_id:bookId,batch_size:10}))});if(!ensureOk(r))return;pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),task_label:'步骤8 分批生成（每次10章）',pending_message:'步骤8 分批生成中（当前批次 10 章）'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
 async function reviewBlueprint(){await startPlanningRun('/api/novels/review_blueprint','Blueprint Critic 评审中','Critic Blueprint 评审');}
-async function continueFormal(){if(!bookId)return alert('请先选择一部小说。');const r=await api('/api/novels/continue',{method:'POST',body:JSON.stringify(withLlmProvider({book_id:bookId}))});if(!ensureOk(r))return;pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'writing',updated_at:new Date().toISOString(),task_label:'正文生成',pending_message:'正在写下一章，请稍候...'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
-async function deleteNovel(){if(!bookId)return alert('请先选择一部小说。');if(!confirm('确认删除此小说？该操作不可撤销。'))return;await api('/api/novels/delete',{method:'POST',body:JSON.stringify({mode,book_id:bookId})});bookId='';currentBook=null;pendingRunId='';pendingStepRevision=null;runsCache=[];expandedRuns=new Set();evs.innerHTML="<div class='empty'>????????????????</div>";renderEmptyRightPanels();stagePill.textContent='未开始';await loadNovels();updateStopButton();}
+async function continueFormal(){if(!bookId)return alert('请先选择一部小说。');const r=await api('/api/novels/continue',{method:'POST',body:JSON.stringify(withLlmProvider({book_id:bookId}))});if(!ensureOk(r))return;pendingRunId=r.run_id||'';lastLivePreviewKey='';delete runActiveItemKeys[pendingRunId];expandedRuns.add(pendingRunId);boxStates={};runsCache=[{run_id:pendingRunId,is_running:true,stage:'writing',updated_at:new Date().toISOString(),task_label:'正文生成',pending_message:'正在写下一章，请稍候...'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
+async function deleteNovel(){if(!bookId)return alert('请先选择一部小说。');if(!confirm('确认删除此小说？该操作不可撤销。'))return;await api('/api/novels/delete',{method:'POST',body:JSON.stringify({mode,book_id:bookId})});bookId='';currentBook=null;pendingRunId='';pendingStepRevision=null;runsCache=[];expandedRuns=new Set();lastLivePreviewKey='';runActiveItemKeys={};evs.innerHTML="<div class='empty'>????????????????</div>";renderEmptyRightPanels();stagePill.textContent='未开始';await loadNovels();updateStopButton();}
 async function testBlueprint(){const q=prompt('输入题材需求（测试大纲）：');if(!q)return;const r=await api('/api/test/blueprint',{method:'POST',body:JSON.stringify({query:q})});pendingRunId=r.run_id||'';expandedRuns=new Set(pendingRunId?[pendingRunId]:[]);runsCache=pendingRunId?[{run_id:pendingRunId,is_running:true,stage:'planning',updated_at:new Date().toISOString(),pending_message:'测试大纲运行中'}]:[];await renderRuns();updateStopButton();}
 async function testWrite(){let r;if(bookId)r=await api('/api/test/write',{method:'POST',body:JSON.stringify({book_id:bookId})});else{const q=prompt('输入题材需求（测试写作）：');if(!q)return;r=await api('/api/test/write',{method:'POST',body:JSON.stringify({query:q})});}pendingRunId=r.run_id||'';expandedRuns=new Set(pendingRunId?[pendingRunId]:[]);runsCache=pendingRunId?[{run_id:pendingRunId,is_running:true,stage:'writing',updated_at:new Date().toISOString(),pending_message:'测试写作运行中'}]:[];await renderRuns();updateStopButton();}
 async function testCritique(){if(!bookId)return alert('请先选择一部小说。');const r=await api('/api/test/critique',{method:'POST',body:JSON.stringify({book_id:bookId})});pendingRunId=r.run_id||'';expandedRuns.add(pendingRunId);runsCache=[{run_id:pendingRunId,is_running:true,stage:'critique',updated_at:new Date().toISOString(),pending_message:'测试评价运行中'},...runsCache.filter(x=>x.run_id!==pendingRunId)];await renderRuns();updateStopButton();}
@@ -3456,7 +3821,8 @@ function renderText(book,livePreview=null){
       content_blocks:Array.isArray(livePreview.content_blocks)?livePreview.content_blocks:[],
       final_text:String(livePreview.final_text||''),
       final_version:Number(livePreview.final_version||0),
-      is_finalized:!!livePreview.is_finalized
+      is_finalized:!!livePreview.is_finalized,
+      preview_mode:String(livePreview.preview_mode||'')
     };
     const previewEntry={volume:{title:'运行中',id:'runtime'},chapter:previewChapter};
     if(idx>=0)chapters[idx]=previewEntry;
@@ -3500,19 +3866,23 @@ function renderText(book,livePreview=null){
     const contentBlocks=Array.isArray(chapter?.content_blocks)?chapter.content_blocks:[];
     const finalText=String(chapter?.final_text||'').trim();
     const isFinalized=!!chapter?.is_finalized;
+    const previewMode=String(chapter?.preview_mode||'').trim();
+    const hasChapterPreview=!!finalText;
+    const previewModeLabel=previewMode==='content_blocks'?'内容块逐块追加中':previewMode==='chapter_rewrite'?'整章审校重写中':previewMode==='final_polish'?'整章精修中':previewMode==='final_text'?'整章覆写已收口':'';
     let proseBody='';
-    if(isFinalized&&finalText){
-      proseBody=`<div class='relationship-card'><div class='subsec'>最终成稿</div><div class='block'>${esc(finalText)}</div></div>`;
+    if(hasChapterPreview){
+      const proseLabel=isFinalized?'最终成稿':'整章覆写预览';
+      proseBody=`<div class='relationship-card'><div class='subsec'>${proseLabel}</div><div class='block'>${esc(finalText)}</div></div>`;
       if(contentBlocks.length){
-        proseBody+=`<div class='relationship-card'><div class='subsec'>生成过程（content blocks）</div><div class='relationship-stack'>${renderContentBlocks(contentBlocks,'内容块')}</div></div>`;
+        proseBody+=`<div class='relationship-card'><div class='subsec'>已提交的内容块</div><div class='chapter-live-blocks'><div class='relationship-stack'>${renderContentBlocks(contentBlocks,'内容块')}</div></div></div>`;
       }
     }else if(contentBlocks.length){
-      proseBody=`<div class='relationship-card'><div class='subsec'>增量写作中</div><div class='relationship-stack'>${renderContentBlocks(contentBlocks,'内容块')}</div></div>`;
+      proseBody=`<div class='relationship-card'><div class='subsec'>增量写作中</div><div class='muted'>每个 content block 提交后，这里都会继续往下追加。</div><div class='relationship-stack'>${renderContentBlocks(contentBlocks,'内容块')}</div></div>`;
     }else{
       proseBody=`<div class='relationship-card'><div class='subsec'>正文展示</div><div class='relationship-stack'>${renderLegacyScenes(chapter)}</div></div>`;
     }
-    const modeSummary=isFinalized&&finalText?'已终稿覆盖':'按 content block 展示';
-    const body=`<div class='relationship-stack'><div class='relationship-card'><div class='subsec'>基础信息</div>${infoRow('卷名', volume.title||volume.id||'')}${infoRow('章节标题', title)}${infoRow('章节概述', summary)}${infoRow('展示模式', modeSummary)}</div>${chapterToolbar}${proseBody}</div>`;
+    const modeSummary=isFinalized&&finalText?'已终稿覆盖':hasChapterPreview?'整章覆写预览':contentBlocks.length?'按内容块逐步追加':'场景回放';
+    const body=`<div class='relationship-stack'><div class='relationship-card'><div class='subsec'>基础信息</div>${infoRow('卷名', volume.title||volume.id||'')}${infoRow('章节标题', title)}${infoRow('章节概述', summary)}${infoRow('展示模式', modeSummary)}${previewModeLabel?infoRow('运行状态', previewModeLabel):''}</div>${chapterToolbar}${proseBody}</div>`;
     html+=sectionCard(`text-chapter-${chapter.id||index}`,title,summary,body,false);
   });
   document.getElementById('pnl-text').innerHTML=html;

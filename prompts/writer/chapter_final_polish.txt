@@ -9,6 +9,9 @@ Do final polish for the whole chapter. Output polished chapter prose only in Sim
 [Original chapter]
 {chapter_text}
 
+[Loaded finalize skill instructions]
+{loaded_skill_instructions_text}
+
 Rules:
 1. Do not change plot facts.
 2. Do not add clues, people, truth, or setting.
@@ -22,10 +25,12 @@ Rules:
 10. Keep the strongest living-human beats: practical calculation, bodily leakage, self-judgment, startled witness reaction, small failure of composure.
 11. Preserve useful concrete details such as props, injuries, labor traces, etiquette, and forms of address only when they genuinely serve the scene.
 12. Let the ending create forward pull in the most natural way for this chapter, without forcing the same hook pattern every time.
-13. Keep front-end reading comfortable:
+13. If a clue appears, keep it emotionally charged and under-explained.
+14. If an established character re-enters, do not re-introduce identity; use recognition signals and current concern.
+15. Keep front-end reading comfortable:
     - One paragraph should usually stay around 30 to 120 Chinese characters.
     - Strong emotion, action, and dialogue paragraphs may be shorter.
     - Paragraphs over 180 Chinese characters should usually be split.
     - Dialogue should usually stand alone as its own paragraph.
     - Break explanatory material into shorter action + reaction + explanation beats when possible.
-14. Do not flatten already flavorful short lines just to make formatting uniform. A format-only cleanup will happen later.
+16. Do not flatten already flavorful short lines just to make formatting uniform. A format-only cleanup will happen later.

@@ -1,17 +1,23 @@
 from __future__ import annotations
 
 import unittest
+from types import SimpleNamespace
 
 from pydantic import ValidationError
 
+from novel_flow.config import Settings
 from novel_flow.llm.base import LLMClient, LLMMessage
 from novel_flow.models.schemas import (
     ActualChapterSummary,
+    BookDocument,
     ChapterBrief,
     CharacterCard,
+    Chapter,
+    CriticReport,
     StoryLine,
     StoryPremise,
     TwistDesign,
+    Volume,
 )
 from novel_flow.server import NovelApp
 from novel_flow.services.chapter_context import ChapterContextAssembler
@@ -70,6 +76,7 @@ class SchemaAndContextTests(unittest.TestCase):
             summary="Hero wants revenge but must move indirectly.",
             incoming_hook="",
             opening_hook="A public imperial order lands at once.",
+            core_scene="He must receive the order in public before he can reclaim any ground.",
             chapter_object="Transfer register",
             reader_emotion="Readers side with him, hate her, and doubt her pause.",
             reader_belief="Readers believe she betrayed him.",
@@ -83,6 +90,9 @@ class SchemaAndContextTests(unittest.TestCase):
             emotional_turn="Victory pressure becomes imperial pressure and cold hatred.",
             backstory_trigger="",
             scene_engine="opening_pressure",
+            clue_reveal_style="natural_exposure",
+            character_reentry_focus={"Heroine": "Use the room's restraint and her refusal to meet his eyes; do not restate who she is."},
+            human_pain_anchor="He has to stand under public scrutiny before the dust of the road has even left his body.",
             small_payoff="He finds a legal indirect route.",
             ending_pull="The first witness is already dead.",
             info_budget="new clues=1",
@@ -113,6 +123,62 @@ class SchemaAndContextTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             NovelApp._normalize_step_payload("step_8", {"chapter_plans": []})
 
+    def test_step8_input_payload_uses_explicit_sections(self) -> None:
+        book = BookDocument(
+            id="book_step8",
+            title="Return",
+            premise=self.premise,
+            characters=[
+                CharacterCard(
+                    name="Hero",
+                    role="returned heir",
+                    occupation="general",
+                    appearance="dust still on his cuffs",
+                    personality="cold restraint",
+                    motivation="reopen the old case",
+                    behavior_pattern="cuts his own words short",
+                ),
+                CharacterCard(
+                    name="Heroine",
+                    role="court witness",
+                    occupation="noblewoman",
+                    appearance="sleeves held too steady",
+                    personality="controlled silence",
+                    motivation="protect a buried truth",
+                    behavior_pattern="answers indirectly",
+                ),
+            ],
+            metadata={
+                "query": "写一部 120 章古言权谋误会文",
+                "character_milestones": [{"character_name": "Hero", "milestone_list": [], "axes": []}],
+                "story_blueprint": {
+                    "story_engine": {
+                        "world_rules": "Imperial verdicts cannot be overturned in public.",
+                        "power_structure": "The court controls formal justice.",
+                        "world_map": "Capital and frontier command route.",
+                        "hook_strategy": "Open with direct court pressure.",
+                    },
+                    "event_timeline": [{"event_id": "evt_001", "title": "He was driven from the capital."}],
+                    "twist_designs": [self.twist.model_dump(mode="json")],
+                    "story_lines": [self.line.model_dump(mode="json")],
+                    "chapter_briefs": [self.chapter_brief.model_dump(mode="json")],
+                },
+            },
+        )
+
+        batch = NovelApp._step8_batch_window(total_chapters=120, start_index=1, batch_size=1)
+        payload = NovelApp._step8_input_payload(book, batch=batch, reference_pack="refs")
+
+        self.assertEqual(payload["batch"]["chapter_ids"], ["ch_002"])
+        self.assertEqual(payload["target_chapter_count"], 120)
+        self.assertNotIn("planning_context_json", payload)
+        self.assertIn("story_spine_json", payload)
+        self.assertIn("worldbuilding_json", payload)
+        self.assertIn("character_bible_json", payload)
+        self.assertEqual(payload["twist_designs_json"][0]["twist_id"], "twist_01")
+        self.assertEqual(payload["story_lines_json"][0]["line_id"], "line_case")
+        self.assertEqual(payload["previous_chapter_briefs_json"][0]["chapter_id"], "ch_001")
+
     def test_merge_story_blueprint_discards_relationship_network(self) -> None:
         merged = NovelApp._merge_story_blueprint(
             {"story_engine": {"engine_sentence": "old"}},
@@ -128,6 +194,202 @@ class SchemaAndContextTests(unittest.TestCase):
     def test_server_no_longer_exposes_legacy_chapter_plan_generators(self) -> None:
         self.assertFalse(hasattr(NovelApp, "generate_formal_chapter_plans"))
         self.assertFalse(hasattr(NovelApp, "generate_formal_chapter_plans_batch"))
+
+    def test_run_preview_prefers_live_chapter_preview_output(self) -> None:
+        preview = NovelApp._build_chapter_preview(
+            outputs=[
+                {
+                    "output_type": "chapter_live_preview",
+                    "payload": {
+                        "chapter_id": "ch_002",
+                        "chapter_title": "Cold Return",
+                        "content_blocks": [{"block_id": "ch_002.sc_001.b001", "text": "first block"}],
+                        "final_text": "full rewrite preview",
+                        "final_version": 2,
+                        "is_finalized": False,
+                        "preview_mode": "chapter_rewrite",
+                    },
+                }
+            ],
+            chapter_blocks=[
+                {
+                    "chapter_id": "ch_002",
+                    "chapter_title": "Cold Return",
+                    "payload": {"block_id": "legacy"},
+                }
+            ],
+        )
+        self.assertEqual(preview["chapter_id"], "ch_002")
+        self.assertEqual(preview["final_text"], "full rewrite preview")
+        self.assertEqual(preview["preview_mode"], "chapter_rewrite")
+        self.assertEqual(len(preview["content_blocks"]), 1)
+
+    def test_delete_chapter_cleans_chapter_level_metadata(self) -> None:
+        critic_ch1 = CriticReport(report_id="critic_ch1", summary="critic 1", issues=[]).model_dump(mode="json")
+        critic_ch2 = CriticReport(report_id="critic_ch2", summary="critic 2", issues=[]).model_dump(mode="json")
+        book = BookDocument(
+            id="book_delete",
+            title="Delete Test",
+            premise=self.premise,
+            characters=self.characters if hasattr(self, "characters") else [],
+            volumes=[
+                Volume(
+                    id="vol_001",
+                    title="Volume 1",
+                    summary="",
+                    chapters=[
+                        Chapter(id="ch_001", title="One", summary="first"),
+                        Chapter(id="ch_002", title="Two", summary="second"),
+                    ],
+                )
+            ],
+            metadata={
+                "completed_chapter_ids": ["ch_001", "ch_002"],
+                "last_written_chapter_id": "ch_002",
+                "actual_chapter_summaries": [
+                    {"chapter_id": "ch_001", "actual_events": ["first"]},
+                    {"chapter_id": "ch_002", "actual_events": ["second"]},
+                ],
+                "latest_critic_report": critic_ch2,
+                "critic_reports": {
+                    "ch_001": {"aggregate": critic_ch1},
+                    "ch_002": {"aggregate": critic_ch2},
+                },
+                "writing_chapter_runs": {"ch_001": {"final_text": "one"}, "ch_002": {"final_text": "two"}},
+                "writer_context_debug": {"ch_001": {"ctx": 1}, "ch_002": {"ctx": 2}},
+                "story_blueprint": {
+                    "chapter_briefs": [
+                        {"chapter_id": "ch_001"},
+                        {"chapter_id": "ch_002"},
+                        {"chapter_id": "ch_003"},
+                    ]
+                },
+                "next_chapter_index": 2,
+            },
+        )
+
+        class DummyStore:
+            def __init__(self, book_doc: BookDocument) -> None:
+                self.book = book_doc
+
+            def load_book(self, book_id: str) -> BookDocument | None:
+                return self.book if self.book.id == book_id else None
+
+            def save_book(self, book_doc: BookDocument) -> None:
+                self.book = book_doc
+
+            def list_books(self) -> list[dict[str, str]]:
+                return []
+
+            def latest_run_for_book(self, book_id: str) -> None:
+                return None
+
+            def list_runs(self, *, book_id: str | None = None, limit: int = 50) -> list[dict[str, str]]:
+                return []
+
+            def load_latest_critic_report(self, book_id: str) -> CriticReport | None:
+                return None
+
+        store = DummyStore(book)
+        app = NovelApp(SimpleNamespace(formal=store, test=store, settings=Settings()))
+        result = app.delete_chapter("formal", book_id="book_delete", chapter_id="ch_002")
+        updated = result["book"]
+        self.assertEqual([item["chapter_id"] for item in updated["metadata"]["actual_chapter_summaries"]], ["ch_001"])
+        self.assertEqual(updated["metadata"]["last_written_chapter_id"], "ch_001")
+        self.assertEqual(updated["metadata"]["latest_critic_report"]["summary"], "critic 1")
+        self.assertNotIn("ch_002", updated["metadata"]["critic_reports"])
+        self.assertNotIn("ch_002", updated["metadata"]["writing_chapter_runs"])
+        self.assertNotIn("ch_002", updated["metadata"]["writer_context_debug"])
+
+    def test_get_novel_prefers_book_metadata_latest_critic(self) -> None:
+        metadata_critic = CriticReport(report_id="critic_meta", summary="metadata critic", issues=[])
+        store_critic = CriticReport(report_id="critic_store", summary="store critic", issues=[])
+        book = BookDocument(
+            id="book_novel",
+            title="Novel",
+            premise=self.premise,
+            characters=[],
+            volumes=[Volume(id="vol_001", title="Volume 1", summary="", chapters=[Chapter(id="ch_001", title="One", summary="")])],
+            metadata={"latest_critic_report": metadata_critic.model_dump(mode="json")},
+        )
+
+        class DummyStore:
+            def save_book(self, book_doc: BookDocument) -> None:
+                self.book = book_doc
+
+            def load_book(self, book_id: str) -> BookDocument | None:
+                return book if book.id == book_id else None
+
+            def latest_run_for_book(self, book_id: str) -> None:
+                return None
+
+            def list_runs(self, *, book_id: str | None = None, limit: int = 50) -> list[dict[str, str]]:
+                return []
+
+            def load_latest_critic_report(self, book_id: str) -> CriticReport | None:
+                return store_critic
+
+            def list_run_outputs(self, run_id: str) -> list[dict[str, str]]:
+                return []
+
+        store = DummyStore()
+        app = NovelApp(SimpleNamespace(formal=store, test=store, settings=Settings()))
+        result = app.get_novel("formal", "book_novel")
+        self.assertEqual(result["critic"]["summary"], "metadata critic")
+
+    def test_get_novel_prunes_stale_deleted_chapter_metadata(self) -> None:
+        critic_payload = CriticReport(report_id="critic_stale", summary="stale critic", issues=[]).model_dump(mode="json")
+        stale_store_critic = CriticReport(report_id="critic_store_stale", summary="store stale critic", issues=[])
+        book = BookDocument(
+            id="book_stale",
+            title="Stale",
+            premise=self.premise,
+            characters=[],
+            volumes=[],
+            metadata={
+                "actual_chapter_summaries": [{"chapter_id": "ch_001", "actual_events": ["stale"]}],
+                "critic_reports": {"ch_001": {"aggregate": critic_payload}},
+                "latest_critic_report": critic_payload,
+                "writing_chapter_runs": {"ch_001": {"final_text": "stale"}},
+                "writer_context_debug": {"ch_001": {"ctx": 1}},
+                "scene_plans": {"ch_001": {"plan": 1}},
+                "completed_chapter_ids": ["ch_001"],
+                "last_written_chapter_id": "ch_001",
+            },
+        )
+
+        class DummyStore:
+            def __init__(self, book_doc: BookDocument) -> None:
+                self.book = book_doc
+                self.saved = 0
+
+            def load_book(self, book_id: str) -> BookDocument | None:
+                return self.book if self.book.id == book_id else None
+
+            def save_book(self, book_doc: BookDocument) -> None:
+                self.book = book_doc
+                self.saved += 1
+
+            def latest_run_for_book(self, book_id: str) -> None:
+                return None
+
+            def list_runs(self, *, book_id: str | None = None, limit: int = 50) -> list[dict[str, str]]:
+                return []
+
+            def load_latest_critic_report(self, book_id: str) -> CriticReport | None:
+                return stale_store_critic
+
+            def list_run_outputs(self, run_id: str) -> list[dict[str, str]]:
+                return []
+
+        store = DummyStore(book)
+        app = NovelApp(SimpleNamespace(formal=store, test=store, settings=Settings()))
+        result = app.get_novel("formal", "book_stale")
+        self.assertEqual(store.saved, 1)
+        self.assertEqual(result["book"]["metadata"]["actual_chapter_summaries"], [])
+        self.assertEqual(result["book"]["metadata"]["critic_reports"], {})
+        self.assertIsNone(result["book"]["metadata"]["latest_critic_report"])
+        self.assertIsNone(result["critic"])
 
     def test_chapter_payload_masks_unrevealed_truth(self) -> None:
         context = ChapterContextAssembler.build(

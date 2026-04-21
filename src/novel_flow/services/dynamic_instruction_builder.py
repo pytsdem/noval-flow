@@ -27,6 +27,7 @@ class DynamicInstructionBuilder:
         if cls._has_issues(engine):
             focus.append("Make the opening hook, chapter object, relationship reprice, and ending pull land on the page instead of in summary.")
             scene_strategy_parts.append("Let the chapter object do double duty: move plot while changing relationship pressure or clue value.")
+            scene_strategy_parts.append("If an important character re-enters, use recognition signals and the character's current concern instead of re-introducing identity.")
 
         humanity = review_reports.get("review_humanity", {})
         if cls._has_issues(humanity):
@@ -47,6 +48,11 @@ class DynamicInstructionBuilder:
         if cls._has_issues(plot):
             focus.append("Repair the causal chain so turns come from visible triggers, compromises, or costs rather than author convenience.")
             scene_strategy_parts.append("When a risky move happens, show the trigger and the price before the result lands.")
+
+        clue = review_reports.get("review_clue_origin", {})
+        if cls._has_issues(clue):
+            focus.append("Reveal important clues through pressure, avoidance, and visible slips instead of author-arranged information drops.")
+            scene_strategy_parts.append("Let clue exposure pass through relationship pressure, evasion, bodily leakage, or object mishandling before anyone tries to explain it.")
 
         if not focus:
             focus.append("Keep the current direction, but preserve the chapter's strongest pressure, human texture, and forward pull.")

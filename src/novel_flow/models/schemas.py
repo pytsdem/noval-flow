@@ -195,6 +195,7 @@ class ChapterBrief(StrictBaseModel):
     summary: str
     incoming_hook: str
     opening_hook: str
+    core_scene: str = ""
     chapter_object: str
     reader_emotion: str
     reader_belief: str
@@ -219,6 +220,18 @@ class ChapterBrief(StrictBaseModel):
         "clue_reversal",
         "aftermath_choice",
     ]
+    clue_reveal_style: Literal[
+        "",
+        "direct_pressure",
+        "natural_exposure",
+        "object_accident",
+        "overheard",
+        "ritual_trigger",
+        "subordinate_report",
+        "withheld_reveal",
+    ] = ""
+    character_reentry_focus: dict[str, str] = Field(default_factory=dict)
+    human_pain_anchor: str = ""
     small_payoff: str
     ending_pull: str
     info_budget: str
@@ -255,6 +268,25 @@ class ActualChapterSummary(StrictBaseModel):
     time_state: dict[str, str] = Field(default_factory=dict)
 
 
+class CharacterReentryMode(StrictBaseModel):
+    target_character: str = ""
+    identity_already_known: bool = True
+    reentry_strategy: str = ""
+    first_signal: str = ""
+    first_emotional_focus: str = ""
+    must_avoid: list[str] = Field(default_factory=list)
+
+
+class ClueRevealMechanism(StrictBaseModel):
+    clue: str = ""
+    surface_trigger: str = ""
+    relationship_pressure: str = ""
+    body_or_object_failure: str = ""
+    who_notices: str = ""
+    who_avoids_explaining: str = ""
+    after_effect: str = ""
+
+
 class ContentBlock(StrictBaseModel):
     block_id: str
     chapter_id: str
@@ -273,6 +305,8 @@ class ContentBlock(StrictBaseModel):
     reader_feeling_target: str = ""
     paragraph_budget: str = ""
     style_risk_guard: list[str] = Field(default_factory=list)
+    character_reentry_mode: CharacterReentryMode | None = None
+    clue_reveal_mechanism: ClueRevealMechanism | None = None
     text: str = ""
     status: Literal["draft", "committed", "replaced"] = "draft"
     version: int = Field(default=1, ge=1)
@@ -434,8 +468,34 @@ class StoryLinesPayload(StrictBaseModel):
     story_lines: list[StoryLine] = Field(default_factory=list)
 
 
+class ChapterBatchWindow(StrictBaseModel):
+    start_index: int = Field(ge=0)
+    end_index: int = Field(ge=0)
+    batch_size: int = Field(ge=1)
+    total_chapters: int = Field(ge=1)
+    chapter_ids: list[str] = Field(default_factory=list)
+
+
+class ChapterBriefGenerationInput(StrictBaseModel):
+    batch: ChapterBatchWindow
+    research_query: str
+    volume_titles_json: list[str] = Field(default_factory=list)
+    story_spine_json: dict[str, Any] = Field(default_factory=dict)
+    worldbuilding_json: dict[str, Any] = Field(default_factory=dict)
+    character_bible_json: dict[str, Any] = Field(default_factory=dict)
+    event_timeline_json: list[dict[str, Any]] = Field(default_factory=list)
+    character_milestones_json: list[dict[str, Any]] = Field(default_factory=list)
+    twist_designs_json: list[dict[str, Any]] = Field(default_factory=list)
+    story_lines_json: list[dict[str, Any]] = Field(default_factory=list)
+    previous_chapter_briefs_json: list[ChapterBrief] = Field(default_factory=list)
+    target_chapter_count: int = Field(default=1, ge=1)
+    reference_pack: str = ""
+
+
 class ChapterBriefsPayload(StrictBaseModel):
+    batch: ChapterBatchWindow | None = None
     chapter_briefs: list[ChapterBrief] = Field(default_factory=list)
+    merged_chapter_brief_count: int | None = None
 
 
 class ScenePlanPayload(StrictBaseModel):

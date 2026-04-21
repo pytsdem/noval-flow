@@ -33,8 +33,8 @@ Output format:
       "category": "weak_memorability",
       "severity": "medium",
       "evidence": "Concrete evidence in Simplified Chinese.",
-      "reason": "Why this prose issue lowers completion in Simplified Chinese.",
-      "fix": "How to revise the prose in Simplified Chinese."
+      "reason": "Why this lowers prose completion in Simplified Chinese.",
+      "fix": "How to revise it in Simplified Chinese."
     }}
   ],
   "evidence_notes": [
@@ -50,14 +50,15 @@ Score with evidence:
 5. `cliche_score`: how generic or formulaic the diction feels. Lower is better.
 6. `double_duty_detail_score`: whether details also serve plot, emotion, class, power, or relationship work.
 7. `scene_texture_score`: whether place, objects, labor, etiquette, weather, money, and body create presence.
-8. `emotion_externalization_score`: whether feeling appears through action, pause, avoidance, body, and consequence.
-9. `dialogue_subtext_score`: whether dialogue contains concealment, pressure, status, and misread.
+8. `emotion_externalization_score`: whether feeling appears through action, pause, avoidance, body, and consequence instead of abstract labeling.
+9. `dialogue_subtext_score`: whether dialogue contains concealment, pressure, status, testing, and misread.
 10. `human_warmth_score`: whether the prose carries concrete cost, self-judgment, and recognizably human reaction.
 11. `memorability_score`: whether the chapter leaves behind lines, images, or beats the reader can remember.
 12. `pressure_authenticity_score`: whether pressure feels real because it binds body, status, money, family, institution, or choice.
 
 Evidence rules:
-1. Do not return vague comments like "the prose is ordinary" or "the emotions are weak."
+1. Do not return vague comments like "the prose is ordinary", "the writing is average", or "the emotions are weak".
 2. If there is a meaningful weakness, include an `issues` item with `evidence`, `reason`, and `fix`.
-3. `evidence_notes` should still be concrete, but may capture strengths as well as weaknesses.
-4. Keep `rewrite_guidance` concise and actionable.
+3. `evidence_notes` should still be concrete and may capture strengths as well as weaknesses.
+4. When you mention weakness, prefer sentence-level, paragraph-level, or beat-level evidence over broad summaries.
+5. Keep `rewrite_guidance` concise and actionable.

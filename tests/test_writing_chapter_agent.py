@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -11,7 +12,10 @@ from novel_flow.models.schemas import (
     ActualChapterSummary,
     BookBlueprint,
     ChapterBrief,
+    ChapterExecutionResult,
     CharacterCard,
+    ContentBlock,
+    CriticReport,
     StoryLine,
     StoryPremise,
     TwistDesign,
@@ -72,6 +76,7 @@ class WritingChapterAgentTests(unittest.TestCase):
             summary="He returns under pressure and chooses an indirect path.",
             incoming_hook="He has come back to the capital.",
             opening_hook="An imperial order lands before he can speak.",
+            core_scene="He is forced to take the order in public before he can choose his own opening move.",
             chapter_object="Transfer register",
             reader_emotion="Readers should side with him and distrust her restraint.",
             reader_belief="Readers believe she betrayed him.",
@@ -85,6 +90,9 @@ class WritingChapterAgentTests(unittest.TestCase):
             emotional_turn="Hatred turns into cold strategic pressure.",
             backstory_trigger="",
             scene_engine="opening_pressure",
+            clue_reveal_style="natural_exposure",
+            character_reentry_focus={"Heroine": "Use the court's reaction and her restraint to re-establish presence; do not re-explain her identity."},
+            human_pain_anchor="He has to accept public pressure while travel dust and fatigue are still hanging on him.",
             small_payoff="He finds a procedural opening.",
             ending_pull="The first witness is already dead.",
             info_budget="new clues=1",
@@ -168,6 +176,14 @@ class WritingChapterAgentTests(unittest.TestCase):
                     "Do not open with background summary.",
                     "Do not let the prose sound like an outline.",
                 ],
+                "character_reentry_mode": {
+                    "target_character": "Hero",
+                    "identity_already_known": True,
+                    "reentry_strategy": "Use the court's reaction and his unfinished military bearing to re-establish presence.",
+                    "first_signal": "Travel dust still clinging to his cuffs beneath formal dress.",
+                    "first_emotional_focus": "He cares first about not surrendering his opening move.",
+                    "must_avoid": ["Do not re-explain his past rank in narrator summary."],
+                },
                 "text": "",
                 "status": "draft",
                 "version": 1,
@@ -228,6 +244,15 @@ class WritingChapterAgentTests(unittest.TestCase):
                     "Do not explain the clue after showing it.",
                     "Do not summarize the relationship change in narrator voice.",
                 ],
+                "clue_reveal_mechanism": {
+                    "clue": "She pauses at the old case term.",
+                    "surface_trigger": "The old case title is spoken aloud in a formal setting.",
+                    "relationship_pressure": "He presses her in public where she cannot answer freely.",
+                    "body_or_object_failure": "Her breath and hand both catch for one beat.",
+                    "who_notices": "Hero",
+                    "who_avoids_explaining": "Heroine",
+                    "after_effect": "The room grows more suspicious without anyone naming the truth.",
+                },
                 "text": "",
                 "status": "draft",
                 "version": 1,
@@ -344,7 +369,6 @@ class WritingChapterAgentTests(unittest.TestCase):
             self._humanity_review_pass(),
             self._evidence_review_pass(),
             self._evidence_review_pass(),
-            self._evidence_review_pass(),
         ]
 
     def test_skill_manager_discovers_guard_skills(self) -> None:
@@ -372,12 +396,37 @@ class WritingChapterAgentTests(unittest.TestCase):
         self.assertIn("character_integrity", block_skills)
         self.assertIn("time_consistency_guard", block_skills)
 
+        self.assertIn("base_style", chapter_skills)
         self.assertIn("prose_improvement", chapter_skills)
-        self.assertIn("reveal_guard", chapter_skills)
-        self.assertIn("plot_guard", chapter_skills)
-        self.assertIn("clue_consistency", chapter_skills)
         self.assertIn("opening_boost", chapter_skills)
         self.assertIn("humanity_boost", chapter_skills)
+        self.assertNotIn("reveal_guard", chapter_skills)
+        self.assertNotIn("plot_guard", chapter_skills)
+        self.assertNotIn("clue_consistency", chapter_skills)
+
+    def test_plan_review_tools_keeps_chapter_hot_path_converged(self) -> None:
+        agent = WritingChapterAgent(llm_client=RecordingSequenceLLM([]))
+        content_blocks = [ContentBlock.model_validate(item) for item in json.loads(self._planned_blocks_json())["blocks"]]
+
+        tool_names = agent._plan_review_tools(
+            chapter_brief=self.chapter_brief,
+            review_reports={},
+            active_skills=agent.skill_manager.initial_skills(stage="chapter"),
+            content_blocks=content_blocks,
+        )
+
+        self.assertEqual(
+            tool_names,
+            [
+                "review_instruction_compliance",
+                "review_prose_quality",
+                "review_plot_logic",
+                "review_continuity",
+                "review_humanity",
+                "review_chapter_engine",
+                "review_clue_origin",
+            ],
+        )
 
     def test_final_judge_blocks_failed_reports(self) -> None:
         result = FinalJudgeTool().run(
@@ -443,6 +492,7 @@ class WritingChapterAgentTests(unittest.TestCase):
         first_block_prompt = llm.calls[2][-1].content
         self.assertNotIn(self.twist.truth, first_block_prompt)
         self.assertIn(self.twist.false_belief, first_block_prompt)
+        self.assertIn("character_reentry_mode:", first_block_prompt)
 
     def test_writing_chapter_agent_emits_live_stage_events(self) -> None:
         llm = RecordingSequenceLLM(
@@ -591,6 +641,128 @@ class WritingChapterAgentTests(unittest.TestCase):
         self.assertEqual(updated_book.metadata["actual_chapter_summaries"][-1]["chapter_id"], "ch_002")
         self.assertIn("ch_002", updated_book.metadata["writing_chapter_runs"])
         self.assertGreaterEqual(len(updated_book.metadata["writing_chapter_runs"]["ch_002"]["content_blocks"]), 4)
+
+    def test_writer_persists_live_preview_to_runtime_store(self) -> None:
+        writer = WriterAgent(llm_client=RecordingSequenceLLM([]), patch_executor=PatchExecutor())
+        premise = StoryPremise(
+            title="Test",
+            high_concept="hc",
+            story_summary="",
+            genre="genre",
+            target_style="style",
+            emotional_hook="hook",
+            central_conflict="conflict",
+            core_hook="core",
+        )
+        blueprint = BookBlueprint(
+            blueprint_id="bp_preview",
+            premise=premise,
+            characters=self.characters,
+            volume_titles=["Volume 1"],
+            chapter_plans=[],
+        )
+        book = writer.create_book(blueprint=blueprint, source_query="query")
+        book.metadata["story_blueprint"] = {
+            "chapter_briefs": [self.chapter_brief.model_dump(mode="json")],
+            "twist_designs": [],
+            "story_lines": [],
+        }
+
+        class RuntimeStoreRecorder:
+            def __init__(self) -> None:
+                self.blocks: list[dict[str, object]] = []
+                self.outputs: list[dict[str, object]] = []
+
+            def save_chapter_block(self, **kwargs: object) -> None:
+                self.blocks.append(kwargs)
+
+            def save_run_output(self, **kwargs: object) -> None:
+                self.outputs.append(kwargs)
+
+        runtime_store = RuntimeStoreRecorder()
+        dummy_context = SimpleNamespace(
+            completed_chapter_memory_text="",
+            step_1_story_foundation_text="",
+            step_2_worldbuilding_text="",
+            step_3_character_packets_text="",
+            step_4_event_timeline_text="",
+            step_5_character_milestones_text="",
+            step_6_twists_text="",
+            step_7_story_lines_text="",
+            step_8_chapter_brief_text="",
+            chapter_payload_text="",
+            timeline_anchor_facts_text="",
+            relevant_world_rules_text="",
+            scene_character_context_text="",
+            relationship_state_text="",
+            style_card_text="",
+        )
+        committed_block = ContentBlock(
+            block_id="ch_002.sc_001.b001",
+            chapter_id="ch_002",
+            block_index=1,
+            purpose="Open pressure",
+            characters=["Hero"],
+            active_lines=[],
+            active_twists=[],
+            scene_goal="Open the chapter",
+            must_reveal=["A public order arrives."],
+            must_hide=[],
+            emotional_tone="tight",
+            end_state="He is trapped in pressure.",
+            text="The order landed before he could breathe.",
+            status="committed",
+            version=1,
+        )
+
+        def fake_write_chapter(self, **kwargs):  # type: ignore[no-untyped-def]
+            kwargs["on_block_committed"](committed_block)
+            kwargs["on_chapter_preview_updated"](
+                {
+                    "chapter_id": "ch_002",
+                    "chapter_title": "Cold Return",
+                    "content_blocks": [committed_block.model_dump(mode="json")],
+                    "final_text": "Full rewritten chapter preview.",
+                    "final_version": 2,
+                    "is_finalized": False,
+                    "preview_mode": "chapter_rewrite",
+                }
+            )
+            return ChapterExecutionResult(
+                chapter_text="Full rewritten chapter preview.",
+                content_blocks=[committed_block],
+                actual_chapter_summary=ActualChapterSummary(
+                    chapter_id="ch_002",
+                    actual_events=["A public order interrupts him."],
+                    reader_now_knows=["The hall still controls the opening move."],
+                    reader_now_believes=["He must move indirectly."],
+                    open_questions=["Who arranged the order?"],
+                    character_states=["He stays controlled."],
+                    relationship_state=["Pressure hardens the encounter."],
+                    seeded_clues=[],
+                    locked_truths=[],
+                ),
+                stage_log=[],
+                review_reports={},
+                final_judge={"passed": True},
+                requires_human_review=False,
+            )
+
+        with patch.object(WriterAgent, "_writer_context_for_chapter", return_value=dummy_context), patch.object(
+            WriterAgent, "_actual_summaries_from_book", return_value=[]
+        ), patch.object(
+            WriterAgent,
+            "_aggregate_loop_critic_report",
+            return_value=CriticReport(report_id="critic_preview", summary="ok", issues=[]),
+        ), patch.object(WritingChapterAgent, "write_chapter", new=fake_write_chapter):
+            _, chapter = writer.write_next_chapter(book=book, runtime_store=runtime_store, run_id="run_preview")
+
+        self.assertEqual(chapter.final_text, "Full rewritten chapter preview.")
+        self.assertEqual(len(runtime_store.blocks), 1)
+        self.assertEqual(len(runtime_store.outputs), 1)
+        self.assertEqual(runtime_store.outputs[0]["output_type"], "chapter_live_preview")
+        self.assertEqual(runtime_store.outputs[0]["payload"]["preview_mode"], "chapter_rewrite")
+        self.assertEqual(runtime_store.outputs[0]["payload"]["final_text"], "Full rewritten chapter preview.")
 
 
 if __name__ == "__main__":

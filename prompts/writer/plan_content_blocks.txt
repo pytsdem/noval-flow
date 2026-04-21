@@ -28,14 +28,14 @@ Plan the chapter as a sequence of content blocks. Return valid JSON only.
 {target_word_count_text}
 
 Definition:
-- A content block is a content unit with one writing purpose, not one physical paragraph.
-- One block may contain 1 to 3 natural paragraphs.
-- Each natural paragraph should remain comfortable for front-end reading.
+- A content block is a writing-design unit, not one physical paragraph.
+- One block should usually contain 2 to 4 natural paragraphs.
+- Plan blocks as if you are a novelist designing scene pressure before writing the prose.
 
 Core shift:
-- Do not only split the chapter brief into information chunks.
-- Design each block around how it will make the characters feel more human, more pressured, more costly, and more memorable.
-- Think in terms of scene design before drafting prose.
+- Do not flatten the chapter brief into information chunks.
+- Design each block around human reaction, cost, relationship pressure, and reader feeling.
+- A good block plan should already make the later prose harder to write flatly.
 
 Requirements:
 1. Plan 3 to 6 blocks only.
@@ -44,7 +44,7 @@ Requirements:
 4. Respect hidden truths, allowed clues, forbidden reveals, and reader belief.
 5. Keep `text` as an empty string, `status` as `draft`, and `version` as `1`.
 6. Use stable ids like `ch_002.sc_001.b001`.
-7. Every block must include all of these fields:
+7. Every block must include these fields:
    - `block_id`
    - `chapter_id`
    - `block_index`
@@ -65,25 +65,36 @@ Requirements:
    - `text`
    - `status`
    - `version`
+8. Add `character_reentry_mode` only when an important already-established character is re-entering the page.
+9. Add `clue_reveal_mechanism` only when this block is responsible for naturally exposing a clue.
 
 Field guidance:
 - `human_reaction_target`:
   Write concrete living-human reactions, not abstract plot function.
-  Examples: bodily leakage, practical calculation, self-mockery, startled witness reaction, small failure of composure.
+  Good targets include bodily leakage, practical calculation, self-mockery, startled witness reaction, social embarrassment, or a small failure of composure.
 - `cost_shift`:
   At the end of the block, someone must pay a little more.
-  The cost may be social, bodily, emotional, financial, political, or relational.
+  The cost may be bodily, social, emotional, financial, political, or relational.
 - `reader_feeling_target`:
-  Say what the reader should directly feel when the block ends.
+  Say what the reader should directly feel when the block ends, not only what the reader should know.
 - `paragraph_budget`:
-  Usually 2-4 natural paragraphs, each around 30-120 Chinese characters, with 180 as a danger line.
+  Usually 2-4 natural paragraphs, each around 30-120 Chinese characters. Treat 180 Chinese characters as a danger line.
 - `style_risk_guard`:
   Name the two to four easiest ways this block could be written badly.
-  Examples: repeating one cold/blood image, summary psychology instead of scene, dialogue that only explains plot.
+  Examples: repeating one cold/blood image, summary psychology instead of scene, dialogue that only explains plot, turning a person into a puzzle device.
+- `character_reentry_mode`:
+  Use this only for re-entry, not first introduction.
+  Prefer recognition signals such as familiar subordinates, objects, symbols, power arrangements, tone of voice, or one high-value line.
+  The returning character's first line or reaction should reveal what they currently care about most.
+- `clue_reveal_mechanism`:
+  Do not treat clue reveal as author handout.
+  Prefer this chain:
+  relationship pressure -> avoidance -> bodily slip or object accident -> another person notices -> the clue becomes visible.
+  After the clue appears, do not explain its full meaning immediately.
 
 Planning style:
-1. A good block plan is not generic.
-2. Prefer pain, price, friction, residue, and relationship re-pricing over flat information delivery.
-3. If a clue appears, design the human reaction around it instead of explaining it.
-4. If the block is quiet, give the quiet a concrete unease or social pressure.
-5. If the chapter ends on a hook, land that hook through a person's reaction or changed situation, not a trailer sentence.
+1. Prefer pain, price, friction, residue, and relationship re-pricing over flat information delivery.
+2. Each block should make at least one person harder pressed by the end.
+3. If a clue appears, design the scene pressure and the refusal to explain around it.
+4. If the block is quiet, give the quiet a concrete unease, etiquette pressure, money pressure, bodily strain, or practical concern.
+5. If the chapter ends on a hook, land that hook through a changed situation or a person's reaction, not a trailer sentence.

@@ -38,9 +38,9 @@ Output format:
     {{
       "category": "block_flat",
       "severity": "medium",
-      "evidence": "Explain in Simplified Chinese what is flat or missing in the block.",
-      "reason": "Explain in Simplified Chinese why this weakens the block as fiction.",
-      "fix": "Explain in Simplified Chinese how to revise this block locally."
+      "evidence": "Concrete evidence in Simplified Chinese.",
+      "reason": "Why this weakens the block in Simplified Chinese.",
+      "fix": "How to revise only this block in Simplified Chinese."
     }}
   ],
   "rewrite_guidance": "One concise block-level rewrite instruction in Simplified Chinese."
@@ -48,17 +48,31 @@ Output format:
 
 Check only these things:
 1. Check whether the block completes the stated `scene_goal` and reaches the `end_state`.
-2. Check whether the block feels like a scene unit instead of a summary or outline.
+2. Check whether the block feels like a scene unit instead of a summary, outline, or bridge paragraph.
 3. Check whether it realizes the `human_reaction_target` with something specifically human on the page.
 4. Check whether the `cost_shift` actually lands.
 5. Check whether the intended `reader_feeling_target` can be felt from the block.
-6. Check whether any paragraphs are too long for front-end reading.
-7. Check whether the block obeys the `paragraph_budget` and `style_risk_guard`.
+6. Check whether any paragraphs are too long for front-end reading, or ignore the stated `paragraph_budget`.
+7. Check whether the block violates `style_risk_guard`.
+8. Check whether emotion is too directly stated instead of externalized through action, pause, body, object, or consequence.
+9. If `clue_reveal_mechanism` exists, check whether the clue appears naturally rather than as an author-arranged drop.
+10. If `character_reentry_mode` exists, check whether the re-entry feels natural instead of re-explaining identity.
 
 Evidence rules:
 1. Never say only "flat", "weak", "not human enough", or "hook is weak".
 2. Every issue must include:
-   - `evidence`: a concrete beat, sentence pattern, or missing on-page action
+   - `evidence`: a concrete beat, sentence pattern, paragraph problem, or an important missing beat
    - `reason`: why that evidence hurts the block
    - `fix`: how to fix this block without rewriting the whole chapter
 3. Prefer 0 to 3 issues. Keep the review light and local.
+4. Good categories include:
+   - `scene_goal`
+   - `block_flat`
+   - `outline_prose`
+   - `human_reaction_missing`
+   - `cost_shift_missing`
+   - `reader_feeling_missing`
+   - `paragraph_overlong`
+   - `style_risk_violation`
+   - `clue_reveal_forced`
+   - `character_reentry_forced`

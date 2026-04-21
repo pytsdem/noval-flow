@@ -15,9 +15,10 @@ class ReviewAggregator:
     ]
     BLOCK_HARD_CONSTRAINTS = [
         "Fix only the current block.",
-        "Do not add new facts, clues, or reveals.",
-        "Keep the block aligned with must_reveal, must_hide, and end_state.",
+        "Do not add new facts, clues, reveals, or chapter-level turns.",
+        "Keep the block aligned with scene_goal, must_reveal, must_hide, end_state, cost_shift, and reader_feeling_target.",
         "Keep paragraph rhythm readable for front-end display.",
+        "Obey paragraph_budget and style_risk_guard while revising.",
     ]
 
     @classmethod
@@ -39,6 +40,10 @@ class ReviewAggregator:
                 keep.append(f"{tool_name} passed for {block_id}; preserve the current block direction.")
                 continue
             raw_issues = report.get("issues", []) or []
+            for note in report.get("evidence_focus", []) or []:
+                text = str(note).strip()
+                if text:
+                    evidence_focus.append(text)
             for issue in raw_issues:
                 priority = cls._block_priority(tool_name=tool_name, issue=issue, report=report)
                 cls._append_issue(issue, priority_target=cls._priority_bucket(priority, p0, p1, p2), evidence_focus=evidence_focus, fallback_tool_name=tool_name)
@@ -129,6 +134,10 @@ class ReviewAggregator:
                 keep.append(f"{tool_name} passed; preserve the compliant parts of the chapter.")
                 continue
             raw_issues = report.get("issues", []) or []
+            for note in report.get("evidence_focus", []) or []:
+                text = str(note).strip()
+                if text:
+                    evidence_focus.append(text)
             for issue in raw_issues:
                 priority = cls._chapter_priority(tool_name=tool_name, issue=issue, report=report)
                 cls._append_issue(issue, priority_target=cls._priority_bucket(priority, p0, p1, p2), evidence_focus=evidence_focus, fallback_tool_name=tool_name)
@@ -214,7 +223,19 @@ class ReviewAggregator:
         severity = cls._issue_severity(issue, report)
         if tool_name in {"review_reveal_leak", "review_time_consistency", "review_character_integrity"}:
             return "p0" if severity in {"critical", "high"} else "p1"
-        if category in {"block_goal", "scene_goal", "block_flat", "human_reaction_missing", "cost_shift_missing", "reader_feeling_missing"}:
+        if category in {
+            "block_goal",
+            "scene_goal",
+            "end_state",
+            "block_flat",
+            "outline_prose",
+            "summary_prose",
+            "human_reaction_missing",
+            "cost_shift_missing",
+            "reader_feeling_missing",
+            "clue_reveal_forced",
+            "character_reentry_forced",
+        }:
             return "p1"
         return "p2"
 
@@ -232,6 +253,7 @@ class ReviewAggregator:
             "relationship_reprice",
             "emotional_turn",
             "chapter_engine",
+            "character_reentry",
         }:
             return "p1"
         return "p2"

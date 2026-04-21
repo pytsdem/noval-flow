@@ -15,16 +15,12 @@ class SkillManager:
     registry: SkillRegistry
 
     BLOCK_SKILLS = ("base_style", "reveal_guard", "character_integrity", "time_consistency_guard")
-    CHAPTER_DEFAULT_SKILLS = ("base_style", "chapter_quality_guard")
-    FINAL_SKILLS = ("chapter_finalize",)
+    CHAPTER_DEFAULT_SKILLS = ("base_style",)
+    FINAL_SKILLS = ("base_style", "chapter_finalize")
     CHAPTER_OPTIONAL_SKILLS = (
         "prose_improvement",
         "humanity_boost",
         "opening_boost",
-        "reveal_guard",
-        "plot_guard",
-        "clue_consistency",
-        "flashback_guard",
     )
 
     def initial_skills(self, *, stage: StageName = "chapter") -> list[SkillDefinition]:
@@ -78,21 +74,6 @@ class SkillManager:
             or not bool(engine.get("passed", True))
         ):
             skill_ids.append("opening_boost")
-
-        reveal = review_reports.get("review_reveal_leak", {})
-        if not bool(reveal.get("passed", True)) or str(reveal.get("level") or "").lower() in {"high", "critical"}:
-            skill_ids.append("reveal_guard")
-
-        plot = review_reports.get("review_plot_logic", {})
-        if not bool(plot.get("passed", True)) or str(plot.get("level") or "").lower() in {"high", "critical"}:
-            skill_ids.append("plot_guard")
-
-        clue = review_reports.get("review_clue_origin", {})
-        if not bool(clue.get("passed", True)) or str(clue.get("level") or "").lower() in {"high", "critical"}:
-            skill_ids.append("clue_consistency")
-
-        if "flashback" in engine_issue_text or "backstory" in engine_issue_text:
-            skill_ids.append("flashback_guard")
 
         ordered_ids = [skill_id for skill_id in skill_ids if skill_id in {*self.CHAPTER_DEFAULT_SKILLS, *self.CHAPTER_OPTIONAL_SKILLS}]
         return self._definitions(ordered_ids)

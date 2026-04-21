@@ -15,6 +15,7 @@ from novel_flow.models.schemas import (
     BookBlueprint,
     BookDocument,
     ChapterBrief,
+    ChapterBriefGenerationInput,
     ChapterBriefsPayload,
     ChapterPlan,
     CharacterCard,
@@ -128,36 +129,37 @@ class BlueprintAgent(BaseAgent):
         planning_context_json: str = "{}",
         reference_pack: str = "暂无额外参考资料。",
     ) -> list[ChapterPlan]:
-        ev.emit("agent_start", agent=self.name, title="Build chapter briefs compat plans", query=research_query)
-        self._emit_agent_input(
-            "chapter briefs compat plans",
+        payload = self.build_chapter_briefs_step(
             research_query=research_query,
-            premise=premise.model_dump(mode="json"),
-            characters=[item.model_dump(mode="json") for item in characters],
             volume_titles=volume_titles,
-            story_blueprint=story_blueprint or {},
-            character_milestones=character_milestones or [],
-            planning_context=self._safe_json_loads(planning_context_json),
-            reference_pack=reference_pack,
-        )
-        prompt = self.prompt_library.render(
-            "writer/step_8_chapter_briefs.txt",
-            research_query=research_query,
-            volume_titles_json=str(volume_titles),
+            batch={
+                "start_index": 0,
+                "end_index": 0,
+                "batch_size": 1,
+                "total_chapters": 1,
+                "chapter_ids": ["ch_001"],
+            },
+            story_spine={
+                "premise": premise.model_dump(mode="json"),
+                "story_engine": dict((story_blueprint or {}).get("story_engine", {}) or {}),
+            },
+            worldbuilding={"story_engine": dict((story_blueprint or {}).get("story_engine", {}) or {})},
+            character_bible={"characters": [item.model_dump(mode="json") for item in characters]},
+            event_timeline=list((story_blueprint or {}).get("event_timeline", []) or []),
+            character_milestones=list(character_milestones or []),
+            twist_designs=list((story_blueprint or {}).get("twist_designs", []) or []),
+            story_lines=list((story_blueprint or {}).get("story_lines", []) or []),
+            previous_chapter_briefs=[],
+            target_chapter_count=1,
             planning_context_json=planning_context_json,
             reference_pack=reference_pack,
         )
-        parsed = self._generate_json_payload(
-            prompt,
-            label="chapter_briefs_compat_plans",
-            schema_model=ChapterBriefsPayload,
-        )
-        parsed["chapter_plans"] = [
+        payload["chapter_plans"] = [
             self._normalize_chapter_plan_payload(self._chapter_plan_from_brief(dict(item)))
-            for item in parsed.get("chapter_briefs", [])
+            for item in payload.get("chapter_briefs", [])
             if isinstance(item, dict)
         ]
-        chapter_plans = [ChapterPlan.model_validate(item) for item in parsed["chapter_plans"]]
+        chapter_plans = [ChapterPlan.model_validate(item) for item in payload["chapter_plans"]]
         ev.emit("blueprint_chapter_briefs_ready", agent=self.name, title="Chapter briefs compat plans ready", chapter_count=len(chapter_plans))
         return chapter_plans
 
@@ -488,29 +490,68 @@ class BlueprintAgent(BaseAgent):
         *,
         research_query: str,
         volume_titles: list[str],
+        batch: dict[str, Any] | None = None,
+        story_spine: dict[str, Any] | None = None,
+        worldbuilding: dict[str, Any] | None = None,
+        character_bible: dict[str, Any] | None = None,
+        event_timeline: list[dict[str, Any]] | None = None,
+        character_milestones: list[dict[str, Any]] | None = None,
+        twist_designs: list[dict[str, Any]] | None = None,
+        story_lines: list[dict[str, Any]] | None = None,
+        previous_chapter_briefs: list[dict[str, Any]] | list[ChapterBrief] | None = None,
+        target_chapter_count: int | None = None,
         planning_context_json: str = "{}",
         reference_pack: str = "暂无额外参考资料。",
     ) -> dict[str, Any]:
+        inferred_total = max(int(target_chapter_count or 0), 1)
+        batch_payload = batch or {
+            "start_index": 0,
+            "end_index": max(inferred_total - 1, 0),
+            "batch_size": inferred_total,
+            "total_chapters": inferred_total,
+            "chapter_ids": [f"ch_{index + 1:03d}" for index in range(inferred_total)],
+        }
+        step_input = ChapterBriefGenerationInput.model_validate(
+            {
+                "batch": batch_payload,
+                "research_query": research_query,
+                "volume_titles_json": volume_titles,
+                "story_spine_json": story_spine or {},
+                "worldbuilding_json": worldbuilding or {},
+                "character_bible_json": character_bible or {},
+                "event_timeline_json": event_timeline or [],
+                "character_milestones_json": character_milestones or [],
+                "twist_designs_json": twist_designs or [],
+                "story_lines_json": story_lines or [],
+                "previous_chapter_briefs_json": previous_chapter_briefs or [],
+                "target_chapter_count": int(target_chapter_count or batch_payload.get("total_chapters") or 1),
+                "reference_pack": reference_pack,
+            }
+        )
         ev.emit("agent_start", agent=self.name, title="Build chapter briefs step", query=research_query)
         self._emit_agent_input(
             "chapter briefs step",
-            research_query=research_query,
-            volume_titles=volume_titles,
+            step8_input=step_input.model_dump(mode="json"),
             planning_context=self._safe_json_loads(planning_context_json),
-            reference_pack=reference_pack,
         )
         prompt = self.prompt_library.render(
             "writer/step_8_chapter_briefs.txt",
-            research_query=research_query,
-            volume_titles_json=self._json_dump(volume_titles),
-            planning_context_json=planning_context_json,
-            reference_pack=reference_pack,
+            research_query=step_input.research_query,
+            volume_titles_json=self._json_dump(step_input.volume_titles_json),
+            story_spine_json=self._json_dump(step_input.story_spine_json),
+            worldbuilding_json=self._json_dump(step_input.worldbuilding_json),
+            character_bible_json=self._json_dump(step_input.character_bible_json),
+            event_timeline_json=self._json_dump(step_input.event_timeline_json),
+            character_milestones_json=self._json_dump(step_input.character_milestones_json),
+            twist_designs_json=self._json_dump(step_input.twist_designs_json),
+            story_lines_json=self._json_dump(step_input.story_lines_json),
+            previous_chapter_briefs_json=self._json_dump([item.model_dump(mode="json") for item in step_input.previous_chapter_briefs_json]),
+            target_chapter_count=step_input.target_chapter_count,
+            batch_window_json=self._json_dump(step_input.batch.model_dump(mode="json")),
+            reference_pack=step_input.reference_pack,
         )
-        parsed = self._generate_json_payload(
-            prompt,
-            label="chapter_briefs_step",
-            schema_model=ChapterBriefsPayload,
-        )
+        parsed = self._generate_json_payload(prompt, label="chapter_briefs_step", schema_model=ChapterBriefsPayload)
+        parsed = ChapterBriefsPayload.model_validate({**parsed, "batch": step_input.batch.model_dump(mode="json")}).model_dump(mode="json")
         ev.emit(
             "blueprint_chapter_briefs_ready",
             agent=self.name,
@@ -1022,11 +1063,43 @@ class BlueprintAgent(BaseAgent):
         for index, item in enumerate(items, start=1):
             if not isinstance(item, dict):
                 continue
+            reentry_focus = item.get("character_reentry_focus", {})
+            if not isinstance(reentry_focus, dict):
+                reentry_focus = {}
             normalized.append(
                 {
                     "chapter_id": cls._ensure_text(item.get("chapter_id") or f"ch_{index:03d}"),
                     "title": cls._ensure_text(item.get("title")),
+                    "chapter_type": cls._ensure_text(item.get("chapter_type")),
                     "active_lines": cls._ensure_list(item.get("active_lines")),
+                    "active_twists": cls._ensure_list(item.get("active_twists")),
+                    "summary": cls._ensure_text(item.get("summary")),
+                    "incoming_hook": cls._ensure_text(item.get("incoming_hook")),
+                    "opening_hook": cls._ensure_text(item.get("opening_hook")),
+                    "core_scene": cls._ensure_text(item.get("core_scene")),
+                    "chapter_object": cls._ensure_text(item.get("chapter_object")),
+                    "reader_emotion": cls._ensure_text(item.get("reader_emotion")),
+                    "reader_belief": cls._ensure_text(item.get("reader_belief")),
+                    "allowed_info": cls._ensure_list(item.get("allowed_info")),
+                    "allowed_clues": cls._ensure_list(item.get("allowed_clues")),
+                    "forbidden": cls._ensure_list(item.get("forbidden")),
+                    "world_limit": cls._ensure_text(item.get("world_limit")),
+                    "character_focus": cls._ensure_list(item.get("character_focus")),
+                    "character_shift": cls._ensure_text(item.get("character_shift")),
+                    "relationship_reprice": cls._ensure_text(item.get("relationship_reprice")),
+                    "emotional_turn": cls._ensure_text(item.get("emotional_turn")),
+                    "backstory_trigger": cls._ensure_text(item.get("backstory_trigger")),
+                    "scene_engine": cls._ensure_text(item.get("scene_engine") or "opening_pressure"),
+                    "clue_reveal_style": cls._ensure_text(item.get("clue_reveal_style")),
+                    "character_reentry_focus": {
+                        cls._ensure_text(key): cls._ensure_text(value)
+                        for key, value in reentry_focus.items()
+                        if cls._ensure_text(key) and cls._ensure_text(value)
+                    },
+                    "human_pain_anchor": cls._ensure_text(item.get("human_pain_anchor")),
+                    "small_payoff": cls._ensure_text(item.get("small_payoff")),
+                    "ending_pull": cls._ensure_text(item.get("ending_pull")),
+                    "info_budget": cls._ensure_text(item.get("info_budget")),
                 }
             )
         return normalized

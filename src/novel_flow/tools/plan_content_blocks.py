@@ -2,11 +2,17 @@ from __future__ import annotations
 
 import json
 
-from novel_flow.models.schemas import ChapterBrief, ContentBlock, ContentBlockPlanPayload
+from novel_flow.models.schemas import (
+    ChapterBrief,
+    CharacterReentryMode,
+    ClueRevealMechanism,
+    ContentBlock,
+    ContentBlockPlanPayload,
+)
 from novel_flow.tools._base import LLMChapterTool
 
 
-DEFAULT_PARAGRAPH_BUDGET = "建议 2-4 个自然段，每段 30-120 中文字，最长不超过 180 中文字"
+DEFAULT_PARAGRAPH_BUDGET = "Use 2-4 natural paragraphs, usually 30-120 Chinese characters each, with 180 as a danger line."
 
 
 class PlanContentBlocksTool(LLMChapterTool):
@@ -50,25 +56,32 @@ class PlanContentBlocksTool(LLMChapterTool):
                         "block_id": f"{chapter_brief.chapter_id}.sc_001.b{index:03d}",
                         "chapter_id": chapter_brief.chapter_id,
                         "block_index": index,
-                        "characters": list(block.characters or chapter_brief.character_focus or []),
-                        "active_lines": list(block.active_lines or chapter_brief.active_lines or []),
-                        "active_twists": list(block.active_twists or chapter_brief.active_twists or []),
-                        "scene_goal": str(block.scene_goal or block.purpose or "").strip(),
-                        "must_reveal": list(block.must_reveal or []),
-                        "must_hide": list(block.must_hide or chapter_brief.forbidden[:4]),
-                        "end_state": str(block.end_state or chapter_brief.small_payoff or chapter_brief.ending_pull or "").strip(),
+                        "purpose": self._clean_text(block.purpose) or self._clean_text(block.scene_goal) or f"Block {index} advances the chapter's main pressure.",
+                        "characters": self._clean_list(block.characters) or list(chapter_brief.character_focus or []),
+                        "active_lines": self._clean_list(block.active_lines) or list(chapter_brief.active_lines or []),
+                        "active_twists": self._clean_list(block.active_twists) or list(chapter_brief.active_twists or []),
+                        "scene_goal": self._clean_text(block.scene_goal) or self._clean_text(block.purpose),
+                        "must_reveal": self._clean_list(block.must_reveal),
+                        "must_hide": self._clean_list(block.must_hide) or list(chapter_brief.forbidden[:4]),
+                        "emotional_tone": self._clean_text(block.emotional_tone) or self._clean_text(chapter_brief.reader_emotion),
+                        "end_state": self._clean_text(block.end_state) or self._clean_text(chapter_brief.small_payoff) or self._clean_text(chapter_brief.ending_pull),
                         "human_reaction_target": self._list_or_fallback(
                             block.human_reaction_target,
-                            self._fallback_human_reaction(index=index, chapter_brief=chapter_brief),
+                            self._fallback_human_reaction(index=index),
                         ),
-                        "cost_shift": str(block.cost_shift or self._fallback_cost_shift(index=index, chapter_brief=chapter_brief)).strip(),
-                        "reader_feeling_target": str(
-                            block.reader_feeling_target or self._fallback_reader_feeling(index=index, chapter_brief=chapter_brief)
-                        ).strip(),
-                        "paragraph_budget": str(block.paragraph_budget or DEFAULT_PARAGRAPH_BUDGET).strip(),
+                        "cost_shift": self._clean_text(block.cost_shift) or self._fallback_cost_shift(index=index, chapter_brief=chapter_brief),
+                        "reader_feeling_target": self._clean_text(block.reader_feeling_target)
+                        or self._fallback_reader_feeling(index=index, chapter_brief=chapter_brief),
+                        "paragraph_budget": self._clean_text(block.paragraph_budget) or DEFAULT_PARAGRAPH_BUDGET,
                         "style_risk_guard": self._list_or_fallback(
                             block.style_risk_guard,
                             self._fallback_style_risks(index=index, chapter_brief=chapter_brief),
+                        ),
+                        "character_reentry_mode": self._normalize_character_reentry_mode(block.character_reentry_mode),
+                        "clue_reveal_mechanism": self._normalize_clue_reveal_mechanism(
+                            block.clue_reveal_mechanism,
+                            index=index,
+                            chapter_brief=chapter_brief,
                         ),
                         "text": "",
                         "status": "draft",
@@ -84,171 +97,259 @@ class PlanContentBlocksTool(LLMChapterTool):
         active_twists = list(chapter_brief.active_twists or [])
         forbidden = list(chapter_brief.forbidden or [])
         clues = list(chapter_brief.allowed_clues or [])
-        blocks = [
+        clue_mechanism = self._fallback_clue_reveal_mechanism(chapter_brief) if clues else None
+        return [
             ContentBlock(
                 block_id=f"{chapter_brief.chapter_id}.sc_001.b001",
                 chapter_id=chapter_brief.chapter_id,
                 block_index=1,
-                purpose=f"用当前压迫和立刻发生的事情把读者拉进章节：{chapter_brief.opening_hook}",
+                purpose=f"Open with immediate pressure: {chapter_brief.opening_hook}",
                 characters=focus_characters,
                 active_lines=active_lines,
                 active_twists=active_twists,
-                scene_goal=chapter_brief.opening_hook or chapter_brief.summary,
-                must_reveal=[item for item in [chapter_brief.opening_hook] if item],
+                scene_goal=self._clean_text(chapter_brief.opening_hook) or self._clean_text(chapter_brief.summary),
+                must_reveal=[item for item in [chapter_brief.opening_hook] if self._clean_text(item)],
                 must_hide=forbidden[:4],
-                emotional_tone=chapter_brief.reader_emotion,
-                end_state="开场压力落地，人物被迫进入这章的主要局面。",
+                emotional_tone=self._clean_text(chapter_brief.reader_emotion),
+                end_state="The opening pressure lands and the focal character loses room to recover before speaking.",
                 human_reaction_target=[
-                    "主角要先表现出被现实压住的一瞬，不只是在脑中分析局势。",
-                    "配角至少有一个替读者受惊、犹疑或避让的反应。",
+                    "Show one bodily or social restraint before the character tries to speak or act.",
+                    "Let at least one witness or supporting character react like a living person under public pressure.",
                 ],
-                cost_shift="人物先失去体面、缓冲时间，或一个更从容的选择。",
-                reader_feeling_target="读者先被拉进当下的压迫，再意识到这章不会轻松展开。",
+                cost_shift="The focal character loses face, time, or the chance to choose a gentler opening move.",
+                reader_feeling_target="Readers should feel the pressure closing around the character immediately.",
                 paragraph_budget=DEFAULT_PARAGRAPH_BUDGET,
                 style_risk_guard=[
-                    "不要先铺一大段背景再进入场面。",
-                    "不要把人物写成解释设定的嘴。",
+                    "Do not open with background summary.",
+                    "Do not turn the character into a plot explainer.",
+                    "Do not replace scene with pure mental recap.",
                 ],
             ),
             ContentBlock(
                 block_id=f"{chapter_brief.chapter_id}.sc_001.b002",
                 chapter_id=chapter_brief.chapter_id,
                 block_index=2,
-                purpose=f"围绕章节对象推进外部行动，同时让关系出现可感知摩擦：{chapter_brief.chapter_object}",
+                purpose=f"Push the chapter object through live pressure: {chapter_brief.chapter_object}",
                 characters=focus_characters,
                 active_lines=active_lines,
                 active_twists=active_twists,
-                scene_goal=chapter_brief.chapter_object,
-                must_reveal=[item for item in [chapter_brief.chapter_object, chapter_brief.small_payoff] if item],
+                scene_goal=self._clean_text(chapter_brief.chapter_object) or "Make the chapter object matter on the page.",
+                must_reveal=[item for item in [chapter_brief.chapter_object, chapter_brief.small_payoff] if self._clean_text(item)],
                 must_hide=forbidden[:4],
-                emotional_tone=chapter_brief.emotional_turn,
-                end_state="人物拿到一小步推进，但代价和误读也同步加重。",
+                emotional_tone=self._clean_text(chapter_brief.emotional_turn),
+                end_state="The characters gain a small procedural push, but the relational and practical cost rises with it.",
                 human_reaction_target=[
-                    "人物的克制要露出身体代价、礼法代价或现实算计。",
-                    "关系对象不能只给信息，要在互动里重估对方。",
+                    "Show practical calculation, etiquette pressure, or controlled discomfort while the goal advances.",
+                    "Make another person's reaction sharpen the cost of that progress.",
                 ],
-                cost_shift="人物为了推进目标多付出一次现实成本，关系也更难收回。",
-                reader_feeling_target="读者感觉到推进不是白拿到的，关系在变贵。",
+                cost_shift="The focal character pays an extra social, procedural, or emotional price to move the goal forward.",
+                reader_feeling_target="Readers should feel that even progress arrives with humiliation, pressure, or residue.",
                 paragraph_budget=DEFAULT_PARAGRAPH_BUDGET,
                 style_risk_guard=[
-                    "不要整块都在解释章节对象为什么重要。",
-                    "不要让对话只承担情报转述。",
+                    "Do not explain why the chapter object matters in abstract summary.",
+                    "Do not let dialogue become pure information transfer.",
+                    "Do not let action pause for a long strategic recap.",
                 ],
             ),
             ContentBlock(
                 block_id=f"{chapter_brief.chapter_id}.sc_001.b003",
                 chapter_id=chapter_brief.chapter_id,
                 block_index=3,
-                purpose=f"让情绪或关系完成一次真正在场的翻价：{chapter_brief.relationship_reprice}",
+                purpose=f"Reprice relationship and expose pressure naturally: {chapter_brief.relationship_reprice}",
                 characters=focus_characters,
                 active_lines=active_lines,
                 active_twists=active_twists,
-                scene_goal=chapter_brief.character_shift or chapter_brief.relationship_reprice,
-                must_reveal=[item for item in [chapter_brief.character_shift, chapter_brief.relationship_reprice, *clues[:2]] if item],
+                scene_goal=self._clean_text(chapter_brief.character_shift) or self._clean_text(chapter_brief.relationship_reprice),
+                must_reveal=[item for item in [chapter_brief.character_shift, chapter_brief.relationship_reprice, *clues[:2]] if self._clean_text(item)],
                 must_hide=forbidden[:4],
-                emotional_tone=chapter_brief.emotional_turn,
-                end_state="人物立场、误解或关系温度被重新定价。",
+                emotional_tone=self._clean_text(chapter_brief.emotional_turn),
+                end_state="The relationship or emotional angle is repriced on the page and the situation becomes harder to read safely.",
                 human_reaction_target=[
-                    "至少一个人物在强撑时露出短暂失手、停顿或自嘲。",
-                    "若有 clue 出现，配角或对手的反应要帮助放大它，而不是作者解释它。",
+                    "At least one character should show a small failure of composure, bodily leak, silence, or self-directed sting.",
+                    "If a clue appears, let somebody else notice it before the owner explains it.",
                 ],
-                cost_shift="旧案、关系或自我判断都比上一块更难处理一步。",
-                reader_feeling_target="读者记住的不是信息本身，而是这层关系重新变得危险。",
+                cost_shift="A clue or shift comes closer, but the relationship becomes harder to trust or manage.",
+                reader_feeling_target="Readers should remember the changed relationship pressure more than the raw information itself.",
                 paragraph_budget=DEFAULT_PARAGRAPH_BUDGET,
                 style_risk_guard=[
-                    "不要把情绪翻转写成总结句。",
-                    "不要重复同一种寒冷、疼痛或压迫意象。",
+                    "Do not summarize the emotional reprice in narrator voice.",
+                    "Do not repeat the same cold, pain, blood, or frost image.",
+                    "Do not turn a person into a puzzle device.",
                 ],
+                clue_reveal_mechanism=clue_mechanism,
             ),
             ContentBlock(
                 block_id=f"{chapter_brief.chapter_id}.sc_001.b004",
                 chapter_id=chapter_brief.chapter_id,
                 block_index=4,
-                purpose=f"把这一章收在新的问题和代价上，形成自然续读拉力：{chapter_brief.ending_pull}",
+                purpose=f"Close on changed cost and natural pull: {chapter_brief.ending_pull}",
                 characters=focus_characters,
                 active_lines=active_lines,
                 active_twists=active_twists,
-                scene_goal=chapter_brief.ending_pull,
-                must_reveal=[item for item in [chapter_brief.ending_pull] if item],
+                scene_goal=self._clean_text(chapter_brief.ending_pull),
+                must_reveal=[item for item in [chapter_brief.ending_pull] if self._clean_text(item)],
                 must_hide=forbidden[:4],
-                emotional_tone=chapter_brief.reader_emotion,
-                end_state="这一章结束时，读者知道下一步更难，而且人物已经没法轻易退回去。",
+                emotional_tone=self._clean_text(chapter_brief.reader_emotion),
+                end_state="The chapter ends with a harder next step and a cost the character cannot step back from easily.",
                 human_reaction_target=[
-                    "结尾消息或动作要落在人物的具体反应上，而不是只写一句钩子结论。",
-                    "让结尾的代价先落到一个人身上，再把读者拖去下一章。",
+                    "Let the ending hit a body, action, breath, or practical loss before it becomes a hook.",
+                    "Do not end on summary language alone.",
                 ],
-                cost_shift="人物失去一个缓冲机会，或被迫面对更坏的下一步。",
-                reader_feeling_target="读者带着不安、惋惜或强烈的下一步问题离章。",
+                cost_shift="The character loses a buffer, an option, or a person they needed for the next move.",
+                reader_feeling_target="Readers should feel the next step has become both urgent and more expensive.",
                 paragraph_budget=DEFAULT_PARAGRAPH_BUDGET,
                 style_risk_guard=[
-                    "不要为了制造钩子硬转折。",
-                    "不要用总结式旁白代替结尾冲击。",
+                    "Do not force a trailer-like ending turn.",
+                    "Do not flatten the closing beat into explanation.",
+                    "Do not spend the final sentence only naming the hook.",
                 ],
             ),
         ]
-        return blocks
 
     @staticmethod
-    def _list_or_fallback(items: list[str], fallback: list[str]) -> list[str]:
-        cleaned = [str(item).strip() for item in items if str(item).strip()]
+    def _clean_text(value: str | None) -> str:
+        return str(value or "").strip()
+
+    @classmethod
+    def _clean_list(cls, items: list[str] | None) -> list[str]:
+        return [cls._clean_text(item) for item in items or [] if cls._clean_text(item)]
+
+    @classmethod
+    def _list_or_fallback(cls, items: list[str] | None, fallback: list[str]) -> list[str]:
+        cleaned = cls._clean_list(items)
         return cleaned or fallback
 
+    @classmethod
+    def _normalize_character_reentry_mode(cls, mode: CharacterReentryMode | None) -> CharacterReentryMode | None:
+        if mode is None:
+            return None
+        cleaned = CharacterReentryMode(
+            target_character=cls._clean_text(mode.target_character),
+            identity_already_known=bool(mode.identity_already_known),
+            reentry_strategy=cls._clean_text(mode.reentry_strategy),
+            first_signal=cls._clean_text(mode.first_signal),
+            first_emotional_focus=cls._clean_text(mode.first_emotional_focus),
+            must_avoid=cls._clean_list(mode.must_avoid),
+        )
+        if not any(
+            [
+                cleaned.target_character,
+                cleaned.reentry_strategy,
+                cleaned.first_signal,
+                cleaned.first_emotional_focus,
+                cleaned.must_avoid,
+            ]
+        ):
+            return None
+        return cleaned
+
+    @classmethod
+    def _normalize_clue_reveal_mechanism(
+        cls,
+        mode: ClueRevealMechanism | None,
+        *,
+        index: int,
+        chapter_brief: ChapterBrief,
+    ) -> ClueRevealMechanism | None:
+        if mode is None:
+            if index != 3 or not chapter_brief.allowed_clues:
+                return None
+            return cls._fallback_clue_reveal_mechanism(chapter_brief)
+        cleaned = ClueRevealMechanism(
+            clue=cls._clean_text(mode.clue),
+            surface_trigger=cls._clean_text(mode.surface_trigger),
+            relationship_pressure=cls._clean_text(mode.relationship_pressure),
+            body_or_object_failure=cls._clean_text(mode.body_or_object_failure),
+            who_notices=cls._clean_text(mode.who_notices),
+            who_avoids_explaining=cls._clean_text(mode.who_avoids_explaining),
+            after_effect=cls._clean_text(mode.after_effect),
+        )
+        if not any(
+            [
+                cleaned.clue,
+                cleaned.surface_trigger,
+                cleaned.relationship_pressure,
+                cleaned.body_or_object_failure,
+                cleaned.who_notices,
+                cleaned.who_avoids_explaining,
+                cleaned.after_effect,
+            ]
+        ):
+            return None
+        return cleaned
+
     @staticmethod
-    def _fallback_human_reaction(*, index: int, chapter_brief: ChapterBrief) -> list[str]:
+    def _fallback_human_reaction(*, index: int) -> list[str]:
         if index == 1:
             return [
-                "主角要先有一个被现实压住的具体反应，再进入行动。",
-                "配角或旁观者要替读者先受一下惊。",
+                "Show one bodily or social restraint before the character moves.",
+                "Let a witness or supporting character absorb some shock, pity, or unease on the page.",
             ]
         if index == 2:
             return [
-                "推进目标时要露出算计、迟疑或礼法下的失衡。",
-                "对手或关系对象要有一个不完全可控的反应。",
+                "Show calculation, etiquette pressure, or controlled discomfort inside the action.",
+                "Make another character respond in a way that sharpens the relationship cost.",
             ]
         if index == 3:
             return [
-                "情绪翻转要靠身体、沉默、错称或失态来显形。",
-                "人物不能只总结关系变化，要在互动里露出代价。",
+                "Let the emotional turn surface through silence, body, pause, object handling, or composure failure.",
+                "If a clue appears, let someone else notice it before anyone tries to explain it.",
             ]
         return [
-            "结尾冲击要先打在人物身上，而不是直接做摘要。",
-            "让人物对下一步的代价有一个短而真的反应。",
+            "Let the hook strike the body, breath, or practical situation before it becomes a chapter pull.",
+            "Give the character one short, recognizably human reaction to the new price.",
         ]
 
     @staticmethod
     def _fallback_cost_shift(*, index: int, chapter_brief: ChapterBrief) -> str:
         if index == 1:
-            return "人物先失去体面、余地或一个更轻松的开场。"
+            return "The focal character loses face, time, or a more comfortable opening choice."
         if index == 2:
-            return "人物为了推进章节对象多付出一次现实成本。"
+            return "The focal character pays an extra procedural, social, or relational cost to advance the chapter object."
         if index == 3:
-            return "关系、误解或自我判断被抬高了处理成本。"
-        return f"这一章收尾时，人物必须带着新的负担面对：{chapter_brief.ending_pull}"
+            return "The relationship, misread, or self-judgment becomes more expensive to carry."
+        return f"The chapter should close with a harder next burden tied to: {chapter_brief.ending_pull}"
 
     @staticmethod
     def _fallback_reader_feeling(*, index: int, chapter_brief: ChapterBrief) -> str:
         if index == 1:
-            return "先感到压迫和失衡，再被拉进人物的难处。"
+            return "Readers should feel pressure and imbalance before they fully process the chapter situation."
         if index == 2:
-            return "感觉推进来之不易，而且关系正在变坏。"
+            return "Readers should feel that progress costs something concrete."
         if index == 3:
-            return "感觉到关系张力被重新定价，而不是只被通知发生变化。"
-        return "读者想立刻知道下一步会怎样，同时知道人物已经更难了。"
+            return "Readers should feel the relationship has become harder or more dangerous, not merely be told so."
+        return f"Readers should want the next move immediately while sensing the added burden of: {chapter_brief.ending_pull}"
 
-    @staticmethod
-    def _fallback_style_risks(*, index: int, chapter_brief: ChapterBrief) -> list[str]:
+    @classmethod
+    def _fallback_style_risks(cls, *, index: int, chapter_brief: ChapterBrief) -> list[str]:
         risks = [
-            "不要用整段心理复盘代替场面。",
-            "不要把人物写成剧情解释器。",
+            "Do not replace scene with long interior recap.",
+            "Do not turn a character into the author's plot explainer.",
         ]
         if index == 1:
-            risks.append("不要把开场写成背景说明书。")
+            risks.append("Do not write the opening like a background memo.")
         elif index == 2:
-            risks.append("不要只写拿到信息，忽略推进的代价。")
+            risks.append("Do not show information gain without the price of getting it.")
         elif index == 3:
-            risks.append("不要用一句总结完成关系翻价。")
+            risks.append("Do not complete the relationship reprice in one narrator-summary line.")
         else:
-            risks.append("不要为了钩子把结尾写成硬拐弯。")
-        if chapter_brief.reader_emotion:
-            risks.append(f"不要把 {chapter_brief.reader_emotion} 直接写成标签句。")
+            risks.append("Do not twist the ending unnaturally just to force a hook.")
+        if cls._clean_text(chapter_brief.reader_emotion):
+            risks.append(f"Do not label the prose with '{chapter_brief.reader_emotion}' instead of dramatizing it.")
         return risks[:4]
+
+    @classmethod
+    def _fallback_clue_reveal_mechanism(cls, chapter_brief: ChapterBrief) -> ClueRevealMechanism | None:
+        clue = cls._clean_text(next(iter(chapter_brief.allowed_clues or []), ""))
+        if not clue:
+            return None
+        focus = cls._clean_text(next(iter(chapter_brief.character_focus or []), "A focal character"))
+        return ClueRevealMechanism(
+            clue=clue,
+            surface_trigger=cls._clean_text(chapter_brief.chapter_object) or "a scene object or phrase under pressure",
+            relationship_pressure=cls._clean_text(chapter_brief.relationship_reprice) or "relationship pressure that makes explanation costly",
+            body_or_object_failure="A hand pauses, breath catches, or an object gives away more than the speaker wants.",
+            who_notices=focus,
+            who_avoids_explaining="The person most entangled with the clue",
+            after_effect="The clue becomes visible, but the scene should stay tighter rather than fully explained.",
+        )

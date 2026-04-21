@@ -18,8 +18,8 @@ Output format:
       "category": "chapter_object",
       "severity": "medium",
       "evidence": "Concrete evidence in Simplified Chinese.",
-      "reason": "Why the chapter engine is not landing in Simplified Chinese.",
-      "fix": "How to fix the engine on the page in Simplified Chinese."
+      "reason": "Why this engine promise does not land on the page in Simplified Chinese.",
+      "fix": "How to fix it inside this chapter in Simplified Chinese."
     }}
   ],
   "rewrite_guidance": "One concise chapter-engine rewrite instruction in Simplified Chinese.",
@@ -34,12 +34,13 @@ Output format:
 
 Check:
 1. Check whether the written opening actually delivers the promised `opening_hook`.
-2. Check whether `chapter_object` does at least two jobs: plot movement plus relationship or emotional pressure or clue-value shift.
+2. Check whether `chapter_object` does at least two jobs: plot movement plus relationship pressure or emotional pressure or clue-value shift.
 3. Check whether `relationship_reprice` happens on the page rather than in summary language.
 4. Check whether the `emotional_turn` is readable from behavior, dialogue, silence, object handling, or consequence.
 5. Check whether the ending creates a real `ending_pull` into the next chapter.
 6. If there is `backstory_trigger`, check whether it grows naturally from present action instead of arriving as explanation.
+7. If an important character re-enters the page, check whether the prose awakens reader memory through recognition signals rather than identity recap.
 
 Evidence rules:
 1. Every issue must use `evidence`, `reason`, and `fix`.
-2. Do not say only "the hook is weak" or "the chapter engine is weak."
+2. Do not say only "the hook is weak", "the chapter engine is weak", or "re-entry feels awkward."

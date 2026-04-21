@@ -45,15 +45,27 @@ HUMANITY RULES:
 4. Characters should not sound like they are summarizing the plot.
 5. If a character is suffering, show what this suffering has cost them in daily life, status, body, money, family, or choice.
 
+NATURAL CLUE REVEAL RULES:
+1. Important clues should not appear as author-arranged information drops.
+2. Prefer revealing clues through relationship pressure, avoidance, bodily slip or object accident, and another person noticing.
+3. Do not explain the full meaning of a clue right after it appears.
+
+CHARACTER REENTRY RULES:
+1. Do not re-introduce an already-established character with identity-summary narration.
+2. Re-entry should rely on recognition signals, power arrangement, objects, subordinates, tone, and one high-value line.
+3. The first reaction should show what that character currently cares about most.
+
 Rules:
 1. Revise only this block. Do not rewrite the whole chapter.
 2. Fix the issues in the block review reports and block revision plan while preserving good lines that already work.
 3. Keep the block aligned with `scene_goal`, `must_reveal`, `must_hide`, `emotional_tone`, `end_state`, `cost_shift`, and `reader_feeling_target`.
 4. Read and obey the block's `style_risk_guard`.
-5. Respect the block's `paragraph_budget`:
+5. If `clue_reveal_mechanism` exists, make the clue surface through scene pressure instead of explanation.
+6. If `character_reentry_mode` exists, preserve recognition-based re-entry and avoid identity recap.
+7. Respect the block's `paragraph_budget`:
    - Usually 30 to 120 Chinese characters per paragraph.
    - Over 180 Chinese characters is a risk.
    - Dialogue should usually stand alone.
-6. Do not add new plot facts, new clues, or new reveals.
-7. Reduce summary language, abstract psychology, and author explanation when possible.
-8. Keep the prose natural and readable in Simplified Chinese.
+8. Do not add new plot facts, new clues, or new reveals.
+9. Reduce summary language, abstract psychology, and author explanation when possible.
+10. Keep the prose natural and readable in Simplified Chinese.

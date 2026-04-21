@@ -67,6 +67,13 @@ Hard rules:
 3. Do not explain allowed clues.
 4. Keep continuity with completed chapter memory and time_anchor.
 5. If time changes, write the transition explicitly.
-6. If humanity is weak, strengthen it through concrete life cost, body leakage, self-judgment, or supporting-character reaction.
+6. If humanity is weak, strengthen it through concrete life cost, body leakage, self-judgment, practical calculation, or supporting-character reaction.
 7. If character integrity is weak, change behavior so it matches what the character currently knows, fears, and can do.
-8. Output prose only.
+8. If chapter engine is weak, land opening hook, chapter object, relationship reprice, emotional turn, and ending pull through action, reaction, and changed cost instead of summary.
+9. If clue origin is weak, reveal the clue through pressure, avoidance, bodily slip, or object failure instead of information drop.
+10. If an important character re-enters, use recognition signals and current concern instead of identity recap.
+11. Keep paragraph rhythm comfortable for front-end reading:
+    - usually 30 to 120 Chinese characters per paragraph
+    - split most paragraphs over 180 Chinese characters
+    - let dialogue and short action breathe on their own lines
+12. Output prose only.

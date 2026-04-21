@@ -1,60 +1,196 @@
-Generate step 8 chapter_briefs only. Output valid JSON only. No markdown.
-All natural-language string content in the JSON must be Simplified Chinese.
-Keep only ids and schema-required enum values in their required format.
+生成 step8 的 `chapter_briefs`。只输出有效 JSON，不要输出 Markdown，不要输出解释，不要输出 `chapter_plans`、`scene_beats` 或任何分析文本。
+JSON 中所有自然语言字段都必须使用简体中文。
+`chapter_brief` 必须像“正文写作发动机”，不是“作者提纲”。
 
-User request:
+用户需求：
 {research_query}
 
-Volume titles JSON:
+分卷信息 JSON：
 {volume_titles_json}
 
-Planning context JSON:
-{planning_context_json}
+step1 主故事骨架摘要 JSON：
+{story_spine_json}
 
-Reference pack:
+step2 世界观摘要 JSON：
+{worldbuilding_json}
+
+step3 角色卡摘要 JSON：
+{character_bible_json}
+
+step4 事件时间线摘要 JSON：
+{event_timeline_json}
+
+step5 角色发展线摘要 JSON：
+{character_milestones_json}
+
+step6 反转设计 JSON：
+{twist_designs_json}
+
+step7 故事线 JSON：
+{story_lines_json}
+
+前序 chapter_briefs JSON：
+{previous_chapter_briefs_json}
+
+计划总章节数：
+{target_chapter_count}
+
+当前批次窗口 JSON：
+{batch_window_json}
+
+额外参考资料：
 {reference_pack}
 
-Output format:
+输出格式：
 {{
   "chapter_briefs": [
     {{
       "chapter_id": "ch_001",
       "title": "归京",
       "chapter_type": "opening",
-      "active_lines": ["line_case"],
+      "active_lines": ["line_01", "line_04"],
       "active_twists": ["twist_01"],
-      "summary": "主角想达成 X，却被 Y 限制，只能借助 Z 间接推进。",
+
+      "summary": "主角想做什么，被什么限制，这一章如何间接推进。",
       "incoming_hook": "",
-      "opening_hook": "以当下命令、打击、物件或危机直接启动章节。",
-      "chapter_object": "承载冲突的具体物件、命令、文书、线索、任务、仪式或地点。",
-      "reader_emotion": "明确读者该站谁、怜惜谁、厌恶谁、怀疑谁、期待什么。",
-      "reader_belief": "在需要时维持既定误判。",
-      "allowed_info": ["本章可明写的信息 1"],
-      "allowed_clues": ["本章只可暗示、不能解释的线索 1"],
-      "forbidden": ["本章禁止写出的具体内容"],
-      "world_limit": "阻止角色直接成功的世界或权力边界。",
-      "character_focus": ["男主", "女主"],
+      "opening_hook": "当前动作或当前压力。",
+      "core_scene": "这一章最该写锋利的中心场面。",
+      "chapter_object": "有真实剧情功能的物件、命令、文书、线索、任务、仪式或地点。",
+      "reader_emotion": "读者先站谁、先误判谁、保留什么异样感。",
+      "reader_belief": "读者此时倾向相信什么。",
+
+      "allowed_info": ["本章可明写事实 1"],
+      "allowed_clues": ["动作型线索 1"],
+      "forbidden": ["正文中禁止出现的具体内容 1"],
+      "world_limit": "本章最关键的一条权力、礼法或制度限制。",
+
+      "character_focus": ["角色甲", "角色乙"],
       "character_shift": "本章内发生的具体身份、立场或状态变化。",
-      "relationship_reprice": "哪段关系被重新定价，以及如何被重新定价。",
-      "emotional_turn": "本章情绪如何完成翻转。",
+      "relationship_reprice": "哪段关系从什么变成什么。",
+      "emotional_turn": "从 A 到 B。",
       "backstory_trigger": "",
+
       "scene_engine": "opening_pressure",
-      "small_payoff": "一个小兑现，但不能是真相大揭示。",
-      "ending_pull": "章节结尾抛出新的问题、障碍、代价、到来或选择。",
-      "info_budget": "新角色<=3；新线索=1"
+      "clue_reveal_style": "natural_exposure",
+      "character_reentry_focus": {{
+        "角色名": "通过什么信号唤起前文记忆，第一反应体现什么，避免什么写法。"
+      }},
+      "human_pain_anchor": "最具体、最扎人的身体或处境痛感锚点。",
+
+      "small_payoff": "克制自然的小兑现。",
+      "ending_pull": "只保留一个主钩子。",
+      "info_budget": "新线索=1；新人物=0"
     }}
   ]
 }}
 
-Rules:
-1. Output only chapter_briefs. Do not output scene_beats or chapter_plans.
-2. Use only active_lines from step 7 and active_twists from step 6.
-3. active_lines and active_twists max 3 each.
-4. allowed_info max 4, allowed_clues max 3, forbidden max 5, character_focus max 5.
-5. From chapter 2 onward, incoming_hook must continue the previous ending_pull.
-6. opening_hook must be current action or pressure, not backstory exposition.
-7. chapter_object must have real plot function.
-8. scene_engine must be one of: opening_pressure, disruptor_arrival, drunken_truth, private_to_public_interruption, earned_flashback, investigation_pressure, court_pressure, relationship_collision, clue_reversal, aftermath_choice.
-9. Early chapters must not explain hidden motives, wash characters white early, fully replay the old case, or drop core hard proof.
-10. All descriptive Chinese text must be Simplified Chinese, concise, and directly usable.
-11. Do not artificially limit the total number of chapter_briefs. Generate as many chapter briefs as the story actually needs.
+总目标：
+1. step8 只负责生成 `chapter_briefs`。
+2. 每条 `chapter_brief` 都要服务正文写作，不要把一章想写的所有信息塞满。
+3. 要明确这一章真正的核心场面、读者站位与误判、线索怎样自然露出、重要人物再出场如何唤起记忆、最痛的人味锚点、章末唯一主钩子。
+4. 第一章尤其要克制，不能过满，必须给后续章节留下空间。
+
+批次规则：
+1. 只生成 `batch_window_json.chapter_ids` 对应章节的 `chapter_briefs`。
+2. 输出顺序必须与 `batch_window_json.chapter_ids` 一致。
+3. `chapter_id` 必须严格等于当前批次提供的 `chapter_ids`。
+4. 如果当前批次不是第一批，必须读取 `previous_chapter_briefs_json`，从第二章开始让 `incoming_hook` 明确承接上一章 `ending_pull`。
+5. 不得跳开上一章钩子，不得让上一章留下的主牵引凭空消失。
+
+硬性规则：
+1. `active_lines` 只能选自 step7，`active_twists` 只能选自 step6。
+2. `active_lines` 最多 3 条，`active_twists` 最多 3 条。
+3. `allowed_info` 最多 4 条，`allowed_clues` 最多 3 条，`forbidden` 最多 5 条，`character_focus` 最多 5 人。
+4. `ending_pull` 一章只保留一个主钩子，不要并列两个以上大问题。
+5. `small_payoff` 不能是大真相、硬设计狠桥段或夸张炸点，优先选择称谓、动作、礼法场面、物件被看见、短而疼的话。
+6. `allowed_info` 只能写本章可以明写的事实，不得混入推测。
+7. `allowed_clues` 只能写动作型 clue，不得写作者总结式解释，不得写抽象心理判断。
+8. `forbidden` 必须具体到正文可执行，禁止空话，例如“不要泄密”。
+9. 不要提前写出 twist 的真实真相，不要洗白人物，不要把后期人格状态提前写出来。
+
+4 个新增字段定义：
+1. `core_scene`
+定义：这一章真正的中心场面，必须是可以直接写成正文的具体场面。
+要求：不能写抽象主题，不能写成“这一章主要讲……”，必须是正文里最应该被写锋利的一场。
+
+2. `clue_reveal_style`
+可选值只能是：
+- `direct_pressure`
+- `natural_exposure`
+- `object_accident`
+- `overheard`
+- `ritual_trigger`
+- `subordinate_report`
+- `withheld_reveal`
+要求：
+- 每章最多一个主 `clue_reveal_style`。
+- 如果本章没有关键线索披露，可以留空字符串。
+- 第一章优先自然、克制，不要硬塞。
+- 如果线索带有情感创伤，优先 `natural_exposure`、`object_accident`、`withheld_reveal`。
+
+3. `character_reentry_focus`
+定义：重要人物不是初登场而是再出场时，如何唤起读者前文记忆，而不是重新解释身份。
+要求：
+- 只给本章重要再出场角色写。
+- 结构必须是对象：`{{"角色名": "一句中文说明"}}`。
+- 说明里必须同时包含：通过什么信号唤起记忆、第一反应最该体现什么、避免什么错误写法。
+- 如果人物前文已经建立身份，就优先生成这个字段，不要重新写成初登场式说明。
+
+4. `human_pain_anchor`
+定义：这一章最具体、最扎人的痛感锚点。
+要求：
+- 不能写成抽象恨、抽象悲伤、抽象愧疚。
+- 必须是可感知的处境、动作、礼法、生活代价、身体经验。
+- 这个字段要能直接帮助正文写出“人味”。
+
+现有字段约束：
+1. `summary` 只能写“主角想做什么 + 被什么限制 + 这一章如何间接推进”，不要写成全章流水账。
+2. `incoming_hook` 第一章可空；第二章开始必须明确承接上一章 `ending_pull`。
+3. `opening_hook` 必须是当前动作或当前压力，不能是背景介绍。
+4. `chapter_object` 必须是物件、命令、文书、线索、任务、仪式、地点之一，而且要有真实剧情功能，最好承担双重功能。
+5. `reader_emotion` 不要写太满，更适合写成“先站谁、先误判谁、保留什么异样感”。
+6. `reader_belief` 用阶段性表述，例如“读者此时倾向相信……”，不要写成终局判断。
+7. `world_limit` 只写本章最关键的一条权力、礼法或制度限制，不要写百科。
+8. `character_shift` 写本章内发生的具体变化，不是全书总结。
+9. `relationship_reprice` 必须说清哪段关系从什么变成什么，不能只写“更复杂了”。
+10. `emotional_turn` 必须写成“从 A 到 B”。
+11. `backstory_trigger` 没有就留空；如果有，必须是动作、声音、物件、称谓、伤痕、制度压力等具体触发物，不能写“回想起过去”。
+12. `scene_engine` 只能是：
+`opening_pressure`、`disruptor_arrival`、`drunken_truth`、`private_to_public_interruption`、`earned_flashback`、`investigation_pressure`、`court_pressure`、`relationship_collision`、`clue_reversal`、`aftermath_choice`。
+
+高质量写法规则：
+1. 线索自然露出
+如果本章存在线索披露，优先遵循这条路径：
+关系压力
+-> 角色回避
+-> 身体或物件失手
+-> 他人介入
+-> 线索自然露出
+-> 当事人回避解释
+不要直接给答案，不要把 clue 写成作者旁白。
+
+2. 重要人物再出场
+如果人物前文已经建立身份，不要重复解释他是谁。
+优先通过下属反应、排场、熟悉物件、熟悉称谓、一句最值钱的话，重建读者记忆。
+`character_reentry_focus` 必须服务这个目标。
+
+`allowed_clues` 正负例：
+错误：
+- "他眼神里藏着复杂"
+- "她其实很痛苦"
+- "他像是在隐瞒什么"
+
+正确：
+- "他开口前有极短停顿"
+- "她听见旧案名字时茶盏轻晃，茶液溅在袖口"
+- "回话前，下属先看了一眼轿帘"
+- "他把旧腰牌重新按回袖中，没有解释"
+
+输出前自检：
+1. 每章是否只有一个最该写锋利的 `core_scene`。
+2. `allowed_clues` 是否全部动作化、可见、可写、无作者解释。
+3. 有线索披露时是否给出合适的 `clue_reveal_style`。
+4. 有重要人物再出场时是否给出 `character_reentry_focus`。
+5. `human_pain_anchor` 是否足够具体，能直接落到身体、礼法、处境或代价。
+6. `small_payoff` 是否克制自然。
+7. `ending_pull` 是否只保留一个主钩子。
