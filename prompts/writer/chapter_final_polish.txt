@@ -1,4 +1,4 @@
-Do final polish for the whole chapter. Output polished chapter prose only.
+Do final polish for the whole chapter. Output polished chapter prose only in Simplified Chinese.
 
 [Chapter payload]
 {chapter_payload_text}
@@ -17,3 +17,8 @@ Rules:
 5. Unify POV and forms of address.
 6. Strengthen scene transitions and chapter ending pull.
 7. Keep restrained, pressurized, misread historical-romance tone.
+8. The final chapter prose must be natural Simplified Chinese and must not switch into English narration.
+9. Remove visible AI flavor: over-explaining, over-symmetry, generic emotional wording, and too-perfect rhetorical patterning.
+10. Strengthen immersion through selective sensory detail, believable action, and emotionally true response.
+11. Preserve useful concrete details such as props, injuries, labor traces, etiquette, and forms of address only when they genuinely serve the scene.
+12. Let the ending create forward pull in the most natural way for this chapter, without forcing the same hook pattern every time.

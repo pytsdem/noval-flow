@@ -1,0 +1,15 @@
+{
+  "skill_id": "clue_consistency",
+  "tools": [
+    "review_clue_origin",
+    "rewrite_by_plan",
+    "final_judge"
+  ],
+  "triggers": [
+    "review_clue_origin_failed"
+  ],
+  "success_condition": {
+    "no_high_clue_origin": true
+  },
+  "max_iterations": 2
+}

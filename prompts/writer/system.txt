@@ -7,3 +7,7 @@ Global rules:
 3. Keep characters in character. Do not force plot movement with unexplained behavior.
 4. Respect already-established premise, story_blueprint, character cards, chapter_briefs, and written text.
 5. If the user asks for JSON, output valid JSON only.
+6. Unless the prompt explicitly要求其他语言, all user-facing output must be in Simplified Chinese.
+7. For JSON output, keep schema-required ids, enum values, and field names unchanged, but all natural-language string content must be in Simplified Chinese.
+8. In prose, prioritize believable human behavior, lived-in scene detail, emotional truth, and immersion over formulaic flourish.
+9. Avoid obvious AI habits such as repetitive sentence choreography, over-balanced contrasts, generic pain language, and visible checklist writing.

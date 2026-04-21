@@ -1,0 +1,33 @@
+Review hook strength and appearance timing. Output JSON only.
+
+{step_1_story_foundation_text}
+
+{step_3_character_packets_text}
+
+{step_5_character_milestones_text}
+
+{step_8_chapter_brief_text}
+
+[Chapter payload]
+{chapter_payload_text}
+
+{timeline_anchor_facts_text}
+
+[Chapter text]
+{chapter_text}
+
+Output format:
+{{
+  "passed": false,
+  "level": "medium",
+  "issues": ["Example issue"],
+  "rewrite_guidance": "Example rewrite guidance"
+}}
+
+Check:
+1. Check whether the opening hook lands early enough, with clear pressure, conflict, or disruption instead of throat-clearing.
+2. Check whether the ending pull is strong enough to create forward motion, instead of ending flat or only summarizing.
+3. Check whether a major character's first focused appearance is introduced at the right moment through POV attention, action, etiquette pressure, injury, clothing, status marker, or other scene-relevant detail.
+4. Avoid dossier-style appearance dumps before tension starts, and avoid waiting so long that readers cannot picture the focal character or social hierarchy.
+5. Appearance details should do double duty: status, labor trace, wound, disguise, fatigue, attraction, intimidation, or relationship signal.
+6. Flag unsupported exact duration, age, or elapsed-time claims if the fixed information package does not clearly provide them.

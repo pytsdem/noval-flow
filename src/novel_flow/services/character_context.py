@@ -26,40 +26,81 @@ class CharacterContextBuilder:
         completed_chapter_memory_text: str,
     ) -> str:
         del completed_chapter_memory_text
-        focus_names = list(dict.fromkeys(chapter_brief.character_focus))
+        return cls._build_lines(
+            character_cards=character_cards,
+            chapter_brief=chapter_brief,
+            current_chapter_id=current_chapter_id,
+            active_twists=active_twists,
+            forbidden=forbidden,
+            visible_goal=scene_card.visible_goal,
+        )
+
+    @classmethod
+    def build_chapter_context(
+        cls,
+        *,
+        character_cards: list[CharacterCard],
+        chapter_brief: ChapterBrief,
+        current_chapter_id: str,
+        active_twists: list[TwistDesign],
+    ) -> str:
+        return cls._build_lines(
+            character_cards=character_cards,
+            chapter_brief=chapter_brief,
+            current_chapter_id=current_chapter_id,
+            active_twists=active_twists,
+            forbidden=chapter_brief.forbidden,
+            visible_goal=chapter_brief.chapter_object,
+        )
+
+    @staticmethod
+    def _build_lines(
+        *,
+        character_cards: list[CharacterCard],
+        chapter_brief: ChapterBrief,
+        current_chapter_id: str,
+        active_twists: list[TwistDesign],
+        forbidden: list[str] | None,
+        visible_goal: str,
+    ) -> str:
+        focus_names = list(dict.fromkeys(name for name in chapter_brief.character_focus if str(name).strip()))
         hidden_character_names = {
             name
             for twist in active_twists
             if _is_hidden_twist(current_chapter_id, twist)
             for name in twist.related_characters
         }
-        lines = ["【本场登场角色卡】", ""]
+        lines = ["[Scene character context]", ""]
         for name in focus_names:
             card = next((item for item in character_cards if item.name == name), None)
             if card is None:
                 continue
-            lines.append(f"{card.name}：")
-            identity = "，".join(
+            identity = " / ".join(
                 part for part in [card.role, card.occupation, card.social_background] if str(part).strip()
-            ) or "身份待在当前场景中自然显露。"
-            surface_goal = card.initial_state or card.motivation or scene_card.visible_goal
-            personality = "；".join(
+            ) or "Identity should be shown naturally in-scene."
+            personality = " / ".join(
                 part for part in [card.personality, card.behavior_pattern] if str(part).strip()
-            ) or "克制，不轻易明说。"
-            lines.append(f"- 当前公开身份：{identity}")
-            lines.append(f"- 当前表面目标：{surface_goal}")
-            lines.append(f"- 当前行动方向：围绕“{scene_card.visible_goal}”行动，并受“{chapter_brief.world_limit}”限制。")
-            lines.append(f"- 当前不能做：{chapter_brief.world_limit}")
-            lines.append(f"- 性格执行：{personality}")
+            ) or "Restrained under pressure."
+            surface_goal = card.initial_state or card.motivation or visible_goal
+            lines.extend(
+                [
+                    f"{card.name}",
+                    f"- Public identity: {identity}",
+                    f"- Surface goal in this chapter: {surface_goal}",
+                    f"- Action lane: move around '{visible_goal}' without breaking '{chapter_brief.world_limit}'.",
+                    f"- Personality execution: {personality}",
+                ]
+            )
             if card.name in hidden_character_names:
-                lines.append("- 当前禁止写：不能写未揭露的真实动机、真实苦衷、后期成长终点或反转真相。")
-                lines.append("- 允许外显：停顿、垂眼、指尖收紧、回避旧词、答非所问。")
+                lines.append("- Hidden truth lock: do not state unrevealed motive, sacrifice, or final arc destination.")
+                lines.append("- Allowed outer signs: pause, deflection, restraint, changed address, avoidance, incomplete answer.")
             else:
-                emotion = card.initial_state or card.personality or "情绪通过动作和称谓外显。"
-                lines.append(f"- 情绪底色：{emotion}")
+                emotional_base = card.initial_state or card.personality or "Emotion should surface through action and address."
+                lines.append(f"- Emotional base tone: {emotional_base}")
             lines.append("")
+
         if forbidden:
-            lines.append("全场统一禁写：")
+            lines.append("Global chapter bans:")
             for item in forbidden:
                 lines.append(f"- {item}")
         return "\n".join(lines).strip()

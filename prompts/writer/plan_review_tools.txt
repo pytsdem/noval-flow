@@ -1,0 +1,37 @@
+Choose which review tools to call next. Output JSON only.
+
+[Active skill packages]
+{skills_text}
+
+[Allowed review tools]
+{allowed_tools}
+
+[Recommended review order]
+{recommended_tools}
+
+[Chapter brief]
+{chapter_brief_json}
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Existing review reports]
+{review_summary}
+
+[Chapter text excerpt]
+{chapter_excerpt}
+
+Rules:
+1. Skills are instruction packages, not tools.
+2. Choose only tool names from the allowed list.
+3. Prefer broad review on the first pass; focus on blocking issues on later passes.
+4. Always include review_instruction_compliance and review_continuity somewhere in the plan.
+5. Include review_hook_appearance when opening hook, ending pull, appearance timing, or exact time-gap wording may be at risk.
+6. Return 5 to 8 tool calls.
+
+Output format:
+{{
+  "tool_calls": [
+    {{"tool_name": "review_instruction_compliance", "reason": "..." }}
+  ]
+}}

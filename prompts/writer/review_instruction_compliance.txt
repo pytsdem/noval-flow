@@ -1,0 +1,54 @@
+Review chapter instruction compliance. Output JSON only.
+
+[Completed chapter memory]
+{completed_chapter_memory_text}
+
+{step_1_story_foundation_text}
+
+{step_2_worldbuilding_text}
+
+{step_3_character_packets_text}
+
+{step_4_event_timeline_text}
+
+{step_5_character_milestones_text}
+
+{step_6_twists_text}
+
+{step_7_story_lines_text}
+
+{step_8_chapter_brief_text}
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Objective timeline anchors]
+{timeline_anchor_facts_text}
+
+[Relevant world rules]
+{relevant_world_rules_text}
+
+[Scene character context]
+{scene_character_context_text}
+
+[Relationship state]
+{relationship_state_text}
+
+[Chapter text]
+{chapter_text}
+
+Output format:
+{{
+  "passed": false,
+  "level": "high",
+  "issues": ["Example issue"],
+  "rewrite_guidance": "Example rewrite guidance"
+}}
+
+Check:
+1. The prose must fulfill chapter summary, incoming_hook, opening_hook, chapter_object, relationship_reprice, emotional_turn, small_payoff, and ending_pull.
+2. Do not add new truth, new character, new clue source, or new setting rule outside the fixed information package.
+3. Do not break reader_belief or info_budget.
+4. Do not explain allowed clues beyond what the chapter permits.
+5. Preserve hard constraints and write only publishable chapter prose.
+6. Do not invent precise years, ages, counts, or elapsed-time claims unless the fixed information package explicitly supports them.

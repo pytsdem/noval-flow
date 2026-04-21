@@ -1,0 +1,16 @@
+{
+  "skill_id": "opening_boost",
+  "tools": [
+    "review_hook_appearance",
+    "review_chapter_engine",
+    "review_prose_quality",
+    "rewrite_by_plan"
+  ],
+  "triggers": [
+    "opening_weak"
+  ],
+  "success_condition": {
+    "opening_pressure_visible": true
+  },
+  "max_iterations": 2
+}

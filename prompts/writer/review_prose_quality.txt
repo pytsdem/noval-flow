@@ -1,0 +1,31 @@
+Review prose quality. Output JSON only.
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Style card]
+{style_card_text}
+
+[Chapter text]
+{chapter_text}
+
+Output format:
+{{
+  "prose_score": 7,
+  "tension_score": 7,
+  "subtext_score": 7,
+  "exposition_score": 4,
+  "cliche_score": 2,
+  "double_duty_detail_score": 6,
+  "rewrite_needed": false,
+  "rewrite_guidance": ""
+}}
+
+Check:
+1. Too much explanation or summary instead of live scene pressure.
+2. Weak opening or weak ending pull.
+3. Emotion told too directly.
+4. Dialogue lacks probing, concealment, etiquette pressure, or threat.
+5. Relationship tension is weak or static.
+6. Details do not carry double duty.
+7. Diction is flat, generic, or cliched.

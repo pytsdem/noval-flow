@@ -19,3 +19,6 @@ Goals:
 4. Convert blunt emotion into gesture, pause, object, distance, title, or etiquette pressure.
 5. Do not add clues, truth, proof, people, or setting.
 6. Do not break forbidden boundaries.
+7. Make the scene feel more lived-in, embodied, and emotionally convincing.
+8. Strengthen selective concrete detail only where it helps character, pressure, or atmosphere; avoid decorative over-writing.
+9. Remove traces of formulaic prose, repeated cadence, and obvious "AI neatness."

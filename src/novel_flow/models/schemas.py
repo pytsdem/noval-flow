@@ -254,6 +254,68 @@ class ActualChapterSummary(StrictBaseModel):
     locked_truths: list[str] = Field(default_factory=list, max_length=8)
 
 
+class BinaryReviewPayload(StrictBaseModel):
+    passed: bool = False
+    level: Literal["low", "medium", "high", "critical"] = "medium"
+    issues: list[str] = Field(default_factory=list)
+    rewrite_guidance: str = ""
+
+
+class ProseQualityPayload(StrictBaseModel):
+    prose_score: int = Field(default=0, ge=0, le=10)
+    tension_score: int = Field(default=0, ge=0, le=10)
+    subtext_score: int = Field(default=0, ge=0, le=10)
+    exposition_score: int = Field(default=10, ge=0, le=10)
+    cliche_score: int = Field(default=10, ge=0, le=10)
+    double_duty_detail_score: int = Field(default=0, ge=0, le=10)
+    rewrite_needed: bool = False
+    rewrite_guidance: str = ""
+
+
+class ToolCallSpec(StrictBaseModel):
+    tool_name: str
+    reason: str = ""
+
+
+class ToolPlanPayload(StrictBaseModel):
+    tool_calls: list[ToolCallSpec] = Field(default_factory=list, max_length=8)
+
+
+class ContextSanitizationPayload(StrictBaseModel):
+    completed_chapter_memory_text: str
+    step_1_story_foundation_text: str
+    step_3_character_packets_text: str
+    step_5_character_milestones_text: str
+    step_6_twists_text: str
+    step_7_story_lines_text: str
+    step_8_chapter_brief_text: str
+    scene_character_context_text: str
+    relationship_state_text: str
+
+
+class RevisionPlan(StrictBaseModel):
+    summary: str
+    must_fix: list[str] = Field(default_factory=list)
+    should_fix: list[str] = Field(default_factory=list)
+    keep: list[str] = Field(default_factory=list)
+    hard_constraints: list[str] = Field(default_factory=list)
+    triggered_skills: list[str] = Field(default_factory=list)
+
+
+class FinalJudgeResult(StrictBaseModel):
+    passed: bool
+    blocking_reasons: list[str] = Field(default_factory=list)
+    metrics: dict[str, Any] = Field(default_factory=dict)
+
+
+class ChapterExecutionResult(StrictBaseModel):
+    chapter_text: str
+    actual_chapter_summary: ActualChapterSummary
+    stage_log: list[dict[str, Any]] = Field(default_factory=list)
+    review_reports: dict[str, Any] = Field(default_factory=dict)
+    final_judge: dict[str, Any] = Field(default_factory=dict)
+
+
 class TwistDesignsPayload(StrictBaseModel):
     twist_designs: list[TwistDesign] = Field(default_factory=list)
 
@@ -273,11 +335,22 @@ class ScenePlanPayload(StrictBaseModel):
 @dataclass
 class WriterContext:
     completed_chapter_memory_text: str
+    step_1_story_foundation_text: str
+    step_2_worldbuilding_text: str
+    step_3_character_packets_text: str
+    step_4_event_timeline_text: str
+    step_5_character_milestones_text: str
+    step_6_twists_text: str
+    step_7_story_lines_text: str
+    step_8_chapter_brief_text: str
     chapter_payload_text: str
+    timeline_anchor_facts_text: str
     relevant_world_rules_text: str
     style_card_text: str
     active_twists: list[TwistDesign]
     active_story_lines: list[StoryLine]
+    scene_character_context_text: str = ""
+    relationship_state_text: str = ""
 
 
 class BookBlueprint(BaseModel):

@@ -1,0 +1,62 @@
+Sanitize the chapter writing context for the current chapter. Output JSON only.
+
+You are not writing fiction. You are preparing a reveal-safe writing package for another writing agent.
+
+Current chapter:
+- chapter_id: {current_chapter_id}
+
+Active twists JSON:
+{active_twists_json}
+
+Policy:
+1. Only sanitize blocks that may leak unrevealed truth before their reveal chapter.
+2. Do not use placeholders like [REDACTED], XXX, omitted, hidden, or similar markers.
+3. Rewrite risky content into abstract, writer-useful guidance.
+4. Preserve current-chapter utility: keep visible pressure, reader misread, allowed clue shape, public relationship movement, and scene-usable facts.
+5. Do not expose hidden motive, hidden causality, hidden sacrifice, final payoff logic, or reveal answer before reveal_at.
+6. Step 2 worldbuilding and Step 4 full event timeline are handled outside this task and must not be returned here.
+7. If a block is already reveal-safe, return it unchanged.
+8. For step 5 and relationship-related blocks, keep outward trigger, public consequence, and chapter-usable movement, while abstracting private motive and concealed cause.
+9. For step 1 and step 7, preserve structure and strategic value, but rewrite high-risk summary/payoff language into reader-facing abstract guidance.
+
+Return exactly this JSON shape:
+{{
+  "completed_chapter_memory_text": "string",
+  "step_1_story_foundation_text": "string",
+  "step_3_character_packets_text": "string",
+  "step_5_character_milestones_text": "string",
+  "step_6_twists_text": "string",
+  "step_7_story_lines_text": "string",
+  "step_8_chapter_brief_text": "string",
+  "scene_character_context_text": "string",
+  "relationship_state_text": "string"
+}}
+
+Input blocks:
+
+[Completed chapter memory]
+{completed_chapter_memory_text}
+
+[Step 1 story foundation]
+{step_1_story_foundation_text}
+
+[Step 3 character packets]
+{step_3_character_packets_text}
+
+[Step 5 character milestones]
+{step_5_character_milestones_text}
+
+[Step 6 twist packets]
+{step_6_twists_text}
+
+[Step 7 story lines]
+{step_7_story_lines_text}
+
+[Step 8 chapter brief]
+{step_8_chapter_brief_text}
+
+[Scene character context]
+{scene_character_context_text}
+
+[Relationship state]
+{relationship_state_text}

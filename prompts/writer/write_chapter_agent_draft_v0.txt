@@ -1,0 +1,50 @@
+Write one full novel chapter. Output prose only in Simplified Chinese.
+
+[Skill instruction packages]
+{skills_text}
+
+{completed_chapter_memory_text}
+
+{step_1_story_foundation_text}
+
+{step_2_worldbuilding_text}
+
+{step_3_character_packets_text}
+
+{step_4_event_timeline_text}
+
+{step_5_character_milestones_text}
+
+{step_6_twists_text}
+
+{step_7_story_lines_text}
+
+{step_8_chapter_brief_text}
+
+{chapter_payload_text}
+
+{timeline_anchor_facts_text}
+
+{relevant_world_rules_text}
+
+{scene_character_context_text}
+
+{relationship_state_text}
+
+{style_card_text}
+
+Hard rules:
+1. Do not add new truth, new character, new clue, or new setting rule.
+2. If this chapter is earlier than any reveal_at, do not expose twist truth in prose.
+3. Preserve reader belief and do not explain allowed clues.
+4. Fulfill the chapter brief in scene form, not outline form.
+5. Output prose only.
+6. The final prose must be natural Simplified Chinese and must not switch into English narration.
+
+Writing goals:
+1. Avoid AI-sounding symmetry, over-explaining, and repeated dramatic formulas.
+2. Make the chapter feel lived rather than summarized, so readers can sense the room, the bodies, the social pressure, and the cost of each move.
+3. Let characterization come from concrete behavior, selective detail, and relationship friction, not from abstract labels.
+4. Let scenes begin and unfold in the way this chapter naturally needs; enter late enough to avoid throat-clearing, but do not force the same opening pattern every time.
+5. If a painful memory or old wound appears, let it rise from the present moment instead of stopping the chapter for explanation.
+6. Aim for genuine feeling through believable human response, restraint, contradiction, and specific detail.

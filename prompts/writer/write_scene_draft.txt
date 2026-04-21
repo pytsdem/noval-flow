@@ -1,4 +1,4 @@
-Write one fiction scene. Output scene prose only.
+Write one fiction scene. Output scene prose only in Simplified Chinese.
 
 [Completed chapter memory]
 {completed_chapter_memory_text}
@@ -38,3 +38,13 @@ Rules:
 8. Any backstory must be triggered by current action, object, speech, scar, rule, or choice.
 9. No parachuted key clues such as ledgers, letters, witnesses, archives, tokens, or testimony.
 10. Dialogue must contain probing, concealment, misunderstanding, threat, etiquette pressure, or unspoken feeling.
+11. The final scene prose must be natural Simplified Chinese and must not switch into English narration.
+
+Craft goals:
+1. Do not sound like an outline being expanded. Let the scene unfold through action, perception, speech, silence, and consequence.
+2. Write with enough concrete detail that the reader can feel physically inside the scene, but choose detail selectively instead of listing things.
+3. Make characters convincing through behavior, habit, posture, and what they notice or avoid noticing.
+4. If the scene opens quietly, let the quiet carry unease, friction, or latent pressure rather than empty atmosphere.
+5. If backstory appears, let it be naturally triggered by the present moment and keep it serving the live scene.
+6. On emotional beats, prefer specific human reaction over generic labels or melodramatic declarations.
+7. Vary rhythm and sentence shape according to the dramatic moment so the prose does not feel mechanically patterned.

@@ -1,0 +1,18 @@
+{
+  "skill_id": "chapter_quality_guard",
+  "tools": [
+    "review_instruction_compliance",
+    "review_continuity",
+    "review_hook_appearance",
+    "review_chapter_engine",
+    "final_judge"
+  ],
+  "triggers": [
+    "always"
+  ],
+  "success_condition": {
+    "instruction_passed": true,
+    "continuity_passed": true
+  },
+  "max_iterations": 3
+}

@@ -1941,6 +1941,18 @@ class NovelApp:
                 updated_book, chapter = writer.write_next_chapter(book=book)
                 memory.save_book(updated_book)
                 self._save_output(memory, run_id, "WriterAgent", "chapter_written", f"Chapter written: {chapter.title}", chapter.model_dump(mode="json"))
+                chapter_run = (
+                    dict(updated_book.metadata.get("writing_chapter_runs", {}) or {}).get(chapter.id)
+                    if isinstance(updated_book.metadata.get("writing_chapter_runs"), dict)
+                    else None
+                )
+                if isinstance(chapter_run, dict):
+                    actual_summary = chapter_run.get("actual_chapter_summary")
+                    if isinstance(actual_summary, dict):
+                        self._save_output(memory, run_id, "WritingChapterAgent", "actual_chapter_summary", "Actual chapter summary", actual_summary)
+                    stage_log = chapter_run.get("stage_log")
+                    if isinstance(stage_log, list):
+                        self._save_output(memory, run_id, "WritingChapterAgent", "chapter_stage_log", "Chapter stage log", {"chapter_id": chapter.id, "stage_log": stage_log})
                 critic_payload = updated_book.metadata.get("latest_critic_report")
                 if isinstance(critic_payload, dict):
                     from novel_flow.models.schemas import CriticReport
@@ -1999,6 +2011,18 @@ class NovelApp:
                 check_cancelled()
                 memory.save_book(updated_book)
                 self._save_output(memory, run_id, "WriterAgent", "chapter_written", f"Chapter written: {chapter.title}", chapter.model_dump(mode="json"))
+                chapter_run = (
+                    dict(updated_book.metadata.get("writing_chapter_runs", {}) or {}).get(chapter.id)
+                    if isinstance(updated_book.metadata.get("writing_chapter_runs"), dict)
+                    else None
+                )
+                if isinstance(chapter_run, dict):
+                    actual_summary = chapter_run.get("actual_chapter_summary")
+                    if isinstance(actual_summary, dict):
+                        self._save_output(memory, run_id, "WritingChapterAgent", "actual_chapter_summary", "Actual chapter summary", actual_summary)
+                    stage_log = chapter_run.get("stage_log")
+                    if isinstance(stage_log, list):
+                        self._save_output(memory, run_id, "WritingChapterAgent", "chapter_stage_log", "Chapter stage log", {"chapter_id": chapter.id, "stage_log": stage_log})
                 state = WorkflowState(run_id=run_id, stage=WorkflowStage.WRITING, current_book_id=updated_book.id, context={"action": "write_chapter"})
                 memory.save_state(state, mode="test")
 
@@ -2737,7 +2761,25 @@ function sanitizeCharactersDraft(chars){if(!Array.isArray(chars))return[];return
 function sanitizeStep3DraftObject(obj){if(!obj||typeof obj!=='object')return obj;const next=deepClone(obj);if(Array.isArray(next.characters))next.characters=sanitizeCharactersDraft(next.characters);return next;}
 function applyStepRevisionDraft(result){if(!result||!result.step_key)return;const stepKey=result.step_key;const revisedText=result.draft_json||JSON.stringify(result.step_payload||{},null,2);stepDrafts[stepKey]=revisedText;try{stepDraftObjects[stepKey]=JSON.parse(revisedText);}catch{stepDraftObjects[stepKey]=deepClone(result.step_payload||{});}if(stepKey==='step_3'){stepDraftObjects[stepKey]=sanitizeStep3DraftObject(stepDraftObjects[stepKey]||{});stepDrafts[stepKey]=JSON.stringify(stepDraftObjects[stepKey]||{},null,2);}stepDraftDirty[stepKey]=true;stepReviewNotes[stepKey]=Array.isArray(result.review_notes)?result.review_notes:[];if(currentBook){renderBlueprint(currentBook);autoSizeTextareas('pnl-blueprint');}}
 function latestOutputByType(runData,outputType){const outs=Array.isArray(runData?.outputs)?runData.outputs:[];for(let i=outs.length-1;i>=0;i-=1){if(outs[i]?.output_type===outputType)return outs[i].payload||null;}return null;}
-function stepFieldLabel(key){const labels={premise:'大纲主体',story_engine:'写作架构',characters:'角色卡',event_timeline:'客观事件时间线',character_milestones:'角色发展线',twist_designs:'反转设计',story_lines:'故事线',chapter_briefs:'章节摘要',title:'标题',high_concept:'高概念',theme_statement:'立意',story_summary:'故事简介',genre:'题材',target_style:'风格',emotional_hook:'情绪钩子',central_conflict:'核心冲突',core_hook:'核心看点',escalation_path:'升级路径',twist_blueprint:'反转蓝图',ending_payoff:'结尾兑现',selling_points:'卖点',engine_sentence:'故事驱动句',narrative_mode:'叙事结构',viewpoint_strategy:'视角策略',reveal_strategy:'信息揭示策略',hook_strategy:'前三章留人策略',default_track:'默认轨道',world_rules:'世界规则',power_structure:'权力结构',world_map:'世界地图',structural_inertia:'结构惯性',rebound_mechanism:'反弹机制',story_trigger:'故事启动条件',objective_conditions:'客观条件与机会结构',name:'名称',visibility:'明暗线',line_type:'线类型',line_goal:'线目标',key_progressions:'关键推进章节',plot:'关键情节',start_state:'起点状态',midpoint_shift:'中段变化',end_state:'终点状态',core_question:'核心问题',chapter_id:'章节编号',active_lines:'挂线',summary:'章节摘要',chapter_type:'章型',small_payoff:'小兑现',ending_pull:'结尾牵引',objective:'章节摘要',tension:'张力',phase:'阶段',story_function:'剧情功能',key_turn:'关键转折',payoff:'兑现',next_route_hint:'下一步提示',target_words:'目标字数',scene_density:'场景密度',scene_id:'场景编号',conflict:'冲突',info_reveal:'信息释放',emotional_shift:'情绪变化',appearance:'外貌'};return labels[key]||String(key).replaceAll('_',' ');}
+function stepFieldLabel(key){const labels={premise:'大纲主体',story_engine:'写作架构',characters:'角色卡',event_timeline:'客观事件时间线',character_milestones:'角色发展线',twist_designs:'反转设计',story_lines:'故事线',chapter_briefs:'章节摘要',title:'标题',high_concept:'高概念',theme_statement:'立意',story_summary:'故事简介',genre:'题材',target_style:'风格',emotional_hook:'情绪钩子',central_conflict:'核心冲突',core_hook:'核心看点',escalation_path:'升级路径',twist_blueprint:'反转蓝图',ending_payoff:'结尾兑现',selling_points:'卖点',engine_sentence:'故事驱动句',narrative_mode:'叙事结构',viewpoint_strategy:'视角策略',reveal_strategy:'信息揭示策略',hook_strategy:'前三章留人策略',default_track:'默认轨道',world_rules:'世界规则',power_structure:'权力结构',world_map:'世界地图',structural_inertia:'结构惯性',rebound_mechanism:'反弹机制',story_trigger:'故事启动条件',objective_conditions:'客观条件与机会结构',twist_id:'反转编号',false_belief:'表层误导认知',truth:'真实真相',reader_alignment:'读者站位',seed_from:'埋线起点',reveal_at:'揭示章节',allowed_clues:'允许埋下的线索',forbidden_reveals:'禁止提前揭示',pov_lock:'视角锁',related_characters:'关联角色',payoff_effect:'兑现效果',line_id:'故事线编号',name:'名称',visibility:'明暗线',line_type:'线类型',reader_hook_mode:'读者钩子方式',line_rules:'线规则',carried_twists:'承载反转',line_goal:'线目标',key_progressions:'关键推进章节',plot:'关键情节',start_state:'起点状态',midpoint_shift:'中段变化',end_state:'终点状态',core_question:'核心问题',chapter_id:'章节编号',active_lines:'挂线',active_twists:'激活反转',summary:'章节摘要',chapter_type:'章型',incoming_hook:'承接钩子',opening_hook:'开篇钩子',chapter_object:'章节目标物',reader_emotion:'读者情绪',reader_belief:'读者当前认知',allowed_info:'允许释放的信息',forbidden:'禁止出现',world_limit:'世界/规则限制',character_focus:'角色焦点',character_shift:'角色变化',relationship_reprice:'关系重估',emotional_turn:'情绪转折',backstory_trigger:'触发的前史',scene_engine:'场景引擎',small_payoff:'小兑现',ending_pull:'结尾牵引',info_budget:'信息预算',objective:'章节摘要',tension:'张力',phase:'阶段',story_function:'剧情功能',key_turn:'关键转折',payoff:'兑现',next_route_hint:'下一步提示',target_words:'目标字数',scene_density:'场景密度',scene_id:'场景编号',conflict:'冲突',info_reveal:'信息释放',emotional_shift:'情绪变化',appearance:'外貌'};return labels[key]||String(key).replaceAll('_',' ');}
+function orderedStepObjectEntries(stepKey,path,obj){
+  const rawEntries=Object.entries(obj||{});
+  const orderMap={
+    step_6:['twist_id','title','false_belief','truth','reader_alignment','seed_from','reveal_at','allowed_clues','forbidden_reveals','pov_lock','related_characters','payoff_effect'],
+    step_7:['line_id','name','line_type','visibility','core_question','reader_hook_mode','start_state','midpoint_shift','end_state','carried_twists','line_rules'],
+    step_8:['chapter_id','title','chapter_type','active_lines','active_twists','summary','incoming_hook','opening_hook','chapter_object','reader_emotion','reader_belief','allowed_info','allowed_clues','forbidden','world_limit','character_focus','character_shift','relationship_reprice','emotional_turn','backstory_trigger','scene_engine','small_payoff','ending_pull','info_budget']
+  };
+  const isStep6Item=stepKey==='step_6'&&path.length===2&&String(path[0])==='twist_designs'&&typeof path[1]==='number';
+  const isStep7Item=stepKey==='step_7'&&path.length===2&&String(path[0])==='story_lines'&&typeof path[1]==='number';
+  const isStep8Item=stepKey==='step_8'&&path.length===2&&String(path[0])==='chapter_briefs'&&typeof path[1]==='number';
+  if(!isStep6Item&&!isStep7Item&&!isStep8Item)return rawEntries;
+  const wanted=orderMap[stepKey]||[];
+  if(!wanted.length)return rawEntries;
+  const entryMap=new Map(rawEntries);
+  const ordered=wanted.filter(key=>entryMap.has(key)).map(key=>[key,entryMap.get(key)]);
+  rawEntries.forEach(([key,val])=>{if(!wanted.includes(key))ordered.push([key,val]);});
+  return ordered;
+}
 function parseStepPath(pathText){return String(pathText||'').split('.').filter(Boolean).map(part=>/^[0-9]+$/.test(part)?Number(part):part);}
 function setStepValueByPath(root,path,value){if(!path.length)return value;let cursor=root;for(let i=0;i<path.length-1;i+=1){const key=path[i],nextKey=path[i+1];if(Array.isArray(cursor)&&typeof key==='number'){while(cursor.length<=key)cursor.push(typeof nextKey==='number'?[]:{});if(cursor[key]===null||cursor[key]===undefined)cursor[key]=typeof nextKey==='number'?[]:{};cursor=cursor[key];continue;}if(cursor[key]===undefined||cursor[key]===null){cursor[key]=typeof nextKey==='number'?[]:{};}cursor=cursor[key];}const finalKey=path[path.length-1];if(Array.isArray(cursor)&&typeof finalKey==='number'){while(cursor.length<finalKey)cursor.push(null);while(cursor.length<=finalKey)cursor.push('');cursor[finalKey]=value;return root;}cursor[finalKey]=value;return root;}
 function updateStepEditorValue(stepKey,pathText,kind,rawValue){if(stepDraftBookId!==bookId)resetStepDraftCache(bookId);const basePayload=stepPayloadFromBook(currentBook,stepKey);const state=ensureStepObject(stepKey,basePayload);const path=parseStepPath(pathText);let value=rawValue;if(kind==='string_array'){value=normalizeMultiline(rawValue).split('\\n').map(item=>item.trim()).filter(Boolean);}else if(kind==='number'){const trimmed=String(rawValue??'').trim();value=trimmed===''?'':Number(trimmed);}else if(kind==='boolean'){value=!!rawValue;}setStepValueByPath(state,path,value);stepDrafts[stepKey]=JSON.stringify(state,null,2);stepDraftDirty[stepKey]=true;}
@@ -2849,20 +2891,7 @@ function renderStepEditorField(stepKey,path,value){
       const phasesVal=Array.isArray(value.phases)?value.phases:[];
       return `<div class='step-inline-root'><div class='step-inline-field'><label>phases</label>${renderStepEditorField(stepKey,[...path,'phases'],phasesVal)}</div></div>`;
     }
-    if(
-      stepKey==='step_8' &&
-      path.length===2 &&
-      String(path[0])==='chapter_briefs' &&
-      typeof path[1]==='number'
-    ){
-      const visibleEntries=[
-        ['chapter_id', value?.chapter_id??''],
-        ['title', value?.title??''],
-        ['objective', value?.objective??value?.summary??''],
-      ];
-      return `<div class='step-inline-root'>${visibleEntries.map(([key,val])=>`<div class='step-inline-field'><label>${esc(stepFieldLabel(String(key)))}</label>${renderStepEditorField(stepKey,[...path,String(key)],val)}</div>`).join('')}</div>`;
-    }
-    const entries=Object.entries(value);
+    const entries=orderedStepObjectEntries(stepKey,path,value);
     if(!entries.length)return `<div class='step-inline-empty'>当前为空。</div>`;
     return `<div class='step-inline-root'>${entries.map(([key,val])=>`<div class='step-inline-field'><label>${esc(stepFieldLabel(key))}</label>${renderStepEditorField(stepKey,[...path,key],val)}</div>`).join('')}</div>`;
   }
@@ -2984,11 +3013,136 @@ function renderToolObservation(payload){
   html+="</div>";
   return html;
 }
+function reviewReportSummaryHtml(toolName,report){
+  if(!report||typeof report!=='object')return "<div class='muted'>暂无结果</div>";
+  const level=String(report.level||'').trim();
+  const issues=toArray(report.issues);
+  const metrics=[];
+  if(typeof report.passed==='boolean')metrics.push(`passed=${report.passed?'yes':'no'}`);
+  if(level)metrics.push(`level=${level}`);
+  if(Number.isFinite(Number(report.prose_score)))metrics.push(`prose=${Number(report.prose_score)}`);
+  if(Number.isFinite(Number(report.tension_score)))metrics.push(`tension=${Number(report.tension_score)}`);
+  if(Number.isFinite(Number(report.exposition_score)))metrics.push(`exposition=${Number(report.exposition_score)}`);
+  let html=`<div class='mini-item'><div class='mini-title'>${esc(toolName)}</div>`;
+  if(metrics.length)html+=`<div class='muted'>${esc(metrics.join(' | '))}</div>`;
+  if(issues.length)html+=`<div style='margin-top:6px'>${linesHtml(issues.slice(0,6))}</div>`;
+  if(report.rewrite_guidance)html+=`<div class='subbox pre' style='margin-top:6px'>${esc(report.rewrite_guidance)}</div>`;
+  html+='</div>';
+  return html;
+}
+function renderActualChapterSummary(payload){
+  let html="<div class='agent-view'>";
+  html+=infoRow('章节', payload&&payload.chapter_id||'');
+  html+=sectionHtml('实际发生', linesHtml(payload&&payload.actual_events));
+  html+=sectionHtml('读者现在知道', linesHtml(payload&&payload.reader_now_knows));
+  html+=sectionHtml('读者现在相信', linesHtml(payload&&payload.reader_now_believes));
+  html+=sectionHtml('未解问题', linesHtml(payload&&payload.open_questions));
+  html+=sectionHtml('角色状态', linesHtml(payload&&payload.character_states));
+  html+=sectionHtml('关系状态', linesHtml(payload&&payload.relationship_state));
+  html+=sectionHtml('已埋线索', linesHtml(payload&&payload.seeded_clues));
+  html+=sectionHtml('仍锁住的真相', linesHtml(payload&&payload.locked_truths));
+  html+="</div>";
+  return html;
+}
+function renderChapterStageLog(payload){
+  const chapterId=String(payload&&payload.chapter_id||'').trim();
+  const stages=toArray(payload&&payload.stage_log);
+  let html="<div class='agent-view'>";
+  if(chapterId)html+=infoRow('章节', chapterId);
+  if(!stages.length){html+="<div class='muted'>暂无 stage log</div></div>";return html;}
+  html+=sectionHtml('正文闭环', `<div class='mini-list'>${stages.map((entry,index)=>{
+    const stageName=String(entry&&entry.stage||`stage_${index+1}`);
+    const skills=toArray(entry&&entry.skill_ids);
+    const toolCalls=toArray(entry&&entry.tool_calls).map(item=>typeof item==='string'?item:String(item&&item.tool_name||'').trim()).filter(Boolean);
+    const reviewReports=(entry&&typeof entry.review_reports==='object'&&entry.review_reports)?entry.review_reports:{};
+    const finalJudge=(entry&&typeof entry.final_judge==='object'&&entry.final_judge)?entry.final_judge:null;
+    const revisionPlan=(entry&&typeof entry.revision_plan==='object'&&entry.revision_plan)?entry.revision_plan:null;
+    let block=`<div class='mini-item'><div class='mini-title'>WritingChapterAgent · ${esc(stageName)}</div>`;
+    if(skills.length)block+=`<div style='margin-top:6px'>${chipsHtml(skills)}</div>`;
+    if(toolCalls.length)block+=sectionHtml('Tool 调用', chipsHtml(toolCalls));
+    if(Number.isFinite(Number(entry&&entry.chapter_length)))block+=infoRow('正文长度', `${Number(entry.chapter_length)} 字符`);
+    if(entry&&entry.current_chapter_draft_tail)block+=sectionHtml('当前草稿尾部', `<div class='subbox pre'>${esc(entry.current_chapter_draft_tail)}</div>`);
+    const reportEntries=Object.entries(reviewReports);
+    if(reportEntries.length)block+=sectionHtml('Tool 输出', `<div class='mini-list'>${reportEntries.map(([toolName,report])=>reviewReportSummaryHtml(toolName,report)).join('')}</div>`);
+    if(revisionPlan){
+      block+=sectionHtml('修订计划', `<div class='mini-list'>${[
+        revisionPlan.summary?`<div class='mini-item'><div class='mini-title'>摘要</div><div class='muted'>${esc(revisionPlan.summary)}</div></div>`:'',
+        toArray(revisionPlan.must_fix).length?`<div class='mini-item'><div class='mini-title'>必须修</div>${linesHtml(revisionPlan.must_fix)}</div>`:'',
+        toArray(revisionPlan.should_fix).length?`<div class='mini-item'><div class='mini-title'>建议修</div>${linesHtml(revisionPlan.should_fix)}</div>`:'',
+        toArray(revisionPlan.keep).length?`<div class='mini-item'><div class='mini-title'>保留</div>${linesHtml(revisionPlan.keep)}</div>`:'',
+        toArray(revisionPlan.hard_constraints).length?`<div class='mini-item'><div class='mini-title'>硬约束</div>${linesHtml(revisionPlan.hard_constraints)}</div>`:''
+      ].filter(Boolean).join('')}</div>`);
+    }
+    if(finalJudge){
+      const reasons=toArray(finalJudge.blocking_reasons);
+      const metrics=finalJudge.metrics&&typeof finalJudge.metrics==='object'?finalJudge.metrics:{};
+      block+=sectionHtml('Final Judge', `<div class='mini-list'>${[
+        `<div class='mini-item'><div class='mini-title'>结论</div><div class='muted'>${esc(finalJudge.passed?'通过':'未通过')}</div></div>`,
+        reasons.length?`<div class='mini-item'><div class='mini-title'>阻塞原因</div>${linesHtml(reasons)}</div>`:'',
+        Object.keys(metrics).length?`<div class='mini-item'><div class='mini-title'>指标</div>${jsonHtml(metrics)}</div>`:''
+      ].filter(Boolean).join('')}</div>`);
+    }
+    block+='</div>';
+    return block;
+  }).join('')}</div>`);
+  html+="</div>";
+  return html;
+}
 function renderStageEvent(payload){
   let html="<div class='agent-view'>";
   html+=infoRow('阶段', payload&&payload.stage||'');
   html+=infoRow('动作', payload&&payload.action||'');
   html+=infoRow('原因', payload&&payload.reason||'');
+  if(payload&&payload.chapter_id)html+=infoRow('章节', payload.chapter_id);
+  if(Number.isFinite(Number(payload&&payload.iteration)))html+=infoRow('轮次', `第 ${Number(payload.iteration)} 轮`);
+  const contextKeys=toArray(payload&&payload.context_keys);
+  const skillIds=toArray(payload&&payload.skill_ids);
+  const toolCalls=toArray(payload&&payload.tool_calls).map(item=>typeof item==='string'?item:String(item&&item.tool_name||'').trim()).filter(Boolean);
+  if(contextKeys.length)html+=sectionHtml('固定信息包', chipsHtml(contextKeys));
+  if(skillIds.length)html+=sectionHtml('已加载 Skills', chipsHtml(skillIds));
+  if(toolCalls.length)html+=sectionHtml('计划调用 Tools', chipsHtml(toolCalls));
+  if(payload&&payload.tool_name)html+=infoRow('当前 Tool', payload.tool_name);
+  if(Number.isFinite(Number(payload&&payload.chapter_length)))html+=infoRow('正文长度', `${Number(payload.chapter_length)} 字符`);
+  if(payload&&payload.current_chapter_draft_tail)html+=sectionHtml('当前草稿尾部', `<div class='subbox pre'>${esc(payload.current_chapter_draft_tail)}</div>`);
+  const toolResult=payload&&payload.tool_result&&typeof payload.tool_result==='object'?payload.tool_result:null;
+  if(toolResult){
+    html+=sectionHtml('Tool 输出', reviewReportSummaryHtml(String(payload&&payload.tool_name||'tool'), toolResult));
+    html+=sectionHtml('Tool 输出详情', jsonHtml(toolResult));
+  }
+  const reviewReports=payload&&payload.review_reports&&typeof payload.review_reports==='object'?payload.review_reports:null;
+  if(reviewReports&&Object.keys(reviewReports).length){
+    html+=sectionHtml('本轮 Review 汇总', `<div class='mini-list'>${Object.entries(reviewReports).map(([toolName,report])=>reviewReportSummaryHtml(toolName,report)).join('')}</div>`);
+  }
+  const revisionPlan=payload&&payload.revision_plan&&typeof payload.revision_plan==='object'?payload.revision_plan:null;
+  if(revisionPlan){
+    html+=sectionHtml('修订计划', `<div class='mini-list'>${[
+      revisionPlan.summary?`<div class='mini-item'><div class='mini-title'>摘要</div><div class='muted'>${esc(revisionPlan.summary)}</div></div>`:'',
+      toArray(revisionPlan.must_fix).length?`<div class='mini-item'><div class='mini-title'>必须修</div>${linesHtml(revisionPlan.must_fix)}</div>`:'',
+      toArray(revisionPlan.should_fix).length?`<div class='mini-item'><div class='mini-title'>建议修</div>${linesHtml(revisionPlan.should_fix)}</div>`:'',
+      toArray(revisionPlan.keep).length?`<div class='mini-item'><div class='mini-title'>保留</div>${linesHtml(revisionPlan.keep)}</div>`:'',
+      toArray(revisionPlan.hard_constraints).length?`<div class='mini-item'><div class='mini-title'>硬约束</div>${linesHtml(revisionPlan.hard_constraints)}</div>`:''
+    ].filter(Boolean).join('')}</div>`);
+  }
+  const finalJudge=payload&&payload.final_judge&&typeof payload.final_judge==='object'?payload.final_judge:null;
+  if(finalJudge){
+    const reasons=toArray(finalJudge.blocking_reasons);
+    const metrics=finalJudge.metrics&&typeof finalJudge.metrics==='object'?finalJudge.metrics:{};
+    html+=sectionHtml('Final Judge', `<div class='mini-list'>${[
+      `<div class='mini-item'><div class='mini-title'>结论</div><div class='muted'>${esc(finalJudge.passed?'通过':'未通过')}</div></div>`,
+      reasons.length?`<div class='mini-item'><div class='mini-title'>阻塞原因</div>${linesHtml(reasons)}</div>`:'',
+      Object.keys(metrics).length?`<div class='mini-item'><div class='mini-title'>指标</div>${jsonHtml(metrics)}</div>`:''
+    ].filter(Boolean).join('')}</div>`);
+  }
+  const summary=payload&&payload.summary&&typeof payload.summary==='object'?payload.summary:null;
+  if(summary){
+    html+=sectionHtml('Actual Summary', `<div class='mini-list'>${[
+      toArray(summary.actual_events).length?`<div class='mini-item'><div class='mini-title'>实际发生</div>${linesHtml(summary.actual_events)}</div>`:'',
+      toArray(summary.reader_now_knows).length?`<div class='mini-item'><div class='mini-title'>读者现在知道</div>${linesHtml(summary.reader_now_knows)}</div>`:'',
+      toArray(summary.reader_now_believes).length?`<div class='mini-item'><div class='mini-title'>读者现在相信</div>${linesHtml(summary.reader_now_believes)}</div>`:'',
+      toArray(summary.seeded_clues).length?`<div class='mini-item'><div class='mini-title'>已埋线索</div>${linesHtml(summary.seeded_clues)}</div>`:'',
+      toArray(summary.locked_truths).length?`<div class='mini-item'><div class='mini-title'>仍锁住的真相</div>${linesHtml(summary.locked_truths)}</div>`:''
+    ].filter(Boolean).join('')}</div>`);
+  }
   html+="</div>";
   return html;
 }
@@ -2999,6 +3153,8 @@ function renderItemPayload(item){
   if(item.kind==='output'&&item.outputType==='director_decision')return renderDirectorDecision(item.rawPayload);
   if(item.kind==='output'&&item.outputType==='reference_cards')return renderReferenceCards(item.rawPayload);
   if(item.kind==='output'&&item.outputType==='tool_observation')return renderToolObservation(item.rawPayload);
+  if(item.kind==='output'&&item.outputType==='actual_chapter_summary')return renderActualChapterSummary(item.rawPayload);
+  if(item.kind==='output'&&item.outputType==='chapter_stage_log')return renderChapterStageLog(item.rawPayload);
   if(item.kind==='event'&&item.eventType==='stage')return renderStageEvent(item.rawPayload);
   if(item.kind==='event'&&item.eventType==='error')return renderErrorEvent(item.rawPayload);
   if(item.kind==='plain')return `<div class='pre'>${esc(item.text||'')}</div>`;
@@ -3051,7 +3207,7 @@ function buildStreamItems(runId,evts){
     : mergedRaw;
   return [{key:`${runId}:stream:all`,title:'模型流式输出',kind:'plain',text:merged,sortTs:latestTs}];
 }
-function outputTaskLabel(out){const t=String(out?.output_type||'');if(t==='outline_blueprint')return'步骤1 大纲+蓝图';if(t==='worldbuilding')return'步骤2 背景体系+世界观';if(t==='character_bible')return'步骤3 角色卡';if(t==='character_added')return'步骤3 增加角色';if(t==='event_timeline')return'步骤4 客观事件时间线';if(t==='character_milestones')return'步骤5 角色发展线';if(t==='twist_designs')return'步骤6 反转设计';if(t==='story_lines')return'步骤7 明线暗线发展线';if(t==='chapter_briefs')return'步骤8 章节摘要规划';if(t==='step_revision_draft'){const p=out?.payload||{};const stepKey=String(p?.step_key||'');const idx=p?.character_index;if(stepKey==='step_3'&&Number.isInteger(idx))return`步骤3 单角色指令修改（角色 ${Number(idx)+1}）`;if(stepKey==='step_5'&&Number.isInteger(idx))return`步骤5 单角色发展线指令调整（角色 ${Number(idx)+1}）`;if(stepKey)return`${stepKey.toUpperCase()} 结果修订`;return'步骤结果修订';}if(t==='blueprint_review')return'Critic Blueprint 评审';if(t==='text_updated')return'正文AI修改';return'';}
+function outputTaskLabel(out){const t=String(out?.output_type||'');if(t==='outline_blueprint')return'步骤1 大纲+蓝图';if(t==='worldbuilding')return'步骤2 背景体系+世界观';if(t==='character_bible')return'步骤3 角色卡';if(t==='character_added')return'步骤3 增加角色';if(t==='event_timeline')return'步骤4 客观事件时间线';if(t==='character_milestones')return'步骤5 角色发展线';if(t==='twist_designs')return'步骤6 反转设计';if(t==='story_lines')return'步骤7 明线暗线发展线';if(t==='chapter_briefs')return'步骤8 章节摘要规划';if(t==='step_revision_draft'){const p=out?.payload||{};const stepKey=String(p?.step_key||'');const idx=p?.character_index;if(stepKey==='step_3'&&Number.isInteger(idx))return`步骤3 单角色指令修改（角色 ${Number(idx)+1}）`;if(stepKey==='step_5'&&Number.isInteger(idx))return`步骤5 单角色发展线指令调整（角色 ${Number(idx)+1}）`;if(stepKey)return`${stepKey.toUpperCase()} 结果修订`;return'步骤结果修订';}if(t==='blueprint_review')return'Critic Blueprint 评审';if(t==='text_updated')return'正文AI修改';if(t==='actual_chapter_summary')return'正文 actual summary';if(t==='chapter_stage_log')return'正文 agent 闭环';return'';}
 function inferTaskLabel(run,detail){
   if(run?.task_label)return String(run.task_label);
   const ctx=detail?.context||{};

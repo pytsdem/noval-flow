@@ -1,0 +1,15 @@
+{
+  "skill_id": "flashback_guard",
+  "tools": [
+    "review_chapter_engine",
+    "review_instruction_compliance",
+    "rewrite_by_plan"
+  ],
+  "triggers": [
+    "flashback_problem"
+  ],
+  "success_condition": {
+    "flashback_trigger_valid": true
+  },
+  "max_iterations": 2
+}

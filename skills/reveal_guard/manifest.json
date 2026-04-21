@@ -1,0 +1,15 @@
+{
+  "skill_id": "reveal_guard",
+  "tools": [
+    "review_reveal_leak",
+    "rewrite_by_plan",
+    "final_judge"
+  ],
+  "triggers": [
+    "review_reveal_leak_failed"
+  ],
+  "success_condition": {
+    "no_high_reveal_leak": true
+  },
+  "max_iterations": 2
+}

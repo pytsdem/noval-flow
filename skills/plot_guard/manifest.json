@@ -1,0 +1,16 @@
+{
+  "skill_id": "plot_guard",
+  "tools": [
+    "review_plot_logic",
+    "review_continuity",
+    "rewrite_by_plan",
+    "final_judge"
+  ],
+  "triggers": [
+    "review_plot_logic_failed"
+  ],
+  "success_condition": {
+    "no_high_plot_logic": true
+  },
+  "max_iterations": 2
+}

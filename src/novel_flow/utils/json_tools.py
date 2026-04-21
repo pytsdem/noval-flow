@@ -6,7 +6,6 @@ import re
 
 def _cleanup_json_text(text: str) -> str:
     cleaned = text.strip()
-    cleaned = cleaned.replace("?", '"').replace("?", '"').replace("?", "'").replace("?", "'")
     cleaned = re.sub(r",(?=\s*[}\]])", "", cleaned)
     return cleaned
 

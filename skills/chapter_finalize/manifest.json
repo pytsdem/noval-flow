@@ -1,0 +1,15 @@
+{
+  "skill_id": "chapter_finalize",
+  "tools": [
+    "final_judge",
+    "final_polish",
+    "summarize_actual_chapter"
+  ],
+  "triggers": [
+    "ready_to_finalize"
+  ],
+  "success_condition": {
+    "final_judge_passed": true
+  },
+  "max_iterations": 1
+}

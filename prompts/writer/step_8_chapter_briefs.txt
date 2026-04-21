@@ -1,4 +1,6 @@
 Generate step 8 chapter_briefs only. Output valid JSON only. No markdown.
+All natural-language string content in the JSON must be Simplified Chinese.
+Keep only ids and schema-required enum values in their required format.
 
 User request:
 {research_query}
@@ -17,29 +19,29 @@ Output format:
   "chapter_briefs": [
     {{
       "chapter_id": "ch_001",
-      "title": "Return to the capital",
+      "title": "归京",
       "chapter_type": "opening",
       "active_lines": ["line_case"],
       "active_twists": ["twist_01"],
-      "summary": "Hero wants X, faces limit Y, and advances indirectly through Z.",
+      "summary": "主角想达成 X，却被 Y 限制，只能借助 Z 间接推进。",
       "incoming_hook": "",
-      "opening_hook": "A current order, blow, object, or crisis starts the chapter.",
-      "chapter_object": "A concrete object, order, document, clue, task, ritual, or place that carries conflict.",
-      "reader_emotion": "State who readers should side with, pity, hate, doubt, and anticipate.",
-      "reader_belief": "Maintain the intended false belief when needed.",
-      "allowed_info": ["visible fact 1"],
-      "allowed_clues": ["question-raising clue 1"],
-      "forbidden": ["concrete forbidden item"],
-      "world_limit": "Concrete world or power boundary that blocks direct success.",
-      "character_focus": ["Hero", "Heroine"],
-      "character_shift": "Concrete role or state shift within the chapter.",
-      "relationship_reprice": "Which relationship gets re-priced and how.",
-      "emotional_turn": "How emotion flips across the chapter.",
+      "opening_hook": "以当下命令、打击、物件或危机直接启动章节。",
+      "chapter_object": "承载冲突的具体物件、命令、文书、线索、任务、仪式或地点。",
+      "reader_emotion": "明确读者该站谁、怜惜谁、厌恶谁、怀疑谁、期待什么。",
+      "reader_belief": "在需要时维持既定误判。",
+      "allowed_info": ["本章可明写的信息 1"],
+      "allowed_clues": ["本章只可暗示、不能解释的线索 1"],
+      "forbidden": ["本章禁止写出的具体内容"],
+      "world_limit": "阻止角色直接成功的世界或权力边界。",
+      "character_focus": ["男主", "女主"],
+      "character_shift": "本章内发生的具体身份、立场或状态变化。",
+      "relationship_reprice": "哪段关系被重新定价，以及如何被重新定价。",
+      "emotional_turn": "本章情绪如何完成翻转。",
       "backstory_trigger": "",
       "scene_engine": "opening_pressure",
-      "small_payoff": "A small reward, not a major truth.",
-      "ending_pull": "A new question, obstacle, cost, arrival, or choice.",
-      "info_budget": "new roles<=3; new clues=1"
+      "small_payoff": "一个小兑现，但不能是真相大揭示。",
+      "ending_pull": "章节结尾抛出新的问题、障碍、代价、到来或选择。",
+      "info_budget": "新角色<=3；新线索=1"
     }}
   ]
 }}
@@ -54,3 +56,5 @@ Rules:
 7. chapter_object must have real plot function.
 8. scene_engine must be one of: opening_pressure, disruptor_arrival, drunken_truth, private_to_public_interruption, earned_flashback, investigation_pressure, court_pressure, relationship_collision, clue_reversal, aftermath_choice.
 9. Early chapters must not explain hidden motives, wash characters white early, fully replay the old case, or drop core hard proof.
+10. All descriptive Chinese text must be Simplified Chinese, concise, and directly usable.
+11. Do not artificially limit the total number of chapter_briefs. Generate as many chapter briefs as the story actually needs.

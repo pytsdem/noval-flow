@@ -1,0 +1,17 @@
+{
+  "skill_id": "prose_improvement",
+  "tools": [
+    "review_prose_quality",
+    "rewrite_by_plan",
+    "final_polish"
+  ],
+  "triggers": [
+    "review_prose_quality_failed"
+  ],
+  "success_condition": {
+    "prose_score_gte": 7,
+    "tension_score_gte": 7,
+    "exposition_score_lte": 4
+  },
+  "max_iterations": 2
+}

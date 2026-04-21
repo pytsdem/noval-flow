@@ -1,0 +1,15 @@
+{
+  "skill_id": "base_style",
+  "tools": [
+    "review_prose_quality",
+    "rewrite_by_plan",
+    "final_polish"
+  ],
+  "triggers": [
+    "always"
+  ],
+  "success_condition": {
+    "style_consistent": true
+  },
+  "max_iterations": 3
+}

@@ -1,0 +1,25 @@
+Review reveal leakage. Output JSON only.
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Active twists JSON]
+{active_twists_json}
+
+[Chapter text]
+{chapter_text}
+
+Output format:
+{{
+  "passed": false,
+  "level": "critical",
+  "issues": ["Example issue"],
+  "rewrite_guidance": "Example rewrite guidance"
+}}
+
+Check:
+1. Early exposure of hidden twist truth.
+2. Early absolution or pity framing for hidden-character behavior.
+3. Forbidden POV entry.
+4. Allowed clues explained too far.
+5. reader_belief or reader_alignment broken.

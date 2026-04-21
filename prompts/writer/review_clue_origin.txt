@@ -1,0 +1,25 @@
+Review clue origin. Output JSON only.
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Chapter text]
+{chapter_text}
+
+Output format:
+{{
+  "passed": false,
+  "level": "high",
+  "issues": ["Example issue"],
+  "rewrite_guidance": "Example rewrite guidance"
+}}
+
+Check each meaningful clue, object, witness, record, or testimony for:
+1. source
+2. holder
+3. timing
+4. surface relevance
+5. current dramatic function
+6. fit with allowed_clues
+7. forbidden violation
+8. double-duty function

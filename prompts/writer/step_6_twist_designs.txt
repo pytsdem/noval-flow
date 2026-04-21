@@ -1,4 +1,6 @@
 Generate step 6 twist_designs only. Output valid JSON only. No markdown, no prose.
+All natural-language string content in the JSON must be Simplified Chinese.
+Keep only ids and schema-required enum-like values in their required format.
 
 User request:
 {research_query}
@@ -14,17 +16,17 @@ Output format:
   "twist_designs": [
     {{
       "twist_id": "twist_01",
-      "title": "True reason behind the betrayal",
-      "false_belief": "Readers should believe the heroine betrayed the hero for power or self-protection.",
-      "truth": "Author-only truth kept hidden before reveal_at.",
-      "reader_alignment": "Before reveal, readers should stand with the hero and misjudge the heroine.",
+      "title": "背叛表象背后的真正原因",
+      "false_belief": "读者应当相信女主是为了权势或自保而背叛男主。",
+      "truth": "只供作者掌握、在 reveal_at 之前必须隐藏的真相。",
+      "reader_alignment": "在正式揭示前，读者应站在男主一侧并误判女主。",
       "seed_from": "ch_001",
       "reveal_at": "ch_018",
-      "allowed_clues": ["brief pause", "avoid old object"],
-      "forbidden_reveals": ["do not say she saved him", "do not say she had hidden pain"],
-      "pov_lock": "No access to true inner thought before reveal.",
-      "related_characters": ["Hero", "Heroine"],
-      "payoff_effect": "The relationship is re-priced after reveal."
+      "allowed_clues": ["短暂停顿", "回避旧物"],
+      "forbidden_reveals": ["不要写她是在救他", "不要写她藏着难言之痛"],
+      "pov_lock": "在揭示前不得进入真实内心。",
+      "related_characters": ["男主", "女主"],
+      "payoff_effect": "真相揭示后，这段关系会被重新定价。"
     }}
   ]
 }}
@@ -38,3 +40,5 @@ Rules:
 6. Use chapter ids like ch_001.
 7. truth is author-only truth and must not be written directly before reveal_at.
 8. Keep strings compact.
+9. All descriptive Chinese text must be Simplified Chinese, concise, and directly usable.
+10. Do not artificially limit the total number of twist_designs. Generate as many twists as the story actually needs.

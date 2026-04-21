@@ -1,0 +1,38 @@
+Review chapter continuity. Output JSON only.
+
+[Completed chapter memory]
+{completed_chapter_memory_text}
+
+{step_4_event_timeline_text}
+
+{step_5_character_milestones_text}
+
+{step_8_chapter_brief_text}
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Objective timeline anchors]
+{timeline_anchor_facts_text}
+
+[Relationship state]
+{relationship_state_text}
+
+[Chapter text]
+{chapter_text}
+
+Output format:
+{{
+  "passed": false,
+  "level": "high",
+  "issues": ["Example issue"],
+  "rewrite_guidance": "Example rewrite guidance"
+}}
+
+Check:
+1. continuity with previous actual chapter summaries
+2. time, place, and relationship carry-over
+3. contradiction with reader_now_knows or reader_now_believes
+4. contradiction with established character state or relationship_state
+5. accidental reset of consequences from completed chapters
+6. exact durations, ages, time gaps, and other factual quantities must match the fixed information package; if the package does not support an exact number, flag invented precision.

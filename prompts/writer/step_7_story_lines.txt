@@ -1,4 +1,6 @@
 Generate step 7 story_lines only. Output valid JSON only. No markdown, no prose.
+All natural-language string content in the JSON must be Simplified Chinese.
+Keep only ids and schema-required enum values in their required format.
 
 User request:
 {research_query}
@@ -14,16 +16,16 @@ Output format:
   "story_lines": [
     {{
       "line_id": "line_case",
-      "name": "Old case revenge line",
-      "line_type": "mystery / power",
+      "name": "旧案复仇线",
+      "line_type": "谜案 / 权谋",
       "visibility": "visible",
-      "core_question": "How the hero approaches the truth without openly reopening the imperial case",
-      "reader_hook_mode": "pressure from rules and status",
-      "start_state": "The hero returns with hatred but cannot openly challenge the verdict.",
-      "midpoint_shift": "Midway clues force readers to re-price a key relationship.",
-      "end_state": "The case truth is re-evaluated.",
+      "core_question": "男主如何在不能公开翻案的前提下逼近旧案真相",
+      "reader_hook_mode": "规则与身份压迫带来的悬念",
+      "start_state": "男主带着恨意归来，却不能公开挑战既定判决。",
+      "midpoint_shift": "中段线索会迫使读者重新判断一段关键关系。",
+      "end_state": "旧案真相被重新审视。",
       "carried_twists": ["twist_01"],
-      "line_rules": ["Only indirect investigation early."]
+      "line_rules": ["前期只能绕路调查。"]
     }}
   ]
 }}
@@ -34,5 +36,7 @@ Rules:
 3. Include line_id, name, line_type, visibility, core_question, reader_hook_mode, start_state, midpoint_shift, end_state, carried_twists, line_rules.
 4. carried_twists must reference existing twist ids.
 5. Do not copy twist truth into story lines.
-6. line_rules max 4.
+6. line_rules max 10.
 7. Do not output chapter briefs or scenes.
+8. All descriptive Chinese text must be Simplified Chinese, concise, and directly usable.
+9. Do not artificially limit the total number of story_lines. Generate as many story lines as the story actually needs.

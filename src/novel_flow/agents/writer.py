@@ -8,6 +8,7 @@ from uuid import uuid4
 
 from novel_flow import events as ev
 from novel_flow.agents.base import BaseAgent
+from novel_flow.agents.writing_chapter_agent import WritingChapterAgent
 from novel_flow.llm.base import LLMClient, LLMMessage
 from novel_flow.models.schemas import (
     ActualChapterSummary,
@@ -36,6 +37,8 @@ from novel_flow.models.schemas import (
 from novel_flow.prompting.templates import PromptLibrary
 from novel_flow.services.chapter_context import ChapterContextAssembler
 from novel_flow.services.character_context import CharacterContextBuilder
+from novel_flow.services.context_coverage import WriterContextCoverageValidator
+from novel_flow.services.context_sanitization_task import ContextSanitizationTask
 from novel_flow.services.patcher import PatchExecutor
 from novel_flow.services.relationship_state import RelationshipStateBuilder
 from novel_flow.utils.json_generation import safe_json_generate
@@ -55,6 +58,10 @@ class WriterAgent(BaseAgent):
         self.llm_client = llm_client
         self.patch_executor = patch_executor
         self.prompt_library = prompt_library or PromptLibrary()
+        self.context_sanitizer = ContextSanitizationTask(
+            llm_client=self.llm_client,
+            prompt_library=self.prompt_library,
+        )
 
     def create_book(self, blueprint: BookBlueprint, source_query: str, style_request: str = "") -> BookDocument:
         ev.emit("agent_start", agent="WriterAgent", title=f"Initialize book shell: {blueprint.premise.title}")
@@ -93,98 +100,28 @@ class WriterAgent(BaseAgent):
         if next_index >= len(chapter_briefs):
             raise ValueError("没有可继续生成的章节。")
         chapter_brief = chapter_briefs[next_index]
-        writer_context = self._writer_context_for_chapter(book, chapter_brief.chapter_id)
+        writer_context = self._writer_context_for_chapter(book, chapter_brief.chapter_id, strict_for_chapter_loop=True)
         actual_summaries = self._actual_summaries_from_book(book)
-        scene_plan = self._make_scene_plan(writer_context=writer_context, chapter_brief=chapter_brief)
-
-        chapter_parts: list[str] = []
-        chapter_scenes: list[Scene] = []
-        previous_scene_tail = ""
-        scene_reports: list[dict[str, Any]] = []
-
-        for scene_card in scene_plan.scenes:
-            scene_character_context = CharacterContextBuilder.build(
-                character_cards=book.characters,
-                chapter_brief=chapter_brief,
-                current_chapter_id=chapter_brief.chapter_id,
-                active_twists=writer_context.active_twists,
-                forbidden=chapter_brief.forbidden,
-                scene_card=scene_card,
-                completed_chapter_memory_text=writer_context.completed_chapter_memory_text,
-            )
-            relationship_state = RelationshipStateBuilder.build(
-                completed_chapter_memory_text=writer_context.completed_chapter_memory_text,
-                chapter_brief=chapter_brief,
-                scene_card=scene_card,
-                actual_summaries=actual_summaries,
-            )
-            draft = self._write_scene_draft(
-                writer_context=writer_context,
-                scene_card=scene_card,
-                scene_character_context_text=scene_character_context,
-                relationship_state_text=relationship_state,
-                previous_scene_tail=previous_scene_tail,
-                current_chapter_draft_tail=self._tail_text("\n\n".join(chapter_parts), max_chars=1200),
-            )
-            polished = self._polish_scene(draft_text=draft, writer_context=writer_context, scene_card=scene_card)
-            reports = self._run_scene_critics(
-                text=polished,
-                writer_context=writer_context,
-                chapter_brief=chapter_brief,
-                scene_card=scene_card,
-            )
-            if self._has_critical_issue(reports):
-                polished = self._rewrite_scene(
-                    original_text=polished,
-                    rewrite_guidance=self._merge_rewrite_guidance(reports),
-                    writer_context=writer_context,
-                    scene_card=scene_card,
-                )
-            chapter_parts.append(polished)
-            previous_scene_tail = self._tail_text(polished, max_chars=1200)
-            chapter_scenes.append(self._scene_from_text(scene_card=scene_card, text=polished))
-            scene_reports.append({"scene_id": scene_card.scene_id, "reports": reports})
-
-        chapter_text = self._chapter_final_polish(
-            chapter_text="\n\n".join(self._scene_text(scene) for scene in chapter_scenes),
-            writer_context=writer_context,
+        chapter_agent = WritingChapterAgent(
+            llm_client=self.llm_client,
+            prompt_library=self.prompt_library,
         )
-        engine_report = self._check_chapter_engine(
-            chapter_text=chapter_text,
-            writer_context=writer_context,
+        execution = chapter_agent.write_chapter(
             chapter_brief=chapter_brief,
-        )
-        if self._engine_requires_rewrite(engine_report) and chapter_scenes:
-            target_index = 0 if chapter_brief.chapter_type == "opening" else len(chapter_scenes) - 1
-            chapter_scenes[target_index] = self._scene_from_text(
-                scene_card=scene_plan.scenes[target_index],
-                text=self._rewrite_scene(
-                    original_text=self._scene_text(chapter_scenes[target_index]),
-                    rewrite_guidance=str(engine_report.get("rewrite_guidance") or self._join_issues(engine_report)),
-                    writer_context=writer_context,
-                    scene_card=scene_plan.scenes[target_index],
-                ),
-            )
-            chapter_text = self._chapter_final_polish(
-                chapter_text="\n\n".join(self._scene_text(scene) for scene in chapter_scenes),
-                writer_context=writer_context,
-            )
-            engine_report = self._check_chapter_engine(
-                chapter_text=chapter_text,
-                writer_context=writer_context,
-                chapter_brief=chapter_brief,
-            )
-
-        actual_summary = self._summarize_actual_chapter(
-            chapter_text=chapter_text,
-            chapter_brief=chapter_brief,
-            writer_context=writer_context,
+            premise=book.premise,
+            twist_designs=self._twists_from_book(book),
+            story_lines=self._story_lines_from_book(book),
+            character_cards=book.characters,
+            character_milestones=self._character_milestones_from_book(book),
+            worldbuilding=dict(book.metadata.get("story_blueprint", {}) or {}),
+            actual_chapter_summaries=actual_summaries,
+            prebuilt_context=writer_context,
         )
         chapter = Chapter(
             id=chapter_brief.chapter_id,
             title=chapter_brief.title,
             summary=chapter_brief.summary,
-            scenes=chapter_scenes,
+            scenes=[self._chapter_scene_from_text(chapter_id=chapter_brief.chapter_id, text=execution.chapter_text)],
         )
 
         updated_book = deepcopy(book)
@@ -195,26 +132,41 @@ class WriterAgent(BaseAgent):
         updated_book.metadata["next_chapter_index"] = next_index + 1
         updated_book.metadata["last_written_chapter_id"] = chapter_brief.chapter_id
         summary_items = [item.model_dump(mode="json") for item in actual_summaries]
-        summary_items.append(actual_summary.model_dump(mode="json"))
+        summary_items.append(execution.actual_chapter_summary.model_dump(mode="json"))
         updated_book.metadata["actual_chapter_summaries"] = summary_items
-        updated_book.metadata.setdefault("scene_plans", {})[chapter_brief.chapter_id] = scene_plan.model_dump(mode="json")
         updated_book.metadata.setdefault("writer_context_debug", {})[chapter_brief.chapter_id] = {
             "completed_chapter_memory_text": writer_context.completed_chapter_memory_text,
+            "step_1_story_foundation_text": writer_context.step_1_story_foundation_text,
+            "step_2_worldbuilding_text": writer_context.step_2_worldbuilding_text,
+            "step_3_character_packets_text": writer_context.step_3_character_packets_text,
+            "step_4_event_timeline_text": writer_context.step_4_event_timeline_text,
+            "step_5_character_milestones_text": writer_context.step_5_character_milestones_text,
+            "step_6_twists_text": writer_context.step_6_twists_text,
+            "step_7_story_lines_text": writer_context.step_7_story_lines_text,
+            "step_8_chapter_brief_text": writer_context.step_8_chapter_brief_text,
             "chapter_payload_text": writer_context.chapter_payload_text,
+            "timeline_anchor_facts_text": writer_context.timeline_anchor_facts_text,
             "relevant_world_rules_text": writer_context.relevant_world_rules_text,
+            "scene_character_context_text": writer_context.scene_character_context_text,
+            "relationship_state_text": writer_context.relationship_state_text,
             "style_card_text": writer_context.style_card_text,
         }
-        critic_report = self._aggregate_critic_report(
+        critic_report = self._aggregate_loop_critic_report(
             book_id=book.id,
             chapter_id=chapter_brief.chapter_id,
-            scene_reports=scene_reports,
-            engine_report=engine_report,
+            review_reports=execution.review_reports,
         )
         updated_book.metadata["latest_critic_report"] = critic_report.model_dump(mode="json")
         updated_book.metadata.setdefault("critic_reports", {})[chapter_brief.chapter_id] = {
-            "chapter_engine": engine_report,
-            "scene_reports": scene_reports,
+            "chapter_loop": execution.review_reports,
+            "final_judge": execution.final_judge,
             "aggregate": critic_report.model_dump(mode="json"),
+        }
+        updated_book.metadata.setdefault("writing_chapter_runs", {})[chapter_brief.chapter_id] = {
+            "actual_chapter_summary": execution.actual_chapter_summary.model_dump(mode="json"),
+            "stage_log": execution.stage_log,
+            "review_reports": execution.review_reports,
+            "final_judge": execution.final_judge,
         }
         updated_book.updated_at = datetime.now(timezone.utc)
         return updated_book, chapter
@@ -228,7 +180,7 @@ class WriterAgent(BaseAgent):
     ) -> BookDocument:
         del reference_pack
         block, chapter, _ = self._locate_block(book, block_id)
-        writer_context = self._writer_context_for_chapter(book, chapter.id)
+        writer_context = self._writer_context_for_chapter(book, chapter.id, sanitize_for_prose=False)
         replacement = self._rewrite_scene(
             original_text=block.text,
             rewrite_guidance=guidance,
@@ -256,7 +208,7 @@ class WriterAgent(BaseAgent):
     ) -> BookDocument:
         del reference_pack
         volume_index, chapter_index, chapter = self._locate_chapter(book, chapter_id)
-        writer_context = self._writer_context_for_chapter(book, chapter_id)
+        writer_context = self._writer_context_for_chapter(book, chapter_id, sanitize_for_prose=False)
         chapter_text = self._chapter_full_text(chapter)
         rewritten = self._generate_text(
             self._render_prompt(
@@ -291,7 +243,7 @@ class WriterAgent(BaseAgent):
     ) -> BookDocument:
         del reference_pack
         block, chapter, _ = self._locate_block(book, block_id)
-        writer_context = self._writer_context_for_chapter(book, chapter.id)
+        writer_context = self._writer_context_for_chapter(book, chapter.id, sanitize_for_prose=False)
         replacement = self._generate_text(
             self._render_prompt(
                 "writer/expand.txt",
@@ -337,18 +289,39 @@ class WriterAgent(BaseAgent):
             return AgentResult(agent_name=self.name, success=True, message="Expanded target block.", payload={"book": expanded_book.model_dump(mode="json")})
         raise ValueError(f"Unsupported writer mode: {mode}")
 
-    def _writer_context_for_chapter(self, book: BookDocument, chapter_id: str) -> WriterContext:
+    def _writer_context_for_chapter(
+        self,
+        book: BookDocument,
+        chapter_id: str,
+        *,
+        strict_for_chapter_loop: bool = False,
+        sanitize_for_prose: bool = True,
+    ) -> WriterContext:
         chapter_brief = next((item for item in self._chapter_briefs_from_book(book) if item.chapter_id == chapter_id), None)
         if chapter_brief is None:
             raise ValueError(UPGRADE_ERROR)
+        if strict_for_chapter_loop:
+            coverage_issues = WriterContextCoverageValidator.validate(
+                chapter_brief=chapter_brief,
+                premise=book.premise,
+                story_blueprint=dict(book.metadata.get("story_blueprint", {}) or {}),
+                character_cards=book.characters,
+                character_milestones=self._character_milestones_from_book(book),
+            )
+            if coverage_issues:
+                detail = "；".join(coverage_issues)
+                raise ValueError(f"{UPGRADE_ERROR} 缺失信息：{detail}")
         return ChapterContextAssembler.build(
             chapter_brief=chapter_brief,
+            premise=book.premise,
             twist_designs=self._twists_from_book(book),
             story_lines=self._story_lines_from_book(book),
             worldbuilding=dict(book.metadata.get("story_blueprint", {}) or {}),
             character_cards=book.characters,
+            character_milestones=self._character_milestones_from_book(book),
             actual_summaries=self._actual_summaries_from_book(book),
             current_chapter_id=chapter_id,
+            context_sanitizer=self.context_sanitizer if sanitize_for_prose else None,
         )
 
     def _make_scene_plan(self, *, writer_context: WriterContext, chapter_brief: ChapterBrief) -> ScenePlan:
@@ -540,6 +513,60 @@ class WriterAgent(BaseAgent):
         summary = f"共记录 {len(issues)} 条章节 critic 问题。" if issues else "本章 critic 未发现显著问题。"
         return CriticReport(report_id=f"critic_{uuid4().hex[:10]}", summary=summary, issues=issues)
 
+    def _aggregate_loop_critic_report(
+        self,
+        *,
+        book_id: str,
+        chapter_id: str,
+        review_reports: dict[str, Any],
+    ) -> CriticReport:
+        issues: list[IssueCard] = []
+        for tool_name, report in review_reports.items():
+            if tool_name == "review_prose_quality":
+                prose_score = int(report.get("prose_score") or 0)
+                tension_score = int(report.get("tension_score") or 0)
+                exposition_score = int(report.get("exposition_score") or 10)
+                if prose_score >= 7 and tension_score >= 7 and exposition_score <= 4:
+                    continue
+                evidence = (
+                    f"prose={prose_score}, tension={tension_score}, exposition={exposition_score}, "
+                    f"rewrite_needed={bool(report.get('rewrite_needed'))}"
+                )
+                issues.append(
+                    IssueCard(
+                        issue_id=f"issue_{uuid4().hex[:10]}",
+                        severity=IssueSeverity.HIGH if prose_score < 7 or tension_score < 7 or exposition_score > 4 else IssueSeverity.MEDIUM,
+                        title="Chapter prose quality",
+                        problem_type="prose_quality",
+                        location=IssueLocation(book_id=book_id, volume_id="vol_001", chapter_id=chapter_id, scene_id="", block_id=""),
+                        evidence=evidence,
+                        impact=evidence,
+                        recommendation=str(report.get("rewrite_guidance") or "Raise prose and tension while reducing exposition."),
+                        acceptance_criteria=[],
+                    )
+                )
+                continue
+
+            level = str(report.get("level") or "medium").lower()
+            if level not in {"low", "medium", "high", "critical"}:
+                level = "medium"
+            for issue in report.get("issues", []) or []:
+                issues.append(
+                    IssueCard(
+                        issue_id=f"issue_{uuid4().hex[:10]}",
+                        severity=IssueSeverity(level),
+                        title=tool_name,
+                        problem_type=tool_name,
+                        location=IssueLocation(book_id=book_id, volume_id="vol_001", chapter_id=chapter_id, scene_id="", block_id=""),
+                        evidence=str(issue),
+                        impact=str(issue),
+                        recommendation=str(report.get("rewrite_guidance") or "Revise according to review tool feedback."),
+                        acceptance_criteria=[],
+                    )
+                )
+        summary = f"共记录 {len(issues)} 条正文闭环问题。" if issues else "正文闭环审稿通过。"
+        return CriticReport(report_id=f"critic_{uuid4().hex[:10]}", summary=summary, issues=issues)
+
     @staticmethod
     def _has_critical_issue(reports: list[dict[str, Any]]) -> bool:
         for report in reports:
@@ -588,6 +615,11 @@ class WriterAgent(BaseAgent):
             return [StoryLine.model_validate(item) for item in story_blueprint.get("story_lines", [])]
         except Exception as exc:
             raise ValueError(UPGRADE_ERROR) from exc
+
+    @staticmethod
+    def _character_milestones_from_book(book: BookDocument) -> list[dict[str, Any]]:
+        items = book.metadata.get("character_milestones", []) or []
+        return [item for item in items if isinstance(item, dict)]
 
     @staticmethod
     def _actual_summaries_from_book(book: BookDocument) -> list[ActualChapterSummary]:
@@ -647,6 +679,19 @@ class WriterAgent(BaseAgent):
             summary=scene_card.exit_state,
             blocks=[
                 TextBlock(id=f"{scene_card.scene_id}.b{index:03d}", text=paragraph, purpose="paragraph")
+                for index, paragraph in enumerate(WriterAgent._split_paragraphs(text), start=1)
+            ],
+        )
+
+    @staticmethod
+    def _chapter_scene_from_text(*, chapter_id: str, text: str) -> Scene:
+        scene_id = f"{chapter_id}.sc_001"
+        return Scene(
+            id=scene_id,
+            title="Chapter body",
+            summary="Full chapter prose",
+            blocks=[
+                TextBlock(id=f"{scene_id}.b{index:03d}", text=paragraph, purpose="paragraph")
                 for index, paragraph in enumerate(WriterAgent._split_paragraphs(text), start=1)
             ],
         )

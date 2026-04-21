@@ -1,0 +1,61 @@
+Rewrite the full chapter according to the revision plan. Output chapter prose only in Simplified Chinese.
+
+[Completed chapter memory]
+{completed_chapter_memory_text}
+
+{step_1_story_foundation_text}
+
+{step_2_worldbuilding_text}
+
+{step_3_character_packets_text}
+
+{step_4_event_timeline_text}
+
+{step_5_character_milestones_text}
+
+{step_6_twists_text}
+
+{step_7_story_lines_text}
+
+{step_8_chapter_brief_text}
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Objective timeline anchors]
+{timeline_anchor_facts_text}
+
+[Relevant world rules]
+{relevant_world_rules_text}
+
+[Scene character context]
+{scene_character_context_text}
+
+[Relationship state]
+{relationship_state_text}
+
+[Style card]
+{style_card_text}
+
+[Current chapter draft]
+{chapter_text}
+
+[Current chapter draft tail]
+{current_chapter_draft_tail}
+
+[Previous scene tail]
+{previous_scene_tail}
+
+[Revision plan JSON]
+{revision_plan_json}
+
+Hard rules:
+1. Do not add new truth, person, clue, or setting.
+2. Do not break hard constraints.
+3. Do not change reader_belief.
+4. Do not explain allowed_clues.
+5. Keep continuity with completed chapter memory.
+6. Output prose only.
+7. The rewritten chapter prose must be natural Simplified Chinese and must not switch into English narration.
+8. Prefer rewriting through more believable behavior, more grounded scene detail, clearer emotional cause and effect, and less explanation.
+9. Do not make the prose sound mechanically "crafted"; preserve organic rhythm and human texture.

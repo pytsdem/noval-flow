@@ -1,0 +1,36 @@
+Review plot logic and authority limits. Output JSON only.
+
+{step_2_worldbuilding_text}
+
+{step_4_event_timeline_text}
+
+{step_6_twists_text}
+
+{step_7_story_lines_text}
+
+{step_8_chapter_brief_text}
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Relevant world rules]
+{relevant_world_rules_text}
+
+[Chapter text]
+{chapter_text}
+
+Output format:
+{{
+  "passed": false,
+  "level": "high",
+  "issues": ["Example issue"],
+  "rewrite_guidance": "Example rewrite guidance"
+}}
+
+Check:
+1. world_limit violations
+2. power overreach
+3. institutions helping too easily
+4. key information gained for free
+5. etiquette, hierarchy, or procedural logic mismatch
+6. cause and effect gaps inside the chapter

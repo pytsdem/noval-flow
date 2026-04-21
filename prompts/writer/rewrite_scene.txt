@@ -1,4 +1,4 @@
-Rewrite the scene according to critic guidance. Output rewritten prose only.
+Rewrite the scene according to critic guidance. Output rewritten prose only in Simplified Chinese.
 
 [Chapter payload]
 {chapter_payload_text}
@@ -24,3 +24,4 @@ Rules:
 6. If a clue appears without source, add a legal source or delete it.
 7. If power overreach appears, replace it with indirect advancement.
 8. Keep scene exit_state intact.
+9. The rewritten prose must be natural Simplified Chinese and must not switch into English narration.

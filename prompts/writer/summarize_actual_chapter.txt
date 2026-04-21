@@ -1,4 +1,6 @@
 Summarize what actually happened in the chapter. Output JSON only.
+All natural-language string content in the JSON must be Simplified Chinese.
+Keep only ids and schema-required field names in their required format.
 
 [Chapter text]
 {chapter_text}
@@ -18,14 +20,14 @@ Summarize what actually happened in the chapter. Output JSON only.
 Output format:
 {{
   "chapter_id": "ch_001",
-  "actual_events": ["event 1"],
-  "reader_now_knows": ["fact 1"],
-  "reader_now_believes": ["belief 1"],
-  "open_questions": ["question 1"],
-  "character_states": ["state 1"],
-  "relationship_state": ["relationship state 1"],
-  "seeded_clues": ["clue 1"],
-  "locked_truths": ["truth still locked 1"]
+  "actual_events": ["事件 1"],
+  "reader_now_knows": ["读者已知信息 1"],
+  "reader_now_believes": ["读者当前误判或判断 1"],
+  "open_questions": ["未解问题 1"],
+  "character_states": ["角色状态 1"],
+  "relationship_state": ["关系状态 1"],
+  "seeded_clues": ["已埋线索 1"],
+  "locked_truths": ["仍被锁住的真相 1"]
 }}
 
 Rules:
@@ -34,3 +36,4 @@ Rules:
 3. seeded_clues are present but unexplained clues.
 4. locked_truths are major truths still hidden.
 5. reader_now_believes should preserve current reader misreading when relevant.
+6. All descriptive Chinese text must be Simplified Chinese, concise, and directly usable.
