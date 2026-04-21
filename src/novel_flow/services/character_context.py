@@ -82,16 +82,26 @@ class CharacterContextBuilder:
                 part for part in [card.personality, card.behavior_pattern] if str(part).strip()
             ) or "Restrained under pressure."
             surface_goal = card.initial_state or card.motivation or visible_goal
+            visible_goal = card.initial_state or visible_goal
+            internal_goal = card.motivation or card.arc or surface_goal
+            is_hidden = card.name in hidden_character_names
+            behavior_rules = [
+                rule
+                for rule in [card.behavior_pattern, f"Stay inside chapter limit: {chapter_brief.world_limit}"]
+                if str(rule).strip()
+            ]
             lines.extend(
                 [
                     f"{card.name}",
                     f"- Public identity: {identity}",
-                    f"- Surface goal in this chapter: {surface_goal}",
+                    f"- Current goal (internal use): {'Hidden motive exists; keep it abstract for prose layer.' if is_hidden else internal_goal}",
+                    f"- Output visible goal: {visible_goal}",
                     f"- Action lane: move around '{visible_goal}' without breaking '{chapter_brief.world_limit}'.",
                     f"- Personality execution: {personality}",
+                    f"- Behavioral rules: {'; '.join(behavior_rules)}",
                 ]
             )
-            if card.name in hidden_character_names:
+            if is_hidden:
                 lines.append("- Hidden truth lock: do not state unrevealed motive, sacrifice, or final arc destination.")
                 lines.append("- Allowed outer signs: pause, deflection, restraint, changed address, avoidance, incomplete answer.")
             else:

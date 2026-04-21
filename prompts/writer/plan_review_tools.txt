@@ -15,6 +15,12 @@ Choose which review tools to call next. Output JSON only.
 [Chapter payload]
 {chapter_payload_text}
 
+[Chapter visible context]
+{chapter_visible_context_text}
+
+[Time anchor]
+{time_anchor_text}
+
 [Existing review reports]
 {review_summary}
 
@@ -25,9 +31,11 @@ Rules:
 1. Skills are instruction packages, not tools.
 2. Choose only tool names from the allowed list.
 3. Prefer broad review on the first pass; focus on blocking issues on later passes.
-4. Always include review_instruction_compliance and review_continuity somewhere in the plan.
-5. Include review_hook_appearance when opening hook, ending pull, appearance timing, or exact time-gap wording may be at risk.
-6. Return 5 to 8 tool calls.
+4. Always include review_instruction_compliance, review_continuity, and review_time_consistency somewhere in the plan.
+5. Include review_humanity when the prose may be emotionally abstract, too clean, or lacking concrete life cost.
+6. Include review_character_integrity when behavior, deduction, or scene decisions may feel author-forced.
+7. Include review_hook_appearance when opening hook, ending pull, appearance timing, or exact time-gap wording may be at risk.
+8. Return 6 to 10 tool calls.
 
 Output format:
 {{

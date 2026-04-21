@@ -1,0 +1,39 @@
+Review whether the chapter engine promised by the brief is actually functioning in scene. Output JSON only.
+
+[Step 8 chapter brief]
+{step_8_chapter_brief_text}
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Chapter text]
+{chapter_text}
+
+Output format:
+{{
+  "passed": false,
+  "level": "medium",
+  "issues": [
+    {{
+      "category": "chapter_engine",
+      "severity": "medium",
+      "evidence": "章节目标只是被口头提到，没有真正推动场景和关系变化。",
+      "reason": "chapter_object 没有承担剧情推进与关系重估的双重功能。",
+      "fix": "让 chapter_object 同时推动外部动作和人物关系变化。"
+    }}
+  ],
+  "rewrite_guidance": "让 chapter_object 至少承担两个功能，并把 emotional_turn 和 relationship_reprice 写实。",
+  "evidence_focus": [
+    "opening_hook 是否落地",
+    "chapter_object 是否双重功能",
+    "relationship_reprice 是否发生",
+    "emotional_turn 是否可读"
+  ]
+}}
+
+Check:
+1. Confirm whether the written opening actually delivers the promised opening hook.
+2. Confirm whether chapter_object does at least two jobs: plot movement plus relationship or emotional pressure or clue-value shift.
+3. Confirm whether relationship_reprice happens on the page rather than in summary language.
+4. Confirm whether the emotional turn is readable from behavior, dialogue, or scene consequence.
+5. If there is backstory_trigger, confirm whether it arises naturally from present action rather than inserted explanation.

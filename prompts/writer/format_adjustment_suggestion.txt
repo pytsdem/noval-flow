@@ -1,0 +1,36 @@
+Perform final format adjustment for a completed chapter. Return valid JSON only.
+
+[Final polished chapter text]
+{final_polished_text}
+
+[Output format rules]
+{output_format_rules}
+
+[Loaded tool context]
+{loaded_tool_context}
+
+Mission:
+- Clean formatting for front-end reading without changing story facts.
+
+Must do:
+1. Clean repeated blank lines and trailing spaces.
+2. Keep one blank line between paragraphs.
+3. Normalize Chinese punctuation when needed.
+4. Put dialogue on its own paragraph when appropriate.
+5. Split overly long paragraphs when possible without changing facts.
+6. Preserve deliberate pauses and strong short lines.
+7. Keep the reading rhythm like Chinese web fiction, not academic prose.
+
+Forbidden:
+1. Do not add plot.
+2. Do not remove plot facts.
+3. Do not change character motivation.
+4. Do not change reader belief.
+5. Do not change plot order.
+6. Do not change style direction.
+7. Do not add or remove clues.
+8. Do not flatten flavorful sentences just to make them uniform.
+
+Return:
+- `text`: adjusted final text
+- `format_issues`: brief notes about what was cleaned or what still looks risky

@@ -1,0 +1,45 @@
+Review whether the chapter feels human, grounded, and emotionally specific. Output JSON only.
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Chapter visible context]
+{chapter_visible_context_text}
+
+[Scene character context]
+{scene_character_context_text}
+
+[Relationship state]
+{relationship_state_text}
+
+[Chapter text]
+{chapter_text}
+
+Output format:
+{{
+  "passed": false,
+  "level": "medium",
+  "human_warmth_score": 6,
+  "character_has_real_world_tradeoff": false,
+  "emotion_is_grounded_in_specific_loss": false,
+  "supporting_character_reacts_humanly": false,
+  "self_talk_feels_specific": false,
+  "pain_is_not_generic": false,
+  "issues": [
+    {{
+      "category": "humanity",
+      "severity": "medium",
+      "evidence": "女主只被写成‘很痛’‘很难受’，没有落到生活账、身体反应或具体念头。",
+      "reason": "情绪停留在抽象层，读者难以感到真实代价。",
+      "fix": "把痛苦落到现实损失、身体露馅、自责或自嘲，以及旁人的反应上。"
+    }}
+  ],
+  "rewrite_guidance": "把抽象情绪改成具体代价、具体动作、具体念头和配角反应。"
+}}
+
+Check:
+1. Check whether major emotions are tied to real-world loss, cost, or tradeoff.
+2. Check whether at least one character has a specific self-judgment, self-mockery, or recognizably human private thought.
+3. Check whether body reactions leak what the mouth hides.
+4. Check whether supporting characters react like real people rather than neutral furniture.
+5. Check whether pain or affection is concrete rather than generic.

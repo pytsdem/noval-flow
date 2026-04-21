@@ -1,0 +1,15 @@
+{
+  "skill_id": "character_integrity",
+  "tools": [
+    "review_character_integrity",
+    "review_plot_logic",
+    "rewrite_by_plan"
+  ],
+  "triggers": [
+    "review_character_integrity_failed"
+  ],
+  "success_condition": {
+    "character_integrity_passed": true
+  },
+  "max_iterations": 2
+}

@@ -80,6 +80,10 @@ class ChapterContextAssembler:
         )
         worldbuilding = worldbuilding or {}
         context = WriterContext(
+            chapter_id=chapter_brief.chapter_id,
+            selection_summary_text="[Context selection]\n尚未生成 selection 摘要。",
+            time_anchor_text="[Time anchor]\n尚未生成时间锚点。",
+            chapter_visible_context_text="[Chapter visible context]\n尚未生成章节可见上下文。",
             completed_chapter_memory_text=completed_chapter_memory_text,
             step_1_story_foundation_text=cls._step_1_story_foundation_text(
                 chapter_brief=chapter_brief,

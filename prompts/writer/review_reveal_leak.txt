@@ -1,4 +1,7 @@
-Review reveal leakage. Output JSON only.
+Review reveal safety. Output JSON only.
+
+[Chapter visible context]
+{chapter_visible_context_text}
 
 [Chapter payload]
 {chapter_payload_text}
@@ -12,14 +15,20 @@ Review reveal leakage. Output JSON only.
 Output format:
 {{
   "passed": false,
-  "level": "critical",
-  "issues": ["Example issue"],
-  "rewrite_guidance": "Example rewrite guidance"
+  "level": "high",
+  "issues": [
+    {{
+      "category": "reveal_leak",
+      "severity": "high",
+      "evidence": "正文已经把女主异常和真实动机直接连上了。",
+      "reason": "读者不只是看见症状，而是被提前引到正确答案。",
+      "fix": "保留异常、停顿、避答等症状，但切断与真实动机的直接解释链。"
+    }}
+  ],
+  "rewrite_guidance": "把真相改回症状、压力、误读或可疑之处，不要写成答案。"
 }}
 
 Check:
-1. Early exposure of hidden twist truth.
-2. Early absolution or pity framing for hidden-character behavior.
-3. Forbidden POV entry.
-4. Allowed clues explained too far.
-5. reader_belief or reader_alignment broken.
+1. Check whether the prose directly reveals any hidden twist truth.
+2. Check whether the prose strongly collapses the intended reader misread too early even without explicit explanation.
+3. Check whether allowed clues are still functioning as clues rather than solved answers.

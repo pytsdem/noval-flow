@@ -25,13 +25,15 @@ class ContextSanitizationTask(LLMChapterTool):
         active_twists: list[TwistDesign],
     ) -> WriterContext:
         hidden_twists = [twist for twist in active_twists if _is_hidden(current_chapter_id, twist)]
-        if not hidden_twists:
-            return writer_context
 
         prompt = self.render_prompt(
             "writer/context_sanitization.txt",
             current_chapter_id=current_chapter_id,
             active_twists_json=json.dumps([item.model_dump(mode="json") for item in hidden_twists], ensure_ascii=False, indent=2),
+            step_2_worldbuilding_text=writer_context.step_2_worldbuilding_text,
+            step_4_event_timeline_text=writer_context.step_4_event_timeline_text,
+            chapter_payload_text=writer_context.chapter_payload_text,
+            timeline_anchor_facts_text=writer_context.timeline_anchor_facts_text,
             completed_chapter_memory_text=writer_context.completed_chapter_memory_text,
             step_1_story_foundation_text=writer_context.step_1_story_foundation_text,
             step_3_character_packets_text=writer_context.step_3_character_packets_text,
@@ -49,6 +51,10 @@ class ContextSanitizationTask(LLMChapterTool):
         )
         return replace(
             writer_context,
+            chapter_id=payload["chapter_id"],
+            selection_summary_text=payload["selection_summary_text"],
+            time_anchor_text=payload["time_anchor_text"],
+            chapter_visible_context_text=payload["chapter_visible_context_text"],
             completed_chapter_memory_text=payload["completed_chapter_memory_text"],
             step_1_story_foundation_text=payload["step_1_story_foundation_text"],
             step_3_character_packets_text=payload["step_3_character_packets_text"],

@@ -259,6 +259,10 @@ class SchemaAndContextTests(unittest.TestCase):
         llm = SequenceLLM(
             [
                 """{
+  "chapter_id": "ch_001",
+  "selection_summary_text": "[Selection]\\n- Relevant roles: Hero, Heroine\\n- Relevant twists: twist_01\\n- Relevant lines: line_case\\n- Current time anchor: return day, morning",
+  "time_anchor_text": "[Time anchor]\\n- Absolute: return day, morning\\n- Relative to previous chapter: opening chapter\\n- Must not conflict: keep travel fatigue and return pressure visible.",
+  "chapter_visible_context_text": "[Chapter visible context]\\n- Reader should know: he is back under pressure.\\n- Reader should believe: she betrayed him.\\n- Reader should not know: her true motive.\\n- Allowed clues: pause, avoid object.",
   "completed_chapter_memory_text": "[Completed chapter memory]\\nNo completed chapter summaries yet.",
   "step_1_story_foundation_text": "[Step 1 story foundation]\\n\\nTitle: Return\\nHigh concept: Preserve the surface conflict, pressure source, and reader misread without stating unrevealed truth.",
   "step_3_character_packets_text": "[Scene character context]\\n\\nHero\\n- Public identity: returned heir / general\\n- Surface goal in this chapter: He returns under pressure.",
@@ -322,6 +326,10 @@ class SchemaAndContextTests(unittest.TestCase):
         llm = SequenceLLM(
             [
                 """{
+  "chapter_id": "ch_001",
+  "selection_summary_text": "[Selection]\\n- Relevant roles: Hero, Heroine\\n- Relevant twists: twist_01\\n- Relevant lines: line_case\\n- Current time anchor: return day, morning",
+  "time_anchor_text": "[Time anchor]\\n- Absolute: return day, morning\\n- Relative to previous chapter: opening chapter\\n- Must not conflict: keep travel fatigue and return pressure visible.",
+  "chapter_visible_context_text": "[Chapter visible context]\\n- Reader should know: he is back under pressure.\\n- Reader should believe: she betrayed him.\\n- Reader should not know: her true motive.\\n- Allowed clues: pause, avoid object.",
   "completed_chapter_memory_text": "[Completed chapter memory]\\nNo completed chapter summaries yet.",
   "step_1_story_foundation_text": "sanitized step1",
   "step_3_character_packets_text": "sanitized step3",

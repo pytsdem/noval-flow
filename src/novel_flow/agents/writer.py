@@ -17,6 +17,7 @@ from novel_flow.models.schemas import (
     BookDocument,
     Chapter,
     ChapterBrief,
+    ContentBlock,
     CriticReport,
     IssueCard,
     IssueLocation,
@@ -93,7 +94,14 @@ class WriterAgent(BaseAgent):
             updated_at=now,
         )
 
-    def write_next_chapter(self, book: BookDocument, reference_pack: str = "暂无额外参考资料。") -> tuple[BookDocument, Chapter]:
+    def write_next_chapter(
+        self,
+        book: BookDocument,
+        reference_pack: str = "暂无额外参考资料。",
+        *,
+        runtime_store: Any | None = None,
+        run_id: str | None = None,
+    ) -> tuple[BookDocument, Chapter]:
         del reference_pack
         chapter_briefs = self._chapter_briefs_from_book(book)
         next_index = int(book.metadata.get("next_chapter_index", 0))
@@ -102,6 +110,19 @@ class WriterAgent(BaseAgent):
         chapter_brief = chapter_briefs[next_index]
         writer_context = self._writer_context_for_chapter(book, chapter_brief.chapter_id, strict_for_chapter_loop=True)
         actual_summaries = self._actual_summaries_from_book(book)
+        def _persist_committed_block(block: ContentBlock) -> None:
+            if runtime_store is None or not run_id:
+                return
+            now_text = datetime.now(timezone.utc).isoformat()
+            runtime_store.save_chapter_block(
+                run_id=run_id,
+                book_id=book.id,
+                chapter_title=chapter_brief.title,
+                block=block,
+                created_at=now_text,
+                updated_at=now_text,
+            )
+
         chapter_agent = WritingChapterAgent(
             llm_client=self.llm_client,
             prompt_library=self.prompt_library,
@@ -116,12 +137,17 @@ class WriterAgent(BaseAgent):
             worldbuilding=dict(book.metadata.get("story_blueprint", {}) or {}),
             actual_chapter_summaries=actual_summaries,
             prebuilt_context=writer_context,
+            on_block_committed=_persist_committed_block,
         )
         chapter = Chapter(
             id=chapter_brief.chapter_id,
             title=chapter_brief.title,
             summary=chapter_brief.summary,
-            scenes=[self._chapter_scene_from_text(chapter_id=chapter_brief.chapter_id, text=execution.chapter_text)],
+            scenes=[self._chapter_scene_from_content_blocks(chapter_id=chapter_brief.chapter_id, blocks=execution.content_blocks)],
+            content_blocks=execution.content_blocks,
+            final_text=execution.chapter_text,
+            final_version=1,
+            is_finalized=True,
         )
 
         updated_book = deepcopy(book)
@@ -163,6 +189,10 @@ class WriterAgent(BaseAgent):
             "aggregate": critic_report.model_dump(mode="json"),
         }
         updated_book.metadata.setdefault("writing_chapter_runs", {})[chapter_brief.chapter_id] = {
+            "content_blocks": [item.model_dump(mode="json") for item in execution.content_blocks],
+            "final_text": execution.chapter_text,
+            "final_version": chapter.final_version,
+            "is_finalized": chapter.is_finalized,
             "actual_chapter_summary": execution.actual_chapter_summary.model_dump(mode="json"),
             "stage_log": execution.stage_log,
             "review_reports": execution.review_reports,
@@ -225,7 +255,11 @@ class WriterAgent(BaseAgent):
             id=chapter.id,
             title=chapter.title,
             summary=chapter.summary,
-            scenes=[self._scene_from_text(scene_card=self._fallback_scene_card(f"{chapter.id}.sc_001"), text=rewritten)],
+            scenes=chapter.scenes,
+            content_blocks=chapter.content_blocks,
+            final_text=rewritten,
+            final_version=max(int(chapter.final_version), 0) + 1,
+            is_finalized=True,
         )
         updated_book.updated_at = datetime.now(timezone.utc)
         return updated_book
@@ -697,6 +731,38 @@ class WriterAgent(BaseAgent):
         )
 
     @staticmethod
+    def _chapter_scene_from_content_blocks(*, chapter_id: str, blocks: list[ContentBlock]) -> Scene:
+        scene_id = f"{chapter_id}.sc_001"
+        scene_blocks = [
+            TextBlock(
+                id=block.block_id,
+                text=block.text,
+                purpose=block.purpose,
+                metadata={
+                    "chapter_id": block.chapter_id,
+                    "block_index": block.block_index,
+                    "characters": list(block.characters),
+                    "active_lines": list(block.active_lines),
+                    "active_twists": list(block.active_twists),
+                    "scene_goal": block.scene_goal,
+                    "must_reveal": list(block.must_reveal),
+                    "must_hide": list(block.must_hide),
+                    "emotional_tone": block.emotional_tone,
+                    "end_state": block.end_state,
+                    "status": block.status,
+                    "version": block.version,
+                },
+            )
+            for block in blocks
+        ]
+        return Scene(
+            id=scene_id,
+            title="Chapter content blocks",
+            summary="Committed content blocks",
+            blocks=scene_blocks,
+        )
+
+    @staticmethod
     def _scene_text(scene: Scene) -> str:
         return "\n\n".join(block.text for block in scene.blocks if str(block.text or "").strip())
 
@@ -736,6 +802,14 @@ class WriterAgent(BaseAgent):
 
     @staticmethod
     def _chapter_full_text(chapter: Chapter) -> str:
+        if chapter.is_finalized and str(chapter.final_text or "").strip():
+            return str(chapter.final_text or "").strip()
+        if chapter.content_blocks:
+            return "\n\n".join(
+                str(block.text or "").strip()
+                for block in chapter.content_blocks
+                if str(block.text or "").strip()
+            ).strip()
         return "\n\n".join(
             text
             for text in (WriterAgent._scene_text(scene) for scene in chapter.scenes)

@@ -252,6 +252,53 @@ class ActualChapterSummary(StrictBaseModel):
     relationship_state: list[str] = Field(default_factory=list)
     seeded_clues: list[str] = Field(default_factory=list, max_length=8)
     locked_truths: list[str] = Field(default_factory=list, max_length=8)
+    time_state: dict[str, str] = Field(default_factory=dict)
+
+
+class ContentBlock(StrictBaseModel):
+    block_id: str
+    chapter_id: str
+    block_index: int = Field(ge=1)
+    purpose: str
+    characters: list[str] = Field(default_factory=list)
+    active_lines: list[str] = Field(default_factory=list)
+    active_twists: list[str] = Field(default_factory=list)
+    scene_goal: str = ""
+    must_reveal: list[str] = Field(default_factory=list)
+    must_hide: list[str] = Field(default_factory=list)
+    emotional_tone: str = ""
+    end_state: str
+    text: str = ""
+    status: Literal["draft", "committed", "replaced"] = "draft"
+    version: int = Field(default=1, ge=1)
+
+    @field_validator("block_id")
+    @classmethod
+    def validate_block_id(cls, value: str) -> str:
+        if ".b" not in value or ".sc_" not in value or not value.startswith("ch_"):
+            raise ValueError("Block id must look like ch_001.sc_001.b001")
+        return value
+
+
+class ContentBlockPlanPayload(StrictBaseModel):
+    blocks: list[ContentBlock] = Field(default_factory=list, min_length=1, max_length=8)
+
+
+class BlockQuickReviewPayload(StrictBaseModel):
+    passed: bool = False
+    purpose_completed: bool = False
+    leak_risk: Literal["low", "medium", "high"] = "medium"
+    time_conflict: bool = False
+    too_outline_like: bool = False
+    paragraph_warnings: list[str] = Field(default_factory=list)
+    issues: list[str] = Field(default_factory=list)
+    rewrite_needed: bool = False
+    rewrite_guidance: str = ""
+
+
+class FormatAdjustmentPayload(StrictBaseModel):
+    text: str
+    format_issues: list[str] = Field(default_factory=list)
 
 
 class BinaryReviewPayload(StrictBaseModel):
@@ -261,6 +308,22 @@ class BinaryReviewPayload(StrictBaseModel):
     rewrite_guidance: str = ""
 
 
+class EvidenceIssue(StrictBaseModel):
+    category: str
+    severity: Literal["low", "medium", "high", "critical"] = "medium"
+    evidence: str
+    reason: str
+    fix: str
+
+
+class EvidenceReviewPayload(StrictBaseModel):
+    passed: bool = False
+    level: Literal["low", "medium", "high", "critical"] = "medium"
+    issues: list[EvidenceIssue] = Field(default_factory=list)
+    rewrite_guidance: str = ""
+    evidence_focus: list[str] = Field(default_factory=list)
+
+
 class ProseQualityPayload(StrictBaseModel):
     prose_score: int = Field(default=0, ge=0, le=10)
     tension_score: int = Field(default=0, ge=0, le=10)
@@ -268,7 +331,25 @@ class ProseQualityPayload(StrictBaseModel):
     exposition_score: int = Field(default=10, ge=0, le=10)
     cliche_score: int = Field(default=10, ge=0, le=10)
     double_duty_detail_score: int = Field(default=0, ge=0, le=10)
+    scene_texture_score: int = Field(default=0, ge=0, le=10)
+    emotion_externalization_score: int = Field(default=0, ge=0, le=10)
+    dialogue_subtext_score: int = Field(default=0, ge=0, le=10)
+    human_warmth_score: int = Field(default=0, ge=0, le=10)
     rewrite_needed: bool = False
+    rewrite_guidance: str = ""
+    evidence_notes: list[str] = Field(default_factory=list)
+
+
+class HumanityReviewPayload(StrictBaseModel):
+    passed: bool = False
+    level: Literal["low", "medium", "high", "critical"] = "medium"
+    human_warmth_score: int = Field(default=0, ge=0, le=10)
+    character_has_real_world_tradeoff: bool = False
+    emotion_is_grounded_in_specific_loss: bool = False
+    supporting_character_reacts_humanly: bool = False
+    self_talk_feels_specific: bool = False
+    pain_is_not_generic: bool = False
+    issues: list[EvidenceIssue] = Field(default_factory=list)
     rewrite_guidance: str = ""
 
 
@@ -278,10 +359,14 @@ class ToolCallSpec(StrictBaseModel):
 
 
 class ToolPlanPayload(StrictBaseModel):
-    tool_calls: list[ToolCallSpec] = Field(default_factory=list, max_length=8)
+    tool_calls: list[ToolCallSpec] = Field(default_factory=list, max_length=10)
 
 
 class ContextSanitizationPayload(StrictBaseModel):
+    chapter_id: str
+    selection_summary_text: str
+    time_anchor_text: str
+    chapter_visible_context_text: str
     completed_chapter_memory_text: str
     step_1_story_foundation_text: str
     step_3_character_packets_text: str
@@ -300,6 +385,15 @@ class RevisionPlan(StrictBaseModel):
     keep: list[str] = Field(default_factory=list)
     hard_constraints: list[str] = Field(default_factory=list)
     triggered_skills: list[str] = Field(default_factory=list)
+    evidence_focus: list[str] = Field(default_factory=list)
+
+
+class DynamicInstructionPayload(StrictBaseModel):
+    focus: list[str] = Field(default_factory=list)
+    skills_to_emphasize: list[str] = Field(default_factory=list)
+    must_fix: list[str] = Field(default_factory=list)
+    tone_adjustment: str = ""
+    scene_strategy: str = ""
 
 
 class FinalJudgeResult(StrictBaseModel):
@@ -310,10 +404,12 @@ class FinalJudgeResult(StrictBaseModel):
 
 class ChapterExecutionResult(StrictBaseModel):
     chapter_text: str
+    content_blocks: list[ContentBlock] = Field(default_factory=list)
     actual_chapter_summary: ActualChapterSummary
     stage_log: list[dict[str, Any]] = Field(default_factory=list)
     review_reports: dict[str, Any] = Field(default_factory=dict)
     final_judge: dict[str, Any] = Field(default_factory=dict)
+    requires_human_review: bool = False
 
 
 class TwistDesignsPayload(StrictBaseModel):
@@ -334,6 +430,10 @@ class ScenePlanPayload(StrictBaseModel):
 
 @dataclass
 class WriterContext:
+    chapter_id: str
+    selection_summary_text: str
+    time_anchor_text: str
+    chapter_visible_context_text: str
     completed_chapter_memory_text: str
     step_1_story_foundation_text: str
     step_2_worldbuilding_text: str
@@ -388,6 +488,10 @@ class Chapter(BaseModel):
     title: str
     summary: str
     scenes: list[Scene] = Field(default_factory=list)
+    content_blocks: list[ContentBlock] = Field(default_factory=list)
+    final_text: str = ""
+    final_version: int = Field(default=0, ge=0)
+    is_finalized: bool = False
 
 
 class Volume(BaseModel):

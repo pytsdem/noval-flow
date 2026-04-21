@@ -22,3 +22,9 @@ Rules:
 10. Strengthen immersion through selective sensory detail, believable action, and emotionally true response.
 11. Preserve useful concrete details such as props, injuries, labor traces, etiquette, and forms of address only when they genuinely serve the scene.
 12. Let the ending create forward pull in the most natural way for this chapter, without forcing the same hook pattern every time.
+13. Keep front-end reading comfortable:
+    - One paragraph should usually stay around 30 to 120 Chinese characters.
+    - Strong emotion, action, and dialogue paragraphs may be shorter.
+    - Paragraphs over 180 Chinese characters should usually be split.
+    - Dialogue should usually stand alone as its own paragraph.
+    - Break explanatory material into shorter action + reaction + explanation beats when possible.

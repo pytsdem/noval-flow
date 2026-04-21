@@ -1,0 +1,958 @@
+2026-04-21 23:59:44,932 | INFO | novel_flow.cli | Novel Flow console started at http://127.0.0.1:8765/
+2026-04-22 00:00:27,755 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+# 《归京》（ch_001）写作执行指南
+## 一、章节核心任务
+萧湛携边地军功归京受封，因皇权严密监控与嫡子-继母的礼法束缚，无法公开翻查旧案，只能借南川王府家宴的礼法仪式，向继母苏蘅发起复仇式施压；同时埋下旧案悬念，维持读者对苏蘅“夺权背叛”的既定认知。
+
+## 二、读者锚点要求
+1. **情绪导向**：站萧湛一侧，怜惜他多年流放的隐忍与仇恨，厌恶苏蘅的冷漠疏离，期待他的复仇动作，因细微线索对苏蘅的背叛动机产生隐约怀疑，但仍坚信核心真相——苏蘅为扶持亲儿萧宁夺权，揭发卫朔并背叛萧湛。
+2. **认知边界**：仅知晓“萧湛因卫朔‘叛主’案被流放，如今携军功归京；苏蘅执掌王府内务，名声不佳；皇帝对萧湛既拉拢又提防”，不得触及任何禁忌真相。
+
+## 三、人物行动指南
+### 1. 萧湛（核心视角）
+- **显性目标**：借礼法羞辱苏蘅，宣泄旧怨，试探旧案突破口。
+- **行为规则**：用最体面的礼法将人逼到墙角（如刻意要求苏蘅按最高规格行母礼、当众提及当年册封前的礼制细节暗示旧案），恨意中藏着不易察觉的复杂（如瞥到苏蘅衣袖下旧军报时的短暂停顿），但绝不流露眷恋；时刻警惕皇权监控，绝不公开提及翻案。
+- **性格落地**：外冷内韧，偏执隐忍，将复仇欲包装成“守礼”，对苏蘅的态度是“恨到极致却无法彻底割裂”。
+
+### 2. 苏蘅（禁忌视角）
+- **显性目标**：维持主母体面，应对萧湛的挑衅，避免事态失控影响王府与自身安全。
+- **行为规则**：刻意避开萧湛的目光，衣袖下露出旧军报边角（无需解释），对萧宁保持严苛（符合allowed clues）；绝不回应萧湛的挑衅，只以“按例行事”的冷漠话术应对；家宴散后单独递上写有“卫朔”的密信，全程面无表情，绝不流露真实情绪。
+- **性格落地**：端方克制，以“冷漠算计”为伪装，所有行为都围绕“规避风险、维持秩序”展开，绝不暴露真实动机。
+
+### 3. 萧弈（皇权视角）
+- **显性目标**：试探萧湛与苏蘅的关系，维持皇权对宗室的掌控，将萧湛视为“可用亦可弃”的工具。
+- **行为规则**：朝堂上破格封赏萧湛，暗中安排内侍监控其动向；借传旨命萧湛回王府拜见苏蘅，坐观两人对峙，评估萧湛的可控性。
+
+### 4. 谢端谨（门阀视角）
+- **显性目标**：绑定萧湛与谢氏的利益，确保门阀在北伐叙事中的地位。
+- **行为规则**：表面维持舅甥情深，实则暗示萧湛需倚仗谢氏的朝堂资源，话语中露出“扶持萧湛是为家族利益”的底色。
+
+### 5. 萧宁（对照视角）
+- **显性目标**：在母亲与兄长的夹缝中求存，渴望母亲认可。
+- **行为规则**：家宴上局促不安，既畏惧萧湛又嫉妒他的光芒；对苏蘅的严苛感到委屈，却不敢反抗。
+
+## 四、剧情节点拆解（贴合opening_pressure场景引擎）
+1. **开场反差**：萧湛在朝堂领完皇帝的破格封赏，内侍突然传旨命他即刻回南川王府拜见继母苏蘅——荣耀高光瞬间跌入冰冷对峙的预期，情绪从扬到抑。
+2. **回忆触发**：萧湛踏入王府大门，看到廊下挂着当年他离京时的旧灯笼，触发对旧案流放的痛苦回忆（仅写情绪：心口发紧、指节攥白，不提及真相细节）。
+3. **家宴施压**：萧湛按最严苛的礼法要求苏蘅（如要求她亲自为自己布菜、提及“当年册封前的家礼规矩”），当众让她难堪；满座宾客噤声，苏蘅始终面无表情，只以“按例”回应。
+4. **小高潮**：萧湛盯着苏蘅，一字一句问“母亲当年守的规矩，如今还认吗？”，恨意中闪过一丝不易察觉的复杂；苏蘅避开他的目光，垂眸道“自然认”。
+5. **结尾悬念**：家宴散后，苏蘅单独递给萧湛一封封口的密信，信上只写了“卫朔”两个字，转身便走，留下萧湛攥着信的手青筋暴起。
+
+## 五、线索与禁忌清单
+### 允许出现的线索（无需解释）
+- 苏蘅刻意避开萧湛的目光
+- 苏蘅衣袖下露出旧军报的边角
+- 萧湛看向苏蘅时，恨意里藏着一丝难以察觉的复杂
+- 萧宁在宴上的局促与嫉妒
+- 谢端谨对萧湛的暗示性话语
+
+### 绝对禁忌内容
+- 禁止写出苏蘅救萧湛的真相
+- 禁止提及卫朔主动牺牲的细节
+- 禁止解释苏蘅的真实动机
+- 禁止揭露萧渊死因的秘密
+- 禁止暴露柳鸢的真实身份
+- 禁止让苏蘅流露“担心萧湛”的情绪
+- 禁止让萧湛明确说出“眷恋苏蘅”的想法
+
+## 六、关系推进要求
+1. **萧湛-苏蘅**：从疏离转为公开敌对，母子关系彻底破裂，沦为仇人，张力拉满。
+2. **萧湛-萧弈**：从名义叔侄转为权力博弈对手，萧湛明确察觉到萧弈的“抬举-设枷”算计。
+3. **萧湛-谢端谨**：舅甥关系露出利益绑定的底色，萧湛明白谢氏的扶持并非无偿。
+4. **萧湛-萧宁**：萧宁的嫉妒与恐惧加剧，两人关系更趋紧张。
+2026-04-22 00:01:36,283 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "chapter_id": "ch_001",
+  "selection_summary_text": "萧湛携边地军功归京受封，因皇权监控与嫡子-继母礼法束缚，无法公开翻查旧案，借南川王府家宴向继母苏蘅发起复仇式施压，同时埋下旧案悬念，维持读者对苏蘅‘夺权背叛’的既定认知。",
+  "time_anchor_text": "萧湛携边地军功归京受封，即将前往南川王府拜见继母苏蘅之时",
+  "chapter_visible_context_text": "萧湛因卫朔‘叛主’案被流放多年，如今携军功归京受封；苏蘅执掌南川王府内务，名声不佳；皇帝对萧湛既拉拢又提防；朝堂封赏后，内侍传旨命萧湛即刻回王府拜见苏蘅，引发对峙预期。",
+  "completed_chapter_memory_text": "",
+  "step_1_story_foundation_text": "核心冲突为萧湛对继母苏蘅的复仇，源于旧案中苏蘅夺权背叛的既定认知；背景是皇权对宗室的严密监控，萧湛无法公开翻案；需引导读者站在萧湛一侧，怜惜其隐忍仇恨，厌恶苏蘅的冷漠，同时通过细微线索隐约怀疑苏蘅的背叛动机，但仍坚信核心真相；严格禁止触及苏蘅救萧湛、卫朔主动牺牲等禁忌内容。",
+  "step_3_character_packets_text": "萧湛（核心视角）：外冷内韧，偏执隐忍，将复仇欲包装成‘守礼’，借礼法施压苏蘅，恨意中藏复杂情绪，警惕皇权监控；苏蘅（禁忌视角）：端方克制，以冷漠算计为伪装，维持主母体面，应对挑衅，暗中留下旧军报、密信线索，绝不暴露真实动机；萧弈（皇权视角）：试探萧湛与苏蘅关系，维持皇权掌控，视萧湛为可用工具；谢端谨（门阀视角）：绑定萧湛与谢氏利益，暗示倚仗朝堂资源，暴露家族利益底色；萧宁（对照视角）：在母亲与兄长夹缝中求存，局促不安，畏惧嫉妒萧湛，不敢反抗苏蘅严苛。",
+  "step_5_character_milestones_text": "萧湛：完成朝堂受封，抵达王府触发回忆，家宴上按严苛礼法施压苏蘅，收到苏蘅递来的‘卫朔’密信；苏蘅：应对萧湛的挑衅，维持体面，家宴后递出密信；萧弈：破格封赏萧湛，安排内侍监控其动向；谢端谨：向萧湛暗示利益绑定，流露家族扶持的底色；萧宁：家宴上表现局促嫉妒，承受苏蘅严苛。",
+  "step_6_twists_text": "苏蘅衣袖下露出旧军报边角、家宴后递上写有‘卫朔’的密信、萧湛看向苏蘅时恨意中藏着难以察觉的复杂情绪，这些细微线索让读者隐约怀疑苏蘅的背叛动机，但仍坚信其夺权背叛的核心真相。",
+  "step_7_story_lines_text": "萧湛复仇线：借家宴礼法施压苏蘅，试探旧案突破口；皇权博弈线：萧湛与皇帝萧弈的权力拉扯，萧湛察觉皇帝的算计；门阀绑定线：萧湛与谢端谨的利益绑定，明白谢氏扶持的目的性；苏蘅隐藏线：以冷漠伪装掩盖真实动机，留下隐晦线索；萧宁生存线：在母亲与兄长的夹缝中求存，嫉妒畏惧萧湛。",
+  "step_8_chapter_brief_text": "1.开场反差：萧湛朝堂受封后，内侍传旨命其即刻回王府拜见苏蘅，情绪从荣耀跌入对峙预期；2.回忆触发：萧湛踏入王府，看到旧灯笼触发流放痛苦回忆；3.家宴施压：萧湛以严苛礼法要求苏蘅，当众使其难堪，苏蘅冷漠回应；4.小高潮：萧湛质问苏蘅是否认当年规矩，恨意中藏复杂，苏蘅避眼回应；5.结尾悬念：家宴散后，苏蘅递上‘卫朔’密信转身离开，萧湛攥信青筋暴起。",
+  "scene_character_context_text": "场景设定在南川王府家宴，萧湛刚受封归京，心怀旧怨与复仇欲；苏蘅执掌王府，维持体面应对挑衅；皇帝安排的内侍暗中监控；王府宾客在场见证对峙；谢端谨、萧宁等角色参与家宴，各怀心思。",
+  "relationship_state_text": "萧湛与苏蘅：从疏离转为公开敌对，母子关系彻底破裂，沦为仇人；萧湛与萧弈：从名义叔侄转为权力博弈对手，萧湛察觉皇帝的‘抬举-设枷’算计；萧湛与谢端谨：舅甥关系露出利益绑定底色，萧湛明白谢氏扶持并非无偿；萧湛与萧宁：萧宁的嫉妒与恐惧加剧，两人关系更趋紧张。"
+}
+2026-04-22 00:03:13,114 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+# 第一章 归京
+
+奉天殿的鎏金铜炉还在燃着沉水香，烟气裹着新封的爵位荣光，缠得萧湛后颈发紧。他刚接过皇帝萧弈亲手递来的镇北将军印，指尖的凉意还没褪尽，内侍总管李福就捧着明黄圣旨凑到跟前，声音尖细得像片淬了冰的薄纸：“陛下有旨，镇北将军萧湛即刻回南川王府，依礼制拜见主母苏蘅。”
+
+殿外的风卷着春寒撞在朱红门上，萧湛握着印绶的指节猛地收紧。他抬眼看向御座上的萧弈，那人穿着绣十二章纹的龙袍，嘴角噙着恰到好处的笑意，目光却像钉在他身上——是拉拢，也是试探，更是把他往那座埋着旧骨的王府里推。
+
+他躬身领旨，转身时听见身后朝臣的窃窃私语，夹杂着谢氏舅父谢端谨刻意压低的咳嗽。走出奉天殿，禁军仪仗早已候在阶下，明晃晃的戈矛映着他脸上未褪的风霜。五年边地生涯，他从被流放的罪臣熬成军功赫赫的将军，可脚下这条路，终究还是要走回起点。
+
+南川王府的朱漆大门虚掩着，门廊下挂着两盏褪色的羊角灯笼，灯面上的缠枝莲纹还是他当年亲手选的。五年前他被押离王府时，这两盏灯正被风吹得晃荡，卫朔被绑在廊下，血顺着靴筒滴在青石板上，染红了他刚刻好的木剑。
+
+萧湛的脚步顿了顿，喉结滚动了一下。廊下的老仆看见他，慌忙躬身行礼，声音里带着颤：“大……大公子回来了。”
+
+他没应，径直往里走。庭院里的海棠开得正盛，花瓣落在他的玄色战袍上，像细碎的血点。正厅里已经摆好了家宴，宾客大多是王府旧人和谢氏宗亲，看见他进来，纷纷起身行礼，目光里有敬畏，有好奇，还有些说不清道不明的打量。
+
+苏蘅坐在主位上，穿着石青色织金褙子，鬓角插着一支素银簪，指尖捏着茶盏的姿势端庄得像尊雕像。她看见他进来，只是微微颔首，声音平淡无波：“回来了就好，坐吧。”
+
+萧湛没动。他按最严苛的宗室礼制，撩袍跪地，磕了三个头，声音冷得像冰：“儿臣萧湛，拜见母亲。”
+
+满座的人都静了。谁都知道当年的旧事，谁都明白这声“母亲”里藏着刀。苏蘅的手指微微蜷了一下，茶盏里的水晃出几滴，落在她的衣袖上——萧湛瞥见那衣袖下露出一点泛黄的纸边，像是旧军报的封皮。
+
+“起来吧。”她的目光避开他，落在旁边坐立不安的萧宁身上，“阿宁，给你兄长布菜。”
+
+萧宁的脸涨得通红，拿起筷子的手直抖，夹了一块鹿肉放在萧湛碗里，头埋得低低的。萧湛瞥了他一眼，看见他腰间挂着的玉佩，是当年父亲给苏蘅的生辰礼，如今戴在这个异母弟弟身上。
+
+谢端谨适时开口打圆场：“阿湛刚立了大功，陛下破格封赏，真是我谢氏的荣光。往后朝堂上，舅父也好帮你周旋几分。”话里的意思很明白——谢氏的扶持不是无偿的，他得成为谢氏在军中的棋子。
+
+萧湛端起酒盏，一饮而尽。酒液烧得喉咙发疼，他看向苏蘅，声音不大，却足以让满座的人听见：“母亲执掌王府多年，规矩想必还和当年一样？”
+
+苏蘅终于抬眼看向他，眼神里没有波澜，像一潭深不见底的冰：“王府的规矩，自然是按祖宗定下的来。”
+
+“当年卫朔将军教我的规矩，母亲也还记得吗？”萧湛往前倾了倾身，目光死死盯着她，“他说，军人的命，要么死在沙场，要么死得明白。可他死的时候，连个像样的葬礼都没有。”
+
+满座的人都屏住了呼吸。苏蘅的指尖攥紧了茶盏，指节泛白，却依旧面不改色：“卫朔犯了谋逆大罪，按律当斩，何来像样的葬礼？”
+
+“谋逆？”萧湛笑了一声，笑声里带着刺骨的寒意，“母亲当年递上去的那封告发信，写得可真是字字确凿。只是不知母亲有没有想过，若卫朔真的谋逆，为何死的时候，连一句辩解的话都没有？”
+
+苏蘅避开他的目光，看向窗外的海棠：“朝廷自有定论，轮不到我一个内宅妇人置喙。”她的衣袖轻轻晃动，那片泛黄的纸边又露了出来，快得像错觉。
+
+萧湛盯着她的侧脸，恨意像藤蔓一样缠上心头，可不知为何，看见她鬓角的几缕白发，心里竟掠过一丝说不清道不明的复杂。他攥紧了拳头，指甲嵌进掌心，疼得让他清醒——眼前的女人，是害死卫朔、逼他流放五年的仇人。
+
+家宴不欢而散。宾客们纷纷告辞，谢端谨走时拍了拍他的肩，低声道：“朝堂水深，你得找个靠山。谢氏永远是你的后盾。”萧湛没应，看着他离去的背影，知道这所谓的后盾，不过是另一种束缚。
+
+萧宁跟在苏蘅身后，想说话又不敢，最后只嗫嚅着说了句：“兄长，母亲她……”
+
+“闭嘴。”苏蘅的声音冷得像冰，萧宁立刻闭了嘴，低着头快步走了。
+
+庭院里只剩下萧湛和苏蘅。风卷着海棠花瓣落在地上，苏蘅转过身，从袖中拿出一封封口的密信，递到他面前。信封上没有落款，只写了两个字——卫朔。
+
+萧湛的瞳孔猛地收缩，伸手去接，却被苏蘅避开。她的指尖碰到他的手背，冰凉得像雪，然后她把信放在旁边的石桌上，转身就走。
+
+“母亲就没什么想说的？”萧湛的声音在她身后响起。
+
+苏蘅的脚步顿了顿，却没回头，只留下一句：“信里有你要的东西。但记住，王府的规矩，不能破。”
+
+她的身影消失在回廊尽头，萧湛拿起石桌上的信，信封很硬，像是夹着什么东西。他攥着信，指节青筋暴起，指腹摩挲着那两个字——卫朔。风又起了，廊下的旧灯笼晃得厉害，五年前的血色又浮现在眼前。
+
+他知道，这场复仇才刚刚开始，而那封信里，藏着的可能是更深的阴谋。远处的墙角，一个穿着内侍服饰的人影一闪而过，萧湛的嘴角勾起一抹冷笑——萧弈的眼睛，果然一直都在。
+2026-04-22 00:04:17,262 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "tool_calls": [
+    {"tool_name": "review_instruction_compliance", "reason": "Verify adherence to all chapter brief constraints, including forbidden content, allowed info/clues, reader belief preservation (maintaining the false belief that苏蘅 betrayed萧湛 for萧宁), and info budget (introduction of谢端谨 and萧宁, one new clue of the密信)." },
+    {"tool_name": "review_prose_quality", "reason": "Assess if the prose aligns with the restrained historical-romance style, maintains limited POV focused on萧湛's perspective, preserves emotional pressurization, and avoids adding unnecessary facts or explaining subtext." },
+    {"tool_name": "review_time_consistency", "reason": "Confirm that all events in the chapter align with the time anchor (萧湛 immediately returning to南川王府 post朝堂封赏), ensuring no timeline discrepancies in the sequence of summons, arrival,家宴, and post-banquet interaction." },
+    {"tool_name": "review_continuity", "reason": "Check consistency with the chapter brief's elements, including the backstory trigger (old lantern triggering past memories), character shifts, relationship reprices, and connection between the opening hook and ending pull." },
+    {"tool_name": "review_character_integrity", "reason": "Validate that each character's actions align with their established traits, such as萧湛's mix of hatred and complex emotion,苏蘅's cold avoidance, and谢端谨's transactional overtures, ensuring no author-forced behavior." },
+    {"tool_name": "review_humanity", "reason": "Evaluate if the prose conveys concrete emotional costs (e.g.,萧湛's clenched fists causing physical pain,苏蘅's white knuckles and graying hair) to avoid abstract emotions, making characters' struggles tangible and relatable." },
+    {"tool_name": "review_hook_appearance", "reason": "Confirm the effective execution of the opening hook (immediate summons post封赏 building confrontation tension) and ending pull (the密信 with \"卫朔\" creating suspense), as well as appropriate timing of key elements like the hidden内侍's appearance." },
+    {"tool_name": "review_chapter_engine", "reason": "Assess if the chapter successfully implements the \"opening_pressure\" scene engine by building tension through皇权 surveillance,礼法 constraints, and the hostile confrontation between萧湛 and苏蘅." },
+    {"tool_name": "review_plot_logic", "reason": "Check the logical flow of events, including the rationale behind萧湛's strict礼法施压,苏蘅's decision to deliver the密信 after the confrontation, and the consistency of imperial monitoring with the allowed info of emperor's suspicion." },
+    {"tool_name": "review_reveal_leak", "reason": "Ensure no forbidden information is inadvertently revealed, such as hints of苏蘅's true motives or卫朔's主动 sacrifice, maintaining the required narrative secrecy." }
+  ]
+}
+2026-04-22 00:05:12,423 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "excellent",
+  "issues": [],
+  "rewrite_guidance": "无需要修改的内容，章节完全符合所有指令要求"
+}
+2026-04-22 00:05:32,938 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "medium",
+  "issues": [],
+  "rewrite_guidance": "无需要修改的内容，章节完全符合所有指令要求",
+  "evidence_focus": []
+}
+2026-04-22 00:05:47,414 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "perfect",
+  "issues": [],
+  "rewrite_guidance": "本章完全符合设定的连续性要求，所有关系状态、剧情节点、线索铺设均与给定框架高度匹配，无需修改，可直接推进后续剧情。"
+}
+2026-04-22 00:06:02,881 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "medium",
+  "issues": [],
+  "rewrite_guidance": "本章完全符合设定的连续性要求，所有关系状态、剧情节点、线索铺设均与给定框架高度匹配，无需修改，可直接推进后续剧情。",
+  "evidence_focus": []
+}
+2026-04-22 00:06:14,274 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "none",
+  "issues": [],
+  "rewrite_guidance": "章节时间线连贯，与既定历史事件的时间推进逻辑一致，无时间跳跃、状态冲突等问题，可保留当前时间叙事结构。",
+  "evidence_focus": [
+    "昼夜连续，从奉天殿白日封赏到王府家宴再到散宴后庭院对峙，时间过渡自然",
+    "人物身体状态延续，萧湛的风霜感、紧绷情绪贯穿始终，符合归京受封又直面仇人的情境",
+    "物件状态延续，廊下旧灯笼作为时间锚点物件，前后呼应且符合五年时间跨度的设定"
+  ]
+}
+2026-04-22 00:06:32,834 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "medium",
+  "issues": [],
+  "rewrite_guidance": "章节时间线连贯，与既定历史事件的时间推进逻辑一致，无时间跳跃、状态冲突等问题，可保留当前时间叙事结构。",
+  "evidence_focus": [
+    "昼夜连续，从奉天殿白日封赏到王府家宴再到散宴后庭院对峙，时间过渡自然",
+    "人物身体状态延续，萧湛的风霜感、紧绷情绪贯穿始终，符合归京受封又直面仇人的情境",
+    "物件状态延续，廊下旧灯笼作为时间锚点物件，前后呼应且符合五年时间跨度的设定"
+  ]
+}
+2026-04-22 00:06:42,874 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": false,
+  "level": "high",
+  "issues": [
+    {
+      "category": "character_integrity",
+      "severity": "high",
+      "evidence": "萧湛在皇权监控（内侍暗中在场）、需遵守“不得公开挑战皇权既定判决”规则的前提下，于公开家宴直接质问苏蘅当年告发卫朔的旧案，直指皇帝定论的“谋逆”罪名存疑。",
+      "reason": "该行为违背了他蛰伏五年、谨小慎微的性格，也突破了皇权设下的禁忌，且无足够触发点（如当场拿到实锤证据）支撑他冒此风险，属于作者为推进复仇线强行让角色越界。",
+      "fix": "将直接质问改为借礼法细节旁敲侧击（如提及卫朔当年教他的军中规矩，暗示旧案不公），或增加触发点（如宴上看到卫朔的旧物被随意处置，刺激他情绪失控但仍留有余地），同时需体现他刻意避开内侍监控的小动作。"
+    },
+    {
+      "category": "plot_force",
+      "severity": "high",
+      "evidence": "苏蘅在宴后主动递给萧湛写有“卫朔”的密信，违反了twist_01中“不要写她藏着密信”的禁止要求，且与读者当前需相信的“她为扶持萧宁夺权背叛萧湛”的设定矛盾。",
+      "reason": "从苏蘅的表象人设（冷漠、维护王府体面、为萧宁铺路）来看，她没有动机主动给萧湛旧案线索，此行为是作者为抛出线索强行推动，而非角色内部逻辑驱动。",
+      "fix": "将递密信改为萧湛偶然发现苏蘅遗落的密信碎片，或苏蘅通过第三方（如老仆）间接传递，且密信内容需更隐晦（如仅留卫朔的旧令牌碎片而非直接写名字），同时保持苏蘅的冷漠表象，不直接与萧湛对话提及密信。"
+    }
+  ],
+  "rewrite_guidance": "严格遵循各角色的行为规则（如萧湛不得公开挑战皇权、苏蘅需维持冷漠算计表象），所有关键行为需符合角色当前的处境、性格及已知信息，线索推进需通过角色的合理动作（如偶然发现、旁敲侧击）完成，避免作者直接操控角色抛出关键信息。"
+}
+2026-04-22 00:07:21,906 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "high",
+  "human_warmth_score": 9,
+  "character_has_real_world_tradeoff": true,
+  "emotion_is_grounded_in_specific_loss": true,
+  "supporting_character_reacts_humanly": true,
+  "self_talk_feels_specific": true,
+  "pain_is_not_generic": true,
+  "issues": [
+    {
+      "category": "humanity",
+      "severity": "minor",
+      "evidence": "萧宁的反应以‘手抖、脸涨红’为主，缺乏更贴合其娇养庶子身份的特质化动作，比如攥紧腰间的祖传玉佩、偷瞄苏蘅寻求庇护等，略显单薄。",
+      "reason": "配角的个性化反应不足，可进一步强化其恐惧与依赖的真实感。",
+      "fix": "添加萧宁攥紧父亲赠予苏蘅的玉佩、偷瞄苏蘅的慌乱眼神、指尖掐进掌心等细节，凸显其在萧湛压迫下的怯懦与对母亲的本能依赖。"
+    }
+  ],
+  "rewrite_guidance": "保留现有核心情感与细节，为萧宁补充贴合身份的个性化动作，进一步强化配角反应的真实感；可适当增加苏蘅鬓角白发被风吹动、指尖微颤等细微身体细节，让其冷漠表象下的情绪张力更隐晦但具体。"
+}
+2026-04-22 00:07:57,307 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "high",
+  "human_warmth_score": 9,
+  "character_has_real_world_tradeoff": true,
+  "emotion_is_grounded_in_specific_loss": true,
+  "supporting_character_reacts_humanly": true,
+  "self_talk_feels_specific": true,
+  "pain_is_not_generic": true,
+  "issues": [
+    {
+      "category": "humanity",
+      "severity": "low",
+      "evidence": "萧宁的反应以‘手抖、脸涨红’为主，缺乏更贴合其娇养庶子身份的特质化动作，比如攥紧腰间的祖传玉佩、偷瞄苏蘅寻求庇护等，略显单薄。",
+      "reason": "配角的个性化反应不足，可进一步强化其恐惧与依赖的真实感。",
+      "fix": "添加萧宁攥紧父亲赠予苏蘅的玉佩、偷瞄苏蘅的慌乱眼神、指尖掐进掌心等细节，凸显其在萧湛压迫下的怯懦与对母亲的本能依赖。"
+    }
+  ],
+  "rewrite_guidance": "保留现有核心情感与细节，为萧宁补充贴合身份的个性化动作，进一步强化配角反应的真实感；可适当增加苏蘅鬓角白发被风吹动、指尖微颤等细微身体细节，让其冷漠表象下的情绪张力更隐晦但具体。"
+}
+2026-04-22 00:08:10,736 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "prose_score": 8,
+  "tension_score": 9,
+  "subtext_score": 9,
+  "exposition_score": 2,
+  "cliche_score": 3,
+  "double_duty_detail_score": 9,
+  "scene_texture_score": 9,
+  "emotion_externalization_score": 9,
+  "dialogue_subtext_score": 9,
+  "human_warmth_score": 8,
+  "rewrite_needed": false,
+  "rewrite_guidance": "1. 将“恨意像藤蔓一样缠上心头”这类抽象俗套的情绪表达替换为身体感官化动作；2. 删除结尾直白点明“这场复仇才刚刚开始”的表述，以萧湛攥紧密信的力度、喉结滚动等细节替代，保持克制风格。",
+  "evidence_notes": [
+    "廊下的褪色羊角灯笼：兼具场景质感（王府未翻新的陈旧氛围）、回忆触发（五年前流放时的血色记忆）、关系伏笔（苏蘅未更换旧物的反常）三重功能，实现细节的多重效用。",
+    "\"恨意像藤蔓一样缠上心头\"属于俗套的抽象情绪表述，违背了“通过动作/感官外化情绪”的要求，削弱了文本的克制质感。",
+    "苏蘅衣袖下露出的旧军报纸边：作为allowed clue以萧湛的有限视角呈现，未过度解释，既符合reveal discipline，又暗藏人物秘密，强化了潜台词。"
+  ]
+}
+2026-04-22 00:08:53,150 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "high",
+  "issues": [],
+  "rewrite_guidance": "章节整体完全符合要求：开场钩子即时触发核心冲突，人物出场紧扣权力博弈与情绪张力，结尾悬念清晰指向后续行动方向，读者立场与预设信念也得到有效巩固。可微调开场细节进一步强化萧湛的隐忍恨意，例如在接旨时增加指尖摩挲旧伤的微动作，增强情绪代入感。",
+  "evidence_focus": [
+    "开场冲突的即时性与明确性",
+    "人物出场细节与压力/权力的绑定",
+    "结尾悬念的具体性与行动指向",
+    "读者预设信念的巩固效果"
+  ]
+}
+2026-04-22 00:10:40,214 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "high",
+  "issues": [],
+  "rewrite_guidance": "章节完整落地了brief所有核心要求，各要素自然融合，情绪张力与权谋线索平衡得当。若需进一步强化，可在符合twist规则的前提下，细化萧湛恨意中复杂情绪的微动作表现，或增加苏蘅冷漠表象下的隐晦细节暗示（如指尖的细微颤抖、目光的短暂停顿），进一步深化人物层次感。",
+  "evidence_focus": [
+    "opening_hook 完全落地：朝堂受封后即刻传旨回王府见苏蘅的情节，通过萧湛攥紧印绶、察觉萧弈试探的动作，精准呈现了从荣耀到对峙预期的情绪落差",
+    "chapter_object 承担双重功能：南川王府家宴礼法仪式既推动了萧湛借礼法发难、质问旧案的剧情推进，又通过严苛跪拜、当众诘问等动作，完成了萧湛与苏蘅、谢端谨等人物的关系施压与情感冲突升级",
+    "relationship_reprice 均在页面具象化：萧湛与苏蘅的母子关系通过冷硬跪拜、当众质问彻底破裂为仇人；萧弈与萧湛的叔侄关系通过御座试探、结尾内侍监视体现为权力博弈对手；谢端谨与萧湛的舅甥关系通过“谢氏后盾需利益绑定”的对话，露出利益底色",
+    "emotional_turn 可读且张力充足：从奉天殿受封的荣耀高光（鎏金铜炉、新封爵位），到踏入王府看到旧灯笼的痛苦回忆，再到家宴对峙的冰冷压抑，通过萧湛的动作（攥紧指节、指甲嵌进掌心）、场景细节（春寒、海棠如血点）、对话语气（冷得像冰），清晰呈现了情绪从扬到抑的转折",
+    "backstory_trigger 自然触发：萧湛看到王府廊下的旧灯笼，顺势回忆起五年前被流放、卫朔被绑的场景，完全由当前场景物品引发，无生硬插入"
+  ]
+}
+2026-04-22 00:11:11,834 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": false,
+  "level": "high",
+  "issues": [
+    {
+      "category": "plot_logic",
+      "severity": "high",
+      "evidence": "苏蘅主动递出与旧案核心相关的密信，与预设的“为扶持萧宁夺权、背叛萧湛”的表象人设矛盾，且违反禁忌内容中“不要写她藏着密信”的要求。",
+      "reason": "核心twist的维持逻辑被打破，角色行为失去表象合理性，直接暴露了不符合当前阶段的动机线索。",
+      "fix": "将密信的获取方式改为萧湛间接获得，如宴后发现苏蘅遗落在石桌上的密信，而非苏蘅主动递出；同时强化苏蘅的冷漠算计表象，比如她离开时因慌乱掉落信，或故意忽略遗落的信以误导监控，维持读者对其背叛者的认知。"
+    },
+    {
+      "category": "rule_constraint",
+      "severity": "high",
+      "evidence": "萧湛未通过line_01规定的“借军务、赈务之名绕路调查”或间接渠道，直接从苏蘅手中获取旧案核心线索，违反主线调查规则。",
+      "reason": "关键线索的获取跳过了场景推进的因果过程，属于作者直接发放结果，削弱了调查线的张力与合理性。",
+      "fix": "调整线索获取路径，比如萧弈在宴上留意到苏蘅衣袖下的旧军报边角，后续借王府整理边地军务档案的名义（绕路调查），找到与卫朔相关的碎片线索；密信可作为后续章节的伏笔，而非本章直接获取，或让密信是苏蘅为干扰皇权监控故意遗落的“诱饵”。"
+    },
+    {
+      "category": "character_shift",
+      "severity": "medium",
+      "evidence": "Character shift要求萧弈对萧湛的态度从拉拢转为警惕制衡，但本章仅体现拉拢（封赏）与提防（派内侍监控），未展现“制衡”的具体行为，角色转变不完整。",
+      "reason": "核心角色的转变未落地，无法支撑line_02的权力博弈主线。",
+      "fix": "补充萧弈制衡的细节，比如在封赏镇北将军的同时，任命萧宁为京畿卫副统领，或限制萧湛的兵权（如仅允许其调动边地旧部而非京畿禁军），明确体现拉拢与制衡并存的态度。"
+    }
+  ],
+  "rewrite_guidance": "1. 调整密信的获取逻辑，使其符合角色表象人设与主线调查规则，避免直接发放关键线索；2. 补充萧弈制衡的具体行为，完成角色转变的落地；3. 强化苏蘅的冷漠算计表象，维持读者对其背叛者的信念，不暴露真实动机线索。"
+}
+2026-04-22 00:12:11,162 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": false,
+  "level": "medium",
+  "issues": [
+    {
+      "category": "rule_violation",
+      "severity": "medium",
+      "evidence": "正文描述苏蘅“从袖中拿出一封封口的密信”，直接暗示她藏着密信，违反了twist_01中“不要写她藏着密信”的禁忌条款。",
+      "reason": "该细节触碰了twist设定的禁忌边界，可能让读者提前对苏蘅的行为产生超出预期的联想，干扰“苏蘅自私背叛”的虚假信念维持。",
+      "fix": "调整密信的呈现方式，例如改为苏蘅示意侍女将密信递上，或密信被预先放置在萧湛当年的旧居案头，避免直接体现苏蘅藏信的行为。"
+    }
+  ],
+  "rewrite_guidance": "严格遵循twist_01的禁忌条款，移除所有暗示苏蘅藏着密信的细节，保留密信作为旧案新线索的核心设定；同时强化苏蘅冷漠疏离的表象，维持读者对她“为夺权背叛萧湛”的既定认知。"
+}
+2026-04-22 00:12:49,382 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+# 第一章 归京
+
+奉天殿的鎏金铜炉燃着沉水香，烟气裹着新封的爵位荣光，缠得萧湛后颈发紧。他刚接过皇帝萧弈亲手递来的镇北将军印，指尖的凉意还没褪尽，内侍总管李福的尖细声音就跟着落下来：“陛下有旨，镇北将军萧湛即刻回南川王府，依礼制拜见主母苏蘅；另，擢升萧宁为京畿卫副统领，明日赴衙任职。”
+
+殿外的春寒卷着风撞在朱红门上，萧湛握着印绶的指节猛地收紧。御座上的萧弈穿着绣十二章纹的龙袍，笑意恰到好处，目光却像钉在他身上——破格封赏是拉拢，给萧宁实权是制衡，明晃晃把他往那座埋着旧骨的王府里推。他躬身领旨，转身时听见身后朝臣的窃窃私语，夹杂着舅父谢端谨刻意压低的咳嗽。
+
+走出奉天殿，禁军仪仗的戈矛映着他脸上的风霜。五年边地生涯，他从流放罪臣熬成军功赫赫的将军，可脚下这条路，终究要走回起点。
+
+南川王府的朱漆大门虚掩着，门廊下挂着两盏褪色的羊角灯笼，灯面的缠枝莲纹还是他当年亲手选的。五年前他被押离时，这两盏灯被风吹得晃荡，卫朔被绑在廊下，血顺着靴筒滴在青石板上，染红了他刚刻好的木剑。萧湛的脚步顿了顿，喉结滚动，眼角扫过廊下阴影里一闪而过的内侍衣角，终究没停，径直往里走。
+
+庭院里海棠开得正盛，花瓣落在玄色战袍上，像细碎的血点。正厅的家宴已摆好，宾客多是王府旧人和谢氏宗亲，看见他进来，纷纷起身行礼，目光里的敬畏与打量缠在一起。
+
+苏蘅坐在主位，石青色织金褙子衬得她脸色苍白，鬓角插着素银簪，指尖捏茶盏的姿势端庄得像尊雕像。她看见他，只微微颔首，声音平淡无波：“回来了就好，坐吧。”
+
+萧湛没动，按最严苛的宗室礼制撩袍跪地，磕了三个头，声音冷得像冰：“儿臣萧湛，拜见母亲。”
+
+满座静了一瞬。谁都知道当年的旧事，这声“母亲”里裹着刀。苏蘅的手指微微蜷了一下，茶盏里的水晃出几滴，落在衣袖上——萧湛瞥见那衣袖下露出一点泛黄的纸边，像是旧军报的封皮。
+
+“起来吧。”她的目光避开他，落在旁边的萧宁身上，“阿宁，给你兄长布菜。”
+
+萧宁的脸涨得通红，攥着腰间那枚父亲给苏蘅的生辰玉佩，指节泛白，指尖掐进掌心。他偷瞄了一眼苏蘅，拿起筷子的手抖得厉害，夹了块鹿肉放在萧湛碗里，头埋得低低的，桌下的腿还在轻轻颤。
+
+谢端谨适时开口打圆场：“阿湛刚立大功，陛下破格封赏，真是我谢氏的荣光。往后朝堂上，舅父也好帮你周旋几分。”话里的意思明明白白——谢氏的扶持不是无偿的，他得做军中的棋子。
+
+萧湛端起酒盏一饮而尽，酒液烧得喉咙发疼。他的目光扫过厅角，看见卫朔当年的佩剑被随意堆在杂物架上，用褪色的粗布盖着，剑鞘上的缠绳已经磨断。心口的怒意猛地翻涌，他却刻意压低声音，眼角扫过廊下的阴影，只问：“母亲执掌王府多年，府中祭礼的规矩，想必还和当年一样？”
+
+苏蘅终于抬眼看他，眼神像一潭深不见底的冰：“王府的规矩，自然按祖宗定下的来。”
+
+“当年卫朔将军教我，军人战死沙场，当入宗祠配享香火。”萧湛往前倾了倾身，声音刚好能让满座听见，却又不至于传到廊外，“不知府里的祭谱，还记不记得他的名字？”
+
+满座的人屏住了呼吸。苏蘅的指尖攥紧茶盏，指节泛白，却依旧面不改色：“卫朔犯了谋逆大罪，按律不得入祠，何来配享之说？”
+
+萧湛笑了一声，笑声里裹着寒意，却没再往下说——他看见廊下的内侍动了动，手里的记录笔顿了顿。他攥紧拳头，指甲嵌进掌心，疼得让他清醒：眼前的女人，是害死卫朔、逼他流放五年的仇人，而皇权的眼睛，正盯着他的一举一动。
+
+家宴不欢而散。宾客们纷纷告辞，谢端谨走时拍了拍他的肩，低声道：“朝堂水深，你得找个靠山。谢氏永远是你的后盾。”萧湛没应，看着他离去的背影，知道这所谓的后盾，不过是另一种束缚。
+
+萧宁跟在苏蘅身后，嗫嚅着想说什么，却被苏蘅一个冷眼神堵了回去，只能低着头快步走，攥着玉佩的手松了又紧。
+
+庭院里只剩下萧湛。风卷着海棠花瓣落在地上，他走到石桌旁，看见桌角遗落着一个信封——封蜡上印着一枚模糊的军徽，是卫朔当年麾下的印记，信封里硬邦邦的，像是夹着什么东西。他左右看了看，廊下的内侍已经消失，想必是跟着苏蘅走了。
+
+他拿起信封，指尖摩挲着封蜡上的军徽，指节青筋暴起。风又起了，廊下的旧灯笼晃得厉害，五年前的血色又浮现在眼前。远处的墙角，一个内侍的衣角一闪而过，萧湛的嘴角勾起一抹冷笑——萧弈的眼睛，果然一直都在。
+
+他把信封塞进怀里，转身走向自己当年的旧居。这场复仇才刚刚开始，而那枚遗落的信封里，藏着的可能是更深的陷阱，也可能是撕开旧案的第一道口子。
+2026-04-22 00:13:43,365 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "tool_calls": [
+    {"tool_name": "review_instruction_compliance", "reason": "确保所有修改内容严格符合章节 brief 的要求、禁忌条款及 active twist 规则，重点修正苏蘅主动递密信、萧湛公开质疑皇权定论等违规行为。"},
+    {"tool_name": "review_continuity", "reason": "验证修改后的人物行为、情节调整（如密信获取方式）及新增的萧弈制衡细节，与既定背景、人物状态保持连贯性。"},
+    {"tool_name": "review_time_consistency", "reason": "确认修改后的章节时间线仍连贯，人物状态、事件时序无矛盾冲突。"},
+    {"tool_name": "review_character_integrity", "reason": "检查是否修复了高严重度的作者强制驱动行为问题，确保萧湛的举动符合其蛰伏隐忍的性格与皇权约束，苏蘅的行为维持冷漠背叛的表象人设。"},
+    {"tool_name": "review_plot_logic", "reason": "验证修改内容修正了剧情逻辑漏洞，包括密信获取路径符合 line_01 调查规则、补充萧弈制衡细节完成角色转变、维持核心反转的虚假信念。"},
+    {"tool_name": "review_reveal_leak", "reason": "确保所有暗示苏蘅藏密信的细节已移除，修改后的内容未违反 twist_01 的禁忌披露条款，保留读者对苏蘅背叛者的既定认知。"},
+    {"tool_name": "review_humanity", "reason": "检查为萧宁补充的个性化动作（攥玉佩、偷瞄苏蘅）及苏蘅的细微情绪线索，是否增强了角色反应的真实感与人文温度。"},
+    {"tool_name": "review_prose_quality", "reason": "验证俗套情绪表达已替换为感官化动作，结尾直白表述已删除，符合克制的历史言情风格要求。"},
+    {"tool_name": "review_chapter_engine", "reason": "确认修改后的章节仍有效执行 opening_pressure 场景引擎，情绪转折、关系重构、核心情节要素均符合 brief 设定。"}
+  ]
+}
+2026-04-22 00:14:16,341 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": false,
+  "level": "medium",
+  "issues": [
+    {
+      "category": "instruction_violation",
+      "severity": "medium",
+      "evidence": "章节结尾未执行chapter brief及payload规定的ending pull，将「苏蘅单独递写有‘卫朔’的密信」改为「萧湛在石桌发现遗落的带有卫朔麾下军徽的信封」，同时偏离info budget中「新线索=1（密信）」的设定。",
+      "reason": "违反章节预设的悬念引导要求，改变了旧案线索的触发逻辑与来源。",
+      "fix": "删除遗落信封的相关内容，修改为家宴散后苏蘅单独找到萧湛，递给他一封封口的密信，信上仅写「卫朔」二字。"
+    }
+  ],
+  "rewrite_guidance": "仅修复ending pull与info budget的偏离问题，保留现有符合要求的场景、人物互动与线索呈现，不新增或删减其他内容。"
+}
+2026-04-22 00:14:56,027 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": false,
+  "level": "medium",
+  "issues": [
+    {
+      "category": "continuity",
+      "severity": "medium",
+      "evidence": "章节结尾的线索载体与既定设定不符：设定为家宴散后苏蘅单独递给萧湛写有‘卫朔’的密信，实际文本为萧湛在石桌发现遗落的、印着卫朔麾下军徽的信封，线索来源与内容均偏离预设目标。",
+      "reason": "违背了章节预设的ending pull要求，无法精准留下旧案新悬念，同时弱化了苏蘅与旧案的直接关联，削弱了读者对其背叛动机的怀疑张力，也不符合苏蘅需主动触发悬念的角色行为逻辑。",
+      "fix": "将结尾修改为：家宴散后，苏蘅单独拦下萧湛，递上一封封口的密信，信面仅写‘卫朔’二字；萧湛接过时瞥见她衣袖下露出的旧军报边角，刚要开口质问，苏蘅已转身离去，廊下阴影里内侍的衣角一闪而过。"
+    }
+  ],
+  "rewrite_guidance": "优先修复结尾线索的载体与来源，确保符合章节预设的ending pull要求，强化苏蘅与旧案的直接关联，维持读者对其背叛动机的怀疑，同时保留皇权监控的细节（内侍身影）以呼应权力博弈线，与前文萧湛察觉监控的情节形成呼应。"
+}
+2026-04-22 00:15:40,965 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "none",
+  "issues": [],
+  "rewrite_guidance": "",
+  "evidence_focus": []
+}
+2026-04-22 00:15:53,799 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "medium",
+  "issues": [],
+  "rewrite_guidance": "",
+  "evidence_focus": []
+}
+2026-04-22 00:15:59,865 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": false,
+  "level": "medium",
+  "issues": [
+    {
+      "category": "character_integrity",
+      "severity": "high",
+      "evidence": "萧湛在明知内侍监控、皇权提防的情况下，于公开家宴上直接质问卫朔入祠事宜，触及皇权定性的旧案核心。",
+      "reason": "该行为违背他隐忍多年的将领人设，也违反active story lines中「不得公开挑战皇权既定判决」的规则，仅靠看到旧佩剑、旧灯笼的情绪触发，不足以支撑他做出这种可能引火烧身的冒险举动，属于作者为推进冲突强行安排。",
+      "fix": "将公开质问改为旁敲侧击（如借提及边地旧部祭礼，隐晦暗示卫朔的功绩），或补充更强烈的触发点（如发现卫朔佩剑被污损，情绪失控下的试探但立刻收敛），同时强化他事后的警惕反应，符合其隐忍谨慎的特质。"
+    },
+    {
+      "category": "clue_placement",
+      "severity": "medium",
+      "evidence": "章节结尾以「遗落的信封」作为线索，偏离设定的ending pull（苏蘅单独递密信），且未交代放置者的合理动机；萧湛明知内侍仍在监控却直接将信封塞进怀里，行为缺乏警惕性。",
+      "reason": "遗落信封的方式属于作者强行投放线索，不符合苏蘅（若为放置者）在皇权监控下的行事逻辑，也不符合萧湛作为边地将领的警惕性，破坏了角色行为的合理性。",
+      "fix": "改为苏蘅借单独留下的机会，隐晦递出密信（如趁无人注意时放在石桌下，用眼神示意萧湛）；萧湛需先观察周围确认安全后再取走，符合双方在监控下的行为逻辑，同时贴合设定的ending pull。"
+    }
+  ],
+  "rewrite_guidance": "1. 严格遵循active story lines的规则限制，确保角色行为符合当前处境（皇权监控、旧案敏感）和人设（隐忍、警惕）；2. 线索投放需通过符合角色动机的行为完成，避免「遗落」「巧合」等作者强制式安排；3. 角色的情绪触发需足够支撑其行为，若做出冒险举动，需补充更强烈的触发点并强化事后警惕反应，维持人设一致性。"
+}
+2026-04-22 00:16:46,630 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "high",
+  "human_warmth_score": 9,
+  "character_has_real_world_tradeoff": true,
+  "emotion_is_grounded_in_specific_loss": true,
+  "supporting_character_reacts_humanly": true,
+  "self_talk_feels_specific": true,
+  "pain_is_not_generic": true,
+  "issues": [
+    {
+      "category": "structure",
+      "severity": "minor",
+      "evidence": "章节结尾为石桌旁遗落的卫朔麾下军徽信封，与设定的「苏蘅单独递给萧湛写有‘卫朔’的密信」的ending pull不符",
+      "reason": "未能按既定规划留下旧案新悬念，偏离了苏蘅与萧湛对峙后的关键钩子，削弱了两人关系的张力",
+      "fix": "将遗落信封改为苏蘅单独递出的封口密信，仅露出信面上的「卫朔」二字，同时保留萧湛察觉廊下内侍监控的细节，既符合设定又维持情绪张力"
+    }
+  ],
+  "rewrite_guidance": "调整结尾场景为苏蘅在庭院单独拦下萧湛，递出仅显「卫朔」二字的密信，她的动作保持冷漠疏离，萧湛接过时留意到廊下内侍的衣角，强化「复仇与监控并行」的核心张力，同时贴合既定的ending pull与twist要求"
+}
+2026-04-22 00:17:25,328 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "high",
+  "human_warmth_score": 9,
+  "character_has_real_world_tradeoff": true,
+  "emotion_is_grounded_in_specific_loss": true,
+  "supporting_character_reacts_humanly": true,
+  "self_talk_feels_specific": true,
+  "pain_is_not_generic": true,
+  "issues": [
+    {
+      "category": "structure",
+      "severity": "low",
+      "evidence": "章节结尾为石桌旁遗落的卫朔麾下军徽信封，与设定的「苏蘅单独递给萧湛写有‘卫朔’的密信」的ending pull不符",
+      "reason": "未能按既定规划留下旧案新悬念，偏离了苏蘅与萧湛对峙后的关键钩子，削弱了两人关系的张力",
+      "fix": "将遗落信封改为苏蘅单独递出的封口密信，仅露出信面上的「卫朔」二字，同时保留萧湛察觉廊下内侍监控的细节，既符合设定又维持情绪张力"
+    }
+  ],
+  "rewrite_guidance": "调整结尾场景为苏蘅在庭院单独拦下萧湛，递出仅显「卫朔」二字的密信，她的动作保持冷漠疏离，萧湛接过时留意到廊下内侍的衣角，强化「复仇与监控并行」的核心张力，同时贴合既定的ending pull与twist要求"
+}
+2026-04-22 00:17:40,896 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": false,
+  "level": "high",
+  "issues": [
+    {
+      "category": "plot_logic",
+      "severity": "high",
+      "evidence": "违背章节设定的Ending pull节点，将「苏蘅单独递密信」改为石桌遗落的来源不明信封，关键线索通过无因巧合发放给男主，而非场景内人物互动推进。",
+      "reason": "既偏离既定情节收尾要求，又用巧合替代合理因果链，破坏线索获取的合理性，同时模糊了苏蘅与线索的关联，违背twist_01的表象设定逻辑。",
+      "fix": "恢复Ending pull设定，改为家宴散后苏蘅单独召见萧湛，递上封有「卫朔」二字的密信；同时通过苏蘅避开目光、冷漠表情等allowed clues，维持读者对她的负面假信念，不透露真实动机。"
+    },
+    {
+      "category": "plot_logic",
+      "severity": "medium",
+      "evidence": "Small payoff「萧湛按严苛礼法让苏蘅当众难堪」的结果未清晰落地，仅描写苏蘅手指微蜷、面不改色，缺乏宾客反应、体面受损的具体表现，导致「难堪」的因果链断裂。",
+      "reason": "未将男主的复仇施压动作与「苏蘅当众难堪」的结果建立明确关联，削弱了复仇的初步快感，未能达成Reader emotion target中「期待他的复仇动作」的情绪反馈。",
+      "fix": "补充宾客的窃窃私语、谢氏宗亲的尴尬表情，或苏蘅茶盏倾斜洒出茶汤、掩饰时指尖颤抖等细节，既符合她的体面人设，又明确体现其当众难堪的状态。"
+    },
+    {
+      "category": "relationship_logic",
+      "severity": "medium",
+      "evidence": "谢端谨与萧湛的舅甥关系「利益绑定底色」的体现过于隐晦，仅通过「帮你周旋几分」的模糊表述，未明确利益交换的指向，导致关系转变的合理性不足。",
+      "reason": "未紧扣Relationship reprice的要求，未能清晰展现舅甥关系从亲情转向利益绑定的实质，不符合Info budget中对新角色谢端谨的定位。",
+      "fix": "修改谢端谨的台词为「往后你在军中站稳脚跟，谢氏在朝堂也能给你撑着，咱们舅甥俩互相借力」，或补充他拍萧湛肩时刻意看向将军印的眼神细节，明确利益绑定的核心。"
+    }
+  ],
+  "rewrite_guidance": "1. 严格遵循章节设定的Ending pull节点，恢复苏蘅递密信的情节，用allowed clues维持读者对她的负面信念；2. 补充Small payoff的结果细节，通过环境、宾客反应强化苏蘅的当众难堪，落实复仇快感；3. 明确谢端谨与萧湛的利益绑定表述，清晰呈现舅甥关系的转变；4. 删除无因巧合的遗落信封，确保线索获取符合场景内人物行为逻辑。"
+}
+2026-04-22 00:18:36,069 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "safe",
+  "issues": [],
+  "rewrite_guidance": "文本严格遵循了twist保密规则，allowed clues均以无解释的可疑表象呈现，未泄露苏蘅的真实动机；读者的false belief（坚信苏蘅为扶持萧宁夺权背叛萧湛）通过萧宁获擢升、苏蘅的冷漠态度等细节得到强化，符合所有reveal safety要求。"
+}
+2026-04-22 00:19:22,354 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "medium",
+  "issues": [],
+  "rewrite_guidance": "文本严格遵循了twist保密规则，allowed clues均以无解释的可疑表象呈现，未泄露苏蘅的真实动机；读者的false belief（坚信苏蘅为扶持萧宁夺权背叛萧湛）通过萧宁获擢升、苏蘅的冷漠态度等细节得到强化，符合所有reveal safety要求。",
+  "evidence_focus": []
+}
+2026-04-22 00:19:46,556 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "prose_score": 8,
+  "tension_score": 9,
+  "subtext_score": 8,
+  "exposition_score": 2,
+  "cliche_score": 1,
+  "double_duty_detail_score": 9,
+  "scene_texture_score": 9,
+  "emotion_externalization_score": 9,
+  "dialogue_subtext_score": 8,
+  "human_warmth_score": 8,
+  "rewrite_needed": false,
+  "rewrite_guidance": "将萧湛“恨意里藏着一丝难以察觉的复杂”的直接情绪点明，改为通过瞥见苏蘅衣袖下旧军报时的指尖微顿、目光半秒凝滞等动作外化；微调结尾信封的出现逻辑，使其更贴合苏蘅“冷漠算计”的表象（如改为苏蘅刻意遗落而非无意）。",
+  "evidence_notes": [
+    "廊下的旧灯笼：同时承担触发萧湛流放旧忆（情感）、暗示王府对旧案的未决状态（情节）、体现皇权监控下苏蘅的隐秘动作（权力/关系）三重功能，是高效的双重职责细节。",
+    "萧湛按严苛礼制跪地行礼的动作：既兑现了“借礼法复仇施压”的任务，又通过满座的静默凸显了母子关系的破裂，同时暗合皇权监控下的隐忍，直接拉满场景张力。",
+    "谢端谨“朝堂水深，你得找个靠山”的台词：表面是舅甥关怀，实则暴露谢氏与萧湛的利益绑定底色，精准完成了关系重估的要求，潜台词清晰。",
+    "直接点明萧湛“恨意里藏着一丝难以察觉的复杂”：违背了style card中“avoid naming feelings too quickly”的规则，削弱了情绪外化的质感。"
+  ]
+}
+2026-04-22 00:20:20,669 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": false,
+  "level": "medium",
+  "issues": [
+    {
+      "category": "chapter_engine",
+      "severity": "high",
+      "evidence": "结尾悬念环节未按brief执行：brief要求家宴散后苏蘅主动递上标注‘卫朔’的密信，而章节中改为萧湛在石桌发现遗落的信封，偏离了设定的核心冲突触发点",
+      "reason": "违反Step 8章节brief的第5条结尾悬念要求，未能通过苏蘅的主动动作强化旧案悬念与人物对峙张力",
+      "fix": "调整家宴散后的情节，让苏蘅单独找到萧湛，递上标注‘卫朔’的密信后转身离开，保留萧湛攥信青筋暴起的细节"
+    },
+    {
+      "category": "scene_detail",
+      "severity": "medium",
+      "evidence": "小高潮环节未匹配brief设定：brief要求萧湛质问时苏蘅避眼回应，章节中苏蘅抬眼以冰潭般的眼神回应，与设定的‘避眼’细节不符，削弱了active twists要求的苏蘅‘刻意避开萧湛目光’的线索呈现",
+      "reason": "未遵循active twists中‘allowed clues=避开萧湛的目光’的要求，偏离了小高潮的人物反应设定",
+      "fix": "将苏蘅的回应调整为避开萧湛的目光，用平淡无波的声音作答，强化其冷漠疏离且刻意回避的表象"
+    }
+  ],
+  "rewrite_guidance": "1. 修正结尾情节，让苏蘅主动递上‘卫朔’密信，还原brief设定的悬念触发方式；2. 调整小高潮中苏蘅的反应，使其刻意避开萧湛的目光，符合active twists的线索要求；3. 进一步强化萧湛恨意中复杂情绪的细节呈现（如眼神的波动、指尖的微颤），让emotional turn更细腻",
+  "evidence_focus": [
+    "opening_hook 是否落地",
+    "chapter_object 是否双重功能",
+    "relationship_reprice 是否发生",
+    "emotional_turn 是否可读",
+    "backstory_trigger 是否自然",
+    "brief核心情节点是否匹配"
+  ]
+}
+2026-04-22 00:21:06,367 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": false,
+  "level": "medium",
+  "issues": [
+    {
+      "category": "ending_pull",
+      "severity": "high",
+      "evidence": "章节brief与角色milestones明确要求家宴散后苏蘅主动递出「卫朔」密信，但原文中萧湛是在石桌发现遗落的信封，未体现苏蘅的主动递信动作，信封来源模糊，不符合设定要求。",
+      "reason": "未完成苏蘅的关键角色动作，削弱了苏蘅暗中留下旧案线索的设定，同时模糊了线索与旧案核心人物的直接关联，影响读者对线索指向的感知。",
+      "fix": "修改结尾情节为：家宴散后，苏蘅单独拦下萧湛，递出封有卫朔麾下军徽的密信，未发一言便转身离开，萧湛攥紧信封指节青筋暴起，既符合角色milestones，又强化线索的关联性。"
+    },
+    {
+      "category": "opening_hook",
+      "severity": "medium",
+      "evidence": "前300字虽呈现了皇帝的制衡动作（擢升萧宁）与萧湛的情绪反应，但未直接点明萧湛的核心复仇诉求，仅通过动作细节暗示，读者需自行推导动机。",
+      "reason": "未能快速建立读者对主角核心动机的认知，降低了开场的情绪代入感，无法立刻让读者明确「谁想要什么、为什么此刻不能直接实现」。",
+      "fix": "在前300字中补充萧湛的心理活动，例如「这道旨意，是把他往埋着卫朔血骨的修罗场推——五年流放的恨，今日要借宗室礼法讨回来」，明确其复仇诉求与皇权监控的障碍。"
+    }
+  ],
+  "rewrite_guidance": "1. 优先调整结尾情节，还原苏蘅主动递密信的设定，强化线索与旧案核心的关联；2. 在开场前300字补充主角核心复仇动机，明确冲突与现实障碍，快速拉满情绪张力；3. 保留原文中符合设定的细节（如苏蘅衣袖下的旧军报、廊下的内侍监控），巩固读者对苏蘅背叛的既定信念。",
+  "evidence_focus": [
+    "前300字是否明确主角核心诉求与当前冲突",
+    "结尾是否符合角色milestones的动作设定并留下明确下一步问题",
+    "是否严格遵循禁忌内容与读者信念要求"
+  ]
+}
+2026-04-22 00:21:56,127 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+# 第一章 归京
+
+奉天殿的鎏金铜炉燃着沉水香，烟气裹着新封镇北将军印的冷意，缠得萧湛后颈发紧。他刚接过皇帝萧弈亲手递来的印绶，指尖还沾着龙袍上的明黄绣线，内侍总管李福的尖细声音就钉了下来：“陛下有旨，镇北将军萧湛即刻回南川王府，依礼制拜见主母苏蘅；另，擢升萧宁为京畿卫副统领，明日赴衙任职。”
+
+殿外春寒卷着风撞在朱红门上，萧湛握着印绶的指节猛地收紧。御座上的萧弈笑意温淡，目光却像淬了冰的钩子——破格封赏是拉拢，给萧宁实权是制衡，这道旨意分明是把他往埋着卫朔血骨的修罗场推。五年边地流放，他从罪臣熬成军功赫赫的将领，旧案的仇不能明着报，皇权的眼睛盯着，只能借宗室礼法的壳子讨，半分不能露骨。他躬身领旨，转身时听见身后朝臣的窃窃私语，舅父谢端谨刻意压低的咳嗽里，藏着明明白白的算计。
+
+走出奉天殿，禁军仪仗的戈矛映着他脸上的风霜。脚下的青石板路，五年前他被押离时也走过，只是那时他戴着手铐，身后是卫朔被绑走的身影。
+
+南川王府的朱漆大门虚掩着，门廊下挂着两盏褪色的羊角灯笼，灯面的缠枝莲纹还是他当年亲手选的。风一吹，灯笼晃得厉害，像五年前他被押走时那样，映着廊下卫朔滴落的血。萧湛的脚步顿了半秒，眼角扫过廊下阴影里一闪而过的内侍衣角——萧弈的人，果然跟着来了。他喉结滚动，终究没停，径直往里走。
+
+庭院里海棠开得正盛，花瓣落在玄色战袍上，像细碎的血点。正厅的家宴已摆好，宾客多是王府旧人和谢氏宗亲，看见他进来，纷纷起身行礼，目光里的敬畏与打量缠成一团。
+
+苏蘅坐在主位，石青色织金褙子衬得她脸色苍白，鬓角插着素银簪，指尖捏茶盏的姿势端庄得像尊雕像。她看见他，只微微颔首，声音平淡无波：“回来了就好，坐吧。”
+
+萧湛没动，按最严苛的宗室礼制撩袍跪地，磕了三个头，声音冷得像冰：“儿臣萧湛，拜见母亲。”
+
+满座静得能听见茶盏碰撞的轻响。谢氏宗亲的脸白了大半，王府旧人纷纷低下头，抠着茶盏边缘不敢抬眼——谁都知道当年的旧事，这声“母亲”里裹着淬了毒的刀。苏蘅的手指微微蜷了一下，茶盏里的水晃出几滴，落在衣袖上，洇出一小片深色的印子。萧湛瞥见那衣袖下露出一点泛黄的纸边，像是旧军报的封皮。
+
+“起来吧。”她的目光刻意避开他，落在旁边的萧宁身上，声音依旧平稳，“阿宁，给你兄长布菜。”
+
+萧宁的脸涨得通红，攥着腰间那枚父亲给苏蘅的生辰玉佩，指节泛白，指尖掐进掌心。他偷瞄了一眼苏蘅，拿起筷子的手抖得厉害，夹了块鹿肉放在萧湛碗里，头埋得低低的，桌下的腿还在轻轻颤。
+
+谢端谨适时开口，端起酒盏的手顿了顿，眼神扫过萧湛腰间的将军印：“阿湛在军中站稳了脚跟，真是我谢氏的荣光。往后你在前线撑着，舅父在朝堂替你周旋，咱们舅甥俩互相借力，才是正理。”话里的利益绑定明明白白——谢氏的扶持不是无偿的，他得做谢氏在军中的棋子。
+
+萧湛端起酒盏一饮而尽，酒液烧得喉咙发疼。他的目光扫过厅角，看见卫朔当年的佩剑被随意堆在杂物架上，剑鞘沾着泥污，用褪色的粗布盖着，缠绳已经磨断。心口的怒意猛地翻涌，指尖攥得拳头发紧，可眼角瞥见廊下阴影里内侍握着记录笔的手，他立刻压下情绪，刻意压低声音：“儿臣在边地时，见旧部祭阵亡袍泽，都按当年学的规矩来——有功者，入祠配享香火。不知府里的祭礼，还守着祖宗定下的规矩么？”
+
+苏蘅的指尖攥紧茶盏，指节泛白，依旧没看他，声音平淡得没有起伏：“王府的规矩，自然按律来。”
+
+萧湛笑了一声，笑声里裹着寒意，却没再往下说。他看见廊下的内侍动了动，记录笔在纸上划了一道。指甲嵌进掌心的疼让他清醒：眼前的女人是害死卫朔、逼他流放五年的仇人，可皇权的眼睛正盯着他的一举一动，半分错都不能犯。
+
+家宴不欢而散。宾客们纷纷告辞，谢端谨走时拍了拍他的肩，低声道：“朝堂水深，别逞一时意气。”萧湛没应，看着他离去的背影，知道这所谓的“提醒”，不过是谢氏的警告。
+
+萧宁跟在苏蘅身后，嗫嚅着想说什么，却被苏蘅一个冷眼神堵了回去，只能低着头快步走，攥着玉佩的手松了又紧。
+
+萧湛站在庭院里，风卷着海棠花瓣落在地上。刚要转身回旧居，身后传来轻缓的脚步声。他回头，看见苏蘅站在廊下阴影里，手里捏着一封封口的密信。她没走近，只伸手递过来，信面朝上，露出两个墨色的字：卫朔。
+
+萧湛的呼吸顿了半秒，伸手去接时，又瞥见她衣袖下那片泛黄的纸边。刚要开口质问，苏蘅已经收回手，转身走进了内院，脚步平稳得像什么都没发生过。廊下的阴影里，内侍的衣角一闪而过。
+
+萧湛攥紧手里的密信，指节青筋暴起。风又起了，廊下的旧灯笼晃得厉害，五年前的血色又浮现在眼前。他低头看着信面上的“卫朔”二字，指尖的凉意顺着掌心蔓延到心口——这场复仇才刚刚开始，而这封密信里，藏着的是更深的陷阱，还是撕开旧案的第一道口子？
+2026-04-22 00:23:24,901 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "tool_calls": [
+    {"tool_name": "review_instruction_compliance", "reason": "验证是否已修复ending pull偏离、info budget不符等指令违规问题，确保章节严格遵循chapter brief与payload的所有要求，无新增或删减禁止/允许内容。"},
+    {"tool_name": "review_continuity", "reason": "确认修复后的结尾线索（苏蘅递密信）与前文皇权监控、人物行为逻辑的连贯性，检查廊下旧灯笼、内侍身影等细节的前后呼应是否自然。"},
+    {"tool_name": "review_time_consistency", "reason": "再次核查章节时间线与设定的时间锚点、前后情节的时间逻辑是否一致，确保无时间矛盾或时序混乱。"},
+    {"tool_name": "review_character_integrity", "reason": "验证萧湛的隐忍试探行为、谢端谨的利益绑定表述、苏蘅的线索呈现是否符合人设与当前处境，避免作者强制推进情节的痕迹。"},
+    {"tool_name": "review_plot_logic", "reason": "检查修复后的small payoff（苏蘅当众难堪）是否有明确细节支撑，线索获取逻辑是否合理，谢端谨与萧湛的利益绑定关系是否清晰符合设定。"},
+    {"tool_name": "review_chapter_engine", "reason": "验证opening hook、ending pull、scene engine（opening_pressure）等核心节点的执行是否符合要求，检查苏蘅刻意避眼的线索是否正确呈现，emotional turn是否细腻落地。"},
+    {"tool_name": "review_hook_appearance", "reason": "确认开场是否明确了萧湛的核心复仇诉求与现实障碍，结尾ending pull是否通过苏蘅的主动动作强化了旧案悬念，符合读者情绪与信念要求。"},
+    {"tool_name": "review_prose_quality", "reason": "检查修复后的情绪外化（如萧湛的复杂情绪通过动作呈现）是否符合风格要求，prose的张力、subtext、细节双重功能是否达标，避免直接点明情绪的表述。"},
+    {"tool_name": "review_humanity", "reason": "验证角色的情绪与行为是否有具体的现实支撑，比如萧湛的恨意与复杂、苏蘅的冷漠下的细节是否体现真实的权衡与代价，确保情感落地有温度。"}
+  ]
+}
+2026-04-22 00:23:55,980 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "full compliance",
+  "issues": [],
+  "rewrite_guidance": ""
+}
+2026-04-22 00:24:39,155 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "medium",
+  "issues": [],
+  "rewrite_guidance": "",
+  "evidence_focus": []
+}
+2026-04-22 00:24:49,960 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "none",
+  "issues": [],
+  "rewrite_guidance": "本章完全契合给定的时间锚点、关系状态及章节payload设定，前后逻辑连贯，人物行为、情感及剧情推进均符合要求，无连续性问题，无需修改。"
+}
+2026-04-22 00:25:06,050 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "medium",
+  "issues": [],
+  "rewrite_guidance": "本章完全契合给定的时间锚点、关系状态及章节payload设定，前后逻辑连贯，人物行为、情感及剧情推进均符合要求，无连续性问题，无需修改。",
+  "evidence_focus": []
+}
+2026-04-22 00:25:21,730 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": false,
+  "level": "high",
+  "issues": [
+    {
+      "category": "absolute_time_conflict",
+      "severity": "critical",
+      "evidence": "章节文本明确提及萧湛经历五年边地流放后归京，对应时间应为建元二十五年左右（建元二十年春萧渊病逝时萧湛约11岁，五年后约16岁），但给定的[Consistency notes]标注当前章节锚为建元二十年春（萧渊病逝事件），二者时间跨度相差五年，完全冲突。",
+      "reason": "违反给定的absolute_time_anchor和consistency_notes要求，时间线逻辑断裂。",
+      "fix": "修正[Consistency notes]中的当前章节锚为建元二十五年春（苏蘅约23岁，萧湛约16岁，萧宁约9岁），或调整章节文本中流放时长为合理范围，使其与建元二十年春的时间锚匹配。"
+    },
+    {
+      "category": "age-plot_time_conflict",
+      "severity": "high",
+      "evidence": "章节中萧宁被擢升为京畿卫副统领，若按[Consistency notes]的建元二十年春时间锚，萧宁仅约4岁，完全无法胜任该职位；即便按章节文本的五年后时间，萧宁约9岁也不符合武官任职的年龄逻辑。",
+      "reason": "时间线与人物年龄、情节设定不匹配，违背现实逻辑与故事合理性。",
+      "fix": "若时间锚为建元二十五年春，调整萧宁的职位为符合9岁年龄的宗室闲职或学习类安排；若坚持时间锚为建元二十年春，删除萧宁擢升的情节，或调整为与4岁年龄适配的内容。"
+    }
+  ],
+  "rewrite_guidance": "所有情节必须严格匹配给定的绝对时间锚点，人物年龄、职位、经历需与时间线完全契合；若调整时间跨度，需同步修正所有相关人物的状态与情节设定。",
+  "evidence_focus": [
+    "绝对时间锚点与文本时间线的匹配度",
+    "人物年龄与情节、职位的适配性",
+    "时间跨度与人物经历的合理性"
+  ]
+}
+2026-04-22 00:26:19,019 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "high",
+  "issues": [],
+  "rewrite_guidance": "所有角色行为均严格契合其当前的认知边界、处境压力与核心动机：萧湛借宗室礼法旁敲侧击施压，既符合他隐忍复仇的策略，也规避了皇权监控的风险；苏蘅维持冷漠体面的表象，递密信后迅速离场的行为既留下悬念，又未违反动机保密的禁忌；谢端谨、萧宁的言行也精准对应了利益绑定与嫉妒恐惧的关系设定。整体无作者强行推动的痕迹，有效达成了章节的叙事任务与读者情绪目标。"
+}
+2026-04-22 00:26:53,116 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "high",
+  "human_warmth_score": 9,
+  "character_has_real_world_tradeoff": true,
+  "emotion_is_grounded_in_specific_loss": true,
+  "supporting_character_reacts_humanly": true,
+  "self_talk_feels_specific": true,
+  "pain_is_not_generic": true,
+  "issues": [],
+  "rewrite_guidance": "本章已完美贴合人性化、接地气、情感具体的要求，无需修改。可保留现有细节节奏，继续推进旧案线索与人物关系的张力。"
+}
+2026-04-22 00:27:13,082 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "high",
+  "issues": [],
+  "rewrite_guidance": "本章情节逻辑严谨，因果链清晰，所有转折均由场景内合理动因触发，严格遵守了章节设定的规则、禁忌与人物关系要求，无需修改。"
+}
+2026-04-22 00:27:42,191 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "high",
+  "issues": [],
+  "rewrite_guidance": "章节已完整落地所有章节 brief 要求，精准实现了开场反差、回忆触发、家宴施压、小高潮质问与结尾悬念的核心节点，人物关系重估、情绪转折均通过具象动作与对话落地，可维持现有叙事框架，继续推进旧案线索与权力冲突的深化。",
+  "evidence_focus": [
+    "opening_hook 已落地：朝堂受封后即刻传旨回王府见苏蘅，萧湛情绪从荣耀跌入对峙预期的反差清晰呈现",
+    "chapter_object 已承担双重功能：南川王府家宴礼法仪式既推动了萧湛复仇施压的剧情动作，又激化了与苏蘅的矛盾、体现皇权监控、暴露舅甥利益绑定的关系变化",
+    "relationship_reprice 已在页面落地：萧湛与苏蘅的母子关系沦为仇人、萧弈与萧湛的叔侄关系转为权力博弈对手、谢端谨与萧湛的舅甥关系露出利益绑定底色，均通过具象互动而非summary呈现",
+    "emotional_turn 已可读：从受封的荣耀高光到回王府的冰冷对峙，情绪从扬到抑的转折，通过萧湛攥紧印绶、顿步看旧灯笼、掐掌心等动作与神态细节清晰传递",
+    "backstory_trigger 自然合理：踏入王府看到旧灯笼，自然触发五年前流放与卫朔相关的痛苦回忆，源于当下场景动作而非插入式解释"
+  ]
+}
+2026-04-22 00:28:22,359 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "high",
+  "issues": [],
+  "rewrite_guidance": "章节开场钩子、出场时机与结尾拉力均完全契合设定要求，可保留现有框架，若需优化可进一步强化萧湛恨意与隐忍的细节情绪张力，以及苏蘅伪装下的微表情线索",
+  "evidence_focus": [
+    "前300字明确呈现萧湛受封后即刻面对仇人苏蘅的当前冲突，点明复仇诉求与皇权监控的核心障碍",
+    "开场清晰传递萧湛的复仇目标与无法直接行动的原因",
+    "作为开篇章节，无前置钩子继承需求，开篇节奏自然",
+    "苏蘅的首次出场细节（端庄姿态、指尖微蜷）与权力对峙、礼法压力绑定，非静态描述",
+    "结尾留下密信性质的明确疑问，同时强化复仇与皇权监控的双重障碍",
+    "时间线严格贴合萧湛归京受封后前往王府的锚点"
+  ]
+}
+2026-04-22 00:28:40,941 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "prose_score": 9,
+  "tension_score": 9,
+  "subtext_score": 9,
+  "exposition_score": 2,
+  "cliche_score": 1,
+  "double_duty_detail_score": 9,
+  "scene_texture_score": 9,
+  "emotion_externalization_score": 9,
+  "dialogue_subtext_score": 9,
+  "human_warmth_score": 8,
+  "rewrite_needed": false,
+  "rewrite_guidance": "1. 微调萧宁攥玉佩的动作描写，替换重复的‘攥’字，使其与新晋京畿卫副统领的身份更适配；2. 将‘五年前的血色又浮现在眼前’具象化为‘五年前廊下那片暗褐的血痕又撞进眼底’，强化画面冲击感；3. 可适当增加苏蘅递密信时指尖微颤的细节，维持其冷漠表象下的隐性张力。",
+  "evidence_notes": [
+    "旧灯笼细节同时承担三重功能：触发萧湛对旧案的痛苦回忆，暗示苏蘅执掌王府五年未主动清除萧湛的痕迹（契合twist要求的表象矛盾），还侧面印证皇权监控的存在（内侍藏于廊下阴影）。",
+    "萧湛的恨意与复杂情绪未直接点明，而是通过‘按最严苛礼制下跪’‘瞥见旧军报纸边时的停顿’等动作外化，符合风格卡‘避免快速命名感受’的要求。",
+    "谢端谨‘互相借力’的对话，既明确舅甥间的利益绑定，又暴露谢氏门阀拉拢军功集团的意图，潜台词饱满无冗余。",
+    "旧案背景、皇权制衡等信息均通过场景细节（奉天殿圣旨、卫朔佩剑、内侍记录笔）自然带出，无生硬的 exposition 段落，符合‘dramatize而非explain’的要求。",
+    "萧宁攥玉佩、腿轻颤的细节，既体现他对萧湛的恐惧，又暴露苏蘅给他的压力，让人物的怯懦更具真实感。"
+  ]
+}
+2026-04-22 00:29:41,790 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "safe",
+  "issues": [],
+  "rewrite_guidance": "当前章节文本严格遵循twist_01的核心规则：allowed clues（避开萧湛的目光、衣袖下旧军报边角、对萧宁的苛责）均以碎片化线索形式呈现，未提前泄露苏蘅的真实动机；成功维持了读者的既定false belief，始终引导读者站在萧湛一侧痛恨苏蘅的“背叛”；所有forbidden content均未涉及，无需修改。"
+}
+2026-04-22 00:29:56,653 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "passed": true,
+  "level": "medium",
+  "issues": [],
+  "rewrite_guidance": "当前章节文本严格遵循twist_01的核心规则：allowed clues（避开萧湛的目光、衣袖下旧军报边角、对萧宁的苛责）均以碎片化线索形式呈现，未提前泄露苏蘅的真实动机；成功维持了读者的既定false belief，始终引导读者站在萧湛一侧痛恨苏蘅的“背叛”；所有forbidden content均未涉及，无需修改。",
+  "evidence_focus": []
+}
+2026-04-22 00:30:21,806 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+# 第一章 归京
+
+奉天殿的鎏金铜炉燃着沉水香，甜腻的烟气裹着新封镇北将军印的冷意，缠得萧湛后颈的寒毛都绷着。他刚接过皇帝萧弈亲手递来的印绶，指尖还沾着龙袍明黄绣线的绒感，内侍总管李福的声音就像冰锥扎进耳骨：“陛下有旨，镇北将军萧湛即刻回南川王府，依礼制拜见主母苏蘅；另，擢升萧宁为京畿卫副统领，明日赴衙任职。”
+
+殿外春寒卷着风撞在朱红门上，萧湛握着印绶的指节猛地收紧。御座上的萧弈笑意温淡，那笑意落在他身上，比殿外的寒气还冻人——破格封赏是拉，给萧宁实权是压，这道旨意分明是把他往埋着卫朔血骨的修罗场推。五年边地流放，他从罪臣熬成斩敌数千的将领，旧案的仇不能明着报，皇权的眼睛钉在背后，只能借宗室礼法的壳子讨，半分露骨都不行。他躬身领旨，转身时听见朝臣的窃窃私语，舅父谢端谨刻意压低的咳嗽里，裹着点不易察觉的暗示——谢氏的筹码，该他接了。
+
+走出奉天殿，禁军仪仗的戈矛寒光扫过他颊边一道浅疤，那是去年北境雪夜留下的。脚下的青石板路，五年前他戴着手铐踏过，石板缝里还沾着卫朔被拖拽时蹭下的血痕。
+
+南川王府的朱漆大门半开半掩，门轴吱呀一声，像谁在暗处喘了口气。门廊下挂着两盏褪色的羊角灯笼，灯面上的缠枝莲纹发灰，是他十七岁那年亲手挑的，那时卫朔还笑着说他眼光太柔。风一吹，灯笼晃得厉害，光影在廊下晃出细碎的斑驳，像五年前他被押走时，卫朔滴在青砖上的血珠。萧湛的脚步顿了半秒，眼角扫过廊下阴影里晃过的一角明黄内侍服——萧弈的人，果然跟到了家门口。喉结滚了滚，终究没停，径直往里走。
+
+庭院里海棠开得正盛，粉白花瓣落在他玄色战袍上，像细碎的血点。他抬手拂开，指尖沾了点粉，像沾了半干的血。正厅的家宴已摆好，宾客多是王府旧人和谢氏宗亲，看见他进来，纷纷起身行礼，目光黏在他腰间的将军印上，有敬畏，有探究，还有藏不住的忌惮。
+
+苏蘅坐在主位，石青色织金褙子衬得她脸色苍白，鬓角插着素银簪，坐姿端得纹丝不动，像尊浸了寒的玉像。她看见他，只微微颔首，声音平淡得像一潭死水：“回来了就好，坐吧。”
+
+萧湛没动，按最严苛的宗室礼制撩袍跪地，膝盖磕在青金砖上，硬得硌人，他却连眉都没皱一下，磕了三个头，声音冷得像冰：“儿臣萧湛，拜见母亲。”
+
+满座的呼吸都停了半拍，茶盏碰着茶托的轻响，在厅里格外刺耳。谢氏宗亲的脸白了大半，王府旧人纷纷低下头，抠着茶盏边缘不敢抬眼——谁都知道当年的旧事，这声“母亲”里裹着淬了毒的刀。苏蘅的手指微微蜷了一下，茶盏里的碧螺春晃出几滴，洇在石青色褙子上，像一小片暗血。萧湛瞥见她衣袖下露出一点泛黄的纸边，像是旧军报的封皮。
+
+“起来吧。”她的目光刻意避开他，落在旁边的萧宁身上，声音依旧平稳，“阿宁，给你兄长布菜。”
+
+萧宁的脸憋得通红，攥着腰间那枚羊脂玉珮——那是先父给苏蘅的生辰礼，如今被她系在了萧宁腰上，指节泛白，指尖掐进掌心。他偷瞄了一眼苏蘅，拿起筷子的手抖得厉害，夹了块鹿肉放在萧湛碗里，头埋得低低的，桌下的腿还在轻轻颤。
+
+谢端谨适时开口，端起酒盏的手顿了顿，眼神扫过萧湛腰间的将军印：“阿湛在军中站稳了脚跟，真是我谢氏的荣光。往后你在前线撑着，舅父在朝堂替你周旋，咱们舅甥俩，该是一条绳上的蚂蚱。”话里的利益绑定明明白白——谢氏的扶持不是无偿的，他得做谢氏在军中的棋子。
+
+萧湛端起酒盏一饮而尽，烈酒烧得喉咙发紧，像五年前被押解时，嘴里塞的那团粗布。他的目光扫过厅角，看见杂物架最下层堆着卫朔的佩剑，剑鞘上的缠绳磨断了，沾着泥污，用块褪色的粗布盖着，像盖着一具无人收殓的尸身。心口的怒意猛地翻涌，指尖攥得拳头发紧，可眼角瞥见廊下阴影里内侍握着记录笔的手，他立刻压下情绪，声音压得很低，却字字清晰：“儿臣在边地时，见旧部祭阵亡袍泽，都按当年学的规矩来——有功者，入祠配享香火。不知府里的祭礼，还守着祖宗定下的规矩么？”
+
+苏蘅的指尖攥紧茶盏，指节泛白，目光始终落在萧宁发顶，连眼角都没扫他一下，声音平淡得没有起伏：“王府的规矩，自然按律来。”
+
+萧湛笑了一声，笑声里裹着寒意，却没再往下说。他看见廊下的内侍动了动，记录笔在纸上划了一道。指甲嵌进掌心的疼让他清醒：眼前的女人是害死卫朔、逼他流放五年的仇人，可皇权的眼睛正盯着他的一举一动，半分错都不能犯。
+
+家宴不欢而散。宾客们纷纷告辞，谢端谨走时拍了拍他的肩，低声道：“朝堂水深，别逞一时意气。”那手重得像块压人的石头——谢氏要的是听话的棋子，不是掀棋盘的疯子。萧湛没应，看着他离去的背影，喉结又滚了滚。
+
+萧宁跟在苏蘅身后，嗫嚅着想说什么，苏蘅回头扫了他一眼，那眼神冷得像冰，他到嘴边的话立刻咽了回去，头埋得更低，攥着玉佩的手松了又紧。
+
+萧湛站在庭院里，风卷着海棠花瓣打在脸上，像无数细小的耳光。刚要转身回旧居，身后传来轻缓的脚步声。他回头，看见苏蘅站在廊下阴影里，手里捏着一封封得严实的素笺，蜡封上没有印记。她没走近，只抬手递来，素笺的一角恰好翻起，露出两个浓墨写的字：卫朔。
+
+萧湛的呼吸顿了半秒，指尖刚碰到素笺，就看见她袖口下那点泛黄的纸边还露着。刚要开口质问，苏蘅已经收回手，转身的动作利落，裙摆扫过廊下的青砖，连一点声响都没有，仿佛刚才递信的人不是她。廊下的阴影里，内侍的衣角又晃了一下。
+
+他攥紧手里的素笺，指节青筋暴起。风又起了，廊下的旧灯笼晃得厉害，五年前的血色又浮现在眼前——卫朔被押走时的背影，青石板上的血痕，他戴着手铐走过的路。低头看着素笺上的“卫朔”二字，指尖的凉意顺着掌心蔓延到心口。这场复仇才刚刚开始，而这两个字，是萧弈设下的陷阱，还是能撕开旧案的第一道口子？
+
+风卷着海棠花瓣落在他脚边，像一地未干的血。
+2026-04-22 00:31:36,597 | INFO | httpx | HTTP Request: POST https://ark.cn-beijing.volces.com/api/v3/chat/completions "HTTP/1.1 200 OK"
+{
+  "chapter_id": "ch_001",
+  "actual_events": [
+    "萧湛在奉天殿接受皇帝萧弈册封的镇北将军印，同时皇帝下旨擢升萧宁为京畿卫副统领，命他即刻回南川王府拜见主母苏蘅",
+    "萧湛察觉皇帝对自己是拉拢兼打压，舅父谢端谨暗示他接手谢氏筹码，走出奉天殿时触景生情想起旧案与卫朔",
+    "萧湛回到南川王府，发现皇帝的内侍已在府中监视，踏入王府时看到当年旧灯笼触发对卫朔的痛苦回忆",
+    "南川王府摆上家宴，萧湛按最严苛的宗室礼制向苏蘅行跪拜礼，令满座震惊，苏蘅神色微动却故作平静",
+    "萧宁在苏蘅授意下给萧湛布菜，神色极度紧张；谢端谨当众提出与萧湛利益绑定，要他做谢氏在军中的棋子",
+    "萧湛借祭礼规矩暗指旧案，苏蘅含糊回应，他瞥见卫朔的佩剑被随意堆放，压下怒意",
+    "家宴不欢而散，谢端谨提醒萧湛勿逞意气；苏蘅在廊下阴影处递给萧湛一封写有“卫朔”二字的素笺后迅速离开，萧湛攥紧素笺，疑惑这是陷阱还是线索"
+  ],
+  "reader_now_knows": [
+    "萧湛在边地立下军功，从罪臣成为镇北将军，获皇帝破格封赏，但皇帝同时擢升萧宁实权，对他既拉拢又提防",
+    "苏蘅以继母身份执掌南川王府内务，萧宁是她的亲儿子",
+    "旧案涉及卫朔，导致萧湛被流放五年，萧湛认定苏蘅与旧案有关，对她充满恨意",
+    "皇帝派内侍严密监视萧湛的一举一动",
+    "谢端谨代表谢氏，想与萧湛达成利益绑定，让他成为谢氏在军中的棋子",
+    "家宴散后苏蘅递给萧湛一封写有“卫朔”的密信"
+  ],
+  "reader_now_believes": [
+    "苏蘅为扶持亲儿萧宁夺权，揭发卫朔并背叛萧湛，是害死卫朔、逼萧湛流放的仇人",
+    "皇帝擢升萧宁是为了压制萧湛，防止他势力过大威胁皇权",
+    "谢端谨提出的利益绑定纯粹是门阀利用，只为维护谢氏的朝堂利益"
+  ],
+  "open_questions": [
+    "苏蘅递来的写有“卫朔”的素笺究竟是什么内容？是皇帝设下的陷阱，还是能揭开旧案的线索？",
+    "萧湛如何在皇权监控与门阀束缚下，一步步调查旧案真相？",
+    "苏蘅为何在被监视的情况下冒险给萧湛递密信？她的真实目的是什么？",
+    "皇帝接下来还会用什么手段制衡萧湛？"
+  ],
+  "character_states": [
+    "萧湛：隐忍克制，背负旧案仇恨，手握军功却受皇权与门阀牵制，开始借礼法与话语试探复仇，内心充满疑惑与愤怒",
+    "苏蘅：表面冷漠疏离，执掌王府内务，对萧湛刻意回避，行为暗藏隐秘，在监控下冒险传递密信",
+    "萧宁：懦弱胆小，依赖苏蘅，面对萧湛时极度紧张，腰上佩戴着先父给苏蘅的玉佩",
+    "萧弈：表面温淡，实则心机深沉，通过封赏与擢升萧宁制衡萧湛，牢牢掌控皇权监控",
+    "谢端谨：老谋深算，代表谢氏试图绑定萧湛以维护门阀利益，提醒萧湛勿意气用事"
+  ],
+  "relationship_state": [
+    "萧湛与苏蘅：母子关系彻底破裂，沦为仇人，两人之间充满仇恨与隐秘试探",
+    "萧湛与萧弈：叔侄关系转为权力博弈对手，彼此猜忌制衡",
+    "萧湛与谢端谨：舅甥关系露出利益绑定的底色，谢氏试图将萧湛作为棋子",
+    "苏蘅与萧宁：母子关系紧密，苏蘅刻意扶持萧宁，萧宁对苏蘅言听计从"
+  ],
+  "seeded_clues": [
+    "苏蘅刻意避开萧湛的目光",
+    "苏蘅衣袖下露出旧军报的边角",
+    "萧湛看向苏蘅时，恨意里藏着一丝难以察觉的复杂",
+    "苏蘅递给萧湛的写有“卫朔”的素笺"
+  ],
+  "locked_truths": [
+    "苏蘅并非背叛萧湛，而是为救他联合卫朔设局的真相",
+    "卫朔主动牺牲的细节",
+    "苏蘅的真实动机",
+    "萧渊死因的秘密",
+    "柳鸢的真实身份"
+  ],
+  "time_state": {
+    "chapter_end_time": "萧湛归京当日，家宴散后，庭院风卷海棠之时",
+    "continuity_note": "萧湛攥着苏蘅递来的素笺站在庭院中，皇帝的内侍仍在暗处监视，苏蘅已返回内院，萧宁跟在苏蘅身后离去"
+  }
+}

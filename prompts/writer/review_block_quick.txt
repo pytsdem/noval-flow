@@ -1,0 +1,30 @@
+Review this content block quickly. Return valid JSON only.
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Relevant world rules]
+{relevant_world_rules_text}
+
+[Block card]
+{block_card_text}
+
+[Committed chapter tail before this block]
+{prior_chapter_text_tail}
+
+[Block draft]
+{block_text}
+
+Check only these things:
+1. Whether the block completed its stated purpose.
+2. Whether it leaked hidden information or explained clues too early.
+3. Whether any character drifted in an obvious way.
+4. Whether there is an obvious time conflict.
+5. Whether the prose reads too much like an outline.
+6. Whether any paragraphs are too long for front-end reading.
+
+Scoring rules:
+- If the block is basically usable, prefer `passed=true`.
+- Use `rewrite_needed=true` only when the block should be revised before commit.
+- Keep issues concrete and brief.
+- Mention paragraph problems explicitly in `paragraph_warnings`.

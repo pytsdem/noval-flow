@@ -1,0 +1,16 @@
+{
+  "skill_id": "time_consistency_guard",
+  "tools": [
+    "review_time_consistency",
+    "review_continuity",
+    "rewrite_by_plan"
+  ],
+  "triggers": [
+    "review_time_consistency_failed"
+  ],
+  "success_condition": {
+    "time_consistency_passed": true,
+    "continuity_passed": true
+  },
+  "max_iterations": 2
+}

@@ -44,8 +44,23 @@ class SkillManager:
         if not bool(clue.get("passed", True)) or str(clue.get("level") or "").lower() in {"high", "critical"}:
             skill_ids.append("clue_consistency")
 
+        humanity = review_reports.get("review_humanity", {})
+        if not bool(humanity.get("passed", True)) or int(humanity.get("human_warmth_score") or 0) < 7:
+            skill_ids.append("humanity_boost")
+
+        integrity = review_reports.get("review_character_integrity", {})
+        if not bool(integrity.get("passed", True)) or str(integrity.get("level") or "").lower() in {"high", "critical"}:
+            skill_ids.append("character_integrity")
+
+        time_consistency = review_reports.get("review_time_consistency", {})
+        if not bool(time_consistency.get("passed", True)) or str(time_consistency.get("level") or "").lower() in {"high", "critical"}:
+            skill_ids.append("time_consistency_guard")
+
         engine = review_reports.get("review_chapter_engine", {})
-        engine_issue_text = " ".join(str(item) for item in engine.get("issues", []) or []).lower()
+        engine_issue_text = " ".join(
+            str(item.get("evidence") or item.get("reason") or item) if isinstance(item, dict) else str(item)
+            for item in engine.get("issues", []) or []
+        ).lower()
         if chapter_brief.chapter_type == "opening" and (
             "opening" in engine_issue_text or int(prose.get("tension_score") or 0) < 7
         ):

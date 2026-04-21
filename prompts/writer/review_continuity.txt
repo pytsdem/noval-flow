@@ -3,20 +3,14 @@ Review chapter continuity. Output JSON only.
 [Completed chapter memory]
 {completed_chapter_memory_text}
 
-{step_4_event_timeline_text}
-
-{step_5_character_milestones_text}
-
-{step_8_chapter_brief_text}
-
-[Chapter payload]
-{chapter_payload_text}
-
-[Objective timeline anchors]
-{timeline_anchor_facts_text}
+[Time anchor]
+{time_anchor_text}
 
 [Relationship state]
 {relationship_state_text}
+
+[Chapter payload]
+{chapter_payload_text}
 
 [Chapter text]
 {chapter_text}
@@ -24,15 +18,20 @@ Review chapter continuity. Output JSON only.
 Output format:
 {{
   "passed": false,
-  "level": "high",
-  "issues": ["Example issue"],
-  "rewrite_guidance": "Example rewrite guidance"
+  "level": "medium",
+  "issues": [
+    {{
+      "category": "continuity",
+      "severity": "medium",
+      "evidence": "上一章男主刚受罚未歇，本章开头却像已经恢复从容，没有承接。",
+      "reason": "前后章状态没有延续，读者会感觉断片。",
+      "fix": "在开头补上身体、情绪、物件或关系状态的延续。"
+    }}
+  ],
+  "rewrite_guidance": "优先修复前后章状态衔接：身体、物件、情绪、关系。"
 }}
 
 Check:
-1. continuity with previous actual chapter summaries
-2. time, place, and relationship carry-over
-3. contradiction with reader_now_knows or reader_now_believes
-4. contradiction with established character state or relationship_state
-5. accidental reset of consequences from completed chapters
-6. exact durations, ages, time gaps, and other factual quantities must match the fixed information package; if the package does not support an exact number, flag invented precision.
+1. Check whether the chapter continues prior chapter memory and relationship state.
+2. Check whether body state, emotional residue, object state, and unresolved pressure are carried over.
+3. Check whether the chapter contradicts already-written facts or reader memory.

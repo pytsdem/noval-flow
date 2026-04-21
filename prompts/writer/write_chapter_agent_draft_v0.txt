@@ -3,6 +3,12 @@ Write one full novel chapter. Output prose only in Simplified Chinese.
 [Skill instruction packages]
 {skills_text}
 
+{selection_summary_text}
+
+{time_anchor_text}
+
+{chapter_visible_context_text}
+
 {completed_chapter_memory_text}
 
 {step_1_story_foundation_text}
@@ -37,14 +43,14 @@ Hard rules:
 1. Do not add new truth, new character, new clue, or new setting rule.
 2. If this chapter is earlier than any reveal_at, do not expose twist truth in prose.
 3. Preserve reader belief and do not explain allowed clues.
-4. Fulfill the chapter brief in scene form, not outline form.
-5. Output prose only.
-6. The final prose must be natural Simplified Chinese and must not switch into English narration.
+4. Obey the time_anchor. If the chapter follows immediately from the previous chapter, carry over body state, object state, and time-of-day.
+5. Fulfill the chapter brief in scene form, not outline form.
+6. Output prose only.
+7. The prose must be natural Simplified Chinese and must not switch into English narration.
 
 Writing goals:
-1. Avoid AI-sounding symmetry, over-explaining, and repeated dramatic formulas.
-2. Make the chapter feel lived rather than summarized, so readers can sense the room, the bodies, the social pressure, and the cost of each move.
-3. Let characterization come from concrete behavior, selective detail, and relationship friction, not from abstract labels.
-4. Let scenes begin and unfold in the way this chapter naturally needs; enter late enough to avoid throat-clearing, but do not force the same opening pattern every time.
-5. If a painful memory or old wound appears, let it rise from the present moment instead of stopping the chapter for explanation.
-6. Aim for genuine feeling through believable human response, restraint, contradiction, and specific detail.
+1. Make the chapter feel lived rather than summarized: room, weather, money, labor, etiquette, and bodily pressure should be sensed where relevant.
+2. Build emotion through concrete reaction, contradiction, restraint, and consequence rather than abstract labels.
+3. Let people think like people: they count real costs, hide behind words, leak through the body, and judge themselves in specific ways.
+4. Use details that do double duty for scene presence, power, class, relationship, or plot pressure.
+5. Keep the chapter novelistic, not like a beat sheet or explanation note.

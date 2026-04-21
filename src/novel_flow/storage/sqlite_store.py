@@ -8,7 +8,7 @@ from typing import Any
 from pydantic import BaseModel
 
 from novel_flow.exceptions import StorageError
-from novel_flow.models.schemas import BlockPatchVersion, BookDocument, CriticReport, ResearchReport, WorkflowState
+from novel_flow.models.schemas import BlockPatchVersion, BookDocument, ContentBlock, CriticReport, ResearchReport, WorkflowState
 
 
 class SQLiteStore:
@@ -86,11 +86,31 @@ class SQLiteStore:
                     created_at TEXT NOT NULL
                 );
                 CREATE INDEX IF NOT EXISTS idx_run_outputs_run_id ON run_outputs(run_id);
+
+                CREATE TABLE IF NOT EXISTS chapter_blocks (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    run_id TEXT NOT NULL,
+                    book_id TEXT NOT NULL,
+                    chapter_id TEXT NOT NULL,
+                    chapter_title TEXT NOT NULL DEFAULT '',
+                    block_id TEXT NOT NULL,
+                    block_index INTEGER NOT NULL,
+                    purpose TEXT NOT NULL,
+                    text TEXT NOT NULL,
+                    status TEXT NOT NULL,
+                    version INTEGER NOT NULL,
+                    payload_json TEXT NOT NULL,
+                    created_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL
+                );
+                CREATE INDEX IF NOT EXISTS idx_chapter_blocks_run_id ON chapter_blocks(run_id, id);
+                CREATE INDEX IF NOT EXISTS idx_chapter_blocks_book_chapter ON chapter_blocks(book_id, chapter_id, block_index, version);
                 """
             )
             self._ensure_column(connection, "workflow_states", "current_book_id", "TEXT")
             self._ensure_column(connection, "workflow_states", "mode", "TEXT NOT NULL DEFAULT 'formal'")
             self._ensure_column(connection, "critic_reports", "book_id", "TEXT")
+            self._ensure_column(connection, "chapter_blocks", "chapter_title", "TEXT NOT NULL DEFAULT ''")
 
     def _ensure_column(self, connection: sqlite3.Connection, table: str, column: str, definition: str) -> None:
         columns = {
@@ -225,6 +245,7 @@ class SQLiteStore:
                 connection.execute(f"DELETE FROM run_outputs WHERE run_id IN ({placeholders})", run_ids)
                 connection.execute(f"DELETE FROM workflow_states WHERE run_id IN ({placeholders})", run_ids)
             connection.execute("DELETE FROM patch_versions WHERE book_id = ?", (book_id,))
+            connection.execute("DELETE FROM chapter_blocks WHERE book_id = ?", (book_id,))
             connection.execute("DELETE FROM critic_reports WHERE book_id = ?", (book_id,))
             connection.execute("DELETE FROM books WHERE book_id = ?", (book_id,))
 
@@ -232,6 +253,7 @@ class SQLiteStore:
         with self._connect() as connection:
             connection.execute("DELETE FROM pipeline_events WHERE run_id = ?", (run_id,))
             connection.execute("DELETE FROM run_outputs WHERE run_id = ?", (run_id,))
+            connection.execute("DELETE FROM chapter_blocks WHERE run_id = ?", (run_id,))
             connection.execute("DELETE FROM workflow_states WHERE run_id = ?", (run_id,))
 
     def save_critic_report(self, report: CriticReport, book_id: str | None = None) -> None:
@@ -304,6 +326,121 @@ class SQLiteStore:
                 (book_id, block_id),
             ).fetchall()
         return [BlockPatchVersion.model_validate(self._from_json(row["payload_json"])) for row in rows]
+
+    def save_chapter_block(
+        self,
+        *,
+        run_id: str,
+        book_id: str,
+        chapter_title: str,
+        block: ContentBlock,
+        created_at: str,
+        updated_at: str,
+    ) -> None:
+        try:
+            with self._connect() as connection:
+                if block.version > 1:
+                    connection.execute(
+                        """
+                        UPDATE chapter_blocks
+                        SET status = 'replaced', updated_at = ?
+                        WHERE run_id = ? AND book_id = ? AND chapter_id = ? AND block_id = ? AND version < ?
+                        """,
+                        (
+                            updated_at,
+                            run_id,
+                            book_id,
+                            block.chapter_id,
+                            block.block_id,
+                            block.version,
+                        ),
+                    )
+                connection.execute(
+                    """
+                    INSERT INTO chapter_blocks
+                    (
+                        run_id, book_id, chapter_id, chapter_title, block_id, block_index,
+                        purpose, text, status, version, payload_json, created_at, updated_at
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        run_id,
+                        book_id,
+                        block.chapter_id,
+                        chapter_title,
+                        block.block_id,
+                        block.block_index,
+                        block.purpose,
+                        block.text,
+                        block.status,
+                        block.version,
+                        json.dumps(block.model_dump(mode="json"), ensure_ascii=False),
+                        created_at,
+                        updated_at,
+                    ),
+                )
+        except sqlite3.DatabaseError as exc:
+            raise StorageError(f"Failed to save chapter block: {exc}") from exc
+
+    def list_chapter_blocks(
+        self,
+        *,
+        run_id: str | None = None,
+        book_id: str | None = None,
+        chapter_id: str | None = None,
+        latest_only: bool = True,
+    ) -> list[dict[str, Any]]:
+        clauses: list[str] = []
+        params: list[Any] = []
+        if run_id:
+            clauses.append("run_id = ?")
+            params.append(run_id)
+        if book_id:
+            clauses.append("book_id = ?")
+            params.append(book_id)
+        if chapter_id:
+            clauses.append("chapter_id = ?")
+            params.append(chapter_id)
+        where = f"WHERE {' AND '.join(clauses)}" if clauses else ""
+        with self._connect() as connection:
+            rows = connection.execute(
+                f"""
+                SELECT id, run_id, book_id, chapter_id, chapter_title, block_id, block_index,
+                       purpose, text, status, version, payload_json, created_at, updated_at
+                FROM chapter_blocks
+                {where}
+                ORDER BY block_index ASC, version DESC, id DESC
+                """,
+                params,
+            ).fetchall()
+        results: list[dict[str, Any]] = []
+        seen: set[str] = set()
+        for row in rows:
+            block_id_value = str(row["block_id"])
+            if latest_only and block_id_value in seen:
+                continue
+            seen.add(block_id_value)
+            payload = ContentBlock.model_validate(self._from_json(row["payload_json"])).model_dump(mode="json")
+            results.append(
+                {
+                    "id": row["id"],
+                    "run_id": row["run_id"],
+                    "book_id": row["book_id"],
+                    "chapter_id": row["chapter_id"],
+                    "chapter_title": row["chapter_title"],
+                    "block_id": row["block_id"],
+                    "block_index": row["block_index"],
+                    "purpose": row["purpose"],
+                    "text": row["text"],
+                    "status": row["status"],
+                    "version": row["version"],
+                    "payload": payload,
+                    "created_at": row["created_at"],
+                    "updated_at": row["updated_at"],
+                }
+            )
+        return sorted(results, key=lambda item: int(item["block_index"]))
 
     def _save_simple(
         self,

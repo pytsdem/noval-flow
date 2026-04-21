@@ -19,6 +19,7 @@ class SummarizeActualChapterTool(LLMChapterTool):
             chapter_text=payload["chapter_text"],
             chapter_brief_json=payload["chapter_brief_json"],
             chapter_payload_text=payload["chapter_payload_text"],
+            time_anchor_text=payload.get("time_anchor_text", ""),
             active_twists_json=json.dumps(payload.get("active_twists", []), ensure_ascii=False, indent=2),
             story_lines_json=json.dumps(payload.get("active_story_lines", []), ensure_ascii=False, indent=2),
         )

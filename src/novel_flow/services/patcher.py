@@ -26,6 +26,21 @@ class PatchExecutor:
                             purpose=block.purpose,
                             metadata={**block.metadata, "last_patch_id": instruction.patch_id},
                         )
+                        if getattr(chapter, "content_blocks", None):
+                            for block_index, content_block in enumerate(chapter.content_blocks):
+                                if content_block.block_id != instruction.target_block_id:
+                                    continue
+                                chapter.content_blocks[block_index] = content_block.model_copy(
+                                    update={
+                                        "text": updated_text,
+                                        "status": "committed",
+                                        "version": max(int(content_block.version), 1) + 1,
+                                    }
+                                )
+                                chapter.final_text = ""
+                                chapter.is_finalized = False
+                                chapter.final_version = max(int(chapter.final_version), 0) + 1
+                                break
                         after_block = deepcopy(scene.blocks[index])
                         book_copy.updated_at = datetime.now(timezone.utc)
                         version = BlockPatchVersion(

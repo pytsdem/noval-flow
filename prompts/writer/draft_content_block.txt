@@ -1,0 +1,45 @@
+Write one chapter content block. Output prose only in Simplified Chinese.
+
+[Completed chapter memory]
+{completed_chapter_memory_text}
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Relevant world rules]
+{relevant_world_rules_text}
+
+[Scene character context]
+{scene_character_context_text}
+
+[Relationship state]
+{relationship_state_text}
+
+[Current block card]
+{block_card_text}
+
+[Earlier committed block summary]
+{prior_block_summary_text}
+
+[Current chapter text tail]
+{prior_chapter_text_tail}
+
+[Style card]
+{style_card_text}
+
+Rules:
+1. Write only the current block, not the whole chapter.
+2. Finish the block purpose and reach the requested end_state.
+3. Respect chapter payload hard constraints, allowed clues, and forbidden content.
+4. Never leak hidden truth or explain an allowed clue too early.
+5. The block is a content unit, not a single paragraph.
+6. Keep front-end reading comfortable:
+   - One paragraph should usually stay around 30 to 120 Chinese characters.
+   - Strong emotion, action, and dialogue paragraphs may be shorter.
+   - Paragraphs over 180 Chinese characters should usually be split.
+   - Dialogue should usually stand alone as its own paragraph.
+   - Do not stack long internal monologue without action, object, or reaction.
+7. Avoid outline-like summary prose. Let the block unfold through action, perception, speech, silence, and consequence.
+8. If exposition is needed, break it into short action + reaction + explanation beats.
+9. Keep the prose in natural Simplified Chinese.
+

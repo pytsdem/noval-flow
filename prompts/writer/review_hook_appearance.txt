@@ -1,16 +1,24 @@
-Review hook strength and appearance timing. Output JSON only.
+Review whether the chapter opening hook, appearance timing, and ending pull are genuinely working. Output JSON only.
 
+[Step 1 story foundation]
 {step_1_story_foundation_text}
 
+[Step 3 character packets]
 {step_3_character_packets_text}
 
+[Step 5 character milestones]
 {step_5_character_milestones_text}
 
+[Step 8 chapter brief]
 {step_8_chapter_brief_text}
 
 [Chapter payload]
 {chapter_payload_text}
 
+[Time anchor]
+{time_anchor_text}
+
+[Objective timeline anchors]
 {timeline_anchor_facts_text}
 
 [Chapter text]
@@ -20,14 +28,26 @@ Output format:
 {{
   "passed": false,
   "level": "medium",
-  "issues": ["Example issue"],
-  "rewrite_guidance": "Example rewrite guidance"
+  "issues": [
+    {{
+      "category": "opening_hook",
+      "severity": "high",
+      "evidence": "前 300 字主要在交代背景，没有当前打击物或当前事件。",
+      "reason": "读者还不知道这章里谁想要什么、为什么此刻拿不到。",
+      "fix": "把当前打击物或当前事件前置，让前 300 字明确冲突、障碍和下一步问题。"
+    }}
+  ],
+  "rewrite_guidance": "优先把冲突和打击物提前，不要先铺背景。",
+  "evidence_focus": [
+    "前 300 字是否出现当前冲突",
+    "结尾是否留下明确下一步问题"
+  ]
 }}
 
 Check:
-1. Check whether the opening hook lands early enough, with clear pressure, conflict, or disruption instead of throat-clearing.
-2. Check whether the ending pull is strong enough to create forward motion, instead of ending flat or only summarizing.
-3. Check whether a major character's first focused appearance is introduced at the right moment through POV attention, action, etiquette pressure, injury, clothing, status marker, or other scene-relevant detail.
-4. Avoid dossier-style appearance dumps before tension starts, and avoid waiting so long that readers cannot picture the focal character or social hierarchy.
-5. Appearance details should do double duty: status, labor trace, wound, disguise, fatigue, attraction, intimidation, or relationship signal.
-6. Flag unsupported exact duration, age, or elapsed-time claims if the fixed information package does not clearly provide them.
+1. In the first 300 Chinese characters, confirm whether the chapter presents a current conflict, strike object, or present-tense event.
+2. Confirm whether the opening lets the reader know who wants what, and why they cannot get it directly now.
+3. Confirm whether it inherits the previous chapter's ending pull or this chapter brief's incoming hook instead of feeling like a restart.
+4. Confirm whether the first focused appearance detail is tied to pressure, power, etiquette, injury, labor, class, or social tension rather than static profile description.
+5. Confirm whether the ending leaves a concrete next-step question, obstacle, or price.
+6. If time information appears, confirm whether it obeys the time anchor.

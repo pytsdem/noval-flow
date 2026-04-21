@@ -1,0 +1,44 @@
+Review chapter time consistency. Output JSON only.
+
+[Time anchor]
+{time_anchor_text}
+
+[Completed chapter memory]
+{completed_chapter_memory_text}
+
+[Objective timeline anchors]
+{timeline_anchor_facts_text}
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Chapter text]
+{chapter_text}
+
+Output format:
+{{
+  "passed": false,
+  "level": "high",
+  "issues": [
+    {{
+      "category": "time_jump",
+      "severity": "high",
+      "evidence": "上一章收在深夜饮酒，本章开头直接写成午后，没有过渡。",
+      "reason": "违反 time_anchor.relative_to_previous_chapter 和 must_not_conflict。",
+      "fix": "改成宿醉后的清晨，或补上明确的时间过渡和身体恢复过程。"
+    }}
+  ],
+  "rewrite_guidance": "所有场景都要服从 time_anchor；若要跳时，必须写明过渡。",
+  "evidence_focus": [
+    "昼夜是否连续",
+    "人物身体状态是否延续",
+    "物件状态是否延续"
+  ]
+}}
+
+Check:
+1. Check whether the chapter obeys the provided absolute time and relative-to-previous-chapter time.
+2. Check whether it conflicts with previous chapter ending state, including body state, object state, and scene aftermath.
+3. Check whether the text jumps from one time-of-day to another without a written transition.
+4. If the chapter contains multiple scenes, check whether transitions are explicit and plausible.
+5. Check whether bodily states like injury, fatigue, hunger, drunkenness, wet clothes, or unfinished business carry through naturally.

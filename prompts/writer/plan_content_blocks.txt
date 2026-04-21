@@ -1,0 +1,58 @@
+Plan the chapter as a sequence of content blocks. Return valid JSON only.
+
+[Chapter brief JSON]
+{chapter_brief_json}
+
+[Completed chapter memory]
+{completed_chapter_memory_text}
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Relevant world rules]
+{relevant_world_rules_text}
+
+[Timeline anchor facts]
+{timeline_anchor_facts_text}
+
+[Scene character context]
+{scene_character_context_text}
+
+[Relationship state]
+{relationship_state_text}
+
+[Style card]
+{style_card_text}
+
+[Target word count hint]
+{target_word_count_text}
+
+Definition:
+- A content block is a writing unit with one clear narrative purpose.
+- It is not a physical paragraph.
+- One block may contain 1 to 3 paragraphs, sometimes more, but each paragraph should remain comfortable for front-end reading.
+
+Requirements:
+1. Plan 3 to 8 blocks depending on chapter complexity.
+2. Each block must do one main thing only.
+3. Adjacent blocks must clearly push the situation forward.
+4. Each block must end with a changed situation, pressure, belief, or relationship angle.
+5. Keep hidden truths hidden. Respect allowed clues and forbidden reveals.
+6. Prefer precise, actionable purposes rather than vague labels like "continue scene".
+7. Set `text` to an empty string.
+8. Set `status` to `draft` and `version` to `1`.
+9. Use stable ids like `ch_002.sc_001.b001`.
+10. Fill every block with:
+   - `block_id`
+   - `chapter_id`
+   - `block_index`
+   - `purpose`
+   - `characters`
+   - `active_lines`
+   - `active_twists`
+   - `scene_goal`
+   - `must_reveal`
+   - `must_hide`
+   - `emotional_tone`
+   - `end_state`
+

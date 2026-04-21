@@ -1,20 +1,13 @@
-Review plot logic and authority limits. Output JSON only.
-
-{step_2_worldbuilding_text}
-
-{step_4_event_timeline_text}
-
-{step_6_twists_text}
-
-{step_7_story_lines_text}
-
-{step_8_chapter_brief_text}
+Review plot logic and causal soundness. Output JSON only.
 
 [Chapter payload]
 {chapter_payload_text}
 
-[Relevant world rules]
-{relevant_world_rules_text}
+[Chapter visible context]
+{chapter_visible_context_text}
+
+[Scene character context]
+{scene_character_context_text}
 
 [Chapter text]
 {chapter_text}
@@ -23,14 +16,20 @@ Output format:
 {{
   "passed": false,
   "level": "high",
-  "issues": ["Example issue"],
-  "rewrite_guidance": "Example rewrite guidance"
+  "issues": [
+    {{
+      "category": "plot_logic",
+      "severity": "high",
+      "evidence": "男主没有铺垫就获得了推进旧案的关键入口。",
+      "reason": "因果链缺了一步，结果像被作者直接发放。",
+      "fix": "补出入口来源、代价或试探过程，让结果由场景推出来。"
+    }}
+  ],
+  "rewrite_guidance": "把关键转折补成清晰因果链，不要直接把结果发给人物。"
 }}
 
 Check:
-1. world_limit violations
-2. power overreach
-3. institutions helping too easily
-4. key information gained for free
-5. etiquette, hierarchy, or procedural logic mismatch
-6. cause and effect gaps inside the chapter
+1. Check whether major turns come from written causes inside this chapter.
+2. Check whether any convenience, coincidence, or shortcut replaces scene-earned progression.
+3. Check whether constraints from the chapter brief and world limit are still binding the characters.
+4. Check whether each clue, object, or reveal-stage movement is justified by visible cause.

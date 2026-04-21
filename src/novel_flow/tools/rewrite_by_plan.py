@@ -11,6 +11,9 @@ class RewriteByPlanTool(LLMChapterTool):
     def run(self, payload: dict[str, object]) -> dict[str, object]:
         prompt = self.render_prompt(
             "writer/rewrite_by_plan.txt",
+            selection_summary_text=payload.get("selection_summary_text", ""),
+            time_anchor_text=payload.get("time_anchor_text", ""),
+            chapter_visible_context_text=payload.get("chapter_visible_context_text", ""),
             completed_chapter_memory_text=payload["completed_chapter_memory_text"],
             step_1_story_foundation_text=payload["step_1_story_foundation_text"],
             step_2_worldbuilding_text=payload["step_2_worldbuilding_text"],
@@ -26,9 +29,11 @@ class RewriteByPlanTool(LLMChapterTool):
             scene_character_context_text=payload["scene_character_context_text"],
             relationship_state_text=payload["relationship_state_text"],
             style_card_text=payload["style_card_text"],
-            chapter_text=payload["chapter_text"],
+            original_text=payload.get("original_text", payload["chapter_text"]),
             current_chapter_draft_tail=payload.get("current_chapter_draft_tail", ""),
             previous_scene_tail=payload.get("previous_scene_tail", ""),
             revision_plan_json=json.dumps(payload["revision_plan"], ensure_ascii=False, indent=2),
+            dynamic_instruction_text=payload.get("dynamic_instruction_text", ""),
+            loaded_skill_instructions_text=payload.get("loaded_skill_instructions_text", ""),
         )
         return {"chapter_text": self.generate_text(prompt=prompt, temperature=0.55)}

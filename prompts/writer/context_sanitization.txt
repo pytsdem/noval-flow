@@ -1,26 +1,35 @@
-Sanitize the chapter writing context for the current chapter. Output JSON only.
+Upgrade the chapter writing context for the current chapter. Output JSON only.
 
-You are not writing fiction. You are preparing a reveal-safe writing package for another writing agent.
+You are not writing fiction. You are preparing a reveal-safe, chapter-usable package for another writing agent.
+
+Do two sub-tasks in one pass:
+1. Selection: from the upstream material, select only the parts that matter for this chapter.
+2. Sanitization: translate author-known material into current-chapter-visible material.
 
 Current chapter:
 - chapter_id: {current_chapter_id}
 
-Active twists JSON:
+Active hidden twists JSON:
 {active_twists_json}
 
-Policy:
-1. Only sanitize blocks that may leak unrevealed truth before their reveal chapter.
-2. Do not use placeholders like [REDACTED], XXX, omitted, hidden, or similar markers.
-3. Rewrite risky content into abstract, writer-useful guidance.
-4. Preserve current-chapter utility: keep visible pressure, reader misread, allowed clue shape, public relationship movement, and scene-usable facts.
-5. Do not expose hidden motive, hidden causality, hidden sacrifice, final payoff logic, or reveal answer before reveal_at.
-6. Step 2 worldbuilding and Step 4 full event timeline are handled outside this task and must not be returned here.
-7. If a block is already reveal-safe, return it unchanged.
-8. For step 5 and relationship-related blocks, keep outward trigger, public consequence, and chapter-usable movement, while abstracting private motive and concealed cause.
-9. For step 1 and step 7, preserve structure and strategic value, but rewrite high-risk summary/payoff language into reader-facing abstract guidance.
+Global policy:
+1. Keep step1~8 facts intact in spirit, but only pass along what this chapter needs.
+2. Do not leak unrevealed truth before reveal_at.
+3. Do not use placeholders like [REDACTED], XXX, omitted, hidden, or similar markers.
+4. Rewrite dangerous author-level material into chapter-visible symptoms, pressure, suspicion, misread, or outward behavior.
+5. Preserve concrete writing utility: who wants what, why they cannot get it directly, what the reader should know, what the reader should still misread, and what clue shape is allowed.
+6. Step 2 worldbuilding and Step 4 full event timeline stay outside this task, but you must use them to infer chapter time anchor and conflict limits.
+7. For time anchor, be explicit about absolute time, relative relation to previous chapter, and must-not-conflict notes.
+8. For character packets, keep only chapter-relevant roles and visible-state guidance.
+9. For character milestones and relationship blocks, keep outward trigger, public consequence, and chapter-usable movement, while abstracting private motive and concealed cause.
+10. Return concise Simplified Chinese natural-language strings.
 
 Return exactly this JSON shape:
 {{
+  "chapter_id": "ch_012",
+  "selection_summary_text": "写清 relevant_roles / relevant_twists / relevant_lines / relevant_world_rules / relevant_past_events / current_time_anchor 的简洁中文摘要",
+  "time_anchor_text": "写成可直接给正文和 review 使用的时间锚点说明，必须包含 absolute / season / timeofday / relative_to_previous_chapter / must_not_conflict",
+  "chapter_visible_context_text": "写成 reader_should_know / reader_should_believe / reader_should_not_know / allowed_clues / forbidden_reveals / current_character_state 的简洁中文摘要",
   "completed_chapter_memory_text": "string",
   "step_1_story_foundation_text": "string",
   "step_3_character_packets_text": "string",
@@ -40,8 +49,14 @@ Input blocks:
 [Step 1 story foundation]
 {step_1_story_foundation_text}
 
+[Step 2 worldbuilding]
+{step_2_worldbuilding_text}
+
 [Step 3 character packets]
 {step_3_character_packets_text}
+
+[Step 4 full event timeline]
+{step_4_event_timeline_text}
 
 [Step 5 character milestones]
 {step_5_character_milestones_text}
@@ -54,6 +69,12 @@ Input blocks:
 
 [Step 8 chapter brief]
 {step_8_chapter_brief_text}
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Objective timeline anchors]
+{timeline_anchor_facts_text}
 
 [Scene character context]
 {scene_character_context_text}

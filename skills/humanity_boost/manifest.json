@@ -1,0 +1,15 @@
+{
+  "skill_id": "humanity_boost",
+  "tools": [
+    "review_humanity",
+    "rewrite_by_plan",
+    "final_polish"
+  ],
+  "triggers": [
+    "review_humanity_failed"
+  ],
+  "success_condition": {
+    "human_warmth_score_gte": 7
+  },
+  "max_iterations": 2
+}

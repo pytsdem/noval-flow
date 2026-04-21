@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from novel_flow.models.schemas import BinaryReviewPayload
+from novel_flow.models.schemas import EvidenceReviewPayload
 from novel_flow.tools._base import LLMChapterTool
 
 
@@ -12,5 +12,5 @@ class ReviewClueOriginTool(LLMChapterTool):
         return self.generate_json(
             prompt=prompt,
             schema_name=self.name,
-            schema_model=BinaryReviewPayload,
+            schema_model=EvidenceReviewPayload,
         )
