@@ -1,0 +1,1814 @@
+{
+  "summary": {
+    "no_backend_started": true,
+    "project_code_modified_in_this_run": false,
+    "live_smoke_total": 2,
+    "live_smoke_input_misread_count": 0,
+    "offline_suite_total": 9,
+    "offline_suite_matched_expectation": 6,
+    "offline_suite_mismatch_count": 3,
+    "offline_weak_case_overblocked_count": 3,
+    "offline_verdict_counts": {
+      "pass": 3,
+      "needs_work": 0,
+      "blocked": 6
+    },
+    "offline_average_hybrid_scores": {
+      "romance_tension_score": 5.38,
+      "relationship_progression_score": 4.26,
+      "emotional_resonance_score": 5.42,
+      "character_attraction_score": 5.4,
+      "hook_score": 5.57,
+      "continuity_score": 5.53,
+      "redundancy_score": 5.5,
+      "mind_state_consistency_score": 5.39
+    }
+  },
+  "live_smoke_results": [
+    {
+      "case_id": "romance_case_01_court_return",
+      "label": "live_strong_smoke_01",
+      "note": "本地手写强样本，用来验证真实 judge 通路。",
+      "text": "殿门被内侍推开时，谢临川靴底的雪水还没干，冰凉先顺着裤脚往上爬。先帝旧案四字落下来，满殿的呼吸像被谁按住，沈知微这才抬眼。\n\n她只看了一瞬，便把目光重新收回礼数里，像什么都没发生。可谢临川偏偏看见她指尖在袖中收紧了一分，也看见她在“转运旧档”四字上停得极轻，轻得若不是他这些年被人一句话一句话逼着活过来，根本听不出来。\n\n他照旨谢恩，膝骨磕在金砖上，声线却稳得发冷：“臣不敢翻旧判，只求调阅三年前军粮转运的原始档册，验一验内库抄本有无讹误。”\n\n群臣里立刻有人嗤笑，说流放回来的人竟也配碰内库旧档。谢临川没有抬头，反倒把请旨的话说得更缓，像把刀一寸寸压进鞘里。高阶上终于有人问沈知微。她是当年旧案证人，如今又掌着内库文簿，人人都等她一句。\n\n“按例，可查。”她答得极冷，连称呼都规整得过分，“请谢世子于偏库阅副册，不得擅动原卷。”\n\n谢临川本该只记住那句“不得擅动”，偏先被“谢世子”三个字钉住。三年前她还会在灯下叫他名字，如今却把每一个字都磨成了最疏远的礼器。他抬眼看她，她已经垂下睫毛，像从未在“旧案”两个字上乱过半拍。\n\n可他还是抓到了。散朝后档册被抬出内库，沈知微从他身侧让开时，目光掠过他虎口旧伤，又极快移开。那一下短得近乎错觉，却比殿上的冷言更像破绽。\n\n谢临川接过调阅腰牌，低声道：“沈大人当年证词落笔也这么稳么？”\n\n她背脊绷得笔直，没有回头：“谢世子若想翻案，就别把力气浪费在问旧人。”\n\n话音未落，殿外风雪里就有人疾步来报，说昨夜替内库誊抄三年前旧档的第一名书吏，今晨被发现死在值房。谢临川攥紧腰牌，忽然意识到她方才那一眼，也许不是心虚，而是来不及。",
+      "title": "旧案重逢的朝堂试探",
+      "judge_payload": {
+        "romance_tension": {
+          "score": 8.5,
+          "reason": "男女主在朝堂高压下的克制拉扯成立，试探、回避、压迫感均通过细节传递，潜台词充足。男主精准捕捉女主的微破绽，女主用极致礼数掩盖情绪，双向的在意与敌意都藏在规矩缝隙里，符合设定的“误读型拉扯”核心。",
+          "evidence_summary": "女主听到旧案时指尖收紧、用疏远的“谢世子”称呼、刻意避开男主虎口旧伤；男主抓住这些细节追问当年证词，被称呼刺痛却保持克制。",
+          "improvement_hint": "可增加男女主的生理微反应（如男主喉结微动、女主呼吸顿半拍），让拉扯的张力更具象，而非仅靠动作细节传递。",
+          "source": "llm"
+        },
+        "relationship_progression": {
+          "score": 8.0,
+          "reason": "本章关系发生了有效变化，从前期的“单向敌对仇敌”推进到“带有怀疑的高危牵制”，男主对女主的认知出现松动，不再认定她只是心虚的叛徒。",
+          "evidence_summary": "男主从被“谢世子”称呼刺痛，到抓住女主避开旧伤的破绽，最后意识到她的反应可能是“来不及”而非心虚，完成了从恨到怀疑的认知转变。",
+          "improvement_hint": "可给关系推进设置阶梯感，比如男主先对一个破绽存疑，再通过第二个细节加深怀疑，而非瞬间完成认知转变，让关系变化更扎实。",
+          "source": "llm"
+        },
+        "emotional_resonance": {
+          "score": 8.0,
+          "reason": "情绪具体且有余波，通过动作、细节传递冷硬、克制下的在意，没有空泛抒情，能让读者感受到朝堂的压迫感和两人未断的牵引。",
+          "evidence_summary": "男主膝骨磕金砖的痛感与被称呼刺痛的心理感受呼应；女主指尖收紧、避开旧伤的动作，藏着无法言说的情绪；结尾书吏之死带来的冲击，留下了情绪余味。",
+          "improvement_hint": "可将环境细节与情绪绑定，比如殿内的冷香、雪水的冰凉与两人的情绪状态呼应，让情绪更有落地感，而非仅靠人物动作支撑。",
+          "source": "llm"
+        },
+        "male_lead_attraction": {
+          "score": 8.5,
+          "reason": "男主魅力突出，兼具压迫感与细腻观察力，不是只会放狠话的模板化角色，高自控的人设立得住，同时藏着未断的旧情牵引。",
+          "evidence_summary": "朝堂上面对群臣嗤笑仍稳如泰山，用缓而冷的语气递出请求；精准捕捉女主的微破绽，被“谢世子”称呼刺痛却未失控；结尾攥紧腰牌的反应，体现他的冷静与警觉。",
+          "improvement_hint": "可加入流放北地后的习惯细节（如下意识摩挲虎口旧伤、对寒冷的敏感度），让人物的过往经历更具象，增强立体度。",
+          "source": "llm"
+        },
+        "female_lead_attraction": {
+          "score": 8.0,
+          "reason": "女主有主体性与辨识度，用极致礼数掩盖内心挣扎，不是纯工具人或冷脸标签，隐忍的人设符合设定，破绽的出现让她更有层次感。",
+          "evidence_summary": "用“按例可查”的冰冷回应守住规矩，指尖收紧、避开旧伤的微动作暴露内心波动；背脊绷直的姿态，体现她的克制与恐惧。",
+          "improvement_hint": "可增加女主的主动行为（如刻意调整档册位置避开男主视线、提前安排副册的细节），让她从“被动破绽”转向“主动防守”，强化主体性。",
+          "source": "llm"
+        },
+        "lead_pair_chemistry": {
+          "score": 8.5,
+          "reason": "双人同场时的化学反应强烈，朝堂高压下的关系压差明显，每一个互动都藏着潜台词火花，克制的互动比直白冲突更有张力。",
+          "evidence_summary": "女主抬眼又快速收回的对视；散朝后擦肩而过时女主避开旧伤的眼神；男主低声追问证词、女主冰冷回应的对话，都在规矩下传递着未断的牵引。",
+          "improvement_hint": "可增加极细微的肢体接触（如女主让开时衣袖擦过男主胳膊），让两人的张力更有“电流感”，进一步强化双向的在意。",
+          "source": "llm"
+        },
+        "opening_hook": {
+          "score": 9.0,
+          "reason": "开头快速建立重逢压力与冲突，400字内直接触发核心矛盾，抓住读者注意力。",
+          "evidence_summary": "开头两句就带出男主靴底未干的状态、先帝旧案的触发点，以及女主抬眼的关键反应，瞬间拉满重逢的紧张感。",
+          "improvement_hint": "可加入男主看到女主时的生理微反应（如呼吸顿半拍），让开头的钩子更紧，直接点出两人的旧情羁绊。",
+          "source": "llm"
+        },
+        "ending_hook": {
+          "score": 9.0,
+          "reason": "结尾抛出新的危机与认知反转，既推进了旧案情节，又改变了男女主的关系状态，强牵引下一章阅读。",
+          "evidence_summary": "书吏死亡的消息直接升级旧案危险，男主意识到女主的反应可能是“来不及”而非心虚，留下了“女主到底藏着什么秘密”“旧案背后的黑手是谁”两大悬念。",
+          "improvement_hint": "可加入女主听到书吏死亡消息后的微反应（如指尖抖一下），让悬念更复杂，同时强化两人的牵制关系。",
+          "source": "llm"
+        },
+        "continuity": {
+          "score": 9.0,
+          "reason": "情节、情绪、人设承接自然，与上一章的回京铺垫、女主的状态完全契合，没有突兀跳变。",
+          "evidence_summary": "上一章女主写错“定北”二字体现她的不安，本章她对旧案的微反应承接了这份情绪；男主的冷硬与复仇欲也承接了上一章的压火状态。",
+          "improvement_hint": "可加入女主整夜未眠的细节（如眼下的青黑），让上一章的“整夜未眠”与本章的状态更紧密衔接，增强连贯性。",
+          "source": "llm"
+        },
+        "redundancy": {
+          "score": 9.0,
+          "reason": "没有重复铺陈同一情绪或关系，每个细节都推进情节或关系，信息密度高，避免了无效表达。",
+          "evidence_summary": "没有重复强调男主的恨意或女主的冷硬，而是通过不同的细节（称呼、指尖动作、眼神）传递情绪，每个细节都有独特作用。",
+          "improvement_hint": "可压缩群臣嗤笑的篇幅，将更多空间留给男女主的互动细节，进一步提升信息效率。",
+          "source": "llm"
+        },
+        "mind_state_consistency": {
+          "score": 9.0,
+          "reason": "男女主的行为、话语完全符合高自控的心智状态，没有过早失控，人设稳定。",
+          "evidence_summary": "男主面对群臣嗤笑未失态，仅用缓冷的语气施压；女主始终用礼数掩盖情绪，只有微破绽，没有暴露真实想法，符合两人“极能忍”的设定。",
+          "improvement_hint": "可让男主的怀疑通过多个破绽叠加逐步形成，而非瞬间意识到“来不及”，让心智转变更符合高自控人物的思考逻辑。",
+          "source": "llm"
+        },
+        "diagnosis": {
+          "strengths": [
+            "高压朝堂下的克制拉扯精准，潜台词充足，完全契合设定的“误读型言情”核心",
+            "关系推进明确，从单向敌对转向怀疑式牵制，避免了原地踏步",
+            "细节驱动情绪与情节，没有空泛抒情，读感扎实",
+            "结尾钩子强，同时关联旧案情节与男女主关系，有效牵引下一章"
+          ],
+          "weaknesses": [
+            "女主的主动性稍弱，更多是被动暴露破绽，缺乏主动防守或布局的细节",
+            "男主的立体度仍有提升空间，缺乏体现流放北地经历的具象细节",
+            "中间群臣嗤笑的戏份稍显冗余，挤占了男女主互动的核心空间"
+          ],
+          "improvement_hints": [
+            "给女主增加主动行为，如刻意调整档册位置避开男主视线，强化她的主体性与防守意识",
+            "加入男主流放后的习惯细节，如下意识摩挲虎口旧伤，让人物过往经历更具象",
+            "压缩群臣嗤笑的篇幅，将更多笔墨放在男女主的微互动上，强化双人张力",
+            "让男主的怀疑通过多个破绽叠加逐步形成，而非瞬间转变，符合高自控人物的思考逻辑"
+          ]
+        }
+      },
+      "rule_redundancy": {
+        "score": 10.0,
+        "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱。",
+        "evidence_summary": "未检测到明显高相似段落或高频重复短语。",
+        "improvement_hint": "继续保持一段一推进，避免把同层情绪解释回头再说一遍。",
+        "source": "rule"
+      },
+      "metrics": {
+        "romance_tension_score": {
+          "score": 8.5,
+          "reason": "男女主在朝堂高压下的克制拉扯成立，试探、回避、压迫感均通过细节传递，潜台词充足。男主精准捕捉女主的微破绽，女主用极致礼数掩盖情绪，双向的在意与敌意都藏在规矩缝隙里，符合设定的“误读型拉扯”核心。",
+          "source": "llm"
+        },
+        "relationship_progression_score": {
+          "score": 8.0,
+          "reason": "本章关系发生了有效变化，从前期的“单向敌对仇敌”推进到“带有怀疑的高危牵制”，男主对女主的认知出现松动，不再认定她只是心虚的叛徒。",
+          "source": "llm"
+        },
+        "emotional_resonance_score": {
+          "score": 8.0,
+          "reason": "情绪具体且有余波，通过动作、细节传递冷硬、克制下的在意，没有空泛抒情，能让读者感受到朝堂的压迫感和两人未断的牵引。",
+          "source": "llm"
+        },
+        "character_attraction_score": {
+          "score": 8.35,
+          "reason": "由男主吸引力、女主吸引力和双人化学反应加权合成。",
+          "source": "hybrid"
+        },
+        "hook_score": {
+          "score": 9.0,
+          "reason": "由开篇钩子与结尾钩子均值合成。",
+          "source": "hybrid"
+        },
+        "continuity_score": {
+          "score": 9.0,
+          "reason": "情节、情绪、人设承接自然，与上一章的回京铺垫、女主的状态完全契合，没有突兀跳变。",
+          "source": "llm"
+        },
+        "redundancy_score": {
+          "score": 9.0,
+          "reason": "以 romance judge 为主分，规则检测只用于向下修正，不再允许规则层把坏重复救高。",
+          "source": "hybrid"
+        },
+        "mind_state_consistency_score": {
+          "score": 9.0,
+          "reason": "男女主的行为、话语完全符合高自控的心智状态，没有过早失控，人设稳定。",
+          "source": "llm"
+        }
+      },
+      "verdict": "pass",
+      "hard_fail_flags": [],
+      "top_targets": [],
+      "looks_like_input_misread": false
+    },
+    {
+      "case_id": "romance_case_02_sickbed_truce",
+      "label": "live_strong_smoke_02",
+      "note": "第二个 live smoke，用来排除单 case 偶发。",
+      "text": "雨声压着屋檐，药盏里的苦气一阵阵往上翻。顾砚伤得重，醒来第一眼先看见林晚坐在灯下，袖口还沾着没干的血。\n\n她听见动静，只把药递过去：“命是我暂时留下的，不代表旧账就算了。”话说得冷，手却在碰到他腕骨时停了一瞬，像怕扯开他刚缝好的伤口。\n\n顾砚接过药，没有立刻喝，反而看见他掌心那枚旧铜钱沾了血。林晚也看见了，眼神只乱了半拍，随即把纱布勒得更紧：“别误会，我不是为了它。”\n\n窗外忽然传来急促的马蹄声，门外人低声禀报，说追杀他的人已经摸到了山道口。顾砚这才把药一口喝尽，抬眼看她：“你现在若把我推出去，我连怨你的力气都没有。”\n\n林晚把灯芯拨亮半寸，终于看向他：“我若真想让你死，昨夜就不会亲手给你止血。”雨声更急，后门也在这时被人敲了三下，用的是她最不想在今夜听到的暗号。",
+      "title": "雨夜药庐的被迫共处",
+      "judge_payload": {
+        "romance_tension": {
+          "score": 6.5,
+          "reason": "具备基本的口是心非拉扯与旧情试探，但层次单一，缺乏动作、呼吸等细节支撑，潜台词不够饱满，压迫感与回避感的刻画偏浅。",
+          "evidence_summary": "林晚冷语拒人却下意识怕碰男主伤口，顾砚借旧铜钱试探，两人关于“推不推出去”的对话暗藏依赖与防备。",
+          "improvement_hint": "将试探藏在护理动作细节中，比如缝伤时的呼吸停顿、指尖颤抖、眼神回避，用近身互动强化拉扯的压迫感，而非直白对话。",
+          "source": "llm"
+        },
+        "relationship_progression": {
+          "score": 5.5,
+          "reason": "关系有初步推进（从互疑旧识到暂时达成“不推出去”的默契），但缺乏从“怀疑”到“依赖”的过渡细节，变化显得突兀，没有体现关系松动的过程。",
+          "evidence_summary": "林晚明确表态不会让男主死，顾砚默认接受她的庇护，但未展现两人从对峙到妥协的关键心理变化。",
+          "improvement_hint": "补全护理过程中的试探与松动，比如男主故意露出税册残页、女主看到残页后的反应，让关系推进有迹可循，而非直接跳到默契状态。",
+          "source": "llm"
+        },
+        "emotional_resonance": {
+          "score": 6.0,
+          "reason": "有雨夜追杀的紧张氛围，但情绪细节过于单薄，缺乏让读者共情的感官与动作支撑，余波不足。",
+          "evidence_summary": "马蹄声、敲门暗号带来基本紧张感，林晚看到旧铜钱时眼神乱了半拍，但未深入刻画她的挣扎与男主的隐忍。",
+          "improvement_hint": "加入具体感官细节，比如药味混着血腥味的刺鼻感、男主伤口牵扯的痛感、女主攥纱布的力度，让情绪落地，而非停留在表面反应。",
+          "source": "llm"
+        },
+        "male_lead_attraction": {
+          "score": 5.5,
+          "reason": "男主的强势、自控人设未立起来，只有基本的试探逻辑，缺乏记忆点，未能体现督查使的警惕与隐忍特质。",
+          "evidence_summary": "顾砚借喝药间隙提旧铜钱，说“推出去也不怨”的示弱式试探，但未展现他强撑伤势的细节与警惕性。",
+          "improvement_hint": "加入他醒来先扫视房间、攥紧床头的隐忍动作，把试探藏在命令式语气中，强化“越疼越不肯示弱”的人设。",
+          "source": "llm"
+        },
+        "female_lead_attraction": {
+          "score": 6.0,
+          "reason": "女主的“温静下有主见”人设体现不足，只有表面的冷语，缺乏内心挣扎的细节，主体性偏弱。",
+          "evidence_summary": "林晚递药时怕碰伤口、拨亮灯芯表态，但未展现她“既怕惹麻烦又忍不住救人”的矛盾心理。",
+          "improvement_hint": "加入她处理伤口时避开旧铜钱的眼神、攥药盏的力度等细节，突出她在“自保”与“旧情”之间的挣扎，强化主见性。",
+          "source": "llm"
+        },
+        "lead_pair_chemistry": {
+          "score": 6.0,
+          "reason": "双人同场有口是心非的潜台词，但缺乏近身互动的火花，关系压差不够明显，化学反应偏淡。",
+          "evidence_summary": "林晚碰男主腕骨的停顿、两人关于生死的对话，有基本张力但未形成强烈的情绪碰撞。",
+          "improvement_hint": "设计更多近身互动细节，比如缝伤时男主的气息扫过女主发顶、女主擦血时刻意避开男主眼神，用肢体接触强化“被迫靠近又刻意疏离”的电流感。",
+          "source": "llm"
+        },
+        "opening_hook": {
+          "score": 5.0,
+          "reason": "开头只是交代场景，未快速建立关系压力或悬念，钩子感弱，未能立刻抓住读者注意力。",
+          "evidence_summary": "开头仅写雨声、药味、林晚袖口的血，未抛出旧情或案件线索的冲突点。",
+          "improvement_hint": "将开头改成林晚正在处理伤口，镜头先对准男主掌心的旧铜钱或掉落的税册残页，立刻带出旧情与案件的双重悬念。",
+          "source": "llm"
+        },
+        "ending_hook": {
+          "score": 7.5,
+          "reason": "结尾的敲门暗号带来新的危险，能勾起读者对“门外人身份”的好奇，但未关联到两人的关系选择，钩子的情感张力不足。",
+          "evidence_summary": "后门的三下暗号是林晚最不想听到的，直接拉高了危险等级，但未体现她在“护男主”与“自保”之间的抉择压力。",
+          "improvement_hint": "加入林晚攥紧剪刀、看向男主的眼神细节，把危险与两人的同盟选择绑定，让钩子同时具备剧情悬念与情感张力。",
+          "source": "llm"
+        },
+        "continuity": {
+          "score": 5.5,
+          "reason": "承接了上一章“躲进药庐”的剧情，但跳过了关键的伤口护理过程，衔接不够顺畅，逻辑断层明显。",
+          "evidence_summary": "上一章结尾是男主撞翻草药匾，本章开头已缝好伤口，中间缺失从“闯入”到“护理”的过渡环节。",
+          "improvement_hint": "补全男主闯入后林晚的第一反应（比如犹豫要不要救、快速锁门），衔接上一章的结尾，让剧情过渡更自然。",
+          "source": "llm"
+        },
+        "redundancy": {
+          "score": 8.0,
+          "reason": "无明显重复铺陈，每段内容都有新的信息推进，未出现同一情绪或关系的反复解释。",
+          "evidence_summary": "从递药试探到旧铜钱伏笔，再到马蹄声危机、敲门暗号，内容推进清晰，无冗余表述。",
+          "improvement_hint": "将部分直白对话替换为动作细节，减少直白表态，用行为传递情绪，进一步压缩无效表述。",
+          "source": "llm"
+        },
+        "mind_state_consistency": {
+          "score": 7.0,
+          "reason": "两人的行为基本符合人设，但男主的“高警惕”特质未体现，存在轻微的心智失真。",
+          "evidence_summary": "林晚冷语但心软的行为符合“温静有主见”的人设，顾砚的试探符合“警惕多疑”的设定，但醒来未先扫视环境，不符合督查使的警惕性。",
+          "improvement_hint": "加入男主醒来先攥紧腰间配刀、快速扫视房间的细节，强化他“高自控、高警惕”的心智状态，避免人设失真。",
+          "source": "llm"
+        },
+        "diagnosis": {
+          "strengths": [
+            "结尾敲门暗号的钩子有效，能勾起读者对后续剧情的好奇",
+            "具备基本的口是心非拉扯逻辑，旧情伏笔（旧铜钱）清晰",
+            "雨夜追杀的氛围铺垫到位，紧张感基本成立"
+          ],
+          "weaknesses": [
+            "关系推进突兀，缺乏从“互疑”到“依赖”的过渡细节",
+            "人物细节单薄，人设立体度不足，未能体现男女主的核心特质",
+            "情绪刻画偏表面，缺乏让读者共情的感官与动作支撑"
+          ],
+          "improvement_hints": [
+            "补全伤口护理过程的试探细节，用税册残页的线索推进关系变化",
+            "加入感官与动作细节，强化男女主的情绪挣扎与隐忍特质",
+            "将案件线索与情感拉扯深度绑定，让剧情推进同时服务于关系升温"
+          ]
+        }
+      },
+      "rule_redundancy": {
+        "score": 10.0,
+        "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱。",
+        "evidence_summary": "未检测到明显高相似段落或高频重复短语。",
+        "improvement_hint": "继续保持一段一推进，避免把同层情绪解释回头再说一遍。",
+        "source": "rule"
+      },
+      "metrics": {
+        "romance_tension_score": {
+          "score": 6.5,
+          "reason": "具备基本的口是心非拉扯与旧情试探，但层次单一，缺乏动作、呼吸等细节支撑，潜台词不够饱满，压迫感与回避感的刻画偏浅。",
+          "source": "llm"
+        },
+        "relationship_progression_score": {
+          "score": 5.5,
+          "reason": "关系有初步推进（从互疑旧识到暂时达成“不推出去”的默契），但缺乏从“怀疑”到“依赖”的过渡细节，变化显得突兀，没有体现关系松动的过程。",
+          "source": "llm"
+        },
+        "emotional_resonance_score": {
+          "score": 6.0,
+          "reason": "有雨夜追杀的紧张氛围，但情绪细节过于单薄，缺乏让读者共情的感官与动作支撑，余波不足。",
+          "source": "llm"
+        },
+        "character_attraction_score": {
+          "score": 5.85,
+          "reason": "由男主吸引力、女主吸引力和双人化学反应加权合成。",
+          "source": "hybrid"
+        },
+        "hook_score": {
+          "score": 6.25,
+          "reason": "由开篇钩子与结尾钩子均值合成。",
+          "source": "hybrid"
+        },
+        "continuity_score": {
+          "score": 5.5,
+          "reason": "承接了上一章“躲进药庐”的剧情，但跳过了关键的伤口护理过程，衔接不够顺畅，逻辑断层明显。",
+          "source": "llm"
+        },
+        "redundancy_score": {
+          "score": 8.0,
+          "reason": "以 romance judge 为主分，规则检测只用于向下修正，不再允许规则层把坏重复救高。",
+          "source": "hybrid"
+        },
+        "mind_state_consistency_score": {
+          "score": 7.0,
+          "reason": "两人的行为基本符合人设，但男主的“高警惕”特质未体现，存在轻微的心智失真。",
+          "source": "llm"
+        }
+      },
+      "verdict": "needs_work",
+      "hard_fail_flags": [
+        {
+          "flag_type": "continuity_break",
+          "severity": "high",
+          "reason": "连贯性仅 5.5 分，已经低于 高风险阈值。承接了上一章“躲进药庐”的剧情，但跳过了关键的伤口护理过程，衔接不够顺畅，逻辑断层明显。",
+          "evidence_summary": "上一章结尾是男主撞翻草药匾，本章开头已缝好伤口，中间缺失从“闯入”到“护理”的过渡环节。；关系推进突兀，缺乏从“互疑”到“依赖”的过渡细节",
+          "related_metrics": [
+            "continuity_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "relationship_progression_break",
+          "severity": "high",
+          "reason": "关系推进仅 5.5 分，已经低于 高风险阈值。关系有初步推进（从互疑旧识到暂时达成“不推出去”的默契），但缺乏从“怀疑”到“依赖”的过渡细节，变化显得突兀，没有体现关系松动的过程。",
+          "evidence_summary": "林晚明确表态不会让男主死，顾砚默认接受她的庇护，但未展现两人从对峙到妥协的关键心理变化。；关系推进突兀，缺乏从“互疑”到“依赖”的过渡细节",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/step_8_chapter_briefs.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        }
+      ],
+      "top_targets": [
+        {
+          "target_module": "prompts/writer/plan_content_blocks.txt",
+          "issue_type": "continuity",
+          "severity": "high",
+          "confidence": 0.84,
+          "reason": "连贯性当前 5.5 分。承接了上一章“躲进药庐”的剧情，但跳过了关键的伤口护理过程，衔接不够顺畅，逻辑断层明显。",
+          "evidence_summary": "上一章结尾是男主撞翻草药匾，本章开头已缝好伤口，中间缺失从“闯入”到“护理”的过渡环节。；关系推进突兀，缺乏从“互疑”到“依赖”的过渡细节",
+          "patch_hint": "优先修补前情承接、因果顺序和场景转折，不要用更华丽的 prose 掩盖断裂。",
+          "related_metrics": [
+            "continuity_score"
+          ],
+          "expected_metric_gains": [
+            "continuity_score",
+            "mind_state_consistency_score",
+            "relationship_progression_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "continuity",
+          "severity": "high",
+          "confidence": 0.84,
+          "reason": "连贯性当前 5.5 分。承接了上一章“躲进药庐”的剧情，但跳过了关键的伤口护理过程，衔接不够顺畅，逻辑断层明显。",
+          "evidence_summary": "上一章结尾是男主撞翻草药匾，本章开头已缝好伤口，中间缺失从“闯入”到“护理”的过渡环节。；关系推进突兀，缺乏从“互疑”到“依赖”的过渡细节",
+          "patch_hint": "优先修补前情承接、因果顺序和场景转折，不要用更华丽的 prose 掩盖断裂。",
+          "related_metrics": [
+            "continuity_score"
+          ],
+          "expected_metric_gains": [
+            "continuity_score",
+            "mind_state_consistency_score",
+            "relationship_progression_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/step_8_chapter_briefs.txt",
+          "issue_type": "relationship_progression",
+          "severity": "high",
+          "confidence": 0.83,
+          "reason": "关系推进当前 5.5 分。关系有初步推进（从互疑旧识到暂时达成“不推出去”的默契），但缺乏从“怀疑”到“依赖”的过渡细节，变化显得突兀，没有体现关系松动的过程。",
+          "evidence_summary": "林晚明确表态不会让男主死，顾砚默认接受她的庇护，但未展现两人从对峙到妥协的关键心理变化。；关系推进突兀，缺乏从“互疑”到“依赖”的过渡细节",
+          "patch_hint": "让 step 8 明确本章关系要发生什么变化，再要求正文用可见动作或选择把变化兑现出来。",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "expected_metric_gains": [
+            "relationship_progression_score",
+            "romance_tension_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "relationship_progression",
+          "severity": "high",
+          "confidence": 0.83,
+          "reason": "关系推进当前 5.5 分。关系有初步推进（从互疑旧识到暂时达成“不推出去”的默契），但缺乏从“怀疑”到“依赖”的过渡细节，变化显得突兀，没有体现关系松动的过程。",
+          "evidence_summary": "林晚明确表态不会让男主死，顾砚默认接受她的庇护，但未展现两人从对峙到妥协的关键心理变化。；关系推进突兀，缺乏从“互疑”到“依赖”的过渡细节",
+          "patch_hint": "让 step 8 明确本章关系要发生什么变化，再要求正文用可见动作或选择把变化兑现出来。",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "expected_metric_gains": [
+            "relationship_progression_score",
+            "romance_tension_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/plan_content_blocks.txt",
+          "issue_type": "hook",
+          "severity": "medium",
+          "confidence": 0.7,
+          "reason": "章节钩子当前 6.2 分。由开篇钩子与结尾钩子均值合成。",
+          "evidence_summary": "开头：开头仅写雨声、药味、林晚袖口的血，未抛出旧情或案件线索的冲突点。；结尾：后门的三下暗号是林晚最不想听到的，直接拉高了危险等级，但未体现她在“护男主”与“自保”之间的抉择压力。",
+          "patch_hint": "把开头异样感和结尾下一章驱动力提前写进 brief 与 block 责任，而不是等正文临场发挥。",
+          "related_metrics": [
+            "hook_score"
+          ],
+          "expected_metric_gains": [
+            "hook_score",
+            "relationship_progression_score",
+            "romance_tension_score"
+          ]
+        }
+      ],
+      "looks_like_input_misread": false
+    }
+  ],
+  "offline_actionability_results": [
+    {
+      "case_id": "romance_case_01_court_return",
+      "title": "旧案重逢的朝堂试探",
+      "variant": "strong",
+      "expectation": "pass",
+      "matched_expectation": true,
+      "note": "应被视为成立的强样本。",
+      "text": "殿门被内侍推开时，谢临川靴底的雪水还没干，冰凉先顺着裤脚往上爬。先帝旧案四字落下来，满殿的呼吸像被谁按住，沈知微这才抬眼。\n\n她只看了一瞬，便把目光重新收回礼数里，像什么都没发生。可谢临川偏偏看见她指尖在袖中收紧了一分，也看见她在“转运旧档”四字上停得极轻，轻得若不是他这些年被人一句话一句话逼着活过来，根本听不出来。\n\n他照旨谢恩，膝骨磕在金砖上，声线却稳得发冷：“臣不敢翻旧判，只求调阅三年前军粮转运的原始档册，验一验内库抄本有无讹误。”\n\n群臣里立刻有人嗤笑，说流放回来的人竟也配碰内库旧档。谢临川没有抬头，反倒把请旨的话说得更缓，像把刀一寸寸压进鞘里。高阶上终于有人问沈知微。她是当年旧案证人，如今又掌着内库文簿，人人都等她一句。\n\n“按例，可查。”她答得极冷，连称呼都规整得过分，“请谢世子于偏库阅副册，不得擅动原卷。”\n\n谢临川本该只记住那句“不得擅动”，偏先被“谢世子”三个字钉住。三年前她还会在灯下叫他名字，如今却把每一个字都磨成了最疏远的礼器。他抬眼看她，她已经垂下睫毛，像从未在“旧案”两个字上乱过半拍。\n\n可他还是抓到了。散朝后档册被抬出内库，沈知微从他身侧让开时，目光掠过他虎口旧伤，又极快移开。那一下短得近乎错觉，却比殿上的冷言更像破绽。\n\n谢临川接过调阅腰牌，低声道：“沈大人当年证词落笔也这么稳么？”\n\n她背脊绷得笔直，没有回头：“谢世子若想翻案，就别把力气浪费在问旧人。”\n\n话音未落，殿外风雪里就有人疾步来报，说昨夜替内库誊抄三年前旧档的第一名书吏，今晨被发现死在值房。谢临川攥紧腰牌，忽然意识到她方才那一眼，也许不是心虚，而是来不及。",
+      "synthetic_scores": {
+        "romance_tension": 8.9,
+        "relationship_progression": 8.2,
+        "emotional_resonance": 8.4,
+        "male_lead_attraction": 8.5,
+        "female_lead_attraction": 8.0,
+        "lead_pair_chemistry": 8.7,
+        "opening_hook": 8.6,
+        "ending_hook": 8.9,
+        "continuity": 8.7,
+        "redundancy": 8.1,
+        "mind_state_consistency": 8.6
+      },
+      "rule_redundancy": {
+        "score": 10.0,
+        "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱。",
+        "evidence_summary": "未检测到明显高相似段落或高频重复短语。",
+        "improvement_hint": "继续保持一段一推进，避免把同层情绪解释回头再说一遍。",
+        "source": "rule"
+      },
+      "hybrid_scores": {
+        "romance_tension_score": 8.9,
+        "relationship_progression_score": 8.2,
+        "emotional_resonance_score": 8.4,
+        "character_attraction_score": 8.43,
+        "hook_score": 8.75,
+        "continuity_score": 8.7,
+        "redundancy_score": 8.1,
+        "mind_state_consistency_score": 8.6
+      },
+      "verdict": "pass",
+      "hard_fail_flags": [],
+      "top_targets": []
+    },
+    {
+      "case_id": "romance_case_01_court_return",
+      "title": "旧案重逢的朝堂试探",
+      "variant": "weak",
+      "expectation": "needs_work",
+      "matched_expectation": false,
+      "note": "应被判成弱样本，而不是 blocker。",
+      "text": "谢临川回京以后，在朝堂上又见到了沈知微。他觉得她很冷，她也觉得他很冷。旧案让他们都很难受，所以气氛一直很压抑。\n\n他想查档，她按规矩答应。她很冷，他也很冷。她很冷，他也很冷。两个人都想到从前，但谁也没有做出新的反应。\n\n散朝以后，他还是觉得她很冷，她也还是觉得他很冷。后来有人告诉他书吏死了，他决定以后再查。",
+      "synthetic_scores": {
+        "romance_tension": 3.9,
+        "relationship_progression": 2.4,
+        "emotional_resonance": 4.2,
+        "male_lead_attraction": 5.1,
+        "female_lead_attraction": 4.7,
+        "lead_pair_chemistry": 3.8,
+        "opening_hook": 4.6,
+        "ending_hook": 3.7,
+        "continuity": 6.4,
+        "redundancy": 3.1,
+        "mind_state_consistency": 6.8
+      },
+      "rule_redundancy": {
+        "score": 10.0,
+        "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱。",
+        "evidence_summary": "未检测到明显高相似段落或高频重复短语。",
+        "improvement_hint": "继续保持一段一推进，避免把同层情绪解释回头再说一遍。",
+        "source": "rule"
+      },
+      "hybrid_scores": {
+        "romance_tension_score": 3.9,
+        "relationship_progression_score": 2.4,
+        "emotional_resonance_score": 4.2,
+        "character_attraction_score": 4.46,
+        "hook_score": 4.15,
+        "continuity_score": 6.4,
+        "redundancy_score": 3.1,
+        "mind_state_consistency_score": 6.8
+      },
+      "verdict": "blocked",
+      "hard_fail_flags": [
+        {
+          "flag_type": "relationship_progression_break",
+          "severity": "blocker",
+          "reason": "关系推进仅 2.4 分，已经低于 阻断阈值。关系几乎停留在原地，没有明显重估。",
+          "evidence_summary": "两人的状态和章前几乎没有区别。；关系推进偏弱",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/step_8_chapter_briefs.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "continuity_break",
+          "severity": "high",
+          "reason": "连贯性仅 6.4 分，已经低于 高风险阈值。前后承接基本没断，但不够紧。",
+          "evidence_summary": "基本逻辑没断，但推进很松。",
+          "related_metrics": [
+            "continuity_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "hook_underpowered",
+          "severity": "high",
+          "reason": "章节钩子仅 4.2 分，已经低于 高风险阈值。由开篇钩子与结尾钩子均值合成。",
+          "evidence_summary": "开头：开头知道在朝堂，但异样感不够快。；结尾：书吏死亡被轻轻带过，没有把局推紧。；尾钩不够硬",
+          "related_metrics": [
+            "hook_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/step_8_chapter_briefs.txt",
+            "prompts/writer/plan_content_blocks.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "redundancy_drag",
+          "severity": "high",
+          "reason": "重复铺陈仅 3.1 分，已经低于 高风险阈值。以 romance judge 为主分，规则检测只用于向下修正，不再允许规则层把坏重复救高。",
+          "evidence_summary": "Judge：“她很冷，他也很冷”属于同义反复。；Rule：未检测到明显高相似段落或高频重复短语。；存在解释型重复",
+          "related_metrics": [
+            "redundancy_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "romance_pull_weak",
+          "severity": "high",
+          "reason": "追读拉力均值仅 4.0 分，说明正文的情绪拉力和关系电流还没真正立起来。",
+          "evidence_summary": "拉扯感：重逢设定在，但正文几乎只在总结“冷”。；情绪余波：情绪是说明出来的，不是长出来的。",
+          "related_metrics": [
+            "romance_tension_score",
+            "emotional_resonance_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        }
+      ],
+      "top_targets": [
+        {
+          "target_module": "prompts/writer/step_8_chapter_briefs.txt",
+          "issue_type": "relationship_progression",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "关系推进当前 2.4 分。关系几乎停留在原地，没有明显重估。",
+          "evidence_summary": "两人的状态和章前几乎没有区别。；关系推进偏弱",
+          "patch_hint": "让 step 8 明确本章关系要发生什么变化，再要求正文用可见动作或选择把变化兑现出来。",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "expected_metric_gains": [
+            "relationship_progression_score",
+            "romance_tension_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "relationship_progression",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "关系推进当前 2.4 分。关系几乎停留在原地，没有明显重估。",
+          "evidence_summary": "两人的状态和章前几乎没有区别。；关系推进偏弱",
+          "patch_hint": "让 step 8 明确本章关系要发生什么变化，再要求正文用可见动作或选择把变化兑现出来。",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "expected_metric_gains": [
+            "relationship_progression_score",
+            "romance_tension_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/plan_content_blocks.txt",
+          "issue_type": "redundancy",
+          "severity": "high",
+          "confidence": 0.95,
+          "reason": "重复铺陈当前 3.1 分。以 romance judge 为主分，规则检测只用于向下修正，不再允许规则层把坏重复救高。",
+          "evidence_summary": "Judge：“她很冷，他也很冷”属于同义反复。；Rule：未检测到明显高相似段落或高频重复短语。；存在解释型重复",
+          "patch_hint": "减少同一情绪或判断的解释型复述，让每个 block 都新增信息、代价或关系变化。",
+          "related_metrics": [
+            "redundancy_score"
+          ],
+          "expected_metric_gains": [
+            "redundancy_score",
+            "emotional_resonance_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "redundancy",
+          "severity": "high",
+          "confidence": 0.95,
+          "reason": "重复铺陈当前 3.1 分。以 romance judge 为主分，规则检测只用于向下修正，不再允许规则层把坏重复救高。",
+          "evidence_summary": "Judge：“她很冷，他也很冷”属于同义反复。；Rule：未检测到明显高相似段落或高频重复短语。；存在解释型重复",
+          "patch_hint": "减少同一情绪或判断的解释型复述，让每个 block 都新增信息、代价或关系变化。",
+          "related_metrics": [
+            "redundancy_score"
+          ],
+          "expected_metric_gains": [
+            "redundancy_score",
+            "emotional_resonance_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/plan_content_blocks.txt",
+          "issue_type": "hook",
+          "severity": "high",
+          "confidence": 0.92,
+          "reason": "章节钩子当前 4.2 分。由开篇钩子与结尾钩子均值合成。",
+          "evidence_summary": "开头：开头知道在朝堂，但异样感不够快。；结尾：书吏死亡被轻轻带过，没有把局推紧。；尾钩不够硬",
+          "patch_hint": "把开头异样感和结尾下一章驱动力提前写进 brief 与 block 责任，而不是等正文临场发挥。",
+          "related_metrics": [
+            "hook_score"
+          ],
+          "expected_metric_gains": [
+            "hook_score",
+            "relationship_progression_score",
+            "romance_tension_score"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "romance_case_01_court_return",
+      "title": "旧案重逢的朝堂试探",
+      "variant": "break",
+      "expectation": "blocked",
+      "matched_expectation": true,
+      "note": "应被强力拦下。",
+      "text": "圣旨刚念到旧案，沈知微就当众扑通跪下，哭着说当年作证全是为了保谢临川。满殿哗然，皇帝也当场改口，说先帝旧判或有误会。\n\n谢临川上前一把扶住她，众目睽睽之下问她是不是这些年一直在等他回来。沈知微点头，说自己从未变心，只是不得不演戏。\n\n群臣很快散去，旧案也立刻重审。谢临川握着她的手说以后再没人能逼她，他们决定一起查清所有真相。",
+      "synthetic_scores": {
+        "romance_tension": 3.2,
+        "relationship_progression": 1.6,
+        "emotional_resonance": 3.7,
+        "male_lead_attraction": 4.4,
+        "female_lead_attraction": 2.8,
+        "lead_pair_chemistry": 2.6,
+        "opening_hook": 4.9,
+        "ending_hook": 2.4,
+        "continuity": 1.4,
+        "redundancy": 4.8,
+        "mind_state_consistency": 0.7
+      },
+      "rule_redundancy": {
+        "score": 10.0,
+        "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱。",
+        "evidence_summary": "未检测到明显高相似段落或高频重复短语。",
+        "improvement_hint": "继续保持一段一推进，避免把同层情绪解释回头再说一遍。",
+        "source": "rule"
+      },
+      "hybrid_scores": {
+        "romance_tension_score": 3.2,
+        "relationship_progression_score": 1.6,
+        "emotional_resonance_score": 3.7,
+        "character_attraction_score": 3.2,
+        "hook_score": 3.65,
+        "continuity_score": 1.4,
+        "redundancy_score": 4.8,
+        "mind_state_consistency_score": 0.7
+      },
+      "verdict": "blocked",
+      "hard_fail_flags": [
+        {
+          "flag_type": "continuity_break",
+          "severity": "blocker",
+          "reason": "连贯性仅 1.4 分，已经低于 阻断阈值。世界限制、前情逻辑和情绪承接都断裂。",
+          "evidence_summary": "先帝旧判与殿前礼制被直接绕开。",
+          "related_metrics": [
+            "continuity_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "mind_state_break",
+          "severity": "blocker",
+          "reason": "角色心智一致性仅 0.7 分，已经低于 阻断阈值。角色明显 OOC，心智约束失效。",
+          "evidence_summary": "两人都严重 OOC。；角色心智明显崩坏",
+          "related_metrics": [
+            "mind_state_consistency_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/build_character_mindset.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "relationship_progression_break",
+          "severity": "blocker",
+          "reason": "关系推进仅 1.6 分，已经低于 阻断阈值。推进过猛且失真，属于跳步。",
+          "evidence_summary": "从误读对峙一步跳到公开坦白。；关系跳步",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/step_8_chapter_briefs.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "hook_underpowered",
+          "severity": "high",
+          "reason": "章节钩子仅 3.6 分，已经低于 高风险阈值。由开篇钩子与结尾钩子均值合成。",
+          "evidence_summary": "开头：开头虽然炸，但违背 case 边界。；结尾：旧案和关系都被过早说穿，后续空间塌缩。",
+          "related_metrics": [
+            "hook_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/step_8_chapter_briefs.txt",
+            "prompts/writer/plan_content_blocks.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "redundancy_drag",
+          "severity": "high",
+          "reason": "重复铺陈仅 4.8 分，已经低于 高风险阈值。以 romance judge 为主分，规则检测只用于向下修正，不再允许规则层把坏重复救高。",
+          "evidence_summary": "Judge：核心不是重复，而是越界。；Rule：未检测到明显高相似段落或高频重复短语。",
+          "related_metrics": [
+            "redundancy_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "romance_pull_weak",
+          "severity": "high",
+          "reason": "追读拉力均值仅 3.5 分，说明正文的情绪拉力和关系电流还没真正立起来。",
+          "evidence_summary": "拉扯感：戏剧化很高，但礼制约束直接塌掉。；情绪余波：靠哭诉和直白表态硬推。",
+          "related_metrics": [
+            "romance_tension_score",
+            "emotional_resonance_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        }
+      ],
+      "top_targets": [
+        {
+          "target_module": "prompts/writer/plan_content_blocks.txt",
+          "issue_type": "continuity",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "连贯性当前 1.4 分。世界限制、前情逻辑和情绪承接都断裂。",
+          "evidence_summary": "先帝旧判与殿前礼制被直接绕开。",
+          "patch_hint": "优先修补前情承接、因果顺序和场景转折，不要用更华丽的 prose 掩盖断裂。",
+          "related_metrics": [
+            "continuity_score"
+          ],
+          "expected_metric_gains": [
+            "continuity_score",
+            "mind_state_consistency_score",
+            "relationship_progression_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "continuity",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "连贯性当前 1.4 分。世界限制、前情逻辑和情绪承接都断裂。",
+          "evidence_summary": "先帝旧判与殿前礼制被直接绕开。",
+          "patch_hint": "优先修补前情承接、因果顺序和场景转折，不要用更华丽的 prose 掩盖断裂。",
+          "related_metrics": [
+            "continuity_score"
+          ],
+          "expected_metric_gains": [
+            "continuity_score",
+            "mind_state_consistency_score",
+            "relationship_progression_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/build_character_mindset.txt",
+          "issue_type": "mind_state_consistency",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "角色心智一致性当前 0.7 分。角色明显 OOC，心智约束失效。",
+          "evidence_summary": "两人都严重 OOC。；角色心智明显崩坏",
+          "patch_hint": "把 fear、hidden_need、misbelief 和 self_control_level 变成正文硬约束，禁止角色越级表态或突然失控。",
+          "related_metrics": [
+            "mind_state_consistency_score"
+          ],
+          "expected_metric_gains": [
+            "mind_state_consistency_score",
+            "continuity_score",
+            "emotional_resonance_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "mind_state_consistency",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "角色心智一致性当前 0.7 分。角色明显 OOC，心智约束失效。",
+          "evidence_summary": "两人都严重 OOC。；角色心智明显崩坏",
+          "patch_hint": "把 fear、hidden_need、misbelief 和 self_control_level 变成正文硬约束，禁止角色越级表态或突然失控。",
+          "related_metrics": [
+            "mind_state_consistency_score"
+          ],
+          "expected_metric_gains": [
+            "mind_state_consistency_score",
+            "continuity_score",
+            "emotional_resonance_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/step_8_chapter_briefs.txt",
+          "issue_type": "relationship_progression",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "关系推进当前 1.6 分。推进过猛且失真，属于跳步。",
+          "evidence_summary": "从误读对峙一步跳到公开坦白。；关系跳步",
+          "patch_hint": "让 step 8 明确本章关系要发生什么变化，再要求正文用可见动作或选择把变化兑现出来。",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "expected_metric_gains": [
+            "relationship_progression_score",
+            "romance_tension_score",
+            "hook_score"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "romance_case_02_sickbed_truce",
+      "title": "雨夜药庐的被迫共处",
+      "variant": "strong",
+      "expectation": "pass",
+      "matched_expectation": true,
+      "note": "应被视为成立的强样本。",
+      "text": "雨声压着屋檐，药盏里的苦气一阵阵往上翻。顾砚伤得重，醒来第一眼先看见林晚坐在灯下，袖口还沾着没干的血。\n\n她听见动静，只把药递过去：“命是我暂时留下的，不代表旧账就算了。”话说得冷，手却在碰到他腕骨时停了一瞬，像怕扯开他刚缝好的伤口。\n\n顾砚接过药，没有立刻喝，反而看见他掌心那枚旧铜钱沾了血。林晚也看见了，眼神只乱了半拍，随即把纱布勒得更紧：“别误会，我不是为了它。”\n\n窗外忽然传来急促的马蹄声，门外人低声禀报，说追杀他的人已经摸到了山道口。顾砚这才把药一口喝尽，抬眼看她：“你现在若把我推出去，我连怨你的力气都没有。”\n\n林晚把灯芯拨亮半寸，终于看向他：“我若真想让你死，昨夜就不会亲手给你止血。”雨声更急，后门也在这时被人敲了三下，用的是她最不想在今夜听到的暗号。",
+      "synthetic_scores": {
+        "romance_tension": 8.7,
+        "relationship_progression": 8.1,
+        "emotional_resonance": 8.6,
+        "male_lead_attraction": 8.2,
+        "female_lead_attraction": 8.4,
+        "lead_pair_chemistry": 8.8,
+        "opening_hook": 8.8,
+        "ending_hook": 8.7,
+        "continuity": 8.5,
+        "redundancy": 8.2,
+        "mind_state_consistency": 8.7
+      },
+      "rule_redundancy": {
+        "score": 10.0,
+        "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱。",
+        "evidence_summary": "未检测到明显高相似段落或高频重复短语。",
+        "improvement_hint": "继续保持一段一推进，避免把同层情绪解释回头再说一遍。",
+        "source": "rule"
+      },
+      "hybrid_scores": {
+        "romance_tension_score": 8.7,
+        "relationship_progression_score": 8.1,
+        "emotional_resonance_score": 8.6,
+        "character_attraction_score": 8.5,
+        "hook_score": 8.75,
+        "continuity_score": 8.5,
+        "redundancy_score": 8.2,
+        "mind_state_consistency_score": 8.7
+      },
+      "verdict": "pass",
+      "hard_fail_flags": [],
+      "top_targets": []
+    },
+    {
+      "case_id": "romance_case_02_sickbed_truce",
+      "title": "雨夜药庐的被迫共处",
+      "variant": "weak",
+      "expectation": "needs_work",
+      "matched_expectation": false,
+      "note": "应被判成弱样本。",
+      "text": "雨夜里，顾砚在林晚的药庐养伤。林晚其实心软，但她不说。顾砚其实也在意她，但他不说。\n\n她给他换药，他觉得她其实心软；她给他倒水，他还是觉得她其实心软。她其实心软，他其实在意，她其实心软，他其实在意。\n\n两个人都没有再试探，也没有新的线索。雨还是很大，夜也很长。最后外面好像有人来，但也没有真正发生什么。",
+      "synthetic_scores": {
+        "romance_tension": 4.1,
+        "relationship_progression": 2.7,
+        "emotional_resonance": 4.3,
+        "male_lead_attraction": 5.0,
+        "female_lead_attraction": 4.9,
+        "lead_pair_chemistry": 4.0,
+        "opening_hook": 4.8,
+        "ending_hook": 3.8,
+        "continuity": 6.5,
+        "redundancy": 3.0,
+        "mind_state_consistency": 6.6
+      },
+      "rule_redundancy": {
+        "score": 10.0,
+        "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱。",
+        "evidence_summary": "未检测到明显高相似段落或高频重复短语。",
+        "improvement_hint": "继续保持一段一推进，避免把同层情绪解释回头再说一遍。",
+        "source": "rule"
+      },
+      "hybrid_scores": {
+        "romance_tension_score": 4.1,
+        "relationship_progression_score": 2.7,
+        "emotional_resonance_score": 4.3,
+        "character_attraction_score": 4.57,
+        "hook_score": 4.3,
+        "continuity_score": 6.5,
+        "redundancy_score": 3.0,
+        "mind_state_consistency_score": 6.6
+      },
+      "verdict": "blocked",
+      "hard_fail_flags": [
+        {
+          "flag_type": "relationship_progression_break",
+          "severity": "blocker",
+          "reason": "关系推进仅 2.7 分，已经低于 阻断阈值。关系几乎停留在原地，没有明显重估。",
+          "evidence_summary": "关系停留在“他觉得她心软”的重复判断。；关系推进偏弱",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/step_8_chapter_briefs.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "continuity_break",
+          "severity": "high",
+          "reason": "连贯性仅 6.5 分，已经低于 高风险阈值。前后承接基本没断，但不够紧。",
+          "evidence_summary": "场景逻辑还在，只是太平。",
+          "related_metrics": [
+            "continuity_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "hook_underpowered",
+          "severity": "high",
+          "reason": "章节钩子仅 4.3 分，已经低于 高风险阈值。由开篇钩子与结尾钩子均值合成。",
+          "evidence_summary": "开头：雨夜药庐的场景感有，但第一击不够狠。；结尾：门外似乎有人，但没有真正形成推进。；尾钩不够硬",
+          "related_metrics": [
+            "hook_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/step_8_chapter_briefs.txt",
+            "prompts/writer/plan_content_blocks.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "redundancy_drag",
+          "severity": "high",
+          "reason": "重复铺陈仅 3.0 分，已经低于 高风险阈值。以 romance judge 为主分，规则检测只用于向下修正，不再允许规则层把坏重复救高。",
+          "evidence_summary": "Judge：“她其实心软，他其实在意”属于显著复述。；Rule：未检测到明显高相似段落或高频重复短语。；存在解释型重复",
+          "related_metrics": [
+            "redundancy_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "romance_pull_weak",
+          "severity": "high",
+          "reason": "追读拉力均值仅 4.2 分，说明正文的情绪拉力和关系电流还没真正立起来。",
+          "evidence_summary": "拉扯感：设定有近距离接触，但没有真正试探。；情绪余波：主要靠直接解释“在意”。",
+          "related_metrics": [
+            "romance_tension_score",
+            "emotional_resonance_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        }
+      ],
+      "top_targets": [
+        {
+          "target_module": "prompts/writer/step_8_chapter_briefs.txt",
+          "issue_type": "relationship_progression",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "关系推进当前 2.7 分。关系几乎停留在原地，没有明显重估。",
+          "evidence_summary": "关系停留在“他觉得她心软”的重复判断。；关系推进偏弱",
+          "patch_hint": "让 step 8 明确本章关系要发生什么变化，再要求正文用可见动作或选择把变化兑现出来。",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "expected_metric_gains": [
+            "relationship_progression_score",
+            "romance_tension_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "relationship_progression",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "关系推进当前 2.7 分。关系几乎停留在原地，没有明显重估。",
+          "evidence_summary": "关系停留在“他觉得她心软”的重复判断。；关系推进偏弱",
+          "patch_hint": "让 step 8 明确本章关系要发生什么变化，再要求正文用可见动作或选择把变化兑现出来。",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "expected_metric_gains": [
+            "relationship_progression_score",
+            "romance_tension_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/plan_content_blocks.txt",
+          "issue_type": "redundancy",
+          "severity": "high",
+          "confidence": 0.95,
+          "reason": "重复铺陈当前 3.0 分。以 romance judge 为主分，规则检测只用于向下修正，不再允许规则层把坏重复救高。",
+          "evidence_summary": "Judge：“她其实心软，他其实在意”属于显著复述。；Rule：未检测到明显高相似段落或高频重复短语。；存在解释型重复",
+          "patch_hint": "减少同一情绪或判断的解释型复述，让每个 block 都新增信息、代价或关系变化。",
+          "related_metrics": [
+            "redundancy_score"
+          ],
+          "expected_metric_gains": [
+            "redundancy_score",
+            "emotional_resonance_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "redundancy",
+          "severity": "high",
+          "confidence": 0.95,
+          "reason": "重复铺陈当前 3.0 分。以 romance judge 为主分，规则检测只用于向下修正，不再允许规则层把坏重复救高。",
+          "evidence_summary": "Judge：“她其实心软，他其实在意”属于显著复述。；Rule：未检测到明显高相似段落或高频重复短语。；存在解释型重复",
+          "patch_hint": "减少同一情绪或判断的解释型复述，让每个 block 都新增信息、代价或关系变化。",
+          "related_metrics": [
+            "redundancy_score"
+          ],
+          "expected_metric_gains": [
+            "redundancy_score",
+            "emotional_resonance_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/plan_content_blocks.txt",
+          "issue_type": "hook",
+          "severity": "high",
+          "confidence": 0.91,
+          "reason": "章节钩子当前 4.3 分。由开篇钩子与结尾钩子均值合成。",
+          "evidence_summary": "开头：雨夜药庐的场景感有，但第一击不够狠。；结尾：门外似乎有人，但没有真正形成推进。；尾钩不够硬",
+          "patch_hint": "把开头异样感和结尾下一章驱动力提前写进 brief 与 block 责任，而不是等正文临场发挥。",
+          "related_metrics": [
+            "hook_score"
+          ],
+          "expected_metric_gains": [
+            "hook_score",
+            "relationship_progression_score",
+            "romance_tension_score"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "romance_case_02_sickbed_truce",
+      "title": "雨夜药庐的被迫共处",
+      "variant": "break",
+      "expectation": "blocked",
+      "matched_expectation": true,
+      "note": "应被强力拦下。",
+      "text": "林晚刚替顾砚包好伤口，他就直接把税银去向和幕后名单全摊在桌上，说自己从一开始就完全相信她。\n\n林晚也没有再回避，立刻承认自己这些年一直在替权贵做假账，只是为了等他回来。两个人很快把旧情说破，顾砚还抱住她，说以后什么都不用再瞒。\n\n门外的人刚敲了一下，林晚便主动牵着他从后门离开，决定今夜就一起去端掉幕后主使。",
+      "synthetic_scores": {
+        "romance_tension": 3.4,
+        "relationship_progression": 1.9,
+        "emotional_resonance": 3.6,
+        "male_lead_attraction": 4.2,
+        "female_lead_attraction": 3.1,
+        "lead_pair_chemistry": 2.7,
+        "opening_hook": 4.7,
+        "ending_hook": 2.5,
+        "continuity": 1.8,
+        "redundancy": 5.1,
+        "mind_state_consistency": 0.9
+      },
+      "rule_redundancy": {
+        "score": 10.0,
+        "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱。",
+        "evidence_summary": "未检测到明显高相似段落或高频重复短语。",
+        "improvement_hint": "继续保持一段一推进，避免把同层情绪解释回头再说一遍。",
+        "source": "rule"
+      },
+      "hybrid_scores": {
+        "romance_tension_score": 3.4,
+        "relationship_progression_score": 1.9,
+        "emotional_resonance_score": 3.6,
+        "character_attraction_score": 3.27,
+        "hook_score": 3.6,
+        "continuity_score": 1.8,
+        "redundancy_score": 5.1,
+        "mind_state_consistency_score": 0.9
+      },
+      "verdict": "blocked",
+      "hard_fail_flags": [
+        {
+          "flag_type": "continuity_break",
+          "severity": "blocker",
+          "reason": "连贯性仅 1.8 分，已经低于 阻断阈值。世界限制、前情逻辑和情绪承接都断裂。",
+          "evidence_summary": "forbidden 和 world_limit 同时被撞穿。",
+          "related_metrics": [
+            "continuity_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "mind_state_break",
+          "severity": "blocker",
+          "reason": "角色心智一致性仅 0.9 分，已经低于 阻断阈值。角色明显 OOC，心智约束失效。",
+          "evidence_summary": "两人都严重越过本章心智边界。；角色心智明显崩坏",
+          "related_metrics": [
+            "mind_state_consistency_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/build_character_mindset.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "relationship_progression_break",
+          "severity": "blocker",
+          "reason": "关系推进仅 1.9 分，已经低于 阻断阈值。推进过猛且失真，属于跳步。",
+          "evidence_summary": "从互疑跳到并肩端主谋，明显越级。；关系跳步",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/step_8_chapter_briefs.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "hook_underpowered",
+          "severity": "high",
+          "reason": "章节钩子仅 3.6 分，已经低于 高风险阈值。由开篇钩子与结尾钩子均值合成。",
+          "evidence_summary": "开头：包伤口后立刻全摊牌，冲击大但失真。；结尾：一起端主谋过快，几乎消耗掉后续空间。",
+          "related_metrics": [
+            "hook_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/step_8_chapter_briefs.txt",
+            "prompts/writer/plan_content_blocks.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "redundancy_drag",
+          "severity": "high",
+          "reason": "重复铺陈仅 5.1 分，已经低于 高风险阈值。以 romance judge 为主分，规则检测只用于向下修正，不再允许规则层把坏重复救高。",
+          "evidence_summary": "Judge：核心问题仍是跳步而非重复。；Rule：未检测到明显高相似段落或高频重复短语。",
+          "related_metrics": [
+            "redundancy_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "romance_pull_weak",
+          "severity": "high",
+          "reason": "追读拉力均值仅 3.5 分，说明正文的情绪拉力和关系电流还没真正立起来。",
+          "evidence_summary": "拉扯感：直接互信和互诉把拉扯彻底写没了。；情绪余波：情绪全靠明说，缺乏共处里的压迫感。",
+          "related_metrics": [
+            "romance_tension_score",
+            "emotional_resonance_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        }
+      ],
+      "top_targets": [
+        {
+          "target_module": "prompts/writer/plan_content_blocks.txt",
+          "issue_type": "continuity",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "连贯性当前 1.8 分。世界限制、前情逻辑和情绪承接都断裂。",
+          "evidence_summary": "forbidden 和 world_limit 同时被撞穿。",
+          "patch_hint": "优先修补前情承接、因果顺序和场景转折，不要用更华丽的 prose 掩盖断裂。",
+          "related_metrics": [
+            "continuity_score"
+          ],
+          "expected_metric_gains": [
+            "continuity_score",
+            "mind_state_consistency_score",
+            "relationship_progression_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "continuity",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "连贯性当前 1.8 分。世界限制、前情逻辑和情绪承接都断裂。",
+          "evidence_summary": "forbidden 和 world_limit 同时被撞穿。",
+          "patch_hint": "优先修补前情承接、因果顺序和场景转折，不要用更华丽的 prose 掩盖断裂。",
+          "related_metrics": [
+            "continuity_score"
+          ],
+          "expected_metric_gains": [
+            "continuity_score",
+            "mind_state_consistency_score",
+            "relationship_progression_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/build_character_mindset.txt",
+          "issue_type": "mind_state_consistency",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "角色心智一致性当前 0.9 分。角色明显 OOC，心智约束失效。",
+          "evidence_summary": "两人都严重越过本章心智边界。；角色心智明显崩坏",
+          "patch_hint": "把 fear、hidden_need、misbelief 和 self_control_level 变成正文硬约束，禁止角色越级表态或突然失控。",
+          "related_metrics": [
+            "mind_state_consistency_score"
+          ],
+          "expected_metric_gains": [
+            "mind_state_consistency_score",
+            "continuity_score",
+            "emotional_resonance_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "mind_state_consistency",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "角色心智一致性当前 0.9 分。角色明显 OOC，心智约束失效。",
+          "evidence_summary": "两人都严重越过本章心智边界。；角色心智明显崩坏",
+          "patch_hint": "把 fear、hidden_need、misbelief 和 self_control_level 变成正文硬约束，禁止角色越级表态或突然失控。",
+          "related_metrics": [
+            "mind_state_consistency_score"
+          ],
+          "expected_metric_gains": [
+            "mind_state_consistency_score",
+            "continuity_score",
+            "emotional_resonance_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/step_8_chapter_briefs.txt",
+          "issue_type": "relationship_progression",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "关系推进当前 1.9 分。推进过猛且失真，属于跳步。",
+          "evidence_summary": "从互疑跳到并肩端主谋，明显越级。；关系跳步",
+          "patch_hint": "让 step 8 明确本章关系要发生什么变化，再要求正文用可见动作或选择把变化兑现出来。",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "expected_metric_gains": [
+            "relationship_progression_score",
+            "romance_tension_score",
+            "hook_score"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "romance_case_03_betrothal_banquet",
+      "title": "婚约宴上的公开逼近",
+      "variant": "strong",
+      "expectation": "pass",
+      "matched_expectation": true,
+      "note": "应被视为成立的强样本。",
+      "text": "第一杯寿酒还没递到姜栀手里，国舅夫人就笑着问起她的婚事。满堂目光一齐压过来，姜栀指尖还扣着酒盏，先听见的是席间一阵压不住的附和。\n\n她刚要按着规矩把话圆过去，裴砚便放下茶盏，语气比酒气还淡：“国舅夫人若真怜惜姜姑娘，就别在她生辰宴上替旁人下聘。”\n\n一句话，先替她截断了最难接的台阶，也把所有视线都拽到了他身上。国舅夫人笑意微凝，反问他凭什么插手。裴砚没有看她，只把桌上一枚刚送来的玉佩推到姜栀面前：“既送到我手里，总该先问问我愿不愿意放。”\n\n席间气息顿时变了。姜栀知道他是在替她挡刀，也知道这一挡会把她推得更近。她抬眼时没谢，只道：“裴大人这话说得太满，回头若收不住，可别怪我不认。”\n\n裴砚这才看她，眸色像压住锋刃后的寒光：“姜姑娘既敢说，我就敢改日上门，亲自讨个说法。”满堂人都听见了，连姜父手里的酒都险些洒出来。",
+      "synthetic_scores": {
+        "romance_tension": 8.8,
+        "relationship_progression": 8.4,
+        "emotional_resonance": 8.2,
+        "male_lead_attraction": 8.7,
+        "female_lead_attraction": 8.1,
+        "lead_pair_chemistry": 8.9,
+        "opening_hook": 8.9,
+        "ending_hook": 8.8,
+        "continuity": 8.4,
+        "redundancy": 8.3,
+        "mind_state_consistency": 8.5
+      },
+      "rule_redundancy": {
+        "score": 10.0,
+        "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱。",
+        "evidence_summary": "未检测到明显高相似段落或高频重复短语。",
+        "improvement_hint": "继续保持一段一推进，避免把同层情绪解释回头再说一遍。",
+        "source": "rule"
+      },
+      "hybrid_scores": {
+        "romance_tension_score": 8.8,
+        "relationship_progression_score": 8.4,
+        "emotional_resonance_score": 8.2,
+        "character_attraction_score": 8.6,
+        "hook_score": 8.85,
+        "continuity_score": 8.4,
+        "redundancy_score": 8.3,
+        "mind_state_consistency_score": 8.5
+      },
+      "verdict": "pass",
+      "hard_fail_flags": [],
+      "top_targets": []
+    },
+    {
+      "case_id": "romance_case_03_betrothal_banquet",
+      "title": "婚约宴上的公开逼近",
+      "variant": "weak",
+      "expectation": "needs_work",
+      "matched_expectation": false,
+      "note": "应被判成弱样本。",
+      "text": "生辰宴上，有人问起姜栀的婚事。姜栀觉得有压力，但她还是按规矩说了几句场面话。\n\n裴砚也在场，他替她说了两句，却没有把话说得太重。大家于是继续喝酒，虽然气氛有些微妙，但也没有谁真的难堪。\n\n姜栀觉得裴砚这个人很危险，也觉得他可能是在帮她。裴砚也觉得她很聪明。宴席结束前，他只说以后有机会再聊。",
+      "synthetic_scores": {
+        "romance_tension": 4.4,
+        "relationship_progression": 3.3,
+        "emotional_resonance": 4.5,
+        "male_lead_attraction": 5.3,
+        "female_lead_attraction": 5.0,
+        "lead_pair_chemistry": 4.2,
+        "opening_hook": 5.0,
+        "ending_hook": 3.9,
+        "continuity": 6.9,
+        "redundancy": 4.0,
+        "mind_state_consistency": 7.1
+      },
+      "rule_redundancy": {
+        "score": 10.0,
+        "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱。",
+        "evidence_summary": "未检测到明显高相似段落或高频重复短语。",
+        "improvement_hint": "继续保持一段一推进，避免把同层情绪解释回头再说一遍。",
+        "source": "rule"
+      },
+      "hybrid_scores": {
+        "romance_tension_score": 4.4,
+        "relationship_progression_score": 3.3,
+        "emotional_resonance_score": 4.5,
+        "character_attraction_score": 4.77,
+        "hook_score": 4.45,
+        "continuity_score": 6.9,
+        "redundancy_score": 4.0,
+        "mind_state_consistency_score": 7.1
+      },
+      "verdict": "blocked",
+      "hard_fail_flags": [
+        {
+          "flag_type": "relationship_progression_break",
+          "severity": "blocker",
+          "reason": "关系推进仅 3.3 分，已经低于 阻断阈值。关系几乎停留在原地，没有明显重估。",
+          "evidence_summary": "关系只是在原地互相评价。；关系推进偏弱",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/step_8_chapter_briefs.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "hook_underpowered",
+          "severity": "high",
+          "reason": "章节钩子仅 4.5 分，已经低于 高风险阈值。由开篇钩子与结尾钩子均值合成。",
+          "evidence_summary": "开头：婚约试探作为开头合格，但不够狠。；结尾：“以后再聊”不能算有效尾钩。；尾钩不够硬",
+          "related_metrics": [
+            "hook_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/step_8_chapter_briefs.txt",
+            "prompts/writer/plan_content_blocks.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "redundancy_drag",
+          "severity": "high",
+          "reason": "重复铺陈仅 4.0 分，已经低于 高风险阈值。以 romance judge 为主分，规则检测只用于向下修正，不再允许规则层把坏重复救高。",
+          "evidence_summary": "Judge：没有特别严重的重复，但信息密度偏低。；Rule：未检测到明显高相似段落或高频重复短语。；存在解释型重复",
+          "related_metrics": [
+            "redundancy_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "romance_pull_weak",
+          "severity": "high",
+          "reason": "追读拉力均值仅 4.5 分，说明正文的情绪拉力和关系电流还没真正立起来。",
+          "evidence_summary": "拉扯感：公共场合的压迫感没有真正顶起来。；情绪余波：危险甜感没真正落地。",
+          "related_metrics": [
+            "romance_tension_score",
+            "emotional_resonance_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        }
+      ],
+      "top_targets": [
+        {
+          "target_module": "prompts/writer/step_8_chapter_briefs.txt",
+          "issue_type": "relationship_progression",
+          "severity": "blocker",
+          "confidence": 0.92,
+          "reason": "关系推进当前 3.3 分。关系几乎停留在原地，没有明显重估。",
+          "evidence_summary": "关系只是在原地互相评价。；关系推进偏弱",
+          "patch_hint": "让 step 8 明确本章关系要发生什么变化，再要求正文用可见动作或选择把变化兑现出来。",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "expected_metric_gains": [
+            "relationship_progression_score",
+            "romance_tension_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "relationship_progression",
+          "severity": "blocker",
+          "confidence": 0.92,
+          "reason": "关系推进当前 3.3 分。关系几乎停留在原地，没有明显重估。",
+          "evidence_summary": "关系只是在原地互相评价。；关系推进偏弱",
+          "patch_hint": "让 step 8 明确本章关系要发生什么变化，再要求正文用可见动作或选择把变化兑现出来。",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "expected_metric_gains": [
+            "relationship_progression_score",
+            "romance_tension_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/plan_content_blocks.txt",
+          "issue_type": "redundancy",
+          "severity": "high",
+          "confidence": 0.92,
+          "reason": "重复铺陈当前 4.0 分。以 romance judge 为主分，规则检测只用于向下修正，不再允许规则层把坏重复救高。",
+          "evidence_summary": "Judge：没有特别严重的重复，但信息密度偏低。；Rule：未检测到明显高相似段落或高频重复短语。；存在解释型重复",
+          "patch_hint": "减少同一情绪或判断的解释型复述，让每个 block 都新增信息、代价或关系变化。",
+          "related_metrics": [
+            "redundancy_score"
+          ],
+          "expected_metric_gains": [
+            "redundancy_score",
+            "emotional_resonance_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "redundancy",
+          "severity": "high",
+          "confidence": 0.92,
+          "reason": "重复铺陈当前 4.0 分。以 romance judge 为主分，规则检测只用于向下修正，不再允许规则层把坏重复救高。",
+          "evidence_summary": "Judge：没有特别严重的重复，但信息密度偏低。；Rule：未检测到明显高相似段落或高频重复短语。；存在解释型重复",
+          "patch_hint": "减少同一情绪或判断的解释型复述，让每个 block 都新增信息、代价或关系变化。",
+          "related_metrics": [
+            "redundancy_score"
+          ],
+          "expected_metric_gains": [
+            "redundancy_score",
+            "emotional_resonance_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/plan_content_blocks.txt",
+          "issue_type": "hook",
+          "severity": "high",
+          "confidence": 0.9,
+          "reason": "章节钩子当前 4.5 分。由开篇钩子与结尾钩子均值合成。",
+          "evidence_summary": "开头：婚约试探作为开头合格，但不够狠。；结尾：“以后再聊”不能算有效尾钩。；尾钩不够硬",
+          "patch_hint": "把开头异样感和结尾下一章驱动力提前写进 brief 与 block 责任，而不是等正文临场发挥。",
+          "related_metrics": [
+            "hook_score"
+          ],
+          "expected_metric_gains": [
+            "hook_score",
+            "relationship_progression_score",
+            "romance_tension_score"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "romance_case_03_betrothal_banquet",
+      "title": "婚约宴上的公开逼近",
+      "variant": "break",
+      "expectation": "blocked",
+      "matched_expectation": true,
+      "note": "应被强力拦下。",
+      "text": "国舅夫人才问完婚事，姜栀就当众起身，说自己早已心许裴砚，谁都不必再替她做主。裴砚随即握住她的手，直言自己今日就是来替她退掉所有婚约的。\n\n满堂宾客还没反应过来，姜父便立刻同意，说姜家今后全听裴砚安排。裴砚也没有再遮掩，当众点出自己真正想借婚约去切国舅府的手。\n\n姜栀当场跟着他离席，生辰宴就此散了。她一路上只顾着问他何时上门定亲，再不提家里的商路和后患。",
+      "synthetic_scores": {
+        "romance_tension": 3.0,
+        "relationship_progression": 1.7,
+        "emotional_resonance": 3.3,
+        "male_lead_attraction": 4.0,
+        "female_lead_attraction": 1.9,
+        "lead_pair_chemistry": 2.5,
+        "opening_hook": 5.2,
+        "ending_hook": 2.1,
+        "continuity": 1.2,
+        "redundancy": 4.9,
+        "mind_state_consistency": 0.6
+      },
+      "rule_redundancy": {
+        "score": 10.0,
+        "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱。",
+        "evidence_summary": "未检测到明显高相似段落或高频重复短语。",
+        "improvement_hint": "继续保持一段一推进，避免把同层情绪解释回头再说一遍。",
+        "source": "rule"
+      },
+      "hybrid_scores": {
+        "romance_tension_score": 3.0,
+        "relationship_progression_score": 1.7,
+        "emotional_resonance_score": 3.3,
+        "character_attraction_score": 2.77,
+        "hook_score": 3.65,
+        "continuity_score": 1.2,
+        "redundancy_score": 4.9,
+        "mind_state_consistency_score": 0.6
+      },
+      "verdict": "blocked",
+      "hard_fail_flags": [
+        {
+          "flag_type": "continuity_break",
+          "severity": "blocker",
+          "reason": "连贯性仅 1.2 分，已经低于 阻断阈值。世界限制、前情逻辑和情绪承接都断裂。",
+          "evidence_summary": "forbidden/world_limit 被连续撞穿。",
+          "related_metrics": [
+            "continuity_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "mind_state_break",
+          "severity": "blocker",
+          "reason": "角色心智一致性仅 0.6 分，已经低于 阻断阈值。角色明显 OOC，心智约束失效。",
+          "evidence_summary": "两人都明显 OOC，尤其女主失去主体性。；角色心智明显崩坏",
+          "related_metrics": [
+            "mind_state_consistency_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/build_character_mindset.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "relationship_progression_break",
+          "severity": "blocker",
+          "reason": "关系推进仅 1.7 分，已经低于 阻断阈值。推进过猛且失真，属于跳步。",
+          "evidence_summary": "直接从危险盟友跳到公开站队。；关系跳步",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/step_8_chapter_briefs.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "hook_underpowered",
+          "severity": "high",
+          "reason": "章节钩子仅 3.6 分，已经低于 高风险阈值。由开篇钩子与结尾钩子均值合成。",
+          "evidence_summary": "开头：热闹，但违背 case 边界。；结尾：后续悬念被提前花光。",
+          "related_metrics": [
+            "hook_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/step_8_chapter_briefs.txt",
+            "prompts/writer/plan_content_blocks.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "redundancy_drag",
+          "severity": "high",
+          "reason": "重复铺陈仅 4.9 分，已经低于 高风险阈值。以 romance judge 为主分，规则检测只用于向下修正，不再允许规则层把坏重复救高。",
+          "evidence_summary": "Judge：主要不是重复，而是设定崩坏。；Rule：未检测到明显高相似段落或高频重复短语。",
+          "related_metrics": [
+            "redundancy_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "romance_pull_weak",
+          "severity": "high",
+          "reason": "追读拉力均值仅 3.1 分，说明正文的情绪拉力和关系电流还没真正立起来。",
+          "evidence_summary": "拉扯感：表面激烈，但公开表白和牵手把误判空间清空了。；情绪余波：甜感来得太直白，后患反而消失。",
+          "related_metrics": [
+            "romance_tension_score",
+            "emotional_resonance_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        }
+      ],
+      "top_targets": [
+        {
+          "target_module": "prompts/writer/plan_content_blocks.txt",
+          "issue_type": "continuity",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "连贯性当前 1.2 分。世界限制、前情逻辑和情绪承接都断裂。",
+          "evidence_summary": "forbidden/world_limit 被连续撞穿。",
+          "patch_hint": "优先修补前情承接、因果顺序和场景转折，不要用更华丽的 prose 掩盖断裂。",
+          "related_metrics": [
+            "continuity_score"
+          ],
+          "expected_metric_gains": [
+            "continuity_score",
+            "mind_state_consistency_score",
+            "relationship_progression_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "continuity",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "连贯性当前 1.2 分。世界限制、前情逻辑和情绪承接都断裂。",
+          "evidence_summary": "forbidden/world_limit 被连续撞穿。",
+          "patch_hint": "优先修补前情承接、因果顺序和场景转折，不要用更华丽的 prose 掩盖断裂。",
+          "related_metrics": [
+            "continuity_score"
+          ],
+          "expected_metric_gains": [
+            "continuity_score",
+            "mind_state_consistency_score",
+            "relationship_progression_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/build_character_mindset.txt",
+          "issue_type": "mind_state_consistency",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "角色心智一致性当前 0.6 分。角色明显 OOC，心智约束失效。",
+          "evidence_summary": "两人都明显 OOC，尤其女主失去主体性。；角色心智明显崩坏",
+          "patch_hint": "把 fear、hidden_need、misbelief 和 self_control_level 变成正文硬约束，禁止角色越级表态或突然失控。",
+          "related_metrics": [
+            "mind_state_consistency_score"
+          ],
+          "expected_metric_gains": [
+            "mind_state_consistency_score",
+            "continuity_score",
+            "emotional_resonance_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "mind_state_consistency",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "角色心智一致性当前 0.6 分。角色明显 OOC，心智约束失效。",
+          "evidence_summary": "两人都明显 OOC，尤其女主失去主体性。；角色心智明显崩坏",
+          "patch_hint": "把 fear、hidden_need、misbelief 和 self_control_level 变成正文硬约束，禁止角色越级表态或突然失控。",
+          "related_metrics": [
+            "mind_state_consistency_score"
+          ],
+          "expected_metric_gains": [
+            "mind_state_consistency_score",
+            "continuity_score",
+            "emotional_resonance_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/step_8_chapter_briefs.txt",
+          "issue_type": "relationship_progression",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "关系推进当前 1.7 分。推进过猛且失真，属于跳步。",
+          "evidence_summary": "直接从危险盟友跳到公开站队。；关系跳步",
+          "patch_hint": "让 step 8 明确本章关系要发生什么变化，再要求正文用可见动作或选择把变化兑现出来。",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "expected_metric_gains": [
+            "relationship_progression_score",
+            "romance_tension_score",
+            "hook_score"
+          ]
+        }
+      ]
+    }
+  ]
+}

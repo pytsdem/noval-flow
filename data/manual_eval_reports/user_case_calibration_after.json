@@ -1,0 +1,829 @@
+{
+  "summary": {
+    "total_cases": 3,
+    "matched_expectation": 3,
+    "expected_verdicts": {
+      "strong_accept_divorce_letter": "pass",
+      "weak_reject_mother_son_pressure": "blocked",
+      "strong_reject_flat_summary": "blocked"
+    },
+    "actual_verdicts": {
+      "strong_accept_divorce_letter": "pass",
+      "weak_reject_mother_son_pressure": "blocked",
+      "strong_reject_flat_summary": "blocked"
+    }
+  },
+  "results": [
+    {
+      "label": "strong_accept_divorce_letter",
+      "expected_verdict": "pass",
+      "actual_verdict": "pass",
+      "matched_expectation": true,
+      "title": "一纸休书",
+      "description": "被遗弃六年的妻子收到太子夫君的休书。重点看情绪钩子、人物抓力、后续追读动力，以及男女主关系是否具备强牵引。",
+      "text": "“季姑娘，这是太子殿下要我交给你的休书，请你过目。”\n春暖花开，西郡皇朝国泰民安，风调雨顺，京都子城一派欣欣向荣的景象，马鸣车过，茶过飘香。\n天子脚下的人们穿着也尤其华贵，谈吐优雅有理，譬如眼前这个年轻的男子，一身绫罗绸缎在身坐在格格不入的路边饺子摊上，却依然彬彬有礼地将一份淡黄的书信递到她面前。\n“休书？”\n像是听不懂他说的似的，季九儿又喃喃地重复一遍。\n才二十二岁的她梳着妇人的发髻，没有珠钗手饰，为了方便干活还包扎着一块粗布的头巾，纤瘦的脸上五官不扬，只有一双大眼黑白分明，过分的执着有神。\n而视线落到桌上的休书时，唯一能看的眼也黯了下去。\n原来他真得是当朝一手遮天的太子殿下，下毒毒死自己的母妃，在百官众目睽睽之下上演殿前斩兄，事后逼迫自己中庸的父皇写下封太子的诏书，培植党羽监国涉政。\n他是一个可怕到令人发指的执权太子，不是上阳城那个只会逛青楼、进赌场的有钱公子哥……多么大的反差，纵然她早查觉他不会是一般人，却怎么都料不到他是高入云端的太子。\n垂在身侧裙袍上的右手无声地动了动，不是一只好看的手，长着薄薄的一层茧不似女子的手，手指微弱地动了两下后终是无力垂下，季九儿终究放弃，伸出左手去接书信，想要拆开来一只手却是无能为力。\n坐在桌对面的年轻男子见状连忙帮她拆了开来。\n“多谢。”季九儿捏着薄薄的纸，休书两个字触目惊心，她惊讶自己还能这样平静地说话，也许是多年的生活早把她的性子磨没了。\n“没事。”年轻男子看向她始终垂着的手显得有些局促，“季姑娘，你的手……”\n“六年前家里起了大火，我想去救我的丈夫和儿子，被困在火中，右手就这样废了。”季九儿低眉，坦然地说完，没有过多的表情。\n休书上的字的确是他的笔迹，一字一字冷漠无情。\n男子震惊，他当然知道她口中的丈夫和儿子就是自己侍奉的太子和大世子，只是她沉默安静的神色让他太过意外，她说得好像不是自己的事一样。\n“笔墨不是新的，公子策……太子殿下什么时候写下的？”季九儿又问，干净利落。\n男子愣了下，忙回道，“哦，是同太子妃成亲那日写下的。”\n同太子妃成亲……呵，又娶了啊。\n休书一直写着，却到瞒不住的关头才拿出来打发她。\n\n捏着纸的手指指尖微微战粟，季九儿咬着牙齿，死死地咬着，那她这六年来的寻找算什么，自欺欺人吗？\n“季姑娘……”年轻男子担忧地注视着她。\n“我不知道六年前那场火是他想摆脱我、摆脱过去的身份才放的。”没有落泪，没有故作逞强的微笑，季九儿只是很平静地叙述出事实，“其实他可以和我讲明白，那我不会平白浪费六年光阴去做些无谓的事，我和小妹走到哪都是身无分文，饱饭都没吃过一顿，就只是为了找他和孩子。”\n这大概是她季九儿这辈子最憋屈的事，她为了找个根本不想让自己找到的人而放弃吃饱饭，都不像她季九儿了。\n谈到钱，年轻男子才想起自己的使命，忙道，“季姑娘，我会派人一路护送你和令妹安全无虞地回到上阳城，至于钱方面不用担心，太子吩咐过要让季姑娘下半辈子足以富裕过活。”\n连露个面都不肯，写了休书就要她走……还真像他会做的事，绝情利落。\n也是，堂堂一国的太子殿下怎么会愿意有一个青楼贱籍出身的糟糠之妻。\n“好，那麻烦爷了。”季九儿从容答应，没有一点拐弯抹角，左手抓着休书站了起来，脸上有着明显的送客之意，“爷要留下来吃碗饺子吗？”\n年轻男子脸羞红一大半，摇着头窘迫地站起身，“我叫李书德，不是什么爷，只是个跟在太子身边做事的奴才而已。”\n“李爷的谈吐不像。”季九儿淡淡地说道，把休书塞入袖子，眼神飘向饺子摊热气腾腾的锅前。\n李书德顺着她的视线看过去，只见一个和她身线差不多纤瘦的少女站在锅前忙着下饺子，卷起的袖子下露出一小截白藕似的细臂，灵巧的脸被薰得满头大汗，不时拿帕子擦去。\n“她是我妹妹。”季九儿见他看自己的妹妹便说道，又补一句，“是个哑巴。”\n“季姑娘，要是还需要什么照顾请尽管说，太子一定会竭力尽最大的补偿。”李书德几乎是冲口而出，他也不知道自己是怎么了，也许是格外同情携妹六年寻夫的季姑娘。\n季九儿深深地看了他一眼，嘴唇紧抿，半晌才一字一字道，“告诉他，他欠我季九儿的，他这辈子都还不起。”\n\n李书德惊愕异常，还想说些什么，季九儿却已经走向锅前，摆明把他晾在这边，顿了顿，李书德摸摸鼻子离去。\n“小末儿，我来。”季九儿走到锅前把小妹推开，只以左手翻着饺子，身旁的少女望了一眼离去的李书德，焦急地冲她指手画脚。\n季九儿看懂她的疑问，滞了半晌道，“小末儿，咱们离开上阳城六年了，也该回去了。”\n看着妹妹比手画脚叙述自己的意思，季九儿忽然很想掉眼泪，她浪费了整整六年，这六年她可以重入青楼，她可以接客，六年足以她挣到很多钱去治小妹的哑病，她却没有，就只是为了找他。\n“不找了。”季九儿勉强笑笑，推过一个碗，麻利地盛起一碗饺子，“你今年都十六了，再不治拖了时间，嗓子一辈子都好不了怎么办。”\n知道瞒不过去，往锅里盛了几勺水，季九儿缓慢地说道，“你姐夫把我休了，刚那人是他的奴才……小末儿，姐真是傻气，找了六年就等到一张休书。”\n\n小末比划地飞快，看得季九儿眼花缭乱，最后她只好抬起左手阻止小末继续比划下去，“都六年了，没有这一封休书姐也撑不下去了，咱还能找一辈子吗？”\n季九儿扯起嘴角无谓地笑起来，“今天早点收摊吧，那位李爷说他会给我们很多钱，等回到上阳城咱们就去治你的嗓子。”\n连“你姐夫”三个字她都无法再说出来。\n小末直直地盯着她，好像想看穿她心里想的，季九儿低下头假装忙碌地收摊，却不慎打翻一碗热汤，滚烫的汤水泼洒在手臂下，刺入心肺的痛疼得她龇牙咧嘴地大叫，“痛、痛，小末儿，湿帕子！”\n小末被吓一跳，连忙卷起帕子绞湿再覆到她的手臂上，然后慢慢卷起她的袖子，湿掉的书纸被小末抽了出来。\n“休书”两个硕大的字被水渍晕开，小末突然哭了出来，季九儿瞥了上面的字一眼，然后把头撇到一边，不再去看。\n\n街尾停着一顶富贵华丽的八抬大轿，珍珠流苏沿着四角垂下在风中轻晃，刺目的尊贵金色轿身外，细细的白纱覆盖住整顶过大的轿子，不烈的日头下，几个轿夫表情木然地站立等待着，不远处，一小队禁卫军严阵以待。\n李书德一路小跑到轿前，掀袍单膝跪下，“奴才叩见太子千岁。回主子，奴才已经把休书交给季姑娘了。”\n“她哭了么？”轿里传出一个男子的声音，初夏微燥的空气里，他的嗓音阴鸷到蛊惑人心。\n怎么会这么问？李书德愣了下，一五一十地回道，“回主子，季姑娘没有哭，她接受主子的安排。”\n“就这样？”男子的声音透了几分阴霾。\n“回主子，季姑娘说……”\n\n“迟疑什么，说。”\n“是。季姑娘说，主子欠她的，这辈子都还不起。”李书德冷汗漓淋地说完，揣测着主子阴晴不定心思，他只是传话应该不会受责罚吧，虽然这话并不好听。\n还不起么……\n“回宫。”男子再没有过多的言语，阴冷地落下话。\n轿夫们立即打起精神，搓搓手抬起轿子往宫门的方向走去。\n李书德想想，迈开步伐跟上轿子，鼓足勇气开口，“主子，恕奴才斗胆，奴才以为季姑娘很可怜。”\n“你多嘴了。”轿里传出男子分外冷漠的声音，让人不禁生起一阵寒气。\n“奴才该死。”\n“她撑得住。”\n她撑得住，所有人都会垮掉，唯有季九儿不会，连一纸休书都不能让她垮掉，季九儿还怎么能垮。\n李书德诧异地张大嘴，刚刚是主子说话了？撑得住，那是什么意思？\n饺子摊收到一半，这个从来都乏人问津的路边摊继李书德之后，迎来第二个不速之客。",
+      "scores": {
+        "romance_tension_score": 8.0,
+        "relationship_progression_score": 8.0,
+        "emotional_resonance_score": 8.5,
+        "character_attraction_score": 7.6,
+        "hook_score": 8.0,
+        "continuity_score": 8.0,
+        "redundancy_score": 7.0,
+        "mind_state_consistency_score": 8.5
+      },
+      "judge_payload": {
+        "romance_tension": {
+          "score": 8.0,
+          "reason": "男女主虽未正面同场，但通过错位互动形成了强拉扯感：男主的隐秘在意（关注女主是否哭泣、笃定她撑得住）与女主的隐忍怨恨（放狠话“他欠我的这辈子都还不起”）形成鲜明对冲，潜台词明确，拉扯关系成立。",
+          "evidence_summary": "男主第一句询问女主是否哭泣，得知女主没哭且放狠话后沉默，最后笃定“她撑得住”；女主平静接受休书却留下狠话，既承认关系断裂又暗藏不甘。",
+          "improvement_hint": "可增加男女主瞬间的错位互动细节，比如女主不经意瞥向街尾轿帘时，轿内男主恰好掀开一丝缝隙，或男主听到狠话后轿内茶盏轻晃，强化隐秘拉扯的具象感。",
+          "source": "llm"
+        },
+        "relationship_progression": {
+          "score": 8.0,
+          "reason": "本章完成了关系的明确推进：从“六年失散、未知等待”的模糊状态，转变为“被正式休弃、关系表面断裂但暗藏未断牵挂”的清晰状态，关系定位发生实质性变化，并非原地踏步。",
+          "evidence_summary": "休书送达确认了男主的抛弃态度，女主接受安排却放狠话，男主的隐秘在意打破了“彻底绝情”的单一定位，关系从“失散夫妻”重新定价为“位高者的冷酷抛弃+未断的隐秘掌控”。",
+          "improvement_hint": "可通过男主的微反应（如听到狠话后停顿三秒才下令回宫）或女主的细微动作（如把休书攥皱又展平），让关系推进的层次感更明确，避免仅靠对话传递变化。",
+          "source": "llm"
+        },
+        "emotional_resonance": {
+          "score": 8.5,
+          "reason": "情绪表达具体扎实，有余波，能精准钩住读者的憋屈与刺痛感：没有空泛抒情，而是通过动作、细节传递情绪，女主的隐忍崩溃有层次感，妹妹的反应也强化了情绪余波。",
+          "evidence_summary": "女主打翻热汤的失控大叫、看到晕开的休书撇头回避、对妹妹说“找了六年就等到一张休书”的自嘲，妹妹哭着拿出湿休书的细节，都让情绪落地。",
+          "improvement_hint": "可增加女主的生理反应细节，比如听到休书时喉咙发紧、手指掐掌心掐出红痕，或看到街尾轿子时呼吸微顿，让情绪更具穿透力，而非仅靠对话和动作。",
+          "source": "llm"
+        },
+        "male_lead_attraction": {
+          "score": 7.5,
+          "reason": "男主通过侧面描写塑造出阴鸷压迫感与隐秘在意的反差，有基本魅力，但标签化背景介绍削弱了立体度，人设略显单薄。",
+          "evidence_summary": "阴冷的嗓音、第一句关注女主是否哭泣、笃定“她撑得住”的评价，体现了他的冷酷与对女主的特殊了解；但“下毒杀母、殿前斩兄”的标签化描述过于直白，缺乏细节支撑。",
+          "improvement_hint": "删掉直白的标签化背景，改用侧面细节塑造，比如下属回报时轿内传来指尖敲击案几的声音，或他听到狠话后沉默的时长，用动作替代“可怕”的定性描述。",
+          "source": "llm"
+        },
+        "female_lead_attraction": {
+          "score": 8.5,
+          "reason": "女主主体性强，辨识度高：隐忍但不软弱，冷静接受现实却暗藏傲骨，对妹妹的责任感更凸显她的韧性，避免了苦情女主的刻板印象。",
+          "evidence_summary": "用左手接休书的细节、平静讲述六年苦寻的经历、放狠话后转身照顾妹妹、优先考虑妹妹的哑病治疗，都体现了她的清醒与韧性。",
+          "improvement_hint": "可增加一个体现女主主动性的细节，比如她接过休书时，刻意确认笔迹的动作，或听到男主另娶时，指尖无意识摩挲右手旧伤，强化她的情绪主动性而非被动接受。",
+          "source": "llm"
+        },
+        "lead_pair_chemistry": {
+          "score": 7.0,
+          "reason": "双人化学反应主要通过错位互动传递，关系压差明显，但缺乏直接的情绪碰撞，电流感不足：男主的在意与女主的怨恨仅通过下属传话形成回响，没有现场的情绪对冲。",
+          "evidence_summary": "女主的狠话传到男主耳中，男主的沉默与“回宫”命令形成情绪呼应；男主对女主的了解（她撑得住）体现了两人过去的羁绊，但无直接互动。",
+          "improvement_hint": "设计一个瞬间的隔空互动，比如女主转身时，轿帘被风掀开一角，两人视线短暂交汇后立刻错开，或男主听到狠话后，下令“再看一眼”，让化学反应更具象。",
+          "source": "llm"
+        },
+        "opening_hook": {
+          "score": 9.0,
+          "reason": "开头直接抛出核心冲突，快速建立异样感与关系压力：第一句就点明“太子送休书”，结合女主路边摊的身份反差，瞬间抓住读者注意力，符合高概念开局要求。",
+          "evidence_summary": "开篇第一句“季姑娘，这是太子殿下要我交给你的休书”直接抛出核心矛盾，后续通过女主的反应强化身份落差，钩子硬且有效。",
+          "improvement_hint": "删掉开头冗余的环境描写（“春暖花开，西郡皇朝国泰民安”），直接切入对话，让冲突来得更迅猛，避免拖沓。",
+          "source": "llm"
+        },
+        "ending_hook": {
+          "score": 7.0,
+          "reason": "结尾留下了新的悬念，但钩子过于模糊，缺乏具体指向：仅提及“第二个不速之客”，未给出身份、目的的暗示，难以强烈勾住读者追读欲望。",
+          "evidence_summary": "结尾停留在“迎来第二个不速之客”，没有任何细节铺垫，悬念空泛。",
+          "improvement_hint": "给不速之客增加细节暗示，比如“一个穿着玄色锦袍、腰间挂着太子府令牌的男子站在摊前”，或直接抛出第一句对话“季九儿，殿下要见你”，让钩子更具体有指向性。",
+          "source": "llm"
+        },
+        "continuity": {
+          "score": 8.0,
+          "reason": "情节、情绪、人设承接自然：从休书送达，到女主与妹妹的互动，再到男主的反应，最后到结尾的不速之客，逻辑连贯，情绪从隐忍到微失控再到平静，符合人物状态。",
+          "evidence_summary": "女主从接休书时的平静，到和妹妹对话时的自嘲，再到打翻热汤的失控，情绪过渡自然；男主的反应也符合他阴鸷又在意的人设。",
+          "improvement_hint": "在女主与妹妹的互动中，加入一个与过去相关的细节，比如她盛饺子时，想起过去和男主一起吃饺子的场景，强化情绪与过往的承接，让人物动机更清晰。",
+          "source": "llm"
+        },
+        "redundancy": {
+          "score": 7.0,
+          "reason": "存在少量重复的情绪表达与标签化描述：女主多次提及“六年浪费”，男主的冷酷标签化介绍略显冗余，但整体信息密度尚可，未严重拖慢节奏。",
+          "evidence_summary": "女主先后说“浪费了整整六年”“找了六年就等到一张休书”，情绪表达重复；“下毒杀母、殿前斩兄”的直白描述属于冗余的标签化信息。",
+          "improvement_hint": "把重复的情绪表达替换为具体细节，比如女主摸了摸妹妹的哑嗓，代替“浪费时间治哑病”的直白表述；删掉男主的标签化背景，用下属的敬畏反应体现他的冷酷。",
+          "source": "llm"
+        },
+        "mind_state_consistency": {
+          "score": 8.5,
+          "reason": "角色行为、话语符合当前心智状态：女主六年苦寻后被抛弃，隐忍平静的反应符合她被生活磨平但有韧性的状态；男主阴鸷不露面却关注女主反应，符合他既想斩断过去又放不下的心智。",
+          "evidence_summary": "女主没有崩溃大哭，而是平静接受休书并放狠话，符合她的清醒；男主不露面却第一句问“她哭了么”，符合他隐秘在意又不愿暴露的心态。",
+          "improvement_hint": "避免下属说“主子欠她的”时，男主的反应过于单薄，可增加轿内的微动作（如指尖攥紧玉佩），体现他情绪的波动，保持心智一致性的同时让反应更立体。",
+          "source": "llm"
+        },
+        "diagnosis": {
+          "strengths": [
+            "高概念开局抓力极强，休书+身份反差瞬间建立核心冲突，符合言情追读的核心需求",
+            "女主人设塑造成功，隐忍韧性+对妹妹的责任感，避免苦情刻板印象，读者共情度高",
+            "情绪细节扎实，通过动作、场景传递情绪，无空泛抒情，余波感强",
+            "错位拉扯感突出，男主隐秘在意与女主怨恨形成张力，为后续关系反转埋下伏笔"
+          ],
+          "weaknesses": [
+            "男主标签化描写过多，缺乏立体细节支撑，人设略显单薄",
+            "男女主无直接互动，双人化学反应仅靠错位传递，电流感不足",
+            "结尾钩子模糊，缺乏具体指向，难以强烈激发追读欲望",
+            "部分情绪表达重复，冗余度略高，拖慢信息传递效率"
+          ],
+          "improvement_hints": [
+            "替换男主标签化背景，用侧面细节（如轿内动作、下属反应）塑造立体人设",
+            "增加一次男女主的隔空互动细节（如短暂眼神交汇），强化双人化学反应",
+            "细化结尾钩子，给出不速之客的身份暗示或第一句对话，提升追读动力",
+            "压缩重复情绪表达，替换为具体动作或回忆碎片，增强信息密度"
+          ]
+        }
+      },
+      "rule_redundancy": {
+        "score": 10.0,
+        "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱。",
+        "evidence_summary": "未检测到明显高相似段落或高频重复短语。",
+        "improvement_hint": "继续保持一段一推进，避免把同层情绪解释回头再说一遍。",
+        "source": "rule"
+      },
+      "hard_fail_flags": [],
+      "top_targets": [
+        {
+          "target_module": "prompts/writer/plan_content_blocks.txt",
+          "issue_type": "redundancy",
+          "severity": "medium",
+          "confidence": 0.7,
+          "reason": "重复铺陈当前 7.0 分。以 romance judge 为主分，规则检测只用于向下修正，不再允许规则层把坏重复救高。",
+          "evidence_summary": "Judge：女主先后说“浪费了整整六年”“找了六年就等到一张休书”，情绪表达重复；“下毒杀母、殿前斩兄”的直白描述属于冗余的标签化信息。；Rule：未检测到明显高相似段落或高频重复短语。；部分情绪表达重复，冗余度略高，拖慢信息传递效率",
+          "patch_hint": "减少同一情绪或判断的解释型复述，让每个 block 都新增信息、代价或关系变化。",
+          "related_metrics": [
+            "redundancy_score"
+          ],
+          "expected_metric_gains": [
+            "redundancy_score",
+            "emotional_resonance_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "redundancy",
+          "severity": "medium",
+          "confidence": 0.7,
+          "reason": "重复铺陈当前 7.0 分。以 romance judge 为主分，规则检测只用于向下修正，不再允许规则层把坏重复救高。",
+          "evidence_summary": "Judge：女主先后说“浪费了整整六年”“找了六年就等到一张休书”，情绪表达重复；“下毒杀母、殿前斩兄”的直白描述属于冗余的标签化信息。；Rule：未检测到明显高相似段落或高频重复短语。；部分情绪表达重复，冗余度略高，拖慢信息传递效率",
+          "patch_hint": "减少同一情绪或判断的解释型复述，让每个 block 都新增信息、代价或关系变化。",
+          "related_metrics": [
+            "redundancy_score"
+          ],
+          "expected_metric_gains": [
+            "redundancy_score",
+            "emotional_resonance_score",
+            "hook_score"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "weak_reject_mother_son_pressure",
+      "expected_verdict": "blocked",
+      "actual_verdict": "blocked",
+      "matched_expectation": true,
+      "title": "归宗礼上的旧案威压",
+      "description": "这是一段宫廷权力对峙文本，氛围和 prose 很强，但没有言情主轴。用它测试 romance eval 会不会被表层张力骗高分。",
+      "text": "宫门下的青石板被马蹄踩得微颤，萧湛翻身下马时，腰间悬着的军功令牌撞得叮当作响——那是边地风沙磨出来的沉实声响，与周遭百官衣袂窸窣的礼制声格格不入。他只淡淡颔首回应上前见礼的礼部官员，黑沉的目光径直越过攒动的官帽，落在王府仪仗最前方的苏蘅身上，下颌线绷紧成一道冷硬的弧线。躲在苏蘅身后的萧宁被这扫过的目光惊得缩了缩肩，指尖攥紧了母亲的衣摆。\n\n苏蘅立在鎏金华盖下，一身石青色织金褙子衬得她面色愈发苍白。听见令牌相撞的声响时，她的肩背几不可察地绷紧，搭在鎏金茶盏边缘的指尖微微蜷起，茶液晃了晃，溅在暗纹袖口上也未察觉。百官只看见她端严的主母姿态，无人留意到她腕骨处因用力而泛起的青白。\n\n萧湛抬脚迈步，靴底碾过青石板时，力道重得震得阶前铜炉里的香灰簌簌落了半寸。他的目光裹着淬冰的寒意，像根针似的钉在苏蘅身上。礼部侍郎跟在身侧，喉结滚了又滚，眼角瞥见远处御史台的官员已经掏出记事簿，笔尖悬在素纸上方，终究没敢出声。萧湛一步步走向归宗仪式的殿门，脚步稳得像踩在刀尖上。\n\n殿门内的内侍捧着锦裹的归宗文书趋步上前，尖细的唱喏声在肃穆的殿廊下荡开：“萧湛接归宗文书——”锦缎封面上烫着明黄宗室纹，边角压着枢密院朱红大印，是他归京的合法凭据。阶下一位须发皆白的宗室老臣捋着银须颔首，目光里满是对礼法周全的赞许，全然未察觉萧湛垂在身侧的手指已骤然蜷起，指节绷得泛出青白。\n\n苏蘅端着鎏金茶盏的手纹丝未动，只眼尾飞快扫过那封文书，又迅速落回案头摊开的宗谱上，肩背绷得像一张拉满的弓。萧湛上前一步，指尖触到锦缎的瞬间，指腹被朱印棱边硌得生疼。他攥紧文书，指节几乎要嵌进锦缎里，垂眼时下颌线绷得快要裂开，喉结滚了半圈却没发出一点声音，缓缓屈膝，准备行那套恪守礼制的母子跪拜礼。\n\n萧湛膝盖磕在冰凉的金砖上，礼毕起身时借着俯身的势头骤然凑近，黑眸压得极低，只有两人能听见的声音像淬了冰：“母亲，卫朔的祭礼，您去了吗？”直起身时动作幅度稍大，袖口自然滑落，半块边缘磨得发白的旧军牌露了一瞬，他眼角余光扫到阶下御史台官员的笔尖动了动，指尖猛地收紧，飞快将军牌掩回袖中。\n\n鎏金茶盏猛地晃了一下，碧色茶液溅在苏蘅暗纹袖口的折痕里，洇开一小片深褐。她指尖掐进掌心，指腹抵着茶盏的鎏金边缘，声线平稳得无一丝波澜：“按例已祭。”身后的萧宁被两人间的低气压惊得攥紧她的衣摆，轻轻拽了拽，她却连眼尾都没扫过去，萧宁指尖飞快松开，缩回袖笼，头埋得更低。\n\n萧湛直起身退回原位，腰背挺得笔直，仿佛方才的低语从未发生，抬手接过内侍递来的归宗文书，继续恪守礼制的流程。苏蘅端着茶盏的手纹丝不动，袖口的茶渍像块隐秘的烙印，在百官赞许的目光里，她连呼吸都放得极缓。\n\n内侍尖细的唱喏声落定：“归宗礼成——”\n\n殿廊下的百官终于松了口气，低低的赞许声此起彼伏。几个年轻官员偷偷交换了释然的眼神，阶下的御史台官员也悄悄合上了摊开的记事簿。\n\n萧湛理了理玄色锦袍的下摆，指尖不经意扫过袖中那半块磨损的旧军牌。他眼角余光扫过御史台方向，脚步顿了半瞬，抬眼时黑眸骤然收紧，寒意像冰棱似的扎向案后的苏蘅。\n\n他转身迈步，擦肩而过时，只有苏蘅能听见他压得极低的声音：“母亲，旧案的账，我会慢慢算。”\n\n苏蘅端坐在案后，鎏金茶盏稳稳搁在描金云纹案几上，袖口沾着一点淡褐色的茶渍。\n\n她放在案下的指尖掐得更紧，肩背绷得愈发笔直，连眼尾都没动一下。只有茶盏上浮起的热气，被她极轻的呼吸搅得微微晃了晃。\n\n身后的萧宁缩着身子，指尖揪着她的衣摆，她却连余光都没分给这个怯懦的次子。\n\n萧湛转身迈步，玄色锦袍的下摆扫过冰凉的金砖，行至殿门口时忽然侧身，压低的嗓音混在百官低语里，只有苏蘅能听见：“母亲，旧案的账，我会慢慢算。”阶下御史台的官员忽然抬眼，笔尖悬在记事簿上顿了半瞬。\n\n她的呼吸猛地一滞，随即又压得匀净，目光牢牢锁在殿门口的空茫里。案下的指节绷得泛出青白，袖口的茶渍在殿外天光下泛着冷光，脊背挺得笔直。眼角余光扫过身后缩成一团的萧宁，指尖无意识地收紧了几分。",
+      "scores": {
+        "romance_tension_score": 0.0,
+        "relationship_progression_score": 0.0,
+        "emotional_resonance_score": 2.0,
+        "character_attraction_score": 2.4,
+        "hook_score": 2.5,
+        "continuity_score": 8.0,
+        "redundancy_score": 3.0,
+        "mind_state_consistency_score": 9.0
+      },
+      "judge_payload": {
+        "romance_tension": {
+          "score": 0.0,
+          "reason": "男女主之间的对峙完全围绕旧案权力冲突展开，无任何言情层面的拉扯、试探、暧昧或欲望流动，仅为亲属身份下的权力施压，不具备言情张力。",
+          "evidence_summary": "两人对话均指向旧案追责，动作细节（如萧湛的军牌、苏蘅的茶渍）均服务于权力压迫氛围，无恋爱相关的潜台词或互动。",
+          "improvement_hint": "需先建立言情关系基础，例如调整设定为两人曾有旧情，或在权力对峙中加入不自觉的在意、隐秘的眼神触碰等言情向细节。",
+          "source": "llm"
+        },
+        "relationship_progression": {
+          "score": 0.0,
+          "reason": "本章仅强化了旧案权力对峙的紧张感，未发生任何言情层面的关系变化，既无升温、松动，也无误会加深等有效言情推进。",
+          "evidence_summary": "从开场到结尾，两人始终维持权力对手的状态，重复提及旧案算账，言情关系无任何实质改变。",
+          "improvement_hint": "加入能触发言情关系变化的事件，例如意外的肢体接触、隐秘旧物的暴露，或某一方流露出超越权力冲突的情绪。",
+          "source": "llm"
+        },
+        "emotional_resonance": {
+          "score": 2.0,
+          "reason": "情绪集中在权力压迫的冷感上，无言情相关的情绪余波，无法让读者因恋爱感产生追读欲望，仅能感受到权谋层面的紧张。",
+          "evidence_summary": "苏蘅的指尖泛白、茶盏晃动，萧湛的下颌紧绷、军牌遮掩，均为旧案压力下的反应，与言情情绪无关。",
+          "improvement_hint": "将权力压迫情绪与言情情绪绑定，例如苏蘅的紧张不仅源于旧案，还夹杂着对萧湛的复杂情感；萧湛的压迫背后藏着隐秘的在意。",
+          "source": "llm"
+        },
+        "male_lead_attraction": {
+          "score": 4.0,
+          "reason": "具备权力层面的压迫感与军功背景的硬朗特质，但缺乏言情层面的魅力点，人设标签化，无立体的情感细节。",
+          "evidence_summary": "萧湛全程冷硬，动作均围绕旧案施压，仅体现了军功功臣的威严，无反差感或隐秘情绪流露。",
+          "improvement_hint": "加入体现内心矛盾的细节，例如瞥见苏蘅苍白面色时的微顿，或触碰旧军牌时的眼神软化，让人物更立体。",
+          "source": "llm"
+        },
+        "female_lead_attraction": {
+          "score": 4.0,
+          "reason": "具备王府主母的隐忍、端严特质，但无言情层面的主体性或魅力表达，仅为权力压迫下的被动承受者。",
+          "evidence_summary": "苏蘅全程维持表面平静，动作均为掩饰旧案紧张，无主动的情感选择或隐秘情绪流露。",
+          "improvement_hint": "加入她对萧湛的复杂情感细节，例如听到他声音时的呼吸变化不止源于旧案，或瞥见他军牌时的眼神波动。",
+          "source": "llm"
+        },
+        "lead_pair_chemistry": {
+          "score": 0.0,
+          "reason": "双人同场仅为权力对峙的气场碰撞，无任何言情层面的化学反应、关系压差或潜台词火花，互动完全服务于旧案冲突。",
+          "evidence_summary": "两人的低语均为旧案追责，无暧昧的语气、不自觉的肢体靠近或超越亲属/对手的情绪流动。",
+          "improvement_hint": "调整互动细节，例如萧湛俯身时的气息扫过苏蘅的发梢，或苏蘅回答时的声线微颤掺杂其他情绪，制造言情电流感。",
+          "source": "llm"
+        },
+        "opening_hook": {
+          "score": 3.0,
+          "reason": "快速建立了萧湛与礼制氛围的违和感及对苏蘅的压迫感，但仅为权谋层面的悬念，无言情相关的钩子。",
+          "evidence_summary": "开场通过令牌声与衣袂声的对比、萧湛锁定苏蘅的目光，快速营造了紧张氛围，但未暗示任何言情关系。",
+          "improvement_hint": "在开头加入能暗示言情关系的细节，例如萧湛看苏蘅时眼神里除了寒意还有一丝不易察觉的波动，或苏蘅听到他名字时的微顿。",
+          "source": "llm"
+        },
+        "ending_hook": {
+          "score": 2.0,
+          "reason": "仅强化了旧案冲突的威胁，未留下任何言情层面的悬念或关系变化，无法触发读者对言情线的追读欲望。",
+          "evidence_summary": "结尾重复两次“旧案的账慢慢算”，仅延续了权谋冲突，无新的言情钩子。",
+          "improvement_hint": "将重复的威胁替换为言情向悬念，例如萧湛不小心掉落与苏蘅相关的旧信物，或苏蘅露出隐秘的旧情印记。",
+          "source": "llm"
+        },
+        "continuity": {
+          "score": 8.0,
+          "reason": "情节按归宗礼流程自然推进，权力压迫的情绪、人物行为逻辑承接顺滑，无突兀跳变或断裂。",
+          "evidence_summary": "从萧湛下马、行礼到礼成，每一步的动作、情绪均围绕旧案压迫展开，符合场景逻辑。",
+          "improvement_hint": "在情节承接中加入言情细节的铺垫，例如萧湛每次靠近苏蘅时的细微动作变化，或苏蘅的眼神跟随轨迹。",
+          "source": "llm"
+        },
+        "redundancy": {
+          "score": 3.0,
+          "reason": "结尾重复两次相同的旧案威胁话语，无新信息补充，属于无效重复铺陈，拖慢节奏。",
+          "evidence_summary": "萧湛在擦肩而过和殿门口两次说出“母亲，旧案的账，我会慢慢算”，内容完全一致，无情绪或信息升级。",
+          "improvement_hint": "删除一次重复话语，替换为能体现人物内心变化的细节，例如萧湛停顿后欲言又止，或苏蘅的反应从隐忍到微露破绽。",
+          "source": "llm"
+        },
+        "mind_state_consistency": {
+          "score": 9.0,
+          "reason": "男女主的行为、话语均符合当前心智状态：萧湛冷硬隐忍，始终维持军功功臣的威严；苏蘅端严克制，坚守王府主母的姿态，无突兀失控。",
+          "evidence_summary": "萧湛仅在私下低语施压，全程恪守礼制；苏蘅仅在案下指尖掐紧，表面维持平静，均符合人物身份与心智。",
+          "improvement_hint": "在符合心智的前提下，加入体现隐秘言情情绪的细微动作，例如萧湛移开目光时的微顿，或苏蘅呼吸的细微变化。",
+          "source": "llm"
+        },
+        "diagnosis": {
+          "strengths": [
+            "权力压迫氛围营造细腻，细节（令牌声、香灰晃动、茶渍印记）具象化，代入感强",
+            "人物心智状态稳定，行为逻辑符合身份，无崩坏",
+            "情节按礼制流程推进，承接顺滑，场景逻辑严谨"
+          ],
+          "weaknesses": [
+            "无有效言情主轴，所有冲突均为权力旧案对峙，完全缺失言情张力与化学反应",
+            "言情关系无任何推进，全程原地踏步，无法触发恋爱向追读欲望",
+            "结尾重复铺陈，无言情钩子，仅延续权谋冲突",
+            "男女主魅力仅停留在权力层面，缺乏言情向的立体特质与情感细节"
+          ],
+          "improvement_hints": [
+            "调整核心关系设定，例如设定萧湛与苏蘅曾有旧情，打破单纯的母子/权力对手框架",
+            "在权力对峙中加入言情细节，例如不自觉的肢体触碰、眼神里的隐秘情绪波动",
+            "删除结尾重复的威胁话语，替换为能引发言情悬念的细节，比如旧信物暴露、隐秘情绪流露",
+            "给男女主加入言情向反差特质，例如萧湛对苏蘅隐秘的在意，苏蘅对萧湛的复杂情感"
+          ]
+        }
+      },
+      "rule_redundancy": {
+        "score": 10.0,
+        "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱。",
+        "evidence_summary": "未检测到明显高相似段落或高频重复短语。",
+        "improvement_hint": "继续保持一段一推进，避免把同层情绪解释回头再说一遍。",
+        "source": "rule"
+      },
+      "hard_fail_flags": [
+        {
+          "flag_type": "relationship_progression_break",
+          "severity": "blocker",
+          "reason": "关系推进仅 0.0 分，已经低于 阻断阈值。本章仅强化了旧案权力对峙的紧张感，未发生任何言情层面的关系变化，既无升温、松动，也无误会加深等有效言情推进。",
+          "evidence_summary": "从开场到结尾，两人始终维持权力对手的状态，重复提及旧案算账，言情关系无任何实质改变。；言情关系无任何推进，全程原地踏步，无法触发恋爱向追读欲望",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/step_8_chapter_briefs.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "romance_mode_miss",
+          "severity": "blocker",
+          "reason": "当前章节的主要压强不是言情双人关系，而是外层权力、旧案或亲属对峙，已经偏离 romance eval 要求的主模式。",
+          "evidence_summary": "拉扯感：两人对话均指向旧案追责，动作细节（如萧湛的军牌、苏蘅的茶渍）均服务于权力压迫氛围，无恋爱相关的潜台词或互动。；关系推进：从开场到结尾，两人始终维持权力对手的状态，重复提及旧案算账，言情关系无任何实质改变。；双人化学反应：两人的低语均为旧案追责，无暧昧的语气、不自觉的肢体靠近或超越亲属/对手的情绪流动。",
+          "related_metrics": [
+            "romance_tension_score",
+            "relationship_progression_score",
+            "emotional_resonance_score",
+            "character_attraction_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/step_8_chapter_briefs.txt",
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "hook_underpowered",
+          "severity": "high",
+          "reason": "章节钩子仅 2.5 分，已经低于 高风险阈值。由开篇钩子与结尾钩子均值合成。",
+          "evidence_summary": "开头：开场通过令牌声与衣袂声的对比、萧湛锁定苏蘅的目光，快速营造了紧张氛围，但未暗示任何言情关系。；结尾：结尾重复两次“旧案的账慢慢算”，仅延续了权谋冲突，无新的言情钩子。；言情关系无任何推进，全程原地踏步，无法触发恋爱向追读欲望",
+          "related_metrics": [
+            "hook_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/step_8_chapter_briefs.txt",
+            "prompts/writer/plan_content_blocks.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "redundancy_drag",
+          "severity": "high",
+          "reason": "重复铺陈仅 3.0 分，已经低于 高风险阈值。以 romance judge 为主分，规则检测只用于向下修正，不再允许规则层把坏重复救高。",
+          "evidence_summary": "Judge：萧湛在擦肩而过和殿门口两次说出“母亲，旧案的账，我会慢慢算”，内容完全一致，无情绪或信息升级。；Rule：未检测到明显高相似段落或高频重复短语。；结尾重复铺陈，无言情钩子，仅延续权谋冲突",
+          "related_metrics": [
+            "redundancy_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "romance_pull_weak",
+          "severity": "high",
+          "reason": "追读拉力均值仅 1.0 分，说明正文的情绪拉力和关系电流还没真正立起来。",
+          "evidence_summary": "拉扯感：两人对话均指向旧案追责，动作细节（如萧湛的军牌、苏蘅的茶渍）均服务于权力压迫氛围，无恋爱相关的潜台词或互动。；情绪余波：苏蘅的指尖泛白、茶盏晃动，萧湛的下颌紧绷、军牌遮掩，均为旧案压力下的反应，与言情情绪无关。",
+          "related_metrics": [
+            "romance_tension_score",
+            "emotional_resonance_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        }
+      ],
+      "top_targets": [
+        {
+          "target_module": "prompts/writer/step_8_chapter_briefs.txt",
+          "issue_type": "relationship_progression",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "关系推进当前 0.0 分。本章仅强化了旧案权力对峙的紧张感，未发生任何言情层面的关系变化，既无升温、松动，也无误会加深等有效言情推进。",
+          "evidence_summary": "从开场到结尾，两人始终维持权力对手的状态，重复提及旧案算账，言情关系无任何实质改变。；言情关系无任何推进，全程原地踏步，无法触发恋爱向追读欲望",
+          "patch_hint": "让 step 8 明确本章关系要发生什么变化，再要求正文用可见动作或选择把变化兑现出来。",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "expected_metric_gains": [
+            "relationship_progression_score",
+            "romance_tension_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "relationship_progression",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "关系推进当前 0.0 分。本章仅强化了旧案权力对峙的紧张感，未发生任何言情层面的关系变化，既无升温、松动，也无误会加深等有效言情推进。",
+          "evidence_summary": "从开场到结尾，两人始终维持权力对手的状态，重复提及旧案算账，言情关系无任何实质改变。；言情关系无任何推进，全程原地踏步，无法触发恋爱向追读欲望",
+          "patch_hint": "让 step 8 明确本章关系要发生什么变化，再要求正文用可见动作或选择把变化兑现出来。",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "expected_metric_gains": [
+            "relationship_progression_score",
+            "romance_tension_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/plan_content_blocks.txt",
+          "issue_type": "romance_mode_miss",
+          "severity": "blocker",
+          "confidence": 0.93,
+          "reason": "拉扯感 0.0 / 关系推进 0.0 / 双人化学反应 0.0，说明章节压根没立住言情主轴。",
+          "evidence_summary": "拉扯感：两人对话均指向旧案追责，动作细节（如萧湛的军牌、苏蘅的茶渍）均服务于权力压迫氛围，无恋爱相关的潜台词或互动。；关系推进：从开场到结尾，两人始终维持权力对手的状态，重复提及旧案算账，言情关系无任何实质改变。；双人化学反应：两人的低语均为旧案追责，无暧昧的语气、不自觉的肢体靠近或超越亲属/对手的情绪流动。",
+          "patch_hint": "先把 step 8 里的双人关系目标写实：谁在意谁、谁回避谁、哪一步关系变化必须落页。权谋、亲属、旧案压力只能做外层压力，不能替代 romance 主轴。",
+          "related_metrics": [
+            "romance_tension_score",
+            "relationship_progression_score",
+            "emotional_resonance_score",
+            "character_attraction_score"
+          ],
+          "expected_metric_gains": [
+            "romance_tension_score",
+            "relationship_progression_score",
+            "character_attraction_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/step_8_chapter_briefs.txt",
+          "issue_type": "romance_mode_miss",
+          "severity": "blocker",
+          "confidence": 0.93,
+          "reason": "拉扯感 0.0 / 关系推进 0.0 / 双人化学反应 0.0，说明章节压根没立住言情主轴。",
+          "evidence_summary": "拉扯感：两人对话均指向旧案追责，动作细节（如萧湛的军牌、苏蘅的茶渍）均服务于权力压迫氛围，无恋爱相关的潜台词或互动。；关系推进：从开场到结尾，两人始终维持权力对手的状态，重复提及旧案算账，言情关系无任何实质改变。；双人化学反应：两人的低语均为旧案追责，无暧昧的语气、不自觉的肢体靠近或超越亲属/对手的情绪流动。",
+          "patch_hint": "先把 step 8 里的双人关系目标写实：谁在意谁、谁回避谁、哪一步关系变化必须落页。权谋、亲属、旧案压力只能做外层压力，不能替代 romance 主轴。",
+          "related_metrics": [
+            "romance_tension_score",
+            "relationship_progression_score",
+            "emotional_resonance_score",
+            "character_attraction_score"
+          ],
+          "expected_metric_gains": [
+            "romance_tension_score",
+            "relationship_progression_score",
+            "character_attraction_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "romance_mode_miss",
+          "severity": "blocker",
+          "confidence": 0.93,
+          "reason": "拉扯感 0.0 / 关系推进 0.0 / 双人化学反应 0.0，说明章节压根没立住言情主轴。",
+          "evidence_summary": "拉扯感：两人对话均指向旧案追责，动作细节（如萧湛的军牌、苏蘅的茶渍）均服务于权力压迫氛围，无恋爱相关的潜台词或互动。；关系推进：从开场到结尾，两人始终维持权力对手的状态，重复提及旧案算账，言情关系无任何实质改变。；双人化学反应：两人的低语均为旧案追责，无暧昧的语气、不自觉的肢体靠近或超越亲属/对手的情绪流动。",
+          "patch_hint": "先把 step 8 里的双人关系目标写实：谁在意谁、谁回避谁、哪一步关系变化必须落页。权谋、亲属、旧案压力只能做外层压力，不能替代 romance 主轴。",
+          "related_metrics": [
+            "romance_tension_score",
+            "relationship_progression_score",
+            "emotional_resonance_score",
+            "character_attraction_score"
+          ],
+          "expected_metric_gains": [
+            "romance_tension_score",
+            "relationship_progression_score",
+            "character_attraction_score",
+            "hook_score"
+          ]
+        }
+      ]
+    },
+    {
+      "label": "strong_reject_flat_summary",
+      "expected_verdict": "blocked",
+      "actual_verdict": "blocked",
+      "matched_expectation": true,
+      "title": "朝堂重逢劣质摘要",
+      "description": "这个文本表面是古言重逢言情，但几乎只有摘要式复述与重复判断。用来测试 eval 是否能严厉拦住“像提纲扩写”的假正文。",
+      "text": "谢临川回京以后，在朝堂上又见到了沈知微。他觉得她很冷，她也觉得他很冷。旧案让他们都很难受，所以气氛一直很压抑。\n\n他想查档，她按规矩答应。她很冷，他也很冷。她很冷，他也很冷。两个人都想到从前，但谁也没有做出新的反应。\n\n散朝以后，他还是觉得她很冷，她也还是觉得他很冷。后来有人告诉他书吏死了，他决定以后再查。",
+      "scores": {
+        "romance_tension_score": 0.0,
+        "relationship_progression_score": 0.0,
+        "emotional_resonance_score": 0.0,
+        "character_attraction_score": 0.0,
+        "hook_score": 0.5,
+        "continuity_score": 5.0,
+        "redundancy_score": 0.0,
+        "mind_state_consistency_score": 5.0
+      },
+      "judge_payload": {
+        "romance_tension": {
+          "score": 0.0,
+          "reason": "完全没有构建起男女主之间的言情拉扯，仅空泛重复“很冷”的情绪结论，没有试探、回避、压迫等言情层面的互动细节，张力为零。",
+          "evidence_summary": "全文反复重复“她很冷，他也很冷”，无任何具体的眼神、动作、潜台词互动，仅概括性描述压抑气氛。",
+          "improvement_hint": "将空泛的情绪转化为具体的言情互动细节，比如男主借查档时刻意提及旧案的语气、女主攥紧袖口的停顿、称呼的刻意疏远等，制造隐秘的拉扯感。",
+          "source": "llm"
+        },
+        "relationship_progression": {
+          "score": 0.0,
+          "reason": "关系完全原地踏步，从开头到结尾未出现任何认知变化、情绪松动或冲突升级，未兑现设定中“从叛徒到影响他呼吸的人”的关系转变。",
+          "evidence_summary": "全文始终停留在“互相觉得冷”的状态，无任何推动关系变化的节点，既没有误会加深也没有旧情松动的迹象。",
+          "improvement_hint": "设计明确的关系推进触发点，比如男主查档时捕捉到女主下意识避开旧案核心的微动作，从而改变对她的单纯敌意，推动关系认知的转变。",
+          "source": "llm"
+        },
+        "emotional_resonance": {
+          "score": 0.0,
+          "reason": "情绪完全空泛，仅用“难受”“压抑”等概括性词语，无具体的感官细节或角色视角感受，无法让读者共情，更无情绪余波。",
+          "evidence_summary": "无任何能承载情绪的具体动作（如男主鞋底未干的雪水、女主颤抖的指尖），仅复述情绪结论，读者无法代入角色情绪。",
+          "improvement_hint": "用具体的感官细节和微动作承载情绪，比如男主看到女主袖口旧痕时的呼吸停滞、女主回答查档时的语速变化，而非直接说“难受”“压抑”。",
+          "source": "llm"
+        },
+        "male_lead_attraction": {
+          "score": 0.0,
+          "reason": "男主完全标签化，仅用“冷”概括，无任何具体的行为逻辑、性格特质或魅力体现，缺乏辨识度。",
+          "evidence_summary": "男主仅被描述为“想查档”“觉得冷”，无任何体现他隐忍、试探或军功加持后的气场的细节。",
+          "improvement_hint": "赋予男主具体的行为特征，比如借军功施压查档时的低哑语气、盯着女主时的锐利眼神，体现他流放三年后的隐忍与复仇欲，而非仅用“冷”标签化。",
+          "source": "llm"
+        },
+        "female_lead_attraction": {
+          "score": 0.0,
+          "reason": "女主无主体性，仅被描述为“冷”“按规矩答应”，无任何体现她内心挣扎、克制或隐秘目的的细节，缺乏存在感。",
+          "evidence_summary": "女主无任何具体动作或潜台词，仅作为“冷”的标签存在，未展现她在旧案中的立场与内心矛盾。",
+          "improvement_hint": "设计女主的微动作与行为逻辑，比如回答查档时刻意用“谢世子”的疏远称呼、避开男主眼神的停顿，体现她的克制与隐藏的秘密，而非仅用“冷”概括。",
+          "source": "llm"
+        },
+        "lead_pair_chemistry": {
+          "score": 0.0,
+          "reason": "双人同场无任何化学反应，仅重复“互相觉得冷”，无关系压差、潜台词火花或隐秘的情绪联结，完全没有言情小说的核心张力。",
+          "evidence_summary": "无任何具体的同场互动细节，连对话都没有，仅概括性描述两人的状态，未形成任何情绪或关系上的联结。",
+          "improvement_hint": "设计错位的同场互动，比如男主提及旧案时女主的指尖颤抖被男主捕捉，两人形成隐秘的情绪交锋，制造电流感。",
+          "source": "llm"
+        },
+        "opening_hook": {
+          "score": 0.0,
+          "reason": "开头平淡陈述重逢，未快速建立冲突、关系压力或悬念，完全没有抓住读者的钩子效应。",
+          "evidence_summary": "开头仅直白说“谢临川回京以后，在朝堂上又见到了沈知微”，无任何异样感或冲突点，无法吸引读者继续阅读。",
+          "improvement_hint": "从核心冲突点切入，比如开头直接写“圣旨刚念到旧案名目，沈知微就猛地抬起了眼”，瞬间建立关系压力与悬念。",
+          "source": "llm"
+        },
+        "ending_hook": {
+          "score": 1.0,
+          "reason": "结尾提及书吏死亡，有潜在的悬念雏形，但表述过于平淡，未与男女主的关系或旧案建立关联，追读驱动力极弱。",
+          "evidence_summary": "结尾仅简单告知“书吏死了，他决定以后再查”，未体现事件的紧迫性或与女主的关联，无法激发读者的好奇心。",
+          "improvement_hint": "强化尾钩的关联性与紧迫感，比如男主刚拿到查档口子，就得知书吏死在女主值守的档房外，留下“女主是否涉案”的悬念。",
+          "source": "llm"
+        },
+        "continuity": {
+          "score": 5.0,
+          "reason": "情节逻辑上基本连贯，从朝堂重逢到查档再到散朝、书吏死亡的脉络清晰，但情绪与关系承接完全空白，缺乏自然过渡。",
+          "evidence_summary": "情节线符合设定的核心走向，但节点之间无角色情绪或互动细节支撑，承接过于生硬。",
+          "improvement_hint": "在情节节点之间加入角色的即时反应，比如查档后男主盯着女主的背影失神，让情节过渡更自然有层次。",
+          "source": "llm"
+        },
+        "redundancy": {
+          "score": 0.0,
+          "reason": "大量重复表达同一空泛情绪，反复说“她很冷，他也很冷”，无任何新信息或层次，严重拖慢读感。",
+          "evidence_summary": "全文至少5次重复“她很冷，他也很冷”，未补充任何新的细节或关系变化，属于无效重复。",
+          "improvement_hint": "删除所有重复的情绪概括，换成能推动情节或关系的新细节，比如男主注意到女主袖口的冻疮、女主刻意绕开男主的路线等。",
+          "source": "llm"
+        },
+        "mind_state_consistency": {
+          "score": 5.0,
+          "reason": "文本未展现角色具体的心智状态，因此无明显的行为与心智不符的情况，但也未体现心智的一致性。",
+          "evidence_summary": "角色无具体行为细节，无法判断心智是否一致，但也未出现矛盾行为。",
+          "improvement_hint": "先明确角色当前的心智状态（如男主隐忍带试探、女主克制藏秘密），再用具体行为体现，比如男主明明恨女主却忍不住注意她的举动，符合他“旧情未断”的心智。",
+          "source": "llm"
+        },
+        "diagnosis": {
+          "strengths": [
+            "具备最基础的情节框架，符合设定的朝堂重逢、查档、书吏死亡的核心事件走向",
+            "结尾提及书吏死亡，有潜在的悬念切入点"
+          ],
+          "weaknesses": [
+            "完全是摘要式复述，无具体场面与细节，无法让读者代入",
+            "关系完全原地踏步，未出现任何有效推进，违背言情连载的核心要求",
+            "大量重复空泛的情绪标签，缺乏新信息与层次感",
+            "开头结尾钩子极弱，几乎没有追读吸引力"
+          ],
+          "improvement_hints": [
+            "将空泛的情绪概括转化为具体的动作、微表情、称呼变化等细节，构建男女主之间的言情拉扯",
+            "设计明确的关系推进节点，比如男主捕捉到女主的破绽，改变对她的单纯敌意",
+            "删除重复内容，加入能推动情节或关系的新信息，比如女主值守档房的细节",
+            "强化开头结尾钩子，开头从旧案冲突切入，结尾建立书吏死亡与女主的关联"
+          ]
+        }
+      },
+      "rule_redundancy": {
+        "score": 10.0,
+        "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱。",
+        "evidence_summary": "未检测到明显高相似段落或高频重复短语。",
+        "improvement_hint": "继续保持一段一推进，避免把同层情绪解释回头再说一遍。",
+        "source": "rule"
+      },
+      "hard_fail_flags": [
+        {
+          "flag_type": "relationship_progression_break",
+          "severity": "blocker",
+          "reason": "关系推进仅 0.0 分，已经低于 阻断阈值。关系完全原地踏步，从开头到结尾未出现任何认知变化、情绪松动或冲突升级，未兑现设定中“从叛徒到影响他呼吸的人”的关系转变。",
+          "evidence_summary": "全文始终停留在“互相觉得冷”的状态，无任何推动关系变化的节点，既没有误会加深也没有旧情松动的迹象。；关系完全原地踏步，未出现任何有效推进，违背言情连载的核心要求",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/step_8_chapter_briefs.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "romance_mode_miss",
+          "severity": "blocker",
+          "reason": "当前章节的主要压强不是言情双人关系，而是外层权力、旧案或亲属对峙，已经偏离 romance eval 要求的主模式。",
+          "evidence_summary": "拉扯感：全文反复重复“她很冷，他也很冷”，无任何具体的眼神、动作、潜台词互动，仅概括性描述压抑气氛。；关系推进：全文始终停留在“互相觉得冷”的状态，无任何推动关系变化的节点，既没有误会加深也没有旧情松动的迹象。；双人化学反应：无任何具体的同场互动细节，连对话都没有，仅概括性描述两人的状态，未形成任何情绪或关系上的联结。",
+          "related_metrics": [
+            "romance_tension_score",
+            "relationship_progression_score",
+            "emotional_resonance_score",
+            "character_attraction_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/step_8_chapter_briefs.txt",
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "summary_prose_fail",
+          "severity": "blocker",
+          "reason": "这章更像把剧情提纲或情绪标签复述了一遍，缺少能落在页上的场面执行，属于摘要式空文。",
+          "evidence_summary": "拉扯感：全文反复重复“她很冷，他也很冷”，无任何具体的眼神、动作、潜台词互动，仅概括性描述压抑气氛。；关系推进：全文始终停留在“互相觉得冷”的状态，无任何推动关系变化的节点，既没有误会加深也没有旧情松动的迹象。；钩子：开头：开头仅直白说“谢临川回京以后，在朝堂上又见到了沈知微”，无任何异样感或冲突点，无法吸引读者继续阅读。；结尾：结尾仅简单告知“书吏死了，他决定以后再查”，未体现事件的紧迫性或与女主的关联，无法激发读者的好奇心。；重复铺陈：Judge：全文至少5次重复“她很冷，他也很冷”，未补充任何新的细节或关系变化，属于无效重复。；Rule：未检测到明显高相似段落或高频重复短语。",
+          "related_metrics": [
+            "romance_tension_score",
+            "relationship_progression_score",
+            "emotional_resonance_score",
+            "hook_score",
+            "redundancy_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "continuity_break",
+          "severity": "high",
+          "reason": "连贯性仅 5.0 分，已经低于 高风险阈值。情节逻辑上基本连贯，从朝堂重逢到查档再到散朝、书吏死亡的脉络清晰，但情绪与关系承接完全空白，缺乏自然过渡。",
+          "evidence_summary": "情节线符合设定的核心走向，但节点之间无角色情绪或互动细节支撑，承接过于生硬。",
+          "related_metrics": [
+            "continuity_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "hook_underpowered",
+          "severity": "high",
+          "reason": "章节钩子仅 0.5 分，已经低于 高风险阈值。由开篇钩子与结尾钩子均值合成。",
+          "evidence_summary": "开头：开头仅直白说“谢临川回京以后，在朝堂上又见到了沈知微”，无任何异样感或冲突点，无法吸引读者继续阅读。；结尾：结尾仅简单告知“书吏死了，他决定以后再查”，未体现事件的紧迫性或与女主的关联，无法激发读者的好奇心。；开头结尾钩子极弱，几乎没有追读吸引力",
+          "related_metrics": [
+            "hook_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/step_8_chapter_briefs.txt",
+            "prompts/writer/plan_content_blocks.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "mind_state_break",
+          "severity": "high",
+          "reason": "角色心智一致性仅 5.0 分，已经低于 高风险阈值。文本未展现角色具体的心智状态，因此无明显的行为与心智不符的情况，但也未体现心智的一致性。",
+          "evidence_summary": "角色无具体行为细节，无法判断心智是否一致，但也未出现矛盾行为。",
+          "related_metrics": [
+            "mind_state_consistency_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/build_character_mindset.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "redundancy_drag",
+          "severity": "high",
+          "reason": "重复铺陈仅 0.0 分，已经低于 高风险阈值。以 romance judge 为主分，规则检测只用于向下修正，不再允许规则层把坏重复救高。",
+          "evidence_summary": "Judge：全文至少5次重复“她很冷，他也很冷”，未补充任何新的细节或关系变化，属于无效重复。；Rule：未检测到明显高相似段落或高频重复短语。；大量重复空泛的情绪标签，缺乏新信息与层次感",
+          "related_metrics": [
+            "redundancy_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        },
+        {
+          "flag_type": "romance_pull_weak",
+          "severity": "high",
+          "reason": "追读拉力均值仅 0.0 分，说明正文的情绪拉力和关系电流还没真正立起来。",
+          "evidence_summary": "拉扯感：全文反复重复“她很冷，他也很冷”，无任何具体的眼神、动作、潜台词互动，仅概括性描述压抑气氛。；情绪余波：无任何能承载情绪的具体动作（如男主鞋底未干的雪水、女主颤抖的指尖），仅复述情绪结论，读者无法代入角色情绪。",
+          "related_metrics": [
+            "romance_tension_score",
+            "emotional_resonance_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        }
+      ],
+      "top_targets": [
+        {
+          "target_module": "prompts/writer/step_8_chapter_briefs.txt",
+          "issue_type": "relationship_progression",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "关系推进当前 0.0 分。关系完全原地踏步，从开头到结尾未出现任何认知变化、情绪松动或冲突升级，未兑现设定中“从叛徒到影响他呼吸的人”的关系转变。",
+          "evidence_summary": "全文始终停留在“互相觉得冷”的状态，无任何推动关系变化的节点，既没有误会加深也没有旧情松动的迹象。；关系完全原地踏步，未出现任何有效推进，违背言情连载的核心要求",
+          "patch_hint": "让 step 8 明确本章关系要发生什么变化，再要求正文用可见动作或选择把变化兑现出来。",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "expected_metric_gains": [
+            "relationship_progression_score",
+            "romance_tension_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "relationship_progression",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "关系推进当前 0.0 分。关系完全原地踏步，从开头到结尾未出现任何认知变化、情绪松动或冲突升级，未兑现设定中“从叛徒到影响他呼吸的人”的关系转变。",
+          "evidence_summary": "全文始终停留在“互相觉得冷”的状态，无任何推动关系变化的节点，既没有误会加深也没有旧情松动的迹象。；关系完全原地踏步，未出现任何有效推进，违背言情连载的核心要求",
+          "patch_hint": "让 step 8 明确本章关系要发生什么变化，再要求正文用可见动作或选择把变化兑现出来。",
+          "related_metrics": [
+            "relationship_progression_score"
+          ],
+          "expected_metric_gains": [
+            "relationship_progression_score",
+            "romance_tension_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/plan_content_blocks.txt",
+          "issue_type": "summary_prose_fail",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "拉扯感 0.0 / 关系推进 0.0 / 情绪余波 0.0 / 钩子 0.5，说明文本停留在摘要层，没有把场面真正写出来。",
+          "evidence_summary": "拉扯感：全文反复重复“她很冷，他也很冷”，无任何具体的眼神、动作、潜台词互动，仅概括性描述压抑气氛。；关系推进：全文始终停留在“互相觉得冷”的状态，无任何推动关系变化的节点，既没有误会加深也没有旧情松动的迹象。；钩子：开头：开头仅直白说“谢临川回京以后，在朝堂上又见到了沈知微”，无任何异样感或冲突点，无法吸引读者继续阅读。；结尾：结尾仅简单告知“书吏死了，他决定以后再查”，未体现事件的紧迫性或与女主的关联，无法激发读者的好奇心。；重复铺陈：Judge：全文至少5次重复“她很冷，他也很冷”，未补充任何新的细节或关系变化，属于无效重复。；Rule：未检测到明显高相似段落或高频重复短语。",
+          "patch_hint": "把标签和结论改写成可见场面：用动作、停顿、称呼变化、选择代价和现场反馈来兑现关系变化，不要只用“他很冷、她也很冷”式总结句代替正文。",
+          "related_metrics": [
+            "romance_tension_score",
+            "relationship_progression_score",
+            "emotional_resonance_score",
+            "hook_score",
+            "redundancy_score"
+          ],
+          "expected_metric_gains": [
+            "romance_tension_score",
+            "relationship_progression_score",
+            "emotional_resonance_score",
+            "hook_score",
+            "redundancy_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "summary_prose_fail",
+          "severity": "blocker",
+          "confidence": 0.95,
+          "reason": "拉扯感 0.0 / 关系推进 0.0 / 情绪余波 0.0 / 钩子 0.5，说明文本停留在摘要层，没有把场面真正写出来。",
+          "evidence_summary": "拉扯感：全文反复重复“她很冷，他也很冷”，无任何具体的眼神、动作、潜台词互动，仅概括性描述压抑气氛。；关系推进：全文始终停留在“互相觉得冷”的状态，无任何推动关系变化的节点，既没有误会加深也没有旧情松动的迹象。；钩子：开头：开头仅直白说“谢临川回京以后，在朝堂上又见到了沈知微”，无任何异样感或冲突点，无法吸引读者继续阅读。；结尾：结尾仅简单告知“书吏死了，他决定以后再查”，未体现事件的紧迫性或与女主的关联，无法激发读者的好奇心。；重复铺陈：Judge：全文至少5次重复“她很冷，他也很冷”，未补充任何新的细节或关系变化，属于无效重复。；Rule：未检测到明显高相似段落或高频重复短语。",
+          "patch_hint": "把标签和结论改写成可见场面：用动作、停顿、称呼变化、选择代价和现场反馈来兑现关系变化，不要只用“他很冷、她也很冷”式总结句代替正文。",
+          "related_metrics": [
+            "romance_tension_score",
+            "relationship_progression_score",
+            "emotional_resonance_score",
+            "hook_score",
+            "redundancy_score"
+          ],
+          "expected_metric_gains": [
+            "romance_tension_score",
+            "relationship_progression_score",
+            "emotional_resonance_score",
+            "hook_score",
+            "redundancy_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/plan_content_blocks.txt",
+          "issue_type": "romance_mode_miss",
+          "severity": "blocker",
+          "confidence": 0.93,
+          "reason": "拉扯感 0.0 / 关系推进 0.0 / 双人化学反应 0.0，说明章节压根没立住言情主轴。",
+          "evidence_summary": "拉扯感：全文反复重复“她很冷，他也很冷”，无任何具体的眼神、动作、潜台词互动，仅概括性描述压抑气氛。；关系推进：全文始终停留在“互相觉得冷”的状态，无任何推动关系变化的节点，既没有误会加深也没有旧情松动的迹象。；双人化学反应：无任何具体的同场互动细节，连对话都没有，仅概括性描述两人的状态，未形成任何情绪或关系上的联结。",
+          "patch_hint": "先把 step 8 里的双人关系目标写实：谁在意谁、谁回避谁、哪一步关系变化必须落页。权谋、亲属、旧案压力只能做外层压力，不能替代 romance 主轴。",
+          "related_metrics": [
+            "romance_tension_score",
+            "relationship_progression_score",
+            "emotional_resonance_score",
+            "character_attraction_score"
+          ],
+          "expected_metric_gains": [
+            "romance_tension_score",
+            "relationship_progression_score",
+            "character_attraction_score",
+            "hook_score"
+          ]
+        }
+      ]
+    }
+  ]
+}

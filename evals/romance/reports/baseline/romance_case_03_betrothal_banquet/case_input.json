@@ -1,0 +1,340 @@
+{
+  "case_id": "romance_case_03_betrothal_banquet",
+  "title": "婚约宴上的公开逼近",
+  "description": "女主被迫在生辰宴上接受联姻试探，男主以看似更冷的方式替她挡下去。重点是公共场合的关系推进、角色魅力与结尾钩子。",
+  "tags": [
+    "banquet",
+    "public-pressure",
+    "fake-betrothal",
+    "hook-heavy"
+  ],
+  "premise": {
+    "title": "春台渡",
+    "high_concept": "被视作裴家锋刃的年轻权臣，与本该成为棋子的商户嫡女，在一场场联姻试探里把彼此拖成了彼此的软肋。",
+    "theme_statement": "公开场合的每一次护与逼，都会改写关系里的权力位置。",
+    "story_summary": "姜栀因家中商路被盯上，成了各方都想拿去交换的筹码；裴砚本想把她隔在局外，却一次次在最公开的地方出手，把关系逼得更近也更危险。",
+    "genre": "historical romance",
+    "target_style": "高压权谋言情，节奏快、钩子强",
+    "emotional_hook": "人人都看得见他在逼近，只有他嘴上最像在把她推远。",
+    "central_conflict": "姜栀想守住自家商路与选择权，裴砚却必须用最锋利的方式把她拉进自己的保护范围。",
+    "core_hook": "公开宴席上的一场似真似假的婚约截胡。",
+    "escalation_path": [
+      "联姻试探升级",
+      "裴砚公开出手",
+      "两人关系在众目睽睽下被重新命名"
+    ],
+    "twist_blueprint": [
+      "裴砚的强势介入表面像控制，实则是在切断旁人的手",
+      "姜栀前期会误判他只是把自己当筹码"
+    ],
+    "ending_payoff": "两人会从互相较劲走到公开绑定，但绑定背后藏着更大的政治代价。",
+    "selling_points": [
+      "公开截胡",
+      "强钩子结尾",
+      "女主有主体性的高压拉扯"
+    ]
+  },
+  "chapter_brief": {
+    "chapter_id": "ch_033",
+    "title": "满堂灯火偏照他",
+    "chapter_type": "public_pressure",
+    "active_lines": [
+      "line_betrothal"
+    ],
+    "active_twists": [
+      "twist_false_control"
+    ],
+    "summary": "姜栀在生辰宴上被当众试探婚约，裴砚以更狠的方式把局接过去，既替她挡刀，也把她逼进了更近的位置。",
+    "incoming_hook": "姜家生辰宴刚开席，裴砚却罕见地亲自到场。",
+    "opening_hook": "第一杯寿酒还没递到姜栀手里，国舅夫人就当众问起她的婚事。",
+    "core_scene": "女主必须在满堂灯火里守住自己的体面与选择权，男主则要用看似冷酷的手段替她切断联姻试探。",
+    "chapter_object": "一枚被临时送上的定亲玉佩",
+    "reader_emotion": "让读者感到窒息、兴奋、被公开护住的危险甜感，以及更大的后患。",
+    "reader_belief": "读者仍应觉得裴砚很会控制局面，也会怀疑他是不是把姜栀拖进了另一种束缚。",
+    "allowed_info": [
+      "姜家商路已被多方盯上",
+      "国舅府想借联姻拿住姜家",
+      "裴砚有能力当场改写局势"
+    ],
+    "allowed_clues": [
+      "裴砚提前准备过应对婚约试探的话与物件",
+      "姜栀对裴砚的护持既心动又恼火",
+      "国舅夫人对裴砚的出手明显意外"
+    ],
+    "forbidden": [
+      "不能揭示裴砚真正想借婚约切谁的手",
+      "不能让两人直接承认彼此心意",
+      "不能让姜栀失去主体性"
+    ],
+    "world_limit": "生辰宴上任何失礼都可能让姜家商路立刻受损，姜栀不能简单翻脸离席。",
+    "character_focus": [
+      "姜栀",
+      "裴砚"
+    ],
+    "character_shift": "姜栀从只想稳住场面，转向被迫承认裴砚的介入已经改变了她的处境。",
+    "relationship_reprice": "裴砚从危险的权臣盟友，变成当众替她截断联姻的人，也变成更难摆脱的人。",
+    "emotional_turn": "姜栀原本想独自应付，最后却在被裴砚公开逼近时第一次真正乱了节奏。",
+    "backstory_trigger": "",
+    "scene_engine": "relationship_collision",
+    "clue_reveal_mechanism": {
+      "style": "ritual_trigger",
+      "pressure_source": "生辰宴祝寿仪式与婚约试探叠在一起",
+      "surface_trigger": "国舅夫人递上的定亲玉佩",
+      "first_noticer": "姜栀",
+      "owner_reaction": "裴砚直接改写玉佩的归属语境"
+    },
+    "character_reentry_focus": {
+      "裴砚": "不要重讲他的身份，用满堂人对他的避让、他掀袍落座的方式和一句话压住场面。"
+    },
+    "human_pain_anchor": "姜栀笑着接寿酒时，指尖其实已经被杯壁凉得发僵，却还得在众人眼前把脊背挺直。",
+    "romance_seed": "裴砚把那枚定亲玉佩接过去时，视线没有看玉，先看的是姜栀的手。",
+    "small_payoff": "姜栀保住了当场拒绝联姻的空间。",
+    "ending_pull": "裴砚在众目睽睽之下说，玉佩既然到了他手里，改日他会亲自上门讨个说法。",
+    "info_budget": "target=3200-4000; hook-heavy; relationship pressure must rise each beat"
+  },
+  "twist_designs": [
+    {
+      "twist_id": "twist_false_control",
+      "title": "他的控制欲表面最重，真正目标却是替她切断旁人的手",
+      "false_belief": "裴砚想借婚约把姜栀也收成自己手里的棋子。",
+      "truth": "他真正想切的是国舅府和另一条走私线对姜家的控制权。",
+      "reader_alignment": "前期让读者既为他的出手心动，又担心他会把女主圈得更紧。",
+      "seed_from": "ch_026",
+      "reveal_at": "ch_048",
+      "allowed_clues": [
+        "他对国舅府的反应远比对姜栀的回应更锋利",
+        "他提前准备了玉佩应对",
+        "他会先观察女主有没有被逼到失态边缘"
+      ],
+      "forbidden_reveals": [
+        "不能直说他在替姜家挡哪条暗线",
+        "不能让他此章说出完整计划",
+        "不能让姜栀完全看懂他的用意"
+      ],
+      "pov_lock": "不能把裴砚的全盘布局一次性说透。",
+      "related_characters": [
+        "裴砚",
+        "姜栀"
+      ],
+      "payoff_effect": "揭晓后，所有像控制的靠近都会改写成另一种保护。"
+    }
+  ],
+  "story_lines": [
+    {
+      "line_id": "line_betrothal",
+      "name": "婚约与商路",
+      "line_type": "relationship",
+      "visibility": "visible",
+      "core_question": "姜栀要怎样在不失去家中商路和个人选择权的前提下，接住裴砚越来越公开的介入？",
+      "reader_hook_mode": "pressure",
+      "start_state": "姜家是多方都想拿的筹码，姜栀只能硬撑体面。",
+      "midpoint_shift": "裴砚公开出手后，两人的关系从私下拉扯转向众人可见的危险绑定。",
+      "end_state": "婚约会成为两人共同的刀柄，也成为更大的风险来源。",
+      "carried_twists": [
+        "twist_false_control"
+      ],
+      "line_rules": [
+        "女主必须保留选择权和反应权",
+        "男主每次护持都要同时抬高代价"
+      ]
+    }
+  ],
+  "character_cards": [
+    {
+      "name": "姜栀",
+      "role": "姜家嫡女",
+      "social_background": "商贾出身，却被迫在权贵盘根错节的局里周旋",
+      "education_background": "",
+      "occupation": "姜家盐布商路的实际掌账人之一",
+      "appearance": "笑起来很稳，真正生气时眼尾会先冷下来",
+      "personality": "聪明、自尊心强、不肯轻易把命运交给别人",
+      "career": "",
+      "initial_state": "不愿把婚事变成筹码，也不想欠裴砚太多",
+      "motivation": "保住姜家商路和自己的决定权",
+      "behavior_pattern": "表面越礼貌，心里越在飞快算账",
+      "arc": "从独自硬撑到学会和另一个强者并肩周旋",
+      "relationships": "与裴砚互相吸引，也互相防备",
+      "development_axes": []
+    },
+    {
+      "name": "裴砚",
+      "role": "大理寺少卿",
+      "social_background": "裴家嫡系，少年得势，名声凌厉",
+      "education_background": "",
+      "occupation": "掌审讯与权贵案牍",
+      "appearance": "常年衣冠冷肃，入席时连烛火都像先避了一步",
+      "personality": "强势、锋利、极会控场，但真正上心时会更冷",
+      "career": "",
+      "initial_state": "知道姜家正在被试探，决定亲自进场改写局势",
+      "motivation": "切断国舅府对姜家的手，同时把姜栀拉到自己能护住的位置",
+      "behavior_pattern": "越在意，越用更像命令的话说出来",
+      "arc": "从隔着局面护她，到不得不让所有人都看见自己的偏护",
+      "relationships": "与姜栀长期拉扯，彼此都不肯先认输",
+      "development_axes": []
+    }
+  ],
+  "worldbuilding": {
+    "story_engine": {
+      "world_rules": [
+        "权贵宴席上的婚约试探，本质是利益交换与站队信号。",
+        "姜家若当众失礼，商路会立刻被扣上失敬权贵的帽子。",
+        "裴砚一旦在公开场合替谁出头，就等于把那个人放进自己的政治视线内。"
+      ],
+      "power_structure": "国舅府、盐运使与裴家围绕商路、婚约和案件彼此牵制。",
+      "objective_conditions": [
+        "姜栀不能翻桌离席",
+        "裴砚必须在不暴露全部用意的前提下切局"
+      ]
+    },
+    "event_timeline": [
+      {
+        "event_id": "evt_201",
+        "title": "姜家商路被查",
+        "time_label": "半月前",
+        "description": "盐布商路忽然被查，国舅府暗示可用婚约换宽手。",
+        "trigger": "商税与漕运线同时施压",
+        "consequence": "姜栀被推到婚约试探前。",
+        "affected_characters": [
+          "姜栀",
+          "裴砚"
+        ]
+      },
+      {
+        "event_id": "evt_202",
+        "title": "裴砚提前到姜家",
+        "time_label": "今夜",
+        "description": "姜家生辰宴开始前，裴砚罕见提前入席。",
+        "trigger": "他收到国舅夫人也会到场的消息",
+        "consequence": "姜栀意识到今夜不会平静。",
+        "affected_characters": [
+          "姜栀",
+          "裴砚"
+        ]
+      }
+    ]
+  },
+  "character_milestones": [
+    {
+      "character_name": "姜栀",
+      "milestone_list": [
+        "从守住家业到学会在权贵局里也抢回主动权",
+        "从不想欠裴砚到不得不与他的保护共处"
+      ],
+      "axes": [
+        "选择权",
+        "信任"
+      ]
+    },
+    {
+      "character_name": "裴砚",
+      "milestone_list": [
+        "从暗中护持到公开偏护",
+        "从只想控局到不得不顾及她的感受与退路"
+      ],
+      "axes": [
+        "控制",
+        "情感暴露"
+      ]
+    }
+  ],
+  "actual_chapter_summaries": [
+    {
+      "chapter_id": "ch_032",
+      "actual_events": [
+        "国舅夫人确认会来姜家赴宴",
+        "裴砚提前到场，坐在离姜栀很近的位置"
+      ],
+      "reader_now_knows": [
+        "姜家今夜很可能被当众试探婚约",
+        "裴砚是带着准备来的"
+      ],
+      "reader_now_believes": [
+        "裴砚对姜栀的介入越来越强势，也越来越像控制"
+      ],
+      "open_questions": [
+        "他今晚会不会当众出手",
+        "姜栀会不会接受他的介入"
+      ],
+      "character_states": [
+        "姜栀表面从容，实则高度戒备",
+        "裴砚明显在等某个节点出手"
+      ],
+      "relationship_state": [
+        "两人私下已很难彻底分开，但公开关系仍未被正式命名"
+      ],
+      "seeded_clues": [
+        "裴砚的人提前进出姜家后院"
+      ],
+      "locked_truths": [
+        "裴砚真正想切断的势力还未揭晓"
+      ],
+      "time_state": {
+        "chapter_end_time": "生辰宴开席前",
+        "continuity_note": "公开试探随时会爆发"
+      }
+    }
+  ],
+  "prior_character_mindsets": [
+    {
+      "character_id": "姜栀",
+      "character_name": "姜栀",
+      "surface_emotion": "礼貌镇定",
+      "core_emotion": "被当成筹码的烦怒与对裴砚介入的复杂心动并存",
+      "primary_goal": "稳住宴席并保住自己的选择权",
+      "hidden_need": "想知道裴砚到底会不会在真正危险时站到自己这边",
+      "fear": "怕自己一旦顺着他的手走，就再也收不回主动权",
+      "attitude_to_key_others": {
+        "裴砚": "嘴上最不想欠他，心里却最先盯他会不会出手"
+      },
+      "self_control_level": "medium_high",
+      "breaking_point_hint": "若他当众替她定性关系，她会先乱在呼吸和指尖上",
+      "known_but_unspoken": "她知道自己并不讨厌被他护着，只讨厌被动接住",
+      "misbelief": "她以为裴砚更在意控局本身，而不是她的感受",
+      "chapter_change_hint": "她会承认裴砚的介入已经影响了自己的选择"
+    },
+    {
+      "character_id": "裴砚",
+      "character_name": "裴砚",
+      "surface_emotion": "冷淡控场",
+      "core_emotion": "对她被当众摆上台面的怒意和不肯承认的占有欲同时上涌",
+      "primary_goal": "切断国舅府的婚约试探",
+      "hidden_need": "想让她至少在关键时刻肯站到自己这边",
+      "fear": "怕自己再晚一步，她就会被旁人先夺走议价权",
+      "attitude_to_key_others": {
+        "姜栀": "越上心越要用更像命令的方式护住她"
+      },
+      "self_control_level": "high",
+      "breaking_point_hint": "若她真要独自硬扛婚约试探，他会直接改写场面规则",
+      "known_but_unspoken": "他比任何人都清楚自己今晚来得太早也太明显",
+      "misbelief": "他以为只要把刀都挡在外面，她就会理解自己的做法",
+      "chapter_change_hint": "他会更公开地把自己放到她身边"
+    }
+  ],
+  "goals": {
+    "chapter_goal": "写出一场公开场合里的联姻试探与截胡，让关系在众目睽睽下推进。",
+    "emotional_goal": "让读者感到窒息、兴奋、被公开偏护的危险甜感和更大的后患。",
+    "relationship_goal": "把两人的关系推进到“公开绑定的边缘”，同时保留拉扯与误判。",
+    "hook_goal": "开头要快，结尾要硬，最好让下一章天然接上。",
+    "continuation_drive": "让读者必须想看裴砚改日上门这句话会把局推成什么样。"
+  },
+  "context_overrides": {
+    "assistant_persona_prompt": "你在写追读型高压古言言情。让角色魅力、关系试探和结尾牵引都落在动作与场面上。",
+    "writing_requirements": {
+      "target_words": "3200-4000",
+      "pace": "300 字内进入婚约试探；中段至少两次关系压差变化；结尾必须留下新的公开后患",
+      "guardrails": [
+        "姜栀必须保有主体性和反击感",
+        "裴砚不能只靠标签式强势撑场",
+        "不要让宴席变成纯信息对话"
+      ]
+    },
+    "reference_pack": "参考方向：公开场合护人、权势感、女主有反应权的高张力对手戏。",
+    "previous_chapter_full_text": "姜家后院的灯刚点满，裴砚就跨过了月洞门。姜栀原本以为他只是送礼，直到看见他的人已经先一步把宴席座次改过。她没来得及质问，前厅已经传来国舅夫人的笑声。",
+    "completed_chapter_summary_bundle": "",
+    "chapter_payload_text": "",
+    "timeline_anchor_facts_text": "",
+    "relevant_world_rules_text": "",
+    "scene_character_context_text": "[Scene character context]\n\n姜栀\n- 表面目标：稳住生辰宴，不让姜家失礼。\n- 潜在矛盾：她不想欠裴砚，却又盯着他会不会出手。\n\n裴砚\n- 表面目标：切断婚约试探。\n- 潜在矛盾：他越想护她，方式越像在逼近她。",
+    "relationship_state_text": "[Relationship state]\n\n姜栀 -> 裴砚\n- 当前关系：危险盟友，彼此都在试探边界。\n- 暗流：她会被他的偏护牵动，也会因为他的强势反弹。\n- 本章目标：关系推进到“公开绑定的边缘”，但不能真正说破心意。\n- 禁止捷径：不要让女主被动失语，也不要让男主直接承认自己在吃醋。"
+  }
+}

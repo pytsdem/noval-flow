@@ -1,12 +1,230 @@
-
+﻿<!doctype html><html lang='zh-CN'><head><meta charset='UTF-8'><title>Novel Flow</title><style>
+*{box-sizing:border-box}
+body{margin:0;font-family:"Microsoft YaHei",sans-serif;background:#0f1115;color:#e6e9ef;height:100vh;display:flex;flex-direction:column}
+#hdr{position:sticky;top:0;z-index:5;display:flex;flex-direction:column;gap:10px;padding:12px 16px;background:rgba(20,25,35,.96);border-bottom:1px solid #232834;backdrop-filter:blur(10px)}
+#hdr h1{margin:0;font-size:18px;font-weight:700;color:#9db6ff;letter-spacing:.01em;white-space:nowrap}
+.hdr-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.hdr-brand{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hdr-selects{display:flex;gap:8px;align-items:center;flex-wrap:wrap;min-width:0;flex:1}
+.hdr-primary{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.hdr-steps{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+#modeSel{min-width:112px}
+#modelSel{min-width:120px}
+#novelSel{min-width:280px;max-width:420px;flex:1}
+select,button,input,textarea{background:#1b2130;color:#eef2ff;border:1px solid #323b52;border-radius:8px;padding:7px 11px;font-size:12px;transition:border-color .16s ease,background .16s ease,transform .16s ease}
+select option{background:#1b2130;color:#eef2ff}
+button{cursor:pointer}
+button:hover,select:hover,input:hover,textarea:hover{border-color:#425173}
+button:hover{background:#212a3d}
+button:active{transform:translateY(1px)}
+textarea:focus,input:focus,select:focus,button:focus{outline:none;border-color:#6b88d9;box-shadow:0 0 0 2px rgba(107,136,217,.14)}
+.danger{border-color:#6a2b3b;color:#ffcad5}
+.danger:hover{background:#2a1820;border-color:#8a4257}
+.ghost{background:transparent}
+.step-btn{padding:6px 9px;font-size:11px}
+.modal{position:fixed;inset:0;background:rgba(3,6,14,.76);display:none;align-items:center;justify-content:center;z-index:20;padding:28px;backdrop-filter:blur(4px)}
+.modal-card{width:min(920px,calc(100vw - 56px));max-height:calc(100vh - 56px);display:flex;flex-direction:column;background:#151a23;border:1px solid #303a52;border-radius:18px;box-shadow:0 24px 90px rgba(0,0,0,.52);overflow:hidden}
+.modal-head{padding:18px 22px;border-bottom:1px solid #263047;background:linear-gradient(135deg,#171f31,#131824)}
+.modal-title{font-size:17px;color:#eef2ff;margin-bottom:4px}
+.modal-desc{font-size:12px;color:#8997b8;line-height:1.6}
+.modal-body{padding:20px 22px;overflow:auto}
+.modal-section{border:1px solid #263047;background:#111722;border-radius:14px;padding:16px;margin-bottom:14px}
+.modal-section-title{font-size:12px;color:#8ea1d8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field.full{grid-column:1/-1}
+.field label{color:#dce3fb;font-size:12px}
+.field textarea,.field input,.field select{width:100%;font-size:13px}
+.field textarea{min-height:132px;resize:vertical}
+.field input{height:36px}
+.field-help{color:#7f8aa3;font-size:11px;line-height:1.55}
+.config-placeholder{border:1px dashed #34405f;border-radius:12px;padding:12px;color:#7f8aa3;font-size:12px;line-height:1.7;background:#0f141f}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;padding:14px 22px;border-top:1px solid #263047;background:#111722}
+#stage-pill{padding:5px 10px;border-radius:999px;border:1px solid #34405f;color:#9fb2eb;font-size:11px;background:#171f2f}
+#main{display:flex;flex:1;min-height:0;overflow:hidden}
+#left{width:37%;min-width:340px;max-width:560px;border-right:1px solid #232834;display:flex;flex-direction:column;background:#10151d}
+#right{flex:1;min-width:0;display:flex;flex-direction:column;background:#0f1115}
+#subhdr{padding:12px 16px;border-bottom:1px solid #232834;color:#8390ad;font-size:12px;line-height:1.6;background:#121823}
+#evs{flex:1;overflow:auto;padding:14px}
+.run{background:#151a23;border:1px solid #242b3b;border-radius:12px;margin-bottom:12px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.16)}
+.head{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px 14px;background:#171d29;cursor:pointer}
+.ts{margin-left:auto;color:#6f7a95;font-size:10px}
+.tag{font-size:10px;padding:3px 7px;border-radius:999px;background:#222a3d;color:#b9c8ff}
+.live{background:#253b2c;color:#9fe2b0}
+.stop{background:#4a2230;color:#ffc4d2}
+.body{padding:12px 14px;border-top:1px solid #242b3b}
+.box{background:#121722;border:1px solid #242b3b;border-radius:10px;margin-bottom:10px;overflow:hidden}
+.box summary{list-style:none;cursor:pointer;padding:11px 12px;color:#eef2ff;font-size:12px;display:flex;align-items:center;gap:8px}
+.box summary::-webkit-details-marker{display:none}
+.box .payload{padding:0 12px 12px 12px}
+.box.task-box{border-color:#28324a;transition:border-color .16s ease,box-shadow .16s ease}
+.box.task-box.active{border-color:#4e628f;box-shadow:0 0 0 1px rgba(78,98,143,.22)}
+.box.task-box.active summary{background:#182031}
+.title{font-size:12px;color:#eef2ff;margin-bottom:0}
+.payload{font-size:11px;color:#93a0bf;white-space:pre-wrap;word-break:break-word;line-height:1.7}
+.stream-shell{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.stream-card{background:#0d1220;border:1px solid #28324a;border-radius:8px;padding:10px}
+.stream-card.live{border-color:#315b4b;background:linear-gradient(135deg,#111b24,#102018)}
+.stream-meta{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:6px}
+.stream-title{font-size:11px;color:#eef2ff;font-weight:600}
+.stream-status{font-size:10px;color:#8fb8a0}
+.stream-card.live .stream-status{color:#a7e0b8}
+.stream-prompt{margin-bottom:6px;font-size:10px;line-height:1.6;color:#8ea1d8}
+.stream-text{font-size:11px;color:#dce3fb;white-space:pre-wrap;word-break:break-word;line-height:1.75;max-height:420px;overflow:auto}
+.chapter-live-blocks{margin-top:12px;padding-top:12px;border-top:1px dashed #2a3448}
+.live-draft-shell{display:flex;flex-direction:column;gap:14px}
+.live-draft-text{max-height:420px;overflow:auto}
+.live-draft-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.block-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.block-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:10px;border:1px solid #2b3752;background:#1a2234;color:#d5e0ff}
+.block-badge.patched{border-color:#2f5a45;background:#173126;color:#aee0bf}
+.block-badge.status{border-color:#3f4d6a;background:#1c2332;color:#b9c8ff}
+.block.patched{border-left-color:#56b483;background:linear-gradient(135deg,#101922,#13241b)}
+.task-note{font-size:11px;color:#8ea1d8;line-height:1.7}
+.empty{padding:56px 24px;text-align:center;color:#7f8aa3;border:1px dashed #273247;border-radius:14px;background:#121722}
+.agent-view{display:flex;flex-direction:column;gap:8px}
+.kv{display:grid;grid-template-columns:78px 1fr;gap:8px;align-items:start;font-size:11px;line-height:1.6;color:#dce3fb}
+.kv .k{color:#8ea1d8}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;background:#1a2234;border:1px solid #2b3752;color:#d5e0ff;font-size:10px}
+.subsec{margin-top:2px;font-size:10px;color:#7e8ba8;text-transform:uppercase;letter-spacing:.08em}
+.subbox{background:#0f131c;border:1px solid #20293b;border-radius:8px;padding:8px}
+.mini-list{display:flex;flex-direction:column;gap:6px}
+.mini-item{background:#0f131c;border:1px solid #20293b;border-radius:8px;padding:8px;font-size:11px;line-height:1.6;color:#dce3fb}
+.mini-title{font-size:11px;color:#eef2ff;margin-bottom:4px}
+.muted{font-size:11px;color:#7f8aa3;line-height:1.6}
+.pre{font-size:11px;color:#93a0bf;white-space:pre-wrap;word-break:break-word;line-height:1.7}
+.json{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+#tabs{display:flex;gap:4px;padding:10px 14px 0;border-bottom:1px solid #232834;background:#141923}
+.tab{padding:11px 14px;cursor:pointer;color:#8b96af;font-size:12px;border:1px solid transparent;border-bottom:none;border-top-left-radius:10px;border-top-right-radius:10px}
+.tab.active{color:#dfe6ff;border-color:#2b3750;background:#1a2231}
+#tc{flex:1;overflow:auto;padding:18px}
+.pnl{display:none}
+.pnl.active{display:block}
+.card{background:#151a23;border:1px solid #242b3b;border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:0 10px 32px rgba(0,0,0,.14)}
+.sec{font-size:11px;color:#7e8ba8;text-transform:uppercase;letter-spacing:.08em;margin:12px 0 8px}
+.row{margin:7px 0;font-size:13px;color:#dce3fb;line-height:1.7}
+.row strong{color:#8ea1d8;margin-right:6px}
+.input-toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.input-toolbar .title-wrap{display:flex;flex-direction:column;gap:4px}
+.input-toolbar h3{margin:0;font-size:22px;color:#eef2ff;letter-spacing:.01em}
+.input-toolbar .meta{font-size:12px;color:#7f8aa3}
+.input-toolbar .actions{display:flex;gap:8px;flex-wrap:wrap}
+.input-hero{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px;padding:18px 20px;border:1px solid #283149;border-radius:14px;background:linear-gradient(135deg,#171e2c,#121822)}
+.input-hero-copy{display:flex;flex-direction:column;gap:10px;min-width:260px;flex:1}
+.input-hero-kicker{font-size:11px;color:#89a0d8;text-transform:uppercase;letter-spacing:.12em}
+.input-hero-title-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.input-hero-title{margin:0;font-size:34px;line-height:1.05;color:#f2f5ff;letter-spacing:-.02em;font-weight:700}
+.input-hero-badge{padding:5px 10px;border-radius:999px;border:1px solid #33415f;background:#1a2436;color:#b7c7f5;font-size:11px;white-space:nowrap}
+.input-hero-desc{font-size:13px;line-height:1.75;color:#b8c5e6;max-width:900px}
+.title-field{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.title-field label{font-size:12px;color:#8ea1d8}
+.title-field input{max-width:420px;height:42px;font-size:18px;font-weight:600}
+.panel-toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.panel-toolbar .title-wrap{display:flex;flex-direction:column;gap:4px}
+.panel-toolbar .panel-title{margin:0;font-size:18px;color:#eef2ff}
+.panel-toolbar .panel-meta{font-size:12px;color:#7f8aa3}
+.panel-toolbar .actions{display:flex;gap:8px;flex-wrap:wrap}
+.input-blocks{display:flex;flex-direction:column;gap:12px}
+.input-block{background:#121722;border:1px solid #29324a;border-radius:12px;overflow:hidden}
+.input-block summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.input-block summary::-webkit-details-marker{display:none}
+.input-block summary:hover{background:#171e2c}
+.input-block .summary-text{display:flex;flex-direction:column;gap:4px;min-width:0}
+.input-block .summary-title{font-size:13px;color:#e8eeff;font-weight:600}
+.input-block .summary-desc{font-size:11px;color:#7f8aa3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.input-block .summary-arrow{font-size:11px;color:#8ea1d8;flex:none}
+.input-block .block-body{padding:0 16px 16px}
+.writing-req-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:12px}
+.writing-req-grid .field{display:flex;flex-direction:column;gap:6px}
+.writing-req-grid .field input{width:100%;height:36px}
+.writing-req-full{display:flex;flex-direction:column;gap:6px}
+.input-block textarea{width:100%;min-height:220px;resize:vertical;white-space:pre-wrap;line-height:1.7;font-size:13px}
+.input-block textarea[readonly]{opacity:.92}
+.input-block .block-help{margin-top:8px;font-size:11px;color:#7f8aa3;line-height:1.6}
+.section-card{background:#151a23;border:1px solid #242b3b;border-radius:14px;margin-bottom:12px;overflow:hidden;box-shadow:0 10px 32px rgba(0,0,0,.14)}
+.section-card summary{list-style:none;cursor:pointer;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.section-card summary::-webkit-details-marker{display:none}
+.section-card summary:hover{background:#1a202d}
+.section-card .summary-text{display:flex;flex-direction:column;gap:4px;min-width:0}
+.section-card .summary-title{font-size:14px;color:#eef2ff;font-weight:600}
+.section-card .summary-desc{font-size:11px;color:#7f8aa3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.section-card .summary-arrow{font-size:16px;color:#4e628f;flex:none;transition:transform .2s;display:inline-block}
+.section-card[open]>.summary>.summary-arrow{transform:rotate(90deg)}
+.section-card .summary-toolbar{display:flex;align-items:center;gap:6px;flex:none}
+.section-card .summary-toolbar .ghost{padding:4px 10px;font-size:11px}
+.dirty-dot{color:#f59e0b;font-size:10px;margin-right:4px;vertical-align:middle}
+.section-card .section-body{padding:0 16px 16px}
+.step-editor{margin:4px 0 16px 0;background:#111723;border:1px solid #232c3d;border-radius:12px;overflow:hidden}
+.step-editor-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 14px 0 14px;margin-bottom:10px}
+.step-editor-title{font-size:12px;color:#8ea1d8;font-weight:600}
+.step-editor-actions{display:flex;gap:8px;flex-wrap:wrap}
+.step-editor-body{padding:0 14px 14px 14px}
+.step-editor-notes{margin:0 0 10px 18px;padding:0;color:#d6def1}
+.step-editor-notes li{margin:6px 0;line-height:1.6}
+.step-editor-empty{font-size:12px;color:#7f8aa3;margin-bottom:10px}
+.step-editor-hint{margin-top:8px;font-size:11px;color:#7f8aa3;line-height:1.6}
+.step-inline-root{display:grid;gap:12px}
+.step-inline-field{display:grid;gap:6px}
+.step-inline-field>label{font-size:12px;color:#8ea1d8;font-weight:600}
+.step-inline-input,.step-inline-textarea{width:100%;background:#161d2b;border:1px solid #2a3448;border-radius:10px;color:#eef2ff;padding:10px 12px;font-size:13px;line-height:1.7}
+.step-inline-textarea{min-height:96px;resize:vertical;white-space:pre-wrap}
+.step-inline-stack{display:grid;gap:10px}
+.step-inline-card{background:#121722;border:1px solid #242b3b;border-radius:10px;padding:12px}
+.step-inline-card-title{font-size:12px;color:#8ea1d8;font-weight:700;margin-bottom:8px}
+.step-inline-empty{font-size:12px;color:#7f8aa3;padding:8px 0}
+.step-readback{margin-top:14px;padding-top:14px;border-top:1px dashed #2a3448}
+.step-readback-title{font-size:12px;color:#8ea1d8;font-weight:600;margin-bottom:10px}
+.relationship-stack{display:flex;flex-direction:column;gap:14px;margin-top:12px}
+.relationship-group-title{font-size:13px;font-weight:700;color:#9fb4ff;margin:6px 0 2px}
+.relationship-card{background:#111723;border:1px solid #232c3d;border-radius:14px;padding:14px}
+.relationship-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px}
+.relationship-title{font-size:16px;font-weight:700;color:#eef2ff}
+.relationship-pair{font-size:12px;color:#8ea1d8}
+.relationship-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.relationship-block{background:#0f141d;border:1px solid #1e2635;border-radius:10px;padding:12px}
+.relationship-block .subsec{margin-top:0}
+.relationship-plain{white-space:pre-wrap;line-height:1.72;color:#d6def1}
+.relationship-list{margin:8px 0 0 18px;padding:0;color:#d6def1}
+.relationship-list li{margin:6px 0;line-height:1.6}
+.relationship-empty{color:#7f8aa3;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.mini{background:#121722;border:1px solid #242b3b;border-radius:10px;padding:12px}
+.mini h4{margin:0 0 8px 0;color:#eef2ff;font-size:13px}
+.chapter,.issue{background:#121722;border:1px solid #242b3b;border-radius:10px;padding:12px;margin-bottom:10px}
+.block{background:#0f131c;border-left:2px solid #4e628f;border-radius:8px;padding:12px;margin:8px 0;white-space:pre-wrap;line-height:1.85;font-size:12px}
+.field-block{background:#0f131c;border-left:2px solid #4e628f;border-radius:8px;padding:10px 12px;margin:8px 0}
+.field-row{display:flex;gap:6px;padding:3px 0;line-height:1.6;font-size:13px;color:#c8d0e0;align-items:baseline}
+.field-dot{color:#4e628f;flex:none;font-size:14px}
+.field-label{color:#8ea1d8;flex:none;font-weight:500}
+.field-val{white-space:pre-wrap;word-break:break-word}
+.editor label{display:block;margin:10px 0 6px;color:#8ea1d8;font-size:12px}
+.editor textarea{width:100%;min-height:140px;resize:vertical}
+.editor input{width:100%}
+.editor .hint{color:#7f8aa3;font-size:11px;margin-top:6px}
+@media (max-width: 1280px){#left{width:34%;min-width:300px}.hdr-selects{flex-basis:100%}#novelSel{max-width:none}}
+@media (max-width: 980px){#main{flex-direction:column}#left{width:100%;max-width:none;min-width:0;border-right:none;border-bottom:1px solid #232834;max-height:42vh}#tabs{padding-top:8px}#tc{padding:14px}.field-grid{grid-template-columns:1fr}}
+</style></head><body>
+<div id='hdr'><div class='hdr-row'><div class='hdr-brand'><h1>Novel Flow</h1><span id='boot-pill' class='tag'>前端待初始化</span></div><div class='hdr-selects'><select id='modeSel' onchange='changeMode()'><option value='formal'>正式模式</option><option value='test'>测试模式</option></select><select id='modelSel' onchange='changeModel()'><option value='doubao'>豆包</option><option value='openai'>OpenAI</option><option value='codex'>Codex CLI</option></select><select id='novelSel' onchange='selectNovel(this.value)'><option value=''>选择小说</option></select><span id='stage-pill'>未开始</span></div><div class='hdr-primary'><button id='btnNew' onclick='openNewNovelDialog()'>新建小说</button><button id='btnContinue' onclick='continueFormal()'>写下一章</button><button id='btnStop' class='ghost' onclick='stopCurrentRun()' style='display:none'>停止运行</button><button class='danger' onclick='deleteNovel()'>删除小说</button><button id='btnBlueprint' onclick='testBlueprint()' style='display:none'>测试大纲</button><button id='btnWrite' onclick='testWrite()' style='display:none'>测试写正文</button><button id='btnCritique' onclick='testCritique()' style='display:none'>测试评价</button><button id='btnPatch' onclick='testPatch()' style='display:none'>测试修改</button></div></div><div class='hdr-row hdr-steps'><button id='btnStep1' class='step-btn' onclick="startConfiguredPlanningRun('step_1')">1 大纲+蓝图</button><button id='btnStep2' class='step-btn' onclick="startConfiguredPlanningRun('step_2')">2 背景系+世界观</button><button id='btnStep3' class='step-btn' onclick="startConfiguredPlanningRun('step_3')">3 角色卡</button><button id='btnStep4' class='step-btn' onclick="startConfiguredPlanningRun('step_4')">4 客观事件时间线</button><button id='btnStep5' class='step-btn' onclick="startConfiguredPlanningRun('step_5')">5 角色发展线</button><button id='btnStep6' class='step-btn' onclick="startConfiguredPlanningRun('step_6')">6 反转设计</button><button id='btnStep7' class='step-btn' onclick="startConfiguredPlanningRun('step_7')">7 明线暗线发展线</button><button id='btnStep8' class='step-btn' onclick="startConfiguredPlanningRun('step_8')">8 续生成一章摘要</button><button id='btnBlueprintReview' class='step-btn' onclick="startConfiguredPlanningRun('blueprint_review')">Critic Blueprint</button></div></div>
+<div id='newNovelModal' class='modal'><div class='modal-card'><div class='modal-head'><div class='modal-title'>新建小说</div><div class='modal-desc'>这里先保存小说标题、原始题材需求和可选风格，不会自动继续到大纲生成。创建后请手动点击“1 大纲+蓝图”。</div></div><div class='modal-body'><div class='modal-section'><div class='modal-section-title'>基础信息</div><div class='field-grid'><div class='field full'><label>小说标题</label><input id='newTitleInput' placeholder='例如：她非良母' /><div class='field-help'>这里是书名，后续会显示在左上角小说切换列表里，也可以在用户输入页继续修改。</div></div><div class='field full'><label>题材/需求</label><textarea id='newQueryInput' placeholder='例如：都市情感反转，女主发现丈夫隐藏身份后反击'></textarea><div class='field-help'>写清题材、主角处境、核心冲突，或者你最想看到的关键局面。</div></div><div class='field full'><label>风格要求（可留空）</label><textarea id='newStyleInput' placeholder='例如：古言权谋、轻喜剧、短篇悬疑、第三人称群像；留空则由系统自行判断'></textarea><div class='field-help'>这里只在你明确填写时生效，不再默认固定文风或人称。</div></div></div></div><div class='modal-section'><div class='modal-section-title'>扩展配置</div><div class='config-placeholder'>后续可以在这里增加目标体量、章节数、叙事视角、禁用元素、参考卡片范围等配置。当前版本先使用系统默认决策。</div></div></div><div class='modal-actions'><button class='ghost' onclick='closeNewNovelDialog()'>取消</button><button onclick='startFormalFromDialog()'>保存需求</button></div></div></div>
+<div id='main'><div id='left'><div id='subhdr'>左侧显示当前小说的历史运行记录，当前运行默认展开</div><div id='evs'><div class='empty'>选择小说或发起一次运行后查看过程</div></div></div><div id='right'><div id='tabs'><div class='tab active' onclick="showTab('input')">用户输入</div><div class='tab' onclick="showTab('blueprint')">小说信息</div><div class='tab' onclick="showTab('text')">小说正文</div><div class='tab' onclick="showTab('critic')">评价结果</div></div><div id='tc'><div id='pnl-input' class='pnl active'><div class='empty'>等待加载用户输入</div></div><div id='pnl-blueprint' class='pnl'><div class='empty'>等待加载小说信息</div></div><div id='pnl-text' class='pnl'><div class='empty'>等待加载小说正文</div></div><div id='pnl-critic' class='pnl'><div class='empty'>等待加载评价结果</div></div></div></div></div>
+<script>
 let mode='formal',llmProvider='doubao',bookId='',pendingRunId='',runsCache=[],expandedRuns=new Set(),boxStates={},detailStates={},currentBook=null,pendingStepRevision=null,lastRightRenderKey='',lastLivePreviewKey='',runActiveItemKeys={};
 let refreshPaused=false,refreshPauseReason='',refreshPauseTimer=null,isMouseSelecting=false;
 const LLM_PROVIDER_STORAGE_KEY='novel_flow_llm_provider';
+const UI_MODE_STORAGE_KEY='novel_flow_ui_mode';
+const UI_BOOK_STORAGE_PREFIX='novel_flow_ui_book:';
 const STAGES={research:'调研中',planning:'大纲中',writing:'写作中',critique:'评价中',patching:'修改中',complete:'已完成'};
 const stageText=v=>STAGES[v]||v||'未开始',esc=v=>String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'),shortTs=v=>v?String(v).replace('T',' ').slice(0,19):'';
 async function api(path,opt){const r=await fetch(path,Object.assign({headers:{'Content-Type':'application/json'}},opt||{}));return await r.json();}
 function ensureOk(r){if(r&&r.ok===false){alert(r.error||'请求失败');return false;}return true;}
 const validLlmProvider=v=>['doubao','openai','codex'].includes(String(v||'').toLowerCase());
+const validMode=v=>['formal','test'].includes(String(v||'').toLowerCase());
+function bookStorageKey(targetMode){return `${UI_BOOK_STORAGE_PREFIX}${validMode(targetMode)?targetMode:'formal'}`;}
+function readStoredMode(){try{const saved=String(localStorage.getItem(UI_MODE_STORAGE_KEY)||'').toLowerCase();return validMode(saved)?saved:'';}catch{return'';}}
+function persistMode(targetMode){try{if(validMode(targetMode))localStorage.setItem(UI_MODE_STORAGE_KEY,targetMode);}catch{}}
+function readStoredBookId(targetMode){try{return String(localStorage.getItem(bookStorageKey(targetMode))||'').trim();}catch{return'';}}
+function persistBookId(targetMode,targetBookId){try{const key=bookStorageKey(targetMode);const value=String(targetBookId||'').trim();if(value)localStorage.setItem(key,value);else localStorage.removeItem(key);}catch{}}
 function currentLlmProvider(){return validLlmProvider(llmProvider)?llmProvider:'doubao';}
 function withLlmProvider(payload){return Object.assign({},payload||{}, {llm_provider:currentLlmProvider()});}
 function changeModel(){llmProvider=validLlmProvider(modelSel.value)?modelSel.value:'doubao';try{localStorage.setItem(LLM_PROVIDER_STORAGE_KEY,llmProvider);}catch{}}
@@ -71,7 +289,9 @@ function sanitizeStep3DraftObject(obj){if(!obj||typeof obj!=='object')return obj
 function applyStepRevisionDraft(result){if(!result||!result.step_key)return;const stepKey=result.step_key;const revisedText=result.draft_json||JSON.stringify(result.step_payload||{},null,2);stepDrafts[stepKey]=revisedText;try{stepDraftObjects[stepKey]=JSON.parse(revisedText);}catch{stepDraftObjects[stepKey]=deepClone(result.step_payload||{});}if(stepKey==='step_3'){stepDraftObjects[stepKey]=sanitizeStep3DraftObject(stepDraftObjects[stepKey]||{});stepDrafts[stepKey]=JSON.stringify(stepDraftObjects[stepKey]||{},null,2);}stepDraftDirty[stepKey]=true;stepReviewNotes[stepKey]=Array.isArray(result.review_notes)?result.review_notes:[];if(currentBook){renderBlueprint(currentBook);autoSizeTextareas('pnl-blueprint');}}
 function latestOutputByType(runData,outputType){const outs=Array.isArray(runData?.outputs)?runData.outputs:[];for(let i=outs.length-1;i>=0;i-=1){if(outs[i]?.output_type===outputType)return outs[i].payload||null;}return null;}
 function latestChapterPreviewByMode(runData,previewMode){const outs=Array.isArray(runData?.outputs)?runData.outputs:[];for(let i=outs.length-1;i>=0;i-=1){const item=outs[i];if(item?.output_type!=='chapter_live_preview')continue;const payload=item?.payload||{};if(String(payload?.preview_mode||'')!==String(previewMode||''))continue;return{payload,createdAt:item?.created_at||''};}return null;}
-function mergeChapterBlocksText(blocks,fallbackText=''){const arr=Array.isArray(blocks)?blocks:[];const merged=arr.map(block=>String(block?.text||'').trim()).filter(Boolean).join('\n\n').trim();return merged||String(fallbackText||'').trim();}
+function mergeChapterBlocksText(blocks,fallbackText=''){const arr=Array.isArray(blocks)?blocks:[];const merged=arr.map(block=>String(block?.text||'').trim()).filter(Boolean).join('
+
+').trim();return merged||String(fallbackText||'').trim();}
 function parsePatchRound(stageName){const match=String(stageName||'').match(/patch_round_(\d+)_/);return match?Number(match[1]||0):0;}
 function latestPatchedBlockIds(runData){const evts=Array.isArray(runData?.events)?runData.events:[];for(let i=evts.length-1;i>=0;i-=1){const payload=evts[i]?.payload||{};const stage=String(payload?.stage||'');if(!stage.includes('_rewrite_done'))continue;const patchedBlocks=Array.isArray(payload?.rewrite_result?.patched_blocks)?payload.rewrite_result.patched_blocks:[];const ids=patchedBlocks.map(item=>String(item?.block_id||'').trim()).filter(Boolean);if(ids.length)return ids;}return [];}
 function collectChapterTaskOutputs(runData){
@@ -335,13 +555,13 @@ async function reviseSingleChapterBriefByInstruction(index){if(!bookId)return al
 function deleteSingleChapterBrief(index){if(!bookId)return alert('请先选择一部小说。');const step8=stepPayloadFromBook(currentBook,'step_8');const plans=Array.isArray(step8?.chapter_briefs)?step8.chapter_briefs:[];if(index<0||index>=plans.length)return alert('章节索引无效。');const target=plans[index]||{};const label=String(target?.title||target?.chapter_id||`第${index+1}章`);if(!confirm(`确认删除章节摘要：${label}？`))return;const draft=ensureStepObject('step_8',step8);if(!Array.isArray(draft.chapter_briefs))draft.chapter_briefs=[];draft.chapter_briefs.splice(index,1);stepDraftObjects['step_8']=draft;stepDrafts['step_8']=JSON.stringify(draft,null,2);stepDraftDirty['step_8']=true;if(currentBook){renderBlueprint(currentBook);autoSizeTextareas('pnl-blueprint');}}
 function toggleButtons(){const t=mode==='test';btnNew.style.display=t?'none':'inline-block';btnStep1.style.display=t?'none':'inline-block';btnStep2.style.display=t?'none':'inline-block';btnStep3.style.display=t?'none':'inline-block';btnStep4.style.display=t?'none':'inline-block';btnStep5.style.display=t?'none':'inline-block';btnStep6.style.display=t?'none':'inline-block';btnStep7.style.display=t?'none':'inline-block';btnStep8.style.display=t?'none':'inline-block';btnBlueprintReview.style.display=t?'none':'inline-block';btnContinue.style.display=t?'none':'inline-block';btnBlueprint.style.display=t?'inline-block':'none';btnWrite.style.display=t?'inline-block':'none';btnCritique.style.display=t?'inline-block':'none';btnPatch.style.display=t?'inline-block':'none';}
 function updateStopButton(){const a=runsCache.find(x=>x.is_running)||(pendingRunId?{run_id:pendingRunId}:null);btnStop.style.display=a?'inline-block':'none';}
-async function loadNovels(){const novels=await api('/api/novels?mode='+mode);novelSel.innerHTML="<option value=''>选择小说</option>";novels.forEach(n=>{const o=document.createElement('option');o.value=n.book_id;o.textContent=n.title||n.book_id;novelSel.appendChild(o);});if(bookId)novelSel.value=bookId;}
+async function loadNovels(options={}){const autoSelectSingle=!!options.autoSelectSingle;const novels=await api('/api/novels?mode='+mode);novelSel.innerHTML="<option value=''>选择小说</option>";const availableIds=new Set();novels.forEach(n=>{const id=String(n?.book_id||'').trim();if(!id)return;availableIds.add(id);const o=document.createElement('option');o.value=id;o.textContent=n.title||id;novelSel.appendChild(o);});let nextBookId=availableIds.has(bookId)?bookId:'';if(!nextBookId){const storedBookId=readStoredBookId(mode);if(storedBookId&&availableIds.has(storedBookId))nextBookId=storedBookId;}if(!nextBookId&&autoSelectSingle&&novels.length===1)nextBookId=String(novels[0]?.book_id||'').trim();bookId=nextBookId;novelSel.value=nextBookId||'';persistBookId(mode,bookId);return novels;}
 async function loadRuns(){if(!bookId){runsCache=pendingRunId?[{run_id:pendingRunId,is_running:true,stage:'writing',updated_at:new Date().toISOString(),pending_message:'运行已启动，正在准备请求模型。'}]:[];return renderRuns();}runsCache=await api(`/api/runs?mode=${mode}&book_id=${bookId}`);const c=runsCache.find(x=>x.is_running)||runsCache[0];if(c)expandedRuns.add(c.run_id);await renderRuns();updateStopButton();}
 function renderEmptyRightPanels(){document.getElementById('pnl-input').innerHTML="<div class='empty'>等待加载用户输入</div>";document.getElementById('pnl-blueprint').innerHTML="<div class='empty'>等待加载小说信息</div>";document.getElementById('pnl-text').innerHTML="<div class='empty'>等待加载小说正文</div>";document.getElementById('pnl-critic').innerHTML="<div class='empty'>等待加载评价结果</div>";showTab('input');}
-async function changeMode(){mode=modeSel.value;bookId='';currentBook=null;pendingRunId='';pendingStepRevision=null;runsCache=[];expandedRuns=new Set();boxStates={};lastRightRenderKey='';lastLivePreviewKey='';runActiveItemKeys={};resetStepDraftCache('');evs.innerHTML="<div class='empty'>选择小说或发起一次运行后查看过程</div>";renderEmptyRightPanels();stagePill.textContent='未开始';toggleButtons();updateStopButton();await loadNovels();}
-async function selectNovel(id){bookId=id;currentBook=null;pendingRunId='';pendingStepRevision=null;expandedRuns=new Set();boxStates={};lastRightRenderKey='';lastLivePreviewKey='';runActiveItemKeys={};resetStepDraftCache(id||'');if(!bookId){evs.innerHTML="<div class='empty'>选择小说或发起一次运行后查看过程</div>";renderEmptyRightPanels();stagePill.textContent='未开始';updateStopButton();return;}await refreshNovel();}
-async function refreshNovel(){if(!bookId)return;const d=await api(`/api/novel?mode=${mode}&book_id=${bookId}`);if(!d.book)return;if(stepDraftBookId!==d.book.id)resetStepDraftCache(d.book.id);const editingInRight=!!document.activeElement&&document.getElementById('right')?.contains(document.activeElement)&&isEditingElement(document.activeElement);const scrollState=captureScrollState();currentBook=d.book;lastLivePreviewKey='';const rightRenderKey=[String(d.book?.id||''),String(d.book?.updated_at||''),String(d.latest_run_id||''),String(d.latest_stage||''),String(d.critic?.report_id||d.critic?.created_at||''),String(d.blueprint_review?.summary||'')].join('|');if(!editingInRight&&rightRenderKey!==lastRightRenderKey){snapshotPanelDetailStates('pnl-input');snapshotPanelDetailStates('pnl-blueprint');snapshotPanelDetailStates('pnl-text');snapshotPanelDetailStates('pnl-critic');renderInputPanel(d.book);renderBlueprint(d.book,d.blueprint_review);renderText(d.book,null);renderCritic(d.critic);lastRightRenderKey=rightRenderKey;}stagePill.textContent=stageText(d.latest_stage);runsCache=d.runs||[];const c=runsCache.find(x=>x.is_running)||runsCache[0];if(c)expandedRuns.add(c.run_id);await renderRuns();updateStopButton();await loadNovels();restoreScrollState(scrollState);}
-async function refreshPendingRun(){if(!pendingRunId)return;const trackedRunId=pendingRunId;const prev=runsCache.find(x=>x.run_id===trackedRunId)||{};const d=await api(`/api/run?mode=${mode}&run_id=${trackedRunId}`);const scrollState=captureScrollState();const editingInRight=!!document.activeElement&&document.getElementById('right')?.contains(document.activeElement)&&isEditingElement(document.activeElement);stagePill.textContent=stageText(d.stage||'writing');const running=d.is_running!==false;if(running){runsCache=[{run_id:trackedRunId,is_running:true,stage:d.stage,updated_at:d.updated_at||new Date().toISOString(),task_label:prev.task_label||'',pending_message:'运行中，等待模型返回更多内容。'},...runsCache.filter(x=>x.run_id!==trackedRunId)];expandedRuns.add(trackedRunId);if(currentBook&&d.chapter_preview){const previewKey=JSON.stringify(d.chapter_preview||null);if(!editingInRight&&previewKey!==lastLivePreviewKey){snapshotPanelDetailStates('pnl-text');renderText(currentBook,d.chapter_preview,d);lastLivePreviewKey=previewKey;}}await renderRuns({[trackedRunId]:d});updateStopButton();restoreScrollState(scrollState);return;}let revisionPayload=latestOutputByType(d,'step_revision_draft');const completedRevision=pendingStepRevision&&pendingStepRevision.run_id===trackedRunId?pendingStepRevision:null;pendingRunId='';pendingStepRevision=null;lastLivePreviewKey='';delete runActiveItemKeys[trackedRunId];if(!revisionPayload&&completedRevision&&completedRevision.step_key&&completedRevision.payload_text){const fallback=await api('/api/novels/revise_step_result',{method:'POST',body:JSON.stringify({mode,book_id:bookId,step_key:completedRevision.step_key,payload_text:completedRevision.payload_text,revision_mode:completedRevision.revision_mode||'instruction',guidance:completedRevision.guidance||''})});if(ensureOk(fallback)){revisionPayload=fallback;}}if(revisionPayload)applyStepRevisionDraft(revisionPayload);if(d.current_book_id){bookId=d.current_book_id;novelSel.value=bookId;await refreshNovel();if(completedRevision){if(revisionPayload)alert(completedRevision.revision_mode==='review'?'已生成质检后的建议稿，请确认后再点保存修改。':'已按你的指令生成建议稿，请确认后再点保存修改。');else alert('修改任务已结束，但没有返回建议稿，请查看左侧运行记录。');}return;}runsCache=[{run_id:trackedRunId,is_running:false,stage:d.stage,updated_at:d.updated_at||new Date().toISOString(),task_label:prev.task_label||'',pending_message:'运行已结束，查看下方最新事件。'}];expandedRuns.add(trackedRunId);await renderRuns({[trackedRunId]:d});updateStopButton();restoreScrollState(scrollState);if(completedRevision){if(revisionPayload)alert(completedRevision.revision_mode==='review'?'已生成质检后的建议稿，请确认后再点保存修改。':'已按你的指令生成建议稿，请确认后再点保存修改。');else alert('修改任务已结束，但没有返回建议稿，请查看左侧运行记录。');}}
+async function changeMode(){mode=validMode(modeSel.value)?modeSel.value:'formal';persistMode(mode);bookId='';persistBookId(mode,'');currentBook=null;pendingRunId='';pendingStepRevision=null;runsCache=[];expandedRuns=new Set();boxStates={};lastRightRenderKey='';lastLivePreviewKey='';runActiveItemKeys={};resetStepDraftCache('');evs.innerHTML="<div class='empty'>选择小说或发起一次运行后查看过程</div>";renderEmptyRightPanels();stagePill.textContent='未开始';toggleButtons();updateStopButton();await loadNovels({autoSelectSingle:true});if(bookId)await refreshNovel();}
+async function selectNovel(id){bookId=String(id||'').trim();persistBookId(mode,bookId);currentBook=null;pendingRunId='';pendingStepRevision=null;expandedRuns=new Set();boxStates={};lastRightRenderKey='';lastLivePreviewKey='';runActiveItemKeys={};resetStepDraftCache(id||'');if(!bookId){evs.innerHTML="<div class='empty'>选择小说或发起一次运行后查看过程</div>";renderEmptyRightPanels();stagePill.textContent='未开始';updateStopButton();return;}await refreshNovel();}
+async function refreshNovel(){if(!bookId)return;const d=await api(`/api/novel?mode=${mode}&book_id=${bookId}`);if(!d.book)return;bookId=String(d.book.id||bookId).trim();persistBookId(mode,bookId);if(stepDraftBookId!==d.book.id)resetStepDraftCache(d.book.id);const editingInRight=!!document.activeElement&&document.getElementById('right')?.contains(document.activeElement)&&isEditingElement(document.activeElement);const scrollState=captureScrollState();currentBook=d.book;lastLivePreviewKey='';const rightRenderKey=[String(d.book?.id||''),String(d.book?.updated_at||''),String(d.latest_run_id||''),String(d.latest_stage||''),String(d.critic?.report_id||d.critic?.created_at||''),String(d.blueprint_review?.summary||'')].join('|');if(!editingInRight&&rightRenderKey!==lastRightRenderKey){snapshotPanelDetailStates('pnl-input');snapshotPanelDetailStates('pnl-blueprint');snapshotPanelDetailStates('pnl-text');snapshotPanelDetailStates('pnl-critic');renderInputPanel(d.book);renderBlueprint(d.book,d.blueprint_review);renderText(d.book,null);renderCritic(d.critic);lastRightRenderKey=rightRenderKey;}stagePill.textContent=stageText(d.latest_stage);runsCache=d.runs||[];const c=runsCache.find(x=>x.is_running)||runsCache[0];if(c)expandedRuns.add(c.run_id);await renderRuns();updateStopButton();await loadNovels();restoreScrollState(scrollState);}
+async function refreshPendingRun(){if(!pendingRunId)return;const trackedRunId=pendingRunId;const prev=runsCache.find(x=>x.run_id===trackedRunId)||{};const d=await api(`/api/run?mode=${mode}&run_id=${trackedRunId}`);const scrollState=captureScrollState();const editingInRight=!!document.activeElement&&document.getElementById('right')?.contains(document.activeElement)&&isEditingElement(document.activeElement);stagePill.textContent=stageText(d.stage||'writing');const running=d.is_running!==false;if(running){runsCache=[{run_id:trackedRunId,is_running:true,stage:d.stage,updated_at:d.updated_at||new Date().toISOString(),task_label:prev.task_label||'',pending_message:'运行中，等待模型返回更多内容。'},...runsCache.filter(x=>x.run_id!==trackedRunId)];expandedRuns.add(trackedRunId);if(currentBook&&d.chapter_preview){const previewKey=JSON.stringify(d.chapter_preview||null);if(!editingInRight&&previewKey!==lastLivePreviewKey){snapshotPanelDetailStates('pnl-text');renderText(currentBook,d.chapter_preview,d);lastLivePreviewKey=previewKey;}}await renderRuns({[trackedRunId]:d});updateStopButton();restoreScrollState(scrollState);return;}let revisionPayload=latestOutputByType(d,'step_revision_draft');const completedRevision=pendingStepRevision&&pendingStepRevision.run_id===trackedRunId?pendingStepRevision:null;pendingRunId='';pendingStepRevision=null;lastLivePreviewKey='';delete runActiveItemKeys[trackedRunId];if(!revisionPayload&&completedRevision&&completedRevision.step_key&&completedRevision.payload_text){const fallback=await api('/api/novels/revise_step_result',{method:'POST',body:JSON.stringify({mode,book_id:bookId,step_key:completedRevision.step_key,payload_text:completedRevision.payload_text,revision_mode:completedRevision.revision_mode||'instruction',guidance:completedRevision.guidance||''})});if(ensureOk(fallback)){revisionPayload=fallback;}}if(revisionPayload)applyStepRevisionDraft(revisionPayload);if(d.current_book_id){bookId=String(d.current_book_id||'').trim();persistBookId(mode,bookId);novelSel.value=bookId;await refreshNovel();if(completedRevision){if(revisionPayload)alert(completedRevision.revision_mode==='review'?'已生成质检后的建议稿，请确认后再点保存修改。':'已按你的指令生成建议稿，请确认后再点保存修改。');else alert('修改任务已结束，但没有返回建议稿，请查看左侧运行记录。');}return;}runsCache=[{run_id:trackedRunId,is_running:false,stage:d.stage,updated_at:d.updated_at||new Date().toISOString(),task_label:prev.task_label||'',pending_message:'运行已结束，查看下方最新事件。'}];expandedRuns.add(trackedRunId);await renderRuns({[trackedRunId]:d});updateStopButton();restoreScrollState(scrollState);if(completedRevision){if(revisionPayload)alert(completedRevision.revision_mode==='review'?'已生成质检后的建议稿，请确认后再点保存修改。':'已按你的指令生成建议稿，请确认后再点保存修改。');else alert('修改任务已结束，但没有返回建议稿，请查看左侧运行记录。');}}
 function boxHtml(key,title,payloadHtml,isOpen,extraClass=''){const klass=['box',extraClass].filter(Boolean).join(' ');return `<details class='${klass}' ${isOpen?'open':''} ontoggle="toggleBox('${key}', this.open)"><summary><span class='title'>${title}</span></summary><div class='payload'>${payloadHtml}</div></details>`}
 function toggleBox(key,isOpen){boxStates[key]=isOpen;}
 const toArray=v=>Array.isArray(v)?v.filter(Boolean):[];
@@ -904,7 +1124,7 @@ function snapshotPanelDetailStates(panelId){const root=document.getElementById(p
 function normalizeMultiline(value){const cr=String.fromCharCode(13),lf=String.fromCharCode(10);return String(value??'').split(cr+lf).join(lf).split(cr).join(lf).trimEnd();}
 function openNewNovelDialog(){newNovelModal.style.display='flex';newTitleInput.focus();}
 function closeNewNovelDialog(){newNovelModal.style.display='none';}
-async function startFormalFromDialog(){const title=newTitleInput.value.trim();const q=normalizeMultiline(newQueryInput.value);if(!q)return alert('请输入题材/需求。');const style=normalizeMultiline(newStyleInput.value);const r=await api('/api/novels/create',{method:'POST',body:JSON.stringify({mode,title,query:q,style_request:style})});if(!ensureOk(r))return;closeNewNovelDialog();bookId=r.book.id;pendingRunId='';pendingStepRevision=null;runsCache=[];expandedRuns=new Set();lastRightRenderKey='';lastLivePreviewKey='';runActiveItemKeys={};currentBook=r.book;stagePill.textContent='未开始';await loadNovels();novelSel.value=bookId;await refreshNovel();updateStopButton();}
+async function startFormalFromDialog(){const title=newTitleInput.value.trim();const q=normalizeMultiline(newQueryInput.value);if(!q)return alert('请输入题材/需求。');const style=normalizeMultiline(newStyleInput.value);const r=await api('/api/novels/create',{method:'POST',body:JSON.stringify({mode,title,query:q,style_request:style})});if(!ensureOk(r))return;closeNewNovelDialog();bookId=r.book.id;persistBookId(mode,bookId);pendingRunId='';pendingStepRevision=null;runsCache=[];expandedRuns=new Set();lastRightRenderKey='';lastLivePreviewKey='';runActiveItemKeys={};currentBook=r.book;stagePill.textContent='未开始';await loadNovels();novelSel.value=bookId;await refreshNovel();updateStopButton();}
 function setPendingRunState(runId,{stage,pendingMessage,taskLabel,clearLivePreview=false,clearActiveItem=false}={}){
   pendingRunId=runId||'';
   if(clearLivePreview)lastLivePreviewKey='';
@@ -925,7 +1145,7 @@ async function startRunRequest(path,payload,{stage,pendingMessage,taskLabel,clea
 async function startPlanningRun(path,message,taskLabel,payloadExtra={}){if(!bookId)return alert('请先选择一部小说。');return await startRunRequest(path,withLlmProvider({book_id:bookId,...(payloadExtra||{})}),{stage:'planning',pendingMessage:message,taskLabel});}
 async function startConfiguredPlanningRun(configKey){const config=STEP_RUN_CONFIGS[configKey];if(!config)return alert('未找到对应步骤配置。');await startPlanningRun(config.path,config.pendingMessage,config.taskLabel,config.payload||{});}
 async function continueFormal(){if(!bookId)return alert('请先选择一部小说。');await startRunRequest('/api/novels/continue',withLlmProvider({book_id:bookId}),{stage:'writing',pendingMessage:'正在写下一章，请稍候...',taskLabel:'正文生成',clearLivePreview:true,clearActiveItem:true});}
-async function deleteNovel(){if(!bookId)return alert('请先选择一部小说。');if(!confirm('确认删除此小说？该操作不可撤销。'))return;await api('/api/novels/delete',{method:'POST',body:JSON.stringify({mode,book_id:bookId})});bookId='';currentBook=null;pendingRunId='';pendingStepRevision=null;runsCache=[];expandedRuns=new Set();lastLivePreviewKey='';runActiveItemKeys={};evs.innerHTML="<div class='empty'>选择小说或发起一次运行后查看过程</div>";renderEmptyRightPanels();stagePill.textContent='未开始';await loadNovels();updateStopButton();}
+async function deleteNovel(){if(!bookId)return alert('请先选择一部小说。');if(!confirm('确认删除此小说？该操作不可撤销。'))return;await api('/api/novels/delete',{method:'POST',body:JSON.stringify({mode,book_id:bookId})});bookId='';persistBookId(mode,'');currentBook=null;pendingRunId='';pendingStepRevision=null;runsCache=[];expandedRuns=new Set();lastLivePreviewKey='';runActiveItemKeys={};evs.innerHTML="<div class='empty'>选择小说或发起一次运行后查看过程</div>";renderEmptyRightPanels();stagePill.textContent='未开始';await loadNovels({autoSelectSingle:true});if(bookId)await refreshNovel();updateStopButton();}
 async function testBlueprint(){const q=prompt('输入题材需求（测试大纲）：');if(!q)return;const r=await startRunRequest('/api/test/blueprint',{query:q},{stage:'planning',pendingMessage:'测试大纲运行中'});if(!r)return;expandedRuns=new Set(pendingRunId?[pendingRunId]:[]);}
 async function testWrite(){let r;if(bookId)r=await startRunRequest('/api/test/write',{book_id:bookId},{stage:'writing',pendingMessage:'测试写作运行中'});else{const q=prompt('输入题材需求（测试写作）：');if(!q)return;r=await startRunRequest('/api/test/write',{query:q},{stage:'writing',pendingMessage:'测试写作运行中'});}if(!r)return;expandedRuns=new Set(pendingRunId?[pendingRunId]:[]);}
 async function testCritique(){if(!bookId)return alert('请先选择一部小说。');await startRunRequest('/api/test/critique',{book_id:bookId},{stage:'critique',pendingMessage:'测试评价运行中'});}
@@ -1161,3 +1381,4 @@ async function initApp(){
   }
 }
 initApp();
+</script></body></html>

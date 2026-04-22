@@ -1,0 +1,25 @@
+{
+  "skill_id": "novel_self_improve",
+  "tools": [
+    "python -m tools.seed_self_improve_cases",
+    "python -m tools.export_eval_cases",
+    "python -m evals.romance.run_step_evals",
+    "python -m evals.romance.run_workflow_diagnostics",
+    "python -m evals.romance.run_romance_evals",
+    "python -m evals.romance.run_case_comparison"
+  ],
+  "activation_mode": "explicit_only",
+  "triggers": [
+    "explicit_skill_call",
+    "$novel_self_improve",
+    "$novel-framework-self-improve",
+    "use novel_self_improve"
+  ],
+  "success_condition": {
+    "core_romance_metrics_improve": true,
+    "continuity_non_regression": true,
+    "mind_state_non_regression": true,
+    "cost_not_meaningfully_worse": true
+  },
+  "max_iterations": 1
+}

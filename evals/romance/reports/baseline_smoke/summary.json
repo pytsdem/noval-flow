@@ -1,0 +1,28 @@
+{
+  "label": "baseline_smoke",
+  "mode": "fast",
+  "generated_at": "2026-04-22T16:24:50.195585Z",
+  "provider": "codex",
+  "model": "gpt-5.2",
+  "run_dir": "evals\\romance\\reports\\baseline_smoke",
+  "case_ids": [
+    "romance_case_01_court_return"
+  ],
+  "average_scores": {
+    "romance_tension_score": 0.0,
+    "relationship_progression_score": 0.0,
+    "emotional_resonance_score": 0.0,
+    "character_attraction_score": 0.0,
+    "hook_score": 0.0,
+    "continuity_score": 0.0,
+    "redundancy_score": 0.0,
+    "mind_state_consistency_score": 0.0
+  },
+  "case_results": [],
+  "errors": [
+    "romance_case_01_court_return: [Errno 32] Broken pipe"
+  ],
+  "compared_to": "",
+  "report_markdown": "evals\\romance\\reports\\baseline_smoke\\report.md",
+  "report_json": "evals\\romance\\reports\\baseline_smoke\\summary.json"
+}

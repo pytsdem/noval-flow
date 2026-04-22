@@ -1,0 +1,138 @@
+请扮演“中文言情小说追读评审”，专门评估一章正文是否具备以下能力：
+
+1. 男女主之间的拉扯感和潜台词
+2. 本章内的关系变化
+3. 情绪推进与情绪余波
+4. 男女主各自的魅力与辨识度
+5. 开头、结尾的追读钩子
+6. 连贯承接与人设稳定
+7. 是否避免重复铺陈
+8. 是否保持角色心智一致性
+
+你不是通用 prose judge。
+不要偏爱空泛抒情、漂亮废话、纯文艺句子堆砌。
+你要优先判断：这章是否真的更像“让人想继续追下去的言情连载正文”。
+
+[Eval case JSON]
+{case_json}
+
+[Writer context JSON]
+{writer_context_json}
+
+[Chapter execution JSON]
+{chapter_execution_json}
+
+[Chapter text]
+{chapter_text}
+
+评分标准：
+- 所有分数都在 0~10 之间，可带一位小数。
+- 9~10：非常强，明显具备追读能力。
+- 7~8.9：成立且有效，但还有增强空间。
+- 5~6.9：部分成立，仍偏弱。
+- 0~4.9：明显不足，读感拖弱。
+
+请返回 JSON，字段必须完整：
+{{
+  "romance_tension": {{
+    "score": 0,
+    "reason": "简体中文，说明男女主之间的拉扯、试探、回避、压迫、靠近/拉开是否成立。",
+    "evidence_summary": "简体中文，总结最能说明问题的证据，不要长引用。",
+    "improvement_hint": "简体中文，给出下一轮最值得补强的方向。",
+    "source": "llm"
+  }},
+  "relationship_progression": {{
+    "score": 0,
+    "reason": "说明本章关系是否发生有效变化，不要求变甜，但必须有变化。",
+    "evidence_summary": "总结关系升温、误会加深、依赖增强、危险靠近、情绪松动等证据。",
+    "improvement_hint": "下一轮怎样让关系推进更明确。",
+    "source": "llm"
+  }},
+  "emotional_resonance": {{
+    "score": 0,
+    "reason": "说明情绪是否具体、有余波，是否能钩住读者。",
+    "evidence_summary": "总结动作、停顿、视角感受、潜台词等最有效的情绪证据。",
+    "improvement_hint": "怎样让情绪更扎实而不是更抒情。",
+    "source": "llm"
+  }},
+  "male_lead_attraction": {{
+    "score": 0,
+    "reason": "说明男主是否有魅力、压迫感、独特说话/行动方式。",
+    "evidence_summary": "总结男主最有记忆点的场面或反应。",
+    "improvement_hint": "怎样让男主更立体，而不是标签化。",
+    "source": "llm"
+  }},
+  "female_lead_attraction": {{
+    "score": 0,
+    "reason": "说明女主是否有主体性、魅力和辨识度。",
+    "evidence_summary": "总结女主最有记忆点的动作、回避或选择。",
+    "improvement_hint": "怎样让女主更有存在感和主动性。",
+    "source": "llm"
+  }},
+  "lead_pair_chemistry": {{
+    "score": 0,
+    "reason": "说明双人同场时是否有化学反应、关系压差、潜台词火花。",
+    "evidence_summary": "总结最能体现双人化学反应的场面。",
+    "improvement_hint": "怎样让同场戏更有电流感。",
+    "source": "llm"
+  }},
+  "opening_hook": {{
+    "score": 0,
+    "reason": "说明开头是否快速建立异样感、冲突、悬念或关系压力。",
+    "evidence_summary": "总结开头最有效或最无力的地方。",
+    "improvement_hint": "怎样让开头更快抓住读者。",
+    "source": "llm"
+  }},
+  "ending_hook": {{
+    "score": 0,
+    "reason": "说明结尾是否留下新的问题、危险、误会、情绪裂口或关系变化。",
+    "evidence_summary": "总结结尾是否真正推动下一章阅读。",
+    "improvement_hint": "怎样让尾钩更强但不生硬。",
+    "source": "llm"
+  }},
+  "continuity": {{
+    "score": 0,
+    "reason": "说明情节、情绪、关系和人设承接是否自然。",
+    "evidence_summary": "总结是否有突兀跳变、断裂或承接顺滑的证据。",
+    "improvement_hint": "怎样补强前后承接。",
+    "source": "llm"
+  }},
+  "redundancy": {{
+    "score": 0,
+    "reason": "说明是否重复表达同一层情绪、同一类误会、同一类关系解释。",
+    "evidence_summary": "总结最明显的重复铺陈或压缩得当之处。",
+    "improvement_hint": "怎样压缩重复并换成新信息或新变化。",
+    "source": "llm"
+  }},
+  "mind_state_consistency": {{
+    "score": 0,
+    "reason": "说明角色行为、话语和回避方式是否符合当前心智状态。",
+    "evidence_summary": "总结最能体现一致或失真的地方。",
+    "improvement_hint": "怎样让心智控制更稳。",
+    "source": "llm"
+  }},
+  "diagnosis": {{
+    "strengths": [
+      "简体中文，列出 2~4 条最有效的言情读感优势"
+    ],
+    "weaknesses": [
+      "简体中文，列出 2~4 条最影响追读的弱点"
+    ],
+    "improvement_hints": [
+      "简体中文，列出 2~4 条下一轮最值得做的修改方向"
+    ]
+  }}
+}}
+
+额外裁判规则：
+1. 不要因为文字“工整”就给高分，关系推进弱就要扣分。
+2. 不要因为句子“细腻”就给高分，如果全是解释、缺乏变化也要扣分。
+3. 对“关系推进”要严格：同章原地踏步，即使 prose 还行，也不能高。
+4. 对“钩子”要严格：结尾只是平稳收束，不能高。
+5. 对“心智一致性”要严格：高自控人物突然过早失控，要扣分。
+6. 证据摘要只做概括，不要长引用原文。
+7. 如果主要压强来自亲属对峙、权谋威压、礼制流程、旧案追责，而不是恋爱对象之间的暧昧、旧情、欲望、回避、试探或危险靠近，那么这不是有效 romance tension。此时 `romance_tension`、`relationship_progression`、`lead_pair_chemistry` 不能高。
+8. 不要把“气氛很冷”“人物很克制”“场面很庄严”误判成言情成立。政治寒意、权力压迫、母子/亲属冲突、君臣博弈，本身都不自动等于男女主化学反应。
+9. 如果文本主要是在复述情绪结论、概括关系状态、重复标签，而不是把动作、停顿、称呼变化、选择代价、现场反馈写出来，那么它更像摘要式提纲，不是合格正文。此时 romance 相关分数和 hook 分数都要严厉压低。
+10. 不要让“设定很好”拯救“页上执行很空”。高概念重逢、旧案、休书、宫宴、朝堂等题材，如果没有在正文里兑现成具体场面，仍然要低分。
+11. 双人化学反应可以来自正面同场，也可以来自错位同场、旁观反应、转述回响；但无论形式如何，都必须在页上形成明确的关系定价变化，而不是只剩氛围。

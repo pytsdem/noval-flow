@@ -1,0 +1,364 @@
+{
+  "case_id": "romance_case_02_sickbed_truce",
+  "case_type": "self_improve_requirement_case",
+  "title": "雨夜药庐的被迫共处",
+  "description": "刺杀余波后，男主带伤躲进女主药庐。场景需要同时成立身体接触、互相防备、暂时合作与情绪余波。",
+  "tags": [
+    "forced-proximity",
+    "injury-care",
+    "aftermath",
+    "romance-tension",
+    "self_improve_test_case"
+  ],
+  "user_input": {
+    "title": "灯尽江南",
+    "query": "古言悬疑言情，书名《灯尽江南》。男主顾砚是新任河道督查使，在查河运税银案时遭遇刺杀；女主林晚是江南药庐女掌柜，也是男主怀疑可能知道旧账的人。我要的关键局面是男主带伤翻进女主后院、两人在雨夜药庐里被迫共处，表面止血，实则继续互相试探。前期要让读者觉得女主和税银线关系不清，但又能明显感觉到她不可能坐视男主死掉。前五章重点写刺杀余波、伤口护理张力、旧情残响、案件线索通过物件和动作露出、关系从互疑变成实际依赖。不要让护理戏变成纯温柔日常，也不要让两人太早摊牌。",
+    "style_request": "克制但带热度的悬疑言情",
+    "user_topic": "被迫共处 / 伤后护理张力 / 悬疑言情",
+    "assistant_persona_prompt": "你在写强关系推进的古言言情。动作、呼吸、停顿和物件比直白告白更重要。"
+  },
+  "self_improve_binding": {
+    "book_id": "test_self_improve_sickbed_truce",
+    "mode": "test",
+    "db_path": "data/novel_flow_test.db",
+    "entry_stage": "step",
+    "checkpoint_chapters": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "is_self_improve_test_case": true
+  },
+  "eval_fixture": {
+    "case_id": "romance_case_02_sickbed_truce",
+    "title": "雨夜药庐的被迫共处",
+    "description": "刺杀余波后，男主带伤躲进女主药庐。场景需要同时成立身体接触、互相防备、暂时合作与情绪余波。",
+    "tags": [
+      "forced-proximity",
+      "injury-care",
+      "aftermath",
+      "romance-tension"
+    ],
+    "premise": {
+      "title": "灯尽江南",
+      "high_concept": "新任督查使在查河道贪墨时险些被刺，唯一能替他缝合伤口的人，正是他怀疑与旧账有关的药堂女掌柜。",
+      "theme_statement": "越想把人推远，越会在最狼狈的时候暴露出真实依赖。",
+      "story_summary": "顾砚奉命查河道案，怀疑林晚与一条失踪税银线有关；可当刀口真正落下来时，能替他收住血的人只有她。两人的关系在一次次照料与试探里变得更危险。",
+      "genre": "historical romance",
+      "target_style": "克制但带热度的悬疑言情",
+      "emotional_hook": "救命与怀疑缠在一起，谁都不敢先交心。",
+      "central_conflict": "他查她，她救他；两人都知道靠近有代价，却暂时分不开。",
+      "core_hook": "伤口、旧债和未说出口的旧情一起挤进一个雨夜。",
+      "escalation_path": [
+        "刺杀受伤",
+        "被迫留宿药庐",
+        "照料与怀疑同步升级"
+      ],
+      "twist_blueprint": [
+        "女主并非案中同伙，而是被逼替某位权贵处理脏账",
+        "男主前期会把她的沉默误判成有罪"
+      ],
+      "ending_payoff": "两人会从互相试探走到不得不同盟，但同盟代价极高。",
+      "selling_points": [
+        "被迫共处",
+        "伤口护理张力",
+        "悬疑线与感情线同步推进"
+      ]
+    },
+    "chapter_brief": {
+      "chapter_id": "ch_021",
+      "title": "灯下缝伤",
+      "chapter_type": "aftermath",
+      "active_lines": [
+        "line_river_accounts"
+      ],
+      "active_twists": [
+        "twist_silver_registry"
+      ],
+      "summary": "顾砚带伤躲进林晚的药庐，表面上是处理伤口，实则在雨夜里继续互相试探；他得到一条案子线索，也意识到她比想象中更难放手。",
+      "incoming_hook": "巷口刺杀后，顾砚撑着最后一点清醒翻进了林晚后院。",
+      "opening_hook": "林晚掀开他染透的外袍时，先看到的是伤口，再看到他掌心还攥着她当年给的旧铜钱。",
+      "core_scene": "女主替男主处理刀伤，男主忍痛试探她与失踪税银的关系，谁都不能让对方看出自己真正慌的是什么。",
+      "chapter_object": "一页被血浸湿的河运税册残页",
+      "reader_emotion": "让读者感到近距离的危险、压抑的心软和被迫靠近的热度。",
+      "reader_belief": "读者仍应怀疑林晚卷入税银线，但同时感到她不可能坐视顾砚死掉。",
+      "allowed_info": [
+        "顾砚伤得不轻，必须在药庐停留至少一夜",
+        "残页来自失踪税银相关税册",
+        "林晚认得这张残页的格式"
+      ],
+      "allowed_clues": [
+        "林晚看到残页后的呼吸停顿",
+        "她下意识去碰顾砚旧伤附近的疤",
+        "顾砚故意把残页留在她能看到的地方"
+      ],
+      "forbidden": [
+        "不能揭示林晚为何替权贵处理过账目",
+        "不能让两人直接互诉旧情",
+        "不能让男主此章完全相信女主"
+      ],
+      "world_limit": "深夜城门已闭，顾砚带伤不能离开，林晚也不能让外人知道他在此处。",
+      "character_focus": [
+        "顾砚",
+        "林晚"
+      ],
+      "character_shift": "顾砚从把她当作可疑对象，转向不得不承认自己正在依赖她。",
+      "relationship_reprice": "林晚从可能涉案的人，变成顾砚在最狼狈时唯一信得过一半的人。",
+      "emotional_turn": "原本冷硬的审讯感逐渐滑向更危险的照料与失守边缘。",
+      "backstory_trigger": "旧铜钱",
+      "scene_engine": "aftermath_choice",
+      "clue_reveal_mechanism": {
+        "style": "object_accident",
+        "pressure_source": "缝伤时必须清理血污和随身物件",
+        "surface_trigger": "残页与旧铜钱一起滑落出来",
+        "first_noticer": "林晚",
+        "owner_reaction": "顾砚故作冷静地让她把东西递回来"
+      },
+      "character_reentry_focus": {
+        "顾砚": "不要重讲督查身份，用伤势、命令口吻和硬撑的姿态让他重新立住。"
+      },
+      "human_pain_anchor": "顾砚每次呼吸都牵着刀口，林晚替他下针时手再稳也会被热血烫到。",
+      "romance_seed": "林晚明明最该先看伤口，却先看见了他掌心那枚旧铜钱。",
+      "small_payoff": "顾砚确认林晚至少认识税册残页的来源范围。",
+      "ending_pull": "窗外有人敲了三下后门，用的是林晚最不想在今夜听到的暗号。",
+      "info_budget": "target=3000-3800; clue reveals<=2; relationship turn must be visible"
+    },
+    "twist_designs": [
+      {
+        "twist_id": "twist_silver_registry",
+        "title": "她知道税银线，却并非同伙",
+        "false_belief": "林晚替幕后权贵藏账，和失踪税银案脱不了干系。",
+        "truth": "她曾被逼为幕后权贵处理伤员和账簿残页，知道一些格式却不知全盘真相。",
+        "reader_alignment": "前期让读者跟着顾砚怀疑她，但又持续被她的救命和回避打动。",
+        "seed_from": "ch_014",
+        "reveal_at": "ch_039",
+        "allowed_clues": [
+          "她对残页格式过于熟悉",
+          "她害怕听到某个船帮暗号",
+          "她见到旧铜钱时明显愣住"
+        ],
+        "forbidden_reveals": [
+          "不能说出逼她做事的人是谁",
+          "不能直接解释她为什么保留旧铜钱",
+          "不能让顾砚完全读懂她的反应"
+        ],
+        "pov_lock": "不能直接交代她所有过往，只能让行为泄露。",
+        "related_characters": [
+          "林晚",
+          "顾砚"
+        ],
+        "payoff_effect": "真相揭开后，所有照料与试探都会从对立变成并肩。"
+      }
+    ],
+    "story_lines": [
+      {
+        "line_id": "line_river_accounts",
+        "name": "河运税银线",
+        "line_type": "mystery",
+        "visibility": "visible",
+        "core_question": "失踪税银究竟通过谁的手和哪条船帮被洗掉了踪迹？",
+        "reader_hook_mode": "clue-pressure",
+        "start_state": "顾砚手里只有碎片线索，查谁都像真也像假。",
+        "midpoint_shift": "林晚从嫌疑人逐渐变成最危险也最必要的线索人。",
+        "end_state": "两人不得不同盟去掀背后的真正权贵。",
+        "carried_twists": [
+          "twist_silver_registry"
+        ],
+        "line_rules": [
+          "案件线推进必须和关系拉扯绑定",
+          "线索要通过物件、动作和回避出现，不能纯口头说明"
+        ]
+      }
+    ],
+    "character_cards": [
+      {
+        "name": "顾砚",
+        "role": "新任河道督查使",
+        "social_background": "出身寒门，靠审案与军功一路爬到权力边缘",
+        "occupation": "奉命暗查河运税银案",
+        "appearance": "惯常衣冠严整，此时被雨水和血水一起泡得狼狈",
+        "personality": "强势、自控、警惕心重，越疼越不肯示弱",
+        "initial_state": "怀疑林晚与案子有关，却在最危险时只能来找她",
+        "motivation": "活下去并顺着残页继续往上查",
+        "behavior_pattern": "会把试探藏在冷淡命令和故意的沉默里",
+        "arc": "从独断独行走向学会把后背交给另一个人",
+        "relationships": "与林晚旧识未断，有旧账也有旧情"
+      },
+      {
+        "name": "林晚",
+        "role": "药庐女掌柜",
+        "social_background": "江南药商养女，后来独自支起药庐",
+        "occupation": "医者",
+        "appearance": "总是袖口束得利落，指尖常带药香",
+        "personality": "温静外壳下极有主见，遇到真正害怕的事反而更沉",
+        "initial_state": "不想再卷进税银线，却不可能看着顾砚死在门外",
+        "motivation": "先把他救回来，再决定要不要继续帮他",
+        "behavior_pattern": "紧张时说话会更轻，动作却更快",
+        "arc": "从被动卷入走向主动选边",
+        "relationships": "与顾砚之间有旧情残响，也有没算清的旧账"
+      }
+    ],
+    "worldbuilding": {
+      "story_engine": {
+        "world_rules": [
+          "夜禁已下，城中坊门关闭，深夜出入皆有风险。",
+          "药庐若私藏官员，一旦泄露会招来重罪。",
+          "河运税银线牵涉船帮和官场，普通人知道得越多越危险。"
+        ],
+        "power_structure": "地方官、船帮和京中权贵通过税银线互相勾连。",
+        "objective_conditions": [
+          "顾砚此刻不能惊动官府",
+          "林晚的药庐是他唯一能藏身的地方"
+        ]
+      },
+      "event_timeline": [
+        {
+          "event_id": "evt_101",
+          "title": "顾砚查到河运账目缺口",
+          "time_label": "三日前",
+          "description": "顾砚在旧仓库查到账目缺口，顺着残页查到江南药材码头。",
+          "trigger": "暗访仓库",
+          "consequence": "他怀疑林晚可能知道内情。",
+          "affected_characters": [
+            "顾砚",
+            "林晚"
+          ]
+        },
+        {
+          "event_id": "evt_102",
+          "title": "巷口刺杀",
+          "time_label": "今夜",
+          "description": "顾砚离开码头后遭到追杀，肩腹受伤。",
+          "trigger": "触碰税银线",
+          "consequence": "他翻进林晚后院求生。",
+          "affected_characters": [
+            "顾砚",
+            "林晚"
+          ]
+        }
+      ]
+    },
+    "character_milestones": [
+      {
+        "character_name": "顾砚",
+        "milestone_list": [
+          "从独查税银到不得不借力林晚",
+          "从怀疑她到承认她会影响自己的判断"
+        ],
+        "axes": [
+          "案件",
+          "信任"
+        ]
+      },
+      {
+        "character_name": "林晚",
+        "milestone_list": [
+          "从只想躲事到一次次被逼着救他",
+          "从压住旧情到在照料中露出更多破绽"
+        ],
+        "axes": [
+          "求生",
+          "情感压抑"
+        ]
+      }
+    ],
+    "actual_chapter_summaries": [
+      {
+        "chapter_id": "ch_020",
+        "actual_events": [
+          "顾砚在码头拿到一页税册残页",
+          "他离开时遭遇埋伏"
+        ],
+        "reader_now_knows": [
+          "税银线与码头船帮有关",
+          "林晚很可能认得部分账目格式"
+        ],
+        "reader_now_believes": [
+          "林晚与税银线关系不清"
+        ],
+        "open_questions": [
+          "她到底站在哪一边",
+          "顾砚会不会伤重暴露"
+        ],
+        "character_states": [
+          "顾砚带伤强撑",
+          "林晚刚关门准备熄灯"
+        ],
+        "relationship_state": [
+          "两人尚在互疑阶段，但顾砚已经本能选择往她这里逃"
+        ],
+        "seeded_clues": [
+          "顾砚一直带着一枚磨旧的铜钱"
+        ],
+        "locked_truths": [
+          "林晚真正知道的范围仍被锁住"
+        ],
+        "time_state": {
+          "chapter_end_time": "今夜子时前后",
+          "continuity_note": "刺杀余波和高压躲藏必须延续到本章"
+        }
+      }
+    ],
+    "prior_character_mindsets": [
+      {
+        "character_id": "顾砚",
+        "character_name": "顾砚",
+        "surface_emotion": "冷硬警惕",
+        "core_emotion": "伤口逼近失控时的本能不安",
+        "primary_goal": "活下来并继续掌控局面",
+        "hidden_need": "确认林晚还会不会像从前那样先救他",
+        "fear": "一旦把命交给她，就会把判断也一并交出去",
+        "attitude_to_key_others": {
+          "林晚": "怀疑她，却又在最坏的时候只信得过她"
+        },
+        "self_control_level": "high",
+        "breaking_point_hint": "若她对旧铜钱露出反应，他会忍不住追问旧事",
+        "known_but_unspoken": "他清楚自己翻墙来找她不只是因为最近的药庐",
+        "misbelief": "他以为她所有沉默都和税银线有关",
+        "chapter_change_hint": "他会承认自己开始依赖她"
+      },
+      {
+        "character_id": "林晚",
+        "character_name": "林晚",
+        "surface_emotion": "镇定克制",
+        "core_emotion": "怕他死在自己面前，也怕自己救了他就再也脱不了身",
+        "primary_goal": "先替他止血并藏住人",
+        "hidden_need": "想确认他是否还记得旧铜钱的来处",
+        "fear": "一旦让他看出自己还在意，他会继续逼近她的秘密",
+        "attitude_to_key_others": {
+          "顾砚": "嘴上要与他撇清，动作却会先救人"
+        },
+        "self_control_level": "medium_high",
+        "breaking_point_hint": "若他带着伤还拿旧事逼她，她的手会抖一下",
+        "known_but_unspoken": "她知道今夜后门那种敲门节奏意味着什么",
+        "misbelief": "她以为只要继续冷处理，顾砚就会把她当成线索而不是人",
+        "chapter_change_hint": "她会发现自己已经很难只把他当麻烦"
+      }
+    ],
+    "goals": {
+      "chapter_goal": "写出伤后共处的局促与热度，同时推进税银线一小步。",
+      "emotional_goal": "让读者同时感到疼、近、烫和压着不说的心软。",
+      "relationship_goal": "把两人的关系推进到“仍互疑，但已经出现实际依赖”。",
+      "hook_goal": "开头用伤口和旧铜钱抓人，结尾用敲门暗号把危险再抬高。",
+      "continuation_drive": "让读者必须想知道门外来的是谁，以及林晚接下来会不会护他到底。"
+    },
+    "context_overrides": {
+      "assistant_persona_prompt": "你在写强关系推进的古言言情。动作、呼吸、停顿和物件比直白告白更重要。",
+      "writing_requirements": {
+        "target_words": "3000-3800",
+        "pace": "前段快速止血并建立距离张力；中段以护理动作带出线索与误读；尾段必须抬高危险",
+        "guardrails": [
+          "不要把护理戏写成纯温柔日常",
+          "不要让两人直接摊牌",
+          "不要重复写同一种疼和同一种心软"
+        ]
+      },
+      "reference_pack": "参考方向：伤后共处、刀口张力、旧情残响、案件线索通过物件露出。",
+      "previous_chapter_full_text": "巷雨淋下来的时候，顾砚已经分不清肩上的湿是血还是水。他翻过后院矮墙，落地时膝盖一软，撞翻了林晚晒在檐下的草药匾。屋里灯还亮着，门却迟迟没有开。",
+      "scene_character_context_text": "[Scene character context]\n\n顾砚\n- 表面目标：止血、藏身、继续试探林晚与税银线的关系。\n- 风险：伤势让他的自控在下降。\n\n林晚\n- 表面目标：先把人救回来，再决定要不要继续帮他。\n- 风险：她对旧铜钱和残页的反应都很难完全藏住。",
+      "relationship_state_text": "[Relationship state]\n\n顾砚 -> 林晚\n- 当前关系：互相怀疑的旧识，靠近会有代价。\n- 暗流：他带伤来找她，本身已经暴露出信任裂口。\n- 本章目标：关系推进到“不得不暂时站在同一边”，但不能真正说开。\n- 禁止捷径：不要直接表白，不要立刻洗清怀疑。"
+    }
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "chapter_id": "ch_033",
+  "selection_summary_text": "relevant_roles：姜栀（姜家嫡女/商路掌账人之一/被迫周旋）、裴砚（大理寺少卿/锋利控场者）、国舅夫人（当众试探婚约的压力源）、满堂宾客（目光与流言放大器）。relevant_twists：twist_false_control（裴砚的强势介入在表面上更像控制，姜栀与读者都会先按这个方向误读）。relevant_lines：line_betrothal（婚约试探与商路、选择权强绑定）。relevant_world_rules：权贵宴席问婚=利益交换与站队信号；当众失礼会立刻伤姜家商路；裴砚公开替谁出头=把那个人放进他的政治视线内。relevant_past_events：半月前姜家商路被查、国舅府暗示可用婚约换宽手；ch_032国舅夫人确认今夜赴宴且裴砚提前入席坐近。current_time_anchor：今夜生辰宴开席，寿酒未递即被问婚，定亲玉佩被推上台面，裴砚当场接局改写语境。",
+  "time_anchor_text": "absolute：盐布商路被查后的半月后之夜，姜家生辰宴当晚。season：春季。timeofday：入夜灯火初上、祝寿礼序刚起第一巡（第一杯寿酒尚未递稳）。relative_to_previous_chapter：紧接ch_032同一夜，裴砚已提前在席间靠近落座之后，国舅夫人当众开口问婚的当刻。must_not_conflict：宴席礼制压人（姜栀不能翻桌离席/不能失礼失态到伤姜家体面）；国舅夫人与宾客在场形成围观压力；裴砚必须在不把用意讲透的前提下切局；玉佩必须作为当场触发物出现并成为众目焦点。",
+  "chapter_visible_context_text": "reader_should_know：姜家商路半月前被查，国舅府借宴席问婚施压；权贵宴上婚事=站队信号，姜栀不能失礼；裴砚罕见提前到场、显然带着准备，今夜会有人把婚约话头推到台前，玉佩会变成刀口。reader_should_believe：裴砚的介入越来越强势、像要把姜栀收进自己的安排里；他控场越稳，束缚感与代价越大；甜与窒息同在。reader_should_not_know：裴砚为何对国舅府格外锋利的根由；他真正要针对的对象与完整布局；姜栀也只能看见表面强势，暂时无法看穿。allowed_clues：他对国舅府/试探者的反应比对姜栀更冷更快；玉佩与话术显得早有准备；出手前先观察姜栀是否被逼到失态边缘；国舅夫人对他的截胡明显意外；裴砚的人手曾提前进出姜家后院。forbidden_reveals：不能点明他在替姜家挡谁或挡哪条线；不能让他此章说出完整计划；不能让姜栀完全看懂他的用意；不能揭示他真正想借婚约切谁的手；不能让两人直接承认彼此心意；不能让姜栀失去主体性。current_character_state：姜栀表面从容礼貌、心里飞快算账且高度戒备，想保住回应权与选择权；裴砚强势冷控、等节点一锤定音，动作与目光优先确认她是否被逼到临界。",
+  "completed_chapter_memory_text": "ch_032记忆：国舅夫人已确认今夜赴宴，姜家很可能被当众试探婚约；裴砚罕见提前到场，座位离姜栀很近，像在等某个节点出手。读者已知今夜不平静、裴砚带着准备来；读者更倾向把他的介入读成强势控制。姜栀外稳内绷、戒备拉满；裴砚冷着等时机。两人私下已很难彻底分开，但公开关系仍未被正式命名。线索余温：裴砚的人提前进出姜家后院。",
+  "step_1_story_foundation_text": "定位：高压权谋言情，节奏快、钩子强。主题句：公开场合的每一次护与逼，都会改写关系里的权力位置。本章使命：生辰宴上婚约试探被推到台面，姜栀要在不失礼的前提下守住体面与选择权；裴砚必须用更锋利的方式公开接局，把压力从姜栀身上移走同时抬高两人绑定的代价，让读者心动又担心他更像在控制。核心冲突：姜栀不愿婚事沦为筹码且不想欠他太多；裴砚要改写局势却不能把意图讲透。",
+  "step_2_worldbuilding_text": "[Step 2 worldbuilding and structural rules]\n\nStory engine:\n- World rules: ['权贵宴席上的婚约试探，本质是利益交换与站队信号。', '姜家若当众失礼，商路会立刻被扣上失敬权贵的帽子。', '裴砚一旦在公开场合替谁出头，就等于把那个人放进自己的政治视线内。']\n- Power structure: 国舅府、盐运使与裴家围绕商路、婚约和案件彼此牵制。\n- Objective conditions: ['姜栀不能翻桌离席', '裴砚必须在不暴露全部用意的前提下切局']",
+  "step_3_character_packets_text": "姜栀：身份=姜家嫡女/商路掌账人之一；可见目标=不让婚事变筹码、尽量不欠裴砚；执行=越礼貌越防备、话里留余地，能接招不失礼但不轻易表态；可写外显=短暂停顿、转话题、收束情绪、称呼微调、答非所问。底线=不能翻脸离席/不能失礼/不能被写成被动木偶。裴砚：身份=大理寺少卿/权臣锋刃；可见目标=看出姜家被试探，亲自入场改写局势；执行=强势控场、越在意越像命令，冷硬措辞里压着“由我来接”；可写外显=先看姜栀是否被逼到临界再出手、对国舅府更锋利、用一句话压住满堂。底线=不说透全部用意/不直接告白。",
+  "step_4_event_timeline_text": "[Step 4 full event timeline]\n\n- evt_201 | 半月前\n  Title: 姜家商路被查\n  Description: 盐布商路忽然被查，国舅府暗示可用婚约换宽手。\n  Trigger: 商税与漕运线同时施压\n  Consequence: 姜栀被推到婚约试探前。\n  Affected characters: 姜栀, 裴砚\n\n- evt_202 | 今夜\n  Title: 裴砚提前到姜家\n  Description: 姜家生辰宴开始前，裴砚罕见提前入席。\n  Trigger: 他收到国舅夫人也会到场的消息\n  Consequence: 姜栀意识到今夜不会平静。\n  Affected characters: 姜栀, 裴砚",
+  "step_5_character_milestones_text": "本章可用里程碑（写外显、不写私因）：1）触发=国舅夫人当众问婚并递出玉佩话头；公开后果=全场目光聚焦姜栀，姜家体面与商路被强行绑上婚约。2）姜栀=先稳住礼数与回应权，避免被逼当场点头或失态，最终保住“当场拒绝联姻”的空间；代价=她被迫承认裴砚的介入已改变处境。3）裴砚=当众接过玉佩、改写其归属语境，用更冷更狠的话把局接过去；公开后果=他把姜栀纳入政治视线，也把两人推成众人默认的危险绑定。4）余震=宴后关于“裴砚要上门讨说法”的流言与站队压力形成章末钩子。",
+  "step_6_twists_text": "twist_false_control：核心误读=裴砚像要借婚约把姜栀收进自己手里当棋子；读者对齐=既为他的出手心动，又担心他把她圈得更紧。可用线索形状=他对国舅府/联姻试探的反应远比对姜栀更锋利；玉佩应对与话术显得早有准备；出手前先看姜栀是否被逼到失态边缘；控场时把矛头落在试探与交换上，而不是逼姜栀当众表态。禁写=点明他在替姜家挡谁或挡哪条线；让他把完整计划讲出来；让姜栀完全看懂他的用意；用裴砚内心独白一次讲透全盘布局。",
+  "step_7_story_lines_text": "line_betrothal（婚约与商路）：核心问题=姜栀如何在不失去商路与选择权前提下，接住裴砚越来越公开的介入？本章状态=宴席压力把婚约变成站队信号，姜家被当筹码；裴砚一出手，私下拉扯被迫转成众人可见的危险绑定。线规则=女主必须保留选择权与反应权（能拒能转能留余地）；男主每一次护持都要同时抬高代价（把火引到自己身上，也把两人绑得更紧）。",
+  "step_8_chapter_brief_text": "ch_033《满堂灯火偏照他》/public_pressure：开场钩子=生辰宴刚开席，裴砚罕见亲自到场并坐近；第一杯寿酒未递稳，国舅夫人当众问婚。核心戏=姜栀在满堂灯火里守住体面与选择权；裴砚用看似冷酷的手段当场接局，截断联姻试探。关键物=临时送上的定亲玉佩（触发点）。情绪目标=窒息+兴奋+被公开护住的危险甜感，同时埋更大后患；读者信念保持=他控场像控制，甜里带束缚疑云。写法要点=仪式触发（祝寿礼序与问婚叠加），姜栀先接礼再接刀；裴砚先看她的手与神色，再出手改写玉佩语境。小回报=姜栀保住当场拒绝联姻的空间；章末钩子=裴砚当众放话玉佩既到他手里，改日亲自上门讨个说法。禁写=揭真实目标/直接告白/剥夺女主主体性/说透计划。",
+  "chapter_payload_text": "[Chapter payload]\n\nChapter: ch_033 / 满堂灯火偏照他\nChapter type: public_pressure\nOne-line mission: 姜栀在生辰宴上被当众试探婚约，裴砚以更狠的方式把局接过去，既替她挡刀，也把她逼进了更近的位置。\nIncoming hook: 姜家生辰宴刚开席，裴砚却罕见地亲自到场。\nOpening hook: 第一杯寿酒还没递到姜栀手里，国舅夫人就当众问起她的婚事。\nCore scene: 女主必须在满堂灯火里守住自己的体面与选择权，男主则要用看似冷酷的手段替她切断联姻试探。\nChapter object: 一枚被临时送上的定亲玉佩\nScene engine: relationship_collision\nClue reveal mechanism: {'style': 'ritual_trigger', 'pressure_source': '生辰宴祝寿仪式与婚约试探叠在一起', 'surface_trigger': '国舅夫人递上的定亲玉佩', 'first_noticer': '姜栀', 'owner_reaction': '裴砚直接改写玉佩的归属语境'}\nCharacter reentry focus: {'裴砚': '不要重讲他的身份，用满堂人对他的避让、他掀袍落座的方式和一句话压住场面。'}\nReader emotion target: 让读者感到窒息、兴奋、被公开护住的危险甜感，以及更大的后患。\nReader belief to preserve: 读者仍应觉得裴砚很会控制局面，也会怀疑他是不是把姜栀拖进了另一种束缚。\nCharacter shift: 姜栀从只想稳住场面，转向被迫承认裴砚的介入已经改变了她的处境。\nRelationship reprice: 裴砚从危险的权臣盟友，变成当众替她截断联姻的人，也变成更难摆脱的人。\nEmotional turn: 姜栀原本想独自应付，最后却在被裴砚公开逼近时第一次真正乱了节奏。\nBackstory trigger: None.\nHuman pain anchor: 姜栀笑着接寿酒时，指尖其实已经被杯壁凉得发僵，却还得在众人眼前把脊背挺直。\nRomance seed: 裴砚把那枚定亲玉佩接过去时，视线没有看玉，先看的是姜栀的手。\nSmall payoff: 姜栀保住了当场拒绝联姻的空间。\nEnding pull: 裴砚在众目睽睽之下说，玉佩既然到了他手里，改日他会亲自上门讨个说法。\nInfo budget: target=3200-4000; hook-heavy; relationship pressure must rise each beat\n\nActive story lines:\n- line_betrothal: 姜栀要怎样在不失去家中商路和个人选择权的前提下，接住裴砚越来越公开的介入？ | visibility=visible | rules=女主必须保留选择权和反应权; 男主每次护持都要同时抬高代价\n\nActive twists:\n- twist_false_control: preserve false belief '裴砚想借婚约把姜栀也收成自己手里的棋子。'; reader alignment='前期让读者既为他的出手心动，又担心他会把女主圈得更紧。'; allowed clues=他对国舅府的反应远比对姜栀的回应更锋利; 他提前准备了玉佩应对; 他会先观察女主有没有被逼到失态边缘; forbidden reveals=不能直说他在替姜家挡哪条暗线; 不能让他此章说出完整计划; 不能让姜栀完全看懂他的用意; POV lock=不能把裴砚的全盘布局一次性说透。\n\nAllowed explicit information:\n- 姜家商路已被多方盯上\n- 国舅府想借联姻拿住姜家\n- 裴砚有能力当场改写局势\n\nAllowed clues without explanation:\n- 裴砚提前准备过应对婚约试探的话与物件\n- 姜栀对裴砚的护持既心动又恼火\n- 国舅夫人对裴砚的出手明显意外\n\nForbidden content:\n- 不能揭示裴砚真正想借婚约切谁的手\n- 不能让两人直接承认彼此心意\n- 不能让姜栀失去主体性\n- 不能直说他在替姜家挡哪条暗线\n- 不能让他此章说出完整计划\n- 不能让姜栀完全看懂他的用意",
+  "timeline_anchor_facts_text": "[Objective timeline anchors]\n\nRelevant prehistory and current anchor from step 4:\n- evt_201 | 半月前\n  Title: 姜家商路被查\n  Description: 盐布商路忽然被查，国舅府暗示可用婚约换宽手。\n  Consequence: 姜栀被推到婚约试探前。\n  Affected characters: 姜栀, 裴砚\n\nConsistency notes:\n- Current chapter anchor is '姜家商路被查' at 半月前.",
+  "relevant_world_rules_text": "[Relevant world rules]\n\n1. 生辰宴上任何失礼都可能让姜家商路立刻受损，姜栀不能简单翻脸离席。\n2. 权贵宴席上的婚约试探，本质是利益交换与站队信号。\n3. 姜家若当众失礼，商路会立刻被扣上失敬权贵的帽子。\n4. 裴砚一旦在公开场合替谁出头，就等于把那个人放进自己的政治视线内。\n5. 国舅府、盐运使与裴家围绕商路、婚约和案件彼此牵制。\n6. 姜栀不能翻桌离席",
+  "style_card_text": "[Style card]\nGenre: restrained historical romance with pressure, mistrust, and emotional misreading.\nPOV: stay in limited perspective; never explain hidden truth from an omniscient distance.\nLanguage: readable modern Chinese prose with historical texture, not archaic imitation and not web-novel slang.\nTexture: scenes should feel lived-in and physically present. Let setting, objects, labor, etiquette, weather, money, and bodily discomfort quietly shape the page.\nEmotion: avoid naming feelings too quickly. Let emotion emerge through what the POV notices, avoids, says, misreads, touches, or cannot bring itself to do.\nDialogue: keep it human and motivated. People should speak from position, need, habit, fear, and relationship history, not to serve the outline.\nCharacter landing: make people convincing through selective concrete detail such as posture, hands, clothing, injuries, routine, and forms of address, without turning detail into a checklist.\nReveal discipline: clues may appear, but allowed clues must not be over-explained before reveal.\nRelationship movement: every chapter should deepen, strain, tilt, or re-price at least one relationship beat in a believable way.\nBackstory rule: if the past appears, let it arise naturally from present pressure, memory trigger, or action; do not paste in explanatory blocks.\nRhythm: vary sentence weight and scene pace with the dramatic moment. Do not let the prose sound mechanically patterned.\nImmersion goal: the reader should feel inside the room, inside the body's reaction, and inside the character's limited understanding.",
+  "active_twists": [
+    {
+      "twist_id": "twist_false_control",
+      "title": "他的控制欲表面最重，真正目标却是替她切断旁人的手",
+      "false_belief": "裴砚想借婚约把姜栀也收成自己手里的棋子。",
+      "truth": "他真正想切的是国舅府和另一条走私线对姜家的控制权。",
+      "reader_alignment": "前期让读者既为他的出手心动，又担心他会把女主圈得更紧。",
+      "seed_from": "ch_026",
+      "reveal_at": "ch_048",
+      "allowed_clues": [
+        "他对国舅府的反应远比对姜栀的回应更锋利",
+        "他提前准备了玉佩应对",
+        "他会先观察女主有没有被逼到失态边缘"
+      ],
+      "forbidden_reveals": [
+        "不能直说他在替姜家挡哪条暗线",
+        "不能让他此章说出完整计划",
+        "不能让姜栀完全看懂他的用意"
+      ],
+      "pov_lock": "不能把裴砚的全盘布局一次性说透。",
+      "related_characters": [
+        "裴砚",
+        "姜栀"
+      ],
+      "payoff_effect": "揭晓后，所有像控制的靠近都会改写成另一种保护。"
+    }
+  ],
+  "active_story_lines": [
+    {
+      "line_id": "line_betrothal",
+      "name": "婚约与商路",
+      "line_type": "relationship",
+      "visibility": "visible",
+      "core_question": "姜栀要怎样在不失去家中商路和个人选择权的前提下，接住裴砚越来越公开的介入？",
+      "reader_hook_mode": "pressure",
+      "start_state": "姜家是多方都想拿的筹码，姜栀只能硬撑体面。",
+      "midpoint_shift": "裴砚公开出手后，两人的关系从私下拉扯转向众人可见的危险绑定。",
+      "end_state": "婚约会成为两人共同的刀柄，也成为更大的风险来源。",
+      "carried_twists": [
+        "twist_false_control"
+      ],
+      "line_rules": [
+        "女主必须保留选择权和反应权",
+        "男主每次护持都要同时抬高代价"
+      ]
+    }
+  ],
+  "scene_character_context_text": "[Scene character context]\n\n姜栀\n- 表面目标：稳住生辰宴，不让姜家失礼。\n- 潜在矛盾：她不想欠裴砚，却又盯着他会不会出手。\n\n裴砚\n- 表面目标：切断婚约试探。\n- 潜在矛盾：他越想护她，方式越像在逼近她。",
+  "relationship_state_text": "[Relationship state]\n\n姜栀 -> 裴砚\n- 当前关系：危险盟友，彼此都在试探边界。\n- 暗流：她会被他的偏护牵动，也会因为他的强势反弹。\n- 本章目标：关系推进到“公开绑定的边缘”，但不能真正说破心意。\n- 禁止捷径：不要让女主被动失语，也不要让男主直接承认自己在吃醋。",
+  "assistant_persona_prompt": "你在写追读型高压古言言情。让角色魅力、关系试探和结尾牵引都落在动作与场面上。",
+  "writing_requirements_json": "{\n  \"target_words\": \"3200-4000\",\n  \"pace\": \"300 字内进入婚约试探；中段至少两次关系压差变化；结尾必须留下新的公开后患\",\n  \"guardrails\": [\n    \"姜栀必须保有主体性和反击感\",\n    \"裴砚不能只靠标签式强势撑场\",\n    \"不要让宴席变成纯信息对话\"\n  ]\n}",
+  "completed_chapter_summary_bundle": "ch_032记忆：国舅夫人已确认今夜赴宴，姜家很可能被当众试探婚约；裴砚罕见提前到场，座位离姜栀很近，像在等某个节点出手。读者已知今夜不平静、裴砚带着准备来；读者更倾向把他的介入读成强势控制。姜栀外稳内绷、戒备拉满；裴砚冷着等时机。两人私下已很难彻底分开，但公开关系仍未被正式命名。线索余温：裴砚的人提前进出姜家后院。",
+  "previous_chapter_full_text": "姜家后院的灯刚点满，裴砚就跨过了月洞门。姜栀原本以为他只是送礼，直到看见他的人已经先一步把宴席座次改过。她没来得及质问，前厅已经传来国舅夫人的笑声。",
+  "reference_pack": "参考方向：公开场合护人、权势感、女主有反应权的高张力对手戏。",
+  "chapter_character_mindsets": [],
+  "chapter_character_mindsets_text": ""
+}

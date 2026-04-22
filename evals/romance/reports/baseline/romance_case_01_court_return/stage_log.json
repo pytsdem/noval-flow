@@ -1,0 +1,838 @@
+[
+  {
+    "stage": "build_character_mindsets",
+    "character_mindsets": [
+      {
+        "character_id": "谢临川",
+        "character_name": "谢临川",
+        "surface_emotion": "冷峻克制的压迫感",
+        "core_emotion": "被旧恨撑起的自尊与对她反应的隐秘渴求相互撕扯的不甘",
+        "primary_goal": "在殿前禁忌与礼制允许的范围内，以“借调三年前军粮转运原始档册”的合规名目拿到查阅口子，为旧案撬开第一道缝且不露底牌",
+        "hidden_need": "在她最冷最讲规矩的应对里逼出一次不可忽视的停顿或细微失准，证明她并非全然无愧无情",
+        "fear": "怕自己把私情写进措辞与目光，被群臣与暗处势力抓成把柄，连同旧案入口一起被更深地封死并反噬到她身上",
+        "attitude_to_key_others": {
+          "沈知微": "把她当作旧案的锁与钥匙：表面以公事冷斥相逼，实则紧盯她每一寸反应，宁肯恨也不肯让她变得无关"
+        },
+        "self_control_level": "medium_high",
+        "breaking_point_hint": "若她在众目下持续用最公事的称谓与“例制”把他每句话都钉回原位，他的停顿会变长、语气会下沉，措辞会从“借调”悄然滑向带刺的“追问名目”，锋芒开始压不住地露边",
+        "known_but_unspoken": "他心里清楚自己今日每一个字都在做两件事：争一条查档的路，也逼她在念到旧案名目与他名号时露出哪怕一瞬的动摇；他甚至为那一瞬预备了第二句话",
+        "misbelief": "他将她的冷静与守礼一概归因为心虚和算计，认定她必会把档册入口当盾牌，因此会把她的任何短暂停顿都误读为被戳中要害后的遮掩",
+        "chapter_change_hint": "当他真拿到查阅口子却立刻嗅到更危险的阻力时，他会开始把“她的态度”与“旧案背后那只手”分开看：对她的定罪松动为不稳定的重新评估，试探会更克制也更精准"
+      },
+      {
+        "character_id": "沈知微",
+        "character_name": "沈知微",
+        "surface_emotion": "冷肃的过度平静",
+        "core_emotion": "被礼制压住的惊惧与在意：怕他一脚踏进更大的局，也怕自己哪怕一瞬松动就把他最后的退路亲手折断",
+        "primary_goal": "在殿前把他的试探锁进合规问答与程序之内，守住旧案名目与档册边界，避免他当众触犯禁忌、被人顺势推去撞死",
+        "hidden_need": "从他的停顿与措辞里确认：他究竟还想不想活着离开这座城，还是已准备把命当筹码",
+        "fear": "自己对旧案或他旧伤的任何细微失衡都会被满殿目光钉成“私情与同谋”，而他会追着这点破绽逼问到底，把自己逼进不可回头的绝境",
+        "attitude_to_key_others": {
+          "谢临川": "越想护他，越只能更冷更准；把情绪藏进规矩里，让每一句都像公事的刃，不给他也不给旁人任何可抓的软意"
+        },
+        "self_control_level": "high",
+        "breaking_point_hint": "宣旨触到旧案名目、他又将锋芒落在“原始档册”时，她会有一瞬吸气过浅，指尖在袖口内侧捏出细褶后立刻归位",
+        "known_but_unspoken": "有人正等着谢临川回京后在殿前犯一次错；任何档册入口与一句失措都会被记成下一次围剿的证据",
+        "misbelief": "她仍以为只要比三年前更冷、更讲规矩，就能把他挡在真相之外；她错误地期待他会被规矩劝退，低估了他会用规矩把路一步步逼出来",
+        "chapter_change_hint": "她会把“回避”微调为“预置”：开始在礼制允许的缝隙里提前安排档册路径与人手，把风险往可控处挪一寸，而不再只靠冷硬顶回去"
+      }
+    ]
+  },
+  {
+    "stage": "plan_content_blocks",
+    "skill_ids": [
+      "base_style",
+      "reveal_guard",
+      "character_integrity",
+      "time_consistency_guard"
+    ],
+    "block_count": 5,
+    "blocks": [
+      {
+        "block_id": "ch_012.sc_001.b001",
+        "chapter_id": "ch_012",
+        "block_index": 1,
+        "purpose": "Establish immediate court pressure, anchor the human pain point, and trigger the first silent standoff between Xie Linchuan and Shen Zhiwei via the old case mention",
+        "characters": [
+          "谢临川",
+          "沈知微",
+          "宣旨太监",
+          "殿上文武"
+        ],
+        "active_lines": [
+          "line_old_case"
+        ],
+        "active_twists": [
+          "twist_false_testimony"
+        ],
+        "scene_goal": "Make readers feel the physical and emotional weight of Xie’s return to the court that condemned him",
+        "must_reveal": [
+          "谢临川回京未平反",
+          "沈知微对旧案名目有本能反应",
+          "谢临川鞋底雪水未干"
+        ],
+        "must_hide": [
+          "沈知微的真实动机",
+          "旧案幕后主谋"
+        ],
+        "emotional_tone": "Frigid, taut, loaded with unspoken historical resentment",
+        "end_state": "Xie Linchuan remains kneeling, locked in a silent standoff with Shen Zhiwei across the hall, while the court holds its breath",
+        "human_reaction_target": [
+          "Xie’s involuntary flinch when the old case name hits his ears; Shen Zhiwei’s brush pausing mid-stroke before resuming with excessive force"
+        ],
+        "cost_shift": "Xie pays the physical cost of cold stone and public humiliation; Shen pays the mental cost of suppressing her visceral reaction to the old case",
+        "reader_feeling_target": "Sharp icy dread mixed with a flicker of curiosity about Shen’s split-second pause",
+        "paragraph_budget": "建议 3~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长",
+        "paragraph_shape": [
+          "Sensory opening (snow boots seeping water, cold stone under knees)",
+          "Court ritual context and宣旨进程",
+          "Shen’s subtle reaction to the old case name",
+          "Xie’s internal observation of her stiff posture and creased袖口",
+          "Silent standoff setup as the hall goes quiet"
+        ],
+        "micro_hook": "Xie catches sight of the faint white scar on Shen’s wrist—from where he once grabbed her three years ago",
+        "turn_type": "pressure_rise",
+        "character_anchor_line": {
+          "owner": "谢临川",
+          "form": "inner_thought",
+          "surface_function": "Express physical discomfort",
+          "hidden_function": "Link current pain to past trauma",
+          "must_reveal_about_character": "His past still haunts him physically and emotionally",
+          "must_not_do": [
+            "Explicitly state lingering affection for Shen"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Over-explaining court hierarchy details",
+          "Making Shen’s reaction too overt",
+          "Info-dumping old case backstory",
+          "Ignoring physical sensory details"
+        ],
+        "character_reentry_mode": {
+          "target_character": "沈知微",
+          "identity_already_known": true,
+          "reentry_strategy": "Use her position as御前记档女史, stiff posture, and brush movement to signal her presence",
+          "first_signal": "Her brush pausing mid-stroke",
+          "first_emotional_focus": "Her suppressed reaction to the old case",
+          "must_avoid": [
+            "Recapping her full backstory"
+          ]
+        },
+        "clue_reveal_mechanism": null,
+        "text": "",
+        "status": "draft",
+        "version": 1
+      },
+      {
+        "block_id": "ch_012.sc_001.b002",
+        "chapter_id": "ch_012",
+        "block_index": 2,
+        "purpose": "Xie makes a rule-compliant request for the old case档册, escalating the pressure on Shen to respond publicly",
+        "characters": [
+          "谢临川",
+          "沈知微",
+          "宣旨太监",
+          "殿上文武"
+        ],
+        "active_lines": [
+          "line_old_case"
+        ],
+        "active_twists": [
+          "twist_false_testimony"
+        ],
+        "scene_goal": "Show Xie’s strategic use of military merit to navigate court禁忌",
+        "must_reveal": [
+          "旧案原始档册仍在内库"
+        ],
+        "must_hide": [
+          "Shen’s intent to protect Xie",
+          "旧案幕后主谋"
+        ],
+        "emotional_tone": "Calculated, tense, with undercurrents of unspoken threat",
+        "end_state": "Xie’s request hangs in the air, all eyes turning to Shen as the official responsible for档册 access",
+        "human_reaction_target": [
+          "Shen’s jaw tightening until her cheekbone shows; a low gasp from a junior court official"
+        ],
+        "cost_shift": "Xie risks drawing unwanted attention to the old case; Shen risks being labeled complicit if she approves or obstructive if she refuses",
+        "reader_feeling_target": "Suspense mixed with admiration for Xie’s strategic thinking",
+        "paragraph_budget": "建议 3~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长",
+        "paragraph_shape": [
+          "Xie’s formal request framed as military reference",
+          "Court’s quiet shock and murmur",
+          "Shen’s internal conflict between rule and hidden concern",
+          "Her outwardly cold posture as she prepares to respond"
+        ],
+        "micro_hook": "Shen opens her mouth to speak, and Xie waits for the name she will use to address him",
+        "turn_type": "pressure_rise",
+        "character_anchor_line": {
+          "owner": "沈知微",
+          "form": "dialogue",
+          "surface_function": "State the rule about inner库档册 access",
+          "hidden_function": "Subtly warn Xie about the danger of touching the old case",
+          "must_reveal_about_character": "Her adherence to rules is a protective shield",
+          "must_not_do": [
+            "Show overt concern for Xie"
+          ],
+          "preferred_shape": "冷硬、符合礼制"
+        },
+        "style_risk_guard": [
+          "Making Xie’s request too aggressive",
+          "Revealing Shen’s true intent",
+          "Overwriting the court’s reaction",
+          "Using modern slang or anachronistic phrasing"
+        ],
+        "character_reentry_mode": null,
+        "clue_reveal_mechanism": null,
+        "text": "",
+        "status": "draft",
+        "version": 1
+      },
+      {
+        "block_id": "ch_012.sc_001.b003",
+        "chapter_id": "ch_012",
+        "block_index": 3,
+        "purpose": "Naturally expose the first key clue: Shen’s sudden shift to a more formal address, triggering Xie’s emotional slip",
+        "characters": [
+          "谢临川",
+          "沈知微",
+          "殿上文武"
+        ],
+        "active_lines": [
+          "line_old_case"
+        ],
+        "active_twists": [
+          "twist_false_testimony"
+        ],
+        "scene_goal": "Initiate Xie’s character shift from revenge-driven to coldly curious",
+        "must_reveal": [
+          "沈知微提到证词时换了更疏远的称呼",
+          "她下意识避开了男主手上的旧伤"
+        ],
+        "must_hide": [
+          "Shen’s reason for the address shift",
+          "旧案幕后主谋"
+        ],
+        "emotional_tone": "Sharp, with an undercurrent of unexpected tension and unspoken longing",
+        "end_state": "Xie is momentarily stunned by the address shift, then regains his composure to press his request",
+        "human_reaction_target": [
+          "Xie’s fingers tightening on his knee until his knuckles white; Shen’s eyes darting away from Xie’s scarred hand"
+        ],
+        "cost_shift": "Xie’s focus shifts from anger to confused curiosity; Shen has to double down on her cold facade to hide her slip",
+        "reader_feeling_target": "Shock mixed with a growing suspicion that Shen’s betrayal isn’t as simple as it seems",
+        "paragraph_budget": "建议 3~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长",
+        "paragraph_shape": [
+          "Shen’s formal response using “谢世子” instead of his given name",
+          "Xie’s immediate stunned reaction",
+          "His observation of her avoiding his old hand injury",
+          "Court’s quiet confusion at the address shift"
+        ],
+        "micro_hook": "Xie notices that Shen’s voice is colder than it was three years ago",
+        "turn_type": "clue_shift",
+        "character_anchor_line": {
+          "owner": "谢临川",
+          "form": "inner_thought",
+          "surface_function": "Note Shen’s cold voice",
+          "hidden_function": "Reveal his lingering attention to small details about her",
+          "must_reveal_about_character": "His resentment is tangled with unresolved在意",
+          "must_not_do": [
+            "Admit his在意 explicitly"
+          ],
+          "preferred_shape": "短、带着不甘"
+        },
+        "style_risk_guard": [
+          "Over-explaining the clue’s significance",
+          "Making Xie’s reaction too obvious",
+          "Revealing Shen’s motive for the address shift",
+          "Rushing the emotional beat"
+        ],
+        "character_reentry_mode": null,
+        "clue_reveal_mechanism": {
+          "clue": "提到证词时她换了一个更疏远的称呼",
+          "style": "natural_exposure",
+          "pressure_source": "殿前公开问答和旧案名目",
+          "surface_trigger": "谢临川请求调档",
+          "first_noticer": "谢临川",
+          "owner_reaction": "沈知微立刻把情绪压回礼制里"
+        },
+        "text": "",
+        "status": "draft",
+        "version": 1
+      },
+      {
+        "block_id": "ch_012.sc_001.b004",
+        "chapter_id": "ch_012",
+        "block_index": 4,
+        "purpose": "Xie secures the small payoff of accessing the档册, while Shen adjusts her strategy to protect him within rules",
+        "characters": [
+          "谢临川",
+          "沈知微",
+          "皇帝",
+          "殿上文武"
+        ],
+        "active_lines": [
+          "line_old_case"
+        ],
+        "active_twists": [
+          "twist_false_testimony"
+        ],
+        "scene_goal": "Complete Xie’s character shift to a more dangerous, calm试探",
+        "must_reveal": [
+          "谢临川成功拿到查阅档册的口子"
+        ],
+        "must_hide": [
+          "Shen’s secret efforts to protect Xie",
+          "旧案幕后主谋"
+        ],
+        "emotional_tone": "Cautiously victorious, with an undercurrent of unease",
+        "end_state": "Xie is granted permission to access the inner库档册; Shen begins preparing the records with subtle safeguards",
+        "human_reaction_target": [
+          "Shen’s shoulders relaxing almost imperceptibly; Xie’s breath catching at the unexpected victory"
+        ],
+        "cost_shift": "Xie now has a target on his back for digging into the old case; Shen has to navigate bureaucratic risks to protect him",
+        "reader_feeling_target": "Cautious relief mixed with growing unease about the dangers ahead",
+        "paragraph_budget": "建议 3~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长",
+        "paragraph_shape": [
+          "Xie’s follow-up argument using北地军功",
+          "Emperor’s quiet approval",
+          "Shen’s formal confirmation of the档册 access",
+          "Xie’s exit preparation with a final glance at Shen"
+        ],
+        "micro_hook": "Xie turns to leave, and he sees Shen’s finger hovering over the档册 entry in her records, as if hesitating to write it down",
+        "turn_type": "false_relief",
+        "character_anchor_line": {
+          "owner": "谢临川",
+          "form": "dialogue",
+          "surface_function": "Thank the emperor",
+          "hidden_function": "Signal to Shen that he won’t stop digging",
+          "must_reveal_about_character": "His determination to uncover the truth outweighs his fear",
+          "must_not_do": [
+            "Threaten Shen openly"
+          ],
+          "preferred_shape": "恭敬但带着锋芒"
+        },
+        "style_risk_guard": [
+          "Making the emperor’s decision too easy",
+          "Revealing Shen’s secret safeguards",
+          "Downplaying the danger of accessing the档册",
+          "Info-dumping the emperor’s motives"
+        ],
+        "character_reentry_mode": null,
+        "clue_reveal_mechanism": null,
+        "text": "",
+        "status": "draft",
+        "version": 1
+      },
+      {
+        "block_id": "ch_012.sc_001.b005",
+        "chapter_id": "ch_012",
+        "block_index": 5,
+        "purpose": "Deliver the ending hook, raising the stakes for the old case and deepening Xie’s suspicion",
+        "characters": [
+          "谢临川",
+          "palace guard"
+        ],
+        "active_lines": [
+          "line_old_case"
+        ],
+        "active_twists": [
+          "twist_false_testimony"
+        ],
+        "scene_goal": "Leave readers with urgent curiosity about who is covering up the old case",
+        "must_reveal": [
+          "负责抄录旧档的第一名书吏昨夜死了"
+        ],
+        "must_hide": [
+          "The identity of the killer",
+          "Shen’s knowledge of the death"
+        ],
+        "emotional_tone": "Ominous, tense, with a sudden jolt of fear",
+        "end_state": "Xie stands frozen outside the palace, realizing the old case is far more dangerous than he thought",
+        "human_reaction_target": [
+          "Xie’s hand tightening on his sword hilt until his palm sweats; the guard’s nervous glance over his shoulder"
+        ],
+        "cost_shift": "Xie’s victory is overshadowed by a new, deadly threat; he now knows someone is actively covering tracks",
+        "reader_feeling_target": "Sudden jolt of fear and urgent curiosity about the book吏’s death",
+        "paragraph_budget": "建议 2~4 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长",
+        "paragraph_shape": [
+          "Xie exiting the palace gates, snow still falling",
+          "Guard approaching to whisper the news",
+          "Xie’s stunned reaction",
+          "His final glance back at the palace, wondering if Shen knew about the death"
+        ],
+        "micro_hook": "Xie turns back to the palace, his eyes locking on the window where Shen sits, and wonders if she’s already writing the book吏’s death into her records",
+        "turn_type": "pressure_rise",
+        "character_anchor_line": {
+          "owner": "谢临川",
+          "form": "inner_thought",
+          "surface_function": "Express shock at the news",
+          "hidden_function": "Link the book吏’s death to the old case cover-up",
+          "must_reveal_about_character": "He’s quickly adapting to the deadly stakes",
+          "must_not_do": [
+            "Accuse Shen directly"
+          ],
+          "preferred_shape": "冷、带着警觉"
+        },
+        "style_risk_guard": [
+          "Revealing the killer’s identity",
+          "Making Xie’s reaction too dramatic",
+          "Over-explaining the book吏’s role",
+          "Rushing the ending hook"
+        ],
+        "character_reentry_mode": null,
+        "clue_reveal_mechanism": null,
+        "text": "",
+        "status": "draft",
+        "version": 1
+      }
+    ]
+  },
+  {
+    "stage": "write_chapter_full",
+    "block_count": 5,
+    "chapter_length": 3250
+  },
+  {
+    "stage": "review_iteration_1",
+    "mode": "fast",
+    "skill_ids": [
+      "base_style"
+    ],
+    "tool_calls": [
+      "review_structure_and_continuity",
+      "review_prose_and_humanity"
+    ],
+    "review_reports": {
+      "review_structure_and_continuity": {
+        "pass": false,
+        "issues": [
+          {
+            "issue_id": "I1",
+            "severity": "high",
+            "problem_type": "world_rule_risk",
+            "reason": "b004里谢临川谢恩后一句“清白之路”“若路上有人拦”的公开表述，容易被殿上听成当众指向翻案/否定旧判的宣言，踩到“殿前不得公开推翻先帝旧判”的禁忌边界，也会削弱皇帝点头的合理性（显得过于纵容）。",
+            "target_blocks": [
+              "ch_012.sc_001.b004"
+            ],
+            "patch_hint": "把“清白”从殿前口头表达挪走：对外继续只谈“军务陈条/转运章程核对/循例查阅”，将锋芒改成更合礼制的案牍措辞（如“若有案牍滞碍，臣亦循例逐条呈请”）；若要保留“清白”的情绪重量，可改成一句内心/旁白压回去的残念，而不是当众说出口。"
+          },
+          {
+            "issue_id": "I2",
+            "severity": "medium",
+            "problem_type": "logic_gap",
+            "reason": "b002里“所有人的目光转向记档席”成立，但文本未点明为何御前记档女史会成为“内库档册出入”规则与执行链条的关键节点，读者容易疑惑她的权限来源，从而削弱“她一句话就能冷硬顶回去”的压力可信度。",
+            "target_blocks": [
+              "ch_012.sc_001.b002"
+            ],
+            "patch_hint": "在“目光转向记档席/她笔尖悬着”附近补一小句权责锚点即可：例如点出“内库档册出入需过她记簿（或奉旨专记内库案牍）”“钥不在她手，例在她笔下”，用一句话把众人看她的原因钉死，不要扩写官制细节。"
+          },
+          {
+            "issue_id": "I3",
+            "severity": "medium",
+            "problem_type": "handoff_tightening",
+            "reason": "b005揭出“第一名书吏昨夜死了”很有力，但与b004刚拿到“查阅口子”的因果扣合还不够紧：读者可能把它当成单纯的氛围警告，而非立刻影响下一步行动的现实阻断与加压点。",
+            "target_blocks": [
+              "ch_012.sc_001.b005"
+            ],
+            "patch_hint": "直接在守卫的禀报里加一条“即时关联”：把“负责抄录旧档的第一名书吏”明确成“按例本该今日监陪/承抄你所查旧档的那一位第一名书吏”，再用半句点出后果（如“内库一时无人敢接这差”或“监陪名册要重排”），让结尾压力明确落到‘口子刚开就被人掐住’。"
+          }
+        ],
+        "summary": "本章整体块序与主转折已落地，但需要三处小补来更稳：殿前台词要更“公事化”避免被听成当众翻案；补一句沈知微为何是内库档册链条关键节点；结尾把书吏之死与“查阅口子”的下一步动作更直接扣合，形成更硬的连续压力与章间牵引。",
+        "passed": false
+      },
+      "review_prose_and_humanity": {
+        "pass": false,
+        "issues": [
+          {
+            "issue_id": "I1",
+            "severity": "medium",
+            "problem_type": "repetitive_imagery",
+            "reason": "开场“冷/寒/冰”与多重比喻密集连用（钉子、绳索、弦、刻字、判词），氛围虽稳但语感容易单一，读者的身体感被同一温度词覆盖，略显“加工感”。",
+            "target_blocks": [
+              "ch_012.sc_001.b001"
+            ],
+            "patch_hint": "保留“雪靴渗水+青石入骨”作为主冷感锚点；删或合并1–2个抽象比喻（比如把“目光像钉子/冰冷的绳索”改成更具体的殿内实感：呼出的白雾被压回喉间、墨香与炭气混在一起、衣料摩擦声忽然停）；让“石冷得像那日的判词”成为这一段唯一一句强抽象落点，其余尽量用可触可闻的细节承压。"
+          },
+          {
+            "issue_id": "I2",
+            "severity": "medium",
+            "problem_type": "dialogue_manual",
+            "reason": "沈知微的回应出现条文式堆叠（尤其连串“不得…”），读起来更像口头抄例制，张力被信息表覆盖；她的“冷”更像在讲规则，而不是用规则当刀。",
+            "target_blocks": [
+              "ch_012.sc_001.b003"
+            ],
+            "patch_hint": "把规则压缩成2–3句核心：保留“非奉旨不得动”“内库书吏监陪”“殿前不言证词”即可；其余“所录所抄定制/不得外传/不得私取”合并为一句短语或留到内库场景再写；在吐出“谢世子”前加一个极轻的可见停顿（笔尖点纸散开一滴墨/喉间一咽/唇角绷紧）承载克制与冷意，不新增信息。"
+          },
+          {
+            "issue_id": "I3",
+            "severity": "medium",
+            "problem_type": "over_explained_subtext",
+            "reason": "几处直接替读者下结论或解释意图（如“殿上众人也听出了…分量”“称谓更疏…刻意把他推回”），会挤掉误读与猜测空间，让“在意的停顿”变得被讲明白。",
+            "target_blocks": [
+              "ch_012.sc_001.b003"
+            ],
+            "patch_hint": "删掉/弱化评语句，改用可见反应顶上：把“听出分量”换成官员的细小动作（窸窣声断、喉结滚、袖口僵住、眼神躲开又看回）；对“证词”处少解释‘她在做什么’，只写她的节奏变化（停半息、笔尖在纸上顿出一点墨）让读者自己读出疏离。"
+          },
+          {
+            "issue_id": "I4",
+            "severity": "low",
+            "problem_type": "flashback_pull",
+            "reason": "疤痕段落把三年前的动作与情绪交代得较完整（风雪、攥住、疼得发抖），镜头会短暂离开殿内压力，像插入说明，削弱当下的“殿前公开压迫”。",
+            "target_blocks": [
+              "ch_012.sc_001.b001"
+            ],
+            "patch_hint": "保留“疤一闪+他被拽回”的功能，但把回忆压成两三个感官碎片：只留“那道痕是他握出来的/指腹一麻/膝下的冷更深”即可；把“冬夜…风雪里…”这类完整叙述删或改成断裂的心内句，让过去像刺一样扎一下就收回。"
+          },
+          {
+            "issue_id": "I5",
+            "severity": "low",
+            "problem_type": "missing_bodily_followthrough",
+            "reason": "开场把跪下的冷痛写得很实，但中后段起身退下、出殿的身体后续（麻、酸、跪久的迟滞）略少，部分转折更多靠抽象总结承接，少了一点“肉身拖着情绪走”的人味。",
+            "target_blocks": [
+              "ch_012.sc_001.b004"
+            ],
+            "patch_hint": "在“叩首谢恩/起身退下”附近补一处不新增信息的身体连贯：膝盖发麻、起身一瞬必须稳住、靴里湿冷黏住袜底；用这处忍痛的细节替代或压缩一两句抽象总结（例如“门开了…”这类），让“冷静也更危险的试探”更像在疼里做选择。"
+          },
+          {
+            "issue_id": "I6",
+            "severity": "low",
+            "problem_type": "supporting_char_nonhuman",
+            "reason": "守卫通报死亡信息的句子过整齐、细节偏“写给读者看”（尤其“口中还含着墨渣”），配角容易像剧情播报器而非活人，反而削弱末尾寒意的真实感。",
+            "target_blocks": [
+              "ch_012.sc_001.b005"
+            ],
+            "patch_hint": "保留硬事实“第一名书吏昨夜死了”“上头吩咐先不许张扬”；把“墨渣”改成守卫更可能一眼确认或道听途说的说法（如“嘴角发黑/满口墨味”这类更口语、更可传播的描述），并加一处他自身的惧意动作（吞咽、手指发僵、目光再扫一眼）让信息更像从人嘴里挤出来，而不是完整通报。"
+          }
+        ],
+        "summary": "本章质感与压迫感很稳，但需要做两类小修：一是冷意与比喻堆叠偏密，容易让语感单一、显得“写得很用力”；二是中段对话与叙述偶尔替读者解释分量与意图，挤掉误读空间。建议压缩条文式例制、删掉几句评语，用更少更准的身体后续与配角惧意动作来承载寒意与关系停顿。",
+        "passed": false
+      },
+      "judge_patched_chapter": {
+        "pass": true,
+        "remaining_issues": [],
+        "newly_introduced_issues": [],
+        "recommendation": "建议不再补 patch；b002/b003 已把“笔锋失手+冷硬称谓+避伤目光”的张力从解释句转为动作与停顿承接，无需切 deep。",
+        "passed": true
+      }
+    },
+    "final_judge": {
+      "passed": false,
+      "blocking_reasons": [
+        "本章整体块序与主转折已落地，但需要三处小补来更稳：殿前台词要更“公事化”避免被听成当众翻案；补一句沈知微为何是内库档册链条关键节点；结尾把书吏之死与“查阅口子”的下一步动作更直接扣合，形成更硬的连续压力与章间牵引。",
+        "本章质感与压迫感很稳，但需要做两类小修：一是冷意与比喻堆叠偏密，容易让语感单一、显得“写得很用力”；二是中段对话与叙述偶尔替读者解释分量与意图，挤掉误读空间。建议压缩条文式例制、删掉几句评语，用更少更准的身体后续与配角惧意动作来承载寒意与关系停顿。"
+      ],
+      "metrics": {
+        "review_tools": 2,
+        "issue_count": 9
+      }
+    }
+  },
+  {
+    "stage": "patch_round_1",
+    "patch_round": 1,
+    "patch_plan": {
+      "patch_targets": [
+        {
+          "target_type": "block",
+          "target_id": "ch_012.sc_001.b001",
+          "problem_type": "repetitive_imagery, flashback pull",
+          "goal": "减少冷意比喻堆叠，收紧闪回片段以聚焦当前朝堂压迫感，用具体感官细节替代抽象修辞，保留核心冷感锚点",
+          "instructions": [
+            "将“殿上文武的目光从他肩背滑过去，又像钉子一样反钉回来”替换为“殿上文武的目光扫过他肩背，有人呼出的白雾顿了顿，衣料摩擦声忽然停了半息”",
+            "将“宣旨太监拖着嗓子念诏，字字分明，像一条冰冷的绳索往下放”替换为“宣旨太监拖着嗓子念诏，每一个字都裹着殿内的炭气，沉得像压在肩头上”",
+            "将疤痕闪回段落从完整叙事压缩为碎片式感官记忆：把“三年前冬夜，他曾在风雪里攥住过那只手，力道重得让她疼得发抖——而那一刻竟像被这道疤轻轻拽回，拽得他膝下的冷更深了一层”改为“那道痕是他三年前攥出来的，指腹忽然一麻，膝下的冷像浸到了骨头里”",
+            "仅保留“石冷得像那日的判词，贴着骨”作为唯一抽象冷感比喻"
+          ],
+          "local_context_needed": [
+            "next_block"
+          ],
+          "source_issue_ids": [
+            "prose_I1",
+            "prose_I4"
+          ]
+        },
+        {
+          "target_type": "block",
+          "target_id": "ch_012.sc_001.b002",
+          "problem_type": "logic gap",
+          "goal": "用一句话明确沈知微在内库档册流程中的权责，让众人目光转向她的行为合理可信",
+          "instructions": [
+            "在“所有人的目光几乎同时转向记档席”后插入：“内库档册出入需经她记簿备案，钥不在她手，例在她笔下”"
+          ],
+          "local_context_needed": [
+            "current_block"
+          ],
+          "source_issue_ids": [
+            "structure_I2"
+          ]
+        },
+        {
+          "target_type": "block",
+          "target_id": "ch_012.sc_001.b003",
+          "problem_type": "dialogue manual, over-explained subtext",
+          "goal": "压缩沈知微的规则表述使其更具锋芒，删除直白解释性叙述，用配角动作传递潜台词",
+          "instructions": [
+            "将沈知微的规则陈述从“若要查阅，需由内库书吏陪同，所录所抄皆有定制，不得私取不得外传。旧案既已结，殿前更不宜多言证词之事”压缩为“若要查阅，需内库书吏监陪，殿前不言证词”",
+            "在“‘谢世子’三个字从她唇间出来”前插入：“笔尖在纸上顿出一点墨，墨珠晕开半圈”",
+            "删除“殿上众人也听出了那句‘谢世子’的分量……叫人从骨缝里发寒”整段，替换为：“殿内静得能听见烛火噼啪，有人袖口僵住，有人喉结滚了滚，不敢抬头看他”"
+          ],
+          "local_context_needed": [
+            "prev_block",
+            "next_block"
+          ],
+          "source_issue_ids": [
+            "prose_I2",
+            "prose_I3"
+          ]
+        },
+        {
+          "target_type": "block",
+          "target_id": "ch_012.sc_001.b004",
+          "problem_type": "world_rule_risk, missing bodily followthrough",
+          "goal": "修改谢临川的公开表述以符合朝堂禁忌，添加身体疼痛细节锚定他冷静试探的状态",
+          "instructions": [
+            "将谢临川的谢恩台词从“臣不敢负陛下信任。臣所求不过一条清白之路——若路上有人拦，臣也只会按规矩，一步一步走过去”改为“臣不敢负陛下信任。若案牍有滞碍，臣亦循例逐条呈请，绝无逾矩”",
+            "在“谢临川叩首谢恩”后插入：“起身时膝盖麻得发颤，他攥紧衣摆稳住才没晃”",
+            "删除抽象叙述“门开了，盯他的人也会更多”"
+          ],
+          "local_context_needed": [
+            "prev_block",
+            "next_block"
+          ],
+          "source_issue_ids": [
+            "structure_I1",
+            "prose_I5"
+          ]
+        },
+        {
+          "target_type": "block",
+          "target_id": "ch_012.sc_001.b005",
+          "problem_type": "handoff_tightening, supporting_char_nonhuman",
+          "goal": "将书吏之死与谢临川即将进行的查阅动作直接绑定，让守卫的通报更具活人感与惧意",
+          "instructions": [
+            "将守卫的通报从“负责抄录旧档的第一名书吏，昨夜死了。今晨才发觉，人已冷透，口中还含着墨渣”改为“按例本该今日监陪您查旧档的第一名书吏，昨夜死了。今晨才见人，嘴角发黑，满是墨味——上头吩咐先不许张扬”",
+            "在守卫开口前插入：“他指尖攥着腰牌，指节发白”"
+          ],
+          "local_context_needed": [
+            "prev_block"
+          ],
+          "source_issue_ids": [
+            "structure_I3",
+            "prose_I6"
+          ]
+        }
+      ],
+      "unchanged_blocks": [],
+      "global_constraints": [
+        "保留所有核心剧情节点：谢临川借调档册请求、沈知微冷硬驳回、称谓转变、查阅许可、书吏死亡钩子",
+        "维持冰冷紧绷、怨恨与在意交织的情绪基调",
+        "不得暴露沈知微的真实动机或旧案幕后主谋",
+        "全程锁定谢临川视角，不得出现沈知微的内心独白"
+      ]
+    },
+    "rewrite_result": {
+      "patched_blocks": [
+        {
+          "block_id": "ch_012.sc_001.b001",
+          "old_summary": "Establish immediate court pressure, anchor the human pain point, and trigger the first silent standoff between Xie Linchuan and Shen Zhiwei via the old case mention",
+          "new_text": "殿门外的雪还在落，谢临川踏进殿中时，靴底带进一线细碎的水声。跪下去的那一瞬，冷硬的青石透过衣料顶上来，膝骨一阵发麻；鞋沿里藏着的雪水也终于压不住，慢慢渗出来，在靴侧拖出一条暗湿的痕。\n\n他今日穿的是规矩里最不扎眼的朝服，连袖口的绣线都收得极淡——回京述职不等于平反，罪名还悬在头顶，军功只是让他有资格跪在这里。殿上文武的目光扫过他肩背，有人呼出的白雾顿了顿，衣料摩擦声忽然停了半息。谁都不必开口，他便明白这份静里藏着什么：有人等他谢恩，有人等他出丑，也有人等他再跌一次。\n\n宣旨太监拖着嗓子念诏，每一个字都裹着殿内的炭气，沉得像压在肩头上。念到那四个字时，殿内忽然更静——“军粮转运旧案”。谢临川指节在膝上微不可察地一紧，手背的筋一跳；他把那一下突兀的停顿压回喉间，只让呼吸更沉。\n\n侧畔的记档席上，毛笔划过宣纸的声音一直在。那声音在旧案名目落下的一刻停了一停，短得几乎让人以为听岔了。谢临川抬眼，正撞见沈知微抬起了眼——她坐得极直，衣襟与袖口都收在规制里，目光从纸面抬起时冷而稳，却在他按在膝上的手上掠过便收回，下一瞬又落回墨线。\n\n她重新落笔时用力过了些，笔锋压得纸面微微起毛，墨色也浓得发沉。她的袖口被指尖在内侧捏出一道细褶，又迅速抹平，动作利落得不留痕迹。那一下停顿被她压进礼制里，像从未发生；可他记得清楚，三年前那句证词也是这样落下的——字正、笔稳，不给人留半分余地。\n\n谢临川的目光还是不受控地停在她手腕一瞬。她抬腕换纸时，袖边略松，露出一线淡白的旧痕，细细一道，从腕骨旁斜过，颜色浅得几乎与肌理融在一起。那道痕是他三年前攥出来的，指腹忽然一麻，膝下的冷像浸到了骨头里。\n\n石冷得像那日的判词，贴着骨。"
+        },
+        {
+          "block_id": "ch_012.sc_001.b002",
+          "old_summary": "Xie makes a rule-compliant request for the old case档册, escalating the pressure on Shen to respond publicly",
+          "new_text": "诏毕，太监合卷，殿上仍无人先动。谢临川叩首，额前一触石面，寒意顺着额骨往后窜。他起身时没有立刻抬头，只把嗓音放得更低、更稳：“臣谢临川，叩谢陛下召还之恩。北地军需方息，转运章程多有更易，臣请依旧例核对，以免再生掣肘。”\n\n他顿了顿，把锋芒收在“旧例”二字里，像把刃压进鞘口：“三年前军粮转运旧案之原始档册，仍藏内库。臣愿按例借调查阅，以备军务陈条，求陛下允准。”\n\n殿内的气息像被人一把攥住，衣袍的窸窣声此起彼伏又迅速压下。有人不自觉吸了一口冷气，离得近的一个年轻官员几乎没忍住，喉间溢出极轻的一声，又立刻咬住。旧案两个字像禁火，谁都知道一碰就烫，却没想到他敢把手伸得这么规矩、这么正当。\n\n所有人的目光几乎同时转向记档席。内库档册出入需经她记簿备案，钥不在她手，例在她笔下。沈知微的侧脸在烛光下显得更冷，颌线绷得紧，直到颧骨轻轻凸起。她握笔的手没有抖，却也没有再写，笔尖悬在纸上，墨珠将坠未坠，像一声被迫按住的心跳。\n\n她抬头看向御座的方向，眼里没有情绪，只有礼制里必须有的询问与等候。然后，她启唇要说话。谢临川这才意识到自己在等——等她用什么称呼叫他，等她把哪一个字落在他身上，像落下一枚新的判签。\n\n沈知微开口时，声音平直得像一条裁好的尺：“内库档册为国之重，非奉旨不得擅动。凡涉旧案，尤需谨慎。”她说到这里，才把视线移向殿中跪着的人，目光落下的一瞬不带温度，“谢世子”三个字从她唇间出来，冷硬、疏远，像把他与她之间曾经所有的私名都一刀斩断。\n\n谢临川胸口像被那称呼敲了一下，轻而钝。他几乎要抬起头去确认自己听见的不是幻觉，指尖却先一步攥紧膝头的衣料，力道大到指节泛白。她从前叫他什么？他在心底一瞬掠过那个旧称呼，又立刻掐断，像掐断一根自取其辱的线——可那一声“谢世子”落下时，他先听见的，竟是她喉间比记忆更冷的回响。"
+        },
+        {
+          "block_id": "ch_012.sc_001.b003",
+          "old_summary": "Naturally expose the first key clue: Shen’s sudden shift to a more formal address, triggering Xie’s emotional slip",
+          "new_text": "她的声音，比三年前更冷。\n\n笔尖在纸上顿出一点墨，墨珠晕开半圈。沈知微继续说，语速不快，却每一个字都像按着例条落下：“若要查阅，需内库书吏监陪，殿前不言证词。”她说“证词”二字时，微不可察地换了口气，称谓更疏，像刻意把他推回规矩之外。\n\n谢临川看见她的眼神在他手上滑开了一下。那只手虎口处旧伤未愈，皮肉上有一道粗硬的疤，他方才叩首时压在地上，疼意顺着筋骨往上爬。沈知微的目光却像避开烫手的炭，掠过就移开，落回纸上，仿佛那道疤会在她眼里生出声音。\n\n殿内静得能听见烛火噼啪，有人袖口僵住，有人喉结滚了滚，不敢抬头看他。\n\n谢临川把那一瞬被敲乱的心跳压下去，抬头时眼神已重新收敛成锋利的平静：“臣请遵女史所陈例制。臣只求在内库依制查阅，不取不抄，只以目记，回呈军务陈条。若有一字逾矩，请陛下立时治臣之罪。”\n\n他把“治罪”两个字说得极淡，像把自己往刀口上递。殿中更静了，连呼吸都像变得有声。御座之上久久不语，烛火微微一跳，照得殿角的金纹像冷光在动。有人欲言又止，终究不敢抢先。\n\n良久，帝王的声音才落下来，平淡得像随口一问，却能压住满殿：“北地方定，军需不可轻忽。准其查阅，限在内库，不得外传。沈女史记档，内库照例派人监陪。”"
+        },
+        {
+          "block_id": "ch_012.sc_001.b004",
+          "old_summary": "Xie secures the small payoff of accessing the档册, while Shen adjusts her strategy to protect him within rules",
+          "new_text": "这句“准”落下时，殿内像有一层看不见的冰裂开了细缝。有人松了口气，有人脸色更沉——旧案被重新提起，哪怕只是“查阅”，也像在灰烬里拨了一下。谢临川的背脊没有动，胸口却像被那一道缝透进一点冷风，冷得他忽然清醒：几道目光隔着官袍的褶影暗暗压来，贴着他的肩骨与后颈，冷而不露。\n\n沈知微立刻俯身应诺：“谨遵圣旨。”她的声音仍旧冷，却比先前更利落，像把所有多余的停顿都切掉。她抬起笔，按例写下“准查内库军粮旧档”几字，笔锋稳得过分。只是写到“旧档”时，指尖在笔杆上顿了一下，像有一瞬不愿落笔，又在下一息用更大的力道压了下去。\n\n谢临川叩首谢恩，起身时膝盖麻得发颤，他攥紧衣摆稳住才没晃。语气恭敬，字里却仍藏着锋：“臣不敢负陛下信任。若案牍有滞碍，臣亦循例逐条呈请，绝无逾矩。”他说完，目光从地面抬起，越过满殿官袍，落在记档席那处——不求她回看，只求她哪怕一瞬被这“循例”二字刺到。\n\n沈知微没有回看，她的眼睫极轻地垂着，像在专心于纸上每一笔。可她握笔的手背上青筋微微浮起，袖口的那道细褶又被捏出一线。谢临川看着那细褶，忽然觉得自己方才那一下试探像撞在一面冰墙上，墙不碎，却也不是全无回音——那停顿，那用力过重的墨痕，都是回音。\n\n他退下时，靴底在石面上轻轻一滑，那点未干的雪水又拖出一线暗湿。走到殿门口，他回头只一眼：记档席上，沈知微的指尖停在册页边缘，像要翻下一页，又像在那一行字上悬了悬。她的手指离纸不过一寸，迟疑得几乎看不见，随即又收回，继续落笔，仿佛从未犹豫。\n\n殿门外风更冷，雪粒砸在檐角，发出细碎的声响。谢临川沿着廊下走出宫门，肩上的披风被风扯起一角，又被他按住。宫城的高墙在雪里沉默，像一座把旧案与旧人都吞进去的巨兽；他每走一步，靴底的水痕就更清，像提醒他：今日的“准”不是恩，是一根引线。"
+        },
+        {
+          "block_id": "ch_012.sc_001.b005",
+          "old_summary": "Deliver the ending hook, raising the stakes for the old case and deepening Xie’s suspicion",
+          "new_text": "刚出宫门不远，一名守卫匆匆迎上来，步子刻意放轻，却还是泄出急。他先向四下扫了一眼，眼神往肩后一瞥，像怕有人跟着；他指尖攥着腰牌，指节发白，才压低声音：“谢……谢世子。”\n\n那称呼又落一次，谢临川的眉梢几不可察地一动。他停住，手自然而然落到刀柄上，掌心贴着冷铁，寒意却压不住皮肤里慢慢渗出的汗。\n\n守卫喉结滚了滚，像咽下去的不只是口水，声音更低：“内库那边……按例本该今日监陪您查旧档的第一名书吏，昨夜死了。今晨才见人，嘴角发黑，满是墨味——上头吩咐先不许张扬。”\n\n话音落地，谢临川指腹在刀柄上微微一压，像把将要迸出的锋按回鞘里。方才殿上那声“准”还在耳边发冷，此刻却被这句通报一把扯紧——口子刚开，陪查的人先死了，像有人早就算准他会伸手。\n\n他没有问怎么死的，也没有问谁先看见的。宫里这些问法都太软，软得像给人递绳结。他只抬眼望向宫墙，雪雾里高处窗格一线阴影沉着不动，仿佛有人在那后头把今日每一步都记得清清楚楚。那方向让他想起记档席上那截冷白的指尖，想起她写下“准查旧档”时那一瞬几乎看不见的停顿——冷得像规矩，规矩里却藏着刃。\n\n谢临川仍站着，靴底的雪水在地上慢慢扩出一小片暗痕，像一枚不肯干的印。他盯着那片暗痕，胸口的气息压得更平，只剩一个念头比雪更冷：旧案不是灰，是火；有人一直守着，等他去翻，就先烧掉第一个该陪他翻的人。"
+        }
+      ],
+      "merged_chapter_text": "殿门外的雪还在落，谢临川踏进殿中时，靴底带进一线细碎的水声。跪下去的那一瞬，冷硬的青石透过衣料顶上来，膝骨一阵发麻；鞋沿里藏着的雪水也终于压不住，慢慢渗出来，在靴侧拖出一条暗湿的痕。\n\n他今日穿的是规矩里最不扎眼的朝服，连袖口的绣线都收得极淡——回京述职不等于平反，罪名还悬在头顶，军功只是让他有资格跪在这里。殿上文武的目光扫过他肩背，有人呼出的白雾顿了顿，衣料摩擦声忽然停了半息。谁都不必开口，他便明白这份静里藏着什么：有人等他谢恩，有人等他出丑，也有人等他再跌一次。\n\n宣旨太监拖着嗓子念诏，每一个字都裹着殿内的炭气，沉得像压在肩头上。念到那四个字时，殿内忽然更静——“军粮转运旧案”。谢临川指节在膝上微不可察地一紧，手背的筋一跳；他把那一下突兀的停顿压回喉间，只让呼吸更沉。\n\n侧畔的记档席上，毛笔划过宣纸的声音一直在。那声音在旧案名目落下的一刻停了一停，短得几乎让人以为听岔了。谢临川抬眼，正撞见沈知微抬起了眼——她坐得极直，衣襟与袖口都收在规制里，目光从纸面抬起时冷而稳，却在他按在膝上的手上掠过便收回，下一瞬又落回墨线。\n\n她重新落笔时用力过了些，笔锋压得纸面微微起毛，墨色也浓得发沉。她的袖口被指尖在内侧捏出一道细褶，又迅速抹平，动作利落得不留痕迹。那一下停顿被她压进礼制里，像从未发生；可他记得清楚，三年前那句证词也是这样落下的——字正、笔稳，不给人留半分余地。\n\n谢临川的目光还是不受控地停在她手腕一瞬。她抬腕换纸时，袖边略松，露出一线淡白的旧痕，细细一道，从腕骨旁斜过，颜色浅得几乎与肌理融在一起。那道痕是他三年前攥出来的，指腹忽然一麻，膝下的冷像浸到了骨头里。\n\n石冷得像那日的判词，贴着骨。\n\n诏毕，太监合卷，殿上仍无人先动。谢临川叩首，额前一触石面，寒意顺着额骨往后窜。他起身时没有立刻抬头，只把嗓音放得更低、更稳：“臣谢临川，叩谢陛下召还之恩。北地军需方息，转运章程多有更易，臣请依旧例核对，以免再生掣肘。”\n\n他顿了顿，把锋芒收在“旧例”二字里，像把刃压进鞘口：“三年前军粮转运旧案之原始档册，仍藏内库。臣愿按例借调查阅，以备军务陈条，求陛下允准。”\n\n殿内的气息像被人一把攥住，衣袍的窸窣声此起彼伏又迅速压下。有人不自觉吸了一口冷气，离得近的一个年轻官员几乎没忍住，喉间溢出极轻的一声，又立刻咬住。旧案两个字像禁火，谁都知道一碰就烫，却没想到他敢把手伸得这么规矩、这么正当。\n\n所有人的目光几乎同时转向记档席。内库档册出入需经她记簿备案，钥不在她手，例在她笔下。沈知微的侧脸在烛光下显得更冷，颌线绷得紧，直到颧骨轻轻凸起。她握笔的手没有抖，却也没有再写，笔尖悬在纸上，墨珠将坠未坠，像一声被迫按住的心跳。\n\n她抬头看向御座的方向，眼里没有情绪，只有礼制里必须有的询问与等候。然后，她启唇要说话。谢临川这才意识到自己在等——等她用什么称呼叫他，等她把哪一个字落在他身上，像落下一枚新的判签。\n\n沈知微开口时，声音平直得像一条裁好的尺：“内库档册为国之重，非奉旨不得擅动。凡涉旧案，尤需谨慎。”她说到这里，才把视线移向殿中跪着的人，目光落下的一瞬不带温度，“谢世子”三个字从她唇间出来，冷硬、疏远，像把他与她之间曾经所有的私名都一刀斩断。\n\n谢临川胸口像被那称呼敲了一下，轻而钝。他几乎要抬起头去确认自己听见的不是幻觉，指尖却先一步攥紧膝头的衣料，力道大到指节泛白。她从前叫他什么？他在心底一瞬掠过那个旧称呼，又立刻掐断，像掐断一根自取其辱的线——可那一声“谢世子”落下时，他先听见的，竟是她喉间比记忆更冷的回响。\n\n她的声音，比三年前更冷。\n\n笔尖在纸上顿出一点墨，墨珠晕开半圈。沈知微继续说，语速不快，却每一个字都像按着例条落下：“若要查阅，需内库书吏监陪，殿前不言证词。”她说“证词”二字时，微不可察地换了口气，称谓更疏，像刻意把他推回规矩之外。\n\n谢临川看见她的眼神在他手上滑开了一下。那只手虎口处旧伤未愈，皮肉上有一道粗硬的疤，他方才叩首时压在地上，疼意顺着筋骨往上爬。沈知微的目光却像避开烫手的炭，掠过就移开，落回纸上，仿佛那道疤会在她眼里生出声音。\n\n殿内静得能听见烛火噼啪，有人袖口僵住，有人喉结滚了滚，不敢抬头看他。\n\n谢临川把那一瞬被敲乱的心跳压下去，抬头时眼神已重新收敛成锋利的平静：“臣请遵女史所陈例制。臣只求在内库依制查阅，不取不抄，只以目记，回呈军务陈条。若有一字逾矩，请陛下立时治臣之罪。”\n\n他把“治罪”两个字说得极淡，像把自己往刀口上递。殿中更静了，连呼吸都像变得有声。御座之上久久不语，烛火微微一跳，照得殿角的金纹像冷光在动。有人欲言又止，终究不敢抢先。\n\n良久，帝王的声音才落下来，平淡得像随口一问，却能压住满殿：“北地方定，军需不可轻忽。准其查阅，限在内库，不得外传。沈女史记档，内库照例派人监陪。”\n\n这句“准”落下时，殿内像有一层看不见的冰裂开了细缝。有人松了口气，有人脸色更沉——旧案被重新提起，哪怕只是“查阅”，也像在灰烬里拨了一下。谢临川的背脊没有动，胸口却像被那一道缝透进一点冷风，冷得他忽然清醒：几道目光隔着官袍的褶影暗暗压来，贴着他的肩骨与后颈，冷而不露。\n\n沈知微立刻俯身应诺：“谨遵圣旨。”她的声音仍旧冷，却比先前更利落，像把所有多余的停顿都切掉。她抬起笔，按例写下“准查内库军粮旧档”几字，笔锋稳得过分。只是写到“旧档”时，指尖在笔杆上顿了一下，像有一瞬不愿落笔，又在下一息用更大的力道压了下去。\n\n谢临川叩首谢恩，起身时膝盖麻得发颤，他攥紧衣摆稳住才没晃。语气恭敬，字里却仍藏着锋：“臣不敢负陛下信任。若案牍有滞碍，臣亦循例逐条呈请，绝无逾矩。”他说完，目光从地面抬起，越过满殿官袍，落在记档席那处——不求她回看，只求她哪怕一瞬被这“循例”二字刺到。\n\n沈知微没有回看，她的眼睫极轻地垂着，像在专心于纸上每一笔。可她握笔的手背上青筋微微浮起，袖口的那道细褶又被捏出一线。谢临川看着那细褶，忽然觉得自己方才那一下试探像撞在一面冰墙上，墙不碎，却也不是全无回音——那停顿，那用力过重的墨痕，都是回音。\n\n他退下时，靴底在石面上轻轻一滑，那点未干的雪水又拖出一线暗湿。走到殿门口，他回头只一眼：记档席上，沈知微的指尖停在册页边缘，像要翻下一页，又像在那一行字上悬了悬。她的手指离纸不过一寸，迟疑得几乎看不见，随即又收回，继续落笔，仿佛从未犹豫。\n\n殿门外风更冷，雪粒砸在檐角，发出细碎的声响。谢临川沿着廊下走出宫门，肩上的披风被风扯起一角，又被他按住。宫城的高墙在雪里沉默，像一座把旧案与旧人都吞进去的巨兽；他每走一步，靴底的水痕就更清，像提醒他：今日的“准”不是恩，是一根引线。\n\n刚出宫门不远，一名守卫匆匆迎上来，步子刻意放轻，却还是泄出急。他先向四下扫了一眼，眼神往肩后一瞥，像怕有人跟着；他指尖攥着腰牌，指节发白，才压低声音：“谢……谢世子。”\n\n那称呼又落一次，谢临川的眉梢几不可察地一动。他停住，手自然而然落到刀柄上，掌心贴着冷铁，寒意却压不住皮肤里慢慢渗出的汗。\n\n守卫喉结滚了滚，像咽下去的不只是口水，声音更低：“内库那边……按例本该今日监陪您查旧档的第一名书吏，昨夜死了。今晨才见人，嘴角发黑，满是墨味——上头吩咐先不许张扬。”\n\n话音落地，谢临川指腹在刀柄上微微一压，像把将要迸出的锋按回鞘里。方才殿上那声“准”还在耳边发冷，此刻却被这句通报一把扯紧——口子刚开，陪查的人先死了，像有人早就算准他会伸手。\n\n他没有问怎么死的，也没有问谁先看见的。宫里这些问法都太软，软得像给人递绳结。他只抬眼望向宫墙，雪雾里高处窗格一线阴影沉着不动，仿佛有人在那后头把今日每一步都记得清清楚楚。那方向让他想起记档席上那截冷白的指尖，想起她写下“准查旧档”时那一瞬几乎看不见的停顿——冷得像规矩，规矩里却藏着刃。\n\n谢临川仍站着，靴底的雪水在地上慢慢扩出一小片暗痕，像一枚不肯干的印。他盯着那片暗痕，胸口的气息压得更平，只剩一个念头比雪更冷：旧案不是灰，是火；有人一直守着，等他去翻，就先烧掉第一个该陪他翻的人。",
+      "patch_report": [
+        {
+          "block_id": "ch_012.sc_001.b001",
+          "applied": true,
+          "notes": "已按 patch plan 重写目标 block。"
+        },
+        {
+          "block_id": "ch_012.sc_001.b002",
+          "applied": true,
+          "notes": "已按 patch plan 重写目标 block。"
+        },
+        {
+          "block_id": "ch_012.sc_001.b003",
+          "applied": true,
+          "notes": "已按 patch plan 重写目标 block。"
+        },
+        {
+          "block_id": "ch_012.sc_001.b004",
+          "applied": true,
+          "notes": "已按 patch plan 重写目标 block。"
+        },
+        {
+          "block_id": "ch_012.sc_001.b005",
+          "applied": true,
+          "notes": "已按 patch plan 重写目标 block。"
+        }
+      ]
+    },
+    "judge_result": {
+      "pass": false,
+      "remaining_issues": [
+        {
+          "problem_type": "over_explained_subtext",
+          "target_blocks": [
+            "ch_012.sc_001.b002",
+            "ch_012.sc_001.b003"
+          ],
+          "reason": "“笔尖在纸上顿出一点墨，墨珠晕开半圈”未落在“‘谢世子’三个字从她唇间出来”之前而被挪到下一段，动作与称谓的锋芒错位；且有“称谓更疏、像刻意把他推回规矩之外”等直述解释，仍偏“讲明白”。"
+        }
+      ],
+      "newly_introduced_issues": [],
+      "recommendation": "建议再补一次轻量 patch（只动 b002/b003）：把“墨珠晕开半圈”挪回“谢世子”前，并删改“称谓更疏/刻意…”等解释句，改用停顿、笔锋与旁人细小反应承接。",
+      "passed": false
+    },
+    "final_judge": {
+      "passed": false,
+      "blocking_reasons": [
+        "“笔尖在纸上顿出一点墨，墨珠晕开半圈”未落在“‘谢世子’三个字从她唇间出来”之前而被挪到下一段，动作与称谓的锋芒错位；且有“称谓更疏、像刻意把他推回规矩之外”等直述解释，仍偏“讲明白”。"
+      ],
+      "metrics": {
+        "patch_round": 1,
+        "remaining_issue_count": 1,
+        "introduced_issue_count": 0
+      },
+      "recommendation": "建议再补一次轻量 patch（只动 b002/b003）：把“墨珠晕开半圈”挪回“谢世子”前，并删改“称谓更疏/刻意…”等解释句，改用停顿、笔锋与旁人细小反应承接。"
+    }
+  },
+  {
+    "stage": "patch_round_2",
+    "patch_round": 2,
+    "patch_plan": {
+      "patch_targets": [
+        {
+          "target_type": "block",
+          "target_id": "ch_012.sc_001.b002",
+          "problem_type": "over_explained_subtext",
+          "goal": "让“笔锋失手”的细节与“谢世子”称呼同一拍落下，称谓的冷硬由动作与停顿带出，不再用解释句替读者讲明白。",
+          "instructions": [
+            "将句子“笔尖在纸上顿出一点墨，墨珠晕开半圈。”前移到“‘谢世子’三个字从她唇间出来”之前（紧贴称呼出口前），作为她压情绪时的微小失手。",
+            "删改/压短“冷硬、疏远，像把他与她之间曾经所有的私名都一刀斩断”等解释性收束句，改用谢临川的即时生理反应与殿内细小停息来承接称呼的锋芒。",
+            "调整段内节奏，保证“她视线移向殿中跪着的人”→“笔锋一点墨”→“谢世子”连续顺滑，不新增信息点。"
+          ],
+          "local_context_needed": [
+            "prev_block",
+            "next_block",
+            "relationship_state"
+          ],
+          "source_issue_ids": [
+            "remaining_1"
+          ]
+        },
+        {
+          "target_type": "block",
+          "target_id": "ch_012.sc_001.b003",
+          "problem_type": "over_explained_subtext",
+          "goal": "去掉“称谓更疏/刻意推回规矩外”的直述解释，让疏离感由礼制用语、目光落点与旁人细小反应自然显影，同时维持线索露出与情绪张力。",
+          "instructions": [
+            "删除本段开头的“笔尖在纸上顿出一点墨，墨珠晕开半圈。”（已并入 b002 的称呼前），用更短的承接直接进入她的例条陈述。",
+            "删改“称谓更疏，像刻意把他推回规矩之外”等解释句；改为在对话中再次落一次更冷的礼制称呼/或用她目光不落他身、笔锋重压、旁人袖口一僵等细节完成同一效果。",
+            "保留“她下意识避开他手上旧伤”的线索，但避免用判断性措辞替读者下结论，优先用可见动作与感官描写呈现。"
+          ],
+          "local_context_needed": [
+            "prev_block",
+            "next_block",
+            "relationship_state"
+          ],
+          "source_issue_ids": [
+            "remaining_1"
+          ]
+        }
+      ],
+      "unchanged_blocks": [
+        "ch_012.sc_001.b001",
+        "ch_012.sc_001.b004",
+        "ch_012.sc_001.b005"
+      ],
+      "global_constraints": [
+        "最小改动：仅修 b002/b003 的交接与“讲明白”句子，不改动剧情走向、角色立场与皇帝裁示。",
+        "严格遵守禁令：不揭示沈知微真实动机、不洗白女主、不解释幕后主谋、不让谢临川此章看穿她。",
+        "线索预算不变（≤2）：只用“称呼变化+笔锋停顿/避伤目光”自然露出，不新增第三条可被解读为线索的信息。",
+        "礼制与场景限制不破：殿前不翻案、不逼问证词细节；沈知微不得失态离席，只能以规矩压回情绪。",
+        "视角与语气连续：保持谢临川在场感与寒意基调，删解释但不删压迫感与那一拍“敌意停顿”。"
+      ]
+    },
+    "rewrite_result": {
+      "patched_blocks": [
+        {
+          "block_id": "ch_012.sc_001.b002",
+          "old_summary": "Xie makes a rule-compliant request for the old case档册, escalating the pressure on Shen to respond publicly",
+          "new_text": "诏毕，太监合卷，殿上仍无人先动。谢临川叩首，额前一触石面，寒意顺着额骨往后窜。他起身时没有立刻抬头，只把嗓音放得更低、更稳：“臣谢临川，叩谢陛下召还之恩。北地军需方息，转运章程多有更易，臣请依旧例核对，以免再生掣肘。”\n\n他顿了顿，把锋芒收在“旧例”二字里，像把刃压进鞘口：“三年前军粮转运旧案之原始档册，仍藏内库。臣愿按例借调查阅，以备军务陈条，求陛下允准。”\n\n殿内的气息像被人一把攥住，衣袍的窸窣声此起彼伏又迅速压下。有人不自觉吸了一口冷气，离得近的一个年轻官员几乎没忍住，喉间溢出极轻的一声，又立刻咬住。旧案两个字像禁火，谁都知道一碰就烫，却没想到他敢把手伸得这么规矩、这么正当。\n\n所有人的目光几乎同时转向记档席。内库档册出入需经她记簿备案，钥不在她手，例在她笔下。沈知微的侧脸在烛光下显得更冷，颌线绷得紧，直到颧骨轻轻凸起。她握笔的手没有抖，却也没有再写，笔尖悬在纸上，墨珠将坠未坠，像一声被迫按住的心跳。\n\n她抬头看向御座的方向，眼里没有情绪，只有礼制里必须有的询问与等候。然后，她启唇要说话。谢临川这才意识到自己在等——等她用什么称呼叫他，等她把哪一个字落在他身上，像落下一枚新的判签。\n\n沈知微开口时，声音平直得像一条裁好的尺：“内库档册为国之重，非奉旨不得擅动。凡涉旧案，尤需谨慎。”她说到这里，才把视线移向殿中跪着的人，目光落下的一瞬不带温度。笔尖在纸上顿出一点墨，墨珠晕开半圈。“谢世子”三个字从她唇间出来。\n\n谢临川胸口像被钝器轻撞，闷痛顺着肋骨漫开。指尖猛地攥紧膝头的衣料，指节泛白，指腹蹭过虎口的旧疤，尖锐的疼意扎进骨缝。殿内的静骤然沉了下去，连烛火的噼啪都慢了半拍。他喉间发紧，那两个字的冷意像雪水渗过靴底，冻得他呼吸都滞了一瞬——他听见的，是比记忆里更冷的回响。"
+        },
+        {
+          "block_id": "ch_012.sc_001.b003",
+          "old_summary": "Naturally expose the first key clue: Shen’s sudden shift to a more formal address, triggering Xie’s emotional slip",
+          "new_text": "沈知微继续说，语速不快，却每一个字都像按着例条落下：“若要查阅，需内库书吏监陪。殿前不言证词——谢世子。”\n\n那三个字落得干净，像把人名也收进了规矩里。谢临川胸口那一下闷痛还在，他却逼自己不动声色，只把掌心在衣料上压得更紧，借疼意把呼吸稳住。\n\n她的视线随即移向殿中，却没有落在他脸上，只从他扣着的手背掠过去。虎口那道旧疤被方才叩首压得发白，粗硬的纹理在烛光里一清二楚；她在那处停了半息，便收回目光，落回簿册边缘，仿佛刚才只是例行扫过，不必记得。\n\n殿内的沉默被拉得更长。有人袖口一僵，随即又缓缓垂下；有人喉结滚了滚，仍不敢先开口。\n\n谢临川把那一瞬被敲乱的心跳压下去，抬头时眼神已重新收敛成锋利的平静：“臣请遵女史所陈例制。臣只求在内库依制查阅，不取不抄，只以目记，回呈军务陈条。若有一字逾矩，请陛下立时治臣之罪。”\n\n他把“治罪”两个字说得极淡，像把自己往刀口上递。御座之上久久不语，满殿连呼吸都像有声。\n\n良久，帝王的声音才落下来，平淡得像随口一问，却能压住满殿：“北地方定，军需不可轻忽。准其查阅，限在内库，不得外传。沈女史记档，内库照例派人监陪。”"
+        }
+      ],
+      "merged_chapter_text": "殿门外的雪还在落，谢临川踏进殿中时，靴底带进一线细碎的水声。跪下去的那一瞬，冷硬的青石透过衣料顶上来，膝骨一阵发麻；鞋沿里藏着的雪水也终于压不住，慢慢渗出来，在靴侧拖出一条暗湿的痕。\n\n他今日穿的是规矩里最不扎眼的朝服，连袖口的绣线都收得极淡——回京述职不等于平反，罪名还悬在头顶，军功只是让他有资格跪在这里。殿上文武的目光扫过他肩背，有人呼出的白雾顿了顿，衣料摩擦声忽然停了半息。谁都不必开口，他便明白这份静里藏着什么：有人等他谢恩，有人等他出丑，也有人等他再跌一次。\n\n宣旨太监拖着嗓子念诏，每一个字都裹着殿内的炭气，沉得像压在肩头上。念到那四个字时，殿内忽然更静——“军粮转运旧案”。谢临川指节在膝上微不可察地一紧，手背的筋一跳；他把那一下突兀的停顿压回喉间，只让呼吸更沉。\n\n侧畔的记档席上，毛笔划过宣纸的声音一直在。那声音在旧案名目落下的一刻停了一停，短得几乎让人以为听岔了。谢临川抬眼，正撞见沈知微抬起了眼——她坐得极直，衣襟与袖口都收在规制里，目光从纸面抬起时冷而稳，却在他按在膝上的手上掠过便收回，下一瞬又落回墨线。\n\n她重新落笔时用力过了些，笔锋压得纸面微微起毛，墨色也浓得发沉。她的袖口被指尖在内侧捏出一道细褶，又迅速抹平，动作利落得不留痕迹。那一下停顿被她压进礼制里，像从未发生；可他记得清楚，三年前那句证词也是这样落下的——字正、笔稳，不给人留半分余地。\n\n谢临川的目光还是不受控地停在她手腕一瞬。她抬腕换纸时，袖边略松，露出一线淡白的旧痕，细细一道，从腕骨旁斜过，颜色浅得几乎与肌理融在一起。那道痕是他三年前攥出来的，指腹忽然一麻，膝下的冷像浸到了骨头里。\n\n石冷得像那日的判词，贴着骨。\n\n诏毕，太监合卷，殿上仍无人先动。谢临川叩首，额前一触石面，寒意顺着额骨往后窜。他起身时没有立刻抬头，只把嗓音放得更低、更稳：“臣谢临川，叩谢陛下召还之恩。北地军需方息，转运章程多有更易，臣请依旧例核对，以免再生掣肘。”\n\n他顿了顿，把锋芒收在“旧例”二字里，像把刃压进鞘口：“三年前军粮转运旧案之原始档册，仍藏内库。臣愿按例借调查阅，以备军务陈条，求陛下允准。”\n\n殿内的气息像被人一把攥住，衣袍的窸窣声此起彼伏又迅速压下。有人不自觉吸了一口冷气，离得近的一个年轻官员几乎没忍住，喉间溢出极轻的一声，又立刻咬住。旧案两个字像禁火，谁都知道一碰就烫，却没想到他敢把手伸得这么规矩、这么正当。\n\n所有人的目光几乎同时转向记档席。内库档册出入需经她记簿备案，钥不在她手，例在她笔下。沈知微的侧脸在烛光下显得更冷，颌线绷得紧，直到颧骨轻轻凸起。她握笔的手没有抖，却也没有再写，笔尖悬在纸上，墨珠将坠未坠，像一声被迫按住的心跳。\n\n她抬头看向御座的方向，眼里没有情绪，只有礼制里必须有的询问与等候。然后，她启唇要说话。谢临川这才意识到自己在等——等她用什么称呼叫他，等她把哪一个字落在他身上，像落下一枚新的判签。\n\n沈知微开口时，声音平直得像一条裁好的尺：“内库档册为国之重，非奉旨不得擅动。凡涉旧案，尤需谨慎。”她说到这里，才把视线移向殿中跪着的人，目光落下的一瞬不带温度。笔尖在纸上顿出一点墨，墨珠晕开半圈。“谢世子”三个字从她唇间出来。\n\n谢临川胸口像被钝器轻撞，闷痛顺着肋骨漫开。指尖猛地攥紧膝头的衣料，指节泛白，指腹蹭过虎口的旧疤，尖锐的疼意扎进骨缝。殿内的静骤然沉了下去，连烛火的噼啪都慢了半拍。他喉间发紧，那两个字的冷意像雪水渗过靴底，冻得他呼吸都滞了一瞬——他听见的，是比记忆里更冷的回响。\n\n沈知微继续说，语速不快，却每一个字都像按着例条落下：“若要查阅，需内库书吏监陪。殿前不言证词——谢世子。”\n\n那三个字落得干净，像把人名也收进了规矩里。谢临川胸口那一下闷痛还在，他却逼自己不动声色，只把掌心在衣料上压得更紧，借疼意把呼吸稳住。\n\n她的视线随即移向殿中，却没有落在他脸上，只从他扣着的手背掠过去。虎口那道旧疤被方才叩首压得发白，粗硬的纹理在烛光里一清二楚；她在那处停了半息，便收回目光，落回簿册边缘，仿佛刚才只是例行扫过，不必记得。\n\n殿内的沉默被拉得更长。有人袖口一僵，随即又缓缓垂下；有人喉结滚了滚，仍不敢先开口。\n\n谢临川把那一瞬被敲乱的心跳压下去，抬头时眼神已重新收敛成锋利的平静：“臣请遵女史所陈例制。臣只求在内库依制查阅，不取不抄，只以目记，回呈军务陈条。若有一字逾矩，请陛下立时治臣之罪。”\n\n他把“治罪”两个字说得极淡，像把自己往刀口上递。御座之上久久不语，满殿连呼吸都像有声。\n\n良久，帝王的声音才落下来，平淡得像随口一问，却能压住满殿：“北地方定，军需不可轻忽。准其查阅，限在内库，不得外传。沈女史记档，内库照例派人监陪。”\n\n这句“准”落下时，殿内像有一层看不见的冰裂开了细缝。有人松了口气，有人脸色更沉——旧案被重新提起，哪怕只是“查阅”，也像在灰烬里拨了一下。谢临川的背脊没有动，胸口却像被那一道缝透进一点冷风，冷得他忽然清醒：几道目光隔着官袍的褶影暗暗压来，贴着他的肩骨与后颈，冷而不露。\n\n沈知微立刻俯身应诺：“谨遵圣旨。”她的声音仍旧冷，却比先前更利落，像把所有多余的停顿都切掉。她抬起笔，按例写下“准查内库军粮旧档”几字，笔锋稳得过分。只是写到“旧档”时，指尖在笔杆上顿了一下，像有一瞬不愿落笔，又在下一息用更大的力道压了下去。\n\n谢临川叩首谢恩，起身时膝盖麻得发颤，他攥紧衣摆稳住才没晃。语气恭敬，字里却仍藏着锋：“臣不敢负陛下信任。若案牍有滞碍，臣亦循例逐条呈请，绝无逾矩。”他说完，目光从地面抬起，越过满殿官袍，落在记档席那处——不求她回看，只求她哪怕一瞬被这“循例”二字刺到。\n\n沈知微没有回看，她的眼睫极轻地垂着，像在专心于纸上每一笔。可她握笔的手背上青筋微微浮起，袖口的那道细褶又被捏出一线。谢临川看着那细褶，忽然觉得自己方才那一下试探像撞在一面冰墙上，墙不碎，却也不是全无回音——那停顿，那用力过重的墨痕，都是回音。\n\n他退下时，靴底在石面上轻轻一滑，那点未干的雪水又拖出一线暗湿。走到殿门口，他回头只一眼：记档席上，沈知微的指尖停在册页边缘，像要翻下一页，又像在那一行字上悬了悬。她的手指离纸不过一寸，迟疑得几乎看不见，随即又收回，继续落笔，仿佛从未犹豫。\n\n殿门外风更冷，雪粒砸在檐角，发出细碎的声响。谢临川沿着廊下走出宫门，肩上的披风被风扯起一角，又被他按住。宫城的高墙在雪里沉默，像一座把旧案与旧人都吞进去的巨兽；他每走一步，靴底的水痕就更清，像提醒他：今日的“准”不是恩，是一根引线。\n\n刚出宫门不远，一名守卫匆匆迎上来，步子刻意放轻，却还是泄出急。他先向四下扫了一眼，眼神往肩后一瞥，像怕有人跟着；他指尖攥着腰牌，指节发白，才压低声音：“谢……谢世子。”\n\n那称呼又落一次，谢临川的眉梢几不可察地一动。他停住，手自然而然落到刀柄上，掌心贴着冷铁，寒意却压不住皮肤里慢慢渗出的汗。\n\n守卫喉结滚了滚，像咽下去的不只是口水，声音更低：“内库那边……按例本该今日监陪您查旧档的第一名书吏，昨夜死了。今晨才见人，嘴角发黑，满是墨味——上头吩咐先不许张扬。”\n\n话音落地，谢临川指腹在刀柄上微微一压，像把将要迸出的锋按回鞘里。方才殿上那声“准”还在耳边发冷，此刻却被这句通报一把扯紧——口子刚开，陪查的人先死了，像有人早就算准他会伸手。\n\n他没有问怎么死的，也没有问谁先看见的。宫里这些问法都太软，软得像给人递绳结。他只抬眼望向宫墙，雪雾里高处窗格一线阴影沉着不动，仿佛有人在那后头把今日每一步都记得清清楚楚。那方向让他想起记档席上那截冷白的指尖，想起她写下“准查旧档”时那一瞬几乎看不见的停顿——冷得像规矩，规矩里却藏着刃。\n\n谢临川仍站着，靴底的雪水在地上慢慢扩出一小片暗痕，像一枚不肯干的印。他盯着那片暗痕，胸口的气息压得更平，只剩一个念头比雪更冷：旧案不是灰，是火；有人一直守着，等他去翻，就先烧掉第一个该陪他翻的人。",
+      "patch_report": [
+        {
+          "block_id": "ch_012.sc_001.b002",
+          "applied": true,
+          "notes": "已按 patch plan 重写目标 block。"
+        },
+        {
+          "block_id": "ch_012.sc_001.b003",
+          "applied": true,
+          "notes": "已按 patch plan 重写目标 block。"
+        }
+      ]
+    },
+    "judge_result": {
+      "pass": true,
+      "remaining_issues": [],
+      "newly_introduced_issues": [],
+      "recommendation": "建议不再补 patch；b002/b003 已把“笔锋失手+冷硬称谓+避伤目光”的张力从解释句转为动作与停顿承接，无需切 deep。",
+      "passed": true
+    },
+    "final_judge": {
+      "passed": true,
+      "blocking_reasons": [],
+      "metrics": {
+        "patch_round": 2,
+        "remaining_issue_count": 0,
+        "introduced_issue_count": 0
+      },
+      "recommendation": "建议不再补 patch；b002/b003 已把“笔锋失手+冷硬称谓+避伤目光”的张力从解释句转为动作与停顿承接，无需切 deep。"
+    }
+  },
+  {
+    "stage": "final_polish",
+    "skill_ids": [
+      "base_style",
+      "chapter_finalize"
+    ],
+    "chapter_length": 3270
+  },
+  {
+    "stage": "format_adjustment",
+    "chapter_length": 3270,
+    "format_issues": []
+  },
+  {
+    "stage": "summarize_actual_chapter",
+    "chapter_id": "ch_012"
+  }
+]

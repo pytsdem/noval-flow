@@ -1,0 +1,31 @@
+{
+  "kind": "novel_self_improve_registry",
+  "db_path": "data/novel_flow_test.db",
+  "mode": "test",
+  "cases": [
+    {
+      "case_id": "romance_case_01_court_return",
+      "case_path": "evals/romance/cases/romance_case_01_court_return.json",
+      "book_id": "test_self_improve_court_return",
+      "mode": "test",
+      "title": "旧案重逢的朝堂试探",
+      "novel_title": "折雪入京"
+    },
+    {
+      "case_id": "romance_case_02_sickbed_truce",
+      "case_path": "evals/romance/cases/romance_case_02_sickbed_truce.json",
+      "book_id": "test_self_improve_sickbed_truce",
+      "mode": "test",
+      "title": "雨夜药庐的被迫共处",
+      "novel_title": "灯尽江南"
+    },
+    {
+      "case_id": "romance_case_03_betrothal_banquet",
+      "case_path": "evals/romance/cases/romance_case_03_betrothal_banquet.json",
+      "book_id": "test_self_improve_betrothal_banquet",
+      "mode": "test",
+      "title": "婚约宴上的公开逼近",
+      "novel_title": "春台渡"
+    }
+  ]
+}

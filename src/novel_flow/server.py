@@ -47,13 +47,11 @@ from novel_flow.services.selectors import (
 if TYPE_CHECKING:
     from novel_flow.storage.sqlite_store import SQLiteStore
 
-
 @dataclass
 class AppStores:
     formal: SQLiteStore
     test: SQLiteStore
     settings: Settings
-
 
 @dataclass
 class RunHandle:
@@ -3054,7 +3052,7 @@ function sanitizeStep3DraftObject(obj){if(!obj||typeof obj!=='object')return obj
 function applyStepRevisionDraft(result){if(!result||!result.step_key)return;const stepKey=result.step_key;const revisedText=result.draft_json||JSON.stringify(result.step_payload||{},null,2);stepDrafts[stepKey]=revisedText;try{stepDraftObjects[stepKey]=JSON.parse(revisedText);}catch{stepDraftObjects[stepKey]=deepClone(result.step_payload||{});}if(stepKey==='step_3'){stepDraftObjects[stepKey]=sanitizeStep3DraftObject(stepDraftObjects[stepKey]||{});stepDrafts[stepKey]=JSON.stringify(stepDraftObjects[stepKey]||{},null,2);}stepDraftDirty[stepKey]=true;stepReviewNotes[stepKey]=Array.isArray(result.review_notes)?result.review_notes:[];if(currentBook){renderBlueprint(currentBook);autoSizeTextareas('pnl-blueprint');}}
 function latestOutputByType(runData,outputType){const outs=Array.isArray(runData?.outputs)?runData.outputs:[];for(let i=outs.length-1;i>=0;i-=1){if(outs[i]?.output_type===outputType)return outs[i].payload||null;}return null;}
 function latestChapterPreviewByMode(runData,previewMode){const outs=Array.isArray(runData?.outputs)?runData.outputs:[];for(let i=outs.length-1;i>=0;i-=1){const item=outs[i];if(item?.output_type!=='chapter_live_preview')continue;const payload=item?.payload||{};if(String(payload?.preview_mode||'')!==String(previewMode||''))continue;return{payload,createdAt:item?.created_at||''};}return null;}
-function mergeChapterBlocksText(blocks,fallbackText=''){const arr=Array.isArray(blocks)?blocks:[];const merged=arr.map(block=>String(block?.text||'').trim()).filter(Boolean).join('\n\n').trim();return merged||String(fallbackText||'').trim();}
+function mergeChapterBlocksText(blocks,fallbackText=''){const arr=Array.isArray(blocks)?blocks:[];const merged=arr.map(block=>String(block?.text||'').trim()).filter(Boolean).join('\\n\\n').trim();return merged||String(fallbackText||'').trim();}
 function parsePatchRound(stageName){const match=String(stageName||'').match(/patch_round_(\\d+)_/);return match?Number(match[1]||0):0;}
 function latestPatchedBlockIds(runData){const evts=Array.isArray(runData?.events)?runData.events:[];for(let i=evts.length-1;i>=0;i-=1){const payload=evts[i]?.payload||{};const stage=String(payload?.stage||'');if(!stage.includes('_rewrite_done'))continue;const patchedBlocks=Array.isArray(payload?.rewrite_result?.patched_blocks)?payload.rewrite_result.patched_blocks:[];const ids=patchedBlocks.map(item=>String(item?.block_id||'').trim()).filter(Boolean);if(ids.length)return ids;}return [];}
 function collectChapterTaskOutputs(runData){
@@ -4113,14 +4111,20 @@ async function initApp(){
   try{
     if(bootPill)bootPill.textContent='前端初始化中';
     try{
+      const savedMode=readStoredMode();
+      mode=validMode(savedMode)?savedMode:'formal';
+    }catch{mode='formal';}
+    try{
       const savedProvider=String(localStorage.getItem(LLM_PROVIDER_STORAGE_KEY)||'').toLowerCase();
       llmProvider=validLlmProvider(savedProvider)?savedProvider:'doubao';
     }catch{llmProvider='doubao';}
+    if(modeSel)modeSel.value=mode;
     if(modelSel)modelSel.value=llmProvider;
     toggleButtons();
-    await loadNovels();
+    await loadNovels({autoSelectSingle:true});
     if(bootPill)bootPill.textContent=`前端已加载 ${Math.max((novelSel?.options?.length||1)-1,0)} 本`;
     updateStopButton();
+    if(bookId)await refreshNovel();
     setInterval(async()=>{
       if(refreshPaused)return;
       // Avoid double re-render during active runs: polling both endpoints in one tick
