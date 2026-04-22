@@ -12,8 +12,10 @@ from novel_flow.models.schemas import (
     BookDocument,
     ChapterBrief,
     CharacterCard,
+    CharacterCandidateLink,
     Chapter,
     CriticReport,
+    NewCharacterCandidate,
     StoryLine,
     StoryPremise,
     TwistDesign,
@@ -22,8 +24,13 @@ from novel_flow.models.schemas import (
 from novel_flow.server import NovelApp
 from novel_flow.services.chapter_context import ChapterContextAssembler
 from novel_flow.services.character_context import CharacterContextBuilder
+from novel_flow.services.character_milestone_context import CharacterMilestoneContextBuilder
 from novel_flow.services.context_sanitization_task import ContextSanitizationTask
 from novel_flow.services.context_coverage import WriterContextCoverageValidator
+from novel_flow.services.selectors import (
+    get_character_card_by_name,
+    get_character_milestone_by_name,
+)
 
 
 class SequenceLLM(LLMClient):
@@ -353,6 +360,7 @@ class SchemaAndContextTests(unittest.TestCase):
                 "writing_chapter_runs": {"ch_001": {"final_text": "stale"}},
                 "writer_context_debug": {"ch_001": {"ctx": 1}},
                 "scene_plans": {"ch_001": {"plan": 1}},
+                "scene_only_characters": [{"candidate_id": "cand_1", "name": "Guest"}],
                 "completed_chapter_ids": ["ch_001"],
                 "last_written_chapter_id": "ch_001",
             },
@@ -389,7 +397,54 @@ class SchemaAndContextTests(unittest.TestCase):
         self.assertEqual(result["book"]["metadata"]["actual_chapter_summaries"], [])
         self.assertEqual(result["book"]["metadata"]["critic_reports"], {})
         self.assertIsNone(result["book"]["metadata"]["latest_critic_report"])
+        self.assertNotIn("scene_plans", result["book"]["metadata"])
+        self.assertNotIn("planning_phase", result["book"]["metadata"])
+        self.assertNotIn("style", result["book"]["metadata"])
+        self.assertNotIn("blueprint_review", result["book"]["metadata"])
+        self.assertNotIn("scene_only_characters", result["book"]["metadata"])
         self.assertIsNone(result["critic"])
+
+    def test_resolve_character_candidate_adds_character_and_rejects_scene_only(self) -> None:
+        candidate = NewCharacterCandidate(
+            candidate_id="cand_001",
+            name="Gate Keeper",
+            first_appearance_chapter="ch_001",
+            role_in_scene="守门人",
+            why_needed="提供进入旧案现场的阻力",
+            provisional_traits=["谨慎", "寡言"],
+            links_to_existing_characters=[CharacterCandidateLink(target="Hero", relation="阻拦者")],
+        )
+        book = BookDocument(
+            id="book_candidates",
+            title="Candidates",
+            premise=self.premise,
+            characters=[],
+            volumes=[],
+            metadata={"new_character_candidates": [candidate.model_dump(mode="json")]},
+        )
+
+        class DummyStore:
+            def __init__(self, book_doc: BookDocument) -> None:
+                self.book = book_doc
+
+            def load_book(self, book_id: str) -> BookDocument | None:
+                return self.book if self.book.id == book_id else None
+
+            def save_book(self, book_doc: BookDocument) -> None:
+                self.book = book_doc
+
+        store = DummyStore(book)
+        app = NovelApp(SimpleNamespace(formal=store, test=store, settings=Settings()))
+
+        result = app.resolve_character_candidate("formal", book_id="book_candidates", candidate_id="cand_001", action="add")
+        updated = result["book"]
+        self.assertEqual(updated["characters"][0]["name"], "Gate Keeper")
+        self.assertEqual(updated["characters"][0]["role"], "守门人")
+        self.assertEqual(updated["metadata"]["new_character_candidates"], [])
+
+        store.book.metadata["new_character_candidates"] = [candidate.model_dump(mode="json")]
+        with self.assertRaises(ValueError):
+            app.resolve_character_candidate("formal", book_id="book_candidates", candidate_id="cand_001", action="scene_only")
 
     def test_chapter_payload_masks_unrevealed_truth(self) -> None:
         context = ChapterContextAssembler.build(
@@ -430,6 +485,36 @@ class SchemaAndContextTests(unittest.TestCase):
         self.assertIn("Hidden truth lock", text)
         self.assertNotIn("protect him from death", text)
         self.assertNotIn("reconcile", text)
+
+    def test_character_selectors_lookup_by_name(self) -> None:
+        hero = CharacterCard(name="Hero", role="returned heir")
+        heroine = CharacterCard(name="Heroine", role="court witness")
+        milestones = [
+            {
+                "character_name": "Heroine",
+                "character_card_name": "Heroine",
+                "milestone_list": [{"axis": "情感线", "stages": ["压抑", "松动"]}],
+                "axes": [],
+            }
+        ]
+        self.assertIs(get_character_card_by_name([hero, heroine], "Heroine"), heroine)
+        self.assertIs(get_character_milestone_by_name(milestones, "Heroine"), milestones[0])
+
+    def test_character_milestone_context_uses_selector_lookup(self) -> None:
+        text = CharacterMilestoneContextBuilder.build(
+            character_milestones=[
+                {
+                    "character_name": "",
+                    "character_card_name": "Heroine",
+                    "milestone_list": [{"axis": "情感线", "stages": ["压抑", "松动"]}],
+                    "axes": [],
+                }
+            ],
+            chapter_brief=self.chapter_brief,
+            active_twists=[self.twist],
+        )
+        self.assertIn("Heroine", text)
+        self.assertIn("情感线: 压抑 -> 松动", text)
 
     def test_completed_memory_comes_from_actual_summaries(self) -> None:
         summary = ActualChapterSummary(

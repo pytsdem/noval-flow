@@ -75,7 +75,7 @@ class JsonGenerationAndExpandTests(unittest.TestCase):
             premise=premise,
             characters=[CharacterCard(name="Hero", role="general")],
             volume_titles=["Volume 1"],
-            chapter_plans=[],
+            chapter_briefs=[],
         )
         writer = WriterAgent(llm_client=SequenceLLM([]), patch_executor=PatchExecutor())
         book = writer.create_book(blueprint=blueprint, source_query="query")
@@ -98,7 +98,7 @@ class JsonGenerationAndExpandTests(unittest.TestCase):
             premise=premise,
             characters=[CharacterCard(name="Hero", role="general")],
             volume_titles=["Volume 1"],
-            chapter_plans=[],
+            chapter_briefs=[],
         )
         writer = BookDocument(
             id="book_001",

@@ -140,23 +140,6 @@ class StoryPremise(BaseModel):
     selling_points: list[str] = Field(default_factory=list)
 
 
-class ChapterPlan(BaseModel):
-    chapter_id: str
-    title: str
-    objective: str
-    tension: str
-    cliffhanger: str
-    phase: str = ""
-    story_function: str = ""
-    key_turn: str = ""
-    payoff: str = ""
-    next_route_hint: str = ""
-    target_words: str = ""
-    scene_density: str = ""
-    scene_beats: list[dict[str, str]] = Field(default_factory=list)
-    planned_scene_count: int = Field(ge=1, default=2)
-
-
 class TwistDesign(StrictBaseModel):
     twist_id: str
     title: str
@@ -472,6 +455,74 @@ class HumanityReviewPayload(StrictBaseModel):
     rewrite_guidance: str = ""
 
 
+class ChapterTargetedIssue(BaseModel):
+    model_config = ConfigDict(extra="forbid", populate_by_name=True)
+
+    issue_id: str
+    severity: Literal["low", "medium", "high", "critical"] = "medium"
+    problem_type: str
+    reason: str
+    target_blocks: list[str] = Field(default_factory=list, min_length=1, max_length=4)
+    patch_hint: str = ""
+
+
+class ChapterTargetedReviewPayload(BaseModel):
+    model_config = ConfigDict(extra="forbid", populate_by_name=True)
+
+    pass_: bool = Field(default=False, alias="pass")
+    issues: list[ChapterTargetedIssue] = Field(default_factory=list)
+    summary: str = ""
+
+
+class ChapterPatchTarget(StrictBaseModel):
+    target_type: Literal["block"] = "block"
+    target_id: str
+    problem_type: str
+    goal: str
+    instructions: list[str] = Field(default_factory=list, max_length=6)
+    local_context_needed: list[str] = Field(default_factory=list, max_length=6)
+    source_issue_ids: list[str] = Field(default_factory=list, max_length=6)
+
+
+class ChapterPatchPlanPayload(StrictBaseModel):
+    patch_targets: list[ChapterPatchTarget] = Field(default_factory=list, max_length=6)
+    unchanged_blocks: list[str] = Field(default_factory=list)
+    global_constraints: list[str] = Field(default_factory=list, max_length=8)
+
+
+class PatchedBlock(StrictBaseModel):
+    block_id: str
+    old_summary: str = ""
+    new_text: str
+
+
+class PatchReportItem(StrictBaseModel):
+    block_id: str
+    applied: bool = False
+    notes: str = ""
+
+
+class RewriteBlocksByPlanPayload(StrictBaseModel):
+    patched_blocks: list[PatchedBlock] = Field(default_factory=list)
+    merged_chapter_text: str = ""
+    patch_report: list[PatchReportItem] = Field(default_factory=list)
+
+
+class PatchJudgeIssue(StrictBaseModel):
+    problem_type: str
+    target_blocks: list[str] = Field(default_factory=list, min_length=1, max_length=4)
+    reason: str
+
+
+class PatchJudgePayload(BaseModel):
+    model_config = ConfigDict(extra="forbid", populate_by_name=True)
+
+    pass_: bool = Field(default=False, alias="pass")
+    remaining_issues: list[PatchJudgeIssue] = Field(default_factory=list)
+    newly_introduced_issues: list[PatchJudgeIssue] = Field(default_factory=list)
+    recommendation: str = ""
+
+
 class ToolCallSpec(StrictBaseModel):
     tool_name: str
     reason: str = ""
@@ -613,7 +664,7 @@ class BookBlueprint(BaseModel):
     premise: StoryPremise
     characters: list[CharacterCard]
     volume_titles: list[str]
-    chapter_plans: list[ChapterPlan]
+    chapter_briefs: list[ChapterBrief] = Field(default_factory=list)
     created_at: datetime = Field(default_factory=utc_now)
 
 

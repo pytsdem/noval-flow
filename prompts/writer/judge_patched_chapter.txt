@@ -1,0 +1,41 @@
+Judge whether the recent block patch resolved the targeted issues. Output JSON only.
+
+[Minimal context]
+{minimal_context_text}
+
+[Patch plan]
+{patch_plan_json}
+
+[Patched block contexts]
+{patched_block_contexts_json}
+
+[Merged chapter text]
+{merged_chapter_text}
+
+Output format:
+{{
+  "pass": true,
+  "remaining_issues": [
+    {{
+      "problem_type": "handoff_weak",
+      "target_blocks": ["ch_001.sc_001.b002", "ch_001.sc_001.b003"],
+      "reason": "用简体中文说明还有什么没修好。"
+    }}
+  ],
+  "newly_introduced_issues": [
+    {{
+      "problem_type": "voice_drift",
+      "target_blocks": ["ch_001.sc_001.b002"],
+      "reason": "用简体中文说明 patch 新引入的明显问题。"
+    }}
+  ],
+  "recommendation": "用简体中文说明是否建议再补一次 patch，还是建议切到 deep。"
+}}
+
+Rules:
+1. Judge only the targeted patch result. Do not run a full chapter review.
+2. Check whether the originally targeted issues were actually resolved.
+3. Report only remaining issues or newly introduced obvious issues.
+4. Keep the issue list short and concrete.
+5. If the patch is good enough, return `"pass": true` and empty issue arrays.
+6. Do not ask for a whole-chapter rewrite.

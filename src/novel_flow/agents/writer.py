@@ -78,7 +78,6 @@ class WriterAgent(BaseAgent):
             volumes=[Volume(id="vol_001", title=volume_title, summary=blueprint.premise.central_conflict, chapters=[])],
             metadata={
                 "target_words": self._target_words_for_style(effective_style),
-                "style": effective_style,
                 "style_request": style_request,
                 "query": source_query,
                 "user_topic": "",
@@ -92,7 +91,6 @@ class WriterAgent(BaseAgent):
                 "completed_chapter_ids": [],
                 "actual_chapter_summaries": [],
                 "latest_critic_report": None,
-                "scene_plans": {},
                 "critic_reports": {},
                 "writer_context_debug": {},
                 "story_blueprint": {},
@@ -648,6 +646,41 @@ class WriterAgent(BaseAgent):
                         acceptance_criteria=[],
                     )
                 )
+                continue
+            if tool_name in {"review_structure_and_continuity", "review_prose_and_humanity"}:
+                for issue in report.get("issues", []) or []:
+                    severity = str(issue.get("severity") or "medium").lower()
+                    if severity not in {"low", "medium", "high", "critical"}:
+                        severity = "medium"
+                    issues.append(
+                        IssueCard(
+                            issue_id=f"issue_{uuid4().hex[:10]}",
+                            severity=IssueSeverity(severity),
+                            title=tool_name,
+                            problem_type=str(issue.get("problem_type") or tool_name),
+                            location=IssueLocation(book_id=book_id, volume_id="vol_001", chapter_id=chapter_id, scene_id="", block_id=""),
+                            evidence=str(issue.get("reason") or ""),
+                            impact=str(issue.get("reason") or ""),
+                            recommendation=str(issue.get("patch_hint") or report.get("summary") or "按 patch review 结果修复目标 block。"),
+                            acceptance_criteria=[],
+                        )
+                    )
+                continue
+            if tool_name == "judge_patched_chapter":
+                for issue in [*(report.get("remaining_issues", []) or []), *(report.get("newly_introduced_issues", []) or [])]:
+                    issues.append(
+                        IssueCard(
+                            issue_id=f"issue_{uuid4().hex[:10]}",
+                            severity=IssueSeverity.MEDIUM,
+                            title="judge_patched_chapter",
+                            problem_type=str(issue.get("problem_type") or "patch_issue"),
+                            location=IssueLocation(book_id=book_id, volume_id="vol_001", chapter_id=chapter_id, scene_id="", block_id=""),
+                            evidence=str(issue.get("reason") or ""),
+                            impact=str(issue.get("reason") or ""),
+                            recommendation=str(report.get("recommendation") or "继续补丁或切到 deep 模式。"),
+                            acceptance_criteria=[],
+                        )
+                    )
                 continue
 
             level = str(report.get("level") or "medium").lower()

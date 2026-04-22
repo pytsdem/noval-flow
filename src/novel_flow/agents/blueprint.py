@@ -17,7 +17,6 @@ from novel_flow.models.schemas import (
     ChapterBrief,
     ChapterBriefGenerationInput,
     ChapterBriefsPayload,
-    ChapterPlan,
     CharacterCard,
     StoryLinesPayload,
     StoryPremise,
@@ -118,51 +117,6 @@ class BlueprintAgent(BaseAgent):
         )
         return [CharacterCard.model_validate(item) for item in payload.get("characters", [])]
 
-    def build_chapter_briefs_compat_plans(
-        self,
-        research_query: str,
-        premise: StoryPremise,
-        characters: list[CharacterCard],
-        volume_titles: list[str],
-        story_blueprint: dict[str, Any] | None = None,
-        character_milestones: list[dict[str, Any]] | None = None,
-        planning_context_json: str = "{}",
-        reference_pack: str = "暂无额外参考资料。",
-    ) -> list[ChapterPlan]:
-        payload = self.build_chapter_briefs_step(
-            research_query=research_query,
-            volume_titles=volume_titles,
-            batch={
-                "start_index": 0,
-                "end_index": 0,
-                "batch_size": 1,
-                "total_chapters": 1,
-                "chapter_ids": ["ch_001"],
-            },
-            story_spine={
-                "premise": premise.model_dump(mode="json"),
-                "story_engine": dict((story_blueprint or {}).get("story_engine", {}) or {}),
-            },
-            worldbuilding={"story_engine": dict((story_blueprint or {}).get("story_engine", {}) or {})},
-            character_bible={"characters": [item.model_dump(mode="json") for item in characters]},
-            event_timeline=list((story_blueprint or {}).get("event_timeline", []) or []),
-            character_milestones=list(character_milestones or []),
-            twist_designs=list((story_blueprint or {}).get("twist_designs", []) or []),
-            story_lines=list((story_blueprint or {}).get("story_lines", []) or []),
-            previous_chapter_briefs=[],
-            target_chapter_count=1,
-            planning_context_json=planning_context_json,
-            reference_pack=reference_pack,
-        )
-        payload["chapter_plans"] = [
-            self._normalize_chapter_plan_payload(self._chapter_plan_from_brief(dict(item)))
-            for item in payload.get("chapter_briefs", [])
-            if isinstance(item, dict)
-        ]
-        chapter_plans = [ChapterPlan.model_validate(item) for item in payload["chapter_plans"]]
-        ev.emit("blueprint_chapter_briefs_ready", agent=self.name, title="Chapter briefs compat plans ready", chapter_count=len(chapter_plans))
-        return chapter_plans
-
     def build_blueprint(
         self,
         research_query: str,
@@ -178,37 +132,59 @@ class BlueprintAgent(BaseAgent):
         )
         premise = StoryPremise.model_validate(spine["premise"])
         volume_titles = [str(item) for item in spine["volume_titles"]]
+        story_blueprint = dict(spine.get("story_blueprint", {}) or {})
+        story_engine = dict(story_blueprint.get("story_engine", {}) or {})
         characters = self.build_character_bible(
             research_query,
             premise,
             volume_titles,
-            story_blueprint=dict(spine.get("story_blueprint", {})),
+            story_blueprint=story_blueprint,
             planning_context_json="{}",
             reference_pack=reference_pack,
         )
-        chapter_plans = self.build_chapter_briefs_compat_plans(
-            research_query,
-            premise,
-            characters,
-            volume_titles,
-            story_blueprint=dict(spine.get("story_blueprint", {})),
+        chapter_briefs_payload = self.build_chapter_briefs_step(
+            research_query=research_query,
+            volume_titles=volume_titles,
+            batch={
+                "start_index": 0,
+                "end_index": 0,
+                "batch_size": 1,
+                "total_chapters": 1,
+                "chapter_ids": ["ch_001"],
+            },
+            story_spine={
+                "premise": premise.model_dump(mode="json"),
+                "story_engine": story_engine,
+            },
+            worldbuilding={"story_engine": story_engine},
+            character_bible={"characters": [item.model_dump(mode="json") for item in characters]},
+            event_timeline=list(story_blueprint.get("event_timeline", []) or []),
             character_milestones=[],
+            twist_designs=list(story_blueprint.get("twist_designs", []) or []),
+            story_lines=list(story_blueprint.get("story_lines", []) or []),
+            previous_chapter_briefs=[],
+            target_chapter_count=1,
             planning_context_json="{}",
             reference_pack=reference_pack,
         )
+        chapter_briefs = [
+            ChapterBrief.model_validate(item)
+            for item in chapter_briefs_payload.get("chapter_briefs", [])
+            if isinstance(item, dict)
+        ]
         blueprint = BookBlueprint(
             blueprint_id=f"blueprint_{uuid4().hex[:10]}",
             premise=premise,
             characters=characters,
             volume_titles=volume_titles,
-            chapter_plans=chapter_plans,
+            chapter_briefs=chapter_briefs,
         )
         ev.emit(
             "blueprint_ready",
             agent=self.name,
             title=f"Blueprint ready: {premise.title}",
             premise_title=premise.title,
-            chapter_count=len(chapter_plans),
+            chapter_count=len(chapter_briefs),
             character_count=len(characters),
         )
         return blueprint
@@ -232,47 +208,6 @@ class BlueprintAgent(BaseAgent):
         character = CharacterCard.model_validate(parsed["character"])
         ev.emit("blueprint_character_added", agent=self.name, title=f"Character added: {character.name}", name=character.name)
         return character
-
-    def build_character_milestones(
-        self,
-        research_query: str,
-        premise: StoryPremise,
-        characters: list[CharacterCard],
-        story_blueprint: dict[str, Any],
-        chapter_plans: list[ChapterPlan] | None = None,
-        planning_context_json: str = "{}",
-        reference_pack: str = "暂无额外参考资料。",
-    ) -> list[dict[str, Any]]:
-        ev.emit("agent_start", agent=self.name, title="Build character milestones", query=research_query)
-        self._emit_agent_input(
-            "character milestones",
-            research_query=research_query,
-            premise=premise.model_dump(mode="json"),
-            characters=[item.model_dump(mode="json") for item in characters],
-            story_blueprint=story_blueprint,
-            chapter_plans=[item.model_dump(mode="json") for item in (chapter_plans or [])],
-            planning_context=self._safe_json_loads(planning_context_json),
-            reference_pack=reference_pack,
-        )
-        prompt = self.prompt_library.render(
-            "writer/step_5_character_milestones.txt",
-            research_query=research_query,
-            premise_json=premise.model_dump_json(indent=2),
-            characters_json=self._json_dump([item.model_dump(mode="json") for item in characters]),
-            story_blueprint_json=self._json_dump(story_blueprint),
-            chapter_plans_json=self._json_dump([item.model_dump(mode="json") for item in (chapter_plans or [])]),
-            planning_context_json=planning_context_json,
-            reference_pack=reference_pack,
-        )
-        parsed = self._generate_json_payload(prompt, label="character_milestones")
-        milestones = self._normalize_character_milestones(parsed.get("character_milestones", []))
-        ev.emit(
-            "blueprint_milestones_ready",
-            agent=self.name,
-            title="Character milestones ready",
-            character_count=len(milestones),
-        )
-        return milestones
 
     def build_single_character_milestone(
         self,
@@ -598,8 +533,6 @@ class BlueprintAgent(BaseAgent):
             parsed["premise"] = self._normalize_premise_payload(dict(parsed["premise"]))
         if "story_blueprint" in parsed:
             parsed["story_blueprint"] = self._normalize_story_blueprint_payload(parsed.get("story_blueprint"))
-        if "chapter_plans" in parsed and isinstance(parsed["chapter_plans"], list):
-            parsed["chapter_plans"] = [self._normalize_chapter_plan_payload(dict(item)) for item in parsed["chapter_plans"] if isinstance(item, dict)]
         ev.emit("blueprint_sections_ready", agent=self.name, title=f"Blueprint sections ready: {task_name}")
         return parsed
 
@@ -641,12 +574,7 @@ class BlueprintAgent(BaseAgent):
                     updated_book.characters = [CharacterCard.model_validate(item) for item in parsed["characters"]]
             else:
                 updated_book.characters = []
-            if book.metadata.get("chapter_plans"):
-                if "chapter_plans" in parsed:
-                    plans = [ChapterPlan.model_validate(item) for item in parsed["chapter_plans"]]
-                    updated_book.metadata["chapter_plans"] = [plan.model_dump(mode="json") for plan in plans]
-            else:
-                updated_book.metadata["chapter_plans"] = []
+            updated_book.metadata.pop("chapter_plans", None)
         elif scope == "premise":
             updated_book.premise = StoryPremise.model_validate(parsed["premise"])
             updated_book.title = updated_book.premise.title
@@ -690,21 +618,17 @@ class BlueprintAgent(BaseAgent):
         )
         parsed = self._generate_json_payload(prompt, label="revise_blueprint")
         parsed["premise"] = self._normalize_premise_payload(dict(parsed["premise"]))
-        chapter_briefs: list[dict[str, Any]] = []
-        if "chapter_briefs" in parsed and isinstance(parsed["chapter_briefs"], list):
-            chapter_briefs = [item for item in self._normalize_chapter_briefs(parsed["chapter_briefs"]) if isinstance(item, dict)]
-            parsed["chapter_plans"] = [
-                self._normalize_chapter_plan_payload(self._chapter_plan_from_brief(dict(item)))
-                for item in chapter_briefs
-            ]
-        else:
-            parsed["chapter_plans"] = [self._normalize_chapter_plan_payload(dict(item)) for item in parsed["chapter_plans"]]
+        chapter_briefs = (
+            [item for item in self._normalize_chapter_briefs(parsed["chapter_briefs"]) if isinstance(item, dict)]
+            if "chapter_briefs" in parsed and isinstance(parsed["chapter_briefs"], list)
+            else [item.model_dump(mode="json") for item in blueprint.chapter_briefs]
+        )
         revised = BookBlueprint(
             blueprint_id=f"blueprint_{uuid4().hex[:10]}",
             premise=StoryPremise.model_validate(parsed["premise"]),
             characters=[CharacterCard.model_validate(item) for item in parsed["characters"]],
             volume_titles=[str(item) for item in parsed["volume_titles"]],
-            chapter_plans=[ChapterPlan.model_validate(item) for item in parsed["chapter_plans"]],
+            chapter_briefs=[ChapterBrief.model_validate(item) for item in chapter_briefs],
         )
         ev.emit("blueprint_revised", agent=self.name, title=f"Blueprint revised: {revised.premise.title}", blueprint_id=revised.blueprint_id)
         return revised
@@ -730,14 +654,28 @@ class BlueprintAgent(BaseAgent):
         if action == "chapter_briefs":
             premise = StoryPremise.model_validate(kwargs["premise"])
             characters = [CharacterCard.model_validate(item) for item in kwargs["characters"]]
-            plans = self.build_chapter_briefs_compat_plans(
-                str(kwargs["research_query"]),
-                premise,
-                characters,
-                list(kwargs["volume_titles"]),
+            story_blueprint = dict(kwargs.get("story_blueprint", {}) or {})
+            story_engine = dict(kwargs.get("story_engine", {}) or story_blueprint.get("story_engine", {}) or {})
+            payload = self.build_chapter_briefs_step(
+                research_query=str(kwargs["research_query"]),
+                volume_titles=list(kwargs["volume_titles"]),
+                batch=dict(kwargs.get("batch") or {"start_index": 0, "end_index": 0, "batch_size": 1, "total_chapters": 1, "chapter_ids": ["ch_001"]}),
+                story_spine={
+                    "premise": premise.model_dump(mode="json"),
+                    "story_engine": story_engine,
+                },
+                worldbuilding={"story_engine": story_engine},
+                character_bible={"characters": [item.model_dump(mode="json") for item in characters]},
+                event_timeline=list(kwargs.get("event_timeline", []) or story_blueprint.get("event_timeline", []) or []),
+                character_milestones=list(kwargs.get("character_milestones", []) or []),
+                twist_designs=list(kwargs.get("twist_designs", []) or story_blueprint.get("twist_designs", []) or []),
+                story_lines=list(kwargs.get("story_lines", []) or story_blueprint.get("story_lines", []) or []),
+                previous_chapter_briefs=list(kwargs.get("previous_chapter_briefs", []) or story_blueprint.get("chapter_briefs", []) or []),
+                target_chapter_count=int(kwargs.get("target_chapter_count", 1) or 1),
+                planning_context_json=str(kwargs.get("planning_context_json", "{}")),
                 reference_pack=str(kwargs.get("reference_pack", "暂无额外参考资料。")),
             )
-            return AgentResult(agent_name=self.name, success=True, message="Chapter briefs compatibility plans built.", payload={"chapter_plans": [item.model_dump(mode="json") for item in plans]})
+            return AgentResult(agent_name=self.name, success=True, message="Chapter briefs built.", payload=payload)
         if action == "build":
             blueprint = self.build_blueprint(
                 research_query=str(kwargs["research_query"]),
@@ -843,8 +781,6 @@ class BlueprintAgent(BaseAgent):
                     first = parsed[0] if parsed else {}
                     return {"character_milestone": first if isinstance(first, dict) else {}}
                 return {"character_milestones": [item for item in parsed if isinstance(item, dict)]}
-            if label == "chapter_briefs_compat_plans":
-                return {"chapter_plans": [item for item in parsed if isinstance(item, dict)]}
             return {"items": parsed}
         return None
 
@@ -866,64 +802,6 @@ class BlueprintAgent(BaseAgent):
         for key in ("escalation_path", "twist_blueprint", "selling_points"):
             premise[key] = cls._ensure_list(premise.get(key, []))
         return premise
-
-    @classmethod
-    def _normalize_chapter_plan_payload(cls, plan: dict[str, Any]) -> dict[str, Any]:
-        summary_text = cls._ensure_text(plan.get("summary"))
-        if not cls._ensure_text(plan.get("objective")) and summary_text:
-            plan["objective"] = summary_text
-        plan["chapter_id"] = cls._ensure_text(plan.get("chapter_id"))
-        plan["title"] = cls._ensure_text(plan.get("title"))
-        plan["objective"] = cls._ensure_text(plan.get("objective"))
-        plan["tension"] = cls._ensure_text(plan.get("tension"))
-        plan["cliffhanger"] = cls._ensure_text(plan.get("cliffhanger"))
-        for key in ("phase", "story_function", "key_turn", "payoff", "next_route_hint", "target_words", "scene_density"):
-            if key in plan and plan[key] is None:
-                plan[key] = ""
-        plan["target_words"] = cls._ensure_text(plan.get("target_words"))
-        plan["scene_density"] = cls._ensure_text(plan.get("scene_density"))
-        scene_beats = plan.get("scene_beats", [])
-        if not isinstance(scene_beats, list):
-            scene_beats = []
-        normalized_beats: list[dict[str, str]] = []
-        for beat in scene_beats:
-            if not isinstance(beat, dict):
-                continue
-            normalized_beats.append(
-                {
-                    "scene_id": cls._ensure_text(beat.get("scene_id")),
-                    "objective": cls._ensure_text(beat.get("objective")),
-                    "conflict": cls._ensure_text(beat.get("conflict")),
-                    "info_reveal": cls._ensure_text(beat.get("info_reveal")),
-                    "emotional_shift": cls._ensure_text(beat.get("emotional_shift")),
-                    "end_state": cls._ensure_text(beat.get("end_state")),
-                }
-            )
-        plan["scene_beats"] = normalized_beats
-        return plan
-
-    @classmethod
-    def _chapter_plan_from_brief(cls, brief: dict[str, Any]) -> dict[str, Any]:
-        chapter_id = cls._ensure_text(brief.get("chapter_id"))
-        title = cls._ensure_text(brief.get("title"))
-        objective = cls._ensure_text(brief.get("summary"))
-        tension = cls._ensure_text(brief.get("reader_emotion") or brief.get("emotional_turn") or brief.get("world_limit"))
-        cliffhanger = cls._ensure_text(brief.get("ending_pull"))
-        return {
-            "chapter_id": chapter_id,
-            "title": title,
-            "objective": objective,
-            "tension": tension,
-            "cliffhanger": cliffhanger,
-            "phase": cls._ensure_text(brief.get("chapter_type")),
-            "story_function": cls._ensure_text(brief.get("scene_engine")),
-            "key_turn": cls._ensure_text(brief.get("relationship_reprice") or brief.get("character_shift")),
-            "payoff": cls._ensure_text(brief.get("small_payoff")),
-            "next_route_hint": cliffhanger,
-            "target_words": cls._ensure_text(brief.get("info_budget")),
-            "scene_density": "",
-            "scene_beats": [],
-        }
 
     @staticmethod
     def _ensure_list(value: Any) -> list[str]:
@@ -1209,4 +1087,3 @@ class BlueprintAgent(BaseAgent):
                 }
             )
         return normalized
-

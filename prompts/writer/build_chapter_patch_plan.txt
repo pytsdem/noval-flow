@@ -1,0 +1,54 @@
+Turn chapter review findings into a minimal block patch plan. Output JSON only.
+
+[Chapter summary context]
+{chapter_summary_context_text}
+
+[Relationship state]
+{relationship_state_text}
+
+[Planned blocks]
+{planned_blocks_json}
+
+[Review reports]
+{review_reports_json}
+
+[Chapter text]
+{chapter_text}
+
+Output format:
+{{
+  "patch_targets": [
+    {{
+      "target_type": "block",
+      "target_id": "ch_001.sc_001.b002",
+      "problem_type": "duplicate_emotion",
+      "goal": "用简体中文说明这个 block 修完后要达成什么。",
+      "instructions": [
+        "用简体中文写可执行指令 1",
+        "用简体中文写可执行指令 2"
+      ],
+      "local_context_needed": ["prev_block", "next_block", "relationship_state"],
+      "source_issue_ids": ["I1"]
+    }}
+  ],
+  "unchanged_blocks": ["ch_001.sc_001.b001"],
+  "global_constraints": [
+    "用简体中文写全局约束 1",
+    "用简体中文写全局约束 2"
+  ]
+}}
+
+Rules:
+1. Minimize patch scope aggressively. Only target blocks that must change.
+2. Prefer 1 block over 2, prefer 2 over half a chapter.
+3. Every `patch_target` must come from a concrete review issue and should carry its `source_issue_ids`.
+4. `instructions` must be operational and local, not abstract slogans.
+5. `unchanged_blocks` must explicitly list every untouched block.
+6. `global_constraints` must protect voice, hidden truths, and continuity.
+7. Do not output a whole-chapter rewrite request.
+
+When planning:
+1. If the issue is about handoff, target the smallest pair of neighboring blocks that can repair the handoff.
+2. If the issue is repetition, prefer cutting or compressing the repeated block rather than expanding others.
+3. If the issue is humanity or prose drag, target the exact block where the weakness is visible.
+4. Never target a block unless you can explain why that block must change.

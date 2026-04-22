@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from novel_flow.models.schemas import ChapterBrief, TwistDesign
+from novel_flow.services.selectors import get_character_milestone_by_name
 
 
 def _normalize_text(value: Any) -> str:
@@ -32,14 +33,7 @@ class CharacterMilestoneContextBuilder:
 
         matched_any = False
         for name in focus_names:
-            item = next(
-                (
-                    milestone
-                    for milestone in character_milestones
-                    if _normalize_text(milestone.get("character_name")) == name
-                ),
-                None,
-            )
+            item = get_character_milestone_by_name(character_milestones, name)
             if not isinstance(item, dict):
                 continue
             matched_any = True

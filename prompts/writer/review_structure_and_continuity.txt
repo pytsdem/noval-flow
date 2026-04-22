@@ -1,0 +1,51 @@
+Review chapter structure and continuity for a fast patch-oriented loop. Output JSON only.
+
+[Completed chapter memory]
+{completed_chapter_memory_text}
+
+[Time anchor]
+{time_anchor_text}
+
+[Relationship state]
+{relationship_state_text}
+
+[Chapter brief]
+{chapter_brief_json}
+
+[Planned blocks]
+{planned_blocks_json}
+
+[Chapter text]
+{chapter_text}
+
+Output format:
+{{
+  "pass": false,
+  "issues": [
+    {{
+      "issue_id": "I1",
+      "severity": "high",
+      "problem_type": "continuity_break",
+      "reason": "用简体中文说明具体问题。",
+      "target_blocks": ["ch_001.sc_001.b001"],
+      "patch_hint": "用简体中文给出可以直接落到 block 的修补提示。"
+    }}
+  ],
+  "summary": "用简体中文总结本章最需要修的结构/连续性问题。"
+}}
+
+Rules:
+1. Focus on chapter structure, scene handoff, continuity carry-over, pressure escalation, and repeated beats.
+2. Every issue must point to one or more concrete `target_blocks`.
+3. Prefer the smallest possible edit scope. If one block can fix it, do not target three.
+4. If the chapter passes, return `"pass": true` and an empty `issues` array.
+5. Do not ask for a whole-chapter rewrite. All feedback must be patchable at block level.
+6. Do not output vague comments like "结构偏弱" without a concrete reason.
+7. Respect hidden-truth boundaries and do not request revealing secrets that the brief forbids.
+
+Check:
+1. Confirm that the chapter follows the planned block order and lands the main chapter turns.
+2. Confirm that each major beat hands off naturally into the next one.
+3. Confirm that body state, emotional residue, object state, and unresolved pressure are carried over.
+4. Check whether visible repetition stalls progression.
+5. Check whether the ending lands on a real next-step pressure instead of dissolving into summary.

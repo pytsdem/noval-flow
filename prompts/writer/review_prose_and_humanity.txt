@@ -1,0 +1,51 @@
+Review chapter prose and humanity for a fast patch-oriented loop. Output JSON only.
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Scene character context]
+{scene_character_context_text}
+
+[Relationship state]
+{relationship_state_text}
+
+[Style card]
+{style_card_text}
+
+[Planned blocks]
+{planned_blocks_json}
+
+[Chapter text]
+{chapter_text}
+
+Output format:
+{{
+  "pass": false,
+  "issues": [
+    {{
+      "issue_id": "I1",
+      "severity": "medium",
+      "problem_type": "flat_emotion",
+      "reason": "用简体中文说明具体问题。",
+      "target_blocks": ["ch_001.sc_001.b002"],
+      "patch_hint": "用简体中文说明这个 block 应该怎样改。"
+    }}
+  ],
+  "summary": "用简体中文总结本章最需要修的文风/人味问题。"
+}}
+
+Rules:
+1. Focus on prose drag, generic emotion, missing bodily reaction, weak subtext, repetitive imagery, and non-human supporting-character behavior.
+2. Every issue must point to one or more concrete `target_blocks`.
+3. Prefer the smallest possible edit scope. If a single block is enough, keep it to that block.
+4. If the chapter passes, return `"pass": true` and an empty `issues` array.
+5. Do not ask for a whole-chapter rewrite. All feedback must be patchable at block level.
+6. `patch_hint` must be actionable: what to cut, what to strengthen, what to preserve.
+7. Do not request adding hidden truths or new setting facts.
+
+Check:
+1. Confirm that major feelings are tied to visible cost, pressure, status, body, or choice.
+2. Confirm that at least one character reacts like a living person instead of a plot device.
+3. Check whether the prose avoids repetitive phrasing or repeated emotional explanation.
+4. Check whether dialogue and action carry subtext instead of pure information transfer.
+5. Check whether the targeted weak points actually belong to specific blocks.

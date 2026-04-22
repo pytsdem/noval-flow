@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 import json
+import re
 from typing import Any
 
 from novel_flow import events as ev
@@ -21,7 +22,6 @@ from novel_flow.models.schemas import (
 from novel_flow.prompting.templates import PromptLibrary
 from novel_flow.services.chapter_context import ChapterContextAssembler, build_current_chapter_context
 from novel_flow.services.context_sanitization_task import ContextSanitizationTask
-from novel_flow.services.dynamic_instruction_builder import DynamicInstructionBuilder
 from novel_flow.services.review_aggregator import ReviewAggregator
 from novel_flow.services.skill_manager import SkillManager
 from novel_flow.services.skill_registry import SkillRegistry
@@ -30,23 +30,22 @@ from novel_flow.services.tool_registry import ToolRegistry
 
 class WritingChapterAgent(BaseAgent):
     INCREMENTAL_BLOCK_DRAFTING_ENABLED = False
+    FAST_CHAPTER_REVIEW_TOOLS = [
+        "review_structure_and_continuity",
+        "review_prose_and_humanity",
+    ]
+    DEEP_CHAPTER_REVIEW_TOOLS = [
+        "review_structure_and_continuity",
+        "review_prose_and_humanity",
+    ]
     BLOCK_REVIEW_TOOLS = [
         "review_reveal_leak",
         "review_character_integrity",
         "review_time_consistency",
         "review_block_quality",
     ]
-    CHAPTER_REVIEW_TOOLS = [
-        "review_instruction_compliance",
-        "review_prose_quality",
-        "review_plot_logic",
-        "review_continuity",
-        "review_humanity",
-        "review_chapter_engine",
-    ]
-    OPTIONAL_CHAPTER_REVIEW_TOOLS = [
-        "review_clue_origin",
-    ]
+    CHAPTER_REVIEW_TOOLS = list(FAST_CHAPTER_REVIEW_TOOLS)
+    OPTIONAL_CHAPTER_REVIEW_TOOLS: list[str] = []
     OUTPUT_FORMAT_RULES = [
         "Prefer Chinese full-width punctuation.",
         "Keep dialogue on its own paragraph when possible.",
@@ -66,7 +65,8 @@ class WritingChapterAgent(BaseAgent):
         prompt_library: PromptLibrary | None = None,
         skill_manager: SkillManager | None = None,
         tool_registry: ToolRegistry | None = None,
-        max_iterations: int = 3,
+        max_iterations: int | None = None,
+        mode: str = "fast",
     ) -> None:
         super().__init__(name="WritingChapterAgent")
         self.llm_client = llm_client
@@ -80,7 +80,12 @@ class WritingChapterAgent(BaseAgent):
             llm_client=llm_client,
             prompt_library=self.prompt_library,
         )
-        self.max_iterations = max_iterations
+        normalized_mode = str(mode or "fast").strip().lower()
+        if normalized_mode not in {"fast", "deep"}:
+            raise ValueError(f"Unsupported WritingChapterAgent mode: {mode}")
+        self.mode = normalized_mode
+        self.max_iterations = max_iterations if max_iterations is not None else (1 if self.mode == "fast" else 3)
+        self.max_patch_rounds = 2 if self.mode == "fast" else max(int(self.max_iterations), 2)
 
     def write_chapter(
         self,
@@ -314,195 +319,262 @@ class WritingChapterAgent(BaseAgent):
             )
 
         active_skills = self.skill_manager.initial_skills(stage="chapter")
-        best_snapshot = {
-            "chapter_text": chapter_text,
-            "review_reports": review_reports,
-            "final_judge": final_judge,
-            "stage_log": list(stage_log),
-        }
-
-        for iteration in range(1, self.max_iterations + 1):
-            if review_reports:
-                active_skills = self.skill_manager.discover(
-                    chapter_brief=chapter_brief,
-                    review_reports=review_reports,
-                    stage="chapter",
-                )
+        review_reports = {}
+        self._emit_stage(
+            stage="review_iteration_1_skills",
+            action="Select chapter skills",
+            reason="Use the lighter chapter-level skill set for the current mode.",
+            chapter_id=chapter_brief.chapter_id,
+            iteration=1,
+            mode=self.mode,
+            skill_ids=[skill.skill_id for skill in active_skills],
+        )
+        planned_tools = self._plan_review_tools(
+            chapter_brief=chapter_brief,
+            review_reports=review_reports,
+            active_skills=active_skills,
+            content_blocks=committed_blocks,
+        )
+        self._emit_stage(
+            stage="review_iteration_1_plan",
+            action="Plan chapter reviews",
+            reason="Keep the chapter-level review set light and deterministic.",
+            chapter_id=chapter_brief.chapter_id,
+            iteration=1,
+            mode=self.mode,
+            tool_calls=planned_tools,
+        )
+        review_reports = self._run_review_tools(
+            tool_names=planned_tools,
+            chapter_brief=chapter_brief,
+            context=context,
+            chapter_text=chapter_text,
+            chapter_id=chapter_brief.chapter_id,
+            iteration=1,
+            planned_blocks=committed_blocks,
+        )
+        final_judge = self._build_review_gate_result(review_reports)
+        self._emit_stage(
+            stage="review_iteration_1_judge",
+            action="Run light review gate",
+            reason="Decide whether the chapter can finalize directly or needs a focused block patch.",
+            chapter_id=chapter_brief.chapter_id,
+            iteration=1,
+            mode=self.mode,
+            final_judge=final_judge,
+        )
+        stage_log.append(
+            {
+                "stage": "review_iteration_1",
+                "mode": self.mode,
+                "skill_ids": [skill.skill_id for skill in active_skills],
+                "tool_calls": planned_tools,
+                "review_reports": review_reports,
+                "final_judge": final_judge,
+            }
+        )
+        if bool(final_judge.get("passed")):
             self._emit_stage(
-                stage=f"review_iteration_{iteration}_skills",
-                action="Select chapter skills",
-                reason="Use focused chapter-level skills for the current review cycle.",
+                stage="review_iteration_1_passed",
+                action="Chapter review passed",
+                reason="The fast review gate passed; proceed to final polish.",
                 chapter_id=chapter_brief.chapter_id,
-                iteration=iteration,
-                skill_ids=[skill.skill_id for skill in active_skills],
-            )
-            planned_tools = self._plan_review_tools(
-                chapter_brief=chapter_brief,
-                review_reports=review_reports,
-                active_skills=active_skills,
-                content_blocks=committed_blocks,
-            )
-            self._emit_stage(
-                stage=f"review_iteration_{iteration}_plan",
-                action="Plan chapter reviews",
-                reason="Keep the chapter-level heavy review set focused and deterministic.",
-                chapter_id=chapter_brief.chapter_id,
-                iteration=iteration,
-                tool_calls=planned_tools,
-            )
-            review_reports = self._run_review_tools(
-                tool_names=planned_tools,
-                chapter_brief=chapter_brief,
-                context=context,
-                chapter_text=chapter_text,
-                chapter_id=chapter_brief.chapter_id,
-                iteration=iteration,
-            )
-            chapter_revision_plan = ReviewAggregator.aggregate_chapter(
-                review_reports=review_reports,
-                triggered_skills=[skill.skill_id for skill in active_skills],
-                chapter_id=chapter_brief.chapter_id,
-            )
-            dynamic_instruction = DynamicInstructionBuilder.build(
-                review_reports=review_reports,
-                revision_plan=chapter_revision_plan,
-                active_skill_ids=[skill.skill_id for skill in active_skills],
-            )
-            self._emit_stage(
-                stage=f"review_iteration_{iteration}_aggregate",
-                action="Aggregate chapter reviews",
-                reason="Build a chapter-only revision plan from chapter-level review evidence.",
-                chapter_id=chapter_brief.chapter_id,
-                iteration=iteration,
-                review_reports=review_reports,
-                chapter_revision_plan=chapter_revision_plan.model_dump(mode="json"),
-                dynamic_instruction=dynamic_instruction.model_dump(mode="json"),
-            )
-            final_judge = self.tool_registry.execute(
-                "final_judge",
-                {"review_reports": review_reports},
-            )
-            self._emit_stage(
-                stage=f"review_iteration_{iteration}_judge",
-                action="Run final judge",
-                reason="Decide whether the chapter can pass or needs a focused rewrite.",
-                chapter_id=chapter_brief.chapter_id,
-                iteration=iteration,
+                iteration=1,
+                mode=self.mode,
                 final_judge=final_judge,
             )
-            stage_log.append(
-                {
-                    "stage": f"review_iteration_{iteration}",
-                    "skill_ids": [skill.skill_id for skill in active_skills],
-                    "tool_calls": planned_tools,
-                    "review_reports": review_reports,
-                    "chapter_revision_plan": chapter_revision_plan.model_dump(mode="json"),
-                    "dynamic_instruction": dynamic_instruction.model_dump(mode="json"),
-                    "final_judge": final_judge,
-                }
+        else:
+            committed_blocks = self._materialize_full_draft_blocks(
+                planned_blocks=committed_blocks,
+                chapter_text=chapter_text,
             )
-            if self._judge_score(final_judge) >= self._judge_score(best_snapshot["final_judge"]):
-                best_snapshot = {
-                    "chapter_text": chapter_text,
-                    "review_reports": review_reports,
-                    "final_judge": final_judge,
-                    "stage_log": list(stage_log),
-                }
-            if bool(final_judge.get("passed")):
+            self._emit_stage(
+                stage="materialize_full_draft_blocks_done",
+                action="Materialize block texts",
+                reason="Map the full-chapter draft back onto planned blocks so only targeted blocks can be patched.",
+                chapter_id=chapter_brief.chapter_id,
+                block_count=len(committed_blocks),
+            )
+            review_source: dict[str, Any] = dict(review_reports)
+            patch_round = 0
+            while patch_round < self.max_patch_rounds:
+                patch_round += 1
                 self._emit_stage(
-                    stage=f"review_iteration_{iteration}_passed",
-                    action="Chapter review passed",
-                    reason="Proceed to final polish and format cleanup.",
+                    stage=f"patch_round_{patch_round}_plan_start",
+                    action="Build chapter patch plan",
+                    reason="Convert review findings into the smallest possible block-level patch plan.",
                     chapter_id=chapter_brief.chapter_id,
-                    iteration=iteration,
-                    final_judge=final_judge,
+                    patch_round=patch_round,
+                    mode=self.mode,
                 )
-                break
-            if iteration >= self.max_iterations:
-                requires_human_review = True
-                chapter_text = str(best_snapshot["chapter_text"] or chapter_text)
-                review_reports = dict(best_snapshot["review_reports"] or review_reports)
-                final_judge = dict(best_snapshot["final_judge"] or final_judge)
-                stage_log = list(best_snapshot["stage_log"] or stage_log)
+                patch_plan = self.tool_registry.execute(
+                    "build_chapter_patch_plan",
+                    {
+                        "chapter_text": chapter_text,
+                        "planned_blocks_json": self._chapter_plan_json(committed_blocks),
+                        "review_reports": review_source,
+                        "chapter_summary_context_text": self._chapter_summary_context(
+                            chapter_brief=chapter_brief,
+                            context=context,
+                        ),
+                        "relationship_state_text": context.relationship_state_text,
+                    },
+                )
+                self._emit_stage(
+                    stage=f"patch_round_{patch_round}_plan_done",
+                    action="Chapter patch plan ready",
+                    reason="The patch planner has selected the exact blocks that should change.",
+                    chapter_id=chapter_brief.chapter_id,
+                    patch_round=patch_round,
+                    mode=self.mode,
+                    patch_plan=patch_plan,
+                )
+                if not list(patch_plan.get("patch_targets") or []):
+                    requires_human_review = True
+                    final_judge = self._build_patch_loop_failure_result(
+                        judge_result={},
+                        patch_round=patch_round,
+                        reason="Patch planner could not find safe local targets. 建议切到 deep 模式继续修。",
+                    )
+                    stage_log.append(
+                        {
+                            "stage": f"patch_round_{patch_round}_no_targets",
+                            "patch_round": patch_round,
+                            "patch_plan": patch_plan,
+                            "final_judge": final_judge,
+                        }
+                    )
+                    self._emit_stage(
+                        stage=f"patch_round_{patch_round}_no_targets",
+                        action="Patch plan stopped",
+                        reason="No safe block-level patch target was found, so the loop stops and suggests deep mode.",
+                        chapter_id=chapter_brief.chapter_id,
+                        patch_round=patch_round,
+                        final_judge=final_judge,
+                    )
+                    break
+
+                self._emit_stage(
+                    stage=f"patch_round_{patch_round}_rewrite_start",
+                    action="Rewrite targeted blocks",
+                    reason="Rewrite only the blocks selected by the patch planner.",
+                    chapter_id=chapter_brief.chapter_id,
+                    patch_round=patch_round,
+                    mode=self.mode,
+                    patch_targets=list(patch_plan.get("patch_targets") or []),
+                )
+                rewrite_result = self.tool_registry.execute(
+                    "rewrite_blocks_by_plan",
+                    {
+                        "planned_blocks_json": self._chapter_plan_json(committed_blocks),
+                        "original_blocks_json": self._chapter_plan_json(committed_blocks),
+                        "patch_plan": patch_plan,
+                        "chapter_payload_text": context.chapter_payload_text,
+                        "scene_character_context_text": context.scene_character_context_text,
+                        "relationship_state_text": context.relationship_state_text,
+                        "style_card_text": context.style_card_text,
+                    },
+                )
+                committed_blocks = self._apply_patch_result_to_blocks(
+                    original_blocks=committed_blocks,
+                    rewrite_result=rewrite_result,
+                )
+                chapter_text = str(rewrite_result.get("merged_chapter_text") or chapter_text).strip()
+                self._emit_chapter_preview(
+                    chapter_brief=chapter_brief,
+                    content_blocks=committed_blocks,
+                    final_text=chapter_text,
+                    final_version=patch_round,
+                    is_finalized=False,
+                    preview_mode="chapter_rewrite",
+                    callback=on_chapter_preview_updated,
+                )
+                self._emit_stage(
+                    stage=f"patch_round_{patch_round}_rewrite_done",
+                    action="Targeted block rewrite complete",
+                    reason="Only the selected blocks were rewritten and merged back into the chapter.",
+                    chapter_id=chapter_brief.chapter_id,
+                    patch_round=patch_round,
+                    mode=self.mode,
+                    rewrite_result=rewrite_result,
+                )
+                judge_result = self.tool_registry.execute(
+                    "judge_patched_chapter",
+                    {
+                        "merged_chapter_text": chapter_text,
+                        "patch_plan_json": json.dumps(patch_plan, ensure_ascii=False, indent=2),
+                        "patched_block_contexts_json": self._patched_block_contexts_json(
+                            content_blocks=committed_blocks,
+                            patch_plan=patch_plan,
+                        ),
+                        "minimal_context_text": self._minimal_patch_context(
+                            chapter_brief=chapter_brief,
+                            context=context,
+                        ),
+                    },
+                )
+                final_judge = self._normalize_patch_judge_result(
+                    judge_result=judge_result,
+                    patch_round=patch_round,
+                )
+                review_reports["judge_patched_chapter"] = judge_result
                 stage_log.append(
                     {
-                        "stage": "max_iterations_reached",
-                        "requires_human_review": True,
-                        "blocking_reasons": final_judge.get("blocking_reasons", []),
+                        "stage": f"patch_round_{patch_round}",
+                        "patch_round": patch_round,
+                        "patch_plan": patch_plan,
+                        "rewrite_result": rewrite_result,
+                        "judge_result": judge_result,
+                        "final_judge": final_judge,
                     }
                 )
                 self._emit_stage(
-                    stage="max_iterations_reached",
-                    action="Reached max iterations",
-                    reason="Keep the best available chapter version and mark it for human review.",
+                    stage=f"patch_round_{patch_round}_judge",
+                    action="Judge patched chapter",
+                    reason="Check whether the targeted patch resolved the issues without causing fresh obvious damage.",
                     chapter_id=chapter_brief.chapter_id,
+                    patch_round=patch_round,
+                    mode=self.mode,
+                    judge_result=judge_result,
                     final_judge=final_judge,
                 )
-                break
-
-            self._emit_stage(
-                stage=f"rewrite_iteration_{iteration}_start",
-                action="Rewrite chapter by plan",
-                reason="Use the chapter-only revision plan to improve prose, humanity, and chapter engine.",
-                chapter_id=chapter_brief.chapter_id,
-                iteration=iteration,
-                chapter_revision_plan=chapter_revision_plan.model_dump(mode="json"),
-            )
-            rewrite_result = self.tool_registry.execute(
-                "rewrite_by_plan",
-                {
-                    "selection_summary_text": context.selection_summary_text,
-                    "time_anchor_text": context.time_anchor_text,
-                    "chapter_visible_context_text": context.chapter_visible_context_text,
-                    "completed_chapter_memory_text": context.completed_chapter_memory_text,
-                    "step_1_story_foundation_text": context.step_1_story_foundation_text,
-                    "step_2_worldbuilding_text": context.step_2_worldbuilding_text,
-                    "step_3_character_packets_text": context.step_3_character_packets_text,
-                    "step_4_event_timeline_text": context.step_4_event_timeline_text,
-                    "step_5_character_milestones_text": context.step_5_character_milestones_text,
-                    "step_6_twists_text": context.step_6_twists_text,
-                    "step_7_story_lines_text": context.step_7_story_lines_text,
-                    "step_8_chapter_brief_text": context.step_8_chapter_brief_text,
-                    "chapter_payload_text": context.chapter_payload_text,
-                    "timeline_anchor_facts_text": context.timeline_anchor_facts_text,
-                    "relevant_world_rules_text": context.relevant_world_rules_text,
-                    "scene_character_context_text": context.scene_character_context_text,
-                    "relationship_state_text": context.relationship_state_text,
-                    "style_card_text": context.style_card_text,
-                    "original_text": chapter_text,
-                    "chapter_text": chapter_text,
-                    "current_chapter_draft_tail": self._tail_text(chapter_text),
-                    "previous_scene_tail": "",
-                    "revision_plan": chapter_revision_plan.model_dump(mode="json"),
-                    "dynamic_instruction_text": json.dumps(dynamic_instruction.model_dump(mode="json"), ensure_ascii=False, indent=2),
-                    "loaded_skill_instructions_text": self.skill_manager.format_for_model(active_skills),
-                },
-            )
-            chapter_text = str(rewrite_result.get("chapter_text") or "").strip()
-            self._emit_chapter_preview(
-                chapter_brief=chapter_brief,
-                content_blocks=committed_blocks,
-                final_text=chapter_text,
-                final_version=iteration,
-                is_finalized=False,
-                preview_mode="chapter_rewrite",
-                callback=on_chapter_preview_updated,
-            )
-            stage_log.append(
-                {
-                    "stage": f"rewrite_iteration_{iteration}",
-                    "skill_ids": [skill.skill_id for skill in active_skills],
-                    "chapter_length": len(chapter_text),
-                }
-            )
-            self._emit_stage(
-                stage=f"rewrite_iteration_{iteration}_done",
-                action="Finished chapter rewrite",
-                reason="The chapter rewrite is ready for another focused heavy review pass.",
-                chapter_id=chapter_brief.chapter_id,
-                iteration=iteration,
-                chapter_length=len(chapter_text),
-            )
+                if bool(judge_result.get("pass") or judge_result.get("passed")):
+                    self._emit_stage(
+                        stage=f"patch_round_{patch_round}_passed",
+                        action="Patch loop passed",
+                        reason="The patch judge passed and the chapter can proceed to final polish.",
+                        chapter_id=chapter_brief.chapter_id,
+                        patch_round=patch_round,
+                        mode=self.mode,
+                        final_judge=final_judge,
+                    )
+                    break
+                if patch_round >= self.max_patch_rounds:
+                    requires_human_review = True
+                    final_judge = self._build_patch_loop_failure_result(
+                        judge_result=judge_result,
+                        patch_round=patch_round,
+                        reason="Patch judge still failed after the fast patch limit. 建议切到 deep 模式继续修。",
+                    )
+                    self._emit_stage(
+                        stage="max_patch_rounds_reached",
+                        action="Reached patch limit",
+                        reason="Stop the fast patch loop and keep the best patched version while suggesting deep mode.",
+                        chapter_id=chapter_brief.chapter_id,
+                        patch_round=patch_round,
+                        mode=self.mode,
+                        final_judge=final_judge,
+                    )
+                    stage_log.append(
+                        {
+                            "stage": "max_patch_rounds_reached",
+                            "patch_round": patch_round,
+                            "requires_human_review": True,
+                            "final_judge": final_judge,
+                        }
+                    )
+                    break
+                review_source = self._review_source_from_patch_judge(judge_result)
 
         finalize_skills = self.skill_manager.finalize_skills()
         self._emit_stage(
@@ -941,6 +1013,303 @@ class WritingChapterAgent(BaseAgent):
     def _merge_blocks_to_chapter(blocks: list[ContentBlock]) -> str:
         return "\n\n".join(str(block.text or "").strip() for block in blocks if str(block.text or "").strip()).strip()
 
+    @staticmethod
+    def _report_passed(report: dict[str, Any]) -> bool:
+        return bool(report.get("passed", report.get("pass", False)))
+
+    @classmethod
+    def _all_reviews_passed(cls, review_reports: dict[str, Any]) -> bool:
+        if not review_reports:
+            return False
+        for report in review_reports.values():
+            if not isinstance(report, dict):
+                return False
+            if not cls._report_passed(report):
+                return False
+            if list(report.get("issues") or []):
+                return False
+        return True
+
+    @classmethod
+    def _build_review_gate_result(cls, review_reports: dict[str, Any]) -> dict[str, Any]:
+        blocking_reasons: list[str] = []
+        for tool_name, report in review_reports.items():
+            if not isinstance(report, dict):
+                blocking_reasons.append(f"{tool_name} returned an invalid report.")
+                continue
+            issues = list(report.get("issues") or [])
+            if not cls._report_passed(report):
+                summary = str(report.get("summary") or "").strip()
+                blocking_reasons.append(summary or f"{tool_name} did not pass.")
+                continue
+            if issues:
+                blocking_reasons.append(f"{tool_name} still reported {len(issues)} issue(s).")
+        return {
+            "passed": not blocking_reasons,
+            "blocking_reasons": blocking_reasons,
+            "metrics": {
+                "review_tools": len(review_reports),
+                "issue_count": sum(len(list(report.get("issues") or [])) for report in review_reports.values() if isinstance(report, dict)),
+            },
+        }
+
+    @classmethod
+    def _materialize_full_draft_blocks(
+        cls,
+        *,
+        planned_blocks: list[ContentBlock],
+        chapter_text: str,
+    ) -> list[ContentBlock]:
+        block_texts = cls._split_text_into_block_texts(chapter_text=chapter_text, block_count=len(planned_blocks))
+        materialized: list[ContentBlock] = []
+        for index, block in enumerate(planned_blocks):
+            text = block_texts[index] if index < len(block_texts) else ""
+            materialized.append(
+                block.model_copy(
+                    update={
+                        "text": text,
+                        "status": "committed" if text else block.status,
+                    }
+                )
+            )
+        return materialized
+
+    @classmethod
+    def _split_text_into_block_texts(cls, *, chapter_text: str, block_count: int) -> list[str]:
+        clean = str(chapter_text or "").strip()
+        if block_count <= 0:
+            return []
+        if not clean:
+            return [""] * block_count
+        paragraphs = cls._split_paragraphs(clean)
+        if len(paragraphs) >= block_count:
+            return cls._pack_units_to_block_count(paragraphs, block_count=block_count, separator="\n\n")
+        sentences = cls._split_sentences(clean)
+        if len(sentences) >= block_count:
+            return cls._pack_units_to_block_count(sentences, block_count=block_count, separator="")
+        return cls._chunk_text_evenly(clean, block_count=block_count)
+
+    @staticmethod
+    def _split_paragraphs(text: str) -> list[str]:
+        return [item.strip() for item in re.split(r"\n\s*\n+", str(text or "").strip()) if item.strip()]
+
+    @staticmethod
+    def _split_sentences(text: str) -> list[str]:
+        pieces = re.findall(r"[^。！？!?；;]+[。！？!?；;]?|\S", str(text or "").strip())
+        return [item.strip() for item in pieces if item and item.strip()]
+
+    @staticmethod
+    def _pack_units_to_block_count(units: list[str], *, block_count: int, separator: str) -> list[str]:
+        base_size, extra = divmod(len(units), block_count)
+        result: list[str] = []
+        cursor = 0
+        for index in range(block_count):
+            take = base_size + (1 if index < extra else 0)
+            take = max(take, 1)
+            chunk = units[cursor : cursor + take]
+            if not chunk:
+                result.append("")
+                continue
+            cursor += take
+            result.append(separator.join(chunk).strip())
+        if cursor < len(units) and result:
+            remainder = separator.join(units[cursor:]).strip()
+            if result[-1] and remainder:
+                result[-1] = f"{result[-1]}{separator}{remainder}".strip()
+            elif remainder:
+                result[-1] = remainder
+        return result
+
+    @staticmethod
+    def _chunk_text_evenly(text: str, *, block_count: int) -> list[str]:
+        clean = str(text or "").strip()
+        if not clean:
+            return [""] * block_count
+        total = len(clean)
+        average = max(total // block_count, 1)
+        result: list[str] = []
+        start = 0
+        punctuation = "。！？!?；;，,"
+        for index in range(block_count):
+            if index == block_count - 1:
+                result.append(clean[start:].strip())
+                break
+            tentative_end = min(start + average, total - (block_count - index - 1))
+            end = tentative_end
+            while end < total and clean[end] not in punctuation and end - tentative_end < 30:
+                end += 1
+            if end < total:
+                end += 1
+            chunk = clean[start:end].strip()
+            if not chunk:
+                chunk = clean[start:tentative_end].strip()
+                end = tentative_end
+            result.append(chunk)
+            start = end
+        while len(result) < block_count:
+            result.append("")
+        return result[:block_count]
+
+    @classmethod
+    def _chapter_summary_context(cls, *, chapter_brief: ChapterBrief, context: Any) -> str:
+        lines = [
+            f"chapter_id: {chapter_brief.chapter_id}",
+            f"title: {chapter_brief.title}",
+            f"summary: {chapter_brief.summary}",
+            "",
+            "[Step 8 chapter brief]",
+            str(context.step_8_chapter_brief_text or "").strip(),
+            "",
+            "[Chapter payload]",
+            str(context.chapter_payload_text or "").strip(),
+        ]
+        return "\n".join(item for item in lines if item is not None).strip()
+
+    @classmethod
+    def _apply_patch_result_to_blocks(
+        cls,
+        *,
+        original_blocks: list[ContentBlock],
+        rewrite_result: dict[str, Any],
+    ) -> list[ContentBlock]:
+        patched_map = {
+            str(item.get("block_id") or "").strip(): str(item.get("new_text") or "").strip()
+            for item in list(rewrite_result.get("patched_blocks") or [])
+            if str(item.get("block_id") or "").strip()
+        }
+        updated_blocks: list[ContentBlock] = []
+        for block in original_blocks:
+            if block.block_id not in patched_map:
+                updated_blocks.append(block)
+                continue
+            new_text = patched_map[block.block_id]
+            changed = new_text != str(block.text or "").strip()
+            updated_blocks.append(
+                block.model_copy(
+                    update={
+                        "text": new_text,
+                        "status": "committed",
+                        "version": max(int(block.version), 1) + (1 if changed else 0),
+                    }
+                )
+            )
+        return updated_blocks
+
+    @classmethod
+    def _patched_block_contexts_json(
+        cls,
+        *,
+        content_blocks: list[ContentBlock],
+        patch_plan: dict[str, Any],
+    ) -> str:
+        block_map = {block.block_id: block for block in content_blocks}
+        ordered_ids = [block.block_id for block in content_blocks]
+        contexts: list[dict[str, Any]] = []
+        for target in list(patch_plan.get("patch_targets") or []):
+            block_id = str(target.get("target_id") or "").strip()
+            if not block_id or block_id not in block_map:
+                continue
+            current = block_map[block_id]
+            previous_block = cls._neighbor_by_id(content_blocks, block_id, offset=-1)
+            next_block = cls._neighbor_by_id(content_blocks, block_id, offset=1)
+            contexts.append(
+                {
+                    "block_id": block_id,
+                    "problem_type": target.get("problem_type", ""),
+                    "goal": target.get("goal", ""),
+                    "instructions": list(target.get("instructions") or []),
+                    "current_block_text": current.text,
+                    "previous_block_text": previous_block.text if previous_block is not None else "",
+                    "next_block_text": next_block.text if next_block is not None else "",
+                    "all_block_ids": ordered_ids,
+                }
+            )
+        return json.dumps(contexts, ensure_ascii=False, indent=2)
+
+    @staticmethod
+    def _neighbor_by_id(blocks: list[ContentBlock], block_id: str, *, offset: int) -> ContentBlock | None:
+        ordered_ids = [block.block_id for block in blocks]
+        if block_id not in ordered_ids:
+            return None
+        index = ordered_ids.index(block_id) + offset
+        if index < 0 or index >= len(blocks):
+            return None
+        return blocks[index]
+
+    @staticmethod
+    def _minimal_patch_context(*, chapter_brief: ChapterBrief, context: Any) -> str:
+        lines = [
+            f"chapter_id: {chapter_brief.chapter_id}",
+            f"chapter_title: {chapter_brief.title}",
+            f"chapter_summary: {chapter_brief.summary}",
+            "",
+            "[Relationship state]",
+            str(context.relationship_state_text or "").strip(),
+            "",
+            "[Time anchor]",
+            str(context.time_anchor_text or "").strip(),
+        ]
+        return "\n".join(lines).strip()
+
+    @staticmethod
+    def _normalize_patch_judge_result(*, judge_result: dict[str, Any], patch_round: int) -> dict[str, Any]:
+        remaining = list(judge_result.get("remaining_issues") or [])
+        introduced = list(judge_result.get("newly_introduced_issues") or [])
+        reasons = [str(item.get("reason") or "").strip() for item in [*remaining, *introduced] if str(item.get("reason") or "").strip()]
+        return {
+            "passed": bool(judge_result.get("pass") or judge_result.get("passed")),
+            "blocking_reasons": reasons,
+            "metrics": {
+                "patch_round": patch_round,
+                "remaining_issue_count": len(remaining),
+                "introduced_issue_count": len(introduced),
+            },
+            "recommendation": str(judge_result.get("recommendation") or "").strip(),
+        }
+
+    @classmethod
+    def _build_patch_loop_failure_result(
+        cls,
+        *,
+        judge_result: dict[str, Any],
+        patch_round: int,
+        reason: str,
+    ) -> dict[str, Any]:
+        result = cls._normalize_patch_judge_result(judge_result=judge_result, patch_round=patch_round)
+        blocking = list(result.get("blocking_reasons") or [])
+        if reason:
+            blocking.append(reason)
+        result["passed"] = False
+        result["blocking_reasons"] = blocking
+        result["recommendation"] = reason
+        return result
+
+    @staticmethod
+    def _review_source_from_patch_judge(judge_result: dict[str, Any]) -> dict[str, Any]:
+        issues: list[dict[str, Any]] = []
+        for prefix, items in (
+            ("remaining", list(judge_result.get("remaining_issues") or [])),
+            ("introduced", list(judge_result.get("newly_introduced_issues") or [])),
+        ):
+            for index, item in enumerate(items, start=1):
+                issues.append(
+                    {
+                        "issue_id": f"{prefix}_{index}",
+                        "severity": "medium",
+                        "problem_type": str(item.get("problem_type") or prefix).strip() or prefix,
+                        "reason": str(item.get("reason") or "").strip(),
+                        "target_blocks": list(item.get("target_blocks") or []),
+                        "patch_hint": str(item.get("reason") or "").strip(),
+                    }
+                )
+        return {
+            "judge_patched_chapter": {
+                "pass": bool(judge_result.get("pass") or judge_result.get("passed")),
+                "issues": issues,
+                "summary": str(judge_result.get("recommendation") or "").strip(),
+            }
+        }
+
     def _plan_review_tools(
         self,
         *,
@@ -949,25 +1318,9 @@ class WritingChapterAgent(BaseAgent):
         active_skills: list[Any],
         content_blocks: list[ContentBlock],
     ) -> list[str]:
-        ordered: list[str] = []
-
-        for tool_name in self.CHAPTER_REVIEW_TOOLS:
-            if tool_name not in ordered:
-                ordered.append(tool_name)
-
-        if self._chapter_needs_clue_review(
-            chapter_brief=chapter_brief,
-            review_reports=review_reports,
-            content_blocks=content_blocks,
-        ):
-            ordered.append("review_clue_origin")
-
-        deduped: list[str] = []
-        allowed = {*(self.CHAPTER_REVIEW_TOOLS), *(self.OPTIONAL_CHAPTER_REVIEW_TOOLS)}
-        for tool_name in ordered:
-            if tool_name in allowed and tool_name not in deduped:
-                deduped.append(tool_name)
-        return deduped
+        del chapter_brief, review_reports, active_skills, content_blocks
+        base_tools = self.FAST_CHAPTER_REVIEW_TOOLS if self.mode == "fast" else self.DEEP_CHAPTER_REVIEW_TOOLS
+        return list(base_tools)
 
     @staticmethod
     def _chapter_needs_clue_review(
@@ -991,6 +1344,7 @@ class WritingChapterAgent(BaseAgent):
         chapter_text: str,
         chapter_id: str,
         iteration: int,
+        planned_blocks: list[ContentBlock],
     ) -> dict[str, Any]:
         payload = {
             "selection_summary_text": context.selection_summary_text,
@@ -1013,6 +1367,7 @@ class WritingChapterAgent(BaseAgent):
             "style_card_text": context.style_card_text,
             "chapter_text": chapter_text,
             "chapter_brief_json": chapter_brief.model_dump_json(indent=2),
+            "planned_blocks_json": self._chapter_plan_json(planned_blocks),
             "active_twists": [item.model_dump(mode="json") for item in context.active_twists],
             "active_twists_json": json.dumps([item.model_dump(mode="json") for item in context.active_twists], ensure_ascii=False, indent=2),
         }
@@ -1074,7 +1429,7 @@ class WritingChapterAgent(BaseAgent):
         if not result:
             return -1000
         score = 0
-        if bool(result.get("passed")):
+        if bool(result.get("passed", result.get("pass", False))):
             score += 1000
         score -= len(result.get("blocking_reasons", []) or []) * 20
         metrics = dict(result.get("metrics", {}) or {})

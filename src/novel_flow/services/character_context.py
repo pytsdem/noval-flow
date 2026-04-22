@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from novel_flow.models.schemas import ChapterBrief, CharacterCard, SceneCard, TwistDesign
+from novel_flow.services.selectors import get_character_card_by_name
 
 
 def _chapter_order(chapter_id: str) -> int:
@@ -72,7 +73,7 @@ class CharacterContextBuilder:
         }
         lines = ["[Scene character context]", ""]
         for name in focus_names:
-            card = next((item for item in character_cards if item.name == name), None)
+            card = get_character_card_by_name(character_cards, name)
             if card is None:
                 continue
             identity = " / ".join(

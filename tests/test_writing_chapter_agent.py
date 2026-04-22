@@ -24,6 +24,7 @@ from novel_flow.services.chapter_context import build_current_chapter_context
 from novel_flow.services.patcher import PatchExecutor
 from novel_flow.services.skill_manager import SkillManager
 from novel_flow.services.skill_registry import SkillRegistry
+from novel_flow.services.tool_registry import ToolRegistry
 from novel_flow.tools.final_judge import FinalJudgeTool
 
 
@@ -432,6 +433,121 @@ class WritingChapterAgentTests(unittest.TestCase):
             ensure_ascii=False,
         )
 
+    @staticmethod
+    def _targeted_review_pass(summary: str) -> str:
+        return json.dumps(
+            {
+                "pass": True,
+                "issues": [],
+                "summary": summary,
+            },
+            ensure_ascii=False,
+        )
+
+    @staticmethod
+    def _targeted_review_fail(*, issue_id: str, problem_type: str, target_blocks: list[str], patch_hint: str, reason: str) -> str:
+        return json.dumps(
+            {
+                "pass": False,
+                "issues": [
+                    {
+                        "issue_id": issue_id,
+                        "severity": "high",
+                        "problem_type": problem_type,
+                        "reason": reason,
+                        "target_blocks": target_blocks,
+                        "patch_hint": patch_hint,
+                    }
+                ],
+                "summary": reason,
+            },
+            ensure_ascii=False,
+        )
+
+    @staticmethod
+    def _patch_plan_single_target(block_id: str) -> str:
+        return json.dumps(
+            {
+                "patch_targets": [
+                    {
+                        "target_type": "block",
+                        "target_id": block_id,
+                        "problem_type": "duplicate_emotion",
+                        "goal": "压缩重复情绪并加强交接。",
+                        "instructions": [
+                            "删掉重复的冷意描写。",
+                            "保留男主的克制和试探。",
+                            "结尾给下一段留下紧绷感。",
+                        ],
+                        "local_context_needed": ["prev_block", "next_block", "relationship_state"],
+                        "source_issue_ids": ["I1"],
+                    }
+                ],
+                "unchanged_blocks": [
+                    "ch_002.sc_001.b001",
+                    "ch_002.sc_001.b003",
+                    "ch_002.sc_001.b004",
+                ],
+                "global_constraints": [
+                    "不得引入新设定。",
+                    "未命中的 block 不要改动。",
+                ],
+            },
+            ensure_ascii=False,
+        )
+
+    @staticmethod
+    def _patch_judge_pass() -> str:
+        return json.dumps(
+            {
+                "pass": True,
+                "remaining_issues": [],
+                "newly_introduced_issues": [],
+                "recommendation": "可以结束。",
+            },
+            ensure_ascii=False,
+        )
+
+    @staticmethod
+    def _patch_judge_fail(reason: str) -> str:
+        return json.dumps(
+            {
+                "pass": False,
+                "remaining_issues": [
+                    {
+                        "problem_type": "handoff_weak",
+                        "target_blocks": ["ch_002.sc_001.b002", "ch_002.sc_001.b003"],
+                        "reason": reason,
+                    }
+                ],
+                "newly_introduced_issues": [],
+                "recommendation": "建议再补一次 patch；若仍失败则切到 deep。",
+            },
+            ensure_ascii=False,
+        )
+
+    @staticmethod
+    def _four_block_draft() -> str:
+        return "\n\n".join(
+            [
+                "Paragraph one keeps the opening pressure on him before he can settle his breath.",
+                "Paragraph two repeats the cold pressure and delays the actual negotiation too long.",
+                "Paragraph three turns her pause into sharper relationship pressure.",
+                "Paragraph four closes on the dead witness and a narrower road forward.",
+            ]
+        )
+
+    @staticmethod
+    def _merge_four_block_draft(block_two: str) -> str:
+        return "\n\n".join(
+            [
+                "Paragraph one keeps the opening pressure on him before he can settle his breath.",
+                block_two,
+                "Paragraph three turns her pause into sharper relationship pressure.",
+                "Paragraph four closes on the dead witness and a narrower road forward.",
+            ]
+        )
+
     def _block_review_pass_once(self) -> list[str]:
         return [
             self._evidence_review_pass(),
@@ -442,13 +558,8 @@ class WritingChapterAgentTests(unittest.TestCase):
 
     def _chapter_review_pass_sequence(self) -> list[str]:
         return [
-            self._evidence_review_pass(),
-            self._prose_review_pass(),
-            self._evidence_review_pass(),
-            self._evidence_review_pass(),
-            self._humanity_review_pass(),
-            self._evidence_review_pass(),
-            self._evidence_review_pass(),
+            self._targeted_review_pass("结构和连续性通过。"),
+            self._targeted_review_pass("文风和人味通过。"),
         ]
 
     def test_skill_manager_discovers_guard_skills(self) -> None:
@@ -498,15 +609,16 @@ class WritingChapterAgentTests(unittest.TestCase):
         self.assertEqual(
             tool_names,
             [
-                "review_instruction_compliance",
-                "review_prose_quality",
-                "review_plot_logic",
-                "review_continuity",
-                "review_humanity",
-                "review_chapter_engine",
-                "review_clue_origin",
+                "review_structure_and_continuity",
+                "review_prose_and_humanity",
             ],
         )
+
+    def test_writing_chapter_agent_defaults_to_fast_mode(self) -> None:
+        agent = WritingChapterAgent(llm_client=RecordingSequenceLLM([]))
+
+        self.assertEqual(agent.mode, "fast")
+        self.assertEqual(agent.max_iterations, 1)
 
     def test_final_judge_blocks_failed_reports(self) -> None:
         result = FinalJudgeTool().run(
@@ -599,6 +711,189 @@ class WritingChapterAgentTests(unittest.TestCase):
         self.assertIn('"micro_hook": "He now has to answer the public pressure before he can reclaim the opening move."', full_chapter_prompt)
         self.assertIn('"character_reentry_mode"', full_chapter_prompt)
 
+    def test_fast_mode_direct_pass_skips_patch_tools(self) -> None:
+        llm = RecordingSequenceLLM(
+            [
+                self.sanitized_context_json,
+                self._planned_blocks_json(),
+                self._four_block_draft(),
+                self._targeted_review_pass("结构和连续性通过。"),
+                self._targeted_review_pass("文风和人味通过。"),
+                self._four_block_draft(),
+                json.dumps(
+                    {
+                        "chapter_id": "ch_002",
+                        "actual_events": ["He returns to court under pressure."],
+                        "reader_now_knows": ["The court still controls the opening move."],
+                        "reader_now_believes": ["She is still hiding something."],
+                        "open_questions": ["Why did she pause?"],
+                        "character_states": ["He stays disciplined."],
+                        "relationship_state": ["Their hostility sharpens."],
+                        "seeded_clues": ["She pauses once."],
+                        "locked_truths": ["Her true motive remains hidden."],
+                    },
+                    ensure_ascii=False,
+                ),
+            ]
+        )
+
+        class RecordingToolRegistry:
+            def __init__(self, inner) -> None:
+                self.inner = inner
+                self.calls: list[str] = []
+
+            def execute(self, tool_name: str, payload: dict[str, object]) -> dict[str, object]:
+                self.calls.append(tool_name)
+                return self.inner.execute(tool_name, payload)
+
+        registry = RecordingToolRegistry(ToolRegistry.build_default(llm_client=llm))
+        agent = WritingChapterAgent(llm_client=llm, tool_registry=registry)
+        result = agent.write_chapter(
+            chapter_brief=self.chapter_brief,
+            twist_designs=[self.twist],
+            story_lines=[self.line],
+            character_cards=self.characters,
+            worldbuilding={"story_engine": {"world_rules": ["The imperial verdict cannot be challenged publicly."]}},
+            actual_chapter_summaries=self.actual_summaries,
+        )
+
+        self.assertTrue(result.final_judge["passed"])
+        self.assertNotIn("build_chapter_patch_plan", registry.calls)
+        self.assertNotIn("rewrite_blocks_by_plan", registry.calls)
+        self.assertNotIn("rewrite_by_plan", registry.calls)
+
+    def test_fast_mode_patch_success_rewrites_only_targeted_blocks(self) -> None:
+        rewritten_block = "Paragraph two stops repeating the cold and pushes the negotiation forward under tighter restraint."
+        llm = RecordingSequenceLLM(
+            [
+                self.sanitized_context_json,
+                self._planned_blocks_json(),
+                self._four_block_draft(),
+                self._targeted_review_fail(
+                    issue_id="I1",
+                    problem_type="duplicate_emotion",
+                    target_blocks=["ch_002.sc_001.b002"],
+                    patch_hint="删掉重复冷意描写，直接推进谈判。",
+                    reason="第二段重复铺陈寒意，推进不足。",
+                ),
+                self._targeted_review_pass("文风和人味通过。"),
+                self._patch_plan_single_target("ch_002.sc_001.b002"),
+                rewritten_block,
+                self._patch_judge_pass(),
+                self._merge_four_block_draft(rewritten_block),
+                json.dumps(
+                    {
+                        "chapter_id": "ch_002",
+                        "actual_events": ["He turns public pressure into a procedural opening."],
+                        "reader_now_knows": ["The register can move the case indirectly."],
+                        "reader_now_believes": ["She is still hiding something."],
+                        "open_questions": ["Why did she pause?"],
+                        "character_states": ["He chooses a colder, more disciplined route."],
+                        "relationship_state": ["Their hostility gains calculation."],
+                        "seeded_clues": ["She pauses once."],
+                        "locked_truths": ["Her true motive remains hidden."],
+                    },
+                    ensure_ascii=False,
+                ),
+            ]
+        )
+
+        class RecordingToolRegistry:
+            def __init__(self, inner) -> None:
+                self.inner = inner
+                self.calls: list[str] = []
+
+            def execute(self, tool_name: str, payload: dict[str, object]) -> dict[str, object]:
+                self.calls.append(tool_name)
+                return self.inner.execute(tool_name, payload)
+
+        registry = RecordingToolRegistry(ToolRegistry.build_default(llm_client=llm))
+        agent = WritingChapterAgent(llm_client=llm, tool_registry=registry)
+        result = agent.write_chapter(
+            chapter_brief=self.chapter_brief,
+            twist_designs=[self.twist],
+            story_lines=[self.line],
+            character_cards=self.characters,
+            worldbuilding={"story_engine": {"world_rules": ["The imperial verdict cannot be challenged publicly."]}},
+            actual_chapter_summaries=self.actual_summaries,
+        )
+
+        block_map = {block.block_id: block.text for block in result.content_blocks}
+        self.assertTrue(result.final_judge["passed"])
+        self.assertIn("build_chapter_patch_plan", registry.calls)
+        self.assertIn("rewrite_blocks_by_plan", registry.calls)
+        self.assertNotIn("rewrite_by_plan", registry.calls)
+        self.assertEqual(block_map["ch_002.sc_001.b001"], "Paragraph one keeps the opening pressure on him before he can settle his breath.")
+        self.assertEqual(block_map["ch_002.sc_001.b002"], rewritten_block)
+        self.assertEqual(block_map["ch_002.sc_001.b003"], "Paragraph three turns her pause into sharper relationship pressure.")
+        self.assertEqual(block_map["ch_002.sc_001.b004"], "Paragraph four closes on the dead witness and a narrower road forward.")
+
+    def test_fast_mode_patch_failure_stops_and_suggests_deep(self) -> None:
+        first_rewrite = "Paragraph two is shorter, but the handoff into the pause is still weak."
+        second_rewrite = "Paragraph two tightens again, yet the next beat still feels slightly detached."
+        llm = RecordingSequenceLLM(
+            [
+                self.sanitized_context_json,
+                self._planned_blocks_json(),
+                self._four_block_draft(),
+                self._targeted_review_fail(
+                    issue_id="I1",
+                    problem_type="duplicate_emotion",
+                    target_blocks=["ch_002.sc_001.b002"],
+                    patch_hint="删掉重复冷意描写，直接推进谈判。",
+                    reason="第二段重复铺陈寒意，推进不足。",
+                ),
+                self._targeted_review_pass("文风和人味通过。"),
+                self._patch_plan_single_target("ch_002.sc_001.b002"),
+                first_rewrite,
+                self._patch_judge_fail("第二段到第三段的交接还是偏弱。"),
+                self._patch_plan_single_target("ch_002.sc_001.b002"),
+                second_rewrite,
+                self._patch_judge_fail("第二段到第三段的交接仍然偏弱。"),
+                self._merge_four_block_draft(second_rewrite),
+                json.dumps(
+                    {
+                        "chapter_id": "ch_002",
+                        "actual_events": ["He still forces a procedural opening."],
+                        "reader_now_knows": ["The public pressure remains unresolved."],
+                        "reader_now_believes": ["She is still hiding something."],
+                        "open_questions": ["Why did she pause?"],
+                        "character_states": ["He stays controlled."],
+                        "relationship_state": ["The handoff still feels tense and incomplete."],
+                        "seeded_clues": ["She pauses once."],
+                        "locked_truths": ["Her true motive remains hidden."],
+                    },
+                    ensure_ascii=False,
+                ),
+            ]
+        )
+
+        class RecordingToolRegistry:
+            def __init__(self, inner) -> None:
+                self.inner = inner
+                self.calls: list[str] = []
+
+            def execute(self, tool_name: str, payload: dict[str, object]) -> dict[str, object]:
+                self.calls.append(tool_name)
+                return self.inner.execute(tool_name, payload)
+
+        registry = RecordingToolRegistry(ToolRegistry.build_default(llm_client=llm))
+        agent = WritingChapterAgent(llm_client=llm, tool_registry=registry)
+        result = agent.write_chapter(
+            chapter_brief=self.chapter_brief,
+            twist_designs=[self.twist],
+            story_lines=[self.line],
+            character_cards=self.characters,
+            worldbuilding={"story_engine": {"world_rules": ["The imperial verdict cannot be challenged publicly."]}},
+            actual_chapter_summaries=self.actual_summaries,
+        )
+
+        self.assertFalse(result.final_judge["passed"])
+        self.assertTrue(result.requires_human_review)
+        self.assertIn("deep", result.final_judge["recommendation"].lower())
+        self.assertEqual(registry.calls.count("rewrite_blocks_by_plan"), 2)
+        self.assertNotIn("rewrite_by_plan", registry.calls)
+
     def test_writing_chapter_agent_emits_live_stage_events(self) -> None:
         llm = RecordingSequenceLLM(
             [
@@ -688,7 +983,7 @@ class WritingChapterAgentTests(unittest.TestCase):
             premise=premise,
             characters=self.characters,
             volume_titles=["Volume 1"],
-            chapter_plans=[],
+            chapter_briefs=[],
         )
         book = writer.create_book(blueprint=blueprint, source_query="query")
         book.metadata["story_blueprint"] = {
@@ -764,7 +1059,7 @@ class WritingChapterAgentTests(unittest.TestCase):
             premise=premise,
             characters=self.characters,
             volume_titles=["Volume 1"],
-            chapter_plans=[],
+            chapter_briefs=[],
         )
         book = writer.create_book(blueprint=blueprint, source_query="query")
         book.metadata["story_blueprint"] = {

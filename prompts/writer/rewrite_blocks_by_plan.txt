@@ -1,0 +1,42 @@
+Rewrite only the current target block. Return prose only for the rewritten block, with no JSON, no explanation, and no extra labels.
+
+[Chapter payload]
+{chapter_payload_text}
+
+[Scene character context]
+{scene_character_context_text}
+
+[Relationship state]
+{relationship_state_text}
+
+[Style card]
+{style_card_text}
+
+[Patch target]
+{patch_target_json}
+
+[Global constraints]
+{global_constraints_json}
+
+[Current block card]
+{current_block_card_text}
+
+[Previous block text]
+{previous_block_text}
+
+[Current block text]
+{current_block_text}
+
+[Next block text]
+{next_block_text}
+
+Rules:
+1. Rewrite only the current block.
+2. Keep continuity with the previous and next block.
+3. Do not introduce new setting facts, new clues, or hidden truths.
+4. Preserve the current block's narrative job while fixing the targeted issue.
+5. Keep the prose natural in Simplified Chinese and avoid repeating information already obvious in adjacent blocks.
+6. If the target issue is repetition, compress or redirect instead of replacing it with fresh filler.
+7. End the rewritten block in a way that hands off cleanly to the next block.
+
+Your output must be only the rewritten block text.
