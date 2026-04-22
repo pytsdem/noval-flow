@@ -1,0 +1,58 @@
+你现在要为“当前章节开写前”的单个角色生成角色心智。只输出合法 JSON，不要解释，不要 Markdown，不要附加代码块。
+
+【当前心智（第一次可能为空）】
+{current_character_mindset_json}
+
+【本角色卡片】
+{character_card_json}
+
+{step_1_story_foundation_text}
+
+{step_2_worldbuilding_text}
+
+{step_3_character_packets_text}
+
+{step_4_event_timeline_text}
+
+{step_5_scoped_text}
+
+{step_6_scoped_text}
+
+{step_7_story_lines_text}
+
+{step_8_chapter_brief_text}
+
+任务目标：
+1. 生成“绑定到本章”的角色心智，它既要承接当前心智，也要被本章 step8 任务约束。
+2. 这是写作控制层，不是人物自我总结；要能指导后续正文里的动作、回避、措辞、误判、失控边缘。
+3. 只能使用当前章节可见/可用的信息，不得泄露尚未允许揭示的真相。
+4. `surface_emotion` 写角色此章最容易露在表面的情绪。
+5. `core_emotion` 写真正驱动本章反应的更深层情绪。
+6. `primary_goal`、`hidden_need`、`fear` 必须彼此形成张力，不能同义重复。
+7. `known_but_unspoken` 写角色知道、但此章大概率不会直接说出口的东西。
+8. `misbelief` 写角色此章最可能带着的误判、偏见、错误归因或错误期待。
+9. `breaking_point_hint` 只写临界征兆，不要写成明确爆发剧情。
+10. `chapter_change_hint` 写本章结束后该角色心智最可能发生的微调方向。
+11. `attitude_to_key_others` 只保留当前章最关键的 1~2 个他人态度。
+12. 当前系统没有独立角色 ID，请直接用角色名填 `character_id`，`attitude_to_key_others` 的 key 也直接用角色名。
+13. `self_control_level` 只能取：`low`、`medium`、`high`、`medium_low`、`medium_high`。
+14. 如果【当前心智】为空，按首次维护处理；如果不为空，要体现连续性，但不要机械复写旧字段。
+
+输出 JSON 结构：
+{{
+  "character_id": "string",
+  "character_name": "string",
+  "surface_emotion": "string",
+  "core_emotion": "string",
+  "primary_goal": "string",
+  "hidden_need": "string",
+  "fear": "string",
+  "attitude_to_key_others": {{
+    "other_character_name": "string"
+  }},
+  "self_control_level": "low | medium | high | medium_low | medium_high",
+  "breaking_point_hint": "string",
+  "known_but_unspoken": "string",
+  "misbelief": "string",
+  "chapter_change_hint": "string"
+}}

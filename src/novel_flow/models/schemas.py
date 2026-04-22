@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Literal
@@ -275,6 +275,22 @@ class ActualChapterSummary(StrictBaseModel):
     seeded_clues: list[str] = Field(default_factory=list, max_length=8)
     locked_truths: list[str] = Field(default_factory=list, max_length=8)
     time_state: dict[str, str] = Field(default_factory=dict)
+
+
+class CharacterMindset(StrictBaseModel):
+    character_id: str
+    character_name: str
+    surface_emotion: str
+    core_emotion: str
+    primary_goal: str
+    hidden_need: str
+    fear: str
+    attitude_to_key_others: dict[str, str] = Field(default_factory=dict)
+    self_control_level: Literal["low", "medium", "high", "medium_low", "medium_high"]
+    breaking_point_hint: str
+    known_but_unspoken: str
+    misbelief: str
+    chapter_change_hint: str
 
 
 class CharacterReentryMode(StrictBaseModel):
@@ -580,6 +596,7 @@ class FinalJudgeResult(StrictBaseModel):
 class ChapterExecutionResult(StrictBaseModel):
     chapter_text: str
     content_blocks: list[ContentBlock] = Field(default_factory=list)
+    character_mindsets: list[CharacterMindset] = Field(default_factory=list)
     actual_chapter_summary: ActualChapterSummary
     stage_log: list[dict[str, Any]] = Field(default_factory=list)
     review_reports: dict[str, Any] = Field(default_factory=dict)
@@ -657,6 +674,8 @@ class WriterContext:
     completed_chapter_summary_bundle: str = ""
     previous_chapter_full_text: str = ""
     reference_pack: str = ""
+    chapter_character_mindsets: list[CharacterMindset] = field(default_factory=list)
+    chapter_character_mindsets_text: str = ""
 
 
 class BookBlueprint(BaseModel):
@@ -695,6 +714,7 @@ class Chapter(BaseModel):
     summary: str
     scenes: list[Scene] = Field(default_factory=list)
     content_blocks: list[ContentBlock] = Field(default_factory=list)
+    character_mindsets: list[CharacterMindset] = Field(default_factory=list, max_length=2)
     final_text: str = ""
     final_version: int = Field(default=0, ge=0)
     is_finalized: bool = False

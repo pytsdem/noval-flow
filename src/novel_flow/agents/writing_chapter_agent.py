@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-import json
 import re
 from typing import Any
 
@@ -14,17 +13,25 @@ from novel_flow.models.schemas import (
     ChapterBrief,
     ChapterExecutionResult,
     CharacterCard,
+    CharacterMindset,
     ContentBlock,
     StoryPremise,
     StoryLine,
     TwistDesign,
 )
 from novel_flow.prompting.templates import PromptLibrary
-from novel_flow.services.chapter_context import ChapterContextAssembler, build_current_chapter_context
+from novel_flow.services.chapter_tool_payloads import ChapterToolPayloadBuilder
+from novel_flow.services.character_mindset_formatter import CharacterMindsetFormatter
 from novel_flow.services.context_sanitization_task import ContextSanitizationTask
+from novel_flow.services.novel_context import (
+    NovelContextFormatter,
+    NovelContextSelectorService,
+    NovelContextSnapshot,
+)
 from novel_flow.services.review_aggregator import ReviewAggregator
 from novel_flow.services.skill_manager import SkillManager
 from novel_flow.services.skill_registry import SkillRegistry
+from novel_flow.services.selectors import get_character_card_by_name
 from novel_flow.services.tool_registry import ToolRegistry
 
 
@@ -98,11 +105,12 @@ class WritingChapterAgent(BaseAgent):
         actual_chapter_summaries: list[ActualChapterSummary],
         premise: StoryPremise | None = None,
         character_milestones: list[dict[str, Any]] | None = None,
+        prior_character_mindsets: list[CharacterMindset] | None = None,
         prebuilt_context: Any | None = None,
         on_block_committed: Callable[[ContentBlock], None] | None = None,
         on_chapter_preview_updated: Callable[[dict[str, Any]], None] | None = None,
     ) -> ChapterExecutionResult:
-        context = prebuilt_context or ChapterContextAssembler.build(
+        snapshot = NovelContextSelectorService.create_snapshot(
             chapter_brief=chapter_brief,
             premise=premise,
             twist_designs=twist_designs,
@@ -112,8 +120,17 @@ class WritingChapterAgent(BaseAgent):
             character_milestones=character_milestones or [],
             actual_summaries=actual_chapter_summaries,
             current_chapter_id=chapter_brief.chapter_id,
-            context_sanitizer=self.context_sanitizer,
         )
+        context = prebuilt_context
+        if context is None:
+            selection = NovelContextSelectorService.select(
+                snapshot=snapshot,
+                strategy="writer_context",
+            )
+            context = NovelContextFormatter.format_writer_context(
+                selection,
+                context_sanitizer=self.context_sanitizer,
+            )
         stage_log: list[dict[str, Any]] = []
         review_reports: dict[str, Any] = {}
         final_judge: dict[str, Any] = {}
@@ -125,6 +142,28 @@ class WritingChapterAgent(BaseAgent):
             reason="The chapter context package is ready for block planning and drafting.",
             chapter_id=chapter_brief.chapter_id,
             context_bundle=self._context_bundle(context),
+        )
+        character_mindsets = self._build_character_mindsets(
+            snapshot=snapshot,
+            context=context,
+            character_cards=character_cards,
+            prior_character_mindsets=prior_character_mindsets or [],
+        )
+        character_mindsets_text = CharacterMindsetFormatter.format_text(character_mindsets)
+        setattr(context, "chapter_character_mindsets", character_mindsets)
+        setattr(context, "chapter_character_mindsets_text", character_mindsets_text)
+        stage_log.append(
+            {
+                "stage": "build_character_mindsets",
+                "character_mindsets": [item.model_dump(mode="json") for item in character_mindsets],
+            }
+        )
+        self._emit_stage(
+            stage="character_mindsets_ready",
+            action="Character mindsets ready",
+            reason="Chapter-bound character mindsets are generated before planning the writing package.",
+            chapter_id=chapter_brief.chapter_id,
+            character_mindsets=[item.model_dump(mode="json") for item in character_mindsets],
         )
 
         block_skills = self.skill_manager.initial_skills(stage="block")
@@ -166,7 +205,7 @@ class WritingChapterAgent(BaseAgent):
                     block=block,
                     committed_blocks=committed_blocks,
                 )
-                block_card_text = self._block_card_text(block)
+                block_card_text = ChapterToolPayloadBuilder.block_card_text(block)
                 self._emit_stage(
                     stage=f"block_{block.block_index}_draft_start",
                     action="Draft block",
@@ -177,12 +216,11 @@ class WritingChapterAgent(BaseAgent):
                 )
                 draft_result = self.tool_registry.execute(
                     "draft_block",
-                    {
-                        **block_context,
-                        **self._block_prompt_fields(block),
-                        "block_card_text": block_card_text,
-                        "loaded_skill_instructions_text": block_skill_text,
-                    },
+                    ChapterToolPayloadBuilder.build_draft_block_payload(
+                        block=block,
+                        block_context=block_context,
+                        loaded_skill_instructions_text=block_skill_text,
+                    ),
                 )
                 block_text = str(draft_result.get("block_text") or "").strip()
                 block_review_reports = self._run_block_review_tools(
@@ -190,7 +228,6 @@ class WritingChapterAgent(BaseAgent):
                     block=block,
                     block_text=block_text,
                     block_context=block_context,
-                    block_card_text=block_card_text,
                 )
                 block_revision_plan = ReviewAggregator.aggregate_block(
                     review_reports=block_review_reports,
@@ -210,15 +247,14 @@ class WritingChapterAgent(BaseAgent):
                     )
                     revise_result = self.tool_registry.execute(
                         "revise_block_if_needed",
-                        {
-                            **block_context,
-                            **self._block_prompt_fields(block),
-                            "block_card_text": block_card_text,
-                            "block_text": block_text,
-                            "review_json": json.dumps(block_review_reports, ensure_ascii=False, indent=2),
-                            "block_revision_plan_json": json.dumps(block_revision_plan.model_dump(mode="json"), ensure_ascii=False, indent=2),
-                            "loaded_skill_instructions_text": block_skill_text,
-                        },
+                        ChapterToolPayloadBuilder.build_revise_block_payload(
+                            block=block,
+                            block_context=block_context,
+                            block_text=block_text,
+                            review_reports=block_review_reports,
+                            block_revision_plan=block_revision_plan.model_dump(mode="json"),
+                            loaded_skill_instructions_text=block_skill_text,
+                        ),
                     )
                     block_text = str(revise_result.get("block_text") or block_text).strip()
                     revised = True
@@ -248,6 +284,7 @@ class WritingChapterAgent(BaseAgent):
                 self._emit_chapter_preview(
                     chapter_brief=chapter_brief,
                     content_blocks=committed_blocks,
+                    character_mindsets=character_mindsets,
                     final_text="",
                     final_version=0,
                     is_finalized=False,
@@ -303,6 +340,7 @@ class WritingChapterAgent(BaseAgent):
             self._emit_chapter_preview(
                 chapter_brief=chapter_brief,
                 content_blocks=committed_blocks,
+                character_mindsets=character_mindsets,
                 final_text=chapter_text,
                 final_version=1,
                 is_finalized=False,
@@ -409,16 +447,13 @@ class WritingChapterAgent(BaseAgent):
                 )
                 patch_plan = self.tool_registry.execute(
                     "build_chapter_patch_plan",
-                    {
-                        "chapter_text": chapter_text,
-                        "planned_blocks_json": self._chapter_plan_json(committed_blocks),
-                        "review_reports": review_source,
-                        "chapter_summary_context_text": self._chapter_summary_context(
-                            chapter_brief=chapter_brief,
-                            context=context,
-                        ),
-                        "relationship_state_text": context.relationship_state_text,
-                    },
+                    ChapterToolPayloadBuilder.build_chapter_patch_plan_payload(
+                        chapter_text=chapter_text,
+                        chapter_brief=chapter_brief,
+                        context=context,
+                        review_reports=review_source,
+                        planned_blocks=committed_blocks,
+                    ),
                 )
                 self._emit_stage(
                     stage=f"patch_round_{patch_round}_plan_done",
@@ -465,15 +500,11 @@ class WritingChapterAgent(BaseAgent):
                 )
                 rewrite_result = self.tool_registry.execute(
                     "rewrite_blocks_by_plan",
-                    {
-                        "planned_blocks_json": self._chapter_plan_json(committed_blocks),
-                        "original_blocks_json": self._chapter_plan_json(committed_blocks),
-                        "patch_plan": patch_plan,
-                        "chapter_payload_text": context.chapter_payload_text,
-                        "scene_character_context_text": context.scene_character_context_text,
-                        "relationship_state_text": context.relationship_state_text,
-                        "style_card_text": context.style_card_text,
-                    },
+                    ChapterToolPayloadBuilder.build_rewrite_blocks_by_plan_payload(
+                        context=context,
+                        planned_blocks=committed_blocks,
+                        patch_plan=patch_plan,
+                    ),
                 )
                 committed_blocks = self._apply_patch_result_to_blocks(
                     original_blocks=committed_blocks,
@@ -483,6 +514,7 @@ class WritingChapterAgent(BaseAgent):
                 self._emit_chapter_preview(
                     chapter_brief=chapter_brief,
                     content_blocks=committed_blocks,
+                    character_mindsets=character_mindsets,
                     final_text=chapter_text,
                     final_version=patch_round,
                     is_finalized=False,
@@ -500,18 +532,13 @@ class WritingChapterAgent(BaseAgent):
                 )
                 judge_result = self.tool_registry.execute(
                     "judge_patched_chapter",
-                    {
-                        "merged_chapter_text": chapter_text,
-                        "patch_plan_json": json.dumps(patch_plan, ensure_ascii=False, indent=2),
-                        "patched_block_contexts_json": self._patched_block_contexts_json(
-                            content_blocks=committed_blocks,
-                            patch_plan=patch_plan,
-                        ),
-                        "minimal_context_text": self._minimal_patch_context(
-                            chapter_brief=chapter_brief,
-                            context=context,
-                        ),
-                    },
+                    ChapterToolPayloadBuilder.build_judge_patched_chapter_payload(
+                        chapter_text=chapter_text,
+                        chapter_brief=chapter_brief,
+                        context=context,
+                        content_blocks=committed_blocks,
+                        patch_plan=patch_plan,
+                    ),
                 )
                 final_judge = self._normalize_patch_judge_result(
                     judge_result=judge_result,
@@ -586,17 +613,17 @@ class WritingChapterAgent(BaseAgent):
         )
         polished = self.tool_registry.execute(
             "final_polish",
-            {
-                "chapter_payload_text": context.chapter_payload_text,
-                "style_card_text": context.style_card_text,
-                "chapter_text": chapter_text,
-                "loaded_skill_instructions_text": self.skill_manager.format_for_model(finalize_skills),
-            },
+            ChapterToolPayloadBuilder.build_final_polish_payload(
+                context=context,
+                chapter_text=chapter_text,
+                loaded_skill_instructions_text=self.skill_manager.format_for_model(finalize_skills),
+            ),
         )
         chapter_text = str(polished.get("chapter_text") or "").strip()
         self._emit_chapter_preview(
             chapter_brief=chapter_brief,
             content_blocks=committed_blocks,
+            character_mindsets=character_mindsets,
             final_text=chapter_text,
             final_version=max(int(final_judge.get("metrics", {}).get("prose_score") or 0), 1),
             is_finalized=False,
@@ -619,16 +646,17 @@ class WritingChapterAgent(BaseAgent):
         )
         formatted = self.tool_registry.execute(
             "format_adjustment_suggestion",
-            {
-                "final_polished_text": chapter_text,
-                "output_format_rules": self.OUTPUT_FORMAT_RULES,
-                "loaded_tool_context": context.chapter_payload_text,
-            },
+            ChapterToolPayloadBuilder.build_format_adjustment_payload(
+                context=context,
+                chapter_text=chapter_text,
+                output_format_rules=self.OUTPUT_FORMAT_RULES,
+            ),
         )
         chapter_text = str(formatted.get("text") or chapter_text).strip()
         self._emit_chapter_preview(
             chapter_brief=chapter_brief,
             content_blocks=committed_blocks,
+            character_mindsets=character_mindsets,
             final_text=chapter_text,
             final_version=max(int(final_judge.get("metrics", {}).get("prose_score") or 0), 1),
             is_finalized=True,
@@ -652,22 +680,11 @@ class WritingChapterAgent(BaseAgent):
         )
         summary_payload = self.tool_registry.execute(
             "summarize_actual_chapter",
-            {
-                "chapter_text": chapter_text,
-                "chapter_brief_json": chapter_brief.model_dump_json(indent=2),
-                "step_1_story_foundation_text": context.step_1_story_foundation_text,
-                "step_2_worldbuilding_text": context.step_2_worldbuilding_text,
-                "step_3_character_packets_text": context.step_3_character_packets_text,
-                "step_4_event_timeline_text": context.step_4_event_timeline_text,
-                "step_5_character_milestones_text": context.step_5_character_milestones_text,
-                "step_6_twists_text": context.step_6_twists_text,
-                "step_7_story_lines_text": context.step_7_story_lines_text,
-                "step_8_chapter_brief_text": context.step_8_chapter_brief_text,
-                "chapter_payload_text": context.chapter_payload_text,
-                "time_anchor_text": context.time_anchor_text,
-                "active_twists": [item.model_dump(mode="json") for item in context.active_twists],
-                "active_story_lines": [item.model_dump(mode="json") for item in context.active_story_lines],
-            },
+            ChapterToolPayloadBuilder.build_summarize_actual_chapter_payload(
+                chapter_text=chapter_text,
+                chapter_brief=chapter_brief,
+                context=context,
+            ),
         )
         actual_summary = ActualChapterSummary.model_validate(summary_payload)
         stage_log.append(
@@ -686,6 +703,7 @@ class WritingChapterAgent(BaseAgent):
         return ChapterExecutionResult(
             chapter_text=chapter_text,
             content_blocks=committed_blocks,
+            character_mindsets=character_mindsets,
             actual_chapter_summary=actual_summary,
             stage_log=stage_log,
             review_reports=review_reports,
@@ -701,6 +719,7 @@ class WritingChapterAgent(BaseAgent):
             story_lines=kwargs["story_lines"],
             character_cards=kwargs["character_cards"],
             character_milestones=kwargs.get("character_milestones"),
+            prior_character_mindsets=kwargs.get("prior_character_mindsets"),
             worldbuilding=kwargs.get("worldbuilding"),
             actual_chapter_summaries=kwargs.get("actual_chapter_summaries", []),
             prebuilt_context=kwargs.get("prebuilt_context"),
@@ -721,63 +740,96 @@ class WritingChapterAgent(BaseAgent):
     ) -> str:
         payload = self.tool_registry.execute(
             "write_chapter_full",
-            {
-                "assistant_persona_prompt": getattr(context, "assistant_persona_prompt", ""),
-                "chapter_id": chapter_brief.chapter_id,
-                "chapter_title": chapter_brief.title,
-                "chapter_summary": chapter_brief.summary,
-                "chapter_plan_json": self._chapter_plan_json(planned_blocks),
-                "step_1_to_7_outputs_json": self._step_1_to_7_outputs_json(context),
-                "chapter_payload_text": context.chapter_payload_text,
-                "timeline_anchor_facts_text": context.timeline_anchor_facts_text,
-                "scene_character_context_text": context.scene_character_context_text,
-                "relationship_state_text": context.relationship_state_text,
-                "style_card_text": context.style_card_text,
-                "previous_chapter_full_text": getattr(context, "previous_chapter_full_text", ""),
-                "completed_chapter_summary_bundle": getattr(context, "completed_chapter_summary_bundle", context.completed_chapter_memory_text),
-                "writing_requirements_json": getattr(context, "writing_requirements_json", "{}"),
-                "reference_pack": getattr(context, "reference_pack", ""),
-            },
+            ChapterToolPayloadBuilder.build_write_chapter_full_payload(
+                chapter_brief=chapter_brief,
+                context=context,
+                planned_blocks=planned_blocks,
+            ),
         )
         return str(payload.get("chapter_text") or "").strip()
 
     def _plan_content_blocks(self, *, chapter_brief: ChapterBrief, context: Any) -> list[ContentBlock]:
         payload = self.tool_registry.execute(
             "plan_content_blocks",
-            {
-                "chapter_brief_json": chapter_brief.model_dump_json(indent=2),
-                "completed_chapter_memory_text": context.completed_chapter_memory_text,
-                "chapter_payload_text": context.chapter_payload_text,
-                "relevant_world_rules_text": context.relevant_world_rules_text,
-                "timeline_anchor_facts_text": context.timeline_anchor_facts_text,
-                "scene_character_context_text": context.scene_character_context_text,
-                "relationship_state_text": context.relationship_state_text,
-                "style_card_text": context.style_card_text,
-                "target_word_count_text": chapter_brief.info_budget,
-            },
+            ChapterToolPayloadBuilder.build_plan_content_blocks_payload(
+                chapter_brief=chapter_brief,
+                context=context,
+            ),
         )
         blocks = [ContentBlock.model_validate(item) for item in payload.get("blocks", [])]
         if not blocks:
             raise ValueError("plan_content_blocks returned no blocks")
         return blocks
 
-    @classmethod
-    def _chapter_plan_json(cls, planned_blocks: list[ContentBlock]) -> str:
-        return cls._json_text({"blocks": [block.model_dump(mode="json") for block in planned_blocks]})
-
-    @classmethod
-    def _step_1_to_7_outputs_json(cls, context: Any) -> str:
-        return cls._json_text(
-            {
-                "step_1_story_foundation_text": context.step_1_story_foundation_text,
-                "step_2_worldbuilding_text": context.step_2_worldbuilding_text,
-                "step_3_character_packets_text": context.step_3_character_packets_text,
-                "step_4_event_timeline_text": context.step_4_event_timeline_text,
-                "step_5_character_milestones_text": context.step_5_character_milestones_text,
-                "step_6_twists_text": context.step_6_twists_text,
-                "step_7_story_lines_text": context.step_7_story_lines_text,
-            }
+    def _build_character_mindsets(
+        self,
+        *,
+        snapshot: NovelContextSnapshot,
+        context: Any,
+        character_cards: list[CharacterCard],
+        prior_character_mindsets: list[CharacterMindset],
+    ) -> list[CharacterMindset]:
+        target_cards = self._select_character_mindset_cards(
+            chapter_brief=snapshot.chapter_brief,
+            character_cards=character_cards,
         )
+        if not target_cards:
+            return []
+
+        prior_map: dict[str, CharacterMindset] = {}
+        for item in prior_character_mindsets:
+            try:
+                mindset = CharacterMindset.model_validate(item)
+            except Exception:
+                continue
+            key = str(mindset.character_name or "").strip()
+            if key and key not in prior_map:
+                prior_map[key] = mindset
+
+        results: list[CharacterMindset] = []
+        for card in target_cards:
+            scoped_selection = NovelContextSelectorService.select(
+                snapshot=snapshot,
+                strategy="character_mindset_scoped_steps",
+                character_name=card.name,
+            )
+            scoped_steps = NovelContextFormatter.format_character_mindset_scoped_steps(
+                scoped_selection
+            )
+            previous = prior_map.get(card.name)
+            payload = self.tool_registry.execute(
+                "build_character_mindset",
+                ChapterToolPayloadBuilder.build_character_mindset_payload(
+                    context=context,
+                    character_card=card,
+                    previous_mindset=previous,
+                    scoped_steps=scoped_steps,
+                    character_id=self._character_id_from_name(card.name),
+                ),
+            )
+            results.append(CharacterMindset.model_validate(payload))
+        return results
+
+    @staticmethod
+    def _select_character_mindset_cards(
+        *,
+        chapter_brief: ChapterBrief,
+        character_cards: list[CharacterCard],
+    ) -> list[CharacterCard]:
+        focus_names = list(dict.fromkeys(str(name or "").strip() for name in chapter_brief.character_focus if str(name or "").strip()))
+        selected: list[CharacterCard] = []
+        for name in focus_names:
+            card = get_character_card_by_name(character_cards, name)
+            if card is None:
+                continue
+            selected.append(card)
+            if len(selected) >= 2:
+                break
+        return selected
+
+    @staticmethod
+    def _character_id_from_name(name: str) -> str:
+        return str(name or "").strip()
 
     def _fetch_block_context(
         self,
@@ -786,39 +838,11 @@ class WritingChapterAgent(BaseAgent):
         block: ContentBlock,
         committed_blocks: list[ContentBlock],
     ) -> dict[str, Any]:
-        current_chapter_context = build_current_chapter_context(
-            block.chapter_id,
-            committed_blocks,
-            max_blocks=4,
-            tail_chars=1000,
+        return ChapterToolPayloadBuilder.build_block_runtime_context(
+            context=context,
+            block=block,
+            committed_blocks=committed_blocks,
         )
-        prior_summary_lines = ["[Earlier committed blocks]"]
-        current_written_blocks = list(current_chapter_context["current_chapter_written_blocks_json"])
-        if current_written_blocks:
-            for item in current_written_blocks:
-                prior_summary_lines.extend(
-                    [
-                        "",
-                        f"{item['block_id']} / {item['purpose']}",
-                        f"- End state: {item['end_state']}",
-                        f"- Text tail: {self._tail_text(str(item['text']), max_chars=220)}",
-                    ]
-                )
-        else:
-            prior_summary_lines.append("No committed blocks yet.")
-        return {
-            "completed_chapter_memory_text": context.completed_chapter_memory_text,
-            "chapter_payload_text": context.chapter_payload_text,
-            "chapter_visible_context_text": context.chapter_visible_context_text,
-            "relevant_world_rules_text": context.relevant_world_rules_text,
-            "scene_character_context_text": context.scene_character_context_text,
-            "relationship_state_text": context.relationship_state_text,
-            "current_chapter_written_blocks_json": self._json_text(current_written_blocks),
-            "current_chapter_draft_tail": str(current_chapter_context["current_chapter_draft_tail"] or ""),
-            "prior_block_summary_text": "\n".join(prior_summary_lines).strip(),
-            "prior_chapter_text_tail": str(current_chapter_context["current_chapter_draft_tail"] or ""),
-            "style_card_text": context.style_card_text,
-        }
 
     def _run_block_review_tools(
         self,
@@ -827,48 +851,19 @@ class WritingChapterAgent(BaseAgent):
         block: ContentBlock,
         block_text: str,
         block_context: dict[str, Any],
-        block_card_text: str,
     ) -> dict[str, Any]:
         reports: dict[str, Any] = {}
-        review_scope_text = (
-            "Review only the current content block. "
-            "Keep the review light and local: catch reveal leakage, character-forced behavior, "
-            "time carry-over conflicts, and whether the block actually feels like a live fiction beat."
-        )
-        common = {
-            "chapter_payload_text": context.chapter_payload_text,
-            "chapter_visible_context_text": context.chapter_visible_context_text,
-            "completed_chapter_memory_text": context.completed_chapter_memory_text,
-            "time_anchor_text": context.time_anchor_text,
-            "timeline_anchor_facts_text": context.timeline_anchor_facts_text,
-            "relevant_world_rules_text": context.relevant_world_rules_text,
-            "scene_character_context_text": context.scene_character_context_text,
-            "relationship_state_text": context.relationship_state_text,
-            "chapter_text": block_text,
-            "block_card_text": block_card_text,
-            "active_twists_json": json.dumps([item.model_dump(mode="json") for item in context.active_twists], ensure_ascii=False, indent=2),
-            "review_scope_text": review_scope_text,
-        }
         for tool_name in self.BLOCK_REVIEW_TOOLS:
-            if tool_name == "review_block_quality":
-                reports[tool_name] = self.tool_registry.execute(
-                    tool_name,
-                    {
-                        "chapter_payload_text": context.chapter_payload_text,
-                        "relevant_world_rules_text": context.relevant_world_rules_text,
-                        "scene_character_context_text": context.scene_character_context_text,
-                        "relationship_state_text": context.relationship_state_text,
-                        "current_chapter_written_blocks_json": block_context["current_chapter_written_blocks_json"],
-                        "current_chapter_draft_tail": block_context["current_chapter_draft_tail"],
-                        "block_card_text": block_card_text,
-                        "prior_block_summary_text": block_context["prior_block_summary_text"],
-                        "prior_chapter_text_tail": block_context["prior_chapter_text_tail"],
-                        "block_text": block_text,
-                        **self._block_prompt_fields(block),
-                    },
-                )
-                continue
-            reports[tool_name] = self.tool_registry.execute(tool_name, common)
+            reports[tool_name] = self.tool_registry.execute(
+                tool_name,
+                ChapterToolPayloadBuilder.build_block_review_payload(
+                    tool_name=tool_name,
+                    context=context,
+                    block=block,
+                    block_text=block_text,
+                    block_context=block_context,
+                ),
+            )
         return reports
 
     @staticmethod
@@ -881,133 +876,6 @@ class WritingChapterAgent(BaseAgent):
             if report.get("issues"):
                 return True
         return False
-
-    @staticmethod
-    def _block_card_text(block: ContentBlock) -> str:
-        lines = [
-            "[Content block card]",
-            "",
-            f"block_id: {block.block_id}",
-            f"chapter_id: {block.chapter_id}",
-            f"block_index: {block.block_index}",
-            f"purpose: {block.purpose}",
-            f"scene_goal: {block.scene_goal}",
-            f"emotional_tone: {block.emotional_tone}",
-            f"end_state: {block.end_state}",
-            f"cost_shift: {block.cost_shift}",
-            f"reader_feeling_target: {block.reader_feeling_target}",
-            f"paragraph_budget: {block.paragraph_budget}",
-            f"micro_hook: {block.micro_hook}",
-            f"turn_type: {block.turn_type}",
-            "paragraph_shape:",
-        ]
-        for item in block.paragraph_shape or ["None."]:
-            lines.append(f"- {item}")
-        lines.append("character_anchor_line:")
-        if block.character_anchor_line is None:
-            lines.append("- None.")
-        else:
-            lines.extend(
-                [
-                    f"- owner: {block.character_anchor_line.owner or 'None.'}",
-                    f"- form: {block.character_anchor_line.form or 'None.'}",
-                    f"- surface_function: {block.character_anchor_line.surface_function or 'None.'}",
-                    f"- hidden_function: {block.character_anchor_line.hidden_function or 'None.'}",
-                    f"- must_reveal_about_character: {block.character_anchor_line.must_reveal_about_character or 'None.'}",
-                    f"- preferred_shape: {block.character_anchor_line.preferred_shape or 'None.'}",
-                    "- must_not_do:",
-                ]
-            )
-            for item in block.character_anchor_line.must_not_do or ["None."]:
-                lines.append(f"  - {item}")
-        lines.extend(
-            [
-            "characters:",
-            ]
-        )
-        for item in block.characters or ["None."]:
-            lines.append(f"- {item}")
-        lines.append("active_lines:")
-        for item in block.active_lines or ["None."]:
-            lines.append(f"- {item}")
-        lines.append("active_twists:")
-        for item in block.active_twists or ["None."]:
-            lines.append(f"- {item}")
-        lines.append("must_reveal:")
-        for item in block.must_reveal or ["None."]:
-            lines.append(f"- {item}")
-        lines.append("must_hide:")
-        for item in block.must_hide or ["None."]:
-            lines.append(f"- {item}")
-        lines.append("human_reaction_target:")
-        for item in block.human_reaction_target or ["None."]:
-            lines.append(f"- {item}")
-        lines.append("style_risk_guard:")
-        for item in block.style_risk_guard or ["None."]:
-            lines.append(f"- {item}")
-        lines.append("character_reentry_mode:")
-        if block.character_reentry_mode is None:
-            lines.append("- None.")
-        else:
-            lines.extend(
-                [
-                    f"- target_character: {block.character_reentry_mode.target_character or 'None.'}",
-                    f"- identity_already_known: {block.character_reentry_mode.identity_already_known}",
-                    f"- reentry_strategy: {block.character_reentry_mode.reentry_strategy or 'None.'}",
-                    f"- first_signal: {block.character_reentry_mode.first_signal or 'None.'}",
-                    f"- first_emotional_focus: {block.character_reentry_mode.first_emotional_focus or 'None.'}",
-                    "- must_avoid:",
-                ]
-            )
-            for item in block.character_reentry_mode.must_avoid or ["None."]:
-                lines.append(f"  - {item}")
-        lines.append("clue_reveal_mechanism:")
-        if block.clue_reveal_mechanism is None:
-            lines.append("- None.")
-        else:
-            lines.extend(
-                [
-                    f"- clue: {block.clue_reveal_mechanism.clue or 'None.'}",
-                    f"- style: {block.clue_reveal_mechanism.style or 'None.'}",
-                    f"- pressure_source: {block.clue_reveal_mechanism.pressure_source or 'None.'}",
-                    f"- surface_trigger: {block.clue_reveal_mechanism.surface_trigger or 'None.'}",
-                    f"- first_noticer: {block.clue_reveal_mechanism.first_noticer or 'None.'}",
-                    f"- owner_reaction: {block.clue_reveal_mechanism.owner_reaction or 'None.'}",
-                ]
-            )
-        return "\n".join(lines).strip()
-
-    @staticmethod
-    def _json_text(value: Any) -> str:
-        return json.dumps(value, ensure_ascii=False, indent=2)
-
-    @classmethod
-    def _block_prompt_fields(cls, block: ContentBlock) -> dict[str, str]:
-        return {
-            "human_reaction_target": cls._json_text(list(block.human_reaction_target or [])),
-            "cost_shift": str(block.cost_shift or "").strip(),
-            "reader_feeling_target": str(block.reader_feeling_target or "").strip(),
-            "paragraph_budget": str(block.paragraph_budget or "").strip(),
-            "micro_hook": str(block.micro_hook or "").strip(),
-            "turn_type": str(block.turn_type or "").strip(),
-            "paragraph_shape": cls._json_text(list(block.paragraph_shape or [])),
-            "character_anchor_line": (
-                cls._json_text(block.character_anchor_line.model_dump(mode="json"))
-                if block.character_anchor_line is not None
-                else ""
-            ),
-            "style_risk_guard": cls._json_text(list(block.style_risk_guard or [])),
-            "clue_reveal_mechanism": (
-                cls._json_text(block.clue_reveal_mechanism.model_dump(mode="json"))
-                if block.clue_reveal_mechanism is not None
-                else ""
-            ),
-            "character_reentry_mode": (
-                cls._json_text(block.character_reentry_mode.model_dump(mode="json"))
-                if block.character_reentry_mode is not None
-                else ""
-            ),
-        }
 
     @staticmethod
     def _merge_blocks_to_chapter(blocks: list[ContentBlock]) -> str:
@@ -1151,21 +1019,6 @@ class WritingChapterAgent(BaseAgent):
         return result[:block_count]
 
     @classmethod
-    def _chapter_summary_context(cls, *, chapter_brief: ChapterBrief, context: Any) -> str:
-        lines = [
-            f"chapter_id: {chapter_brief.chapter_id}",
-            f"title: {chapter_brief.title}",
-            f"summary: {chapter_brief.summary}",
-            "",
-            "[Step 8 chapter brief]",
-            str(context.step_8_chapter_brief_text or "").strip(),
-            "",
-            "[Chapter payload]",
-            str(context.chapter_payload_text or "").strip(),
-        ]
-        return "\n".join(item for item in lines if item is not None).strip()
-
-    @classmethod
     def _apply_patch_result_to_blocks(
         cls,
         *,
@@ -1194,62 +1047,6 @@ class WritingChapterAgent(BaseAgent):
                 )
             )
         return updated_blocks
-
-    @classmethod
-    def _patched_block_contexts_json(
-        cls,
-        *,
-        content_blocks: list[ContentBlock],
-        patch_plan: dict[str, Any],
-    ) -> str:
-        block_map = {block.block_id: block for block in content_blocks}
-        ordered_ids = [block.block_id for block in content_blocks]
-        contexts: list[dict[str, Any]] = []
-        for target in list(patch_plan.get("patch_targets") or []):
-            block_id = str(target.get("target_id") or "").strip()
-            if not block_id or block_id not in block_map:
-                continue
-            current = block_map[block_id]
-            previous_block = cls._neighbor_by_id(content_blocks, block_id, offset=-1)
-            next_block = cls._neighbor_by_id(content_blocks, block_id, offset=1)
-            contexts.append(
-                {
-                    "block_id": block_id,
-                    "problem_type": target.get("problem_type", ""),
-                    "goal": target.get("goal", ""),
-                    "instructions": list(target.get("instructions") or []),
-                    "current_block_text": current.text,
-                    "previous_block_text": previous_block.text if previous_block is not None else "",
-                    "next_block_text": next_block.text if next_block is not None else "",
-                    "all_block_ids": ordered_ids,
-                }
-            )
-        return json.dumps(contexts, ensure_ascii=False, indent=2)
-
-    @staticmethod
-    def _neighbor_by_id(blocks: list[ContentBlock], block_id: str, *, offset: int) -> ContentBlock | None:
-        ordered_ids = [block.block_id for block in blocks]
-        if block_id not in ordered_ids:
-            return None
-        index = ordered_ids.index(block_id) + offset
-        if index < 0 or index >= len(blocks):
-            return None
-        return blocks[index]
-
-    @staticmethod
-    def _minimal_patch_context(*, chapter_brief: ChapterBrief, context: Any) -> str:
-        lines = [
-            f"chapter_id: {chapter_brief.chapter_id}",
-            f"chapter_title: {chapter_brief.title}",
-            f"chapter_summary: {chapter_brief.summary}",
-            "",
-            "[Relationship state]",
-            str(context.relationship_state_text or "").strip(),
-            "",
-            "[Time anchor]",
-            str(context.time_anchor_text or "").strip(),
-        ]
-        return "\n".join(lines).strip()
 
     @staticmethod
     def _normalize_patch_judge_result(*, judge_result: dict[str, Any], patch_round: int) -> dict[str, Any]:
@@ -1346,31 +1143,12 @@ class WritingChapterAgent(BaseAgent):
         iteration: int,
         planned_blocks: list[ContentBlock],
     ) -> dict[str, Any]:
-        payload = {
-            "selection_summary_text": context.selection_summary_text,
-            "time_anchor_text": context.time_anchor_text,
-            "chapter_visible_context_text": context.chapter_visible_context_text,
-            "completed_chapter_memory_text": context.completed_chapter_memory_text,
-            "step_1_story_foundation_text": context.step_1_story_foundation_text,
-            "step_2_worldbuilding_text": context.step_2_worldbuilding_text,
-            "step_3_character_packets_text": context.step_3_character_packets_text,
-            "step_4_event_timeline_text": context.step_4_event_timeline_text,
-            "step_5_character_milestones_text": context.step_5_character_milestones_text,
-            "step_6_twists_text": context.step_6_twists_text,
-            "step_7_story_lines_text": context.step_7_story_lines_text,
-            "step_8_chapter_brief_text": context.step_8_chapter_brief_text,
-            "chapter_payload_text": context.chapter_payload_text,
-            "timeline_anchor_facts_text": context.timeline_anchor_facts_text,
-            "relevant_world_rules_text": context.relevant_world_rules_text,
-            "scene_character_context_text": context.scene_character_context_text,
-            "relationship_state_text": context.relationship_state_text,
-            "style_card_text": context.style_card_text,
-            "chapter_text": chapter_text,
-            "chapter_brief_json": chapter_brief.model_dump_json(indent=2),
-            "planned_blocks_json": self._chapter_plan_json(planned_blocks),
-            "active_twists": [item.model_dump(mode="json") for item in context.active_twists],
-            "active_twists_json": json.dumps([item.model_dump(mode="json") for item in context.active_twists], ensure_ascii=False, indent=2),
-        }
+        payload = ChapterToolPayloadBuilder.build_chapter_review_payload(
+            chapter_brief=chapter_brief,
+            context=context,
+            chapter_text=chapter_text,
+            planned_blocks=planned_blocks,
+        )
         reports: dict[str, Any] = {}
         for tool_name in tool_names:
             self._emit_stage(
@@ -1418,6 +1196,7 @@ class WritingChapterAgent(BaseAgent):
             "relevant_world_rules_text": context.relevant_world_rules_text,
             "scene_character_context_text": context.scene_character_context_text,
             "relationship_state_text": context.relationship_state_text,
+            "chapter_character_mindsets_text": getattr(context, "chapter_character_mindsets_text", ""),
             "style_card_text": context.style_card_text,
             "assistant_persona_prompt": getattr(context, "assistant_persona_prompt", ""),
             "writing_requirements_json": getattr(context, "writing_requirements_json", "{}"),
@@ -1464,6 +1243,7 @@ class WritingChapterAgent(BaseAgent):
         *,
         chapter_brief: ChapterBrief,
         content_blocks: list[ContentBlock],
+        character_mindsets: list[CharacterMindset],
         final_text: str,
         final_version: int,
         is_finalized: bool,
@@ -1477,6 +1257,7 @@ class WritingChapterAgent(BaseAgent):
                 "chapter_id": chapter_brief.chapter_id,
                 "chapter_title": chapter_brief.title,
                 "content_blocks": [item.model_dump(mode="json") for item in content_blocks],
+                "character_mindsets": [item.model_dump(mode="json") for item in character_mindsets],
                 "final_text": str(final_text or "").strip(),
                 "final_version": max(int(final_version), 0),
                 "is_finalized": bool(is_finalized),

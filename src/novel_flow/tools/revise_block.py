@@ -13,6 +13,7 @@ class ReviseBlockTool(LLMChapterTool):
             relevant_world_rules_text=payload["relevant_world_rules_text"],
             scene_character_context_text=payload["scene_character_context_text"],
             relationship_state_text=payload["relationship_state_text"],
+            chapter_character_mindsets_text=payload.get("chapter_character_mindsets_text", ""),
             current_chapter_written_blocks_json=payload.get("current_chapter_written_blocks_json", "[]"),
             current_chapter_draft_tail=payload.get("current_chapter_draft_tail", ""),
             block_card_text=payload["block_card_text"],

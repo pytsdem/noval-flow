@@ -15,6 +15,9 @@ Write one chapter content block. Output prose only in Simplified Chinese.
 [Relationship state]
 {relationship_state_text}
 
+[Chapter character mindsets]
+{chapter_character_mindsets_text}
+
 [Current block card]
 {block_card_text}
 
@@ -161,6 +164,14 @@ CHARACTER ANCHOR LINE RULES:
    - 锚句不能只是推进剧情，必须揭示人物。
    - 锚句要短、准、留余味。
    - 锚句出现后，不要马上解释它，让停顿、反应、气氛托住它。
+
+CHARACTER MINDSET RULES:
+1. Treat the chapter character mindsets as the hidden control panel for the first two focal characters.
+2. Let `surface_emotion` show more directly on the page, but let `core_emotion`, `hidden_need`, and `fear` leak through hesitation, choice, body reaction, avoidance, tone, or misreading.
+3. Let `known_but_unspoken` affect what the character refuses to say plainly.
+4. Let `misbelief` shape the character's judgment, tension, or wrong reading of the moment.
+5. Let `self_control_level` affect how tightly the character contains themselves under pressure.
+6. Do not dump the mindset as direct explanation. Convert it into scene behavior.
 
 Rules:
 1. Write only the current block, not the whole chapter.

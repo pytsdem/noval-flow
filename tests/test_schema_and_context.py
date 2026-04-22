@@ -13,7 +13,9 @@ from novel_flow.models.schemas import (
     ChapterBrief,
     CharacterCard,
     CharacterCandidateLink,
+    CharacterMindset,
     Chapter,
+    ContentBlock,
     CriticReport,
     NewCharacterCandidate,
     StoryLine,
@@ -22,11 +24,11 @@ from novel_flow.models.schemas import (
     Volume,
 )
 from novel_flow.server import NovelApp
-from novel_flow.services.chapter_context import ChapterContextAssembler
-from novel_flow.services.character_context import CharacterContextBuilder
-from novel_flow.services.character_milestone_context import CharacterMilestoneContextBuilder
 from novel_flow.services.context_sanitization_task import ContextSanitizationTask
 from novel_flow.services.context_coverage import WriterContextCoverageValidator
+from novel_flow.services.chapter_tool_payloads import ChapterToolPayloadBuilder
+from novel_flow.services.character_mindset_formatter import CharacterMindsetFormatter
+from novel_flow.services.novel_context import NovelContextFormatter, NovelContextSelectorService
 from novel_flow.services.selectors import (
     get_character_card_by_name,
     get_character_milestone_by_name,
@@ -120,6 +122,43 @@ class SchemaAndContextTests(unittest.TestCase):
             selling_points=["Court pressure", "Emotional misreading"],
         )
 
+    def _snapshot(
+        self,
+        *,
+        chapter_brief: ChapterBrief | None = None,
+        worldbuilding: dict | None = None,
+        character_cards: list[CharacterCard] | None = None,
+        character_milestones: list[dict] | None = None,
+        actual_summaries: list[ActualChapterSummary] | None = None,
+        current_chapter_id: str = "ch_001",
+    ):
+        return NovelContextSelectorService.create_snapshot(
+            chapter_brief=chapter_brief or self.chapter_brief,
+            premise=self.premise,
+            twist_designs=[self.twist],
+            story_lines=[self.line],
+            worldbuilding=worldbuilding or {},
+            character_cards=character_cards or [],
+            character_milestones=character_milestones or [],
+            actual_summaries=actual_summaries or [],
+            current_chapter_id=current_chapter_id,
+        )
+
+    def _writer_context(self, **snapshot_kwargs):
+        selection = NovelContextSelectorService.select(
+            snapshot=self._snapshot(**snapshot_kwargs),
+            strategy="writer_context",
+        )
+        return NovelContextFormatter.format_writer_context(selection)
+
+    def _scoped_steps(self, *, character_name: str, **snapshot_kwargs):
+        selection = NovelContextSelectorService.select(
+            snapshot=self._snapshot(**snapshot_kwargs),
+            strategy="character_mindset_scoped_steps",
+            character_name=character_name,
+        )
+        return NovelContextFormatter.format_character_mindset_scoped_steps(selection)
+
     def test_strict_models_reject_extra_fields(self) -> None:
         with self.assertRaises(ValidationError):
             TwistDesign.model_validate({**self.twist.model_dump(mode="json"), "extra_field": "x"})
@@ -211,6 +250,7 @@ class SchemaAndContextTests(unittest.TestCase):
                         "chapter_id": "ch_002",
                         "chapter_title": "Cold Return",
                         "content_blocks": [{"block_id": "ch_002.sc_001.b001", "text": "first block"}],
+                        "character_mindsets": [{"character_id": "Hero", "character_name": "Hero"}],
                         "final_text": "full rewrite preview",
                         "final_version": 2,
                         "is_finalized": False,
@@ -230,6 +270,7 @@ class SchemaAndContextTests(unittest.TestCase):
         self.assertEqual(preview["final_text"], "full rewrite preview")
         self.assertEqual(preview["preview_mode"], "chapter_rewrite")
         self.assertEqual(len(preview["content_blocks"]), 1)
+        self.assertEqual(len(preview["character_mindsets"]), 1)
 
     def test_delete_chapter_cleans_chapter_level_metadata(self) -> None:
         critic_ch1 = CriticReport(report_id="critic_ch1", summary="critic 1", issues=[]).model_dump(mode="json")
@@ -447,15 +488,8 @@ class SchemaAndContextTests(unittest.TestCase):
             app.resolve_character_candidate("formal", book_id="book_candidates", candidate_id="cand_001", action="scene_only")
 
     def test_chapter_payload_masks_unrevealed_truth(self) -> None:
-        context = ChapterContextAssembler.build(
-            chapter_brief=self.chapter_brief,
-            premise=self.premise,
-            twist_designs=[self.twist],
-            story_lines=[self.line],
+        context = self._writer_context(
             worldbuilding={"story_engine": {"world_rules": ["Imperial verdict cannot be challenged publicly."]}},
-            character_cards=[],
-            character_milestones=[],
-            actual_summaries=[],
             current_chapter_id="ch_001",
         )
         self.assertIn("Readers believe she betrayed him.", context.chapter_payload_text)
@@ -473,15 +507,8 @@ class SchemaAndContextTests(unittest.TestCase):
             behavior_pattern="answers indirectly",
             arc="later she will reconcile",
         )
-        text = CharacterContextBuilder.build(
-            character_cards=[card],
-            chapter_brief=self.chapter_brief,
-            current_chapter_id="ch_001",
-            active_twists=[self.twist],
-            forbidden=self.chapter_brief.forbidden,
-            scene_card=self._scene_card(),
-            completed_chapter_memory_text="none",
-        )
+        context = self._writer_context(character_cards=[card], current_chapter_id="ch_001")
+        text = context.step_3_character_packets_text
         self.assertIn("Hidden truth lock", text)
         self.assertNotIn("protect him from death", text)
         self.assertNotIn("reconcile", text)
@@ -501,7 +528,8 @@ class SchemaAndContextTests(unittest.TestCase):
         self.assertIs(get_character_milestone_by_name(milestones, "Heroine"), milestones[0])
 
     def test_character_milestone_context_uses_selector_lookup(self) -> None:
-        text = CharacterMilestoneContextBuilder.build(
+        scoped = self._scoped_steps(
+            character_name="Heroine",
             character_milestones=[
                 {
                     "character_name": "",
@@ -510,11 +538,67 @@ class SchemaAndContextTests(unittest.TestCase):
                     "axes": [],
                 }
             ],
-            chapter_brief=self.chapter_brief,
-            active_twists=[self.twist],
         )
+        text = scoped.step_5_character_milestones_text
         self.assertIn("Heroine", text)
         self.assertIn("情感线: 压抑 -> 松动", text)
+
+    def test_character_mindset_formatter_formats_text(self) -> None:
+        text = CharacterMindsetFormatter.format_text(
+            [
+                CharacterMindset(
+                    character_id="Hero",
+                    character_name="Hero",
+                    surface_emotion="冷",
+                    core_emotion="痛",
+                    primary_goal="查旧案",
+                    hidden_need="被理解",
+                    fear="再次失去",
+                    attitude_to_key_others={"Heroine": "怀疑又在意"},
+                    self_control_level="high",
+                    breaking_point_hint="她再提旧案证词",
+                    known_but_unspoken="她当年有难言之隐",
+                    misbelief="她纯粹背叛了他",
+                    chapter_change_hint="克制转为试探",
+                )
+            ]
+        )
+        self.assertIn("Hero / Hero", text)
+        self.assertIn("Attitude to key others", text)
+        self.assertIn("Heroine: 怀疑又在意", text)
+
+    def test_chapter_tool_payload_builder_converges_writing_and_review_payloads(self) -> None:
+        context = self._writer_context(current_chapter_id="ch_001")
+        planned_blocks = [
+            ContentBlock(
+                block_id="ch_001.sc_001.b001",
+                chapter_id="ch_001",
+                block_index=1,
+                purpose="open pressure",
+                end_state="pressure lands",
+            )
+        ]
+        plan_payload = ChapterToolPayloadBuilder.build_plan_content_blocks_payload(
+            chapter_brief=self.chapter_brief,
+            context=context,
+        )
+        write_payload = ChapterToolPayloadBuilder.build_write_chapter_full_payload(
+            chapter_brief=self.chapter_brief,
+            context=context,
+            planned_blocks=planned_blocks,
+        )
+        review_payload = ChapterToolPayloadBuilder.build_chapter_review_payload(
+            chapter_brief=self.chapter_brief,
+            context=context,
+            chapter_text="正文",
+            planned_blocks=planned_blocks,
+        )
+
+        self.assertEqual(plan_payload["target_word_count_text"], self.chapter_brief.info_budget)
+        self.assertIn("chapter_plan_json", write_payload)
+        self.assertIn("step_1_to_7_outputs_json", write_payload)
+        self.assertEqual(review_payload["chapter_text"], "正文")
+        self.assertIn("twist_01", review_payload["active_twists_json"])
 
     def test_completed_memory_comes_from_actual_summaries(self) -> None:
         summary = ActualChapterSummary(
@@ -528,17 +612,7 @@ class SchemaAndContextTests(unittest.TestCase):
             seeded_clues=["She pauses."],
             locked_truths=["Her true motive remains hidden."],
         )
-        context = ChapterContextAssembler.build(
-            chapter_brief=self.chapter_brief,
-            premise=self.premise,
-            twist_designs=[self.twist],
-            story_lines=[self.line],
-            worldbuilding={},
-            character_cards=[],
-            character_milestones=[],
-            actual_summaries=[summary],
-            current_chapter_id="ch_002",
-        )
+        context = self._writer_context(actual_summaries=[summary], current_chapter_id="ch_002")
         self.assertIn("He returns to court.", context.completed_chapter_memory_text)
 
     def test_timeline_anchor_facts_are_pulled_into_writer_context(self) -> None:
@@ -564,11 +638,7 @@ class SchemaAndContextTests(unittest.TestCase):
                 },
             ]
         }
-        raw_context = ChapterContextAssembler.build(
-            chapter_brief=self.chapter_brief,
-            premise=self.premise,
-            twist_designs=[self.twist],
-            story_lines=[self.line],
+        raw_context = self._writer_context(
             worldbuilding=worldbuilding,
             character_cards=[
                 CharacterCard(
@@ -600,7 +670,6 @@ class SchemaAndContextTests(unittest.TestCase):
                     "axes": [],
                 },
             ],
-            actual_summaries=[],
             current_chapter_id="ch_001",
         )
         llm = SequenceLLM(
@@ -656,18 +725,11 @@ class SchemaAndContextTests(unittest.TestCase):
         self.assertTrue(any("step5" in issue for issue in issues))
 
     def test_context_sanitization_task_uses_llm_and_preserves_skipped_blocks(self) -> None:
-        raw_context = ChapterContextAssembler.build(
-            chapter_brief=self.chapter_brief,
-            premise=self.premise,
-            twist_designs=[self.twist],
-            story_lines=[self.line],
+        raw_context = self._writer_context(
             worldbuilding={
                 "story_engine": {"world_rules": "Imperial verdict cannot be challenged publicly."},
                 "event_timeline": [{"event_id": "EVT_001", "title": f"Timeline note {self.twist.truth}"}],
             },
-            character_cards=[],
-            character_milestones=[],
-            actual_summaries=[],
             current_chapter_id="ch_001",
         )
         llm = SequenceLLM(

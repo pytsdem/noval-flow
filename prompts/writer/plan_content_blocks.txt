@@ -21,6 +21,9 @@ Plan the chapter as a sequence of content blocks. Return valid JSON only.
 [Relationship state]
 {relationship_state_text}
 
+[Chapter character mindsets]
+{chapter_character_mindsets_text}
+
 [Style card]
 {style_card_text}
 
@@ -174,3 +177,5 @@ Planning style:
 6. Do not design blocks that read like summary bullets waiting to be expanded.
 7. The full sequence of blocks should feel like a serialized chapter, not like five flat outline segments.
 8. Prefer `character_anchor_line` over decorative flourish when they compete. If necessary, choose a sharper character anchor instead of prettier diction.
+9. Use the chapter character mindsets as hidden control signals for block design: let goals, fear, misbelief, and self-control level shape pressure, reaction target, and local turn.
+10. Do not restate mindset labels inside prose planning; translate them into action, hesitation, concealment, misreading, and cost.

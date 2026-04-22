@@ -1,3 +1,4 @@
+from novel_flow.tools.build_character_mindset import BuildCharacterMindsetTool
 from novel_flow.tools.build_chapter_patch_plan import BuildChapterPatchPlanTool
 from novel_flow.tools.draft_block import DraftBlockTool
 from novel_flow.tools.final_judge import FinalJudgeTool
@@ -23,6 +24,7 @@ from novel_flow.tools.write_chapter_full import WriteChapterFullTool
 
 __all__ = [
     "BuildChapterPatchPlanTool",
+    "BuildCharacterMindsetTool",
     "DraftBlockTool",
     "FinalJudgeTool",
     "FinalPolishTool",

@@ -18,6 +18,7 @@ from novel_flow.models.schemas import (
     BookDocument,
     Chapter,
     ChapterBrief,
+    CharacterMindset,
     ContentBlock,
     CriticReport,
     IssueCard,
@@ -37,12 +38,10 @@ from novel_flow.models.schemas import (
     WriterMode,
 )
 from novel_flow.prompting.templates import PromptLibrary
-from novel_flow.services.chapter_context import ChapterContextAssembler
-from novel_flow.services.character_context import CharacterContextBuilder
 from novel_flow.services.context_coverage import WriterContextCoverageValidator
 from novel_flow.services.context_sanitization_task import ContextSanitizationTask
+from novel_flow.services.novel_context import NovelContextFormatter, NovelContextSelectorService
 from novel_flow.services.patcher import PatchExecutor
-from novel_flow.services.relationship_state import RelationshipStateBuilder
 from novel_flow.utils.json_generation import safe_json_generate
 
 
@@ -155,6 +154,10 @@ class WriterAgent(BaseAgent):
             story_lines=self._story_lines_from_book(book),
             character_cards=book.characters,
             character_milestones=self._character_milestones_from_book(book),
+            prior_character_mindsets=self._latest_character_mindsets_for_chapter(
+                book=book,
+                focus_names=list(chapter_brief.character_focus or []),
+            ),
             worldbuilding=dict(book.metadata.get("story_blueprint", {}) or {}),
             actual_chapter_summaries=actual_summaries,
             prebuilt_context=writer_context,
@@ -172,6 +175,7 @@ class WriterAgent(BaseAgent):
             summary=chapter_brief.summary,
             scenes=[scene],
             content_blocks=execution.content_blocks,
+            character_mindsets=execution.character_mindsets,
             final_text=execution.chapter_text,
             final_version=1,
             is_finalized=True,
@@ -203,6 +207,7 @@ class WriterAgent(BaseAgent):
             "scene_character_context_text": writer_context.scene_character_context_text,
             "relationship_state_text": writer_context.relationship_state_text,
             "style_card_text": writer_context.style_card_text,
+            "chapter_character_mindsets_text": getattr(writer_context, "chapter_character_mindsets_text", ""),
             "assistant_persona_prompt": getattr(writer_context, "assistant_persona_prompt", ""),
             "writing_requirements_json": getattr(writer_context, "writing_requirements_json", "{}"),
             "previous_chapter_full_text": getattr(writer_context, "previous_chapter_full_text", ""),
@@ -221,6 +226,7 @@ class WriterAgent(BaseAgent):
         }
         updated_book.metadata.setdefault("writing_chapter_runs", {})[chapter_brief.chapter_id] = {
             "content_blocks": [item.model_dump(mode="json") for item in execution.content_blocks],
+            "character_mindsets": [item.model_dump(mode="json") for item in execution.character_mindsets],
             "final_text": execution.chapter_text,
             "final_version": chapter.final_version,
             "is_finalized": chapter.is_finalized,
@@ -288,6 +294,7 @@ class WriterAgent(BaseAgent):
             summary=chapter.summary,
             scenes=chapter.scenes,
             content_blocks=chapter.content_blocks,
+            character_mindsets=chapter.character_mindsets,
             final_text=rewritten,
             final_version=max(int(chapter.final_version), 0) + 1,
             is_finalized=True,
@@ -377,7 +384,7 @@ class WriterAgent(BaseAgent):
             if coverage_issues:
                 detail = "；".join(coverage_issues)
                 raise ValueError(f"{UPGRADE_ERROR} 缺失信息：{detail}")
-        context = ChapterContextAssembler.build(
+        snapshot = NovelContextSelectorService.create_snapshot(
             chapter_brief=chapter_brief,
             premise=book.premise,
             twist_designs=self._twists_from_book(book),
@@ -387,6 +394,13 @@ class WriterAgent(BaseAgent):
             character_milestones=self._character_milestones_from_book(book),
             actual_summaries=self._actual_summaries_from_book(book),
             current_chapter_id=chapter_id,
+        )
+        selection = NovelContextSelectorService.select(
+            snapshot=snapshot,
+            strategy="writer_context",
+        )
+        context = NovelContextFormatter.format_writer_context(
+            selection,
             context_sanitizer=self.context_sanitizer if sanitize_for_prose else None,
         )
         return replace(
@@ -756,6 +770,31 @@ class WriterAgent(BaseAgent):
     def _character_milestones_from_book(book: BookDocument) -> list[dict[str, Any]]:
         items = book.metadata.get("character_milestones", []) or []
         return [item for item in items if isinstance(item, dict)]
+
+    @staticmethod
+    def _latest_character_mindsets_for_chapter(
+        *,
+        book: BookDocument,
+        focus_names: list[str],
+    ) -> list[CharacterMindset]:
+        target_names = list(dict.fromkeys(str(name or "").strip() for name in focus_names if str(name or "").strip()))[:2]
+        if not target_names:
+            return []
+
+        found: dict[str, CharacterMindset] = {}
+        for volume in reversed(book.volumes):
+            for chapter in reversed(volume.chapters):
+                for item in reversed(list(getattr(chapter, "character_mindsets", []) or [])):
+                    try:
+                        mindset = CharacterMindset.model_validate(item)
+                    except Exception:
+                        continue
+                    name = str(mindset.character_name or "").strip()
+                    if name in target_names and name not in found:
+                        found[name] = mindset
+                if len(found) >= len(target_names):
+                    return [found[name] for name in target_names if name in found]
+        return [found[name] for name in target_names if name in found]
 
     @staticmethod
     def _actual_summaries_from_book(book: BookDocument) -> list[ActualChapterSummary]:

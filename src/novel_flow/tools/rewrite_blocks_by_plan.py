@@ -46,6 +46,7 @@ class RewriteBlocksByPlanTool(LLMChapterTool):
                 chapter_payload_text=payload.get("chapter_payload_text", ""),
                 scene_character_context_text=payload.get("scene_character_context_text", ""),
                 relationship_state_text=payload.get("relationship_state_text", ""),
+                chapter_character_mindsets_text=payload.get("chapter_character_mindsets_text", ""),
                 style_card_text=payload.get("style_card_text", ""),
                 patch_target_json=self._json_text(target.model_dump(mode="json")),
                 global_constraints_json=self._json_text(patch_plan.global_constraints),

@@ -12,6 +12,9 @@ Revise one content block. Output prose only in Simplified Chinese.
 [Relationship state]
 {relationship_state_text}
 
+[Chapter character mindsets]
+{chapter_character_mindsets_text}
+
 [Block card]
 {block_card_text}
 
@@ -151,6 +154,11 @@ CHARACTER ANCHOR LINE RULES:
    - 锚句不能只是推进剧情，必须揭示人物。
    - 锚句要短、准、留余味。
    - 锚句出现后，不要马上解释它，让停顿、反应、气氛托住它。
+
+CHARACTER MINDSET RULES:
+1. Preserve the current chapter character mindsets for the first two focal characters.
+2. If the block rewrite changes action or reaction, it must still match the bound mindset's goal, fear, self-control level, and misbelief.
+3. Do not translate the mindset into direct exposition labels.
 
 Revision rules:
 1. Revise only this block. Do not rewrite the whole chapter.

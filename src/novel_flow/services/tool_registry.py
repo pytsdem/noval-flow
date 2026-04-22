@@ -5,6 +5,7 @@ from typing import Any, Protocol
 
 from novel_flow.llm.base import LLMClient
 from novel_flow.prompting.templates import PromptLibrary
+from novel_flow.tools.build_character_mindset import BuildCharacterMindsetTool
 from novel_flow.tools.draft_block import DraftBlockTool
 from novel_flow.tools.build_chapter_patch_plan import BuildChapterPatchPlanTool
 from novel_flow.tools.final_judge import FinalJudgeTool
@@ -47,6 +48,7 @@ class ToolRegistry:
     def build_default(cls, *, llm_client: LLMClient, prompt_library: PromptLibrary | None = None) -> "ToolRegistry":
         library = prompt_library or PromptLibrary()
         tool_list: list[ToolProtocol] = [
+            BuildCharacterMindsetTool(llm_client=llm_client, prompt_library=library),
             PlanContentBlocksTool(llm_client=llm_client, prompt_library=library),
             WriteChapterFullTool(llm_client=llm_client, prompt_library=library),
             DraftBlockTool(llm_client=llm_client, prompt_library=library),

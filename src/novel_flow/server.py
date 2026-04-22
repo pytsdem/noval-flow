@@ -283,6 +283,9 @@ class NovelApp:
             content_blocks = payload.get("content_blocks")
             if not isinstance(content_blocks, list):
                 content_blocks = []
+            character_mindsets = payload.get("character_mindsets")
+            if not isinstance(character_mindsets, list):
+                character_mindsets = []
             final_version_raw = payload.get("final_version", 0)
             try:
                 final_version = max(int(final_version_raw), 0)
@@ -295,6 +298,7 @@ class NovelApp:
                 "final_text": str(payload.get("final_text") or ""),
                 "final_version": final_version,
                 "content_blocks": content_blocks,
+                "character_mindsets": character_mindsets,
                 "preview_mode": str(payload.get("preview_mode") or ""),
             }
         if chapter_blocks:
@@ -306,6 +310,7 @@ class NovelApp:
                 "final_text": "",
                 "final_version": 0,
                 "content_blocks": [item["payload"] for item in chapter_blocks],
+                "character_mindsets": [],
                 "preview_mode": "content_blocks",
             }
         return None
@@ -3346,6 +3351,41 @@ function renderBlockCards(blocks,options={}){
     return `<div class='block ${isPatched?'patched':''}'><div class='row'><strong>${esc(label)} ${blockIndex}</strong>${metaBits?` <span class='muted'>${esc(metaBits)}</span>`:''}</div>${endState?`<div class='muted' style='margin-top:4px'>落点：${esc(endState)}</div>`:''}${badges.length?`<div class='block-badges'>${badges.join('')}</div>`:''}<div style='margin-top:6px'>${esc(block?.text||'')}</div></div>`;
   }).join('')||"<div class='relationship-empty'>暂无内容块</div>";
 }
+function renderCharacterMindsetsBlock(characterMindsets){
+  const items=(Array.isArray(characterMindsets)?characterMindsets:[]).filter(item=>item&&typeof item==='object');
+  if(!items.length)return '';
+  const renderAttitudes=(attitudes)=>{
+    const rows=Object.entries(attitudes&&typeof attitudes==='object'?attitudes:{}).filter(([key,value])=>String(key||'').trim()&&String(value||'').trim());
+    return rows.length
+      ? `<div class='mini-list'>${rows.map(([key,value])=>`<div class='mini-item'><strong>${esc(key)}</strong>：${esc(value)}</div>`).join('')}</div>`
+      : "<div class='relationship-empty'>暂无关键他人态度</div>";
+  };
+  const cards=items.map((item,index)=>{
+    const title=String(item?.character_name||item?.character_id||`角色 ${index+1}`).trim()||`角色 ${index+1}`;
+    const emotionSummary=[String(item?.surface_emotion||'').trim(),String(item?.core_emotion||'').trim()].filter(Boolean).join(' / ')||'暂无情绪摘要';
+    return `<div style='border:1px solid #2a3447;border-radius:12px;padding:12px;background:#0d1420'>
+      <div class='row' style='justify-content:space-between;align-items:flex-start;gap:12px'>
+        <div>
+          <div class='subsec'>${esc(title)}</div>
+          <div class='muted'>${esc(emotionSummary)}</div>
+        </div>
+        <span class='block-badge status'>${esc(item?.self_control_level||'medium')}</span>
+      </div>
+      ${infoRow('表层情绪', item?.surface_emotion||'')}
+      ${infoRow('核心情绪', item?.core_emotion||'')}
+      ${infoRow('主要目标', item?.primary_goal||'')}
+      ${infoRow('隐藏需求', item?.hidden_need||'')}
+      ${infoRow('恐惧', item?.fear||'')}
+      ${infoRow('临界点提示', item?.breaking_point_hint||'')}
+      ${infoRow('知道但未说', item?.known_but_unspoken||'')}
+      ${infoRow('误判', item?.misbelief||'')}
+      ${infoRow('本章变化提示', item?.chapter_change_hint||'')}
+      <div class='subsec' style='margin-top:10px'>关键他人态度</div>
+      ${renderAttitudes(item?.attitude_to_key_others)}
+    </div>`;
+  }).join('');
+  return `<div class='relationship-card'><div class='subsec'>角色心智</div><div class='task-note'>仅维护本章前两个角色的章节心智，和章节本身绑定展示。</div><div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:12px'>${cards}</div></div>`;
+}
 function renderChapterDraftTask(payload){
   const preview=payload?.draft_preview&&typeof payload.draft_preview==='object'?payload.draft_preview:{};
   const finalText=String(preview?.final_text||'').trim();
@@ -3974,6 +4014,7 @@ function renderText(book,livePreview=null,runDetail=null){
       summary:'实时生成中',
       scenes:[],
       content_blocks:Array.isArray(livePreview.content_blocks)?livePreview.content_blocks:[],
+      character_mindsets:Array.isArray(livePreview.character_mindsets)?livePreview.character_mindsets:[],
       final_text:String(livePreview.final_text||''),
       final_version:Number(livePreview.final_version||0),
       is_finalized:!!livePreview.is_finalized,
@@ -4008,6 +4049,7 @@ function renderText(book,livePreview=null,runDetail=null){
     const summary=chapter.summary||'暂无摘要';
     const chapterToolbar=`<div style='display:flex;justify-content:flex-end;gap:8px;margin-bottom:8px'><button class='ghost' onclick="aiReviseText('chapter','${esc(chapter.id||'')}')">整章指令修改</button><button class='ghost' onclick="deleteChapter('${esc(chapter.id||'')}')">删除章节</button></div>`;
     const contentBlocks=Array.isArray(chapter?.content_blocks)?chapter.content_blocks:[];
+    const characterMindsets=Array.isArray(chapter?.character_mindsets)?chapter.character_mindsets:[];
     const finalText=String(chapter?.final_text||'').trim();
     const isFinalized=!!chapter?.is_finalized;
     const previewMode=String(chapter?.preview_mode||'').trim();
@@ -4016,6 +4058,7 @@ function renderText(book,livePreview=null,runDetail=null){
     const hasChapterPreview=!!finalText;
     const assembledPreviewText=mergeChapterBlocksText(contentBlocks,finalText);
     const previewModeLabel=previewMode==='content_blocks'?'内容块逐块追加中':previewMode==='chapter_rewrite'?'整章审校重写中':previewMode==='final_polish'?'整章精修中':previewMode==='final_text'?'整章覆写已收口':'';
+    const mindsetBody=renderCharacterMindsetsBlock(characterMindsets);
     let proseBody='';
     if(hasChapterPreview||contentBlocks.length){
       const proseLabel=isFinalized?'当前小说正文':'当前修订中的正文';
@@ -4033,7 +4076,7 @@ function renderText(book,livePreview=null,runDetail=null){
       proseBody=`<div class='relationship-card'><div class='subsec'>正文展示</div><div class='relationship-stack'>${renderLegacyScenes(chapter)}</div></div>`;
     }
     const modeSummary=isFinalized&&finalText?'已终稿覆盖':(hasChapterPreview||contentBlocks.length)&&previewMode?'实时修订视图':contentBlocks.length?'按内容块逐步追加':'场景回放';
-    const body=`<div class='relationship-stack'><div class='relationship-card'><div class='subsec'>基础信息</div>${infoRow('卷名', volume.title||volume.id||'')}${infoRow('章节标题', title)}${infoRow('章节概述', summary)}${infoRow('展示模式', modeSummary)}${previewModeLabel?infoRow('运行状态', previewModeLabel):''}</div>${chapterToolbar}${proseBody}</div>`;
+    const body=`<div class='relationship-stack'><div class='relationship-card'><div class='subsec'>基础信息</div>${infoRow('卷名', volume.title||volume.id||'')}${infoRow('章节标题', title)}${infoRow('章节概述', summary)}${infoRow('展示模式', modeSummary)}${previewModeLabel?infoRow('运行状态', previewModeLabel):''}</div>${chapterToolbar}${mindsetBody}${proseBody}</div>`;
     html+=sectionCard(`text-chapter-${chapter.id||index}`,title,summary,body,false);
   });
   document.getElementById('pnl-text').innerHTML=html;

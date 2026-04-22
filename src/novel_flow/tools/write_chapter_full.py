@@ -19,6 +19,7 @@ class WriteChapterFullTool(LLMChapterTool):
             timeline_anchor_facts_text=payload.get("timeline_anchor_facts_text", ""),
             scene_character_context_text=payload.get("scene_character_context_text", ""),
             relationship_state_text=payload.get("relationship_state_text", ""),
+            chapter_character_mindsets_text=payload.get("chapter_character_mindsets_text", ""),
             style_card_text=payload.get("style_card_text", ""),
             previous_chapter_full_text=payload.get("previous_chapter_full_text", ""),
             completed_chapter_summary_bundle=payload.get("completed_chapter_summary_bundle", ""),

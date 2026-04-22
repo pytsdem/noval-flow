@@ -20,7 +20,7 @@ from novel_flow.models.schemas import (
     StoryPremise,
     TwistDesign,
 )
-from novel_flow.services.chapter_context import build_current_chapter_context
+from novel_flow.services.novel_context import build_current_chapter_context
 from novel_flow.services.patcher import PatchExecutor
 from novel_flow.services.skill_manager import SkillManager
 from novel_flow.services.skill_registry import SkillRegistry
@@ -150,6 +150,34 @@ class WritingChapterAgentTests(unittest.TestCase):
             },
             ensure_ascii=False,
         )
+
+    def _character_mindset_json(self, *, character_name: str, other_name: str) -> str:
+        return json.dumps(
+            {
+                "character_id": character_name,
+                "character_name": character_name,
+                "surface_emotion": f"{character_name}表层克制",
+                "core_emotion": f"{character_name}内里绷紧",
+                "primary_goal": f"{character_name}想先稳住本章局面",
+                "hidden_need": f"{character_name}需要确认对方真实站位",
+                "fear": f"{character_name}害怕先失控就失去主动",
+                "attitude_to_key_others": {
+                    other_name: f"对{other_name}既警惕又不得不试探"
+                },
+                "self_control_level": "medium_high",
+                "breaking_point_hint": f"{character_name}一旦被当众逼到无路可退就会露出裂口",
+                "known_but_unspoken": f"{character_name}知道本章真正危险不止表面命令",
+                "misbelief": f"{character_name}仍误判对方此刻的真实意图",
+                "chapter_change_hint": f"{character_name}会从纯粹对抗转向更复杂的提防",
+            },
+            ensure_ascii=False,
+        )
+
+    def _character_mindset_jsons(self) -> list[str]:
+        return [
+            self._character_mindset_json(character_name="Hero", other_name="Heroine"),
+            self._character_mindset_json(character_name="Heroine", other_name="Hero"),
+        ]
 
     def _planned_blocks_json(self) -> str:
         paragraph_budget = "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长"
@@ -670,6 +698,7 @@ class WritingChapterAgentTests(unittest.TestCase):
         llm = RecordingSequenceLLM(
             [
                 self.sanitized_context_json,
+                *self._character_mindset_jsons(),
                 self._planned_blocks_json(),
                 "Cold wind pressed against the vermilion steps. He bowed, but not low enough to forget himself. The order arrived before his first breath settled. The transfer register stayed tucked beneath the eunuch's sleeve, and when the old case title surfaced, she paused only once. By the time he reached the lower steps again, he already knew the first witness was dead.",
                 *self._chapter_review_pass_sequence(),
@@ -702,19 +731,23 @@ class WritingChapterAgentTests(unittest.TestCase):
         )
         self.assertEqual(result.actual_chapter_summary.chapter_id, "ch_002")
         self.assertTrue(result.final_judge["passed"])
+        self.assertEqual(len(result.character_mindsets), 2)
         self.assertIn("vermilion steps", result.chapter_text)
-        full_chapter_prompt = llm.calls[2][-1].content
+        full_chapter_prompt = llm.calls[4][-1].content
         self.assertNotIn(self.twist.truth, full_chapter_prompt)
         self.assertIn(self.twist.false_belief, full_chapter_prompt)
         self.assertIn('"block_id": "ch_002.sc_001.b001"', full_chapter_prompt)
         self.assertIn('"turn_type": "pressure_rise"', full_chapter_prompt)
         self.assertIn('"micro_hook": "He now has to answer the public pressure before he can reclaim the opening move."', full_chapter_prompt)
         self.assertIn('"character_reentry_mode"', full_chapter_prompt)
+        self.assertIn("[Chapter character mindsets]", full_chapter_prompt)
+        self.assertIn("Hero表层克制", full_chapter_prompt)
 
     def test_fast_mode_direct_pass_skips_patch_tools(self) -> None:
         llm = RecordingSequenceLLM(
             [
                 self.sanitized_context_json,
+                *self._character_mindset_jsons(),
                 self._planned_blocks_json(),
                 self._four_block_draft(),
                 self._targeted_review_pass("结构和连续性通过。"),
@@ -767,6 +800,7 @@ class WritingChapterAgentTests(unittest.TestCase):
         llm = RecordingSequenceLLM(
             [
                 self.sanitized_context_json,
+                *self._character_mindset_jsons(),
                 self._planned_blocks_json(),
                 self._four_block_draft(),
                 self._targeted_review_fail(
@@ -834,6 +868,7 @@ class WritingChapterAgentTests(unittest.TestCase):
         llm = RecordingSequenceLLM(
             [
                 self.sanitized_context_json,
+                *self._character_mindset_jsons(),
                 self._planned_blocks_json(),
                 self._four_block_draft(),
                 self._targeted_review_fail(
@@ -898,6 +933,7 @@ class WritingChapterAgentTests(unittest.TestCase):
         llm = RecordingSequenceLLM(
             [
                 self.sanitized_context_json,
+                *self._character_mindset_jsons(),
                 self._planned_blocks_json(),
                 "Cold wind pressed against the vermilion steps. He bowed, but not low enough to forget himself. The order arrived before his first breath settled. The transfer register stayed tucked beneath the eunuch's sleeve, and when the old case title surfaced, she paused only once. Before he reached the lower steps, he learned the first witness was dead.",
                 *self._chapter_review_pass_sequence(),
@@ -946,6 +982,7 @@ class WritingChapterAgentTests(unittest.TestCase):
         llm = RecordingSequenceLLM(
             [
                 self.sanitized_context_json,
+                *self._character_mindset_jsons(),
                 self._planned_blocks_json(),
                 "He returned in silence, but the hall refused him even that small mercy. Every eye counted what he no longer had. The clerk would not touch the register until the eunuch nodded. She paused at the old case name and looked away too quickly. By the time he stepped back into the wind, he had found the indirect route he needed, and it came with the news that the first witness would never speak again.",
                 *self._chapter_review_pass_sequence(),
@@ -1033,14 +1070,17 @@ class WritingChapterAgentTests(unittest.TestCase):
         self.assertEqual(chapter.scenes[0].summary, "Full chapter prose")
         self.assertIn("hall gave him no mercy", chapter.scenes[0].blocks[0].text)
         self.assertGreaterEqual(len(chapter.content_blocks), 4)
+        self.assertEqual(len(chapter.character_mindsets), 2)
         self.assertEqual(updated_book.metadata["actual_chapter_summaries"][-1]["chapter_id"], "ch_002")
         self.assertIn("ch_002", updated_book.metadata["writing_chapter_runs"])
         self.assertGreaterEqual(len(updated_book.metadata["writing_chapter_runs"]["ch_002"]["content_blocks"]), 4)
-        full_chapter_prompt = llm.calls[2][-1].content
+        self.assertEqual(len(updated_book.metadata["writing_chapter_runs"]["ch_002"]["character_mindsets"]), 2)
+        full_chapter_prompt = llm.calls[4][-1].content
         self.assertIn("你要盯住场面压力，不要写成剧情说明。", full_chapter_prompt)
         self.assertIn("多视角", full_chapter_prompt)
         self.assertIn("5000字", full_chapter_prompt)
         self.assertIn("每章一个小钩子", full_chapter_prompt)
+        self.assertIn("Hero表层克制", full_chapter_prompt)
 
     def test_writer_persists_live_preview_to_runtime_store(self) -> None:
         writer = WriterAgent(llm_client=RecordingSequenceLLM([]), patch_executor=PatchExecutor())
