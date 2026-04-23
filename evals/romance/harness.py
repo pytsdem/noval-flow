@@ -19,7 +19,7 @@ from novel_flow.services.novel_context import NovelContextFormatter, NovelContex
 from novel_flow.services.tool_registry import ToolRegistry
 
 from evals.romance.instrumentation import InstrumentedLLMClient, InstrumentedToolRegistry
-from evals.romance.judges import RedundancyRuleAnalyzer, RomanceChapterJudge
+from evals.romance.judges import AntiSlopRuleAnalyzer, RedundancyRuleAnalyzer, RomanceChapterJudge
 from evals.romance.loader import load_cases
 from evals.romance.models import (
     RomanceCaseArtifacts,
@@ -398,6 +398,10 @@ class RomanceEvalHarness:
             stage_log=execution.stage_log,
             review_reports=execution.review_reports,
         )
+        rule_anti_slop = AntiSlopRuleAnalyzer().analyze(
+            chapter_text=execution.chapter_text,
+            review_reports=execution.review_reports,
+        )
 
         judge_start = len(self.llm_client.records)
         self.llm_client.set_phase(f"judge:{case.case_id}")
@@ -410,7 +414,11 @@ class RomanceEvalHarness:
             )
             judge_payload_path.write_text(judge.model_dump_json(indent=2), encoding="utf-8")
             diagnosis = judge.diagnosis
-            judge_detail = self._judge_metrics_to_core(judge=judge, rule_redundancy=rule_redundancy)
+            judge_detail = self._judge_metrics_to_core(
+                judge=judge,
+                rule_redundancy=rule_redundancy,
+                rule_anti_slop=rule_anti_slop,
+            )
             breakdowns = {
                 "male_lead_attraction": judge.male_lead_attraction,
                 "female_lead_attraction": judge.female_lead_attraction,
@@ -419,18 +427,34 @@ class RomanceEvalHarness:
                 "ending_hook_score": judge.ending_hook,
                 "judge_redundancy_score": judge.redundancy,
                 "rule_redundancy_score": rule_redundancy,
+                "rule_anti_slop_score": rule_anti_slop,
             }
             if rule_redundancy.score < 7.0 and not any("重复" in item for item in diagnosis.weaknesses):
                 diagnosis.weaknesses.append("中段存在重复铺陈信号")
                 diagnosis.improvement_hints.append(rule_redundancy.improvement_hint)
+            if rule_anti_slop.score < 7.0 and not any(token in item for item in diagnosis.weaknesses for token in ("直白", "心理", "解释")):
+                diagnosis.weaknesses.append("存在直白心理解释信号")
+                diagnosis.improvement_hints.append(rule_anti_slop.improvement_hint)
         except Exception as exc:
             judge_errors.append(f"romance_judge_failed: {exc}")
             judge_payload_path.write_text(
-                _json_text({"error": str(exc), "rule_redundancy": rule_redundancy.model_dump(mode="json")}),
+                _json_text(
+                    {
+                        "error": str(exc),
+                        "rule_redundancy": rule_redundancy.model_dump(mode="json"),
+                        "rule_anti_slop": rule_anti_slop.model_dump(mode="json"),
+                    }
+                ),
                 encoding="utf-8",
             )
-            judge_detail = self._fallback_core_metrics(rule_redundancy=rule_redundancy)
-            breakdowns = {"rule_redundancy_score": rule_redundancy}
+            judge_detail = self._fallback_core_metrics(
+                rule_redundancy=rule_redundancy,
+                rule_anti_slop=rule_anti_slop,
+            )
+            breakdowns = {
+                "rule_redundancy_score": rule_redundancy,
+                "rule_anti_slop_score": rule_anti_slop,
+            }
             diagnosis = RomanceJudgeDiagnosis(
                 strengths=[],
                 weaknesses=["LLM judge 未返回可用结果，本次使用降级分数。"],
@@ -983,8 +1007,9 @@ class RomanceEvalHarness:
         *,
         judge_score: float,
         rule_score: float,
+        anti_slop_score: float,
     ) -> float:
-        supportive_rule_score = min(rule_score, judge_score)
+        supportive_rule_score = min(rule_score, anti_slop_score, judge_score)
         return round((judge_score * 0.8) + (supportive_rule_score * 0.2), 2)
 
     @staticmethod
@@ -992,6 +1017,7 @@ class RomanceEvalHarness:
         *,
         judge: Any,
         rule_redundancy: RomanceMetricDetail,
+        rule_anti_slop: RomanceMetricDetail,
     ) -> dict[str, RomanceMetricDetail]:
         attraction_score = round(
             (judge.male_lead_attraction.score * 0.3)
@@ -1003,6 +1029,7 @@ class RomanceEvalHarness:
         hybrid_redundancy_score = RomanceEvalHarness._hybrid_redundancy_score(
             judge_score=judge.redundancy.score,
             rule_score=rule_redundancy.score,
+            anti_slop_score=rule_anti_slop.score,
         )
         return {
             "romance_tension_score": judge.romance_tension.model_copy(update={"source": "llm"}),
@@ -1032,16 +1059,24 @@ class RomanceEvalHarness:
             "continuity_score": judge.continuity.model_copy(update={"source": "llm"}),
             "redundancy_score": RomanceMetricDetail(
                 score=hybrid_redundancy_score,
-                reason="以 romance judge 为主分，规则检测只用于向下修正，不再允许规则层把坏重复救高。",
-                evidence_summary=f"Judge：{judge.redundancy.evidence_summary}；Rule：{rule_redundancy.evidence_summary}",
-                improvement_hint=judge.redundancy.improvement_hint,
+                reason="以 romance judge 为主分，并用重复/anti-slop 规则信号做向下修正，不再允许规则层把坏重复或直白心理解释救高。",
+                evidence_summary=(
+                    f"Judge：{judge.redundancy.evidence_summary}；"
+                    f"Rule：{rule_redundancy.evidence_summary}；"
+                    f"Anti-slop：{rule_anti_slop.evidence_summary}"
+                ),
+                improvement_hint=rule_anti_slop.improvement_hint if rule_anti_slop.score < rule_redundancy.score else judge.redundancy.improvement_hint,
                 source="hybrid",
             ),
             "mind_state_consistency_score": judge.mind_state_consistency.model_copy(update={"source": "llm"}),
         }
 
     @staticmethod
-    def _fallback_core_metrics(*, rule_redundancy: RomanceMetricDetail) -> dict[str, RomanceMetricDetail]:
+    def _fallback_core_metrics(
+        *,
+        rule_redundancy: RomanceMetricDetail,
+        rule_anti_slop: RomanceMetricDetail,
+    ) -> dict[str, RomanceMetricDetail]:
         fallback = lambda hint: RomanceMetricDetail(  # noqa: E731
             score=5.0,
             reason="LLM judge 失败，使用中性降级分数 5.0。此分数只用于保留报告结构，不建议据此做趋势判断。",
@@ -1049,6 +1084,7 @@ class RomanceEvalHarness:
             improvement_hint=hint,
             source="fallback",
         )
+        fallback_redundancy = min(rule_redundancy.score, rule_anti_slop.score)
         return {
             "romance_tension_score": fallback("先修复 judge，再观察拉扯感评分。"),
             "relationship_progression_score": fallback("先修复 judge，再观察关系推进评分。"),
@@ -1057,10 +1093,13 @@ class RomanceEvalHarness:
             "hook_score": fallback("先修复 judge，再观察章节钩子评分。"),
             "continuity_score": fallback("先修复 judge，再观察连贯性评分。"),
             "redundancy_score": RomanceMetricDetail(
-                score=rule_redundancy.score,
-                reason="LLM judge 失败，本项退化为规则型重复检测。",
-                evidence_summary=rule_redundancy.evidence_summary,
-                improvement_hint=rule_redundancy.improvement_hint,
+                score=fallback_redundancy,
+                reason="LLM judge 失败，本项退化为规则型重复/anti-slop 检测。",
+                evidence_summary=(
+                    f"规则重复：{rule_redundancy.evidence_summary}；"
+                    f"Anti-slop：{rule_anti_slop.evidence_summary}"
+                ),
+                improvement_hint=rule_anti_slop.improvement_hint if rule_anti_slop.score < rule_redundancy.score else rule_redundancy.improvement_hint,
                 source="rule",
             ),
             "mind_state_consistency_score": fallback("先修复 judge，再观察角色心智一致性评分。"),

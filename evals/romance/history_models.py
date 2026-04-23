@@ -162,6 +162,7 @@ class WorkflowDiagnosticsCaseReport(BaseModel):
     title: str = ""
     tags: list[str] = Field(default_factory=list)
     final_text_scores: dict[str, RomanceMetricDetail] = Field(default_factory=dict)
+    diagnostic_signals: dict[str, RomanceMetricDetail] = Field(default_factory=dict)
     workflow_layer_diagnostics: dict[str, WorkflowDiagnosticDetail] = Field(default_factory=dict)
     step_diagnostics: dict[str, WorkflowDiagnosticDetail] = Field(default_factory=dict)
     root_cause_hypothesis: list[str] = Field(default_factory=list)
@@ -178,6 +179,7 @@ class AggregateFindings(BaseModel):
     most_common_root_steps: list[str] = Field(default_factory=list)
     frequent_full_rewrite_cases: list[str] = Field(default_factory=list)
     redundancy_hotspot_cases: list[str] = Field(default_factory=list)
+    slop_hotspot_cases: list[str] = Field(default_factory=list)
     failure_prone_tags: list[str] = Field(default_factory=list)
 
 

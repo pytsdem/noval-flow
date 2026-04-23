@@ -94,7 +94,11 @@ class WorkflowDiagnosticsTests(unittest.TestCase):
                 stage_log=[{"stage": "rewrite_iteration_1"}],
             ),
             outputs=HistoricalCaseOutputs(
-                final_text="He bowed, threatened her twice, and left the hall.",
+                final_text=(
+                    "她知道自己不能露怯，这让她更明白眼前的人更危险。"
+                    "她又知道自己不能退，这让她更清楚谢临川不会轻易放手。"
+                    "他意识到她没有一句真话，也觉得自己更难抽身。"
+                ),
                 final_summary="He returns under pressure.",
                 final_status="failed_partial",
             ),
@@ -117,7 +121,10 @@ class WorkflowDiagnosticsTests(unittest.TestCase):
         self.assertIn("state_modeling_layer", report.workflow_layer_diagnostics)
         self.assertIn("mind_state_quality_score", report.step_diagnostics)
         self.assertIn("continuity_score", report.final_text_scores)
+        self.assertIn("anti_slop_score", report.diagnostic_signals)
+        self.assertLess(report.diagnostic_signals["anti_slop_score"].score, 7.0)
         self.assertIn("state_modeling_layer", summary.aggregate_findings.most_common_root_layers)
+        self.assertEqual(summary.aggregate_findings.slop_hotspot_cases, ["case_001"])
 
     def test_aggregate_analysis_counts_shared_failure_modes(self) -> None:
         report_a = WorkflowDiagnosticsCaseReport(
@@ -145,6 +152,9 @@ class WorkflowDiagnosticsTests(unittest.TestCase):
                 "block_plan_quality_score": WorkflowDiagnosticDetail(score=7.0, reason="ok", evidence=[], improvement_hint=""),
                 "writer_execution_quality_score": WorkflowDiagnosticDetail(score=6.5, reason="mid", evidence=[], improvement_hint=""),
                 "patch_effectiveness_score": WorkflowDiagnosticDetail(score=6.2, reason="mid", evidence=[], improvement_hint=""),
+            },
+            diagnostic_signals={
+                "anti_slop_score": _detail(8.1),
             },
             cost_metrics=HistoricalCaseMetrics(used_full_rewrite=True),
         )
@@ -174,6 +184,9 @@ class WorkflowDiagnosticsTests(unittest.TestCase):
                 "writer_execution_quality_score": WorkflowDiagnosticDetail(score=6.6, reason="mid", evidence=[], improvement_hint=""),
                 "patch_effectiveness_score": WorkflowDiagnosticDetail(score=6.1, reason="mid", evidence=[], improvement_hint=""),
             },
+            diagnostic_signals={
+                "anti_slop_score": _detail(5.9),
+            },
             cost_metrics=HistoricalCaseMetrics(used_full_rewrite=False),
         )
 
@@ -184,6 +197,7 @@ class WorkflowDiagnosticsTests(unittest.TestCase):
         self.assertEqual(aggregate.most_common_root_steps[0], "relationship_state_quality_score")
         self.assertEqual(aggregate.frequent_full_rewrite_cases, ["a"])
         self.assertEqual(aggregate.redundancy_hotspot_cases, ["b"])
+        self.assertEqual(aggregate.slop_hotspot_cases, ["b"])
 
 
 if __name__ == "__main__":

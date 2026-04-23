@@ -318,3 +318,50 @@
 - 下一步：
   - 后续进入 `final_polish` / `rewrite_blocks_by_plan` 的真实质量优化时，优先用这套 pairwise 结果做 keep / reject 辅助判断
   - 下一轮更值得做的是补一个低成本 anti-slop / direct-thought 诊断，让“去重但不压平关系落点”的目标能在单点评测里更快被验证
+
+## Iteration 8 - keep：新增 anti-slop / direct-thought 单点诊断，补齐 final polish 的低成本观测
+
+- 主假设：
+  - 目前 repo 能看见“重复”，但还不够稳定地看见“直白心理解释 / 机械性总结句”；这会让 `final_polish` 和 `rewrite_blocks_by_plan` 的优化仍然缺少单点证据。如果补一个规则型 anti-slop 信号，并把它挂到 workflow diagnostics 与 eval breakdown，就能在不跑端到端的情况下更快判断“是否真的在去解释化”。
+- 改动文件：
+  - `evals/romance/judges/rule_metrics.py`
+  - `evals/romance/judges/__init__.py`
+  - `evals/romance/harness.py`
+  - `evals/romance/reporting.py`
+  - `evals/romance/workflow_diagnostics.py`
+  - `evals/romance/history_models.py`
+  - `tests/test_rule_metrics.py`
+  - `tests/test_romance_eval_harness.py`
+  - `tests/test_workflow_diagnostics.py`
+- 已做改动：
+  - 新增 `AntiSlopRuleAnalyzer`
+    - 命中 `她知道 / 他意识到 / 这让她更明白 / 这让她更清楚` 这类直白心理标签与解释性总结句
+    - 同时吸收 review 报告里 `direct_thought / on_the_nose / 直白 / 解释 / 总结` 等信号
+  - 把 anti-slop 接入 romance eval harness：
+    - 新增 `rule_anti_slop_score` breakdown
+    - `redundancy_score` 的 hybrid 现在会同时参考 `rule_redundancy_score` 和 `rule_anti_slop_score`，避免 judge 高估时把“坏重复/坏解释”放过去
+    - 当 anti-slop 过低时，自动把“存在直白心理解释信号”补进 diagnosis
+  - 把 anti-slop 接入 workflow diagnostics：
+    - 为每个 case 新增 `diagnostic_signals.anti_slop_score`
+    - aggregate 新增 `slop_hotspot_cases`
+    - `draft_execution_layer` / `revision_layer` 会显式吃到 anti-slop 信号，让 root cause 更容易指向 `final_polish` / `patch` 层
+  - 更新 report 渲染：
+    - romance eval markdown 会显示 `rule_anti_slop_score`
+    - workflow diagnostics markdown 会显示 per-case diagnostic signals 和全局 `slop_hotspot_cases`
+- 验证：
+  - `python -m py_compile evals/romance/judges/rule_metrics.py evals/romance/harness.py evals/romance/workflow_diagnostics.py evals/romance/reporting.py evals/romance/history_models.py tests/test_rule_metrics.py tests/test_romance_eval_harness.py tests/test_workflow_diagnostics.py`
+  - `python -m unittest tests.test_rule_metrics tests.test_romance_eval_harness tests.test_workflow_diagnostics`
+  - `python -X utf8 - <<py` 逐文件编译 `evals/romance/*.py` 与 `tools/*.py`（共 `19` 个文件）
+  - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases tests.test_romance_eval_harness tests.test_rule_metrics`
+- 收益：
+  - repo 现在可以单点识别“直白心理标签”和“解释性总结句”，不再只靠 redundancy 的高相似段落检测
+  - workflow diagnostics 现在能直接标出 `slop_hotspot_cases`，更适合后续把 `final_polish` 当成单根因层来打
+  - harness breakdown 新增 `rule_anti_slop_score` 后，full eval 报告也能看见“judge 觉得还行，但规则层看见了直白解释”这种错位
+  - 新增规则单测里：
+    - 明显 direct-thought 文本会被打到 `< 7.0`
+    - 动作/潜台词主导文本会保持 `>= 8.0`
+  - 本轮没有新增 LLM 生成成本，全部收益来自本地规则评测与诊断能力增强
+- 结论：`keep`
+- 下一步：
+  - 下一轮优先进入 `final_polish` / `rewrite_blocks_by_plan` 的最小生成改动
+  - 目标不是继续硬删 patch target，而是专打 `rule_anti_slop_score` 暴露出来的句式：删掉“她知道 / 他意识到 / 这让她更明白”类解释句，同时保住关系切口和双人拉扯

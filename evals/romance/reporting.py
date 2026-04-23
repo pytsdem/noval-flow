@@ -70,7 +70,8 @@ def render_run_markdown(summary: RomanceRunSummary) -> str:
             lines.append(f"| {metric} | {result.scores.get(metric, 0.0):.2f} | {note} |")
         judge_redundancy = result.breakdowns.get("judge_redundancy_score")
         rule_redundancy = result.breakdowns.get("rule_redundancy_score")
-        if judge_redundancy is not None or rule_redundancy is not None:
+        rule_anti_slop = result.breakdowns.get("rule_anti_slop_score")
+        if judge_redundancy is not None or rule_redundancy is not None or rule_anti_slop is not None:
             lines.extend(
                 [
                     "",
@@ -82,6 +83,8 @@ def render_run_markdown(summary: RomanceRunSummary) -> str:
                 lines.append(f"| judge_redundancy_score | {judge_redundancy.score:.2f} |")
             if rule_redundancy is not None:
                 lines.append(f"| rule_redundancy_score | {rule_redundancy.score:.2f} |")
+            if rule_anti_slop is not None:
+                lines.append(f"| rule_anti_slop_score | {rule_anti_slop.score:.2f} |")
             lines.append(f"| hybrid_redundancy_score | {result.scores.get('redundancy_score', 0.0):.2f} |")
         if result.hard_fail_flags:
             lines.extend(

@@ -13,7 +13,7 @@ from evals.romance.history_models import (
     WorkflowDiagnosticsCaseReport,
     WorkflowDiagnosticsSummary,
 )
-from evals.romance.judges.rule_metrics import RedundancyRuleAnalyzer
+from evals.romance.judges.rule_metrics import AntiSlopRuleAnalyzer, RedundancyRuleAnalyzer
 from evals.romance.loader import load_historical_cases
 from evals.romance.models import RomanceCaseResult, RomanceMetricDetail, RomanceRunSummary
 
@@ -160,8 +160,13 @@ class WorkflowDiagnosticsRunner:
         case: HistoricalEvalCase,
         eval_result: RomanceCaseResult | None,
     ) -> WorkflowDiagnosticsCaseReport:
+        diagnostic_signals = self._diagnostic_signals(case)
         final_text_scores = self._final_text_scores(case=case, eval_result=eval_result)
-        workflow_layer_diagnostics = self._workflow_layer_diagnostics(case=case, final_text_scores=final_text_scores)
+        workflow_layer_diagnostics = self._workflow_layer_diagnostics(
+            case=case,
+            final_text_scores=final_text_scores,
+            diagnostic_signals=diagnostic_signals,
+        )
         step_diagnostics = self._step_diagnostics(case=case, workflow_layers=workflow_layer_diagnostics, final_text_scores=final_text_scores)
         root_causes, targets = self._root_causes(workflow_layer_diagnostics=workflow_layer_diagnostics, step_diagnostics=step_diagnostics)
         return WorkflowDiagnosticsCaseReport(
@@ -169,6 +174,7 @@ class WorkflowDiagnosticsRunner:
             title=case.metadata.chapter_title or str(case.inputs.chapter_brief.get("title") or case.case_id),
             tags=list(case.metadata.tags or []),
             final_text_scores=final_text_scores,
+            diagnostic_signals=diagnostic_signals,
             workflow_layer_diagnostics=workflow_layer_diagnostics,
             step_diagnostics=step_diagnostics,
             root_cause_hypothesis=root_causes,
@@ -176,6 +182,14 @@ class WorkflowDiagnosticsRunner:
             cost_metrics=case.metrics,
             missing_fields=[item.field for item in case.export_notes if item.level == "warning"],
         )
+
+    def _diagnostic_signals(self, case: HistoricalEvalCase) -> dict[str, RomanceMetricDetail]:
+        return {
+            "anti_slop_score": AntiSlopRuleAnalyzer().analyze(
+                chapter_text=case.outputs.final_text,
+                review_reports=_latest_review_reports(case),
+            )
+        }
 
     def _final_text_scores(
         self,
@@ -314,12 +328,15 @@ class WorkflowDiagnosticsRunner:
         *,
         case: HistoricalEvalCase,
         final_text_scores: dict[str, RomanceMetricDetail],
+        diagnostic_signals: dict[str, RomanceMetricDetail],
     ) -> dict[str, WorkflowDiagnosticDetail]:
         brief = dict(case.inputs.chapter_brief or {})
         writing_pack = dict(case.inputs.writing_pack or {})
         block_plan = dict(case.intermediates.block_plan or {})
         latest_review = _latest_review_reports(case)
         final_judge = dict(case.intermediates.final_judge or {})
+        anti_slop_detail = diagnostic_signals.get("anti_slop_score")
+        anti_slop_score = anti_slop_detail.score if anti_slop_detail is not None else 7.0
 
         input_completeness = mean(
             [
@@ -357,9 +374,14 @@ class WorkflowDiagnosticsRunner:
                 final_text_scores["emotional_resonance_score"].score,
                 final_text_scores["character_attraction_score"].score,
                 final_text_scores["continuity_score"].score,
+                anti_slop_score,
             ]
         )
         revision_score = self._patch_effectiveness_score(case)
+        if case.metrics.patch_rounds:
+            revision_score = mean([revision_score, anti_slop_score])
+        elif anti_slop_score < 6.0:
+            revision_score -= 0.3
         if case.metrics.used_full_rewrite:
             revision_score -= 0.5
         if bool(final_judge.get("blocking_reasons")):
@@ -413,20 +435,22 @@ class WorkflowDiagnosticsRunner:
                     f"romance_tension={final_text_scores['romance_tension_score'].score:.2f}",
                     f"relationship_progression={final_text_scores['relationship_progression_score'].score:.2f}",
                     f"continuity={final_text_scores['continuity_score'].score:.2f}",
+                    f"anti_slop={anti_slop_score:.2f}",
                     f"failing_tools={','.join(case.metrics.failing_tools) or 'none'}",
                 ],
-                improvement_hint="Prefer fixing drafting behavior and plan execution over hiding issues in judge prompts.",
+                improvement_hint="Prefer fixing drafting behavior and plan execution over hiding issues in judge prompts or summary-style explanation sentences.",
             ),
             "revision_layer": WorkflowDiagnosticDetail(
                 score=_clamp(revision_score),
-                reason="Measures whether review and rewrite rounds reduced blockers without overusing full rewrite.",
+                reason="Measures whether review and rewrite rounds reduced blockers without overusing full rewrite, while also removing direct-thought and explanation slop from the final prose.",
                 evidence=[
                     f"review_rounds={case.metrics.review_rounds}",
                     f"patch_rounds={case.metrics.patch_rounds}",
                     f"used_full_rewrite={str(case.metrics.used_full_rewrite).lower()}",
                     f"blocking_reasons={len(list(final_judge.get('blocking_reasons') or []))}",
+                    f"anti_slop={anti_slop_score:.2f}",
                 ],
-                improvement_hint="Keep revision focused and patch-oriented; only escalate rewrite scope when blockers shrink measurably.",
+                improvement_hint="Keep revision focused and patch-oriented; use final polish to delete direct-thought / explanation sentences before escalating rewrite scope.",
             ),
         }
 
@@ -571,6 +595,7 @@ class WorkflowDiagnosticsRunner:
         failure_tags: Counter[str] = Counter()
         full_rewrite_cases: list[str] = []
         redundancy_cases: list[str] = []
+        slop_cases: list[str] = []
         for report in case_reports:
             for metric_name, detail in report.final_text_scores.items():
                 if detail.score < 7.0:
@@ -584,6 +609,9 @@ class WorkflowDiagnosticsRunner:
             redundancy_detail = report.final_text_scores.get("redundancy_score")
             if redundancy_detail is not None and redundancy_detail.score < 7.0:
                 redundancy_cases.append(report.case_id)
+            anti_slop_detail = report.diagnostic_signals.get("anti_slop_score")
+            if anti_slop_detail is not None and anti_slop_detail.score < 7.0:
+                slop_cases.append(report.case_id)
             if sum(1 for detail in report.final_text_scores.values() if detail.score < 7.0) >= 2:
                 for tag in report.tags:
                     failure_tags[tag] += 1
@@ -593,6 +621,7 @@ class WorkflowDiagnosticsRunner:
             most_common_root_steps=[item for item, _ in root_steps.most_common(5)],
             frequent_full_rewrite_cases=sorted(full_rewrite_cases),
             redundancy_hotspot_cases=sorted(redundancy_cases),
+            slop_hotspot_cases=sorted(slop_cases),
             failure_prone_tags=[item for item, _ in failure_tags.most_common(5)],
         )
 
@@ -613,6 +642,7 @@ def render_workflow_diagnostics_markdown(summary: WorkflowDiagnosticsSummary) ->
         f"- failure_prone_tags: {', '.join(summary.aggregate_findings.failure_prone_tags) or 'None'}",
         f"- frequent_full_rewrite_cases: {', '.join(summary.aggregate_findings.frequent_full_rewrite_cases) or 'None'}",
         f"- redundancy_hotspot_cases: {', '.join(summary.aggregate_findings.redundancy_hotspot_cases) or 'None'}",
+        f"- slop_hotspot_cases: {', '.join(summary.aggregate_findings.slop_hotspot_cases) or 'None'}",
     ]
     for report in summary.case_reports:
         lines.extend(
@@ -629,6 +659,16 @@ def render_workflow_diagnostics_markdown(summary: WorkflowDiagnosticsSummary) ->
             if detail is None:
                 continue
             lines.append(f"| {metric} | {detail.score:.2f} |")
+        if report.diagnostic_signals:
+            lines.extend(
+                [
+                    "",
+                    "| diagnostic signal | score |",
+                    "| --- | ---: |",
+                ]
+            )
+            for key, detail in report.diagnostic_signals.items():
+                lines.append(f"| {key} | {detail.score:.2f} |")
         lines.extend(
             [
                 "",

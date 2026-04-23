@@ -655,14 +655,48 @@ class RomanceEvalHarnessTests(unittest.TestCase):
             improvement_hint="保持段落功能分布差异。",
             source="rule",
         )
+        rule_anti_slop = RomanceMetricDetail(
+            score=10.0,
+            reason="规则层未命中直白心理解释。",
+            evidence_summary="未检测到明显直白心理标签。",
+            improvement_hint="保持动作化表达。",
+            source="rule",
+        )
 
         metrics = RomanceEvalHarness._judge_metrics_to_core(
             judge=judge,
             rule_redundancy=rule_redundancy,
+            rule_anti_slop=rule_anti_slop,
         )
 
         self.assertLessEqual(metrics["redundancy_score"].score, judge.redundancy.score)
         self.assertEqual(metrics["redundancy_score"].score, 2.0)
+
+    def test_anti_slop_rule_can_pull_down_hybrid_redundancy(self) -> None:
+        judge = RomanceJudgePayload.model_validate_json(_judge_payload(redundancy=8.0))
+        rule_redundancy = RomanceMetricDetail(
+            score=9.5,
+            reason="规则层未命中高相似重复。",
+            evidence_summary="未检测到高相似段落。",
+            improvement_hint="保持段落功能差异。",
+            source="rule",
+        )
+        rule_anti_slop = RomanceMetricDetail(
+            score=4.0,
+            reason="存在明显直白心理解释。",
+            evidence_summary="“她知道自己不能露怯”与“这让她更明白”反复出现。",
+            improvement_hint="把解释句改成动作和潜台词。",
+            source="rule",
+        )
+
+        metrics = RomanceEvalHarness._judge_metrics_to_core(
+            judge=judge,
+            rule_redundancy=rule_redundancy,
+            rule_anti_slop=rule_anti_slop,
+        )
+
+        self.assertLess(metrics["redundancy_score"].score, judge.redundancy.score)
+        self.assertIn("Anti-slop", metrics["redundancy_score"].evidence_summary)
 
     def test_non_romance_pressure_gets_romance_mode_blocker(self) -> None:
         judge = RomanceJudgePayload.model_validate_json(
@@ -687,9 +721,17 @@ class RomanceEvalHarnessTests(unittest.TestCase):
             improvement_hint="把重复威胁替换成新的关系代价。",
             source="rule",
         )
+        rule_anti_slop = RomanceMetricDetail(
+            score=7.5,
+            reason="直白心理解释较少。",
+            evidence_summary="未检测到明显解释句。",
+            improvement_hint="继续保持潜台词表达。",
+            source="rule",
+        )
         metrics = RomanceEvalHarness._judge_metrics_to_core(
             judge=judge,
             rule_redundancy=rule_redundancy,
+            rule_anti_slop=rule_anti_slop,
         )
         verdict, flags, targets = RomanceEvalHarness._derive_actionability(
             metrics=metrics,
@@ -701,6 +743,7 @@ class RomanceEvalHarnessTests(unittest.TestCase):
                 "ending_hook_score": judge.ending_hook,
                 "judge_redundancy_score": judge.redundancy,
                 "rule_redundancy_score": rule_redundancy,
+                "rule_anti_slop_score": rule_anti_slop,
             },
             diagnosis=judge.diagnosis,
             judge_errors=[],
@@ -735,9 +778,17 @@ class RomanceEvalHarnessTests(unittest.TestCase):
             improvement_hint="把重复标签替换成具体对手戏。",
             source="rule",
         )
+        rule_anti_slop = RomanceMetricDetail(
+            score=5.0,
+            reason="存在解释性总结句。",
+            evidence_summary="“这让她更明白”类句式过多。",
+            improvement_hint="把总结句改写成动作和停顿。",
+            source="rule",
+        )
         metrics = RomanceEvalHarness._judge_metrics_to_core(
             judge=judge,
             rule_redundancy=rule_redundancy,
+            rule_anti_slop=rule_anti_slop,
         )
         verdict, flags, targets = RomanceEvalHarness._derive_actionability(
             metrics=metrics,
@@ -749,6 +800,7 @@ class RomanceEvalHarnessTests(unittest.TestCase):
                 "ending_hook_score": judge.ending_hook,
                 "judge_redundancy_score": judge.redundancy,
                 "rule_redundancy_score": rule_redundancy,
+                "rule_anti_slop_score": rule_anti_slop,
             },
             diagnosis=judge.diagnosis,
             judge_errors=[],
