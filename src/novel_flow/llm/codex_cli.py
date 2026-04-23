@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import subprocess
 import sys
 import tempfile
@@ -18,6 +19,7 @@ class CodexCLIClient(LLMClient):
     _STREAM_CHUNK_SIZE = 900
     _POLL_INTERVAL_SECONDS = 0.4
     _TIMEOUT_SECONDS = 300
+    _TMP_DIR = Path("data")
 
     def __init__(self, exe: str = "codex", model: str | None = None) -> None:
         self.exe = exe
@@ -38,7 +40,8 @@ class CodexCLIClient(LLMClient):
             total_chars=len(prompt),
         )
 
-        output_file = Path(tempfile.mktemp(suffix=".txt"))
+        output_file = self._reserve_temp_file(suffix=".txt")
+        stderr_file = self._reserve_temp_file(suffix=".stderr.txt")
         cmd = [
             self.exe, "exec",
             "--ephemeral",
@@ -51,40 +54,62 @@ class CodexCLIClient(LLMClient):
             cmd.extend(["-m", self.model])
 
         try:
-            proc = subprocess.Popen(
-                cmd,
-                stdin=subprocess.PIPE,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-                text=True,
-                encoding="utf-8",
-            )
-            assert proc.stdin is not None
-            proc.stdin.write(prompt)
-            proc.stdin.close()
+            with stderr_file.open("w", encoding="utf-8", errors="replace") as stderr_sink:
+                proc = subprocess.Popen(
+                    cmd,
+                    stdin=subprocess.PIPE,
+                    stdout=subprocess.DEVNULL,
+                    stderr=stderr_sink,
+                    text=True,
+                    encoding="utf-8",
+                )
+                assert proc.stdin is not None
+                try:
+                    proc.stdin.write(prompt)
+                    proc.stdin.close()
+                except BrokenPipeError as exc:
+                    raise AgentExecutionError(
+                        self._format_cli_failure(
+                            return_code=proc.poll(),
+                            stderr_file=stderr_file,
+                            default_message="codex exec closed stdin before reading the prompt.",
+                        )
+                    ) from exc
 
-            stream_offset = 0
-            deadline = time.monotonic() + self._TIMEOUT_SECONDS
-            while True:
-                ev.check_cancelled()
-                stream_offset = self._emit_new_output_chunks(output_file, call_id=call_id, start_offset=stream_offset)
+                stream_offset = 0
+                deadline = time.monotonic() + self._TIMEOUT_SECONDS
+                while True:
+                    ev.check_cancelled()
+                    stream_offset = self._emit_new_output_chunks(output_file, call_id=call_id, start_offset=stream_offset)
 
-                return_code = proc.poll()
-                if return_code is not None:
-                    if return_code not in (0, None) and not output_file.exists():
-                        raise AgentExecutionError(f"codex exec failed (exit {return_code}).")
-                    break
+                    return_code = proc.poll()
+                    if return_code is not None:
+                        if return_code not in (0, None) and not output_file.exists():
+                            raise AgentExecutionError(
+                                self._format_cli_failure(
+                                    return_code=return_code,
+                                    stderr_file=stderr_file,
+                                    default_message=f"codex exec failed (exit {return_code}).",
+                                )
+                            )
+                        break
 
-                if time.monotonic() > deadline:
-                    proc.kill()
-                    raise AgentExecutionError(f"codex exec timed out after {self._TIMEOUT_SECONDS}s.")
+                    if time.monotonic() > deadline:
+                        proc.kill()
+                        raise AgentExecutionError(f"codex exec timed out after {self._TIMEOUT_SECONDS}s.")
 
-                time.sleep(self._POLL_INTERVAL_SECONDS)
+                    time.sleep(self._POLL_INTERVAL_SECONDS)
 
             self._emit_new_output_chunks(output_file, call_id=call_id, start_offset=stream_offset)
-            result = output_file.read_text(encoding="utf-8").strip() if output_file.exists() else ""
+            result = output_file.read_text(encoding="utf-8", errors="ignore").strip() if output_file.exists() else ""
             if not result:
-                raise AgentExecutionError("codex exec returned empty output.")
+                raise AgentExecutionError(
+                    self._format_cli_failure(
+                        return_code=proc.poll() if "proc" in locals() else None,
+                        stderr_file=stderr_file,
+                        default_message="codex exec returned empty output.",
+                    )
+                )
 
             ev.check_cancelled()
             ev.emit(
@@ -95,8 +120,7 @@ class CodexCLIClient(LLMClient):
                 preview=result[:600],
                 length=len(result),
             )
-            sys.stderr.write(result[:200] + "\n")
-            sys.stderr.flush()
+            self._write_debug_preview(result[:200])
             return result
         except FileNotFoundError as exc:
             raise AgentExecutionError(
@@ -108,6 +132,7 @@ class CodexCLIClient(LLMClient):
             raise
         finally:
             output_file.unlink(missing_ok=True)
+            stderr_file.unlink(missing_ok=True)
 
     @staticmethod
     def _build_prompt(messages: list[LLMMessage]) -> str:
@@ -149,3 +174,49 @@ class CodexCLIClient(LLMClient):
                     preview=chunk,
                 )
         return len(text)
+
+    @classmethod
+    def _tmp_root(cls) -> Path:
+        root = (Path.cwd() / cls._TMP_DIR).resolve()
+        root.mkdir(parents=True, exist_ok=True)
+        return root
+
+    @classmethod
+    def _reserve_temp_file(cls, *, suffix: str) -> Path:
+        fd, raw_path = tempfile.mkstemp(dir=cls._tmp_root(), prefix="codex_cli_", suffix=suffix)
+        os.close(fd)
+        return Path(raw_path)
+
+    @staticmethod
+    def _read_text_if_exists(path: Path) -> str:
+        if not path.exists():
+            return ""
+        return path.read_text(encoding="utf-8", errors="ignore").strip()
+
+    def _format_cli_failure(
+        self,
+        *,
+        return_code: int | None,
+        stderr_file: Path,
+        default_message: str,
+    ) -> str:
+        stderr_text = self._read_text_if_exists(stderr_file)
+        if stderr_text:
+            compact = " ".join(stderr_text.split())
+            return f"{default_message} stderr: {compact[:500]}"
+        if return_code not in (None, 0):
+            return f"{default_message} (exit {return_code})"
+        return default_message
+
+    @staticmethod
+    def _write_debug_preview(preview: str) -> None:
+        try:
+            sys.stderr.write(preview + "\n")
+            sys.stderr.flush()
+        except (UnicodeEncodeError, OSError):
+            safe_preview = preview.encode("utf-8", errors="replace").decode("utf-8", errors="replace")
+            try:
+                sys.stderr.write(safe_preview + "\n")
+                sys.stderr.flush()
+            except Exception:
+                pass
