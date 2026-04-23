@@ -163,7 +163,13 @@ def _mindset() -> CharacterMindset:
     )
 
 
-def _book(*, book_id: str = "book_export", missing_context: bool = False) -> BookDocument:
+def _book(
+    *,
+    book_id: str = "book_export",
+    missing_context: bool = False,
+    include_chapter_mindsets: bool = True,
+    include_stage_mindsets: bool = True,
+) -> BookDocument:
     brief = _brief()
     block = _block()
     actual_summary = ActualChapterSummary(
@@ -204,64 +210,72 @@ def _book(*, book_id: str = "book_export", missing_context: bool = False) -> Boo
                 "previous_chapter_full_text": "",
             }
         }
+    review_iteration = {
+        "stage": "review_iteration_1",
+        "tool_calls": ["review_continuity", "review_plot_logic"],
+        "review_reports": {
+            "review_continuity": {
+                "passed": False,
+                "level": "medium",
+                "issues": [
+                    {
+                        "category": "continuity",
+                        "severity": "medium",
+                        "evidence": "The ending repeats the same threat twice.",
+                        "reason": "It weakens the chapter pull.",
+                        "fix": "Keep one threat line.",
+                    }
+                ],
+                "rewrite_guidance": "Keep one threat line.",
+            },
+            "review_plot_logic": {
+                "passed": False,
+                "level": "high",
+                "issues": [
+                    {
+                        "category": "plot_logic",
+                        "severity": "high",
+                        "evidence": "The ritual certificate does not constrain him enough.",
+                        "reason": "The chapter object is underused.",
+                        "fix": "Make the certificate visibly limit his behavior.",
+                    }
+                ],
+                "rewrite_guidance": "Make the chapter object do double duty.",
+            },
+        },
+        "final_judge": {
+            "passed": False,
+            "blocking_reasons": ["Continuity still weak.", "Plot logic remains high risk."],
+            "metrics": {"continuity_passed": False, "plot_level": "high"},
+        },
+        "chapter_revision_plan": {"priority": ["ending_pull", "chapter_object"]},
+        "dynamic_instruction": {"must_fix": ["keep one threat line"]},
+    }
     stage_log = [
         {
             "stage": "plan_content_blocks",
             "block_count": 1,
             "blocks": [block.model_dump(mode="json")],
             "skill_ids": ["base_style"],
-        },
-        {
-            "stage": "build_character_mindsets",
-            "character_mindsets": [_mindset().model_dump(mode="json")],
-        },
-        {
-            "stage": "review_iteration_1",
-            "tool_calls": ["review_continuity", "review_plot_logic"],
-            "review_reports": {
-                "review_continuity": {
-                    "passed": False,
-                    "level": "medium",
-                    "issues": [
-                        {
-                            "category": "continuity",
-                            "severity": "medium",
-                            "evidence": "The ending repeats the same threat twice.",
-                            "reason": "It weakens the chapter pull.",
-                            "fix": "Keep one threat line.",
-                        }
-                    ],
-                    "rewrite_guidance": "Keep one threat line.",
-                },
-                "review_plot_logic": {
-                    "passed": False,
-                    "level": "high",
-                    "issues": [
-                        {
-                            "category": "plot_logic",
-                            "severity": "high",
-                            "evidence": "The ritual certificate does not constrain him enough.",
-                            "reason": "The chapter object is underused.",
-                            "fix": "Make the certificate visibly limit his behavior.",
-                        }
-                    ],
-                    "rewrite_guidance": "Make the chapter object do double duty.",
-                },
-            },
-            "final_judge": {
-                "passed": False,
-                "blocking_reasons": ["Continuity still weak.", "Plot logic remains high risk."],
-                "metrics": {"continuity_passed": False, "plot_level": "high"},
-            },
-            "chapter_revision_plan": {"priority": ["ending_pull", "chapter_object"]},
-            "dynamic_instruction": {"must_fix": ["keep one threat line"]},
-        },
-        {
-            "stage": "rewrite_iteration_1",
-            "chapter_length": 1200,
-            "skill_ids": ["base_style"],
-        },
+        }
     ]
+    if include_stage_mindsets:
+        stage_log.append(
+            {
+                "stage": "build_character_mindsets",
+                "character_mindsets": [_mindset().model_dump(mode="json")],
+            }
+        )
+    stage_log.extend(
+        [
+            review_iteration,
+            {
+                "stage": "rewrite_iteration_1",
+                "chapter_length": 1200,
+                "skill_ids": ["base_style"],
+            },
+        ]
+    )
     metadata = {
         "story_blueprint": {
             "story_engine": {"world_rules": ["No open challenge during the ritual."]},
@@ -276,8 +290,8 @@ def _book(*, book_id: str = "book_export", missing_context: bool = False) -> Boo
                 "content_blocks": [block.model_dump(mode="json")],
                 "final_text": "He bowed in public, then threatened her once as he left the hall.",
                 "final_version": 2,
-                "review_reports": stage_log[2]["review_reports"],
-                "final_judge": stage_log[2]["final_judge"],
+                "review_reports": review_iteration["review_reports"],
+                "final_judge": review_iteration["final_judge"],
                 "stage_log": stage_log,
                 "actual_chapter_summary": actual_summary.model_dump(mode="json"),
             }
@@ -303,7 +317,7 @@ def _book(*, book_id: str = "book_export", missing_context: bool = False) -> Boo
                         title="Cold Return",
                         summary="He returns to court under pressure.",
                         content_blocks=[block],
-                        character_mindsets=[_mindset()],
+                        character_mindsets=[_mindset()] if include_chapter_mindsets else [],
                         final_text="He bowed in public, then threatened her once as he left the hall.",
                         final_version=2,
                         is_finalized=True,
@@ -323,8 +337,21 @@ class EvalCaseExporterTests(unittest.TestCase):
         self.db_path = self.root / "novel_flow.db"
         self.store = SQLiteStore(self.db_path)
 
-    def _seed_run(self, *, run_id: str, missing_context: bool = False, updated_at: str | None = None) -> str:
-        book = _book(book_id=f"book_{run_id}", missing_context=missing_context)
+    def _seed_run(
+        self,
+        *,
+        run_id: str,
+        missing_context: bool = False,
+        updated_at: str | None = None,
+        include_chapter_mindsets: bool = True,
+        include_stage_mindsets: bool = True,
+    ) -> str:
+        book = _book(
+            book_id=f"book_{run_id}",
+            missing_context=missing_context,
+            include_chapter_mindsets=include_chapter_mindsets,
+            include_stage_mindsets=include_stage_mindsets,
+        )
         self.store.save_book(book)
         state = WorkflowState(
             run_id=run_id,
@@ -365,6 +392,7 @@ class EvalCaseExporterTests(unittest.TestCase):
         self.assertEqual(case.outputs.final_status, "failed_partial")
         self.assertEqual(case.metrics.review_rounds, 1)
         self.assertEqual(case.metrics.patch_rounds, 1)
+        self.assertFalse(case.metrics.used_full_rewrite)
         self.assertTrue(any(note.field == "metadata.mode" for note in case.export_notes))
 
         replay_cases = load_cases(output_dir)
@@ -379,6 +407,45 @@ class EvalCaseExporterTests(unittest.TestCase):
         case = load_historical_cases(output_dir)[0]
         warning_fields = {note.field for note in case.export_notes if note.level == "warning"}
         self.assertIn("inputs.sanitized_writer_context", warning_fields)
+
+    def test_exporter_infers_character_mindsets_from_writer_context_when_persisted_data_missing(self) -> None:
+        book_id = self._seed_run(
+            run_id="run_inferred",
+            include_chapter_mindsets=False,
+            include_stage_mindsets=False,
+        )
+        book = self.store.load_book(book_id)
+        self.assertIsNotNone(book)
+        assert book is not None
+        book.metadata["writer_context_debug"]["ch_001"].update(
+            {
+                "scene_character_context_text": "Hero: road-worn, outwardly cold restraint, watching every move. Lady Su: outwardly calm restraint, holding the ritual line under pressure.",
+                "relationship_state_text": "Hero and Lady Su are ritual kin on the surface but hidden enemies underneath; Hero watches Lady Su too closely, while Lady Su hides strain behind etiquette.",
+                "step_3_character_packets_text": "Hero: core goal is force one crack in the old case, outwardly cold restraint, carries dangerous attachment beneath anger. Lady Su: core goal is keep the ritual stable, outwardly calm restraint, hides strain behind etiquette and control.",
+                "chapter_payload_text": "[Chapter payload]\nReader belief to preserve: Readers believe Lady Su betrayed Hero on purpose.",
+            }
+        )
+        book.characters[0].initial_state = "He returned to court under pressure and cannot afford to lose control first."
+        book.characters[0].motivation = "Surface: force one crack in the old case. Deeper: find out whether she regrets anything."
+        book.characters[1].initial_state = "She is holding the ritual together and is most afraid of a public fracture."
+        book.characters[1].motivation = "Surface: keep the ritual stable. Deeper: keep him alive long enough to leave the hall safely."
+        self.store.save_book(book)
+
+        output_dir = self.root / "inferred_export"
+        HistoricalCaseExporter(self.db_path).export(output_dir=output_dir, limit=1, sample_mode="latest")
+        case = load_historical_cases(output_dir)[0]
+
+        self.assertEqual([item["character_name"] for item in case.inputs.character_mind_states], ["Hero", "Lady Su"])
+        self.assertTrue(all(str(item["primary_goal"]).strip() for item in case.inputs.character_mind_states))
+        self.assertTrue(all(str(item["hidden_need"]).strip() for item in case.inputs.character_mind_states))
+        self.assertEqual(case.replay_case["prior_character_mindsets"][0]["character_name"], "Hero")
+        self.assertTrue(
+            any(
+                note.field == "inputs.character_mind_states"
+                and "inferred" in note.message.lower()
+                for note in case.export_notes
+            )
+        )
 
     def test_low_score_sampling_prefers_riskier_run(self) -> None:
         self._seed_run(run_id="run_low", updated_at="2026-04-21T10:00:00+00:00")
