@@ -281,3 +281,40 @@
 - 下一步：
   - 当前证据已表明：`build_chapter_patch_plan` 的 tool-level 归一化不适合继续硬裁
   - 下一轮更合理的主目标应切到 `final_polish` / `rewrite_blocks_by_plan` 的去重与关系落点保真，而不是继续在 patch-plan 里做删除策略
+
+## Iteration 7 - keep：补上 case 级加权 pairwise 比较，避免均分掩盖坏优化
+
+- 主假设：
+  - 当前 `run_case_comparison` 主要依赖平均分和 blocker/guard 阈值；这对“1 个 case 大涨、2 个 case 小幅变差”的候选不够敏感，容易把真实阅读体验更差的方案误看成“总体提升”。如果引入按 case 的加权 pairwise 偏好，就能更早挡住这类坏优化。
+- 改动文件：
+  - `evals/romance/comparison.py`
+  - `tests/test_case_comparison.py`
+- 已做改动：
+  - 在 romance eval comparison 中新增 `pairwise_preference`：
+    - 按项目优先级对 `romance_tension`、`relationship_progression`、`emotional_resonance`、`character_attraction`、`hook`、`continuity`、`mind_state_consistency`、`redundancy` 做 case 级加权比较
+    - 为每个 case 产出 `preferred_side`、`weighted_margin`、`candidate_wins`、`baseline_wins`、`guard_failures`、`cost_flags`
+    - 聚合得到 `overall_preferred_side`、`candidate_case_wins`、`baseline_case_wins`
+  - 把 pairwise 结果接入 `decision`：
+    - 当候选在 case 级 pairwise 上总体输给 baseline 时，即使平均核心分仍为正，也会拒绝保留
+  - 更新 comparison markdown：
+    - 报告里直接展示 pairwise 总结和每个 case 的偏好来源，便于后续 self-improve 复盘
+  - 补充回归测试：
+    - 覆盖普通提升 case 仍会被接受
+    - 覆盖“平均核心分仍上升，但 3 个 case 里有 2 个更差”时会被 pairwise 拒绝
+- 验证：
+  - `python -m py_compile evals/romance/comparison.py tests/test_case_comparison.py`
+  - `python -m unittest tests.test_case_comparison`
+  - `python -X utf8 - <<py` 逐文件编译 `evals/romance/*.py` 与 `tools/*.py`（共 `19` 个文件）
+  - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
+- 收益：
+  - comparison 现在不再只给“均分涨没涨”，而是会额外给出“哪个方案在更多 case 上更优”
+  - 新增的 pairwise 回归样例里：
+    - 候选的平均核心分仍有正向提升：`core_metric_delta = +0.17`
+    - 但 case 级偏好为：`candidate_case_wins = 1`、`baseline_case_wins = 2`
+    - 最终 `overall_preferred_side = baseline`，并触发 `Pairwise case preference favored the baseline.`
+  - 这正好补上了前两轮 reject 暴露出来的问题：像 `case01` 这种高优先级 romance 体验被伤到时，不会再被局部均分或单项 hook 提升掩盖
+  - 本轮没有新增 LLM 调用与端到端生成成本，全部收益来自评测基础件增强
+- 结论：`keep`
+- 下一步：
+  - 后续进入 `final_polish` / `rewrite_blocks_by_plan` 的真实质量优化时，优先用这套 pairwise 结果做 keep / reject 辅助判断
+  - 下一轮更值得做的是补一个低成本 anti-slop / direct-thought 诊断，让“去重但不压平关系落点”的目标能在单点评测里更快被验证

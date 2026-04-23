@@ -26,6 +26,25 @@ GUARD_METRICS = [
     "redundancy_score",
 ]
 
+PAIRWISE_METRIC_WEIGHTS = {
+    "romance_tension_score": 5,
+    "relationship_progression_score": 4,
+    "emotional_resonance_score": 3,
+    "character_attraction_score": 3,
+    "hook_score": 2,
+    "continuity_score": 4,
+    "mind_state_consistency_score": 4,
+    "redundancy_score": 2,
+}
+
+PAIRWISE_DELTA_THRESHOLD = 0.2
+PAIRWISE_BLOCKER_WEIGHT = 8
+PAIRWISE_COST_PENALTIES = {
+    "llm_calls": (3.0, 2),
+    "patch_rounds": (1.0, 1),
+    "duration_seconds": (20.0, 1),
+}
+
 
 def _load_json(path_or_dir: str | Path) -> tuple[dict[str, Any], Path]:
     path = Path(path_or_dir)
@@ -62,7 +81,8 @@ def compare_paths(baseline: str | Path, candidate: str | Path) -> dict[str, Any]
 
 def compare_romance_eval_paths(baseline: str | Path, candidate: str | Path) -> dict[str, Any]:
     diff = compare_run_summaries(baseline, candidate)
-    decision = evaluate_romance_diff(diff)
+    pairwise_preference = build_pairwise_preference(diff)
+    decision = evaluate_romance_diff(diff, pairwise_preference=pairwise_preference)
     return {
         "comparison_type": "romance_eval",
         "baseline_label": diff.baseline_label,
@@ -77,6 +97,7 @@ def compare_romance_eval_paths(baseline: str | Path, candidate: str | Path) -> d
         "blocked_case_delta": diff.blocked_case_delta,
         "new_blocker_case_ids": list(diff.new_blocker_case_ids),
         "resolved_blocker_case_ids": list(diff.resolved_blocker_case_ids),
+        "pairwise_preference": pairwise_preference,
         "decision": decision,
     }
 
@@ -192,7 +213,97 @@ def compare_step_eval_paths(baseline: str | Path, candidate: str | Path) -> dict
     }
 
 
-def evaluate_romance_diff(diff: RomanceRunDiff) -> dict[str, Any]:
+def _build_pairwise_case_preference(case_diff: Any) -> dict[str, Any]:
+    candidate_wins: list[str] = []
+    baseline_wins: list[str] = []
+    neutral_metrics: list[str] = []
+    guard_failures: list[str] = []
+    cost_flags: list[str] = []
+    weighted_margin = 0
+
+    for metric, weight in PAIRWISE_METRIC_WEIGHTS.items():
+        score_delta = case_diff.score_deltas.get(metric)
+        if score_delta is None:
+            continue
+        delta = float(score_delta.delta)
+        if delta >= PAIRWISE_DELTA_THRESHOLD:
+            weighted_margin += weight
+            candidate_wins.append(metric)
+        elif delta <= -PAIRWISE_DELTA_THRESHOLD:
+            weighted_margin -= weight
+            baseline_wins.append(metric)
+            if metric in GUARD_METRICS:
+                guard_failures.append(metric)
+        else:
+            neutral_metrics.append(metric)
+
+    if case_diff.new_blockers:
+        weighted_margin -= PAIRWISE_BLOCKER_WEIGHT * len(case_diff.new_blockers)
+        guard_failures.extend(f"new_blocker:{flag}" for flag in case_diff.new_blockers)
+    if case_diff.resolved_blockers:
+        weighted_margin += PAIRWISE_BLOCKER_WEIGHT * len(case_diff.resolved_blockers)
+
+    for cost_key, (threshold, penalty) in PAIRWISE_COST_PENALTIES.items():
+        delta = float(case_diff.cost_deltas.get(cost_key, 0.0))
+        if delta > threshold:
+            weighted_margin -= penalty
+            cost_flags.append(f"{cost_key}>+{threshold:g}")
+
+    preferred_side = "tie"
+    if weighted_margin > 0:
+        preferred_side = "candidate"
+    elif weighted_margin < 0:
+        preferred_side = "baseline"
+
+    return {
+        "case_id": case_diff.case_id,
+        "title": case_diff.title,
+        "preferred_side": preferred_side,
+        "weighted_margin": weighted_margin,
+        "candidate_wins": candidate_wins,
+        "baseline_wins": baseline_wins,
+        "neutral_metrics": neutral_metrics,
+        "guard_failures": guard_failures,
+        "cost_flags": cost_flags,
+        "new_blockers": list(case_diff.new_blockers),
+        "resolved_blockers": list(case_diff.resolved_blockers),
+    }
+
+
+def build_pairwise_preference(diff: RomanceRunDiff) -> dict[str, Any]:
+    case_preferences = [_build_pairwise_case_preference(case_diff) for case_diff in diff.case_diffs]
+    candidate_case_wins = sum(1 for item in case_preferences if item["preferred_side"] == "candidate")
+    baseline_case_wins = sum(1 for item in case_preferences if item["preferred_side"] == "baseline")
+    tied_case_count = sum(1 for item in case_preferences if item["preferred_side"] == "tie")
+    weighted_margin = round(sum(float(item["weighted_margin"]) for item in case_preferences), 2)
+
+    overall_preferred_side = "tie"
+    if candidate_case_wins > baseline_case_wins:
+        overall_preferred_side = "candidate"
+    elif baseline_case_wins > candidate_case_wins:
+        overall_preferred_side = "baseline"
+    elif weighted_margin > 0:
+        overall_preferred_side = "candidate"
+    elif weighted_margin < 0:
+        overall_preferred_side = "baseline"
+
+    return {
+        "overall_preferred_side": overall_preferred_side,
+        "candidate_case_wins": candidate_case_wins,
+        "baseline_case_wins": baseline_case_wins,
+        "tied_case_count": tied_case_count,
+        "weighted_margin": weighted_margin,
+        "delta_threshold": PAIRWISE_DELTA_THRESHOLD,
+        "metric_weights": dict(PAIRWISE_METRIC_WEIGHTS),
+        "case_preferences": case_preferences,
+    }
+
+
+def evaluate_romance_diff(
+    diff: RomanceRunDiff,
+    *,
+    pairwise_preference: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     core_delta = round(mean(diff.average_score_deltas[item].delta for item in CORE_OBJECTIVES), 2)
     guard_delta = round(mean(diff.average_score_deltas[item].delta for item in GUARD_METRICS), 2)
     llm_delta = round(
@@ -229,6 +340,9 @@ def evaluate_romance_diff(diff: RomanceRunDiff) -> dict[str, Any]:
     if duration_delta > 20.0:
         accept = False
         reasons.append("Average duration increased too much.")
+    if pairwise_preference and pairwise_preference.get("overall_preferred_side") == "baseline":
+        accept = False
+        reasons.append("Pairwise case preference favored the baseline.")
     if accept:
         reasons.append("Candidate improved core romance objectives without violating continuity, mind-state, or cost guards.")
         if diff.resolved_blocker_case_ids:
@@ -242,6 +356,10 @@ def evaluate_romance_diff(diff: RomanceRunDiff) -> dict[str, Any]:
         "blocked_case_delta": diff.blocked_case_delta,
         "new_blocker_case_ids": list(diff.new_blocker_case_ids),
         "resolved_blocker_case_ids": list(diff.resolved_blocker_case_ids),
+        "pairwise_preferred_side": (pairwise_preference or {}).get("overall_preferred_side", "tie"),
+        "pairwise_weighted_margin": round(float((pairwise_preference or {}).get("weighted_margin", 0.0)), 2),
+        "pairwise_candidate_case_wins": int((pairwise_preference or {}).get("candidate_case_wins", 0)),
+        "pairwise_baseline_case_wins": int((pairwise_preference or {}).get("baseline_case_wins", 0)),
         "reasons": reasons,
     }
 
@@ -319,6 +437,8 @@ def render_comparison_markdown(payload: dict[str, Any]) -> str:
         f"- core_metric_delta: `{payload.get('decision', {}).get('core_metric_delta', 0.0):.2f}`",
         f"- guard_metric_delta: `{payload.get('decision', {}).get('guard_metric_delta', 0.0):.2f}`",
         f"- blocked_case_delta: `{payload.get('decision', {}).get('blocked_case_delta', 0):+d}`",
+        f"- pairwise_preferred_side: `{payload.get('decision', {}).get('pairwise_preferred_side', 'tie')}`",
+        f"- pairwise_weighted_margin: `{payload.get('decision', {}).get('pairwise_weighted_margin', 0.0):+.2f}`",
         f"- new_blocker_case_ids: {', '.join(payload.get('decision', {}).get('new_blocker_case_ids', [])) or 'None'}",
         f"- resolved_blocker_case_ids: {', '.join(payload.get('decision', {}).get('resolved_blocker_case_ids', [])) or 'None'}",
         f"- reasons: {', '.join(payload.get('decision', {}).get('reasons', [])) or 'None'}",
@@ -341,4 +461,34 @@ def render_comparison_markdown(payload: dict[str, Any]) -> str:
         lines.extend(["", "| gate verdict | delta |", "| --- | ---: |"])
         for key, value in gate_deltas.items():
             lines.append(f"| {key} | {int(value):+d} |")
+    pairwise_preference = payload.get("pairwise_preference", {})
+    if pairwise_preference:
+        lines.extend(
+            [
+                "",
+                "## Pairwise Preference",
+                "",
+                f"- overall_preferred_side: `{pairwise_preference.get('overall_preferred_side', 'tie')}`",
+                f"- candidate_case_wins: `{int(pairwise_preference.get('candidate_case_wins', 0))}`",
+                f"- baseline_case_wins: `{int(pairwise_preference.get('baseline_case_wins', 0))}`",
+                f"- tied_case_count: `{int(pairwise_preference.get('tied_case_count', 0))}`",
+                f"- weighted_margin: `{float(pairwise_preference.get('weighted_margin', 0.0)):+.2f}`",
+                f"- delta_threshold: `{float(pairwise_preference.get('delta_threshold', 0.0)):.2f}`",
+                "",
+                "| case_id | preferred | margin | candidate wins | baseline wins | guard failures | cost flags |",
+                "| --- | --- | ---: | --- | --- | --- | --- |",
+            ]
+        )
+        for item in pairwise_preference.get("case_preferences", []):
+            lines.append(
+                "| {case_id} | {preferred} | {margin:+.2f} | {candidate_wins} | {baseline_wins} | {guard_failures} | {cost_flags} |".format(
+                    case_id=item.get("case_id", ""),
+                    preferred=item.get("preferred_side", "tie"),
+                    margin=float(item.get("weighted_margin", 0.0)),
+                    candidate_wins=", ".join(item.get("candidate_wins", [])) or "None",
+                    baseline_wins=", ".join(item.get("baseline_wins", [])) or "None",
+                    guard_failures=", ".join(item.get("guard_failures", [])) or "None",
+                    cost_flags=", ".join(item.get("cost_flags", [])) or "None",
+                )
+            )
     return "\n".join(lines).strip() + "\n"

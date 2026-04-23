@@ -112,6 +112,8 @@ class CaseComparisonTests(unittest.TestCase):
         self.assertTrue(payload["decision"]["accept_change"])
         self.assertGreater(payload["decision"]["core_metric_delta"], 0)
         self.assertIn("romance_tension_score", payload["average_score_deltas"])
+        self.assertEqual(payload["pairwise_preference"]["overall_preferred_side"], "candidate")
+        self.assertEqual(payload["decision"]["pairwise_preferred_side"], "candidate")
 
     def test_comparison_rejects_guard_regression(self) -> None:
         baseline = RomanceRunSummary(
@@ -152,6 +154,60 @@ class CaseComparisonTests(unittest.TestCase):
         payload = compare_paths(baseline_path, candidate_path)
         self.assertFalse(payload["decision"]["accept_change"])
         self.assertIn("Continuity regressed beyond the safety threshold.", payload["decision"]["reasons"])
+
+    def test_comparison_rejects_pairwise_baseline_majority_even_when_average_core_improves(self) -> None:
+        baseline_case_results = [
+            _case_result("case_001", delta=0.0, continuity_delta=0.0, llm_calls=5),
+            _case_result("case_002", delta=0.0, continuity_delta=0.0, llm_calls=5),
+            _case_result("case_003", delta=0.0, continuity_delta=0.0, llm_calls=5),
+        ]
+        candidate_case_results = [
+            _case_result("case_001", delta=1.0, continuity_delta=0.0, llm_calls=5),
+            _case_result("case_002", delta=-0.25, continuity_delta=0.0, llm_calls=5),
+            _case_result("case_003", delta=-0.25, continuity_delta=0.0, llm_calls=5),
+        ]
+        baseline = RomanceRunSummary(
+            label="baseline_pairwise",
+            mode="fast",
+            case_results=baseline_case_results,
+            average_scores={
+                "romance_tension_score": 7.0,
+                "relationship_progression_score": 6.8,
+                "emotional_resonance_score": 7.1,
+                "character_attraction_score": 7.2,
+                "hook_score": 6.9,
+                "continuity_score": 7.4,
+                "redundancy_score": 7.5,
+                "mind_state_consistency_score": 7.3,
+            },
+        )
+        candidate = RomanceRunSummary(
+            label="candidate_pairwise",
+            mode="fast",
+            case_results=candidate_case_results,
+            average_scores={
+                "romance_tension_score": 7.17,
+                "relationship_progression_score": 6.97,
+                "emotional_resonance_score": 7.27,
+                "character_attraction_score": 7.37,
+                "hook_score": 7.07,
+                "continuity_score": 7.4,
+                "redundancy_score": 7.5,
+                "mind_state_consistency_score": 7.3,
+            },
+        )
+        baseline_path = self.root / "baseline_pairwise.json"
+        candidate_path = self.root / "candidate_pairwise.json"
+        baseline_path.write_text(baseline.model_dump_json(indent=2), encoding="utf-8")
+        candidate_path.write_text(candidate.model_dump_json(indent=2), encoding="utf-8")
+
+        payload = compare_paths(baseline_path, candidate_path)
+        self.assertGreater(payload["decision"]["core_metric_delta"], 0)
+        self.assertEqual(payload["pairwise_preference"]["candidate_case_wins"], 1)
+        self.assertEqual(payload["pairwise_preference"]["baseline_case_wins"], 2)
+        self.assertEqual(payload["pairwise_preference"]["overall_preferred_side"], "baseline")
+        self.assertFalse(payload["decision"]["accept_change"])
+        self.assertIn("Pairwise case preference favored the baseline.", payload["decision"]["reasons"])
 
     def test_comparison_rejects_new_blocker_case(self) -> None:
         blocker = RomanceHardFailFlag(
