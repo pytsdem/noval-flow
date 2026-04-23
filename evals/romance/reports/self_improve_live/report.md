@@ -365,3 +365,49 @@
 - 下一步：
   - 下一轮优先进入 `final_polish` / `rewrite_blocks_by_plan` 的最小生成改动
   - 目标不是继续硬删 patch target，而是专打 `rule_anti_slop_score` 暴露出来的句式：删掉“她知道 / 他意识到 / 这让她更明白”类解释句，同时保住关系切口和双人拉扯
+
+## Iteration 9 - reject：final polish 级 anti-slop prompt 成功去解释化，但把关系拉扯一起磨平了
+
+- 主假设：
+  - `final_polish` 是最末端的线编辑阶段；如果只在这里增加更明确的 anti-slop 反例和替换策略，就能删掉“她知道 / 他意识到 / 这让她更明白”类解释句，而不伤到上游已经成立的关系切口和张力。
+- 候选改动文件（已回退，不保留）：
+  - `prompts/writer/chapter_final_polish.txt`
+  - `tests/test_final_polish_prompt.py`
+- 候选改动内容：
+  - 在 `chapter_final_polish` 里新增 direct-thought / explanation-first clauses 的显式禁区
+  - 加入“删解释但保住 bargaining move / threat / pause / cost shift”的约束
+  - 补两组正反例，要求模型把解释句改写为动作、停顿、潜台词和目击反应
+- 验证：
+  - `python scripts/check_prompt_encoding.py`
+  - `python -m unittest tests.test_final_polish_prompt tests.test_writing_chapter_agent tests.test_schema_and_context`
+  - `LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_final_polish_anti_slop_case01`
+  - `python -m evals.romance.run_case_comparison --baseline evals/romance/reports/smoke_doubao_case01/summary.json --candidate evals/romance/reports/candidate_final_polish_anti_slop_case01/summary.json --output-dir evals/romance/reports/candidate_final_polish_anti_slop_case01`
+  - 离线 anti-slop 对比：对 baseline / candidate 最终正文重新跑 `AntiSlopRuleAnalyzer`
+- 指标变化（对比 `smoke_doubao_case01`）：
+  - `romance_tension_score`: `8.5 -> 8.0`
+  - `relationship_progression_score`: `8.0 -> 7.5`
+  - `emotional_resonance_score`: `8.2 -> 8.2`
+  - `character_attraction_score`: `8.25 -> 7.93`
+  - `hook_score`: `8.3 -> 8.25`
+  - `continuity_score`: `8.8 -> 8.0`
+  - `redundancy_score`: `9.0 -> 7.0`
+  - `mind_state_consistency_score`: `8.7 -> 8.5`
+- anti-slop 离线证据：
+  - baseline 重新离线打分：`anti_slop_score = 7.85`
+  - candidate 离线打分：`anti_slop_score = 10.0`
+  - 说明这轮改动确实把“直白心理解释 / 总结句”压掉了，但代价是把 tension、relationship、continuity 也一起磨薄
+- 成本变化：
+  - `llm_calls`: `-3`
+  - `duration_seconds`: `-248.99`
+  - 额外消耗 1 次 requirement case 真实端到端评测，`candidate_final_polish_anti_slop_case01` 用时约 `1016s`
+- 结论：`reject`
+- reject 原因：
+  - `rule_anti_slop_score` 的目标确实达成了，但更高优先级的 `romance_tension_score`、`relationship_progression_score`、`character_attraction_score`、`continuity_score` 明显回撤
+  - `run_case_comparison` 判定为 `accept_change = false`，并给出：
+    - `core_metric_delta = -0.27`
+    - `guard_metric_delta = -1.0`
+    - `pairwise_preferred_side = baseline`
+  - 说明“在 final polish 直接强压解释句”会把原本靠解释句勉强托住的关系电流一并削弱，不适合作为 repo 级默认行为
+- 下一步：
+  - 不再继续加重 `final_polish` 的 anti-slop 规则
+  - 下一轮应把目标收窄到 `rewrite_blocks_by_plan` 的局部重写质量：只在被 patch 的 block 内，把解释句改写成动作/潜台词，同时明确要求保住 `relationship_cut`、`pause`、`cost_shift` 等关系落点
