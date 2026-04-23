@@ -204,3 +204,80 @@
 - 下一步：
   - 不再碰首稿大 prompt
   - 仅在 patch-plan / patch-rewrite 的最小归一化层做更窄的约束，优先减少“为低优先级重复问题扩写太多 block”的过修补倾向
+
+## Iteration 5 - reject：直接裁掉低优先级 patch block 会伤到关系张力块
+
+- 主假设：
+  - `draft_execution_layer` 里真正的问题不是“patch 轮数太少”，而是 `build_chapter_patch_plan` 对 review issue 过度照单全收，导致低优先级润色问题也会把整章 5 个 block 一起拖进 rewrite；如果只保留高严重度连续性/规则问题，应该能在不伤 romance 的前提下降低过修补。
+- 候选改动文件（已回退，不保留）：
+  - `src/novel_flow/tools/build_chapter_patch_plan.py`
+  - `tests/test_build_chapter_patch_plan.py`
+- 候选改动内容：
+  - 为 `build_chapter_patch_plan` 增加 review issue 优先级归一化
+  - 高严重度连续性 / 礼制 / 线索泄露问题优先保留，纯低优先级润色 block 优先被裁掉
+  - 对真实 `smoke_doubao_case01` artifact 做离线回放，patch target 从 `5 -> 4`，被裁掉的是只承载 `flat_emotion/repetitive_imagery` 的 `ch_012.sc_001.b002`
+- 验证命令：
+  - `python -m unittest tests.test_build_chapter_patch_plan tests.test_writing_chapter_agent`
+  - 离线 artifact 回放：复用 `smoke_doubao_case01/romance_case_01_court_return/stage_log.json` 的 `patch_plan` 与 `review_reports`
+  - `LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_patch_scope_case01`
+- 离线证据：
+  - `before_target_ids`: `b001,b002,b003,b004,b005`
+  - `after_target_ids`: `b001,b003,b004,b005`
+  - `unchanged_blocks`: `b002`
+- 指标变化（对比 `smoke_doubao_case01`）：
+  - `romance_tension_score`: `8.5 -> 7.5`
+  - `relationship_progression_score`: `8.0 -> 8.0`
+  - `emotional_resonance_score`: `8.2 -> 8.2`
+  - `character_attraction_score`: `8.25 -> 7.77`
+  - `hook_score`: `8.3 -> 8.75`
+  - `continuity_score`: `8.8 -> 9.0`
+  - `redundancy_score`: `9.0 -> 8.0`
+  - `mind_state_consistency_score`: `8.7 -> 8.8`
+- 成本变化：
+  - 额外消耗 1 次 requirement case 真实端到端评测，`candidate_patch_scope_case01` 用时约 `1117s`
+- 结论：`reject`
+- reject 原因：
+  - `continuity_score` 和 `hook_score` 虽有提升，但更高优先级的 `romance_tension_score` 与 `character_attraction_score` 明显下滑
+  - 说明 `b002` 这种表面看像“润色”的 block，实际承担了关系切口和言情兑现，不能被简单当作可删 patch target
+- 下一步：
+  - 不再直接删“flat_emotion 类 relationship block”
+  - 改为只裁掉 line-level 的低价值重复润色指令，保住关系块本身
+
+## Iteration 6 - reject：只裁低价值 line-level 指令仍未形成净收益
+
+- 主假设：
+  - `Iteration 5` 失败说明 block 级裁剪太粗；如果保留关键关系 block，但把 `repetitive_imagery` 这类低价值 line-level replacement instruction 裁掉，应该能减少 patch 抖动，同时保住 romance tension。
+- 候选改动文件（已回退，不保留）：
+  - `src/novel_flow/tools/build_chapter_patch_plan.py`
+  - `tests/test_build_chapter_patch_plan.py`
+- 候选改动内容：
+  - 保留 `b001~b005` 全部 patch target，不再删除 `relationship_cut/clue_shift/ending` 等关键 block
+  - 只裁掉与 `repetitive_imagery / repetition` 对应的低价值 line-level instruction
+  - 真实 `case01` artifact 离线回放里，instruction counts 从 `3/2/3/2/2` 收窄到 `2/1/2/2/1`
+- 验证命令：
+  - `python -m unittest tests.test_build_chapter_patch_plan tests.test_writing_chapter_agent`
+  - 离线 artifact 回放：复用 `smoke_doubao_case01/romance_case_01_court_return/stage_log.json`
+  - `LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_patch_scope_case01_v2`
+- 离线证据：
+  - `before_target_ids`: `b001,b002,b003,b004,b005`
+  - `after_target_ids`: `b001,b002,b003,b004,b005`
+  - `before_instruction_counts`: `3/2/3/2/2`
+  - `after_instruction_counts`: `2/1/2/2/1`
+- 指标变化（对比 `smoke_doubao_case01`）：
+  - `romance_tension_score`: `8.5 -> 8.5`
+  - `relationship_progression_score`: `8.0 -> 8.0`
+  - `emotional_resonance_score`: `8.2 -> 8.2`
+  - `character_attraction_score`: `8.25 -> 8.03`
+  - `hook_score`: `8.3 -> 8.75`
+  - `continuity_score`: `8.8 -> 8.5`
+  - `redundancy_score`: `9.0 -> 8.8`
+  - `mind_state_consistency_score`: `8.7 -> 8.5`
+- 成本变化：
+  - 再额外消耗 1 次 requirement case 真实端到端评测，`candidate_patch_scope_case01_v2` 用时约 `1153s`
+- 结论：`reject`
+- reject 原因：
+  - 虽然把 `romance_tension_score` 拉回 baseline，且 `hook_score` 继续提升，但 `continuity_score`、`redundancy_score`、`mind_state_consistency_score` 与 `character_attraction_score` 仍发生回撤
+  - 中间 patch judge 还暴露出 residual duplicate / direct-thought 问题，说明这种“按问题标签裁 instruction”的方法太脆，容易和 LLM 已生成的 replacement 句式产生错位
+- 下一步：
+  - 当前证据已表明：`build_chapter_patch_plan` 的 tool-level 归一化不适合继续硬裁
+  - 下一轮更合理的主目标应切到 `final_polish` / `rewrite_blocks_by_plan` 的去重与关系落点保真，而不是继续在 patch-plan 里做删除策略
