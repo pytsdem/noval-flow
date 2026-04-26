@@ -21,5 +21,38 @@ class JudgePatchedChapterTool(LLMChapterTool):
             schema_model=PatchJudgePayload,
         )
         result = PatchJudgePayload.model_validate(raw).model_dump(mode="json", by_alias=True)
-        result["passed"] = bool(result.get("pass"))
+        llm_pass = bool(result.get("pass"))
+        remaining = list(result.get("remaining_issues") or [])
+        introduced = list(result.get("newly_introduced_issues") or [])
+        recommendation = str(result.get("recommendation") or "").strip()
+        deterministic_pass = (
+            llm_pass
+            and not remaining
+            and not introduced
+            and not self._recommendation_requires_followup(recommendation)
+        )
+        result["llm_pass"] = llm_pass
+        result["pass"] = deterministic_pass
+        result["passed"] = deterministic_pass
         return result
+
+    @staticmethod
+    def _recommendation_requires_followup(recommendation: str) -> bool:
+        normalized = str(recommendation or "").strip().lower()
+        if not normalized:
+            return False
+        followup_markers = (
+            "建议补",
+            "继续补",
+            "再补",
+            "补一次",
+            "继续 patch",
+            "another patch",
+            "retry patch",
+            "patch again",
+            "suggest deep",
+            "切到 deep",
+            "建议切到 deep",
+            "need another patch",
+        )
+        return any(marker in normalized for marker in followup_markers)

@@ -565,7 +565,7 @@ class WritingChapterAgent(BaseAgent):
                     judge_result=judge_result,
                     final_judge=final_judge,
                 )
-                if bool(judge_result.get("pass") or judge_result.get("passed")):
+                if bool(final_judge.get("passed")):
                     self._emit_stage(
                         stage=f"patch_round_{patch_round}_passed",
                         action="Patch loop passed",
@@ -1053,16 +1053,48 @@ class WritingChapterAgent(BaseAgent):
         remaining = list(judge_result.get("remaining_issues") or [])
         introduced = list(judge_result.get("newly_introduced_issues") or [])
         reasons = [str(item.get("reason") or "").strip() for item in [*remaining, *introduced] if str(item.get("reason") or "").strip()]
+        llm_pass = bool(judge_result.get("pass") or judge_result.get("passed"))
+        recommendation = str(judge_result.get("recommendation") or "").strip()
+        passed = (
+            llm_pass
+            and not remaining
+            and not introduced
+            and not WritingChapterAgent._recommendation_requires_followup(recommendation)
+        )
+        if llm_pass and not passed and recommendation:
+            reasons.append(f"Patch judge requested follow-up: {recommendation}")
         return {
-            "passed": bool(judge_result.get("pass") or judge_result.get("passed")),
+            "passed": passed,
             "blocking_reasons": reasons,
             "metrics": {
                 "patch_round": patch_round,
+                "llm_pass_flag": llm_pass,
                 "remaining_issue_count": len(remaining),
                 "introduced_issue_count": len(introduced),
             },
-            "recommendation": str(judge_result.get("recommendation") or "").strip(),
+            "recommendation": recommendation,
         }
+
+    @staticmethod
+    def _recommendation_requires_followup(recommendation: str) -> bool:
+        normalized = str(recommendation or "").strip().lower()
+        if not normalized:
+            return False
+        followup_markers = (
+            "建议补",
+            "继续补",
+            "再补",
+            "补一次",
+            "继续 patch",
+            "another patch",
+            "retry patch",
+            "patch again",
+            "suggest deep",
+            "切到 deep",
+            "建议切到 deep",
+            "need another patch",
+        )
+        return any(marker in normalized for marker in followup_markers)
 
     @classmethod
     def _build_patch_loop_failure_result(

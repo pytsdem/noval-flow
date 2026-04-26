@@ -411,3 +411,112 @@
 - 下一步：
   - 不再继续加重 `final_polish` 的 anti-slop 规则
   - 下一轮应把目标收窄到 `rewrite_blocks_by_plan` 的局部重写质量：只在被 patch 的 block 内，把解释句改写成动作/潜台词，同时明确要求保住 `relationship_cut`、`pause`、`cost_shift` 等关系落点
+
+## Iteration 10 - reject：局部 rewrite anti-slop brief 虽然显著降了解释句，但把 block 间场景交接打坏了
+
+- 主假设：
+  - `Iteration 9` 失败说明不能在 `final_polish` 全章强压解释句；如果把 anti-slop 约束收窄到 `rewrite_blocks_by_plan`，并只针对被 patch 的 block 增加“保住关系刺痛感、不要补新 verdict phrase”的局部 brief，就能减少 `direct_thought` / `flat_emotion`，同时保住 chapter 级 tension 与 continuity。
+- 候选改动文件（已回退，不保留）：
+  - `src/novel_flow/tools/rewrite_blocks_by_plan.py`
+  - `prompts/writer/rewrite_blocks_by_plan.txt`
+  - `tests/test_prompt_rendering.py`
+  - `tests/test_writing_chapter_agent.py`
+- 候选改动内容：
+  - 在 `RewriteBlocksByPlanTool` 里把 `patch_target` 和 `global_constraints` 从纯 JSON 额外整理成可执行 brief，明确 `goal / instructions / local_context_needed`
+  - 为 `flat_emotion / structural_weakness / repetitive_imagery` 这类 patch target 增加局部 rewrite focus：
+    - 删解释句时必须改成动作、停顿、视线、语气或体感
+    - 必须保住当前 block 的 `turn pressure / cost shift`
+    - 不要额外补“他知道 / 她知道 / 愧疚 / 另有隐情 / 不再是单纯的爱恨”这类新 verdict phrase
+    - 不要再堆一层冷意、旧伤、雪、疼痛等同层重复意象
+  - 新增 prompt/rendering 与 writer agent 回归测试，确认这些局部约束确实进入 `rewrite_blocks_by_plan` prompt
+- 验证：
+  - `python scripts/check_prompt_encoding.py`
+  - `python -m py_compile src/novel_flow/tools/rewrite_blocks_by_plan.py tests/test_prompt_rendering.py tests/test_writing_chapter_agent.py`
+  - `python -m unittest tests.test_prompt_rendering tests.test_writing_chapter_agent`
+  - `python -m unittest tests.test_schema_and_context tests.test_romance_eval_harness`
+  - `python -X utf8 - <<py` 逐文件编译 `evals/romance/*.py` 与 `tools/*.py`（共 `19` 个文件）
+  - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
+  - `LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_rewrite_local_anti_slop_case01`
+  - `python -m evals.romance.run_case_comparison --baseline evals/romance/reports/smoke_doubao_case01/summary.json --candidate evals/romance/reports/candidate_rewrite_local_anti_slop_case01/summary.json --output-dir evals/romance/reports/candidate_rewrite_local_anti_slop_case01`
+  - 离线 anti-slop 复核：对 baseline / candidate 的 `final_text.txt` 重新跑 `AntiSlopRuleAnalyzer`
+- 指标变化（对比 `smoke_doubao_case01`）：
+  - `romance_tension_score`: `8.5 -> 7.5`
+  - `relationship_progression_score`: `8.0 -> 7.0`
+  - `emotional_resonance_score`: `8.2 -> 7.5`
+  - `character_attraction_score`: `8.25 -> 7.3`
+  - `hook_score`: `8.3 -> 8.0`
+  - `continuity_score`: `8.8 -> 6.5`
+  - `redundancy_score`: `9.0 -> 8.0`
+  - `mind_state_consistency_score`: `8.7 -> 8.0`
+- anti-slop 离线证据：
+  - baseline：`anti_slop_score = 7.85`
+  - candidate：`anti_slop_score = 9.25`
+  - 说明这轮局部 brief 确实把“解释句 / 总结句”压下去了，但收益没有转化为更好的 romance 体验
+- 额外 artifact 证据：
+  - candidate 的 `stage_log` / `chapter_execution` 都明确报出同一条 `remaining_issue`：`b002` 仍保留“去偏厅抄录”的提法，而 `b003` 已切到丹陛旁公开交接，导致场景交接断层
+  - `run_case_comparison` 判定：
+    - `accept_change = false`
+    - `core_metric_delta = -0.79`
+    - `guard_metric_delta = -1.33`
+    - `pairwise_preferred_side = baseline`
+  - 这轮还暴露出一个值得后续单独处理的信号：candidate run 里 `remaining_issue_count = 1` 时，最终 `final_judge` 仍被判成 `passed = true`，说明 patch acceptance gate 的口径可能偏松
+- 成本变化：
+  - `llm_calls`: `-3`
+  - `duration_seconds`: `-182.51`
+  - 额外消耗 1 次 requirement case 真实端到端评测，`candidate_rewrite_local_anti_slop_case01` 用时约 `1104s`
+- 结论：`reject`
+- reject 原因：
+  - 局部 anti-slop brief 达成了“少解释句”的单点目标，但更高优先级的 `romance_tension`、`relationship_progression`、`continuity`、`mind_state_consistency` 都明显回撤
+  - 新 prompt 倾向于让 patch block 做更激进的局部重构，结果把相邻 block 的场景约束打散，出现了比 baseline 更重的 continuity break
+  - 这说明当前真正该打的不是“继续加 rewrite prompt 规则”，而是“patch 结果验收是否能拦住带 `remaining_issue` 的候选”
+- 下一步：
+  - 不再继续给 `rewrite_blocks_by_plan` prompt 叠加 anti-slop 压力
+  - 下一轮更合理的主目标应切到 `patch_judge / final_judge` 的 acceptance gate：当 `remaining_issue_count > 0` 或 recommendation 明确要求再 patch 时，不应该直接放行进入最终稿
+
+## Iteration 11 - keep：收紧 patch acceptance gate，拦住“明明还有问题却直接放行”的坏候选
+
+- 主假设：
+  - 参考 `Re3` 的“rerank + factual consistency` 和 `autonovel` 的 `modify -> evaluate -> keep/discard` 回路，当前仓库真正缺的不是再加一层 prompt，而是更硬的 patch 验收门。
+  - 如果 `judge_patched_chapter` 仍有 `remaining_issues` / `newly_introduced_issues`，或者 recommendation 明确要求“再补一次 patch / 切到 deep”，就不应该因为 LLM 仍给了 `"pass": true` 而直接进入 `final_polish`。
+- 参考来源：
+  - `Re3: Generating Longer Stories With Recursive Reprompting and Revision`：强调 structured plan、continuation reranking、consistency editing  
+    https://arxiv.org/abs/2210.06774
+  - `autonovel`：强调 `modify-evaluate-keep/discard`、`adversarial editing -> briefs -> rewrite` 的 revision loop  
+    https://github.com/NousResearch/autonovel
+- 改动文件：
+  - `src/novel_flow/tools/judge_patched_chapter.py`
+  - `src/novel_flow/agents/writing_chapter_agent.py`
+  - `tests/test_writing_chapter_agent.py`
+- 已做改动：
+  - 在 `judge_patched_chapter` 里新增 deterministic pass gate：
+    - 只有当 `llm_pass=true`
+    - 且 `remaining_issues == 0`
+    - 且 `newly_introduced_issues == 0`
+    - 且 recommendation 不包含“建议补 / 再补 / patch again / 切到 deep”这类 follow-up 信号
+    - 才会把 `pass/passed` 真正标成 `true`
+  - 在 `WritingChapterAgent` 里不再直接信任原始 `judge_result.pass`
+    - patch loop 的 break 条件改为只看归一化后的 `final_judge.passed`
+    - `final_judge.metrics` 补充 `llm_pass_flag`，便于区分“LLM 口头说过了”和“deterministic gate 真过了”
+    - 当 LLM 说 `pass=true` 但 recommendation 仍要求继续 patch 时，会把 follow-up 信息加入 blocking reasons
+  - 新增回归测试：
+    - `pass=true` 但仍有 `remaining_issues` 时，归一化结果必须 `passed=false`
+    - patch loop 在这种“口头通过但实际未通过”的情况下，必须继续下一轮 patch，而不是错误放行
+- 验证：
+  - `python -m py_compile src/novel_flow/tools/judge_patched_chapter.py src/novel_flow/agents/writing_chapter_agent.py tests/test_writing_chapter_agent.py`
+  - `python -m unittest tests.test_writing_chapter_agent`
+  - `python -m unittest tests.test_schema_and_context tests.test_romance_eval_harness`
+  - `python -X utf8 - <<py` 逐文件编译 `evals/romance/*.py` 与 `tools/*.py`（共 `19` 个文件）
+  - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
+- 收益：
+  - 修掉了 `Iteration 10` 暴露出来的核心架构问题：`remaining_issue_count = 1` 时不再可能因为 LLM 同时给了 `"pass": true` 就直接过关
+  - 新增端到端风格回归样例证明：
+    - 第 1 轮 patch judge 即使返回 `pass=true`，只要 recommendation 是“建议补一次patch”，系统就会继续第 2 轮 patch
+    - 最终只会在 clean pass 时进入后续 `final_polish`
+  - 这轮没有新增 LLM 评测成本，全部收益来自 writer workflow 的验收口径收紧
+- 成本变化：
+  - 无新增真实 case 端到端成本
+  - 正常运行时，只有“此前会被错误放行的坏 patch”才会多走一轮 patch loop；这属于有意增加的安全成本
+- 结论：`keep`
+- 下一步：
+  - 现在 patch acceptance gate 已经更可信，下一轮可以更大胆地引入 `candidate rewrite + rerank`
+  - 最值得借的方向是把 `rewrite_blocks_by_plan` 从“单候选直出”升级为“2~3 个候选 -> 基于 anti-slop / continuity / patch adherence 做 block 级 rerank”，更贴近 `Re3` 的 continuation reranking 和 `autonovel` 的 keep/discard revision loop
