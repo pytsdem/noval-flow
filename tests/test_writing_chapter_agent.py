@@ -193,6 +193,17 @@ class WritingChapterAgentTests(unittest.TestCase):
                 "scene_goal": "Land the imperial order before he can settle himself.",
                 "must_reveal": ["An imperial order lands before he can speak."],
                 "must_hide": ["Do not explain her true motive."],
+                "new_value": "Readers newly feel the opening pressure as an active public trap.",
+                "must_not_repeat": [
+                    "Do not restate the old case backstory.",
+                    "Do not explain her motive yet.",
+                ],
+                "relationship_delta": "Their relationship moves from suspended distance into public pressure.",
+                "clue_delta": "No new clue yet; only the opening pressure becomes active.",
+                "must_land_in_action": [
+                    "Land the pressure through gesture, etiquette, and witness reaction.",
+                    "Do not summarize the pressure in narrator explanation.",
+                ],
                 "emotional_tone": "Readers should side with him and distrust her restraint.",
                 "end_state": "He is forced into the chapter's pressure without room to recover.",
                 "human_reaction_target": [
@@ -202,6 +213,7 @@ class WritingChapterAgentTests(unittest.TestCase):
                 "cost_shift": "He loses the chance to choose his own opening move.",
                 "reader_feeling_target": "Readers should feel the public pressure close around him immediately.",
                 "paragraph_budget": paragraph_budget,
+                "target_chars": 420,
                 "micro_hook": "He now has to answer the public pressure before he can reclaim the opening move.",
                 "turn_type": "pressure_rise",
                 "paragraph_shape": [
@@ -249,6 +261,17 @@ class WritingChapterAgentTests(unittest.TestCase):
                 "scene_goal": "Make the transfer register matter through scene pressure.",
                 "must_reveal": ["Transfer register", "He finds a procedural opening."],
                 "must_hide": ["Do not explain her true motive."],
+                "new_value": "The chapter object becomes actionable, but only through a more expensive route.",
+                "must_not_repeat": [
+                    "Do not replay the opening pressure in abstract summary.",
+                    "Do not restate the same public threat without new movement.",
+                ],
+                "relationship_delta": "Their clash turns from public pressure into procedural negotiation.",
+                "clue_delta": "The register becomes newly usable, but no deeper truth is exposed.",
+                "must_land_in_action": [
+                    "Move the register through dialogue, procedure, or another person's reaction.",
+                    "Do not explain the procedural opening as pure summary.",
+                ],
                 "emotional_tone": "Hatred turns into cold strategic pressure.",
                 "end_state": "He gains a procedural path, but it costs him leverage.",
                 "human_reaction_target": [
@@ -258,6 +281,7 @@ class WritingChapterAgentTests(unittest.TestCase):
                 "cost_shift": "He must ask through the same court order that humiliates him.",
                 "reader_feeling_target": "Readers should feel that even progress comes with humiliation and constraint.",
                 "paragraph_budget": paragraph_budget,
+                "target_chars": 520,
                 "micro_hook": "The register can move the case, but asking for it exposes him further.",
                 "turn_type": "pressure_rise",
                 "paragraph_shape": [
@@ -301,6 +325,17 @@ class WritingChapterAgentTests(unittest.TestCase):
                     "She pauses at the old case term.",
                 ],
                 "must_hide": ["Do not explain her true motive."],
+                "new_value": "The relationship is newly repriced through her pause, and the clue becomes legible without explanation.",
+                "must_not_repeat": [
+                    "Do not repeat the negotiation result from the prior beat.",
+                    "Do not explain the pause after showing it.",
+                ],
+                "relationship_delta": "She becomes less like a fixed traitor and more like a controlled danger.",
+                "clue_delta": "Her pause is newly visible as a clue carrier, but still unreadable in motive.",
+                "must_land_in_action": [
+                    "Land the change through pause, gaze, witness reaction, or failed composure.",
+                    "Do not narrate the relationship change as a flat conclusion.",
+                ],
                 "emotional_tone": "Hatred turns into cold strategic pressure.",
                 "end_state": "Her restraint becomes more threatening than a direct answer.",
                 "human_reaction_target": [
@@ -310,6 +345,7 @@ class WritingChapterAgentTests(unittest.TestCase):
                 "cost_shift": "The old case moves one step closer while their relationship becomes harder to read and harder to trust.",
                 "reader_feeling_target": "Readers should remember the pause and feel the relationship has become more dangerous.",
                 "paragraph_budget": paragraph_budget,
+                "target_chars": 560,
                 "micro_hook": "The pause becomes visible, but nobody in the room will explain it cleanly.",
                 "turn_type": "clue_shift",
                 "paragraph_shape": [
@@ -357,6 +393,17 @@ class WritingChapterAgentTests(unittest.TestCase):
                 "scene_goal": "Make the ending pull land through a changed situation.",
                 "must_reveal": ["The first witness is already dead."],
                 "must_hide": ["Do not explain her true motive."],
+                "new_value": "The chapter exits on a harder route and a narrower next move.",
+                "must_not_repeat": [
+                    "Do not restate the pause and relationship reprice from the prior beat.",
+                    "Do not end in trailer-like explanation.",
+                ],
+                "relationship_delta": "The cost of moving against her and the case both become harder to walk back.",
+                "clue_delta": "The witness death is a new fact, not a restatement of prior suspicion.",
+                "must_land_in_action": [
+                    "Land the hook through body, breath, loss, or the changed route forward.",
+                    "Do not explain the ending hook in summary voice.",
+                ],
                 "emotional_tone": "Readers should side with him and distrust her restraint.",
                 "end_state": "The chapter closes on a harder route and a sharper cost.",
                 "human_reaction_target": [
@@ -366,6 +413,7 @@ class WritingChapterAgentTests(unittest.TestCase):
                 "cost_shift": "He loses the first witness before the investigation can even begin.",
                 "reader_feeling_target": "Readers should feel the next step has become both urgent and harder.",
                 "paragraph_budget": paragraph_budget,
+                "target_chars": 420,
                 "micro_hook": "The case can still move, but only through a worse and narrower path.",
                 "turn_type": "false_relief",
                 "paragraph_shape": [
@@ -757,6 +805,11 @@ class WritingChapterAgentTests(unittest.TestCase):
         self.assertIn('"block_id": "ch_002.sc_001.b001"', full_chapter_prompt)
         self.assertIn('"turn_type": "pressure_rise"', full_chapter_prompt)
         self.assertIn('"micro_hook": "He now has to answer the public pressure before he can reclaim the opening move."', full_chapter_prompt)
+        self.assertIn('"new_value": "Readers newly feel the opening pressure as an active public trap."', full_chapter_prompt)
+        self.assertIn('"must_not_repeat"', full_chapter_prompt)
+        self.assertIn('"relationship_delta": "Their relationship moves from suspended distance into public pressure."', full_chapter_prompt)
+        self.assertIn('"must_land_in_action"', full_chapter_prompt)
+        self.assertIn('"target_chars": 420', full_chapter_prompt)
         self.assertIn('"character_reentry_mode"', full_chapter_prompt)
         self.assertIn("[Chapter character mindsets]", full_chapter_prompt)
         self.assertIn("Hero表层克制", full_chapter_prompt)

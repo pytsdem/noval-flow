@@ -609,3 +609,83 @@
 - 结论：`keep`
 - 下一步：
   - 在 follow-up 口径统一后，下一轮更适合把精力放到真正能影响 romance 体验的上游层，比如 `write_chapter_full` 的 scene pressure / heroine agency，而不是继续在 patch 层堆局部启发式
+
+## Iteration 14 - keep：把 chapter planning 从“信息块”收紧成更有排他职责的 beat card
+
+- 主假设：
+  - 参考 `DOC`、`Re3`、`GOAT-Storytelling-Agent` 的分层规划思路，当前仓库“整章首稿 + 局部 patch”之所以容易重复，不只是因为 prompt 太弱，也因为 `plan_content_blocks` 产出的 block 还是偏“信息块”，缺少明确的新增值、禁重复边界和关系/线索落点。
+  - 在暂时不切成真正 `beat-by-beat drafting` 的前提下，先把 block 升级成更强约束的 beat card，并让 `write_chapter_full` 明确服从这些 beat 字段，能先降低“同一层压迫/关系判断/线索含义被换句话重讲”的风险。
+- 参考来源：
+  - `DOC: A Hierarchical Long Story Generation Framework over Dynamic Outlines`
+    https://arxiv.org/abs/2212.10077
+  - `Re3: Generating Longer Stories With Recursive Reprompting and Revision`
+    https://arxiv.org/abs/2210.06774
+  - `GOAT-Storytelling-Agent`
+    https://github.com/GOAT-AI-lab/GOAT-Storytelling-Agent
+- 改动文件：
+  - `src/novel_flow/models/schemas.py`
+  - `src/novel_flow/tools/plan_content_blocks.py`
+  - `src/novel_flow/services/chapter_tool_payloads.py`
+  - `prompts/writer/plan_content_blocks.txt`
+  - `prompts/writer/write_chapter_full.txt`
+  - `tests/test_schema_and_context.py`
+  - `tests/test_writing_chapter_agent.py`
+- 已做改动：
+  - 在 `ContentBlock` 里新增 beat card 约束字段：
+    - `new_value`
+    - `must_not_repeat`
+    - `relationship_delta`
+    - `clue_delta`
+    - `must_land_in_action`
+    - `target_chars`
+  - `PlanContentBlocksTool` 的 normalize / fallback 逻辑会自动补齐这些字段：
+    - 当 LLM planner 只给旧式最小 block 时，系统仍会生成可写的 beat card
+    - `target_word_count_text` 会被转成 block 级 `target_chars`
+    - fallback block 不再只是“开场/推进/转折/钩子”，而是带排他职责的 beat
+  - `ChapterToolPayloadBuilder` 现在会把这些字段同时送进：
+    - block card 文本
+    - writer prompt JSON
+  - `writer/plan_content_blocks.txt` 现在显式要求 planner 输出：
+    - 每块新增什么
+    - 明确不能重复什么
+    - 关系和线索分别在哪一块落地
+    - 变化必须如何落在动作、称呼、停顿、物件、程序等可观察材料上
+  - `writer/write_chapter_full.txt` 新增 beat 执行纪律：
+    - `chapter_plan_json` 是正文结构第一约束
+    - 已被前一 beat 落地的信息不能在后一 beat 里换种解释重讲
+    - `must_not_repeat` 被当成硬约束
+    - `target_chars` 作为单 beat 的软预算提示
+  - 新增两类回归：
+    - `tests.test_schema_and_context` 直接验证 `PlanContentBlocksTool` 对旧式最小 block 输出也会补齐 beat 字段
+    - `tests.test_writing_chapter_agent` 验证 full chapter prompt 确实包含 `new_value / must_not_repeat / relationship_delta / must_land_in_action / target_chars`
+- 验证：
+  - `python scripts/check_prompt_encoding.py`
+  - `python -m py_compile src/novel_flow/models/schemas.py src/novel_flow/tools/plan_content_blocks.py src/novel_flow/services/chapter_tool_payloads.py src/novel_flow/tools/write_chapter_full.py tests/test_schema_and_context.py tests/test_writing_chapter_agent.py`
+  - `python -m unittest tests.test_schema_and_context tests.test_writing_chapter_agent tests.test_prompt_rendering tests.test_romance_eval_harness`
+  - `python -X utf8 - <<py` 逐文件编译 `evals/romance/*.py` 与 `tools/*.py`
+  - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
+- 关键证据：
+  - 新增 planner 回归证明：即使 fake LLM 只返回旧式最小 `purpose/end_state/turn_type` block，`PlanContentBlocksTool.run()` 仍会稳定补齐：
+    - `new_value`
+    - `must_not_repeat`
+    - `relationship_delta`
+    - `clue_delta`
+    - `must_land_in_action`
+    - 正数 `target_chars`
+  - writer prompt 回归证明：`WritingChapterAgent` 生成的 full chapter prompt 已经把 beat 字段真实传给正文工具，不是只停在 schema 或 planner 层。
+  - 这轮先没有跑新的 clean single-case 端到端对照：
+    - 当前工作区还有未纳入本轮的 `rewrite_blocks_by_plan / build_chapter_patch_plan` 试验改动
+    - 直接在脏工作区跑 requirement case 会把不属于本轮的 runtime 改动混进证据
+    - 因此本轮 keep 的依据是“上游规划约束闭环已落地并被回归保护”，不是“正文指标已确认净提升”
+- 成本变化：
+  - 无新增默认 LLM 成本
+  - `target_chars` 只是规划层软预算，不增加推理轮次
+  - 本轮只新增本地测试与 prompt/rendering 约束，没有引入新的端到端评测成本
+- 结论：`keep`
+- keep 原因：
+  - 这轮确实沿着调研方向把“block -> beat card”落进了 repo 主链路，而且没有引入新的运行成本
+  - 它先解决的是“上游规划不够排他，导致整章写作容易重复”的架构问题，属于值得保留的结构性升级
+  - 但正文净收益仍需在干净分支上做 single-case 对照后再继续确认，不能提前宣称已经稳定抬高 romance 指标
+- 下一步：
+  - 在隔离掉当前工作区旧实验改动后，跑一个干净的 `case01` single-case comparison，优先看重复控制、scene pressure 和 heroine agency 是否比 baseline 更稳
+  - 如果 clean run 证据成立，再继续第二阶段：从“整章 obey beat”切到“按 beat 顺序写作”

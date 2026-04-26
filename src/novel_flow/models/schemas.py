@@ -360,12 +360,18 @@ class ContentBlock(StrictBaseModel):
     scene_goal: str = ""
     must_reveal: list[str] = Field(default_factory=list)
     must_hide: list[str] = Field(default_factory=list)
+    new_value: str = ""
+    must_not_repeat: list[str] = Field(default_factory=list)
+    relationship_delta: str = ""
+    clue_delta: str = ""
+    must_land_in_action: list[str] = Field(default_factory=list)
     emotional_tone: str = ""
     end_state: str
     human_reaction_target: list[str] = Field(default_factory=list)
     cost_shift: str = ""
     reader_feeling_target: str = ""
     paragraph_budget: str = ""
+    target_chars: int = Field(default=0, ge=0)
     paragraph_shape: list[str] = Field(default_factory=list)
     micro_hook: str = ""
     turn_type: Literal[

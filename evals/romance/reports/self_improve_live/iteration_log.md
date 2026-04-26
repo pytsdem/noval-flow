@@ -178,3 +178,17 @@
   - fast mode 在 satisfied recommendation 场景下不再错误进入下一轮 patch
 - Next step: 把精力转回真正影响 romance 体验的上游层
 - Report ref: `report.md` / `Iteration 13`
+
+## Iteration 14
+
+- Date: `2026-04-27`
+- Outcome: `keep`
+- Theme: 把 chapter planning 从信息块收紧成更有排他职责的 beat card
+- Root layer: `chapter_planning_beat_card`
+- Files changed: `src/novel_flow/models/schemas.py`, `src/novel_flow/tools/plan_content_blocks.py`, `src/novel_flow/services/chapter_tool_payloads.py`, `prompts/writer/plan_content_blocks.txt`, `prompts/writer/write_chapter_full.txt`, `tests/test_schema_and_context.py`, `tests/test_writing_chapter_agent.py`
+- Success snapshot:
+  - `ContentBlock` 新增 `new_value / must_not_repeat / relationship_delta / clue_delta / must_land_in_action / target_chars`
+  - planner 即使收到旧式最小 block 输出，也会自动补齐 beat 字段并把它们传进 writer prompt
+  - 这轮先保留结构升级，不提前宣称正文指标已净提升
+- Next step: 在隔离旧实验 runtime 改动后，跑干净的 `case01` single-case 对照，验证重复控制、scene pressure 和 heroine agency
+- Report ref: `report.md` / `Iteration 14`

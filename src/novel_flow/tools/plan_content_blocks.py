@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 
 from novel_flow.models.schemas import (
     ChapterBrief,
@@ -45,13 +46,27 @@ class PlanContentBlocksTool(LLMChapterTool):
             blocks = [ContentBlock.model_validate(item) for item in raw.get("blocks", [])]
         except Exception:
             blocks = self._fallback_blocks(chapter_brief)
-        normalized = self._normalize_blocks(blocks=blocks, chapter_brief=chapter_brief)
+        normalized = self._normalize_blocks(
+            blocks=blocks,
+            chapter_brief=chapter_brief,
+            target_word_count_text=str(payload.get("target_word_count_text", "") or ""),
+        )
         return ContentBlockPlanPayload.model_validate({"blocks": normalized}).model_dump(mode="json")
 
-    def _normalize_blocks(self, *, blocks: list[ContentBlock], chapter_brief: ChapterBrief) -> list[ContentBlock]:
+    def _normalize_blocks(
+        self,
+        *,
+        blocks: list[ContentBlock],
+        chapter_brief: ChapterBrief,
+        target_word_count_text: str,
+    ) -> list[ContentBlock]:
         if len(blocks) < 3:
             blocks = self._fallback_blocks(chapter_brief)
         trimmed = blocks[:10]
+        total_target_chars = self._target_total_chars(
+            target_word_count_text=target_word_count_text,
+            block_count=len(trimmed),
+        )
         normalized: list[ContentBlock] = []
         for index, block in enumerate(trimmed, start=1):
             normalized.append(
@@ -67,6 +82,20 @@ class PlanContentBlocksTool(LLMChapterTool):
                         "scene_goal": self._clean_text(block.scene_goal) or self._clean_text(block.purpose),
                         "must_reveal": self._clean_list(block.must_reveal),
                         "must_hide": self._clean_list(block.must_hide) or list(chapter_brief.forbidden[:4]),
+                        "new_value": self._clean_text(block.new_value)
+                        or self._fallback_new_value(index=index, chapter_brief=chapter_brief),
+                        "must_not_repeat": self._list_or_fallback(
+                            block.must_not_repeat,
+                            self._fallback_must_not_repeat(index=index, chapter_brief=chapter_brief),
+                        ),
+                        "relationship_delta": self._clean_text(block.relationship_delta)
+                        or self._fallback_relationship_delta(index=index, chapter_brief=chapter_brief),
+                        "clue_delta": self._clean_text(block.clue_delta)
+                        or self._fallback_clue_delta(index=index, chapter_brief=chapter_brief),
+                        "must_land_in_action": self._list_or_fallback(
+                            block.must_land_in_action,
+                            self._fallback_action_landing(index=index, chapter_brief=chapter_brief),
+                        ),
                         "emotional_tone": self._clean_text(block.emotional_tone) or self._clean_text(chapter_brief.reader_emotion),
                         "end_state": self._clean_text(block.end_state) or self._clean_text(chapter_brief.small_payoff) or self._clean_text(chapter_brief.ending_pull),
                         "human_reaction_target": self._list_or_fallback(
@@ -77,6 +106,16 @@ class PlanContentBlocksTool(LLMChapterTool):
                         "reader_feeling_target": self._clean_text(block.reader_feeling_target)
                         or self._fallback_reader_feeling(index=index, chapter_brief=chapter_brief),
                         "paragraph_budget": self._clean_text(block.paragraph_budget) or DEFAULT_PARAGRAPH_BUDGET,
+                        "target_chars": (
+                            int(block.target_chars or 0)
+                            if int(block.target_chars or 0) > 0
+                            else self._fallback_target_chars(
+                                index=index,
+                                total_blocks=len(trimmed),
+                                turn_type=self._normalize_turn_type(block.turn_type, index=index),
+                                total_target_chars=total_target_chars,
+                            )
+                        ),
                         "paragraph_shape": self._list_or_fallback(
                             block.paragraph_shape,
                             self._fallback_paragraph_shape(index=index),
@@ -127,6 +166,17 @@ class PlanContentBlocksTool(LLMChapterTool):
                 scene_goal=self._clean_text(chapter_brief.opening_hook) or self._clean_text(chapter_brief.summary),
                 must_reveal=[item for item in [chapter_brief.opening_hook] if self._clean_text(item)],
                 must_hide=forbidden[:4],
+                new_value="Readers newly feel the opening pressure as an active public trap, not as background setup.",
+                must_not_repeat=[
+                    "不要把旧案背景或人物旧怨整段复述一遍。",
+                    "不要在第一块就解释对方真实动机。",
+                ],
+                relationship_delta="关系从未正面碰撞的悬置，转为公开场域里必须立刻接招的压迫。",
+                clue_delta="这一块主要落地开场压力，不额外偷跑新 clue。",
+                must_land_in_action=[
+                    "必须把压迫落在动作、礼制或身体反应上。",
+                    "不能只用总结句说气氛紧张。",
+                ],
                 emotional_tone=self._clean_text(chapter_brief.reader_emotion),
                 end_state="The opening pressure lands and the focal character loses room to recover before speaking.",
                 human_reaction_target=[
@@ -136,6 +186,7 @@ class PlanContentBlocksTool(LLMChapterTool):
                 cost_shift="The focal character loses face, time, or the chance to choose a gentler opening move.",
                 reader_feeling_target="Readers should feel the pressure closing around the character immediately.",
                 paragraph_budget=DEFAULT_PARAGRAPH_BUDGET,
+                target_chars=420,
                 paragraph_shape=[
                     "主动作",
                     "配角反应",
@@ -162,6 +213,17 @@ class PlanContentBlocksTool(LLMChapterTool):
                 scene_goal=self._clean_text(chapter_brief.chapter_object) or "Make the chapter object matter on the page.",
                 must_reveal=[item for item in [chapter_brief.chapter_object, chapter_brief.small_payoff] if self._clean_text(item)],
                 must_hide=forbidden[:4],
+                new_value="The chapter object becomes newly actionable, but only through a more expensive route.",
+                must_not_repeat=[
+                    "不要再重讲第一块已经建立的公开压迫。",
+                    "不要把章目标只讲成抽象信息点。",
+                ],
+                relationship_delta="关系从单纯受压，转为带着程序和筹码差的试探性交锋。",
+                clue_delta="让章目标和小回报真正推进，但不要额外偷跑更高层真相。",
+                must_land_in_action=[
+                    "章目标必须通过对话、手续、动作选择或旁人反应被推进。",
+                    "不能只写人物心里觉得机会出现了。",
+                ],
                 emotional_tone=self._clean_text(chapter_brief.emotional_turn),
                 end_state="The characters gain a small procedural push, but the relational and practical cost rises with it.",
                 human_reaction_target=[
@@ -171,6 +233,7 @@ class PlanContentBlocksTool(LLMChapterTool):
                 cost_shift="The focal character pays an extra social, procedural, or emotional price to move the goal forward.",
                 reader_feeling_target="Readers should feel that even progress arrives with humiliation, pressure, or residue.",
                 paragraph_budget=DEFAULT_PARAGRAPH_BUDGET,
+                target_chars=520,
                 paragraph_shape=[
                     "主动作",
                     "礼法或程序阻力",
@@ -196,6 +259,17 @@ class PlanContentBlocksTool(LLMChapterTool):
                 scene_goal=self._clean_text(chapter_brief.character_shift) or self._clean_text(chapter_brief.relationship_reprice),
                 must_reveal=[item for item in [chapter_brief.character_shift, chapter_brief.relationship_reprice, *clues[:2]] if self._clean_text(item)],
                 must_hide=forbidden[:4],
+                new_value="Readers newly see the relationship reprice and at least one clue carrier, without getting a clean explanation.",
+                must_not_repeat=[
+                    "不要重复前一块已经完成的程序推进。",
+                    "不要把关系变化再用作者总结句重复一遍。",
+                ],
+                relationship_delta="关系重新定价为更危险、更难判断，不能再停留在同一层敌意。",
+                clue_delta="至少有一个异常、停顿或反应被看见，但它还不能被解释清楚。",
+                must_land_in_action=[
+                    "关系变化必须落在称呼、停顿、避视、动作失手或他人先发现上。",
+                    "不能只说她其实更危险了。",
+                ],
                 emotional_tone=self._clean_text(chapter_brief.emotional_turn),
                 end_state="The relationship or emotional angle is repriced on the page and the situation becomes harder to read safely.",
                 human_reaction_target=[
@@ -205,6 +279,7 @@ class PlanContentBlocksTool(LLMChapterTool):
                 cost_shift="A clue or shift comes closer, but the relationship becomes harder to trust or manage.",
                 reader_feeling_target="Readers should remember the changed relationship pressure more than the raw information itself.",
                 paragraph_budget=DEFAULT_PARAGRAPH_BUDGET,
+                target_chars=560,
                 paragraph_shape=[
                     "关系压力",
                     "回避与失手",
@@ -231,6 +306,17 @@ class PlanContentBlocksTool(LLMChapterTool):
                 scene_goal=self._clean_text(chapter_brief.ending_pull),
                 must_reveal=[item for item in [chapter_brief.ending_pull] if self._clean_text(item)],
                 must_hide=forbidden[:4],
+                new_value="The chapter exits on a changed cost and a next move that is harder to avoid than before.",
+                must_not_repeat=[
+                    "不要把前一块已经落地的关系变化再解释一遍。",
+                    "不要把结尾写成预告片口播。",
+                ],
+                relationship_delta="结尾要让关系或局势的代价更难回头，而不是停在同一位置。",
+                clue_delta="若有钩子，必须让钩子来自新代价或新事实，而不是重复旧悬念。",
+                must_land_in_action=[
+                    "尾钩必须先打到身体、动作、现场变化或实际损失上。",
+                    "不能只用一句解释性判断代替收尾。",
+                ],
                 emotional_tone=self._clean_text(chapter_brief.reader_emotion),
                 end_state="The chapter ends with a harder next step and a cost the character cannot step back from easily.",
                 human_reaction_target=[
@@ -240,6 +326,7 @@ class PlanContentBlocksTool(LLMChapterTool):
                 cost_shift="The character loses a buffer, an option, or a person they needed for the next move.",
                 reader_feeling_target="Readers should feel the next step has become both urgent and more expensive.",
                 paragraph_budget=DEFAULT_PARAGRAPH_BUDGET,
+                target_chars=420,
                 paragraph_shape=[
                     "结果落地",
                     "短反应",
@@ -260,6 +347,40 @@ class PlanContentBlocksTool(LLMChapterTool):
     def _clean_text(value: str | None) -> str:
         return str(value or "").strip()
 
+    @staticmethod
+    def _target_total_chars(*, target_word_count_text: str, block_count: int) -> int:
+        values = [int(item) for item in re.findall(r"\d+", str(target_word_count_text or ""))]
+        if len(values) >= 2:
+            estimated = int(round((values[0] + values[1]) / 2))
+        elif len(values) == 1:
+            estimated = values[0]
+        else:
+            estimated = 3200 if block_count <= 4 else 4600 if block_count <= 6 else 5600
+        return max(1800, min(7200, estimated))
+
+    @staticmethod
+    def _fallback_target_chars(*, index: int, total_blocks: int, turn_type: str, total_target_chars: int) -> int:
+        if total_blocks <= 0:
+            return 420
+        base_weights = [1.0] * total_blocks
+        base_weights[0] = 0.9
+        if total_blocks > 1:
+            base_weights[-1] = 0.9
+        turn_bonus = {
+            "pressure_rise": 1.0,
+            "clue_shift": 1.08,
+            "emotional_slip": 1.02,
+            "relationship_cut": 1.08,
+            "ritual_embarrassment": 1.0,
+            "witness_reaction": 0.94,
+            "false_relief": 0.95,
+            "withheld_answer": 0.95,
+        }
+        base_weights[index - 1] *= turn_bonus.get(turn_type, 1.0)
+        total_weight = sum(base_weights) or float(total_blocks)
+        target = int(round(total_target_chars * (base_weights[index - 1] / total_weight)))
+        return max(260, min(1200, target))
+
     @classmethod
     def _clean_list(cls, items: list[str] | None) -> list[str]:
         return [cls._clean_text(item) for item in items or [] if cls._clean_text(item)]
@@ -268,6 +389,73 @@ class PlanContentBlocksTool(LLMChapterTool):
     def _list_or_fallback(cls, items: list[str] | None, fallback: list[str]) -> list[str]:
         cleaned = cls._clean_list(items)
         return cleaned or fallback
+
+    @classmethod
+    def _fallback_new_value(cls, *, index: int, chapter_brief: ChapterBrief) -> str:
+        if index == 1:
+            return "Readers newly feel the opening pressure as a live trap instead of abstract setup."
+        if index == 2:
+            return "The chapter object becomes newly actionable, but only through a more expensive route."
+        if index == 3:
+            return "The relationship and clue pressure are newly repriced through what the characters do not cleanly explain."
+        if cls._clean_text(chapter_brief.ending_pull):
+            return "The situation exits in a newly changed state, with a cost or hook that did not exist before this beat."
+        return "This beat must end with a changed situation, not a restatement of prior pressure."
+
+    @classmethod
+    def _fallback_must_not_repeat(cls, *, index: int, chapter_brief: ChapterBrief) -> list[str]:
+        items = [
+            "不要把上一块已经完成的关系判断换句话再讲一遍。",
+            "不要重复同一层场景寒意、痛感或压迫感铺垫。",
+        ]
+        if index > 1:
+            items.append("不要重新铺垫整章背景，只推进当前 beat 的新增值。")
+        if cls._clean_text(chapter_brief.relationship_reprice):
+            items.append("不要用作者总结句直接复述关系重新定价。")
+        return items[:4]
+
+    @classmethod
+    def _fallback_relationship_delta(cls, *, index: int, chapter_brief: ChapterBrief) -> str:
+        if index == 1:
+            return "关系从未正面碰撞，变为必须在公开压力下接招。"
+        if index == 2:
+            return "关系从纯压迫转为带着程序和筹码差的试探。"
+        if index == 3:
+            return cls._clean_text(chapter_brief.relationship_reprice) or "关系必须出现重新定价，而不是停留在同一层敌意。"
+        return "关系或局势代价必须比上一块更难回头。"
+
+    @classmethod
+    def _fallback_clue_delta(cls, *, index: int, chapter_brief: ChapterBrief) -> str:
+        if index == 1:
+            return "这一块主要负责落地开场压迫，不必额外推进新线索。"
+        clues = list(chapter_brief.allowed_clues or [])
+        if index == 3 and clues:
+            return f"至少让一个可见线索真正被看见：{clues[0]}"
+        if index >= 4 and cls._clean_text(chapter_brief.ending_pull):
+            return "结尾钩子必须来自新事实、新代价或新障碍，而不是重复旧悬念。"
+        return "如果没有新线索推进，就明确把这一块写成压力或关系推进，不要假装有新 clue。"
+
+    @staticmethod
+    def _fallback_action_landing(*, index: int, chapter_brief: ChapterBrief) -> list[str]:
+        if index == 1:
+            return [
+                "把压力落在动作、礼制、身体反应或现场回声上。",
+                "不要只写人物心里知道危险来了。",
+            ]
+        if index == 2:
+            return [
+                "把章目标落在对话、手续、动作选择或旁人反应上。",
+                "不要只用解释句说明局势推进了。",
+            ]
+        if index == 3:
+            return [
+                "把关系变化落在称呼、停顿、避视、动作失手或旁观者先发现上。",
+                "不要用作者口吻总结她其实怎样、他其实怎样。",
+            ]
+        return [
+            "把尾钩落在动作、身体、物件变化或实际损失上。",
+            "不要用一句解释性判断代替结尾场面。",
+        ]
 
     @classmethod
     def _normalize_character_reentry_mode(cls, mode: CharacterReentryMode | None) -> CharacterReentryMode | None:

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import unittest
 from types import SimpleNamespace
 
@@ -33,6 +34,7 @@ from novel_flow.services.selectors import (
     get_character_card_by_name,
     get_character_milestone_by_name,
 )
+from novel_flow.tools.plan_content_blocks import PlanContentBlocksTool
 
 
 class SequenceLLM(LLMClient):
@@ -599,6 +601,73 @@ class SchemaAndContextTests(unittest.TestCase):
         self.assertIn("step_1_to_7_outputs_json", write_payload)
         self.assertEqual(review_payload["chapter_text"], "正文")
         self.assertIn("twist_01", review_payload["active_twists_json"])
+
+    def test_plan_content_blocks_tool_enriches_blocks_into_beat_cards(self) -> None:
+        context = self._writer_context(current_chapter_id="ch_001")
+        payload = ChapterToolPayloadBuilder.build_plan_content_blocks_payload(
+            chapter_brief=self.chapter_brief,
+            context=context,
+        )
+        llm = SequenceLLM(
+            [
+                json.dumps(
+                    {
+                        "blocks": [
+                            {
+                                "block_id": "ch_001.sc_001.b009",
+                                "chapter_id": "ch_001",
+                                "block_index": 9,
+                                "purpose": "Public pressure forces him to receive the order in full view.",
+                                "end_state": "He has less room to recover before answering.",
+                                "turn_type": "pressure_rise",
+                            },
+                            {
+                                "block_id": "ch_001.sc_001.b010",
+                                "chapter_id": "ch_001",
+                                "block_index": 10,
+                                "purpose": "He reaches for the register through a more expensive route.",
+                                "end_state": "The chapter object becomes actionable at a social cost.",
+                                "turn_type": "pressure_rise",
+                            },
+                            {
+                                "block_id": "ch_001.sc_001.b011",
+                                "chapter_id": "ch_001",
+                                "block_index": 11,
+                                "purpose": "Her pause makes the clue legible without explaining it.",
+                                "end_state": "The room now reads the pause differently, but no one explains it.",
+                                "turn_type": "clue_shift",
+                            },
+                        ]
+                    },
+                    ensure_ascii=False,
+                )
+            ]
+        )
+        tool = PlanContentBlocksTool(llm_client=llm)
+
+        result = tool.run(payload)
+        blocks = result["blocks"]
+
+        self.assertEqual(len(blocks), 3)
+        self.assertEqual(blocks[0]["block_id"], "ch_001.sc_001.b001")
+        self.assertEqual(blocks[2]["block_id"], "ch_001.sc_001.b003")
+        self.assertEqual(blocks[0]["chapter_id"], "ch_001")
+        self.assertEqual(blocks[1]["block_index"], 2)
+        self.assertGreaterEqual(len(llm.calls), 1)
+
+        for block in blocks:
+            self.assertTrue(block["new_value"])
+            self.assertTrue(block["must_not_repeat"])
+            self.assertTrue(block["relationship_delta"])
+            self.assertTrue(block["clue_delta"])
+            self.assertTrue(block["must_land_in_action"])
+            self.assertGreater(block["target_chars"], 0)
+            self.assertLessEqual(block["target_chars"], 1200)
+
+        self.assertIn("Readers newly feel the opening pressure", blocks[0]["new_value"])
+        self.assertIn("不要", blocks[0]["must_not_repeat"][0])
+        self.assertIn("关系", blocks[1]["relationship_delta"])
+        self.assertIn("线索", blocks[2]["clue_delta"])
 
     def test_completed_memory_comes_from_actual_summaries(self) -> None:
         summary = ActualChapterSummary(

@@ -404,11 +404,15 @@ class ChapterToolPayloadBuilder:
             f"block_index: {block.block_index}",
             f"purpose: {block.purpose}",
             f"scene_goal: {block.scene_goal}",
+            f"new_value: {block.new_value}",
+            f"relationship_delta: {block.relationship_delta}",
+            f"clue_delta: {block.clue_delta}",
             f"emotional_tone: {block.emotional_tone}",
             f"end_state: {block.end_state}",
             f"cost_shift: {block.cost_shift}",
             f"reader_feeling_target: {block.reader_feeling_target}",
             f"paragraph_budget: {block.paragraph_budget}",
+            f"target_chars: {block.target_chars}",
             f"micro_hook: {block.micro_hook}",
             f"turn_type: {block.turn_type}",
             "paragraph_shape:",
@@ -446,6 +450,12 @@ class ChapterToolPayloadBuilder:
             lines.append(f"- {item}")
         lines.append("must_hide:")
         for item in block.must_hide or ["None."]:
+            lines.append(f"- {item}")
+        lines.append("must_not_repeat:")
+        for item in block.must_not_repeat or ["None."]:
+            lines.append(f"- {item}")
+        lines.append("must_land_in_action:")
+        for item in block.must_land_in_action or ["None."]:
             lines.append(f"- {item}")
         lines.append("human_reaction_target:")
         for item in block.human_reaction_target or ["None."]:
@@ -492,6 +502,12 @@ class ChapterToolPayloadBuilder:
             "cost_shift": str(block.cost_shift or "").strip(),
             "reader_feeling_target": str(block.reader_feeling_target or "").strip(),
             "paragraph_budget": str(block.paragraph_budget or "").strip(),
+            "target_chars": str(int(block.target_chars or 0)),
+            "new_value": str(block.new_value or "").strip(),
+            "must_not_repeat": cls.json_text(list(block.must_not_repeat or [])),
+            "relationship_delta": str(block.relationship_delta or "").strip(),
+            "clue_delta": str(block.clue_delta or "").strip(),
+            "must_land_in_action": cls.json_text(list(block.must_land_in_action or [])),
             "micro_hook": str(block.micro_hook or "").strip(),
             "turn_type": str(block.turn_type or "").strip(),
             "paragraph_shape": cls.json_text(list(block.paragraph_shape or [])),

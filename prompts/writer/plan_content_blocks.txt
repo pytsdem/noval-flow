@@ -76,12 +76,18 @@ Requirements:
    - `scene_goal`
    - `must_reveal`
    - `must_hide`
+   - `new_value`
+   - `must_not_repeat`
+   - `relationship_delta`
+   - `clue_delta`
+   - `must_land_in_action`
    - `emotional_tone`
    - `end_state`
    - `human_reaction_target`
    - `cost_shift`
    - `reader_feeling_target`
    - `paragraph_budget`
+   - `target_chars`
    - `paragraph_shape`
    - `micro_hook`
    - `turn_type`
@@ -104,10 +110,53 @@ Required field guidance:
 - `reader_feeling_target`
   Say what the reader should directly feel when the block ends, not only what the reader should know.
 
+- `new_value`
+  State the one thing this block newly changes for the reader.
+  Good values include:
+  - a new public pressure,
+  - a newly visible cost,
+  - a relationship reprice,
+  - a clue becoming legible,
+  - or a changed next move.
+  Bad values are restatements of the previous block.
+
+- `must_not_repeat`
+  Name two to four things this block must not restate from earlier blocks.
+  Prefer concrete anti-repeat constraints such as:
+  - do not re-explain the same hatred,
+  - do not restate the same etiquette pressure,
+  - do not repeat the same injury / cold / blood image family,
+  - do not re-open background that the previous block already landed.
+
+- `relationship_delta`
+  State how the relationship is repriced in this block.
+  If the relationship does not materially change, say what new edge, debt, distance, or danger becomes visible instead.
+
+- `clue_delta`
+  State what clue pressure changes in this block.
+  If no clue advances, say that clearly and make the block carry pressure, relationship, or cost instead.
+
+- `must_land_in_action`
+  Give a short list describing how this block must carry its value through observable scene material.
+  Good carriers include:
+  - gesture,
+  - pause,
+  - address term,
+  - interrupted action,
+  - witness reaction,
+  - object handling,
+  - procedural choice.
+  Do not let this field contain abstract psychology summaries.
+
 - `paragraph_budget`
   Use this default style unless the block truly needs a variation:
   `建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长`
   For high-tension or clue-reveal blocks, prefer 3~5 shorter paragraphs.
+
+- `target_chars`
+  Give one approximate Chinese-character budget for this block.
+  It should help the chapter stay balanced, but it is only a planning target, not a hard token count.
+  Higher-pressure or relationship-reprice blocks may take more space than quiet transition blocks.
 
 - `paragraph_shape`
   Give a short ordered list describing how the natural paragraphs should be shaped inside this block.
@@ -179,3 +228,5 @@ Planning style:
 8. Prefer `character_anchor_line` over decorative flourish when they compete. If necessary, choose a sharper character anchor instead of prettier diction.
 9. Use the chapter character mindsets as hidden control signals for block design: let goals, fear, misbelief, and self-control level shape pressure, reaction target, and local turn.
 10. Do not restate mindset labels inside prose planning; translate them into action, hesitation, concealment, misreading, and cost.
+11. Treat each block like a beat card with an exclusive job. If two adjacent blocks could be merged without losing any reader value, your plan is too repetitive.
+12. Make `new_value`, `must_not_repeat`, and `must_land_in_action` concrete enough that a writer could avoid repeating the previous beat even when given the full chapter context.
