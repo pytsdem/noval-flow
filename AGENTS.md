@@ -113,6 +113,25 @@ python -m evals.romance.run_workflow_diagnostics --cases evals/romance/exported_
 python -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --label fixture_baseline
 ```
 
+## Iteration Ledger
+
+Every self-improve iteration must update both of these files:
+
+- `evals/romance/reports/self_improve_live/report.md`: human-readable narrative report
+- `evals/romance/reports/self_improve_live/iteration_log.md`: concise append-only ledger
+
+Each markdown ledger entry must include at least:
+
+- `iteration`
+- `date`
+- `outcome`
+- `title`
+- `root_layer`
+- `files_changed`
+- `success_snapshot`
+- `next_step`
+- `report_ref`
+
 ## Development Rules
 
 - Diagnose workflow failures with intermediate artifacts, not only final prose.

@@ -48,6 +48,11 @@ The front-end is part of the optimization surface. If the repo exposes a web con
 
 Temporary file hygiene is part of the optimization standard. Use temporary artifacts only when they help diagnosis or verification, keep them in predictable locations while working, and delete throwaway files before finishing so the repo does not accumulate clutter.
 
+Iteration traceability is part of the optimization standard. After each keep/reject decision, update both:
+
+- `evals/romance/reports/self_improve_live/report.md`
+- `evals/romance/reports/self_improve_live/iteration_log.md`
+
 ## Fixed Workflow
 
 ### Step 1: Read the fixed requirement cases and their bound test books

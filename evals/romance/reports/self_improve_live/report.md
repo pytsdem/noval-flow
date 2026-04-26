@@ -9,6 +9,7 @@
 - 当前终端里的 `codex exec` 会返回 `Access denied`，因此后续评测与诊断命令应显式使用 `LLM_PROVIDER=doubao`
 - 参考基线：`evals/romance/reports/baseline/summary.json`
 - 当前可运行 smoke：`evals/romance/reports/smoke_doubao_case01/summary.json`
+- 迭代 ledger：`evals/romance/reports/self_improve_live/iteration_log.md`
 
 ## 迭代记录规范
 
@@ -520,3 +521,91 @@
 - 下一步：
   - 现在 patch acceptance gate 已经更可信，下一轮可以更大胆地引入 `candidate rewrite + rerank`
   - 最值得借的方向是把 `rewrite_blocks_by_plan` 从“单候选直出”升级为“2~3 个候选 -> 基于 anti-slop / continuity / patch adherence 做 block 级 rerank”，更贴近 `Re3` 的 continuation reranking 和 `autonovel` 的 keep/discard revision loop
+
+## Iteration 12 - reject：block 级 multi-candidate rerank 还没有打赢 baseline
+
+- 主假设：
+  - 参考 `Re3` 的 continuation reranking，如果把 `rewrite_blocks_by_plan` 从单候选直出升级成高风险 patch target 的 `2` 候选生成，再用轻量本地规则做 block 级 rerank，就能更稳定地避开直白心理句、已删除设定残留和重复意象，同时保住章节级 tension。
+- 参考来源：
+  - `Re3: Generating Longer Stories With Recursive Reprompting and Revision`
+    https://arxiv.org/abs/2210.06774
+  - `autonovel`
+    https://github.com/NousResearch/autonovel
+- 候选改动文件（已回退，不保留）：
+  - `src/novel_flow/tools/rewrite_blocks_by_plan.py`
+  - `tests/test_writing_chapter_agent.py`
+- 候选改动内容：
+  - 为 `flat_emotion / structural_weakness / repetitive_imagery / continuity_break` 等高风险 patch target 生成 `2` 个 rewrite 候选
+  - 用 block 邻接文本 overlap、指令禁词、直白心理短语、重复意象等启发式信号本地 rerank
+  - 增加回归样例，验证 rerank 会主动避开被 patch 指令删除的设定残留和 `she knows he still cares` 这类直白结论句
+- 验证：
+  - `python -m py_compile src/novel_flow/tools/rewrite_blocks_by_plan.py tests/test_writing_chapter_agent.py`
+  - `python -m unittest tests.test_writing_chapter_agent`
+  - `python -m unittest tests.test_schema_and_context tests.test_romance_eval_harness`
+  - `python -X utf8 - <<py` 逐文件编译 `evals/romance/*.py` 与 `tools/*.py`（共 `19` 个文件）
+  - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
+  - `LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_rewrite_rerank_case01`
+  - `LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_rewrite_rerank_gatefix_case01`
+  - `python -m evals.romance.run_case_comparison --baseline evals/romance/reports/smoke_doubao_case01/summary.json --candidate evals/romance/reports/candidate_rewrite_rerank_gatefix_case01/summary.json --output-dir evals/romance/reports/candidate_rewrite_rerank_gatefix_case01`
+- 关键证据：
+  - 第一版 rerank（`candidate_rewrite_rerank_case01`）确实触发了 block 级候选选择，但 requirement case `case01` 的 `redundancy_score` 从 `9.0 -> 7.22`，整体不满足 keep 标准
+  - 第二版在修掉 follow-up 误判后（`candidate_rewrite_rerank_gatefix_case01`），`redundancy_score` 回到 `9.0`，但核心 romance 指标没有赢过 baseline：
+    - `romance_tension_score`: `8.5 -> 8.2`
+    - `relationship_progression_score`: `8.0 -> 8.0`
+    - `emotional_resonance_score`: `8.2 -> 8.5`
+    - `character_attraction_score`: `8.25 -> 8.07`
+    - `hook_score`: `8.3 -> 8.5`
+    - `continuity_score`: `8.8 -> 8.8`
+    - `redundancy_score`: `9.0 -> 9.0`
+    - `mind_state_consistency_score`: `8.7 -> 8.7`
+  - `run_case_comparison` 判定：
+    - `accept_change = false`
+    - `core_metric_delta = 0.0`
+    - `guard_metric_delta = 0.0`
+    - `pairwise_preferred_side = baseline`
+    - `average_llm_calls_delta = +4.0`
+- 成本变化（相对 `smoke_doubao_case01`）：
+  - `llm_calls`: `18 -> 22`
+  - `duration_seconds`: `1178.18 -> 1124.56`
+  - `patch_rounds`: `1 -> 2`
+- 结论：`reject`
+- reject 原因：
+  - 这套 block 级 rerank 的局部启发式能改写一些“表面上很像 slop”的句子，但还没有稳定转化成更好的 romance 体验
+  - requirement case 的 pairwise 偏好仍然站在 baseline 一边，而且额外多吃了 `4` 次 LLM 调用
+  - 说明现在直接把 rerank 嵌进 `rewrite_blocks_by_plan` 还太早，容易把局部规则优化变成默认成本
+- 下一步：
+  - 不保留这版 rerank 代码
+  - 后续若再走 multi-candidate 路线，应先把 rerank 信号升级成更贴近 romance 目标的评测，而不是只靠局部 overlap / slop 启发式
+
+## Iteration 13 - keep：修正 patch judge 的“无需再补”口径，避免 satisfied verdict 被误判成 follow-up
+
+- 主假设：
+  - `Iteration 12` 的 requirement case 里暴露出一个独立的控制流 bug：judge 明明给出了“补丁已成功解决目标问题，无需再补补丁”的 recommendation，agent 仍可能因为命中 `"再补"` 子串而把它误判成 follow-up，导致错误继续 patch。
+  - 这个问题与 rerank 架构本身无关，属于应该独立保留的验收正确性修复。
+- 改动文件：
+  - `src/novel_flow/tools/judge_patched_chapter.py`
+  - `src/novel_flow/agents/writing_chapter_agent.py`
+  - `tests/test_writing_chapter_agent.py`
+- 已做改动：
+  - 在 `judge_patched_chapter` 和 `WritingChapterAgent` 两侧统一 recommendation 口径：
+    - 优先识别 `无需再补 / 无需补 / 可保留当前版本 / 可以结束 / 可推进` 这类 satisfied marker
+    - 只有 recommendation 明确要求继续 patch / 切到 deep 时，才视为 follow-up
+  - `WritingChapterAgent._normalize_patch_judge_result()` 改为优先尊重显式 `llm_pass` 字段；只有缺失 `llm_pass` 时，才回退到 `pass/passed`
+  - 新增回归测试：
+    - `pass=false, passed=false, llm_pass=true` 且 recommendation 为“无需再补补丁”时，归一化结果必须 `passed=true`
+    - fast mode 在 tool 已明确 satisfied 的情况下，不得错误进入第 `2` 轮 patch
+- 验证：
+  - `python -m unittest tests.test_writing_chapter_agent`
+  - `python -m unittest tests.test_schema_and_context tests.test_romance_eval_harness`
+  - `python -X utf8 - <<py` 逐文件编译 `evals/romance/*.py` 与 `tools/*.py`（共 `19` 个文件）
+  - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
+- 收益：
+  - 修掉了一个确定性的 false follow-up bug：当 patch judge 已经表达“无需再补”时，agent 不会再因为 recommendation 里含有 `"再补"` 字样而误判
+  - targeted 回归样例证明：在 satisfied recommendation 场景下，`rewrite_blocks_by_plan` 只会执行 `1` 次，不会错误进入下一轮 patch
+  - 这个修复会降低未来 requirement case 和真实运行里“明明已经 clean pass 却多走一轮 patch”的无效成本
+- 成本变化：
+  - 无新增默认 LLM 成本
+  - 对真实运行的影响是减少 false follow-up 触发的额外 patch
+- 结论：`keep`
+- 下一步：
+  - 在 follow-up 口径统一后，下一轮更适合把精力放到真正能影响 romance 体验的上游层，比如 `write_chapter_full` 的 scene pressure / heroine agency，而不是继续在 patch 层堆局部启发式

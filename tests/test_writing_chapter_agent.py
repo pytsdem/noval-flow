@@ -902,6 +902,25 @@ class WritingChapterAgentTests(unittest.TestCase):
         self.assertEqual(result["metrics"]["remaining_issue_count"], 1)
         self.assertIn("Patch judge requested follow-up", result["blocking_reasons"][-1])
 
+    def test_patch_gate_accepts_explicit_llm_pass_when_recommendation_says_no_followup(self) -> None:
+        result = WritingChapterAgent._normalize_patch_judge_result(
+            judge_result={
+                "pass": False,
+                "passed": False,
+                "llm_pass": True,
+                "remaining_issues": [],
+                "newly_introduced_issues": [],
+                "recommendation": "当前补丁已完全解决所有目标问题，无需再补补丁，可保留当前版本。",
+            },
+            patch_round=1,
+        )
+
+        self.assertTrue(result["passed"])
+        self.assertEqual(result["metrics"]["llm_pass_flag"], True)
+        self.assertEqual(result["metrics"]["remaining_issue_count"], 0)
+        self.assertEqual(result["metrics"]["introduced_issue_count"], 0)
+        self.assertEqual(result["blocking_reasons"], [])
+
     def test_fast_mode_retries_when_patch_judge_sets_pass_true_but_requests_followup(self) -> None:
         first_rewrite = "Paragraph two is less blunt, but the handoff still frays at the edge."
         second_rewrite = "Paragraph two now carries the pressure cleanly into the next beat."
@@ -968,6 +987,77 @@ class WritingChapterAgentTests(unittest.TestCase):
         self.assertEqual(registry.calls.count("rewrite_blocks_by_plan"), 2)
         self.assertEqual(block_map["ch_002.sc_001.b002"], second_rewrite)
         self.assertEqual(result.final_judge["metrics"]["remaining_issue_count"], 0)
+
+    def test_fast_mode_stops_after_patch_when_tool_marks_llm_pass_and_no_followup(self) -> None:
+        rewrite = "Paragraph two keeps the pressure public; her courtesy turns colder, and his hand tightens before he answers."
+        llm = RecordingSequenceLLM(
+            [
+                self.sanitized_context_json,
+                *self._character_mindset_jsons(),
+                self._planned_blocks_json(),
+                self._four_block_draft(),
+                self._targeted_review_fail(
+                    issue_id="I1",
+                    problem_type="flat_emotion",
+                    target_blocks=["ch_002.sc_001.b002"],
+                    patch_hint="删掉直白结论句，改成动作和称呼里的压迫。",
+                    reason="第二段的关系变化说得太直。",
+                ),
+                self._targeted_review_pass("文风和人味通过。"),
+                self._patch_plan_single_target("ch_002.sc_001.b002"),
+                rewrite,
+                json.dumps(
+                    {
+                        "pass": True,
+                        "remaining_issues": [],
+                        "newly_introduced_issues": [],
+                        "recommendation": "当前补丁已完全解决所有目标问题，无需再补补丁，可保留当前版本。",
+                    },
+                    ensure_ascii=False,
+                ),
+                self._merge_four_block_draft(rewrite),
+                json.dumps(
+                    {
+                        "chapter_id": "ch_002",
+                        "actual_events": ["He still forces a procedural opening."],
+                        "reader_now_knows": ["The register can still move the case indirectly."],
+                        "reader_now_believes": ["She is still hiding something."],
+                        "open_questions": ["Why did she pause?"],
+                        "character_states": ["He stays controlled."],
+                        "relationship_state": ["The pressure now stays public and lands cleanly."],
+                        "seeded_clues": ["She pauses once."],
+                        "locked_truths": ["Her true motive remains hidden."],
+                    },
+                    ensure_ascii=False,
+                ),
+            ]
+        )
+
+        class RecordingToolRegistry:
+            def __init__(self, inner) -> None:
+                self.inner = inner
+                self.calls: list[str] = []
+
+            def execute(self, tool_name: str, payload: dict[str, object]) -> dict[str, object]:
+                self.calls.append(tool_name)
+                return self.inner.execute(tool_name, payload)
+
+        registry = RecordingToolRegistry(ToolRegistry.build_default(llm_client=llm))
+        agent = WritingChapterAgent(llm_client=llm, tool_registry=registry)
+        result = agent.write_chapter(
+            chapter_brief=self.chapter_brief,
+            twist_designs=[self.twist],
+            story_lines=[self.line],
+            character_cards=self.characters,
+            worldbuilding={"story_engine": {"world_rules": ["The imperial verdict cannot be challenged publicly."]}},
+            actual_chapter_summaries=self.actual_summaries,
+        )
+
+        self.assertTrue(result.final_judge["passed"])
+        self.assertEqual(registry.calls.count("rewrite_blocks_by_plan"), 1)
+        stage_names = [entry.get("stage") for entry in result.stage_log]
+        self.assertNotIn("patch_round_2", stage_names)
+        self.assertNotIn("patch_round_2_no_targets", stage_names)
 
     def test_fast_mode_patch_failure_stops_and_suggests_deep(self) -> None:
         first_rewrite = "Paragraph two is shorter, but the handoff into the pause is still weak."

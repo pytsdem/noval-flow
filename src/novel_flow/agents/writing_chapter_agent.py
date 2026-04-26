@@ -1053,7 +1053,10 @@ class WritingChapterAgent(BaseAgent):
         remaining = list(judge_result.get("remaining_issues") or [])
         introduced = list(judge_result.get("newly_introduced_issues") or [])
         reasons = [str(item.get("reason") or "").strip() for item in [*remaining, *introduced] if str(item.get("reason") or "").strip()]
-        llm_pass = bool(judge_result.get("pass") or judge_result.get("passed"))
+        if "llm_pass" in judge_result:
+            llm_pass = bool(judge_result.get("llm_pass"))
+        else:
+            llm_pass = bool(judge_result.get("pass") or judge_result.get("passed"))
         recommendation = str(judge_result.get("recommendation") or "").strip()
         passed = (
             llm_pass
@@ -1079,6 +1082,20 @@ class WritingChapterAgent(BaseAgent):
     def _recommendation_requires_followup(recommendation: str) -> bool:
         normalized = str(recommendation or "").strip().lower()
         if not normalized:
+            return False
+        satisfied_markers = (
+            "无需再补",
+            "无需补",
+            "无需额外补打补丁",
+            "无需额外补丁",
+            "可保留当前版本",
+            "无需再补补丁",
+            "无需补补丁",
+            "无需补丁",
+            "可以结束",
+            "可推进",
+        )
+        if any(marker in normalized for marker in satisfied_markers):
             return False
         followup_markers = (
             "建议补",

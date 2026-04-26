@@ -41,6 +41,20 @@ class JudgePatchedChapterTool(LLMChapterTool):
         normalized = str(recommendation or "").strip().lower()
         if not normalized:
             return False
+        satisfied_markers = (
+            "无需再补",
+            "无需补",
+            "无需额外补打补丁",
+            "无需额外补丁",
+            "可保留当前版本",
+            "无需再补补丁",
+            "无需补补丁",
+            "无需补丁",
+            "可以结束",
+            "可推进",
+        )
+        if any(marker in normalized for marker in satisfied_markers):
+            return False
         followup_markers = (
             "建议补",
             "继续补",
