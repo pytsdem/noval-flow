@@ -274,3 +274,20 @@
   - beat prompt 已补回 `assistant_persona_prompt` 和 `writing_requirements_json`，不会因为切成 sequential drafting 就丢掉风格和节奏约束
 - Next step: 跑干净 `case01`，验证跨 beat 重复、`redundancy`、`romance_tension` 和 `relationship_progression`
 - Report ref: `report.md` / `Iteration 20`
+
+## Iteration 21
+
+- Date: `2026-04-28`
+- Outcome: `reject`
+- Theme: 顺序 beat 起草在 `case01` 上把 romance 主指标和 pairwise 拉起来了，但成本和重复仍未过 keep 门
+- Root layer: `sequential_beat_drafting_validation`
+- Files changed: `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
+- Success snapshot:
+  - `romance_tension 8.5 -> 9.2`
+  - `relationship_progression 8.0 -> 9.0`
+  - `hook 8.75 -> 9.65`
+  - `mind_state_consistency 8.7 -> 9.4`
+  - `pairwise_preferred_side = candidate`
+  - 但 `redundancy 8.84 -> 8.62`、`duration_seconds 1214.45 -> 1768.8`、`llm_calls 18 -> 20`，所以 comparison 仍判 `accept_change = false`
+- Next step: 收缩 beat 数和上下文体积，专打 `redundancy` 与 prompt cost，再复跑 isolated `case01`
+- Report ref: `report.md` / `Iteration 21`

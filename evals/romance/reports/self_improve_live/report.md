@@ -1103,3 +1103,57 @@
     - 人物特征是否还会跨 beat 重复命名
     - `redundancy_score` 是否下降
     - `romance_tension / relationship_progression / continuity` 是否至少不回撤
+
+## Iteration 21 - Sequential Beat Drafting Case01 Validation
+
+- Date: `2026-04-28`
+- Root layer: `sequential_beat_drafting_validation`
+- Hypothesis:
+  - 顺序 beat 起草如果真的解决了“重复铺垫 / 重复命名人物特征 / 场景切换后又从头解释”的问题，`case01` 应该在 romance 主指标上明显改善，同时不再像整章直写那样需要大面积 patch。
+- Evidence:
+  - 使用本地运行时 `DeepSeek V4-Pro`（`.env` 已正式切到 `LLM_PROVIDER=deepseek`）跑隔离 `romance_case_01_court_return`。
+  - 原始对比命令因为历史 baseline `summary.json` 含 BOM 失败，但 candidate run 已完整生成；后续用 `utf-8-sig` 清洗 baseline 与 candidate summary 后完成对比。
+  - 证据目录：
+    - `evals/romance/reports/sequential_beat_case01_deepseek/`
+    - baseline: `evals/romance/reports/candidate_beat_card_case01_clean/summary.json`
+- Files changed:
+  - `evals/romance/reports/self_improve_live/report.md`
+  - `evals/romance/reports/self_improve_live/iteration_log.md`
+- What happened:
+  - candidate 在 `case01` 上的 romance 主指标显著上升：
+    - `romance_tension_score: 8.5 -> 9.2`
+    - `relationship_progression_score: 8.0 -> 9.0`
+    - `emotional_resonance_score: 8.2 -> 9.1`
+    - `character_attraction_score: 8.25 -> 9.18`
+    - `hook_score: 8.75 -> 9.65`
+    - `continuity_score: 8.8 -> 9.0`
+    - `mind_state_consistency_score: 8.7 -> 9.4`
+  - pairwise 也明确站在 candidate：
+    - `pairwise_preferred_side = candidate`
+    - `pairwise_weighted_margin = 22.0`
+  - 执行层收益同样明显：
+    - `patch_rounds: 2 -> 1`
+    - `patched_block_ratio: 1.0 -> 0.14`
+    - `review_calls: 4 -> 3`
+  - 但仍有两项没有过 keep 门：
+    - `redundancy_score: 8.84 -> 8.62`
+    - `duration_seconds: 1214.45 -> 1768.8`
+    - `llm_calls: 18 -> 20`
+    - `generation_prompt_chars: 224749 -> 481550`
+- Verification:
+  - `python -m evals.romance.run_romance_evals --mode fast --cases-dir evals/romance/cases --cases romance_case_01_court_return --label sequential_beat_case01_deepseek`
+  - `python -m evals.romance.run_case_comparison --baseline data/_comparison_tmp/baseline_summary.json --candidate data/_comparison_tmp/candidate_summary.json`
+- Metrics / cost:
+  - 主指标平均提升明显，`core_metric_delta = +0.89`
+  - 但 `guard_metric_delta = +0.23` 仍被 comparison 拒绝，因为：
+    - `Redundancy regressed beyond the safety threshold.`
+    - `Average duration increased too much.`
+- Outcome:
+  - `reject`
+- Keep / reject:
+  - `keep` 作为方向证据：顺序 beat 起草确实更像目标文风，主 romance 指标和 pairwise 都更强
+  - `reject` 作为当前新 baseline：成本和时长涨得太多，且重复没有压下去
+- Next step:
+  - 不回退顺序 beat 架构思路，但下一轮只打两个点：
+    - 压 planner 输出的 beat 数量和每 beat 上下文体积
+    - 缩短 `[Already delivered in this chapter]`，只保留最小必要增量，专门打 `redundancy` 和 prompt cost
