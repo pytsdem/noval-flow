@@ -62,18 +62,6 @@ def build_llm_client(settings: Settings) -> LLMClient:
             exe=settings.codex_exe,
             model=settings.codex_model,
         )
-        if settings.doubao_api_key and settings.doubao_model:
-            fallback = DoubaoLLMClient(
-                api_key=settings.doubao_api_key,
-                model=settings.doubao_model,
-                base_url=settings.doubao_base_url,
-            )
-            return FallbackLLMClient(
-                primary=primary,
-                fallback=fallback,
-                primary_name="codex",
-                fallback_name="doubao",
-            )
         if settings.deepseek_api_key and settings.deepseek_model:
             fallback = OpenAILLMClient(
                 api_key=settings.deepseek_api_key,
@@ -85,6 +73,18 @@ def build_llm_client(settings: Settings) -> LLMClient:
                 fallback=fallback,
                 primary_name="codex",
                 fallback_name="deepseek",
+            )
+        if settings.doubao_api_key and settings.doubao_model:
+            fallback = DoubaoLLMClient(
+                api_key=settings.doubao_api_key,
+                model=settings.doubao_model,
+                base_url=settings.doubao_base_url,
+            )
+            return FallbackLLMClient(
+                primary=primary,
+                fallback=fallback,
+                primary_name="codex",
+                fallback_name="doubao",
             )
         if settings.openai_api_key and settings.openai_model:
             fallback = OpenAILLMClient(

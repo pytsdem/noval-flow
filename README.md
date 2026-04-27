@@ -34,7 +34,7 @@ Novel Flow 是一个面向中文长篇小说创作的多 Agent 工作台。
 主要模块：
 
 - `agents/`：Blueprint、Writer、Critic、Master、Research、Memory
-- `llm/`：`codex_cli`、`doubao`、`openai`、`factory`
+- `llm/`：`codex_cli`、`doubao`、`deepseek`、`openai`、`factory`
 - `storage/`：SQLite 持久化
 - `prompting/` 与 `prompts/`：提示词模板与渲染
 - `server.py`：Web API + 控制台页面
@@ -67,7 +67,21 @@ pip install -e .
 cp .env.example .env
 ```
 
-### 方案 A：豆包
+### 方案 A：DeepSeek（官方 OpenAI 兼容接口，默认推荐）
+
+```env
+LLM_PROVIDER=deepseek
+DEEPSEEK_API_KEY=your_deepseek_api_key
+DEEPSEEK_MODEL=deepseek-v4-pro
+DEEPSEEK_BASE_URL=https://api.deepseek.com
+```
+
+说明：
+
+- `DeepSeek-V4-Pro` 更适合少量确认性生成与复杂 case。
+- `DeepSeek-V4-Flash` 更适合日常迭代与批量自优化。
+
+### 方案 B：豆包
 
 ```env
 LLM_PROVIDER=doubao
@@ -76,7 +90,7 @@ DOUBAO_MODEL=your_endpoint_id
 DOUBAO_BASE_URL=https://ark.cn-beijing.volces.com/api/v3
 ```
 
-### 方案 B：OpenAI
+### 方案 C：OpenAI
 
 ```env
 LLM_PROVIDER=openai
@@ -84,20 +98,6 @@ OPENAI_API_KEY=your_openai_api_key
 OPENAI_MODEL=your_openai_model
 OPENAI_BASE_URL=https://api.openai.com/v1
 ```
-
-### 方案 C：DeepSeek（官方 OpenAI 兼容接口）
-
-```env
-LLM_PROVIDER=deepseek
-DEEPSEEK_API_KEY=your_deepseek_api_key
-DEEPSEEK_MODEL=deepseek-v4-flash
-DEEPSEEK_BASE_URL=https://api.deepseek.com
-```
-
-说明：
-
-- `DeepSeek-V4-Flash` 更适合日常迭代与批量自优化。
-- `DeepSeek-V4-Pro` 更适合少量确认性生成与复杂 case。
 
 ### 方案 D：Codex CLI
 

@@ -1,0 +1,202 @@
+{
+  "comparison_type": "romance_eval",
+  "baseline_label": "candidate_beat_card_case01_clean",
+  "candidate_label": "deepseek_v4_pro_case01_candidate",
+  "average_score_deltas": {
+    "romance_tension_score": {
+      "baseline": 8.5,
+      "candidate": 8.0,
+      "delta": -0.5
+    },
+    "relationship_progression_score": {
+      "baseline": 8.0,
+      "candidate": 7.5,
+      "delta": -0.5
+    },
+    "emotional_resonance_score": {
+      "baseline": 8.2,
+      "candidate": 7.0,
+      "delta": -1.2
+    },
+    "character_attraction_score": {
+      "baseline": 8.25,
+      "candidate": 7.5,
+      "delta": -0.75
+    },
+    "hook_score": {
+      "baseline": 8.75,
+      "candidate": 9.25,
+      "delta": 0.5
+    },
+    "continuity_score": {
+      "baseline": 8.8,
+      "candidate": 8.0,
+      "delta": -0.8
+    },
+    "redundancy_score": {
+      "baseline": 8.84,
+      "candidate": 7.83,
+      "delta": -1.01
+    },
+    "mind_state_consistency_score": {
+      "baseline": 8.7,
+      "candidate": 9.0,
+      "delta": 0.3
+    }
+  },
+  "case_diffs": [
+    {
+      "case_id": "romance_case_01_court_return",
+      "title": "旧案重逢的朝堂试探",
+      "baseline_verdict": "pass",
+      "candidate_verdict": "pass",
+      "score_deltas": {
+        "romance_tension_score": {
+          "baseline": 8.5,
+          "candidate": 8.0,
+          "delta": -0.5
+        },
+        "relationship_progression_score": {
+          "baseline": 8.0,
+          "candidate": 7.5,
+          "delta": -0.5
+        },
+        "emotional_resonance_score": {
+          "baseline": 8.2,
+          "candidate": 7.0,
+          "delta": -1.2
+        },
+        "character_attraction_score": {
+          "baseline": 8.25,
+          "candidate": 7.5,
+          "delta": -0.75
+        },
+        "hook_score": {
+          "baseline": 8.75,
+          "candidate": 9.25,
+          "delta": 0.5
+        },
+        "continuity_score": {
+          "baseline": 8.8,
+          "candidate": 8.0,
+          "delta": -0.8
+        },
+        "redundancy_score": {
+          "baseline": 8.84,
+          "candidate": 7.83,
+          "delta": -1.01
+        },
+        "mind_state_consistency_score": {
+          "baseline": 8.7,
+          "candidate": 9.0,
+          "delta": 0.3
+        }
+      },
+      "improved_metrics": [
+        "hook_score",
+        "mind_state_consistency_score"
+      ],
+      "declined_metrics": [
+        "romance_tension_score",
+        "relationship_progression_score",
+        "emotional_resonance_score",
+        "character_attraction_score",
+        "continuity_score",
+        "redundancy_score"
+      ],
+      "new_blockers": [],
+      "resolved_blockers": [],
+      "cost_deltas": {
+        "llm_calls": -3.0,
+        "patch_rounds": -1.0,
+        "duration_seconds": 89.06
+      }
+    }
+  ],
+  "improved_metrics": [
+    "hook_score",
+    "mind_state_consistency_score"
+  ],
+  "declined_metrics": [
+    "character_attraction_score",
+    "continuity_score",
+    "emotional_resonance_score",
+    "redundancy_score",
+    "relationship_progression_score",
+    "romance_tension_score"
+  ],
+  "blocked_case_delta": 0,
+  "new_blocker_case_ids": [],
+  "resolved_blocker_case_ids": [],
+  "pairwise_preference": {
+    "overall_preferred_side": "baseline",
+    "candidate_case_wins": 0,
+    "baseline_case_wins": 1,
+    "tied_case_count": 0,
+    "weighted_margin": -16.0,
+    "delta_threshold": 0.2,
+    "metric_weights": {
+      "romance_tension_score": 5,
+      "relationship_progression_score": 4,
+      "emotional_resonance_score": 3,
+      "character_attraction_score": 3,
+      "hook_score": 2,
+      "continuity_score": 4,
+      "mind_state_consistency_score": 4,
+      "redundancy_score": 2
+    },
+    "case_preferences": [
+      {
+        "case_id": "romance_case_01_court_return",
+        "title": "旧案重逢的朝堂试探",
+        "preferred_side": "baseline",
+        "weighted_margin": -16,
+        "candidate_wins": [
+          "hook_score",
+          "mind_state_consistency_score"
+        ],
+        "baseline_wins": [
+          "romance_tension_score",
+          "relationship_progression_score",
+          "emotional_resonance_score",
+          "character_attraction_score",
+          "continuity_score",
+          "redundancy_score"
+        ],
+        "neutral_metrics": [],
+        "guard_failures": [
+          "continuity_score",
+          "redundancy_score"
+        ],
+        "cost_flags": [
+          "duration_seconds>+20"
+        ],
+        "new_blockers": [],
+        "resolved_blockers": []
+      }
+    ]
+  },
+  "decision": {
+    "accept_change": false,
+    "core_metric_delta": -0.49,
+    "guard_metric_delta": -0.5,
+    "average_llm_calls_delta": -3.0,
+    "average_duration_seconds_delta": 89.06,
+    "blocked_case_delta": 0,
+    "new_blocker_case_ids": [],
+    "resolved_blocker_case_ids": [],
+    "pairwise_preferred_side": "baseline",
+    "pairwise_weighted_margin": -16.0,
+    "pairwise_candidate_case_wins": 0,
+    "pairwise_baseline_case_wins": 1,
+    "reasons": [
+      "Core romance objectives did not improve on average.",
+      "Continuity regressed beyond the safety threshold.",
+      "Redundancy regressed beyond the safety threshold.",
+      "Average duration increased too much.",
+      "Pairwise case preference favored the baseline."
+    ]
+  },
+  "baseline_path": "data\\_tmp_case01_clean_baseline_nobom.json",
+  "candidate_path": "data\\_tmp_case01_deepseek_candidate_nobom.json"
+}

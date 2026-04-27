@@ -231,3 +231,18 @@
   - 但 `case01` 对比 clean beat-card baseline 时，`romance_tension 8.5 -> 7.5`、`character_attraction 8.25 -> 7.45`、`hook 8.75 -> 8.5`，`pairwise` 仍站回 baseline
 - Next step: 保留 DeepSeek provider；继续 beat-card 时不要再加 schema 级主动性字段，改试局部 guidance 或 chapter payload 约束
 - Report ref: `report.md` / `Iteration 17`
+
+
+## Iteration 18
+
+- Date: `2026-04-27`
+- Outcome: `partial_keep`
+- Theme: keep `DeepSeek V4-Pro` as default runtime, reject the local relationship-beat guidance prompt tweak
+- Root layer: `provider_default_switch_and_validation`
+- Files changed: `src/novel_flow/config.py`, `src/novel_flow/llm/factory.py`, `src/novel_flow/server.py`, `evals/romance/harness.py`, `.env.example`, `README.md`, `tests/test_llm_factory.py`, plus `evals/romance/reports/deepseek_v4_pro_case01_candidate/*`
+- Success snapshot:
+  - repo defaults, `codex` fallback priority, UI model dropdown, and eval model naming all now point to `DeepSeek V4-Pro`
+  - direct UI fetch confirmed the page now exposes `DeepSeek V4-Pro` as the default model option
+  - current `DeepSeek V4-Pro` candidate improved `hook_score` to `9.25` and reduced `llm_calls` / `patch_rounds`, but still lost to the clean beat-card baseline on pairwise preference and core romance metrics
+- Next step: keep the `DeepSeek` switch, but move the next optimization target to post-draft / pre-polish execution rather than adding more planner or full-chapter relationship guidance
+- Report ref: `report.md` / `Iteration 18`

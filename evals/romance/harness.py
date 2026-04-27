@@ -1115,6 +1115,8 @@ class RomanceEvalHarness:
 
     def _effective_model_name(self) -> str:
         provider = self.settings.llm_provider.strip().lower()
+        if provider == "deepseek":
+            return self.settings.deepseek_model or ""
         if provider == "openai":
             return self.settings.openai_model or ""
         if provider == "doubao":
