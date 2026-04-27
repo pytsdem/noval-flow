@@ -1,0 +1,735 @@
+﻿[
+  {
+    "stage": "build_character_mindsets",
+    "character_mindsets": [
+      {
+        "character_id": "谢临川",
+        "character_name": "谢临川",
+        "surface_emotion": "冷硬沉肃，公事公办的疏离下藏着压迫感",
+        "core_emotion": "旧恨翻涌时被她反常的无动于衷拽出一丝困惑，失衡感愈烈",
+        "primary_goal": "在朝堂礼制约束下，借调旧案档册撬开缺口",
+        "hidden_need": "从她的反应里抓出当年背叛的破绽，或是一丝未泯的愧疚",
+        "fear": "在百官面前失控失态，既丢尽谢家颜面，也让她看穿自己的在意",
+        "attitude_to_key_others": {
+          "沈知微": "视她为钉死谢家的仇人，冷硬敌意中藏着不受控的关注，对她的驳回既愤怒又困惑"
+        },
+        "self_control_level": "high",
+        "breaking_point_hint": "若她再次用冰冷官称刻意划清界限，他会忍不住在礼制边缘抛出更尖锐的旧案细节",
+        "known_but_unspoken": "他清楚自己刚才的试探，注意力全在她攥紧的手指上，而非档册本身",
+        "misbelief": "他认定她的冷硬驳回是心虚，怕旧案翻出她当年构陷的把柄",
+        "chapter_change_hint": "他会开始怀疑旧案背后有更隐秘的势力插手，同时对沈知微的判断添上一层不确定"
+      },
+      {
+        "character_id": "沈知微",
+        "character_name": "沈知微",
+        "surface_emotion": "无波的冷硬",
+        "core_emotion": "被谢临川的试探扯出三年未散的愧意，更怕他查档触碰到门阀与皇权的死线",
+        "primary_goal": "在百官面前冷硬驳回谢临川的档册借调请求，死死守住旧案的朝堂禁忌线",
+        "hidden_need": "确认谢临川查档的真实目的，是否真要赌上性命触碰先帝旧判",
+        "fear": "怕谢临川借查档撕开旧案缺口引火烧身，更怕自己在对峙中漏出半分在意的破绽",
+        "attitude_to_key_others": {
+          "谢临川": "越怕他陷入死局，表面越要摆出毫无转圜的敌意"
+        },
+        "self_control_level": "high",
+        "breaking_point_hint": "若谢临川当众提及当年证词的某个模糊细节，她攥着档册封皮的指节会瞬间泛白",
+        "known_but_unspoken": "她知道谢临川查档的举动已经触怒旧案背后的势力，他的处境比表面更凶险",
+        "misbelief": "她以为只要在朝堂上彻底驳回他的请求，就能让他暂时放弃翻案，避开杀身之祸",
+        "chapter_change_hint": "她会意识到仅靠被动防守已经没用，旧案的灭口网已经向谢临川张开"
+      }
+    ]
+  },
+  {
+    "stage": "plan_content_blocks",
+    "skill_ids": [
+      "base_style",
+      "reveal_guard",
+      "character_integrity",
+      "time_consistency_guard"
+    ],
+    "block_count": 4,
+    "blocks": [
+      {
+        "block_id": "ch_012.sc_001.b001",
+        "chapter_id": "ch_012",
+        "block_index": 1,
+        "purpose": "Open with immediate pressure: 圣旨刚念到旧案名目，沈知微就抬起了眼。",
+        "characters": [
+          "谢临川",
+          "沈知微"
+        ],
+        "active_lines": [
+          "line_old_case"
+        ],
+        "active_twists": [
+          "twist_false_testimony"
+        ],
+        "scene_goal": "圣旨刚念到旧案名目，沈知微就抬起了眼。",
+        "must_reveal": [
+          "圣旨刚念到旧案名目，沈知微就抬起了眼。"
+        ],
+        "must_hide": [
+          "不能揭示沈知微当年是为了保谢临川才作证",
+          "不能直接洗白女主",
+          "不能让两人提前坦白"
+        ],
+        "new_value": "Readers newly feel the opening pressure as an active public trap, not as background setup.",
+        "must_not_repeat": [
+          "不要把旧案背景或人物旧怨整段复述一遍。",
+          "不要在第一块就解释对方真实动机。"
+        ],
+        "relationship_delta": "关系从未正面碰撞的悬置，转为公开场域里必须立刻接招的压迫。",
+        "clue_delta": "这一块主要落地开场压力，不额外偷跑新 clue。",
+        "must_land_in_action": [
+          "必须把压迫落在动作、礼制或身体反应上。",
+          "不能只用总结句说气氛紧张。"
+        ],
+        "emotional_tone": "让读者感到寒意、怨恨和一种不该出现却压不住的在意。",
+        "end_state": "The opening pressure lands and the focal character loses room to recover before speaking.",
+        "human_reaction_target": [
+          "Show one bodily or social restraint before the character tries to speak or act.",
+          "Let at least one witness or supporting character react like a living person under public pressure."
+        ],
+        "cost_shift": "The focal character loses face, time, or the chance to choose a gentler opening move.",
+        "reader_feeling_target": "Readers should feel the pressure closing around the character immediately.",
+        "paragraph_budget": "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长",
+        "target_chars": 420,
+        "paragraph_shape": [
+          "主动作",
+          "配角反应",
+          "人物细节/情绪泄露",
+          "礼法或环境补压"
+        ],
+        "micro_hook": "The character is forced to answer the opening pressure before they can recover their footing.",
+        "turn_type": "pressure_rise",
+        "character_anchor_line": {
+          "owner": "谢临川",
+          "form": "reaction_line",
+          "surface_function": "用一句短促反应把开场压力钉在场面上。",
+          "hidden_function": "让读者看见角色在被压住时最先守的东西是体面、控制或骨气。",
+          "must_reveal_about_character": "这个人受压时首先暴露出的不是信息，而是性格里的硬处。",
+          "must_not_do": [
+            "不要写成功能性口号。",
+            "不要立刻跟解释性旁白。",
+            "不要为了漂亮把句子抻长。"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Do not open with background summary.",
+          "Do not turn the character into a plot explainer.",
+          "Do not replace scene with pure mental recap."
+        ],
+        "character_reentry_mode": {
+          "target_character": "沈知微",
+          "identity_already_known": true,
+          "reentry_strategy": "不要重讲她是谁，用礼制、袖口、称呼和避视来让读者重新记起她。",
+          "first_signal": "Use a familiar subordinate, object, title, or power arrangement to signal re-entry immediately.",
+          "first_emotional_focus": "沈知微从单纯的旧日叛徒，变成仍然会影响谢临川判断和呼吸的人。",
+          "must_avoid": [
+            "Do not re-explain identity in narrator summary.",
+            "Do not make the re-entry feel like a fresh character introduction."
+          ]
+        },
+        "clue_reveal_mechanism": null,
+        "text": "",
+        "status": "draft",
+        "version": 1
+      },
+      {
+        "block_id": "ch_012.sc_001.b002",
+        "chapter_id": "ch_012",
+        "block_index": 2,
+        "purpose": "Push the chapter object through live pressure: 三年前军粮转运的原始档册",
+        "characters": [
+          "谢临川",
+          "沈知微"
+        ],
+        "active_lines": [
+          "line_old_case"
+        ],
+        "active_twists": [
+          "twist_false_testimony"
+        ],
+        "scene_goal": "三年前军粮转运的原始档册",
+        "must_reveal": [
+          "三年前军粮转运的原始档册",
+          "谢临川成功拿到查阅档册的口子。"
+        ],
+        "must_hide": [
+          "不能揭示沈知微当年是为了保谢临川才作证",
+          "不能直接洗白女主",
+          "不能让两人提前坦白"
+        ],
+        "new_value": "The chapter object becomes newly actionable, but only through a more expensive route.",
+        "must_not_repeat": [
+          "不要再重讲第一块已经建立的公开压迫。",
+          "不要把章目标只讲成抽象信息点。"
+        ],
+        "relationship_delta": "关系从单纯受压，转为带着程序和筹码差的试探性交锋。",
+        "clue_delta": "让章目标和小回报真正推进，但不要额外偷跑更高层真相。",
+        "must_land_in_action": [
+          "章目标必须通过对话、手续、动作选择或旁人反应被推进。",
+          "不能只写人物心里觉得机会出现了。"
+        ],
+        "emotional_tone": "他原本想当众逼她失态，最后失控边缘的人却先成了他自己。",
+        "end_state": "The characters gain a small procedural push, but the relational and practical cost rises with it.",
+        "human_reaction_target": [
+          "Show practical calculation, etiquette pressure, or controlled discomfort while the goal advances.",
+          "Make another person's reaction sharpen the cost of that progress."
+        ],
+        "cost_shift": "The focal character pays an extra social, procedural, or emotional price to move the goal forward.",
+        "reader_feeling_target": "Readers should feel that even progress arrives with humiliation, pressure, or residue.",
+        "paragraph_budget": "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长",
+        "target_chars": 520,
+        "paragraph_shape": [
+          "主动作",
+          "礼法或程序阻力",
+          "配角反应",
+          "代价落点"
+        ],
+        "micro_hook": "The procedural opening appears, but the price of taking it forward is now visible.",
+        "turn_type": "pressure_rise",
+        "character_anchor_line": {
+          "owner": "谢临川",
+          "form": "dialogue",
+          "surface_function": "在推进程序或交涉时留下一句能顶住场面的短句。",
+          "hidden_function": "通过措辞、克制或算计显出角色真正的处事方式。",
+          "must_reveal_about_character": "这个人做事时先算代价、脸面还是底线。",
+          "must_not_do": [
+            "不要只传递剧情信息。",
+            "不要把潜台词解释出来。",
+            "不要写成一整段说理。"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Do not explain why the chapter object matters in abstract summary.",
+          "Do not let dialogue become pure information transfer.",
+          "Do not let action pause for a long strategic recap."
+        ],
+        "character_reentry_mode": null,
+        "clue_reveal_mechanism": null,
+        "text": "",
+        "status": "draft",
+        "version": 1
+      },
+      {
+        "block_id": "ch_012.sc_001.b003",
+        "chapter_id": "ch_012",
+        "block_index": 3,
+        "purpose": "Reprice relationship and expose pressure naturally: 沈知微从单纯的旧日叛徒，变成仍然会影响谢临川判断和呼吸的人。",
+        "characters": [
+          "谢临川",
+          "沈知微"
+        ],
+        "active_lines": [
+          "line_old_case"
+        ],
+        "active_twists": [
+          "twist_false_testimony"
+        ],
+        "scene_goal": "谢临川从带刺的报复欲，转向更冷静也更危险的试探。",
+        "must_reveal": [
+          "谢临川从带刺的报复欲，转向更冷静也更危险的试探。",
+          "沈知微从单纯的旧日叛徒，变成仍然会影响谢临川判断和呼吸的人。",
+          "沈知微在旧案名目上停顿了一拍",
+          "她下意识避开了男主手上的旧伤"
+        ],
+        "must_hide": [
+          "不能揭示沈知微当年是为了保谢临川才作证",
+          "不能直接洗白女主",
+          "不能让两人提前坦白"
+        ],
+        "new_value": "Readers newly see the relationship reprice and at least one clue carrier, without getting a clean explanation.",
+        "must_not_repeat": [
+          "不要重复前一块已经完成的程序推进。",
+          "不要把关系变化再用作者总结句重复一遍。"
+        ],
+        "relationship_delta": "关系重新定价为更危险、更难判断，不能再停留在同一层敌意。",
+        "clue_delta": "至少有一个异常、停顿或反应被看见，但它还不能被解释清楚。",
+        "must_land_in_action": [
+          "关系变化必须落在称呼、停顿、避视、动作失手或他人先发现上。",
+          "不能只说她其实更危险了。"
+        ],
+        "emotional_tone": "他原本想当众逼她失态，最后失控边缘的人却先成了他自己。",
+        "end_state": "The relationship or emotional angle is repriced on the page and the situation becomes harder to read safely.",
+        "human_reaction_target": [
+          "At least one character should show a small failure of composure, bodily leak, silence, or self-directed sting.",
+          "If a clue appears, let somebody else notice it before the owner explains it."
+        ],
+        "cost_shift": "A clue or shift comes closer, but the relationship becomes harder to trust or manage.",
+        "reader_feeling_target": "Readers should remember the changed relationship pressure more than the raw information itself.",
+        "paragraph_budget": "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长",
+        "target_chars": 560,
+        "paragraph_shape": [
+          "关系压力",
+          "回避与失手",
+          "他人先发现",
+          "当事人回避解释"
+        ],
+        "micro_hook": "The clue is visible enough to keep the reader moving, but nobody will give it a clean explanation yet.",
+        "turn_type": "clue_shift",
+        "character_anchor_line": {
+          "owner": "谢临川",
+          "form": "narrative_judgment",
+          "surface_function": "在关系重估或线索露出时留下一个贴近视角的判断句。",
+          "hidden_function": "让读者通过这句判断看见人物的误读、偏执、心虚或本能回避。",
+          "must_reveal_about_character": "这个人看人看事时最深的一层偏向或伤口。",
+          "must_not_do": [
+            "不要变成作者总结。",
+            "不要把真相说穿。",
+            "不要马上跟着完整解释。"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Do not summarize the emotional reprice in narrator voice.",
+          "Do not repeat the same cold, pain, blood, or frost image.",
+          "Do not turn a person into a puzzle device."
+        ],
+        "character_reentry_mode": null,
+        "clue_reveal_mechanism": {
+          "clue": "沈知微在旧案名目上停顿了一拍",
+          "style": "natural_exposure",
+          "pressure_source": "殿前公开问答和旧案名目",
+          "surface_trigger": "内库档册被抬上殿时的称呼变化",
+          "first_noticer": "谢临川",
+          "owner_reaction": "沈知微立刻把情绪压回礼制里"
+        },
+        "text": "",
+        "status": "draft",
+        "version": 1
+      },
+      {
+        "block_id": "ch_012.sc_001.b004",
+        "chapter_id": "ch_012",
+        "block_index": 4,
+        "purpose": "Close on changed cost and natural pull: 他刚走出殿门，就得知负责抄录旧档的第一名书吏昨夜死了。",
+        "characters": [
+          "谢临川",
+          "沈知微"
+        ],
+        "active_lines": [
+          "line_old_case"
+        ],
+        "active_twists": [
+          "twist_false_testimony"
+        ],
+        "scene_goal": "他刚走出殿门，就得知负责抄录旧档的第一名书吏昨夜死了。",
+        "must_reveal": [
+          "他刚走出殿门，就得知负责抄录旧档的第一名书吏昨夜死了。"
+        ],
+        "must_hide": [
+          "不能揭示沈知微当年是为了保谢临川才作证",
+          "不能直接洗白女主",
+          "不能让两人提前坦白"
+        ],
+        "new_value": "The chapter exits on a changed cost and a next move that is harder to avoid than before.",
+        "must_not_repeat": [
+          "不要把前一块已经落地的关系变化再解释一遍。",
+          "不要把结尾写成预告片口播。"
+        ],
+        "relationship_delta": "结尾要让关系或局势的代价更难回头，而不是停在同一位置。",
+        "clue_delta": "若有钩子，必须让钩子来自新代价或新事实，而不是重复旧悬念。",
+        "must_land_in_action": [
+          "尾钩必须先打到身体、动作、现场变化或实际损失上。",
+          "不能只用一句解释性判断代替收尾。"
+        ],
+        "emotional_tone": "让读者感到寒意、怨恨和一种不该出现却压不住的在意。",
+        "end_state": "The chapter ends with a harder next step and a cost the character cannot step back from easily.",
+        "human_reaction_target": [
+          "Let the ending hit a body, action, breath, or practical loss before it becomes a hook.",
+          "Do not end on summary language alone."
+        ],
+        "cost_shift": "The character loses a buffer, an option, or a person they needed for the next move.",
+        "reader_feeling_target": "Readers should feel the next step has become both urgent and more expensive.",
+        "paragraph_budget": "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长",
+        "target_chars": 420,
+        "paragraph_shape": [
+          "结果落地",
+          "短反应",
+          "额外代价",
+          "尾钩或未竟动作"
+        ],
+        "micro_hook": "The chapter closes with a next move that is now harder, costlier, and impossible to ignore.",
+        "turn_type": "false_relief",
+        "character_anchor_line": {
+          "owner": "谢临川",
+          "form": "inner_thought",
+          "surface_function": "在结尾变化落地时，用一句短念头或短反应把尾钩钉住。",
+          "hidden_function": "让结尾先立住人，再立住事件。",
+          "must_reveal_about_character": "这个人真正怕失去或真正放不下的东西。",
+          "must_not_do": [
+            "不要写成预告片文案。",
+            "不要只负责抛钩子。",
+            "不要把情绪解释得太满。"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Do not force a trailer-like ending turn.",
+          "Do not flatten the closing beat into explanation.",
+          "Do not spend the final sentence only naming the hook."
+        ],
+        "character_reentry_mode": null,
+        "clue_reveal_mechanism": null,
+        "text": "",
+        "status": "draft",
+        "version": 1
+      }
+    ]
+  },
+  {
+    "stage": "write_chapter_full",
+    "block_count": 4,
+    "chapter_length": 1769
+  },
+  {
+    "stage": "review_iteration_1",
+    "mode": "fast",
+    "skill_ids": [
+      "base_style"
+    ],
+    "tool_calls": [
+      "review_structure_and_continuity",
+      "review_prose_and_humanity"
+    ],
+    "review_reports": {
+      "review_structure_and_continuity": {
+        "pass": false,
+        "issues": [
+          {
+            "issue_id": "I1",
+            "severity": "medium",
+            "problem_type": "beat_miss",
+            "reason": "未落实章节brief指定的romance seed——“她改口叫他‘谢世子’的那一刻，他竟先注意到的是她声音比三年前更冷”，文本中沈知微已使用“谢世子”称呼，但谢临川未对应出现该感官细节反应，缺失了关系重估中的细腻情感锚点。",
+            "target_blocks": [
+              "ch_012.sc_001.b003"
+            ],
+            "patch_hint": "在沈知微说出“谢世子客气，分内之事”后，添加谢临川的感官细节，比如“他指尖一顿，竟先注意到她的声音比三年前雪夜传讯时更冷，像冰碴子蹭过骨缝”，贴合原romance seed的设定。"
+          },
+          {
+            "issue_id": "I2",
+            "severity": "medium",
+            "problem_type": "character_anchor_line_violation",
+            "reason": "block3中谢临川的内心判断“她果然有问题”过于直白，违背了character anchor line要求的“短、准、留余味”且“不能把潜台词说穿”的规则，破坏了试探阶段的模糊感。",
+            "target_blocks": [
+              "ch_012.sc_001.b003"
+            ],
+            "patch_hint": "将该内心判断修改为更含蓄的短句，比如“不对劲”或“她藏着事”，保留困惑试探的情绪，不直接点明结论。"
+          },
+          {
+            "issue_id": "I3",
+            "severity": "medium",
+            "problem_type": "style_violation",
+            "reason": "block4结尾的总结性语句“前路，已经比北地的雪原更凶险，更看不清尽头”属于作者式抽象总结，违背了style risk guard中“Do not end on summary language alone”的要求，削弱了结尾的具象压迫感。",
+            "target_blocks": [
+              "ch_012.sc_001.b004"
+            ],
+            "patch_hint": "删除该抽象总结，替换为具象的身体感受或动作收尾，比如停在“雪靴底的湿意顺着脚踝往上爬，像三年前押送路上的寒意，挥之不去”之后，或添加他攥紧档册的动作，让结尾落在具体的压力载体上。"
+          }
+        ],
+        "summary": "本章整体结构符合规划的block顺序，压力 escalation 连贯，但存在三处可修补的细节问题：未落实指定的romance seed、角色内心判断过于直白、结尾使用抽象总结削弱压迫感，均可通过对应block的局部修改完成修补。",
+        "passed": false
+      },
+      "review_prose_and_humanity": {
+        "pass": false,
+        "issues": [
+          {
+            "issue_id": "I1",
+            "severity": "medium",
+            "problem_type": "repetitive imagery",
+            "reason": "多次重复沈知微“攥紧手指、指节泛白”的肢体细节，导致意象冗余，削弱了该细节的情绪暗示作用，引发读者审美疲劳。",
+            "target_blocks": [
+              "ch_012.sc_001.b002",
+              "ch_012.sc_001.b003",
+              "ch_012.sc_001.b004"
+            ],
+            "patch_hint": "保留b002中第一次出现的“指节却在不知不觉间泛了白”作为核心暗示；删除b003里“余光瞥见沈知微握着名录的手指松了半分，又立刻攥紧”、b004结尾“握着笔的手指，恐怕又攥紧了，指节泛白”的重复表述；替换为更隐蔽的细节，比如b003中改为“她的笔尖在名录页边蹭过一道淡墨痕”，b004中改为“她的背影依旧挺直，只是案上的绢纸被指尖压出了一道折痕”，保持情绪暗示但避免重复。"
+          },
+          {
+            "issue_id": "I2",
+            "severity": "medium",
+            "problem_type": "non-human supporting-character behavior",
+            "reason": "首辅张大人的反应过于单薄，仅用“咳嗽一声，正要开口打圆场”带过，未体现他作为朝堂首辅在新旧势力交锋中的权衡与犹豫，完全是推进剧情的工具人。",
+            "target_blocks": [
+              "ch_012.sc_001.b002"
+            ],
+            "patch_hint": "给张大人增加符合身份的细节，比如改为“手指捻着朝珠的动作顿了半拍，清了清嗓子正要开口，却被沈知微抢了先”，既保留他打圆场的意图，又体现他的迟疑和局势的紧迫，让配角行为更具真实感。"
+          },
+          {
+            "issue_id": "I3",
+            "severity": "medium",
+            "problem_type": "weak subtext",
+            "reason": "谢临川直白的内心独白“她果然有问题”违背了“潜台词不直接解释”的要求，破坏了人物的克制感和悬念，把本该由读者体会的情绪直接点破。",
+            "target_blocks": [
+              "ch_012.sc_001.b003"
+            ],
+            "patch_hint": "删除这句直白的内心独白，替换为身体动作细节，比如“他指尖用力掐了一下档册的硬边缘，指腹传来一阵钝疼”，通过肢体反应体现他的困惑与试探，让潜台词自然流露。"
+          },
+          {
+            "issue_id": "I4",
+            "severity": "medium",
+            "problem_type": "flat emotion",
+            "reason": "谢临川从报复欲转冷静的情绪转变仅用内心描述，未绑定具体的身体反应，显得突兀且不真实，不符合“情绪通过动作流露”的要求。",
+            "target_blocks": [
+              "ch_012.sc_001.b003"
+            ],
+            "patch_hint": "在“原本涌上来的报复欲突然淡了下去”前增加身体细节，比如“他攥着档册的指尖突然松了松，胸口那股翻涌的戾气像被殿外的雪风刮得散了些”，让情绪转变通过肢体动作落地，增强真实感。"
+          }
+        ],
+        "summary": "本章核心问题在于重复意象削弱细节张力、配角行为工具化、直白内心独白破坏悬念、情绪转变未落地到身体四个方面，需针对对应block进行局部调整，通过替换重复细节、补充配角真实反应、用动作替代直白独白等方式，增强人物行为的真实性和情绪表达的含蓄性。",
+        "passed": false
+      },
+      "judge_patched_chapter": {
+        "pass": true,
+        "remaining_issues": [],
+        "newly_introduced_issues": [],
+        "recommendation": "补丁已成功解决首辅张大人工具人化的问题，通过动作细节与措辞调整，充分体现了其在新旧势力交锋中的迟疑与权衡，增强了朝堂交锋的真实感与细节张力，无需额外补丁，可维持当前版本。",
+        "llm_pass": true,
+        "passed": true
+      }
+    },
+    "final_judge": {
+      "passed": false,
+      "blocking_reasons": [
+        "本章整体结构符合规划的block顺序，压力 escalation 连贯，但存在三处可修补的细节问题：未落实指定的romance seed、角色内心判断过于直白、结尾使用抽象总结削弱压迫感，均可通过对应block的局部修改完成修补。",
+        "本章核心问题在于重复意象削弱细节张力、配角行为工具化、直白内心独白破坏悬念、情绪转变未落地到身体四个方面，需针对对应block进行局部调整，通过替换重复细节、补充配角真实反应、用动作替代直白独白等方式，增强人物行为的真实性和情绪表达的含蓄性。"
+      ],
+      "metrics": {
+        "review_tools": 2,
+        "issue_count": 7
+      }
+    }
+  },
+  {
+    "stage": "patch_round_1",
+    "patch_round": 1,
+    "patch_plan": {
+      "patch_targets": [
+        {
+          "target_type": "block",
+          "target_id": "ch_012.sc_001.b002",
+          "problem_type": "non-human supporting-character behavior, repetitive imagery",
+          "goal": "修复首辅张大人的工具人行为，替换重复的肢体细节，增强朝堂交锋的真实感与细节张力",
+          "instructions": [
+            "将“首辅张大人咳嗽一声，正要开口打圆场”修改为“首辅张大人手指捻着朝珠的动作顿了半拍，清了清嗓子正要开口”，体现他在新旧势力交锋中的迟疑与权衡",
+            "删除“余光瞥见沈知微握着名录的手指松了半分，又立刻攥紧”，替换为“余光瞥见她的笔尖在名录页边蹭过一道淡墨痕”，避免重复“攥紧手指”的意象"
+          ],
+          "local_context_needed": [
+            "prev_block",
+            "relationship_state"
+          ],
+          "source_issue_ids": [
+            "I2",
+            "I1"
+          ]
+        },
+        {
+          "target_type": "block",
+          "target_id": "ch_012.sc_001.b003",
+          "problem_type": "beat_miss, character_anchor_line_violation, weak subtext, flat emotion, repetitive imagery",
+          "goal": "落实指定的romance seed，用动作替代直白内心独白，让情绪转变落地，保留困惑试探的模糊感",
+          "instructions": [
+            "在沈知微说出“谢世子客气，分内之事”后，添加谢临川的感官细节：“他指尖一顿，竟先注意到她的声音比三年前雪夜传讯时更冷，像冰碴子蹭过骨缝”",
+            "删除“‘她果然有问题。’他在心里想”，替换为“他指尖用力掐了一下档册的硬边缘，指腹传来一阵钝疼”，用肢体动作体现困惑与试探",
+            "在“原本涌上来的报复欲突然淡了下去”前添加：“他攥着档册的指尖突然松了松，胸口那股翻涌的戾气像被殿外的雪风刮得散了些”，让情绪转变通过动作落地"
+          ],
+          "local_context_needed": [
+            "prev_block",
+            "next_block",
+            "relationship_state"
+          ],
+          "source_issue_ids": [
+            "I1",
+            "I2",
+            "I3",
+            "I4"
+          ]
+        },
+        {
+          "target_type": "block",
+          "target_id": "ch_012.sc_001.b004",
+          "problem_type": "style_violation, repetitive imagery",
+          "goal": "删除抽象总结式结尾，替换重复的肢体细节，让结尾落在具象的压迫感上",
+          "instructions": [
+            "删除结尾句“而前路，已经比北地的雪原更凶险，更看不清尽头”",
+            "将“只是握着笔的手指，恐怕又攥紧了，指节泛白”修改为“只是案上的绢纸被指尖压出了一道深折痕”，避免重复“攥紧手指”的意象"
+          ],
+          "local_context_needed": [
+            "prev_block",
+            "relationship_state"
+          ],
+          "source_issue_ids": [
+            "I3",
+            "I1"
+          ]
+        }
+      ],
+      "unchanged_blocks": [
+        "ch_012.sc_001.b001"
+      ],
+      "global_constraints": [
+        "全程不得揭示沈知微当年是为了保护谢临川才作证的真相，不得直接洗白女主",
+        "必须维持原章节的情绪基调：寒意、怨恨、隐秘在意，保留人物试探阶段的模糊感",
+        "所有修改需贴合角色身份与当前关系状态，不得提前让人物坦白或看穿对方"
+      ]
+    },
+    "rewrite_result": {
+      "patched_blocks": [
+        {
+          "block_id": "ch_012.sc_001.b002",
+          "old_summary": "Push the chapter object through live pressure: 三年前军粮转运的原始档册",
+          "new_text": "她的语气四平八稳，连眼神都没落在他身上，只盯着手里的名录，指节却在不知不觉间泛了白。皇帝沉吟片刻，指尖敲了敲御案：“准你查阅副本，正本仍存内库。着沈女史协同办理。”\n\n谢临川躬身谢恩，余光瞥见她的笔尖在名录页边蹭过一道淡墨痕。他知道这是个勉强的口子，却也清楚，刚才当众提旧案的举动，已经把自己架在了风口浪尖——那些当年踩过谢家的人，现在恐怕已经在心里盘算着怎么堵死他的路。“臣遵旨。”他的声音平静，只有自己知道，攥着腰牌的指尖已经掐进了掌心。\n\n内库的太监抬着红木箱子进来时，尖声喊了一句“军粮案档册到”。沈知微起身去接，脚步顿了一拍，快得几乎让人察觉不到，但谢临川看见了——她的睫毛颤了一下，像被风吹动的雪絮。\n\n他上前一步，伸手去接箱子的把手，左手腕上的旧伤在朝服袖口下露了出来——那是三年前被押送时，铁链磨出来的疤，现在还留着一道淡粉色的印子。沈知微的目光刚落在那道疤上，立刻偏头避开，转向旁边的太监：“清点清楚，别漏了册页。”\n\n旁边的小太监愣了一下，显然没料到她会突然转移话题。谢临川的心里像被什么尖锐的东西刺了一下，原本涌上来的报复欲突然淡了下去，取而代之的是一种诡异的冷静——她避开的不是档册，是他的旧伤。"
+        },
+        {
+          "block_id": "ch_012.sc_001.b003",
+          "old_summary": "Reprice relationship and expose pressure naturally: 沈知微从单纯的旧日叛徒，变成仍然会影响谢临川判断和呼吸的人。",
+          "new_text": "他原本想当众逼她说出当年证词的破绽，攥着档册的指尖突然松了松，胸口那股翻涌的戾气像被殿外的雪风刮得散了些，竟就这么按住了话头。他看着她弯腰清点册页，背影挺直得像奉天殿的盘龙柱，声音依旧冷淡：“劳烦沈女史了。”\n\n沈知微头也没抬：“谢世子客气，分内之事。”\n\n他指尖一顿，竟先注意到她的声音比三年前雪夜传讯时更冷，像冰碴子蹭过骨缝。他从她的语气里听出了刻意的疏远，却也听出了一丝不易察觉的慌乱。他突然意识到，这个女人不再是三年前那个只会站在他对面指证他的叛徒，她现在是能影响他判断、甚至能左右他生死的人。他指尖用力掐了一下档册的硬边缘，指腹传来一阵钝疼，那不是以前那种笃定的恨意，而是一种带着困惑的试探。\n\n谢临川抱着档册走出奉天殿时，雪又下了起来，细碎的雪花落在他的朝服上，很快融化成水。他刚走到宫门口，副将林默就快步迎了上来，脸色凝重得像结了冰：“世子，出事了。”\n\n“说。”谢临川的脚步没停，档册的硬边角硌着他的胸口，有点钝疼。"
+        },
+        {
+          "block_id": "ch_012.sc_001.b004",
+          "old_summary": "Close on changed cost and natural pull: 他刚走出殿门，就得知负责抄录旧档的第一名书吏昨夜死了。",
+          "new_text": "“负责抄录旧档的李书吏，昨夜在寓所暴毙了。仵作验了，说是心疾发作，但……”林默顿了顿，压低声音凑到他耳边，“属下查了，李书吏昨天还在衙门加班抄档，跟同僚说笑，根本没有心疾病史。”\n\n谢临川的脚步猛地顿住，雪靴底的雪水溅在地上，留下一个深色的湿痕。他低头看着怀里的档册，指尖的寒意顺着册页传到骨头里。他原本以为拿到档册是个撬开旧案的口子，现在才知道，这是一个早就设好的陷阱——有人不想让他查下去，甚至不惜杀人灭口。\n\n“她到底想干什么？”他在心里问，既是问沈知微，也是问那些藏在暗处的人。\n\n他转身看向奉天殿的方向，隔着层层宫墙和飘雪，他仿佛能看见沈知微站在殿内的案几前，依旧低着头记档，案上的绢纸被她指尖压出了一道深折痕。\n\n雪还在下，细碎的雪粒粘在他未干的雪靴上，靴底的湿意顺着脚踝往上钻，像三年前押送路上的寒意，缠得他骨头发紧。"
+        }
+      ],
+      "merged_chapter_text": "奉天殿的金砖缝里还嵌着昨夜未化的残雪，谢临川跪在阶下，膝盖抵着冰凉的砖面，雪靴底的湿意慢慢渗进朝服裤腿。传旨太监的声音拖得冗长，念到“三年前军粮转运案”时，他听见身侧御前记档的案几上，传来一声极轻的笔锋顿住的声响。\n\n他抬眼望去，正对上沈知微骤然抬起的目光。她握着狼毫的手指紧了紧，墨汁在米黄色的绢面上晕开一小团黑，像三年前他被押出京城时，她袖口沾着的那点墨痕——也是这样，在所有人都低着头的时候，她抬了眼。\n\n旁边的中书舍人手里的茶盏磕在托子上，发出清脆的一响，立刻又低下头去。奉天殿里的寂静突然变得刺耳，连殿外卷着雪粒的风声都听得见。谢临川的喉结动了动，声音压得极低，却足够让她听见：“沈女史倒是耳尖。”\n\n传旨太监宣读完圣旨，尖声道“谢恩”。谢临川叩首起身，袍角扫过砖缝里的残雪，留下一道暗湿的痕迹。他上前一步，对着御座上的皇帝躬身：“臣谢陛下恩典。另有一事恳请陛下恩准——三年前军粮案疑点未明，臣恳请查阅内库所存的原始转运档册。”\n\n殿内顿时起了一阵骚动，首辅张大人咳嗽一声，正要开口打圆场，沈知微已经拿起案上的档册名录，声音冷得像殿外悬着的冰棱：“按大周礼制，先帝钦定结案的旧案档册，非陛下亲点不得私阅。谢世子战功虽著，亦当循规，莫要坏了朝廷规矩。”\n\n她的语气四平八稳，连眼神都没落在他身上，只盯着手里的名录，指节却在不知不觉间泛了白。皇帝沉吟片刻，指尖敲了敲御案：“准你查阅副本，正本仍存内库。着沈女史协同办理。”\n\n谢临川躬身谢恩，余光瞥见她的笔尖在名录页边蹭过一道淡墨痕。他知道这是个勉强的口子，却也清楚，刚才当众提旧案的举动，已经把自己架在了风口浪尖——那些当年踩过谢家的人，现在恐怕已经在心里盘算着怎么堵死他的路。“臣遵旨。”他的声音平静，只有自己知道，攥着腰牌的指尖已经掐进了掌心。\n\n内库的太监抬着红木箱子进来时，尖声喊了一句“军粮案档册到”。沈知微起身去接，脚步顿了一拍，快得几乎让人察觉不到，但谢临川看见了——她的睫毛颤了一下，像被风吹动的雪絮。\n\n他上前一步，伸手去接箱子的把手，左手腕上的旧伤在朝服袖口下露了出来——那是三年前被押送时，铁链磨出来的疤，现在还留着一道淡粉色的印子。沈知微的目光刚落在那道疤上，立刻偏头避开，转向旁边的太监：“清点清楚，别漏了册页。”\n\n旁边的小太监愣了一下，显然没料到她会突然转移话题。谢临川的心里像被什么尖锐的东西刺了一下，原本涌上来的报复欲突然淡了下去，取而代之的是一种诡异的冷静——她避开的不是档册，是他的旧伤。\n\n他原本想当众逼她说出当年证词的破绽，攥着档册的指尖突然松了松，胸口那股翻涌的戾气像被殿外的雪风刮得散了些，竟就这么按住了话头。他看着她弯腰清点册页，背影挺直得像奉天殿的盘龙柱，声音依旧冷淡：“劳烦沈女史了。”\n\n沈知微头也没抬：“谢世子客气，分内之事。”\n\n他指尖一顿，竟先注意到她的声音比三年前雪夜传讯时更冷，像冰碴子蹭过骨缝。他从她的语气里听出了刻意的疏远，却也听出了一丝不易察觉的慌乱。他突然意识到，这个女人不再是三年前那个只会站在他对面指证他的叛徒，她现在是能影响他判断、甚至能左右他生死的人。他指尖用力掐了一下档册的硬边缘，指腹传来一阵钝疼，那不是以前那种笃定的恨意，而是一种带着困惑的试探。\n\n谢临川抱着档册走出奉天殿时，雪又下了起来，细碎的雪花落在他的朝服上，很快融化成水。他刚走到宫门口，副将林默就快步迎了上来，脸色凝重得像结了冰：“世子，出事了。”\n\n“说。”谢临川的脚步没停，档册的硬边角硌着他的胸口，有点钝疼。\n\n“负责抄录旧档的李书吏，昨夜在寓所暴毙了。仵作验了，说是心疾发作，但……”林默顿了顿，压低声音凑到他耳边，“属下查了，李书吏昨天还在衙门加班抄档，跟同僚说笑，根本没有心疾病史。”\n\n谢临川的脚步猛地顿住，雪靴底的雪水溅在地上，留下一个深色的湿痕。他低头看着怀里的档册，指尖的寒意顺着册页传到骨头里。他原本以为拿到档册是个撬开旧案的口子，现在才知道，这是一个早就设好的陷阱——有人不想让他查下去，甚至不惜杀人灭口。\n\n“她到底想干什么？”他在心里问，既是问沈知微，也是问那些藏在暗处的人。\n\n他转身看向奉天殿的方向，隔着层层宫墙和飘雪，他仿佛能看见沈知微站在殿内的案几前，依旧低着头记档，案上的绢纸被她指尖压出了一道深折痕。\n\n雪还在下，细碎的雪粒粘在他未干的雪靴上，靴底的湿意顺着脚踝往上钻，像三年前押送路上的寒意，缠得他骨头发紧。",
+      "patch_report": [
+        {
+          "block_id": "ch_012.sc_001.b002",
+          "applied": true,
+          "notes": "已按 patch plan 重写目标 block。"
+        },
+        {
+          "block_id": "ch_012.sc_001.b003",
+          "applied": true,
+          "notes": "已按 patch plan 重写目标 block。"
+        },
+        {
+          "block_id": "ch_012.sc_001.b004",
+          "applied": true,
+          "notes": "已按 patch plan 重写目标 block。"
+        }
+      ]
+    },
+    "judge_result": {
+      "pass": false,
+      "remaining_issues": [
+        {
+          "problem_type": "non-human supporting-character behavior",
+          "target_blocks": [
+            "ch_012.sc_001.b001"
+          ],
+          "reason": "补丁计划中要求修改首辅张大人的行为以体现其在新旧势力交锋中的迟疑与权衡，但该内容位于标注为未修改的b001区块中，未完成对应修改，首辅仍呈现工具人式的打圆场行为，未增强朝堂交锋的真实感与细节张力。"
+        }
+      ],
+      "newly_introduced_issues": [],
+      "recommendation": "建议针对ch_012.sc_001.b001区块补充补丁，完成首辅张大人行为的修改，以落实原补丁目标。",
+      "llm_pass": false,
+      "passed": false
+    },
+    "final_judge": {
+      "passed": false,
+      "blocking_reasons": [
+        "补丁计划中要求修改首辅张大人的行为以体现其在新旧势力交锋中的迟疑与权衡，但该内容位于标注为未修改的b001区块中，未完成对应修改，首辅仍呈现工具人式的打圆场行为，未增强朝堂交锋的真实感与细节张力。"
+      ],
+      "metrics": {
+        "patch_round": 1,
+        "llm_pass_flag": false,
+        "remaining_issue_count": 1,
+        "introduced_issue_count": 0
+      },
+      "recommendation": "建议针对ch_012.sc_001.b001区块补充补丁，完成首辅张大人行为的修改，以落实原补丁目标。"
+    }
+  },
+  {
+    "stage": "patch_round_2",
+    "patch_round": 2,
+    "patch_plan": {
+      "patch_targets": [
+        {
+          "target_type": "block",
+          "target_id": "ch_012.sc_001.b001",
+          "problem_type": "non-human supporting-character behavior",
+          "goal": "修改首辅张大人的行为，使其体现出在新旧势力交锋中的迟疑与权衡，增强朝堂交锋的真实感与细节张力，避免工具人化的打圆场表现。",
+          "instructions": [
+            "将原句中“首辅张大人咳嗽一声，正要开口打圆场”替换为包含迟疑动作与权衡细节的描写，例如：“首辅张大人攥紧了手里的蜜蜡朝珠，指尖在珠串上滑过两圈，眼神飞快扫过御座上的皇帝与沈知微，才清了清嗓子，迟疑着开口”",
+            "补充首辅的措辞，使其既试图缓和局势，又暴露他不愿得罪任何一方的立场，例如将后续内容改为：“这……旧案乃先帝钦定，谢世子刚立军功，不如……容臣等斟酌后再奏？”，确保沈知微的打断更具针对性，凸显朝堂势力的拉扯。"
+          ],
+          "local_context_needed": [
+            "relationship_state",
+            "active_lines",
+            "current_block_text"
+          ],
+          "source_issue_ids": [
+            "remaining_1"
+          ]
+        }
+      ],
+      "unchanged_blocks": [
+        "ch_012.sc_001.b002",
+        "ch_012.sc_001.b003",
+        "ch_012.sc_001.b004"
+      ],
+      "global_constraints": [
+        "严格遵守原设定的禁止内容，不得揭示沈知微当年为保谢临川作证的真实动机，不得直接洗白女主，不得让两人提前坦白",
+        "保留谢临川从带刺报复欲转向冷静试探的人物转变轨迹，以及两人关系从敌对到互相牵制的核心变化",
+        "维持原章节的寒意、怨恨与隐秘在意的情绪基调，不得偏离",
+        "不得修改原章节的关键剧情节点，包括谢临川获得档册查阅权、结尾书吏暴毙的设定"
+      ]
+    },
+    "rewrite_result": {
+      "patched_blocks": [
+        {
+          "block_id": "ch_012.sc_001.b001",
+          "old_summary": "Open with immediate pressure: 圣旨刚念到旧案名目，沈知微就抬起了眼。",
+          "new_text": "奉天殿的金砖缝里还嵌着昨夜未化的残雪，谢临川跪在阶下，膝盖抵着冰凉的砖面，雪靴底的湿意慢慢渗进朝服裤腿。传旨太监的声音拖得冗长，念到“三年前军粮转运案”时，他听见身侧御前记档的案几上，传来一声极轻的笔锋顿住的声响。\n\n他抬眼望去，正对上沈知微骤然抬起的目光。她握着狼毫的手指紧了紧，墨汁在米黄色的绢面上晕开一小团黑，像三年前他被押出京城时，她袖口沾着的那点墨痕——也是这样，在所有人都低着头的时候，她抬了眼。\n\n旁边的中书舍人手里的茶盏磕在托子上，发出清脆的一响，立刻又低下头去。奉天殿里的寂静突然变得刺耳，连殿外卷着雪粒的风声都听得见。谢临川的喉结动了动，声音压得极低，却足够让她听见：“沈女史倒是耳尖。”\n\n传旨太监宣读完圣旨，尖声道“谢恩”。谢临川叩首起身，袍角扫过砖缝里的残雪，留下一道暗湿的痕迹。他上前一步，对着御座上的皇帝躬身：“臣谢陛下恩典。另有一事恳请陛下恩准——三年前军粮案疑点未明，臣恳请查阅内库所存的原始转运档册。”\n\n殿内顿时起了一阵骚动，文武百官交头接耳的声音像蜂群嗡鸣，又很快被御座前的沉默压下去。首辅张大人坐在班首，指节攥着腰间的蜜蜡朝珠，指尖在圆润的珠串上飞快滑过两圈——那串珠子是先帝御赐，他从不轻易摩挲。他的目光先扫过御座上皇帝微蹙的眉峰，又飞快落向沈知微案几上那支停在绢面的狼毫，喉结滚了滚才清了清嗓子，语气带着刻意的迟疑：“这……旧案乃先帝钦定，谢世子刚立军功，正是朝廷倚重之时，不如……容臣等与内库司核对档册存况后，再行奏请陛下定夺？”\n\n他的话还没说完，沈知微已经拿起案上的档册名录，声音冷得像殿外悬着的冰棱：“按大周礼制，先帝钦定结案的旧案档册，非陛下亲点不得私阅。谢世子战功虽著，亦当循规，莫要坏了朝廷规矩。”"
+        }
+      ],
+      "merged_chapter_text": "奉天殿的金砖缝里还嵌着昨夜未化的残雪，谢临川跪在阶下，膝盖抵着冰凉的砖面，雪靴底的湿意慢慢渗进朝服裤腿。传旨太监的声音拖得冗长，念到“三年前军粮转运案”时，他听见身侧御前记档的案几上，传来一声极轻的笔锋顿住的声响。\n\n他抬眼望去，正对上沈知微骤然抬起的目光。她握着狼毫的手指紧了紧，墨汁在米黄色的绢面上晕开一小团黑，像三年前他被押出京城时，她袖口沾着的那点墨痕——也是这样，在所有人都低着头的时候，她抬了眼。\n\n旁边的中书舍人手里的茶盏磕在托子上，发出清脆的一响，立刻又低下头去。奉天殿里的寂静突然变得刺耳，连殿外卷着雪粒的风声都听得见。谢临川的喉结动了动，声音压得极低，却足够让她听见：“沈女史倒是耳尖。”\n\n传旨太监宣读完圣旨，尖声道“谢恩”。谢临川叩首起身，袍角扫过砖缝里的残雪，留下一道暗湿的痕迹。他上前一步，对着御座上的皇帝躬身：“臣谢陛下恩典。另有一事恳请陛下恩准——三年前军粮案疑点未明，臣恳请查阅内库所存的原始转运档册。”\n\n殿内顿时起了一阵骚动，文武百官交头接耳的声音像蜂群嗡鸣，又很快被御座前的沉默压下去。首辅张大人坐在班首，指节攥着腰间的蜜蜡朝珠，指尖在圆润的珠串上飞快滑过两圈——那串珠子是先帝御赐，他从不轻易摩挲。他的目光先扫过御座上皇帝微蹙的眉峰，又飞快落向沈知微案几上那支停在绢面的狼毫，喉结滚了滚才清了清嗓子，语气带着刻意的迟疑：“这……旧案乃先帝钦定，谢世子刚立军功，正是朝廷倚重之时，不如……容臣等与内库司核对档册存况后，再行奏请陛下定夺？”\n\n他的话还没说完，沈知微已经拿起案上的档册名录，声音冷得像殿外悬着的冰棱：“按大周礼制，先帝钦定结案的旧案档册，非陛下亲点不得私阅。谢世子战功虽著，亦当循规，莫要坏了朝廷规矩。”\n\n她的语气四平八稳，连眼神都没落在他身上，只盯着手里的名录，指节却在不知不觉间泛了白。皇帝沉吟片刻，指尖敲了敲御案：“准你查阅副本，正本仍存内库。着沈女史协同办理。”\n\n谢临川躬身谢恩，余光瞥见她的笔尖在名录页边蹭过一道淡墨痕。他知道这是个勉强的口子，却也清楚，刚才当众提旧案的举动，已经把自己架在了风口浪尖——那些当年踩过谢家的人，现在恐怕已经在心里盘算着怎么堵死他的路。“臣遵旨。”他的声音平静，只有自己知道，攥着腰牌的指尖已经掐进了掌心。\n\n内库的太监抬着红木箱子进来时，尖声喊了一句“军粮案档册到”。沈知微起身去接，脚步顿了一拍，快得几乎让人察觉不到，但谢临川看见了——她的睫毛颤了一下，像被风吹动的雪絮。\n\n他上前一步，伸手去接箱子的把手，左手腕上的旧伤在朝服袖口下露了出来——那是三年前被押送时，铁链磨出来的疤，现在还留着一道淡粉色的印子。沈知微的目光刚落在那道疤上，立刻偏头避开，转向旁边的太监：“清点清楚，别漏了册页。”\n\n旁边的小太监愣了一下，显然没料到她会突然转移话题。谢临川的心里像被什么尖锐的东西刺了一下，原本涌上来的报复欲突然淡了下去，取而代之的是一种诡异的冷静——她避开的不是档册，是他的旧伤。\n\n他原本想当众逼她说出当年证词的破绽，攥着档册的指尖突然松了松，胸口那股翻涌的戾气像被殿外的雪风刮得散了些，竟就这么按住了话头。他看着她弯腰清点册页，背影挺直得像奉天殿的盘龙柱，声音依旧冷淡：“劳烦沈女史了。”\n\n沈知微头也没抬：“谢世子客气，分内之事。”\n\n他指尖一顿，竟先注意到她的声音比三年前雪夜传讯时更冷，像冰碴子蹭过骨缝。他从她的语气里听出了刻意的疏远，却也听出了一丝不易察觉的慌乱。他突然意识到，这个女人不再是三年前那个只会站在他对面指证他的叛徒，她现在是能影响他判断、甚至能左右他生死的人。他指尖用力掐了一下档册的硬边缘，指腹传来一阵钝疼，那不是以前那种笃定的恨意，而是一种带着困惑的试探。\n\n谢临川抱着档册走出奉天殿时，雪又下了起来，细碎的雪花落在他的朝服上，很快融化成水。他刚走到宫门口，副将林默就快步迎了上来，脸色凝重得像结了冰：“世子，出事了。”\n\n“说。”谢临川的脚步没停，档册的硬边角硌着他的胸口，有点钝疼。\n\n“负责抄录旧档的李书吏，昨夜在寓所暴毙了。仵作验了，说是心疾发作，但……”林默顿了顿，压低声音凑到他耳边，“属下查了，李书吏昨天还在衙门加班抄档，跟同僚说笑，根本没有心疾病史。”\n\n谢临川的脚步猛地顿住，雪靴底的雪水溅在地上，留下一个深色的湿痕。他低头看着怀里的档册，指尖的寒意顺着册页传到骨头里。他原本以为拿到档册是个撬开旧案的口子，现在才知道，这是一个早就设好的陷阱——有人不想让他查下去，甚至不惜杀人灭口。\n\n“她到底想干什么？”他在心里问，既是问沈知微，也是问那些藏在暗处的人。\n\n他转身看向奉天殿的方向，隔着层层宫墙和飘雪，他仿佛能看见沈知微站在殿内的案几前，依旧低着头记档，案上的绢纸被她指尖压出了一道深折痕。\n\n雪还在下，细碎的雪粒粘在他未干的雪靴上，靴底的湿意顺着脚踝往上钻，像三年前押送路上的寒意，缠得他骨头发紧。",
+      "patch_report": [
+        {
+          "block_id": "ch_012.sc_001.b001",
+          "applied": true,
+          "notes": "已按 patch plan 重写目标 block。"
+        }
+      ]
+    },
+    "judge_result": {
+      "pass": true,
+      "remaining_issues": [],
+      "newly_introduced_issues": [],
+      "recommendation": "补丁已成功解决首辅张大人工具人化的问题，通过动作细节与措辞调整，充分体现了其在新旧势力交锋中的迟疑与权衡，增强了朝堂交锋的真实感与细节张力，无需额外补丁，可维持当前版本。",
+      "llm_pass": true,
+      "passed": true
+    },
+    "final_judge": {
+      "passed": true,
+      "blocking_reasons": [],
+      "metrics": {
+        "patch_round": 2,
+        "llm_pass_flag": true,
+        "remaining_issue_count": 0,
+        "introduced_issue_count": 0
+      },
+      "recommendation": "补丁已成功解决首辅张大人工具人化的问题，通过动作细节与措辞调整，充分体现了其在新旧势力交锋中的迟疑与权衡，增强了朝堂交锋的真实感与细节张力，无需额外补丁，可维持当前版本。"
+    }
+  },
+  {
+    "stage": "final_polish",
+    "skill_ids": [
+      "base_style",
+      "chapter_finalize"
+    ],
+    "chapter_length": 1975
+  },
+  {
+    "stage": "format_adjustment",
+    "chapter_length": 1975,
+    "format_issues": []
+  },
+  {
+    "stage": "summarize_actual_chapter",
+    "chapter_id": "ch_012"
+  }
+]

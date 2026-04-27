@@ -192,3 +192,29 @@
   - 这轮先保留结构升级，不提前宣称正文指标已净提升
 - Next step: 在隔离旧实验 runtime 改动后，跑干净的 `case01` single-case 对照，验证重复控制、scene pressure 和 heroine agency
 - Report ref: `report.md` / `Iteration 14`
+
+## Iteration 15
+
+- Date: `2026-04-27`
+- Outcome: `reject`
+- Theme: clean `case01` 已出现 hook 与 pairwise 收益，但还不足以把 beat card 宣称为正文稳定提升
+- Root layer: `clean_requirement_validation`
+- Files changed: `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`, `evals/romance/reports/candidate_beat_card_case01_clean/*`
+- Success snapshot:
+  - 在隔离 worktree 里，beat card 版本对 `case01` 的 `hook_score` 从 `8.3 -> 8.75`
+  - pairwise comparison 已经偏向 candidate，但 `redundancy` 轻微回撤且 `duration +36.27s`
+- Next step: 不再反复证明 beat card 本身，改打基于 beat card 的正文执行层，优先补 heroine agency 和双人微动作
+- Report ref: `report.md` / `Iteration 15`
+
+## Iteration 16
+
+- Date: `2026-04-27`
+- Outcome: `reject`
+- Theme: 全局追加女主主动性与错位微动作纪律，反而把 beat-card baseline 的含蓄张力打散了
+- Root layer: `write_chapter_full_global_agency_prompt`
+- Files changed: `prompts/writer/write_chapter_full.txt`, `tests/test_writing_chapter_agent.py`（实验后未保留），以及 `evals/romance/reports/candidate_agency_microaction_case01/*`
+- Success snapshot:
+  - prompt 回归证明新纪律真实进入了 full chapter prompt
+  - 但 clean `case01` 对比 beat-card baseline 后，`pairwise` 明确站回 baseline，且 `redundancy / continuity / hook` 一起回撤
+- Next step: 不再给整章全局 prompt 叠“女主主动性”硬要求，改打更局部、可兑现的 beat 级职责约束
+- Report ref: `report.md` / `Iteration 16`

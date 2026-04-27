@@ -1,0 +1,196 @@
+﻿{
+  "case_id": "romance_case_01_court_return",
+  "title": "旧案重逢的朝堂试探",
+  "description": "男主流放归京，女主作为旧案证人再次与他在朝堂对上。核心看点是误读下的拉扯、克制与试探，以及结尾对下一章的强牵引。",
+  "tags": [
+    "historical",
+    "misread-love",
+    "court-pressure",
+    "high-tension-reunion"
+  ],
+  "verdict": "pass",
+  "scores": {
+    "romance_tension_score": 8.5,
+    "relationship_progression_score": 8.0,
+    "emotional_resonance_score": 8.2,
+    "character_attraction_score": 8.25,
+    "hook_score": 8.75,
+    "continuity_score": 8.8,
+    "redundancy_score": 8.84,
+    "mind_state_consistency_score": 8.7
+  },
+  "metrics": {
+    "romance_tension_score": {
+      "score": 8.5,
+      "reason": "男女主之间的拉扯、试探、回避均成立，核心张力来自旧情余韵与隐秘在意，而非单纯朝堂权谋压迫。谢临川的刻意试探（提旧案、露旧伤）与沈知微的刻意冷淡（回避眼神、压下情绪）形成精准的情绪对抗，拉扯感扎实。",
+      "evidence_summary": "谢临川故意露出三年前的铁链旧伤，沈知微立刻偏头回避；谢临川原本想当众逼问证词破绽，最终因沈知微的反常反应压下话头；沈知微用冰冷官称疏远，声音却藏着不易察觉的颤。",
+      "improvement_hint": "可增加1-2处更隐秘的肢体错位互动（如递档册时指尖擦过、视线短暂纠缠后快速错开），强化暧昧拉扯的暗流，而非仅靠语言和单一动作体现。",
+      "source": "llm"
+    },
+    "relationship_progression_score": {
+      "score": 8.0,
+      "reason": "本章关系发生明确有效变化：从谢临川单方面认定沈知微为“叛徒”的敌对状态，转向双向的困惑试探与互相牵制，关系定价明显更新。",
+      "evidence_summary": "谢临川从“想逼她失态”转为“困惑她的回避”，意识到她能牵动自己情绪、左右前路；皇帝命沈知微协同办理档册，将两人绑定在同一事件中；结尾谢临川怀疑沈知微与旧案灭口有关，关系从“恨意”转向“疑惧+在意”的复杂状态。",
+      "improvement_hint": "可让沈知微主动做出一个影响关系的选择（如故意给谢临川缺页的副本、暗中提醒他注意风险），让关系推进更具双向性，而非仅靠男主的视角变化体现。",
+      "source": "llm"
+    },
+    "emotional_resonance_score": {
+      "score": 8.2,
+      "reason": "情绪具体且有余波，全部落地在身体细节与场景感受上，无空泛抒情，能有效钩住读者的共情。",
+      "evidence_summary": "用“膝盖贴砖的冷意”“指尖掐进掌心的疼”“雪水缠骨头的僵”等身体感受承载情绪；沈知微指尖压出的绢纸折痕、谢临川攥紧档册的动作，均留下情绪余韵；结尾雪的意象呼应三年前的押送经历，强化情绪闭环。",
+      "improvement_hint": "可补充1处沈知微的视角细节（如低头记档时的呼吸停顿、指尖摩挲旧册页的动作），让情绪共振更具双向性，而非仅靠男主的感受传递。",
+      "source": "llm"
+    },
+    "character_attraction_score": {
+      "score": 8.25,
+      "reason": "由男主吸引力、女主吸引力和双人化学反应加权合成。",
+      "evidence_summary": "男主：当众冒风险提旧案，体现他的胆识与复仇决心；看到沈知微回避旧伤后压下报复欲，体现他的克制与情绪感知力；听到书吏暴毙时的短暂停顿，体现他的冷静与警觉。；女主：抢先驳回谢临川的请求，体现她的朝堂应变能力；回避旧伤、声音颤抖，暴露她的隐秘在意；指尖压出绢纸折痕，体现她的情绪失控。；双人：眼神碰撞时的短暂停顿，传递出未说出口的旧情；沈知微回避旧伤的动作，让谢临川的情绪瞬间软化；刻意疏远的官称下，藏着彼此都察觉的情绪波动。",
+      "improvement_hint": "可设计1处“错位互动”（如谢临川看沈知微时，沈知微刚好低头避开，却在他转头时偷偷看他），用更隐蔽的细节强化电流感，避免仅靠语言传递张力。",
+      "source": "hybrid"
+    },
+    "hook_score": {
+      "score": 8.75,
+      "reason": "由开篇钩子与结尾钩子均值合成。",
+      "evidence_summary": "开头：传旨念到“三年前军粮转运案”时，沈知微笔锋顿住、指尖收紧，两人立刻眼神碰撞，直接切入核心矛盾，瞬间营造出紧张感。；结尾：负责抄录旧档的书吏离奇暴毙，谢临川怀疑沈知微与幕后势力有关，转身看向奉天殿的动作留下悬念，直接推动读者想知道下一章两人的对峙与旧案的进展。",
+      "improvement_hint": "可补充1处沈知微在殿内收到书吏死讯的细微反应（如笔尖顿住、指尖收紧），让悬念更具双向性，而非仅靠男主的怀疑支撑。",
+      "source": "hybrid"
+    },
+    "continuity_score": {
+      "score": 8.8,
+      "reason": "情节、情绪、关系与人设承接自然，无突兀跳变，逻辑闭环完整。",
+      "evidence_summary": "从谢临川提旧案→沈知微驳回→皇帝批准协同办理→书吏暴毙，情节连贯；情绪从恨意→困惑→疑惧，层层递进；关系从敌对→试探→牵制，变化顺滑。",
+      "improvement_hint": "可增加1处与前章的呼应细节（如谢临川想起前章沈知微捏皱的袖口），强化章节间的承接感，让情绪延续更自然。",
+      "source": "llm"
+    },
+    "redundancy_score": {
+      "score": 8.84,
+      "reason": "以 romance judge 为主分，并用重复/anti-slop 规则信号做向下修正，不再允许规则层把坏重复或直白心理解释救高。",
+      "evidence_summary": "Judge：雪的意象贯穿始终，但每次出现都承载不同情绪（开头的冷→中间的回忆→结尾的压迫）；没有重复的内心独白，每个动作都传递新信息。；Rule：review_prose_and_humanity 命中过重复相关问题；Anti-slop：review_structure_and_continuity 命中过直白心理/解释问题；review_prose_and_humanity 命中过直白心理/解释问题",
+      "improvement_hint": "继续让情绪落在动作、停顿、对话余味和误读上，而不是补写判断句。",
+      "source": "hybrid"
+    },
+    "mind_state_consistency_score": {
+      "score": 8.7,
+      "reason": "角色行为、话语与回避方式完全符合当前心智状态，高克制人设没有过早失控，逻辑自洽。",
+      "evidence_summary": "谢临川作为隐忍的复仇者，压下报复欲符合他的“谋定而后动”心智；沈知微作为藏有秘密的御前女史，刻意冷淡、回避旧伤符合她的“自保+隐藏情绪”心智。",
+      "improvement_hint": "可将沈知微“声音颤抖”的细节改为更隐蔽的表现（如呼吸停顿、指尖微颤），更贴合她“高克制”的人设，避免情绪外露过于明显。",
+      "source": "llm"
+    }
+  },
+  "breakdowns": {
+    "male_lead_attraction": {
+      "score": 8.3,
+      "reason": "男主具备独特魅力，克制隐忍与爆发力并存，行为逻辑清晰，不是标签化的“冷酷权臣”。",
+      "evidence_summary": "当众冒风险提旧案，体现他的胆识与复仇决心；看到沈知微回避旧伤后压下报复欲，体现他的克制与情绪感知力；听到书吏暴毙时的短暂停顿，体现他的冷静与警觉。",
+      "improvement_hint": "可补充1-2处碎片化的三年前回忆细节（如沈知微当年递给他的一杯热茶、一句未说完的话），让他的“在意”更有依据，避免仅靠“旧伤”单一线索支撑动机。",
+      "source": "llm"
+    },
+    "female_lead_attraction": {
+      "score": 8.0,
+      "reason": "女主具备主体性与辨识度，刻意冷淡的背后藏着隐秘情绪，行为符合她“隐忍自保+藏有秘密”的人设，不是推动剧情的工具人。",
+      "evidence_summary": "抢先驳回谢临川的请求，体现她的朝堂应变能力；回避旧伤、声音颤抖，暴露她的隐秘在意；指尖压出绢纸折痕，体现她的情绪失控。",
+      "improvement_hint": "可给她增加1个主动布局的小动作（如故意将档册副本放在离谢临川较远的位置、暗中示意小太监注意档册完整性），强化她的主动性，而非仅靠被动回避体现情绪。",
+      "source": "llm"
+    },
+    "lead_pair_chemistry": {
+      "score": 8.4,
+      "reason": "双人同场时有明确的化学反应，潜台词充足，关系压差（旧情vs新怨、试探vs回避）清晰，不是单纯的朝堂对话。",
+      "evidence_summary": "眼神碰撞时的短暂停顿，传递出未说出口的旧情；沈知微回避旧伤的动作，让谢临川的情绪瞬间软化；刻意疏远的官称下，藏着彼此都察觉的情绪波动。",
+      "improvement_hint": "可设计1处“错位互动”（如谢临川看沈知微时，沈知微刚好低头避开，却在他转头时偷偷看他），用更隐蔽的细节强化电流感，避免仅靠语言传递张力。",
+      "source": "llm"
+    },
+    "opening_hook_score": {
+      "score": 8.5,
+      "reason": "开头快速建立关系压力与冲突，用细节瞬间抓住读者，没有冗余铺垫。",
+      "evidence_summary": "传旨念到“三年前军粮转运案”时，沈知微笔锋顿住、指尖收紧，两人立刻眼神碰撞，直接切入核心矛盾，瞬间营造出紧张感。",
+      "improvement_hint": "可直接从“军粮转运案”的字眼切入，省略部分奉天殿场景的铺垫，让冲突来得更直接，进一步缩短读者的进入时间。",
+      "source": "llm"
+    },
+    "ending_hook_score": {
+      "score": 9.0,
+      "reason": "结尾抛出明确的新危险与新疑问，直接关联男女主与核心旧案，具备极强的追读驱动力，不是平稳收束。",
+      "evidence_summary": "负责抄录旧档的书吏离奇暴毙，谢临川怀疑沈知微与幕后势力有关，转身看向奉天殿的动作留下悬念，直接推动读者想知道下一章两人的对峙与旧案的进展。",
+      "improvement_hint": "可补充1处沈知微在殿内收到书吏死讯的细微反应（如笔尖顿住、指尖收紧），让悬念更具双向性，而非仅靠男主的怀疑支撑。",
+      "source": "llm"
+    },
+    "judge_redundancy_score": {
+      "score": 9.0,
+      "reason": "无重复表达，每个细节都服务于情节推进、关系变化或情绪传递，没有冗余的情绪解释或人设标签。",
+      "evidence_summary": "雪的意象贯穿始终，但每次出现都承载不同情绪（开头的冷→中间的回忆→结尾的压迫）；没有重复的内心独白，每个动作都传递新信息。",
+      "improvement_hint": "可适当压缩朝堂流程的描述（如首辅的部分对话），给男女主的互动细节留出更多空间，进一步提升节奏。",
+      "source": "llm"
+    },
+    "rule_redundancy_score": {
+      "score": 9.1,
+      "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱。",
+      "evidence_summary": "review_prose_and_humanity 命中过重复相关问题",
+      "improvement_hint": "继续保持一段一推进，避免把同层情绪解释回头再说一遍。 同时检查 patch 是否只改字面而没改 block 功能。",
+      "source": "rule"
+    },
+    "rule_anti_slop_score": {
+      "score": 8.2,
+      "reason": "规则检测显示正文较少依赖直白心理标签或解释性总结句。",
+      "evidence_summary": "review_structure_and_continuity 命中过直白心理/解释问题；review_prose_and_humanity 命中过直白心理/解释问题",
+      "improvement_hint": "继续让情绪落在动作、停顿、对话余味和误读上，而不是补写判断句。",
+      "source": "rule"
+    }
+  },
+  "diagnosis": {
+    "strengths": [
+      "旧情拉扯与权谋结合自然，言情张力未被权谋压制，核心冲突清晰",
+      "情绪全部落地在身体细节，无空泛抒情，共情力强",
+      "角色行为符合人设，心智状态一致，逻辑自洽",
+      "结尾钩子精准，直接关联核心矛盾，追读驱动力强"
+    ],
+    "weaknesses": [
+      "女主主动性稍弱，多为被动应对，缺乏主动布局的细节",
+      "双人互动的隐秘细节不足，电流感可进一步强化",
+      "男主的旧情动机支撑稍显单薄，缺乏碎片化回忆补充"
+    ],
+    "improvement_hints": [
+      "给女主增加主动布局的小动作，如刻意控制档册传递、暗中提醒风险，强化主体性",
+      "补充1-2处男女主的错位互动细节，如视线短暂纠缠、指尖擦过档册，增强化学反应",
+      "添加男主关于三年前的碎片化回忆，让他的“在意”更有依据，动机更立体",
+      "适当压缩朝堂流程描述，聚焦男女主的互动与情绪变化，提升节奏"
+    ]
+  },
+  "hard_fail_flags": [],
+  "optimization_targets": [],
+  "cost_metrics": {
+    "llm_calls": 18,
+    "judge_llm_calls": 1,
+    "review_calls": 4,
+    "patch_rounds": 2,
+    "used_full_rewrite": false,
+    "duration_seconds": 1214.45,
+    "block_count": 4,
+    "patched_block_count": 4,
+    "patched_block_ratio": 1.0,
+    "generation_prompt_chars": 224749,
+    "judge_prompt_chars": 81448,
+    "tool_calls_by_name": {
+      "build_chapter_patch_plan": 2,
+      "build_character_mindset": 2,
+      "final_polish": 1,
+      "format_adjustment_suggestion": 1,
+      "judge_patched_chapter": 2,
+      "plan_content_blocks": 1,
+      "review_prose_and_humanity": 1,
+      "review_structure_and_continuity": 1,
+      "rewrite_blocks_by_plan": 2,
+      "summarize_actual_chapter": 1,
+      "write_chapter_full": 1
+    }
+  },
+  "artifacts": {
+    "case_dir": "evals\\romance\\reports\\candidate_beat_card_case01_clean\\romance_case_01_court_return",
+    "case_input_json": "evals\\romance\\reports\\candidate_beat_card_case01_clean\\romance_case_01_court_return\\case_input.json",
+    "writer_context_json": "evals\\romance\\reports\\candidate_beat_card_case01_clean\\romance_case_01_court_return\\writer_context.json",
+    "chapter_execution_json": "evals\\romance\\reports\\candidate_beat_card_case01_clean\\romance_case_01_court_return\\chapter_execution.json",
+    "stage_log_json": "evals\\romance\\reports\\candidate_beat_card_case01_clean\\romance_case_01_court_return\\stage_log.json",
+    "final_text_txt": "evals\\romance\\reports\\candidate_beat_card_case01_clean\\romance_case_01_court_return\\final_text.txt",
+    "judge_json": "evals\\romance\\reports\\candidate_beat_card_case01_clean\\romance_case_01_court_return\\judge.json",
+    "result_json": "evals\\romance\\reports\\candidate_beat_card_case01_clean\\romance_case_01_court_return\\result.json"
+  },
+  "errors": []
+}

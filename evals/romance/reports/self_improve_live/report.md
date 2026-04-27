@@ -689,3 +689,136 @@
 - 下一步：
   - 在隔离掉当前工作区旧实验改动后，跑一个干净的 `case01` single-case comparison，优先看重复控制、scene pressure 和 heroine agency 是否比 baseline 更稳
   - 如果 clean run 证据成立，再继续第二阶段：从“整章 obey beat”切到“按 beat 顺序写作”
+
+## Iteration 15 - reject：clean `case01` 证据转正了一部分，但还不足以把 beat card 宣称为“正文效果已稳定提升”
+
+- 主假设：
+  - `Iteration 14` 的 beat card 结构升级如果真有正文收益，那么在隔离掉当前工作区里 `rewrite_blocks_by_plan / build_chapter_patch_plan` 等未提交试验改动后，单独跑一个干净的 `case01` 应该能给出更可信的端到端证据。
+  - 重点不是再看 schema/prompt 是否生效，而是验证它是否真的改善读者体验，尤其是重复控制、hook、scene pressure 和 heroine agency。
+- 改动文件：
+  - `evals/romance/reports/self_improve_live/report.md`
+  - `evals/romance/reports/self_improve_live/iteration_log.md`
+  - `evals/romance/reports/candidate_beat_card_case01_clean/summary.json`
+  - `evals/romance/reports/candidate_beat_card_case01_clean/report.md`
+  - `evals/romance/reports/candidate_beat_card_case01_clean/comparison.md`
+  - `evals/romance/reports/candidate_beat_card_case01_clean/comparison.json`
+- 已做改动：
+  - 用 `git worktree add --detach` 创建隔离 worktree，只包含 `codex_20260423_8` 的 beat card 代码，不带当前主工作区里未纳入本轮的 patch 层试验改动。
+  - 在隔离 worktree 里显式使用 `LLM_PROVIDER=doubao` 跑单 case requirement eval：
+    - `romance_case_01_court_return`
+    - label: `candidate_beat_card_case01_clean`
+  - 跑 baseline vs candidate 的 pairwise comparison，并把本轮结果目录完整保留到 repo 的 `evals/romance/reports/candidate_beat_card_case01_clean/`
+- 验证：
+  - `LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_beat_card_case01_clean`
+  - `python -m evals.romance.run_case_comparison --baseline evals/romance/reports/smoke_doubao_case01/summary.json --candidate evals/romance/reports/candidate_beat_card_case01_clean/summary.json --output-dir evals/romance/reports/candidate_beat_card_case01_clean`
+- 指标变化（对比 `smoke_doubao_case01`）：
+  - `romance_tension_score`: `8.5 -> 8.5`
+  - `relationship_progression_score`: `8.0 -> 8.0`
+  - `emotional_resonance_score`: `8.2 -> 8.2`
+  - `character_attraction_score`: `8.25 -> 8.25`
+  - `hook_score`: `8.3 -> 8.75`
+  - `continuity_score`: `8.8 -> 8.8`
+  - `redundancy_score`: `9.0 -> 8.84`
+  - `mind_state_consistency_score`: `8.7 -> 8.7`
+- 关键证据：
+  - `run_case_comparison` 的 pairwise 结果已经偏向 candidate：
+    - `pairwise_preferred_side = candidate`
+    - `pairwise_weighted_margin = +1.0`
+    - `candidate_case_wins = 1`
+    - `baseline_case_wins = 0`
+  - 平均核心指标增量为：
+    - `core_metric_delta = +0.09`
+  - 最明显的正向收益来自 `hook_score +0.45`
+  - 但自动 acceptance 仍然给出：
+    - `accept_change = false`
+    - 原因：`Average duration increased too much.`
+  - 这次 clean run 的成本信号是：
+    - `llm_calls`: `18 -> 18`
+    - `patch_rounds`: `2 -> 2`
+    - `duration_seconds`: `1178.18 -> 1214.45`（`+36.27s`）
+  - guard 侧还留有一处轻微回撤：
+    - `redundancy_score`: `9.0 -> 8.84`
+- 结论：`reject`
+- reject 原因：
+  - 这轮 clean evidence 说明 beat card 方向是有潜力的，至少在 `case01` 上已经把 hook 拉高，并让 pairwise 偏向 candidate。
+  - 但它还不足以支撑“正文效果已稳定提升”的更强结论：
+    - 目前只有单 case 证据
+    - guard 侧仍有 `redundancy -0.16` 的小回撤
+    - 自动 comparison 仍因 `duration +36.27s` 拒绝 accept
+  - 因此更准确的判断是：
+    - `Iteration 14` 的结构升级仍然值得保留
+    - 但本轮 clean validation 还不能把它升级成“已被 requirement case 端到端完全证明”的质量 keep
+- 下一步：
+  - 不再把“beat card 本身是否有效”当成主问题反复验证
+  - 下一轮更值得直接打在 beat card 之上的正文执行层：
+    - heroine agency 的显式落地
+    - 双人错位互动的微动作
+    - 在不拉低 `redundancy` 的前提下，把 `hook` 的收益转成更稳的 `relationship_progression / attraction`
+
+## Iteration 16 - reject：全局追加“女主主动性 + 错位微动作”纪律，反而把 beat-card baseline 的优势打散了
+
+- 主假设：
+  - 既然 `Iteration 15` 说明 beat card 版本已经能把 `hook` 拉高，但还没转成更稳的 `relationship_progression / attraction`，那最直接的下一步是继续打正文执行层，而不是回到 planner。
+  - 我尝试在 `write_chapter_full` 的全局写作纪律里补两条更强的要求：
+    - 女主在场时不能只当“被看、被猜、被误读”的对象，至少要有一个会改变局势/关系/信息流向的主动动作。
+    - 男女主同场时，必须安排一个兑现 `relationship_delta` 的“错位微动作”。
+  - 期望收益是：把 `hook` 的收益转成更稳的双人化学反应、女主主体性和关系推进。
+- 候选改动文件（实验后不保留）：
+  - `prompts/writer/write_chapter_full.txt`
+  - `tests/test_writing_chapter_agent.py`
+- 实验环境：
+  - 由于当前主工作区仍有未纳入本轮的 `rewrite_blocks_by_plan / build_chapter_patch_plan` 试验改动，不能直接在脏工作区跑端到端。
+  - 本轮改用仓库内纯净快照目录 `data/_sandbox_iter16/` 作为隔离实验环境：
+    - 基线快照来自 `codex_20260423_9`
+    - 显式把 `PYTHONPATH` 指向 `data/_sandbox_iter16/src`
+    - 所有生成与评测显式使用 `LLM_PROVIDER=doubao`
+- 已做改动：
+  - 在 `writer/write_chapter_full.txt` 的 `Beat 执行纪律` 中新增：
+    - 女主在场时必须承担至少一个主动动作
+    - 男女主同场时必须有一个“错位微动作”兑现关系变化
+    - 配角、礼制、程序只能给主 pair 加压，不能抢走主 pair 的互动份额
+  - 在 `tests.test_writing_chapter_agent` 中新增 prompt 回归，确认这些新纪律真的进入 full chapter prompt
+- 验证：
+  - `python scripts/check_prompt_encoding.py`（在 `data/_sandbox_iter16/`）
+  - `python -m py_compile src/novel_flow/tools/write_chapter_full.py tests/test_writing_chapter_agent.py`（在 `data/_sandbox_iter16/`）
+  - `PYTHONPATH=data/_sandbox_iter16/src python -m unittest tests.test_writing_chapter_agent tests.test_schema_and_context tests.test_romance_eval_harness`
+  - `PYTHONPATH=data/_sandbox_iter16/src LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_agency_microaction_case01`
+  - `PYTHONPATH=data/_sandbox_iter16/src python -m evals.romance.run_case_comparison --baseline evals/romance/reports/candidate_beat_card_case01_clean/summary.json --candidate evals/romance/reports/candidate_agency_microaction_case01/summary.json --output-dir evals/romance/reports/candidate_agency_microaction_case01`
+- 指标变化（对比 clean beat-card baseline `candidate_beat_card_case01_clean`）：
+  - `romance_tension_score`: `8.5 -> 7.5`
+  - `relationship_progression_score`: `8.0 -> 7.8`
+  - `emotional_resonance_score`: `8.2 -> 8.0`
+  - `character_attraction_score`: `8.25 -> 7.87`
+  - `hook_score`: `8.75 -> 8.3`
+  - `continuity_score`: `8.8 -> 8.3`
+  - `redundancy_score`: `8.84 -> 7.2`
+  - `mind_state_consistency_score`: `8.7 -> 8.4`
+- 关键证据：
+  - `run_case_comparison` 结论非常明确：
+    - `accept_change = false`
+    - `core_metric_delta = -0.45`
+    - `guard_metric_delta = -0.81`
+    - `pairwise_preferred_side = baseline`
+    - `pairwise_weighted_margin = -28.0`
+  - 成本也明显变差：
+    - `llm_calls`: `18 -> 20`
+    - `duration_seconds`: `1214.45 -> 1381.82`
+    - `generation_prompt_chars`: `224749 -> 255214`
+  - 质性失败点很集中：
+    - judge 仍然指出“女主主动性不足，多为被动应对”
+    - judge 仍然指出“双人同场的化学反应偏隐晦，缺乏直接情绪碰撞点”
+    - 同时新版本多出了明显的解释性重复，`redundancy_score` 直接掉到 `7.2`
+  - 说明这类“全局追加更强纪律”的 prompt 不是没被模型看见，而是被执行成了更多的显式解释与重复暗示，反而把上一轮 beat-card baseline 已有的含蓄张力打散了
+- 结论：`reject`
+- reject 原因：
+  - 这次不是“没触发到 prompt”，而是“prompt 触发了，但触发方式不对”。
+  - 全局层的“女主主动性 / 错位微动作”硬要求，被模型执行成了更重的说明性文本和更明显的提示性动作，结果：
+    - 没真正补出女主的有效主动选择
+    - 没真正补出更强的双人电流
+    - 反而把 `hook / continuity / redundancy / tension` 一起拖下去
+  - 这说明下一轮不该继续给 `write_chapter_full` 叠全局纪律，而应转向更局部、可兑现的约束位置
+- 下一步：
+  - 不再在全局 `write_chapter_full` prompt 上直接加“女主主动性 / 微动作”硬要求
+  - 更值得尝试的下一个根因层是：
+    - 把“女主主动动作”前移到 beat 规划或 chapter payload，让它成为具体 beat 的职责，而不是整章泛要求
+    - 或者只在 `relationship_delta` 为关键 beat 时局部约束一个可兑现的互动动作，而不是要求每个同场 beat 都补“微动作”

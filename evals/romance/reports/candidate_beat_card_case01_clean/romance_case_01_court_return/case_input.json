@@ -1,0 +1,341 @@
+﻿{
+  "case_id": "romance_case_01_court_return",
+  "title": "旧案重逢的朝堂试探",
+  "description": "男主流放归京，女主作为旧案证人再次与他在朝堂对上。核心看点是误读下的拉扯、克制与试探，以及结尾对下一章的强牵引。",
+  "tags": [
+    "historical",
+    "misread-love",
+    "court-pressure",
+    "high-tension-reunion"
+  ],
+  "premise": {
+    "title": "折雪入京",
+    "high_concept": "被流放三年的定北王世子回京翻案，却发现当年在御前指证他的女史仍站在权力中心。",
+    "theme_statement": "旧恨与旧情都不会在权力场里原样归来。",
+    "story_summary": "谢临川以军功换来回京资格，试图从旧案的缝里撬开一道口子；沈知微当年亲手把他送上流放之路，如今却在一次次回避里暴露出更危险的真相。",
+    "genre": "historical romance",
+    "target_style": "克制、压迫、潜台词强的古言言情",
+    "emotional_hook": "旧爱旧恨同场，谁都不能先露底。",
+    "central_conflict": "他以为她背叛了自己，她却在所有人面前继续站在他的对立面。",
+    "core_hook": "流放归来的男人与曾经亲手毁掉他的女人在朝堂重逢。",
+    "escalation_path": [
+      "朝堂公开重逢",
+      "旧案线索被重新触碰",
+      "敌意里开始夹带更复杂的在意"
+    ],
+    "twist_blueprint": [
+      "读者前期认定女主背叛男主",
+      "女主所有回避都既像心虚又像保护"
+    ],
+    "ending_payoff": "两人的关系会从纯粹仇恨被重新定价为高危互相牵制。",
+    "selling_points": [
+      "高压重逢",
+      "误读型言情",
+      "朝堂规训下的情感拉扯"
+    ]
+  },
+  "chapter_brief": {
+    "chapter_id": "ch_012",
+    "title": "雪靴未干",
+    "chapter_type": "relationship_pressure",
+    "active_lines": [
+      "line_old_case"
+    ],
+    "active_twists": [
+      "twist_false_testimony"
+    ],
+    "summary": "谢临川在朝堂上借调档册试探旧案，却被沈知微以更冷的方式顶回去；两人的敌意第一次出现了无法忽视的停顿。",
+    "incoming_hook": "昨夜他带着北地军功归京，今晨奉诏入殿。",
+    "opening_hook": "圣旨刚念到旧案名目，沈知微就抬起了眼。",
+    "core_scene": "男主必须在文武百官面前接住羞辱与机会，女主则要在众目睽睽之下继续扮演站在他对面的人。",
+    "chapter_object": "三年前军粮转运的原始档册",
+    "reader_emotion": "让读者感到寒意、怨恨和一种不该出现却压不住的在意。",
+    "reader_belief": "读者仍应相信沈知微当年背叛过谢临川，但要开始怀疑事情没那么简单。",
+    "allowed_info": [
+      "谢临川回京并未得到真正平反",
+      "旧案原始档册仍在内库",
+      "沈知微对旧案名目有本能反应"
+    ],
+    "allowed_clues": [
+      "沈知微在旧案名目上停顿了一拍",
+      "她下意识避开了男主手上的旧伤",
+      "提到证词时她换了一个更疏远的称呼"
+    ],
+    "forbidden": [
+      "不能揭示沈知微当年是为了保谢临川才作证",
+      "不能直接洗白女主",
+      "不能让两人提前坦白"
+    ],
+    "world_limit": "殿前无人可以公开推翻先帝旧判，谢临川也不能当场逼问女主。",
+    "character_focus": [
+      "谢临川",
+      "沈知微"
+    ],
+    "character_shift": "谢临川从带刺的报复欲，转向更冷静也更危险的试探。",
+    "relationship_reprice": "沈知微从单纯的旧日叛徒，变成仍然会影响谢临川判断和呼吸的人。",
+    "emotional_turn": "他原本想当众逼她失态，最后失控边缘的人却先成了他自己。",
+    "backstory_trigger": "",
+    "scene_engine": "court_pressure",
+    "clue_reveal_mechanism": {
+      "style": "natural_exposure",
+      "pressure_source": "殿前公开问答和旧案名目",
+      "surface_trigger": "内库档册被抬上殿时的称呼变化",
+      "first_noticer": "谢临川",
+      "owner_reaction": "沈知微立刻把情绪压回礼制里"
+    },
+    "character_reentry_focus": {
+      "沈知微": "不要重讲她是谁，用礼制、袖口、称呼和避视来让读者重新记起她。"
+    },
+    "human_pain_anchor": "谢临川鞋底的雪水还没干，就得跪在曾经判他死路的人面前接旨。",
+    "romance_seed": "她改口叫他“谢世子”的那一刻，他竟先注意到的是她声音比三年前更冷。",
+    "small_payoff": "谢临川成功拿到查阅档册的口子。",
+    "ending_pull": "他刚走出殿门，就得知负责抄录旧档的第一名书吏昨夜死了。",
+    "info_budget": "target=3200-4200; new clues<=2; relationship shift must land on page"
+  },
+  "twist_designs": [
+    {
+      "twist_id": "twist_false_testimony",
+      "title": "她的证词不是真正的背叛",
+      "false_belief": "沈知微为了自保，把谢临川送去了流放地。",
+      "truth": "她当年在更大的灭门局里只能用伪证换谢临川一线生机。",
+      "reader_alignment": "前期让读者坚定站在谢临川这边，同时不断被女主的反常牵动。",
+      "seed_from": "ch_003",
+      "reveal_at": "ch_046",
+      "allowed_clues": [
+        "她提到旧案时会下意识收紧手指",
+        "她从不正面回应当年证词细节",
+        "她会在男主真正受伤时本能偏头"
+      ],
+      "forbidden_reveals": [
+        "不能直接说她是为了救男主",
+        "不能解释幕后主谋",
+        "不能让男主此章看穿她"
+      ],
+      "pov_lock": "在揭晓前不能给出她的完整真实动机独白。",
+      "related_characters": [
+        "沈知微",
+        "谢临川"
+      ],
+      "payoff_effect": "真相揭晓后，所有试探和敌意都会被重新解释。"
+    }
+  ],
+  "story_lines": [
+    {
+      "line_id": "line_old_case",
+      "name": "军粮旧案",
+      "line_type": "mystery",
+      "visibility": "visible",
+      "core_question": "谢临川要怎么在不能翻案的朝局里先撬出旧案的缺口？",
+      "reader_hook_mode": "pressure",
+      "start_state": "他只能以军功换回一个回京资格，仍然碰不到旧案核心证据。",
+      "midpoint_shift": "读者逐渐意识到女主知道的比她能说出来的多得多。",
+      "end_state": "旧案的真实因果会与两人的感情线一起反噬回来。",
+      "carried_twists": [
+        "twist_false_testimony"
+      ],
+      "line_rules": [
+        "前中期只能通过礼制、档册、口供和旁人反应挤出信息",
+        "每次推进都必须同时重估两人的关系"
+      ]
+    }
+  ],
+  "character_cards": [
+    {
+      "name": "谢临川",
+      "role": "定北王世子",
+      "social_background": "功勋世家嫡子，曾被朝局当作替罪羊流放北地",
+      "education_background": "",
+      "occupation": "归京述职的前锋统领",
+      "appearance": "肩背仍带北地风雪磨出来的锋利，手背旧伤未褪",
+      "personality": "自控极强，越受压越显得冷，话少但攻击性准确",
+      "career": "",
+      "initial_state": "坚信沈知微背叛了自己，却又对她的一举一动过分敏感",
+      "motivation": "借回京机会撬开旧案，同时逼出她到底在怕什么",
+      "behavior_pattern": "说话常故意留半句，逼对方先露反应",
+      "arc": "从单向报复走向危险的重新靠近",
+      "relationships": "与沈知微是旧识旧恨，仍有没断干净的牵引",
+      "development_axes": []
+    },
+    {
+      "name": "沈知微",
+      "role": "御前女史",
+      "social_background": "寒门出身，靠极高的识礼与记忆力爬到御前",
+      "education_background": "",
+      "occupation": "掌诏记档的女史",
+      "appearance": "永远收得极稳的袖口和近乎没有破绽的仪态",
+      "personality": "克制、聪明、极能忍，越动情时越像什么都没感觉",
+      "career": "",
+      "initial_state": "必须在所有人眼里继续扮演曾经作证的人",
+      "motivation": "压住旧案外泄速度，也压住自己对谢临川并未死透的在意",
+      "behavior_pattern": "真正心乱时反而更讲规矩、更冷",
+      "arc": "从纯防守慢慢被逼到不得不主动改写局面",
+      "relationships": "与谢临川之间仍残留旧情和更深的愧意",
+      "development_axes": []
+    }
+  ],
+  "worldbuilding": {
+    "story_engine": {
+      "world_rules": [
+        "殿前礼制严格，所有私人情绪都必须包在规矩里。",
+        "旧案若牵涉先帝旧判，任何人都不能在朝堂上直言翻案。",
+        "御前记档女史不能离席失态，否则等同向所有人认罪。"
+      ],
+      "power_structure": "皇权压顶，内阁与宗室互相牵制，旧案背后有更深的门阀利益。",
+      "objective_conditions": [
+        "谢临川有军功但无实权",
+        "沈知微握着档册入口却站在最危险的位置"
+      ],
+      "hook_strategy": "每章都要让关系和旧案至少有一处同时前进。 "
+    },
+    "event_timeline": [
+      {
+        "event_id": "evt_001",
+        "title": "谢临川被押送离京",
+        "time_label": "三年前冬",
+        "description": "军粮旧案暴发后，谢家被褫夺兵权，谢临川被流放北地。",
+        "trigger": "御前证词与内库账本同时指向谢家。",
+        "consequence": "谢临川与沈知微彻底决裂。",
+        "affected_characters": [
+          "谢临川",
+          "沈知微"
+        ]
+      },
+      {
+        "event_id": "evt_002",
+        "title": "谢临川战功归京",
+        "time_label": "当下",
+        "description": "北地战事平定后，他以军功换得回京述职资格。",
+        "trigger": "边关大捷",
+        "consequence": "旧案被迫再次浮出水面。",
+        "affected_characters": [
+          "谢临川",
+          "沈知微"
+        ]
+      }
+    ]
+  },
+  "character_milestones": [
+    {
+      "character_name": "谢临川",
+      "milestone_list": [
+        "从活下来到想翻案",
+        "从想逼她认罪到想看穿她为什么不敢认"
+      ],
+      "axes": [
+        "复仇",
+        "情感误读"
+      ]
+    },
+    {
+      "character_name": "沈知微",
+      "milestone_list": [
+        "从独自承担旧案后果到被迫重新面对谢临川",
+        "从绝对回避到不得不留下越来越多破绽"
+      ],
+      "axes": [
+        "自保",
+        "情感压抑"
+      ]
+    }
+  ],
+  "actual_chapter_summaries": [
+    {
+      "chapter_id": "ch_011",
+      "actual_events": [
+        "谢临川带着北地军功回到京城",
+        "宫中传旨，命他次日入殿谢恩"
+      ],
+      "reader_now_knows": [
+        "谢临川并未得到真正平反",
+        "沈知微仍在御前做记档女史"
+      ],
+      "reader_now_believes": [
+        "沈知微当年确实背叛过谢临川"
+      ],
+      "open_questions": [
+        "她当年为什么连一句解释都没有",
+        "谢临川回京后会不会先找她算账"
+      ],
+      "character_states": [
+        "谢临川压着火回京",
+        "沈知微提前得知他要入殿，整夜未眠"
+      ],
+      "relationship_state": [
+        "两人尚未正式碰面，但彼此都被这场重逢拖住了呼吸"
+      ],
+      "seeded_clues": [
+        "沈知微听到谢临川名字时捏皱了袖口"
+      ],
+      "locked_truths": [
+        "女主真实动机仍被严密锁住"
+      ],
+      "time_state": {
+        "chapter_end_time": "归京次日清晨",
+        "continuity_note": "重逢前的紧绷感已经拉满"
+      }
+    }
+  ],
+  "prior_character_mindsets": [
+    {
+      "character_id": "谢临川",
+      "character_name": "谢临川",
+      "surface_emotion": "冷硬戒备",
+      "core_emotion": "被旧情和旧恨同时牵住的失衡",
+      "primary_goal": "在不露底的前提下拿到旧案入口",
+      "hidden_need": "确认她到底有没有一刻后悔过",
+      "fear": "一旦先失控，就会在她面前再次落到下风",
+      "attitude_to_key_others": {
+        "沈知微": "认定她危险又不可忽视，恨意里带着不肯承认的在意"
+      },
+      "self_control_level": "high",
+      "breaking_point_hint": "若她继续用最疏远的称呼对他，他会在礼制边缘露出攻击性",
+      "known_but_unspoken": "他清楚自己回京第一件想确认的不是案子，而是她看他的眼神有没有变",
+      "misbelief": "他以为她现在的冷静全是心虚和算计",
+      "chapter_change_hint": "他会开始意识到自己对她的判断并不稳定"
+    },
+    {
+      "character_id": "沈知微",
+      "character_name": "沈知微",
+      "surface_emotion": "过度平静",
+      "core_emotion": "怕他再被拖进更大的局，也怕自己一松口就毁了他最后一点退路",
+      "primary_goal": "守住礼制和旧案边界，不让他在朝堂上直接撞死",
+      "hidden_need": "确认他还愿不愿意活着离开这座城",
+      "fear": "一旦露出破绽，他会追着那点破绽把自己逼到绝境",
+      "attitude_to_key_others": {
+        "谢临川": "越想护住他，表面越只能更冷"
+      },
+      "self_control_level": "high",
+      "breaking_point_hint": "若他拿自己的旧伤逼问当年，她会出现极轻的呼吸失控",
+      "known_but_unspoken": "她知道有人正盯着谢临川回京后的每一步",
+      "misbelief": "她以为只要自己继续像当年一样狠，谢临川就不会再靠近真相",
+      "chapter_change_hint": "她会发现仅靠回避已经不够"
+    }
+  ],
+  "goals": {
+    "chapter_goal": "在朝堂公开场合里让旧案推进一小步，并把男女主重逢的敌意写成高压拉扯。",
+    "emotional_goal": "让读者感到冷、疼、克制和说不出口的在意同时存在。",
+    "relationship_goal": "把两人的关系从单纯仇敌推进到高危互相牵制。",
+    "hook_goal": "开头立刻重逢，结尾给出更大的旧案危险。",
+    "continuation_drive": "让读者必须想看谢临川会不会追着书吏之死继续查下去。"
+  },
+  "context_overrides": {
+    "assistant_persona_prompt": "你在写高张力古言言情章节。关系推进优先于漂亮句子，潜台词优先于直白告白。",
+    "writing_requirements": {
+      "target_words": "3200-4200",
+      "pace": "开头 400 字内建立重逢压力；中段至少一次关系重估；结尾必须留下更硬的追读点",
+      "guardrails": [
+        "不要把沈知微写成纯工具人或纯冷脸标签",
+        "不要把谢临川写成只会放狠话的模板男主",
+        "不要重复解释同一种恨意"
+      ]
+    },
+    "reference_pack": "参考方向：高压朝堂重逢、误读型旧情、礼制压住情绪但压不住细节。",
+    "previous_chapter_full_text": "城门雪夜里，谢临川勒马停住，望见宫城灯火时没有下马。副将问他先进驿馆还是先递牌子，他只说先换朝服。另一边，沈知微在灯下重抄次日的谢恩流程，第三次写错了“定北”二字。",
+    "completed_chapter_summary_bundle": "",
+    "chapter_payload_text": "",
+    "timeline_anchor_facts_text": "",
+    "relevant_world_rules_text": "",
+    "scene_character_context_text": "[Scene character context]\n\n谢临川\n- 表面目标：在谢恩时争到碰旧案档册的口子。\n- 潜在矛盾：越想逼沈知微露破绽，越容易先被她牵动。\n\n沈知微\n- 表面目标：按礼完成记档，不让任何人看出她对旧案的异常反应。\n- 潜在矛盾：她越想压住在意，越容易把礼数用得过冷。",
+    "relationship_state_text": "[Relationship state]\n\n谢临川 -> 沈知微\n- 当前公开关系：旧案中的指证者与被指证者，关系冰冷敌对。\n- 暗流：恨意很真，在意也没有死。\n- 本章目标：把关系推进到“互相牵制、互相试探”，而不是单向辱骂。\n- 禁止捷径：不要让任何一方提前说破旧情或真相。"
+  }
+}
