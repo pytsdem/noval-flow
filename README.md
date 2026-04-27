@@ -85,7 +85,21 @@ OPENAI_MODEL=your_openai_model
 OPENAI_BASE_URL=https://api.openai.com/v1
 ```
 
-### 方案 C：Codex CLI
+### 方案 C：DeepSeek（官方 OpenAI 兼容接口）
+
+```env
+LLM_PROVIDER=deepseek
+DEEPSEEK_API_KEY=your_deepseek_api_key
+DEEPSEEK_MODEL=deepseek-v4-flash
+DEEPSEEK_BASE_URL=https://api.deepseek.com
+```
+
+说明：
+
+- `DeepSeek-V4-Flash` 更适合日常迭代与批量自优化。
+- `DeepSeek-V4-Pro` 更适合少量确认性生成与复杂 case。
+
+### 方案 D：Codex CLI
 
 ```env
 LLM_PROVIDER=codex
@@ -95,7 +109,7 @@ CODEX_MODEL=your_codex_model_optional
 
 说明：
 
-- `codex` 模式支持回退：若配置了豆包或 OpenAI，会在 CodexCLI 失败时自动 fallback。
+- `codex` 模式支持回退：若配置了豆包、DeepSeek 或 OpenAI，会在 CodexCLI 失败时自动 fallback。
 - 目前 `.env.example` 未列出 `CODEX_EXE/CODEX_MODEL`，可手动添加。
 
 ## 启动服务
@@ -179,4 +193,3 @@ python -m py_compile src/novel_flow/server.py src/novel_flow/agents/blueprint.py
 如需查看当前命令行参数定义，可看：
 
 - `src/novel_flow/cli.py`
-

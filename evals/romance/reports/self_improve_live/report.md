@@ -822,3 +822,70 @@
   - 更值得尝试的下一个根因层是：
     - 把“女主主动动作”前移到 beat 规划或 chapter payload，让它成为具体 beat 的职责，而不是整章泛要求
     - 或者只在 `relationship_delta` 为关键 beat 时局部约束一个可兑现的互动动作，而不是要求每个同场 beat 都补“微动作”
+
+## Iteration 17 - reject：把 heroine agency 前移成 beat 级“主动方 / 主动动作”字段，仍没换来 core romance 提升；仅保留 DeepSeek provider 支持
+
+- 主假设：
+  - `Iteration 16` 已经证明，全局 `write_chapter_full` prompt 叠“女主主动性 / 错位微动作”会把含蓄张力写成解释性文本。
+  - 因此这轮把假设前移到 planner：不给整章加泛化纪律，而是让具体 beat 明确回答“谁主动改变这个 beat”“这个主动动作是什么”，看能否把女主主体性转成更稳的 `relationship_progression / attraction / tension`。
+  - 同时，为了后续把“模型收益”和“架构收益”拆开，本轮顺手把 `DeepSeek V4` 作为显式 provider 接进仓库，但不把它混进这次质量判定。
+- 保留改动（infra）：
+  - `src/novel_flow/config.py`
+  - `src/novel_flow/llm/factory.py`
+  - `.env.example`
+  - `README.md`
+  - `tests/test_llm_factory.py`
+  - 新增了独立 `deepseek` provider，可配置 `DEEPSEEK_API_KEY / DEEPSEEK_MODEL / DEEPSEEK_BASE_URL`，也支持作为 `codex` fallback。
+- 候选改动（实验后回退）：
+  - `src/novel_flow/models/schemas.py`
+  - `src/novel_flow/services/chapter_tool_payloads.py`
+  - `src/novel_flow/tools/plan_content_blocks.py`
+  - `prompts/writer/plan_content_blocks.txt`
+  - `prompts/writer/write_chapter_full.txt`
+  - `tests/test_schema_and_context.py`
+  - `tests/test_writing_chapter_agent.py`
+- 隔离环境：
+  - 使用 `data/_sandbox_iter17/` 作为干净快照环境，基于当前 `HEAD` 导出后，仅覆盖本轮候选文件。
+  - 所有评测显式使用 `PYTHONPATH=data/_sandbox_iter17/src` 与 `LLM_PROVIDER=doubao`，避免主工作区里未纳入本轮的 `rewrite_blocks_by_plan / build_chapter_patch_plan` 脏改动污染结论。
+- 验证：
+  - `python scripts/check_prompt_encoding.py`
+  - `python -m unittest tests.test_llm_factory tests.test_schema_and_context tests.test_writing_chapter_agent tests.test_romance_eval_harness`
+  - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
+  - `python -m py_compile src/novel_flow/config.py src/novel_flow/llm/factory.py tests/test_llm_factory.py`
+  - `python -m py_compile evals/romance/*.py tools/*.py`
+  - `PYTHONPATH=data/_sandbox_iter17/src LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_beat_card_initiative_case01`
+  - `PYTHONPATH=data/_sandbox_iter17/src python -X utf8 -m evals.romance.run_case_comparison --baseline data/_tmp_case01_clean_baseline.json --candidate data/_tmp_case01_initiative_candidate.json --output-dir evals/romance/reports/candidate_beat_card_initiative_case01`
+- 指标变化（对比 clean beat-card baseline `candidate_beat_card_case01_clean`）：
+  - `romance_tension_score`: `8.5 -> 7.5`
+  - `relationship_progression_score`: `8.0 -> 8.0`
+  - `emotional_resonance_score`: `8.2 -> 8.0`
+  - `character_attraction_score`: `8.25 -> 7.45`
+  - `hook_score`: `8.75 -> 8.5`
+  - `continuity_score`: `8.8 -> 9.0`
+  - `redundancy_score`: `8.84 -> 8.84`
+  - `mind_state_consistency_score`: `8.7 -> 9.0`
+- 关键证据：
+  - `run_case_comparison` 结论：
+    - `accept_change = false`
+    - `core_metric_delta = -0.45`
+    - `guard_metric_delta = +0.17`
+    - `average_llm_calls_delta = -2.0`
+    - `average_duration_seconds_delta = -18.53`
+    - `pairwise_preferred_side = baseline`
+    - `pairwise_weighted_margin = -5.0`
+  - 这说明 beat 级“主动方 / 主动动作”字段确实提高了控制感和守卫侧信号，但没有把它转成更强的 romance 核心体验。
+  - 质性上，候选版本更像“谁做了一个明确动作”的结构化执行，而不是更强的双人电流；女主主体性并没有自然转成更高的吸引力或张力。
+- 结论：`reject`
+- reject 原因：
+  - 这轮不是没生效，而是“生效方向不对”。
+  - 把主动性显式编码成 beat 顶层字段后，planner 更容易产出明确可执行动作，但正文随之更偏向程序推进和职责交代，没有把上一轮 beat-card baseline 的含蓄关系张力继续抬高。
+  - 在 `case01` 上，连续性和心智一致性更好，但 `tension / attraction / hook` 退步，按项目目标排序不能接受。
+- 清理：
+  - 实验后已回退主代码中的 beat 级 `initiative_owner / initiative_move` 改动。
+  - `data/_sandbox_iter17/` 与比较用的临时无 BOM summary 副本已删除。
+- 下一步：
+  - 保留 `DeepSeek` provider 支持，用它做后续模型 A/B，但不要把模型切换和 beat-card 架构收益混判。
+  - beat-card 方向先不再新增 schema 顶层字段。
+  - 更值得尝试的是：
+    - 只在 `plan_content_blocks` prompt 里局部强调 1~2 个关键 `relationship_delta` beat 的主动动作，而不扩张 schema 面；
+    - 或把“女主主动动作”变成 `chapter_payload` / `writer_context` 的局部约束，而不是让每个 beat 都显式携带一个动作字段。

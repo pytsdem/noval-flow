@@ -12,6 +12,9 @@ class Settings(BaseModel):
     doubao_api_key: str | None = None
     doubao_model: str | None = None
     doubao_base_url: str = "https://ark.cn-beijing.volces.com/api/v3"
+    deepseek_api_key: str | None = None
+    deepseek_model: str | None = None
+    deepseek_base_url: str = "https://api.deepseek.com"
     openai_api_key: str | None = None
     openai_model: str | None = None
     openai_base_url: str = "https://api.openai.com/v1"
@@ -36,6 +39,9 @@ class Settings(BaseModel):
             doubao_api_key=os.getenv("DOUBAO_API_KEY"),
             doubao_model=os.getenv("DOUBAO_MODEL"),
             doubao_base_url=os.getenv("DOUBAO_BASE_URL", "https://ark.cn-beijing.volces.com/api/v3"),
+            deepseek_api_key=os.getenv("DEEPSEEK_API_KEY"),
+            deepseek_model=os.getenv("DEEPSEEK_MODEL"),
+            deepseek_base_url=os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com"),
             openai_api_key=os.getenv("OPENAI_API_KEY"),
             openai_model=os.getenv("OPENAI_MODEL"),
             openai_base_url=os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1"),

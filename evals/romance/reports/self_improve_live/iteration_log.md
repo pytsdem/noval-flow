@@ -218,3 +218,16 @@
   - 但 clean `case01` 对比 beat-card baseline 后，`pairwise` 明确站回 baseline，且 `redundancy / continuity / hook` 一起回撤
 - Next step: 不再给整章全局 prompt 叠“女主主动性”硬要求，改打更局部、可兑现的 beat 级职责约束
 - Report ref: `report.md` / `Iteration 16`
+
+## Iteration 17
+
+- Date: `2026-04-27`
+- Outcome: `reject`
+- Theme: 把 heroine agency 前移成 beat 级“主动方 / 主动动作”字段，但 `case01` core romance 仍不如 clean beat-card baseline；仅保留 DeepSeek provider 支持
+- Root layer: `beat_planning_initiative_owner_move`
+- Files changed: `src/novel_flow/config.py`, `src/novel_flow/llm/factory.py`, `.env.example`, `README.md`, `tests/test_llm_factory.py`（保留）；以及 `src/novel_flow/models/schemas.py`, `src/novel_flow/services/chapter_tool_payloads.py`, `src/novel_flow/tools/plan_content_blocks.py`, `prompts/writer/plan_content_blocks.txt`, `prompts/writer/write_chapter_full.txt`, `tests/test_schema_and_context.py`, `tests/test_writing_chapter_agent.py`（实验后未保留），并新增 `evals/romance/reports/candidate_beat_card_initiative_case01/*`
+- Success snapshot:
+  - 新增显式 `deepseek` provider，可独立配置 `DEEPSEEK_API_KEY / MODEL / BASE_URL`，也可作为 `codex` fallback
+  - 但 `case01` 对比 clean beat-card baseline 时，`romance_tension 8.5 -> 7.5`、`character_attraction 8.25 -> 7.45`、`hook 8.75 -> 8.5`，`pairwise` 仍站回 baseline
+- Next step: 保留 DeepSeek provider；继续 beat-card 时不要再加 schema 级主动性字段，改试局部 guidance 或 chapter payload 约束
+- Report ref: `report.md` / `Iteration 17`

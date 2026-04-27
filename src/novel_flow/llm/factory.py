@@ -33,6 +33,14 @@ class FallbackLLMClient(LLMClient):
 
 def build_llm_client(settings: Settings) -> LLMClient:
     provider = settings.llm_provider.strip().lower()
+    if provider == "deepseek":
+        if not settings.deepseek_api_key or not settings.deepseek_model:
+            raise ValueError("Missing DEEPSEEK_API_KEY or DEEPSEEK_MODEL. Check your .env file.")
+        return OpenAILLMClient(
+            api_key=settings.deepseek_api_key,
+            model=settings.deepseek_model,
+            base_url=settings.deepseek_base_url,
+        )
     if provider == "openai":
         if not settings.openai_api_key or not settings.openai_model:
             raise ValueError("Missing OPENAI_API_KEY or OPENAI_MODEL. Check your .env file.")
@@ -66,6 +74,18 @@ def build_llm_client(settings: Settings) -> LLMClient:
                 primary_name="codex",
                 fallback_name="doubao",
             )
+        if settings.deepseek_api_key and settings.deepseek_model:
+            fallback = OpenAILLMClient(
+                api_key=settings.deepseek_api_key,
+                model=settings.deepseek_model,
+                base_url=settings.deepseek_base_url,
+            )
+            return FallbackLLMClient(
+                primary=primary,
+                fallback=fallback,
+                primary_name="codex",
+                fallback_name="deepseek",
+            )
         if settings.openai_api_key and settings.openai_model:
             fallback = OpenAILLMClient(
                 api_key=settings.openai_api_key,
@@ -79,4 +99,6 @@ def build_llm_client(settings: Settings) -> LLMClient:
                 fallback_name="openai",
             )
         return primary
-    raise ValueError(f"Unsupported LLM_PROVIDER: {settings.llm_provider}. Use 'doubao', 'openai', or 'codex'.")
+    raise ValueError(
+        f"Unsupported LLM_PROVIDER: {settings.llm_provider}. Use 'doubao', 'deepseek', 'openai', or 'codex'."
+    )
