@@ -54,14 +54,14 @@
 2. social_background 要说明其阶层、家族、势力、地域或社会位置。
 3. education_background 要说明其成长中受过怎样的训练、教育、规训或环境塑形。
 4. occupation 要写当前主要身份、职责或权力位置。
-5. personality 不能只写标签词，要写成能指导写戏的性格概括。
+5. personality 不能只写标签词，要写成“相对稳定的人物底色”；不要把当前章节情绪、阶段目标或成长方向塞进这里。
 6. career 要写其事业方向、权力诉求、人生路径或现实位置，不要空泛。
-7. initial_state 要说明此人故事起点处的处境、资源、短板与心理状态。
-8. motivation 要写当前最强驱动力，不要只写“想变强”“想复仇”。
-9. behavior_pattern 要说明他遇事通常怎么做，如何处理冲突、利益、亲密和风险。
-10. arc 要写清此人的主要变化方向，最好带代价或误判。
-11. relationships 是人物自述层面的关系概括，说明他与最重要几人的关系基调；不要把详细关系卡塞进这里。
-12. development_axes 必须是数组，写 2-4 条此人后续最值得展开的发展轴。
+7. initial_state 要说明故事起点的现实处境与眼前受限，不要改写成长期性格结论。
+8. motivation 要写当前最强驱动力，不要只写“想变强”“想复仇”，也不要与 arc 重复。
+9. behavior_pattern 要说明他遇压时反复出现的可观察动作模式；不要再重复 personality 的抽象评价词。
+10. arc 要写清此人的长期变化方向，最好带代价或误判；不要重写 initial_state 或 motivation。
+11. relationships 是人物自述层面的稳定关系基调，不要把本章关系变化、误会升级或临时态度塞进这里。
+12. development_axes 必须是数组，写 2-4 条后续最值得展开的发展轴；它们应是 arc 的展开维度，不要逐条复述 arc。
 
 五、relationship_network 的边界
 1. relationship_network 是“关系网”，不是“故事线”。

@@ -9,6 +9,12 @@ Write one chapter content block. Output prose only in Simplified Chinese.
 [Relevant world rules]
 {relevant_world_rules_text}
 
+[Dynamic assistant persona]
+{assistant_persona_prompt}
+
+[Writing requirements JSON]
+{writing_requirements_json}
+
 [Scene character context]
 {scene_character_context_text}
 
@@ -23,6 +29,9 @@ Write one chapter content block. Output prose only in Simplified Chinese.
 
 [Earlier committed block summary]
 {prior_block_summary_text}
+
+[Already delivered in this chapter]
+{delivered_beat_summary_text}
 
 [Current chapter text tail before this block]
 {prior_chapter_text_tail}
@@ -95,6 +104,16 @@ CHAPTER-INTERNAL CONTINUITY RULES:
    - 不要重复前面已经出现过的动作、反应、线索、物件，除非这种重复本身有戏剧目的。
    - 必须把上一块的 `end_state` 当作当前块的起点。
    - 必须保持人物位置、情绪温度、称谓、手中物件、未完成动作的连续性。
+   - 把 `[Already delivered in this chapter]` 当成硬记忆：前面已经成立的 `new_value / relationship_delta / clue_delta` 不得换句话再讲一遍，除非本块真的改变了代价、误读、权力位置或后果。
+
+SCENE-CUT RULES:
+1. If this beat changes scene, do not spend the opening sentences recapping the previous scene.
+2. Start from consequence, residue, interruption, or a carried object/body state.
+3. Let the first paragraph answer which pressure is live now because of what just happened.
+4. If the previous beat already delivered a relationship judgment, the new scene must either deepen it through action or redirect the pressure elsewhere.
+5. 中文补充：
+   - 切场景时，先写上一场留下的后果、残响、未完成动作或带在身上的物件，不要先复述上一场发生了什么。
+   - 新场景第一拍必须立刻告诉读者：新的压力现在落在哪里。
 
 PARAGRAPH RULES:
 1. One paragraph should focus on only one dominant action, one dominant reaction, or one dominant observation.
@@ -192,3 +211,4 @@ Rules:
 16. Do not let a character act while delivering a long strategic recap.
 17. Do not let a role become the author's plot explainer.
 18. Keep the prose in natural Simplified Chinese.
+19. Treat `new_value` as mandatory: by the end of this beat, the reader must have received something meaningfully new.

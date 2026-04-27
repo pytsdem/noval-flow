@@ -60,6 +60,14 @@ def _normalize_text(value: Any) -> str:
     return str(value or "").strip()
 
 
+def _first_nonempty(*values: Any) -> str:
+    for value in values:
+        text = _normalize_text(value)
+        if text:
+            return text
+    return ""
+
+
 def _chapter_order(chapter_id: str) -> int:
     digits = "".join(ch for ch in str(chapter_id or "") if ch.isdigit())
     return int(digits or "0")
@@ -578,7 +586,12 @@ class NovelContextFormatter:
                     "block_id": item.block_id,
                     "block_index": item.block_index,
                     "purpose": item.purpose,
+                    "scene_goal": item.scene_goal,
+                    "new_value": item.new_value,
+                    "relationship_delta": item.relationship_delta,
+                    "clue_delta": item.clue_delta,
                     "end_state": item.end_state,
+                    "micro_hook": item.micro_hook,
                     "text": str(item.text or "").strip(),
                 }
                 for item in selection.recent_blocks
@@ -708,17 +721,14 @@ class NovelContextFormatter:
                 for part in [card.role, card.occupation, card.social_background]
                 if _normalize_text(part)
             ) or "Identity should be shown naturally in-scene."
-            personality = " / ".join(
-                part
-                for part in [card.personality, card.behavior_pattern]
-                if _normalize_text(part)
-            ) or "Restrained under pressure."
-            output_goal = card.initial_state or chapter_object
-            internal_goal = card.motivation or card.arc or card.initial_state or chapter_object
+            stable_trait = _first_nonempty(card.personality, "Trait should be shown through selective concrete detail.")
+            pressure_behavior = _first_nonempty(card.behavior_pattern, "React through deflection, restraint, or tactical delay.")
+            visible_goal = _first_nonempty(card.initial_state, chapter_object, card.motivation)
+            internal_drive = _first_nonempty(card.motivation, card.initial_state, chapter_object)
             behavior_rules = [
                 rule
                 for rule in [
-                    card.behavior_pattern,
+                    pressure_behavior,
                     f"Stay inside chapter limit: {snapshot.chapter_brief.world_limit}",
                 ]
                 if _normalize_text(rule)
@@ -728,10 +738,11 @@ class NovelContextFormatter:
                 [
                     f"{card.name}",
                     f"- Public identity: {identity}",
-                    f"- Current goal (internal use): {'Hidden motive exists; keep it abstract for prose layer.' if is_hidden else internal_goal}",
-                    f"- Output visible goal: {output_goal}",
-                    f"- Action lane: move around '{output_goal}' without breaking '{snapshot.chapter_brief.world_limit}'.",
-                    f"- Personality execution: {personality}",
+                    f"- Stable trait (book-level): {stable_trait}",
+                    f"- Pressure behavior (scene-usable): {pressure_behavior}",
+                    f"- Current drive (chapter-facing): {'Hidden motive exists; keep it abstract for prose layer.' if is_hidden else internal_drive}",
+                    f"- Visible scene task: {visible_goal}",
+                    f"- Action lane: move around '{visible_goal}' without breaking '{snapshot.chapter_brief.world_limit}'.",
                     f"- Behavioral rules: {'; '.join(behavior_rules)}",
                 ]
             )
@@ -739,8 +750,11 @@ class NovelContextFormatter:
                 lines.append("- Hidden truth lock: do not state unrevealed motive, sacrifice, or final arc destination.")
                 lines.append("- Allowed outer signs: pause, deflection, restraint, changed address, avoidance, incomplete answer.")
             else:
-                emotional_base = card.initial_state or card.personality or "Emotion should surface through action and address."
-                lines.append(f"- Emotional base tone: {emotional_base}")
+                emotional_base = _first_nonempty(
+                    card.initial_state,
+                    "Emotion should surface through action, address, hesitation, and body cost.",
+                )
+                lines.append(f"- Emotional starting point (chapter-only): {emotional_base}")
             lines.append("")
 
         if snapshot.chapter_brief.forbidden:
@@ -1013,9 +1027,9 @@ class NovelContextFormatter:
                 lines.extend(
                     [
                         f"{center} -> {other}",
-                        f"- Current public relationship: {snapshot.chapter_brief.relationship_reprice}",
-                        f"- Emotional temperature: {snapshot.chapter_brief.emotional_turn}",
-                        f"- This chapter should move toward: {snapshot.chapter_brief.emotional_turn}",
+                        f"- Current public read: {snapshot.chapter_brief.relationship_reprice}",
+                        f"- Emotional pressure now: {snapshot.chapter_brief.emotional_turn}",
+                        f"- Target reprice this chapter: {snapshot.chapter_brief.relationship_reprice}",
                         "- Forbidden shortcut: do not skip misreading, cost, or unrevealed truth.",
                         "",
                     ]
@@ -1023,9 +1037,9 @@ class NovelContextFormatter:
         else:
             lines.extend(
                 [
-                    f"- Relationship axis: {snapshot.chapter_brief.relationship_reprice}",
-                    f"- Emotional temperature: {snapshot.chapter_brief.emotional_turn}",
-                    f"- This chapter should move toward: {snapshot.chapter_brief.emotional_turn}",
+                    f"- Relationship axis now: {snapshot.chapter_brief.relationship_reprice}",
+                    f"- Emotional pressure now: {snapshot.chapter_brief.emotional_turn}",
+                    f"- Target reprice this chapter: {snapshot.chapter_brief.relationship_reprice}",
                     "",
                 ]
             )

@@ -38,6 +38,7 @@ from novel_flow.services.tool_registry import ToolRegistry
 
 class WritingChapterAgent(BaseAgent):
     INCREMENTAL_BLOCK_DRAFTING_ENABLED = False
+    SEQUENTIAL_BEAT_DRAFTING_ENABLED = True
     FAST_CHAPTER_REVIEW_TOOLS = [
         "review_structure_and_continuity",
         "review_prose_and_humanity",
@@ -318,6 +319,50 @@ class WritingChapterAgent(BaseAgent):
                     "chapter_length": len(chapter_text),
                 }
             )
+        elif self.SEQUENTIAL_BEAT_DRAFTING_ENABLED:
+            self._emit_stage(
+                stage="write_chapter_full_start",
+                action="Write chapter beat by beat",
+                reason="Draft the chapter one beat at a time so each planned block adds new value without resetting the scene.",
+                chapter_id=chapter_brief.chapter_id,
+                block_count=len(committed_blocks),
+            )
+            committed_blocks, chapter_text, beat_stage_log = self._draft_chapter_beat_by_beat(
+                chapter_brief=chapter_brief,
+                context=context,
+                planned_blocks=committed_blocks,
+                loaded_skill_instructions_text=block_skill_text,
+                character_mindsets=character_mindsets,
+                on_block_committed=on_block_committed,
+                on_chapter_preview_updated=on_chapter_preview_updated,
+            )
+            stage_log.extend(beat_stage_log)
+            stage_log.append(
+                {
+                    "stage": "write_chapter_full",
+                    "mode": "sequential_beat_drafting",
+                    "block_count": len(committed_blocks),
+                    "chapter_length": len(chapter_text),
+                }
+            )
+            self._emit_chapter_preview(
+                chapter_brief=chapter_brief,
+                content_blocks=committed_blocks,
+                character_mindsets=character_mindsets,
+                final_text=chapter_text,
+                final_version=1,
+                is_finalized=False,
+                preview_mode="chapter_draft",
+                callback=on_chapter_preview_updated,
+            )
+            self._emit_stage(
+                stage="write_chapter_full_done",
+                action="Finished sequential beat draft",
+                reason="The chapter prose now follows the planned content blocks one beat at a time and is ready for chapter-level review.",
+                chapter_id=chapter_brief.chapter_id,
+                block_count=len(committed_blocks),
+                chapter_length=len(chapter_text),
+            )
         else:
             self._emit_stage(
                 stage="write_chapter_full_start",
@@ -423,17 +468,18 @@ class WritingChapterAgent(BaseAgent):
                 final_judge=final_judge,
             )
         else:
-            committed_blocks = self._materialize_full_draft_blocks(
-                planned_blocks=committed_blocks,
-                chapter_text=chapter_text,
-            )
-            self._emit_stage(
-                stage="materialize_full_draft_blocks_done",
-                action="Materialize block texts",
-                reason="Map the full-chapter draft back onto planned blocks so only targeted blocks can be patched.",
-                chapter_id=chapter_brief.chapter_id,
-                block_count=len(committed_blocks),
-            )
+            if not self._blocks_have_text(committed_blocks):
+                committed_blocks = self._materialize_full_draft_blocks(
+                    planned_blocks=committed_blocks,
+                    chapter_text=chapter_text,
+                )
+                self._emit_stage(
+                    stage="materialize_full_draft_blocks_done",
+                    action="Materialize block texts",
+                    reason="Map the full-chapter draft back onto planned blocks so only targeted blocks can be patched.",
+                    chapter_id=chapter_brief.chapter_id,
+                    block_count=len(committed_blocks),
+                )
             review_source: dict[str, Any] = dict(review_reports)
             patch_round = 0
             while patch_round < self.max_patch_rounds:
@@ -749,6 +795,88 @@ class WritingChapterAgent(BaseAgent):
         )
         return str(payload.get("chapter_text") or "").strip()
 
+    def _draft_chapter_beat_by_beat(
+        self,
+        *,
+        chapter_brief: ChapterBrief,
+        context: Any,
+        planned_blocks: list[ContentBlock],
+        loaded_skill_instructions_text: str,
+        character_mindsets: list[CharacterMindset],
+        on_block_committed: Callable[[ContentBlock], None] | None = None,
+        on_chapter_preview_updated: Callable[[dict[str, Any]], None] | None = None,
+    ) -> tuple[list[ContentBlock], str, list[dict[str, Any]]]:
+        committed_blocks: list[ContentBlock] = []
+        stage_log: list[dict[str, Any]] = []
+        chapter_text = ""
+        for block in planned_blocks:
+            block_context = self._fetch_block_context(
+                context=context,
+                block=block,
+                committed_blocks=committed_blocks,
+            )
+            self._emit_stage(
+                stage=f"beat_{block.block_index}_draft_start",
+                action="Draft beat",
+                reason="Write the next beat using the already committed beats as carry-over memory instead of restarting the chapter.",
+                chapter_id=chapter_brief.chapter_id,
+                block_id=block.block_id,
+                block_index=block.block_index,
+                delivered_beat_summary_text=block_context.get("delivered_beat_summary_text", ""),
+            )
+            draft_result = self.tool_registry.execute(
+                "draft_block",
+                ChapterToolPayloadBuilder.build_draft_block_payload(
+                    block=block,
+                    block_context=block_context,
+                    loaded_skill_instructions_text=loaded_skill_instructions_text,
+                ),
+            )
+            block_text = str(draft_result.get("block_text") or "").strip()
+            if not block_text:
+                raise ValueError(f"draft_block returned empty text for {block.block_id}")
+            committed_block = block.model_copy(
+                update={
+                    "text": block_text,
+                    "status": "committed",
+                    "version": max(int(block.version), 1),
+                }
+            )
+            committed_blocks.append(committed_block)
+            chapter_text = self._merge_blocks_to_chapter(committed_blocks)
+            stage_log.append(
+                {
+                    "stage": f"draft_beat_{block.block_index}",
+                    "block_id": committed_block.block_id,
+                    "block_index": committed_block.block_index,
+                    "chapter_length": len(chapter_text),
+                    "delivered_beat_summary_text": block_context.get("delivered_beat_summary_text", ""),
+                }
+            )
+            if on_block_committed is not None:
+                on_block_committed(committed_block)
+            self._emit_chapter_preview(
+                chapter_brief=chapter_brief,
+                content_blocks=committed_blocks,
+                character_mindsets=character_mindsets,
+                final_text=chapter_text,
+                final_version=0,
+                is_finalized=False,
+                preview_mode="chapter_draft",
+                callback=on_chapter_preview_updated,
+            )
+            self._emit_stage(
+                stage=f"beat_{block.block_index}_draft_done",
+                action="Committed beat draft",
+                reason="The beat is drafted and now becomes carry-over context for the next beat.",
+                chapter_id=chapter_brief.chapter_id,
+                block_id=committed_block.block_id,
+                block_index=committed_block.block_index,
+                committed_block=committed_block.model_dump(mode="json"),
+                current_chapter_draft_tail=self._tail_text(chapter_text, max_chars=500),
+            )
+        return committed_blocks, chapter_text, stage_log
+
     def _plan_content_blocks(self, *, chapter_brief: ChapterBrief, context: Any) -> list[ContentBlock]:
         payload = self.tool_registry.execute(
             "plan_content_blocks",
@@ -881,6 +1009,10 @@ class WritingChapterAgent(BaseAgent):
     @staticmethod
     def _merge_blocks_to_chapter(blocks: list[ContentBlock]) -> str:
         return "\n\n".join(str(block.text or "").strip() for block in blocks if str(block.text or "").strip()).strip()
+
+    @staticmethod
+    def _blocks_have_text(blocks: list[ContentBlock]) -> bool:
+        return all(str(block.text or "").strip() for block in blocks)
 
     @staticmethod
     def _report_passed(report: dict[str, Any]) -> bool:

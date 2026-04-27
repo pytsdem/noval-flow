@@ -981,3 +981,125 @@
 - ????
   - ???????? `DeepSeek V4-Pro`?????????? writer prompt ? planner ????????
   - ?????? `write_chapter_full` ???`final_polish` ???????? + ???????????? `DeepSeek` ? clean baseline????????? patch / polish ????
+
+## Iteration 19 - Character Scope De-dup
+
+- Date: `2026-04-27`
+- Root layer: `character_context_scope_dedup`
+- Hypothesis:
+  - 正文里反复“命名人物特征”，不只是 beat 执行问题，也和上游人物字段的语义重叠有关。
+  - `CharacterCard`、`CharacterMindset`、`ChapterBrief` 三层都在描述“当前人物状态”，导致 writer context 把稳定底色、章节驱动、长期 arc 混着喂给下游任务。
+- Evidence:
+  - `src/novel_flow/services/novel_context.py` 之前把 `personality + behavior_pattern` 合成同一条 `Personality execution`，又把 `motivation or arc or initial_state` 合成同一条 `Current goal`。
+  - `src/novel_flow/services/character_mindset_formatter.py` 之前把 `surface/core emotion`、`goal/need/fear`、`misbelief/chapter_change_hint` 逐条平铺，writer 很容易把它们当成多次重复提醒。
+  - `prompts/writer/step_3_character_bible.txt` 与 `prompts/writer/build_character_mindset.txt` 虽然已有字段说明，但还没有把“稳定底色 / 本章状态 / 长期变化”切得足够硬。
+- Files changed:
+  - `src/novel_flow/services/novel_context.py`
+  - `src/novel_flow/services/character_mindset_formatter.py`
+  - `prompts/writer/step_3_character_bible.txt`
+  - `prompts/writer/build_character_mindset.txt`
+  - `tests/test_schema_and_context.py`
+- What changed:
+  - `scene_character_context_text` 现在显式拆成：
+    - `Stable trait (book-level)`
+    - `Pressure behavior (scene-usable)`
+    - `Current drive (chapter-facing)`
+    - `Visible scene task`
+    - `Emotional starting point (chapter-only)`
+  - 不再把 `arc` 混进 writer 当前目标里，也不再把 `personality` 和 `behavior_pattern` 直接拼成一条。
+  - `relationship_state_text` 去掉了把 `emotional_turn` 重复说两遍的写法，改成 `Current public read / Emotional pressure now / Target reprice this chapter` 三层。
+  - `chapter_character_mindsets_text` 从逐字段清单改成更短的控制语：
+    - `Visible emotional mask`
+    - `Inner emotional driver`
+    - `Chapter tension: wants / secretly needs / fears`
+    - `Control edge`
+    - `Unsaid fact to protect`
+    - `Current misreading`
+    - `Expected drift after this chapter`
+  - 上游 prompt 也补了字段边界：
+    - `personality` 不再允许混入章节情绪和 arc
+    - `behavior_pattern` 强制写可观察动作模式
+    - `surface_emotion / core_emotion / primary_goal / hidden_need / fear / chapter_change_hint` 的分工更明确
+- Verification:
+  - `python scripts/check_prompt_encoding.py`
+  - `python -m unittest tests.test_schema_and_context tests.test_writing_chapter_agent`
+  - `python -m unittest tests.test_prompt_rendering tests.test_romance_eval_harness`
+- Metrics / cost:
+  - 本轮没有跑新的 LLM 端到端 case。
+  - LLM cost delta: `0`
+  - 这是一轮“去重和语义收口”基础改动，不宣称正文指标已净提升。
+- Outcome:
+  - `partial_keep`
+- Keep / reject:
+  - `keep` 这组 schema-context-prompt 去重改动
+  - `defer` 真实章节质量结论，等下一轮 isolated case 验证
+- Next step:
+  - 在同一条 beat-card 基线上跑一个隔离 `case01`，重点看：
+    - 人物特征是否还被跨 beat 重复命名
+    - `redundancy_score` 是否改善
+    - `romance_tension / relationship_progression` 是否至少不回撤
+
+## Iteration 20 - Sequential Beat Drafting MVP
+
+- Date: `2026-04-28`
+- Root layer: `sequential_beat_drafting_mvp`
+- Hypothesis:
+  - 只做 beat card 规划还不够，只要正文仍然“一章一把写”，模型就会提前把背景、人物判断、关系压力说满，后续 block 更容易重复补讲。
+  - 如果改成真正按 beat 顺序起草，并把“前面已经交付了什么”显式喂给后一个 beat，能更稳定地压住跨 beat 重复、场景复述和人物标签反复命名。
+- Evidence:
+  - 之前 requirement / clean case 里反复出现的坏味道很一致：多个 block 会换句话重讲同一层 `pressure / relationship read / clue meaning`。
+  - `build_block_runtime_context` 之前只给了“已写 tail”和“Earlier committed blocks”概览，没有把 `new_value / relationship_delta / clue_delta / micro_hook` 当成硬记忆交给下一 beat。
+  - 切到 sequential drafting 后，如果 beat prompt 丢掉原本整章 prompt 里的 `assistant_persona_prompt` 和 `writing_requirements_json`，会损失风格、节奏和篇幅控制；这在回归测试里已经暴露出来并已补回。
+- Files changed:
+  - `src/novel_flow/agents/writing_chapter_agent.py`
+  - `src/novel_flow/services/chapter_tool_payloads.py`
+  - `src/novel_flow/services/novel_context.py`
+  - `src/novel_flow/tools/draft_block.py`
+  - `src/novel_flow/tools/revise_block.py`
+  - `prompts/writer/draft_content_block.txt`
+  - `prompts/writer/revise_content_block.txt`
+  - `tests/test_prompt_rendering.py`
+  - `tests/test_schema_and_context.py`
+  - `tests/test_writing_chapter_agent.py`
+- What changed:
+  - `WritingChapterAgent` 默认改走 `SEQUENTIAL_BEAT_DRAFTING_ENABLED = True`，不再先调用一次 `write_chapter_full` 写整章首稿，而是按规划好的 beat 顺序逐个调用 `draft_block`。
+  - 每个 beat 完成后，agent 会：
+    - 把 block 正文正式 commit 到 `committed_blocks`
+    - 增量合成 chapter draft
+    - 产出 live preview
+    - 为下一个 beat 生成新的承接上下文
+  - `build_block_runtime_context` 新增了显式的 `[Already delivered in this chapter]` 记忆层，把前面每个 beat 的：
+    - `scene_goal`
+    - `new_value`
+    - `relationship_delta`
+    - `clue_delta`
+    - `end_state`
+    - `micro_hook`
+    传给后续 beat，避免“换句话重讲上一 beat 的价值”。
+  - `format_current_chapter_context` 也补了更适合顺序写作的最近 block 信息，便于后续 review / patch 阶段读取同一套 beat 记忆。
+  - `draft_content_block` / `revise_content_block` prompt 新增了：
+    - `[Already delivered in this chapter]`
+    - 更硬的 `SCENE-CUT RULES`
+    - 把 `new_value` 当成 mandatory 的写法纪律
+  - 顺手补回了整章 prompt 原本就有、但 beat prompt 里一度漏掉的：
+    - `assistant_persona_prompt`
+    - `writing_requirements_json`
+    让每个 beat 继续继承风格、人设、节奏和篇幅要求。
+- Verification:
+  - `python scripts/check_prompt_encoding.py`
+  - `python -m unittest tests.test_writing_chapter_agent tests.test_schema_and_context tests.test_prompt_rendering`
+- Metrics / cost:
+  - 本轮没有跑新的 isolated `case01` 或 requirement end-to-end eval。
+  - LLM cost delta: `0`（仅本地代码与 prompt 回归）
+  - 这是一次正文执行架构升级，不提前宣称 romance 指标已净提升。
+- Outcome:
+  - `partial_keep`
+- Keep / reject:
+  - `keep` 顺序 beat 起草、已交付记忆层、scene-cut 纪律、beat prompt 补回人设/写作要求
+  - `defer` 正文质量结论，等下一轮 isolated `case01` 对照
+- Next step:
+  - 用当前这版顺序 beat 起草链路跑一个干净 `case01`
+  - 重点看：
+    - 人物特征是否还会跨 beat 重复命名
+    - `redundancy_score` 是否下降
+    - `romance_tension / relationship_progression / continuity` 是否至少不回撤

@@ -486,6 +486,11 @@ def _judge_payload(
 
 
 def _generation_sequence() -> list[str]:
+    beat_outputs = [
+        "殿门一开，寒意先贴着谢临川的靴面往上爬。圣旨未落地，殿中视线已经先压到他肩上。",
+        "他接旨时连指节都稳得过分，偏偏在求取档册时把每个字都压得更慢。那条窄得可怜的查档口子，也只能从这道命令里硬生生抠出来。",
+        "沈知微在“旧案”两个字上短了一拍，袖口绷出的褶被他看得清楚。等殿外消息送到时，昨夜替旧案抄档的书吏已经死了。",
+    ]
     chapter_text = (
         "殿门一开，寒意先贴着谢临川的靴面往上爬。圣旨念到旧案时，沈知微终于抬眼，那一眼像刀锋轻轻擦过，又立刻被礼数收回。\n\n"
         "他接旨时连指节都稳得过分，偏偏在求取档册时把每个字都压得更慢。她回话极冷，句句都守规矩，却在“旧案”两个字上短了一拍。\n\n"
@@ -496,7 +501,7 @@ def _generation_sequence() -> list[str]:
         _mindset_json("Hero", "Heroine"),
         _mindset_json("Heroine", "Hero"),
         _planned_blocks_json(),
-        chapter_text,
+        *beat_outputs,
         _review_pass("结构通过"),
         _review_pass("文风通过"),
         chapter_text,

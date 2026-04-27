@@ -515,6 +515,28 @@ class SchemaAndContextTests(unittest.TestCase):
         self.assertNotIn("protect him from death", text)
         self.assertNotIn("reconcile", text)
 
+    def test_character_context_separates_scope_and_relationship_targets(self) -> None:
+        card = CharacterCard(
+            name="Hero",
+            role="returned heir",
+            occupation="general",
+            personality="controlled restraint",
+            initial_state="He cannot strike directly yet.",
+            motivation="reopen the old case",
+            behavior_pattern="cuts his own words short under pressure",
+            arc="learn to trust her version later",
+        )
+        context = self._writer_context(character_cards=[card], current_chapter_id="ch_001")
+        text = context.scene_character_context_text
+        self.assertIn("Stable trait (book-level): controlled restraint", text)
+        self.assertIn("Pressure behavior (scene-usable): cuts his own words short under pressure", text)
+        self.assertIn("Current drive (chapter-facing): reopen the old case", text)
+        self.assertIn("Visible scene task: He cannot strike directly yet.", text)
+        self.assertNotIn("learn to trust her version later", text)
+        self.assertIn("Current public read:", context.relationship_state_text)
+        self.assertIn("Emotional pressure now:", context.relationship_state_text)
+        self.assertIn("Target reprice this chapter:", context.relationship_state_text)
+
     def test_character_selectors_lookup_by_name(self) -> None:
         hero = CharacterCard(name="Hero", role="returned heir")
         heroine = CharacterCard(name="Heroine", role="court witness")
@@ -566,8 +588,13 @@ class SchemaAndContextTests(unittest.TestCase):
             ]
         )
         self.assertIn("Hero / Hero", text)
+        self.assertIn("Visible emotional mask: 冷", text)
+        self.assertIn("Inner emotional driver: 痛", text)
+        self.assertIn("Chapter tension: wants 查旧案; secretly needs 被理解; fears 再次失去", text)
+        self.assertIn("Expected drift after this chapter: 克制转为试探", text)
         self.assertIn("Attitude to key others", text)
         self.assertIn("Heroine: 怀疑又在意", text)
+        self.assertNotIn("Primary goal:", text)
 
     def test_chapter_tool_payload_builder_converges_writing_and_review_payloads(self) -> None:
         context = self._writer_context(current_chapter_id="ch_001")
@@ -601,6 +628,49 @@ class SchemaAndContextTests(unittest.TestCase):
         self.assertIn("step_1_to_7_outputs_json", write_payload)
         self.assertEqual(review_payload["chapter_text"], "正文")
         self.assertIn("twist_01", review_payload["active_twists_json"])
+
+    def test_block_runtime_context_exposes_delivered_beat_summary(self) -> None:
+        context = self._writer_context(current_chapter_id="ch_001")
+        committed_blocks = [
+            ContentBlock(
+                block_id="ch_001.sc_001.b001",
+                chapter_id="ch_001",
+                block_index=1,
+                purpose="open pressure",
+                characters=["Hero"],
+                active_lines=[],
+                active_twists=[],
+                scene_goal="Public pressure lands first.",
+                must_reveal=[],
+                must_hide=[],
+                new_value="Readers feel the public trap activate.",
+                relationship_delta="Distance turns public and costly.",
+                clue_delta="None yet.",
+                emotional_tone="tight",
+                end_state="He has to answer in public.",
+                micro_hook="He still has not touched the register.",
+                text="第一块把公开压力压到他身上。",
+                status="committed",
+            )
+        ]
+        block = ContentBlock(
+            block_id="ch_001.sc_001.b002",
+            chapter_id="ch_001",
+            block_index=2,
+            purpose="Her pause changes the room.",
+            end_state="The pause becomes legible.",
+        )
+
+        runtime_payload = ChapterToolPayloadBuilder.build_block_runtime_context(
+            context=context,
+            block=block,
+            committed_blocks=committed_blocks,
+        )
+
+        self.assertIn("[Already delivered in this chapter]", runtime_payload["delivered_beat_summary_text"])
+        self.assertIn("Readers feel the public trap activate.", runtime_payload["delivered_beat_summary_text"])
+        self.assertIn("Distance turns public and costly.", runtime_payload["delivered_beat_summary_text"])
+        self.assertIn("He still has not touched the register.", runtime_payload["delivered_beat_summary_text"])
 
     def test_plan_content_blocks_tool_enriches_blocks_into_beat_cards(self) -> None:
         context = self._writer_context(current_chapter_id="ch_001")

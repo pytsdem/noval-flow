@@ -23,16 +23,16 @@ class CharacterMindsetFormatter:
                 [
                     "",
                     f"{mindset.character_name} / {mindset.character_id}",
-                    f"- Surface emotion: {mindset.surface_emotion}",
-                    f"- Core emotion: {mindset.core_emotion}",
-                    f"- Primary goal: {mindset.primary_goal}",
-                    f"- Hidden need: {mindset.hidden_need}",
-                    f"- Fear: {mindset.fear}",
-                    f"- Self control: {mindset.self_control_level}",
-                    f"- Breaking point hint: {mindset.breaking_point_hint}",
-                    f"- Known but unspoken: {mindset.known_but_unspoken}",
-                    f"- Misbelief: {mindset.misbelief}",
-                    f"- Chapter change hint: {mindset.chapter_change_hint}",
+                    f"- Visible emotional mask: {mindset.surface_emotion}",
+                    f"- Inner emotional driver: {mindset.core_emotion}",
+                    (
+                        f"- Chapter tension: wants {mindset.primary_goal}; "
+                        f"secretly needs {mindset.hidden_need}; fears {mindset.fear}"
+                    ),
+                    f"- Control edge: self control {mindset.self_control_level}; breaking sign {mindset.breaking_point_hint}",
+                    f"- Unsaid fact to protect: {mindset.known_but_unspoken}",
+                    f"- Current misreading: {mindset.misbelief}",
+                    f"- Expected drift after this chapter: {mindset.chapter_change_hint}",
                 ]
             )
             if attitudes:

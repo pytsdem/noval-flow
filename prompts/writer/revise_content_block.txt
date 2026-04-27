@@ -6,6 +6,12 @@ Revise one content block. Output prose only in Simplified Chinese.
 [Relevant world rules]
 {relevant_world_rules_text}
 
+[Dynamic assistant persona]
+{assistant_persona_prompt}
+
+[Writing requirements JSON]
+{writing_requirements_json}
+
 [Scene character context]
 {scene_character_context_text}
 
@@ -20,6 +26,9 @@ Revise one content block. Output prose only in Simplified Chinese.
 
 [Current block draft]
 {block_text}
+
+[Already delivered in this chapter]
+{delivered_beat_summary_text}
 
 [Block review reports JSON]
 {review_json}
@@ -85,6 +94,7 @@ CHAPTER-INTERNAL CONTINUITY RULES:
    - 不要重复前面已经出现过的动作、反应、线索、物件，除非这种重复本身有戏剧目的。
    - 必须把上一块的 `end_state` 当作当前块的起点。
    - 必须保持人物位置、情绪温度、称谓、手中物件、未完成动作的连续性。
+   - `[Already delivered in this chapter]` 里的 `new_value / relationship_delta / clue_delta` 不得被改写成另一版复述，除非本块真的把它推向新的代价或新的误读。
 
 PARAGRAPH RULES:
 1. One paragraph should focus on only one dominant action, one dominant reaction, or one dominant observation.

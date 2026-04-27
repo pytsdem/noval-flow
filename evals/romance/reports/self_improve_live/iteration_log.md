@@ -246,3 +246,31 @@
   - current `DeepSeek V4-Pro` candidate improved `hook_score` to `9.25` and reduced `llm_calls` / `patch_rounds`, but still lost to the clean beat-card baseline on pairwise preference and core romance metrics
 - Next step: keep the `DeepSeek` switch, but move the next optimization target to post-draft / pre-polish execution rather than adding more planner or full-chapter relationship guidance
 - Report ref: `report.md` / `Iteration 18`
+
+## Iteration 19
+
+- Date: `2026-04-27`
+- Outcome: `partial_keep`
+- Theme: 收紧人物字段作用域，把 writer 侧人物控制信息从重复标签改成分层控制语
+- Root layer: `character_context_scope_dedup`
+- Files changed: `src/novel_flow/services/novel_context.py`, `src/novel_flow/services/character_mindset_formatter.py`, `prompts/writer/step_3_character_bible.txt`, `prompts/writer/build_character_mindset.txt`, `tests/test_schema_and_context.py`, `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
+- Success snapshot:
+  - `scene_character_context_text` 不再把 `personality / behavior_pattern / motivation / arc / initial_state` 混成几条大而虚的提示
+  - `chapter_character_mindsets_text` 改成更短、更可执行的 writer 控制语，减少同义字段平铺
+  - 上游 prompt 定义明确区分了稳定底色、本章状态、长期变化，降低任务输出互相重写同一层信息的概率
+- Next step: 跑隔离 `case01`，验证人物标签重复是否下降，并观察 `redundancy / tension / relationship_progression`
+- Report ref: `report.md` / `Iteration 19`
+
+## Iteration 20
+
+- Date: `2026-04-28`
+- Outcome: `partial_keep`
+- Theme: 把正文执行从整章首稿切成顺序 beat 起草，并显式把已交付 beat 价值带给下一 beat
+- Root layer: `sequential_beat_drafting_mvp`
+- Files changed: `src/novel_flow/agents/writing_chapter_agent.py`, `src/novel_flow/services/chapter_tool_payloads.py`, `src/novel_flow/services/novel_context.py`, `src/novel_flow/tools/draft_block.py`, `src/novel_flow/tools/revise_block.py`, `prompts/writer/draft_content_block.txt`, `prompts/writer/revise_content_block.txt`, `tests/test_prompt_rendering.py`, `tests/test_schema_and_context.py`, `tests/test_writing_chapter_agent.py`, `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
+- Success snapshot:
+  - `WritingChapterAgent` 现在默认按 beat 顺序逐个 `draft_block`，不再先整章一把写
+  - 每个 beat 都会拿到 `[Already delivered in this chapter]`，显式看到前面已落地的 `new_value / relationship_delta / clue_delta / micro_hook`
+  - beat prompt 已补回 `assistant_persona_prompt` 和 `writing_requirements_json`，不会因为切成 sequential drafting 就丢掉风格和节奏约束
+- Next step: 跑干净 `case01`，验证跨 beat 重复、`redundancy`、`romance_tension` 和 `relationship_progression`
+- Report ref: `report.md` / `Iteration 20`

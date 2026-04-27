@@ -122,17 +122,37 @@ class ChapterToolPayloadBuilder:
                 )
         else:
             prior_summary_lines.append("No committed blocks yet.")
+        delivered_summary_lines = ["[Already delivered in this chapter]"]
+        if current_written_blocks:
+            for item in current_written_blocks:
+                delivered_summary_lines.extend(
+                    [
+                        "",
+                        f"{item['block_id']} / {item['purpose']}",
+                        f"- scene_goal: {item.get('scene_goal', '') or 'None.'}",
+                        f"- new_value: {item.get('new_value', '') or 'None.'}",
+                        f"- relationship_delta: {item.get('relationship_delta', '') or 'None.'}",
+                        f"- clue_delta: {item.get('clue_delta', '') or 'None.'}",
+                        f"- end_state: {item.get('end_state', '') or 'None.'}",
+                        f"- micro_hook: {item.get('micro_hook', '') or 'None.'}",
+                    ]
+                )
+        else:
+            delivered_summary_lines.append("No beat has landed yet.")
         return {
             "completed_chapter_memory_text": context.completed_chapter_memory_text,
             "chapter_payload_text": context.chapter_payload_text,
             "chapter_visible_context_text": context.chapter_visible_context_text,
             "relevant_world_rules_text": context.relevant_world_rules_text,
+            "assistant_persona_prompt": getattr(context, "assistant_persona_prompt", ""),
+            "writing_requirements_json": getattr(context, "writing_requirements_json", "{}"),
             "scene_character_context_text": context.scene_character_context_text,
             "relationship_state_text": context.relationship_state_text,
             "chapter_character_mindsets_text": getattr(context, "chapter_character_mindsets_text", ""),
             "current_chapter_written_blocks_json": cls.json_text(current_written_blocks),
             "current_chapter_draft_tail": str(current_chapter_context["current_chapter_draft_tail"] or ""),
             "prior_block_summary_text": "\n".join(prior_summary_lines).strip(),
+            "delivered_beat_summary_text": "\n".join(delivered_summary_lines).strip(),
             "prior_chapter_text_tail": str(current_chapter_context["current_chapter_draft_tail"] or ""),
             "style_card_text": context.style_card_text,
         }
