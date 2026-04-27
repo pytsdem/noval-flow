@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from novel_flow.llm.base import LLMClient, LLMMessage
+from novel_flow.llm.executor import build_messages, run_llm_text
 from novel_flow.prompting.templates import PromptLibrary
 from novel_flow.services.json_generation import safe_json_generate
 
@@ -20,10 +21,7 @@ class LLMChapterTool:
     prompt_library: PromptLibrary | None = None
 
     def messages(self, prompt: str, *, system_prompt: str = DEFAULT_SYSTEM_PROMPT) -> list[LLMMessage]:
-        return [
-            LLMMessage(role="system", content=system_prompt),
-            LLMMessage(role="user", content=prompt),
-        ]
+        return build_messages(system_prompt=system_prompt, prompt=prompt)
 
     def generate_json(self, *, prompt: str, schema_name: str, schema_model: Any) -> dict[str, Any]:
         return safe_json_generate(
@@ -34,7 +32,7 @@ class LLMChapterTool:
         )
 
     def generate_text(self, *, prompt: str, temperature: float = 0.4) -> str:
-        return self.llm_client.generate(messages=self.messages(prompt), temperature=temperature).strip()
+        return run_llm_text(self.llm_client, self.messages(prompt), temperature=temperature)
 
     def render_prompt(self, relative_path: str, **kwargs: Any) -> str:
         library = self.prompt_library or PromptLibrary()

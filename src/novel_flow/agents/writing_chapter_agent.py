@@ -7,6 +7,7 @@ from typing import Any
 from novel_flow import events as ev
 from novel_flow.agents.base import BaseAgent
 from novel_flow.llm.base import LLMClient, LLMMessage
+from novel_flow.llm.executor import build_messages
 from novel_flow.models.schemas import (
     ActualChapterSummary,
     AgentResult,
@@ -1318,16 +1319,13 @@ class WritingChapterAgent(BaseAgent):
         return self.prompt_library.render(relative_path, **kwargs)
 
     def _messages(self, prompt: str) -> list[LLMMessage]:
-        return [
-            LLMMessage(
-                role="system",
-                content=(
-                    "You are a chapter-writing agent. "
-                    "All user-facing content must be in Simplified Chinese unless the prompt explicitly requires another language. "
-                    "If asked for prose, return prose only. "
-                    "If asked for JSON, return valid JSON only. "
-                    "For JSON, keep ids and schema-required enums unchanged, but write natural-language string content in Simplified Chinese."
-                ),
+        return build_messages(
+            system_prompt=(
+                "You are a chapter-writing agent. "
+                "All user-facing content must be in Simplified Chinese unless the prompt explicitly requires another language. "
+                "If asked for prose, return prose only. "
+                "If asked for JSON, return valid JSON only. "
+                "For JSON, keep ids and schema-required enums unchanged, but write natural-language string content in Simplified Chinese."
             ),
-            LLMMessage(role="user", content=prompt),
-        ]
+            prompt=prompt,
+        )

@@ -5,7 +5,8 @@ from typing import Any
 
 from novel_flow import events as ev
 from novel_flow.agents.base import BaseAgent
-from novel_flow.llm.base import LLMClient, LLMMessage
+from novel_flow.llm.base import LLMClient
+from novel_flow.llm.executor import PromptLLMExecutor
 from novel_flow.models.schemas import AgentResult, DirectorAction, DirectorDecision, ToolObservation
 from novel_flow.prompting.templates import PromptLibrary
 from novel_flow.utils.json_tools import extract_json_object
@@ -16,6 +17,7 @@ class DirectorAgent(BaseAgent):
         super().__init__(name="DirectorAgent")
         self.llm_client = llm_client
         self.prompt_library = prompt_library or PromptLibrary()
+        self.llm_executor = PromptLLMExecutor(llm_client=self.llm_client, prompt_library=self.prompt_library)
 
     def decide(
         self,
@@ -73,11 +75,11 @@ class DirectorAgent(BaseAgent):
         )
 
     def _generate_json_text(self, prompt: str) -> str:
-        messages = [
-            LLMMessage(role="system", content=self.prompt_library.load("director/system.txt")),
-            LLMMessage(role="user", content=prompt),
-        ]
-        return self.llm_client.generate(messages=messages, temperature=0.2).strip()
+        return self.llm_executor.generate_prompt_text(
+            system_path="director/system.txt",
+            prompt=prompt,
+            temperature=0.2,
+        )
 
     @staticmethod
     def _fallback_decision(

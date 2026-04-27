@@ -9,7 +9,8 @@ from uuid import uuid4
 
 from novel_flow import events as ev
 from novel_flow.agents.base import BaseAgent
-from novel_flow.llm.base import LLMClient, LLMMessage
+from novel_flow.llm.base import LLMClient
+from novel_flow.llm.executor import PromptLLMExecutor, run_llm_text
 from novel_flow.models.schemas import (
     AgentResult,
     BookBlueprint,
@@ -32,6 +33,7 @@ class BlueprintAgent(BaseAgent):
         super().__init__(name="BlueprintAgent")
         self.llm_client = llm_client
         self.prompt_library = prompt_library or PromptLibrary()
+        self.llm_executor = PromptLLMExecutor(llm_client=self.llm_client, prompt_library=self.prompt_library)
 
     def build_story_spine(
         self,
@@ -704,11 +706,11 @@ class BlueprintAgent(BaseAgent):
         raise ValueError(f"Unsupported blueprint action: {action}")
 
     def _generate_json_text(self, prompt: str, *, temperature: float = 0.2) -> str:
-        messages = [
-            LLMMessage(role="system", content=self.prompt_library.load("writer/system.txt")),
-            LLMMessage(role="user", content=prompt),
-        ]
-        return self.llm_client.generate(messages=messages, temperature=temperature).strip()
+        return self.llm_executor.generate_prompt_text(
+            system_path="writer/system.txt",
+            prompt=prompt,
+            temperature=temperature,
+        )
 
     @classmethod
     def _normalize_story_blueprint_payload(cls, payload: Any) -> dict[str, Any]:
@@ -734,12 +736,9 @@ class BlueprintAgent(BaseAgent):
         allow_repair: bool = True,
         schema_model: type[Any] | None = None,
     ) -> dict[str, Any]:
-        messages = [
-            LLMMessage(role="system", content=self.prompt_library.load("writer/system.txt")),
-            LLMMessage(role="user", content=prompt),
-        ]
+        messages = self.llm_executor.build_prompt_messages(system_path="writer/system.txt", prompt=prompt)
         if not allow_repair:
-            raw = self.llm_client.generate(messages=messages, temperature=0.2).strip()
+            raw = run_llm_text(self.llm_client, messages, temperature=0.2)
             return extract_json_object(raw)
         return safe_json_generate(
             self.llm_client,

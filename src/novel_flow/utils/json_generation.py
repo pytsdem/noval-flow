@@ -6,6 +6,7 @@ from typing import Any
 from pydantic import BaseModel, ValidationError
 
 from novel_flow.llm.base import LLMClient, LLMMessage
+from novel_flow.llm.executor import run_llm_text
 from novel_flow.prompting.templates import PromptLibrary
 from novel_flow.utils.json_tools import extract_json_object
 
@@ -35,10 +36,10 @@ def safe_json_generate(
         )
         repair_messages = [message for message in messages if message.role == "system"]
         repair_messages.append(LLMMessage(role="user", content=repair_prompt))
-        repaired_raw = llm_client.generate(messages=repair_messages, temperature=0.0).strip()
+        repaired_raw = run_llm_text(llm_client, repair_messages, temperature=0.0)
         return extract_json_object(repaired_raw)
 
-    raw = llm_client.generate(messages=messages, temperature=0.2).strip()
+    raw = run_llm_text(llm_client, messages, temperature=0.2)
     parse_error: Exception | None = None
     parsed: dict[str, Any] | None = None
     for attempt in range(max_retries + 1):

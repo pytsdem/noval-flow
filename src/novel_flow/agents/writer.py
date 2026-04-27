@@ -11,6 +11,7 @@ from novel_flow import events as ev
 from novel_flow.agents.base import BaseAgent
 from novel_flow.agents.writing_chapter_agent import WritingChapterAgent
 from novel_flow.llm.base import LLMClient, LLMMessage
+from novel_flow.llm.executor import PromptLLMExecutor
 from novel_flow.models.schemas import (
     ActualChapterSummary,
     AgentResult,
@@ -59,6 +60,7 @@ class WriterAgent(BaseAgent):
         self.llm_client = llm_client
         self.patch_executor = patch_executor
         self.prompt_library = prompt_library or PromptLibrary()
+        self.llm_executor = PromptLLMExecutor(llm_client=self.llm_client, prompt_library=self.prompt_library)
         self.context_sanitizer = ContextSanitizationTask(
             llm_client=self.llm_client,
             prompt_library=self.prompt_library,
@@ -811,13 +813,14 @@ class WriterAgent(BaseAgent):
         return self.prompt_library.render(relative_path, **kwargs)
 
     def _messages(self, system_path: str, prompt: str) -> list[LLMMessage]:
-        return [
-            LLMMessage(role="system", content=self.prompt_library.load(system_path)),
-            LLMMessage(role="user", content=prompt),
-        ]
+        return self.llm_executor.build_prompt_messages(system_path=system_path, prompt=prompt)
 
     def _generate_text(self, prompt: str, *, system_path: str, temperature: float) -> str:
-        return self.llm_client.generate(messages=self._messages(system_path, prompt), temperature=temperature).strip()
+        return self.llm_executor.generate_prompt_text(
+            system_path=system_path,
+            prompt=prompt,
+            temperature=temperature,
+        )
 
     @staticmethod
     def _scene_card_text(scene_card: SceneCard) -> str:

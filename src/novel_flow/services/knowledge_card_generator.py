@@ -4,7 +4,8 @@ import re
 from pathlib import Path
 
 from novel_flow.config import Settings
-from novel_flow.llm.base import LLMClient, LLMMessage
+from novel_flow.llm.base import LLMClient
+from novel_flow.llm.executor import PromptLLMExecutor
 from novel_flow.llm.factory import build_llm_client
 from novel_flow.models.schemas import KnowledgeCard
 from novel_flow.prompting.templates import PromptLibrary
@@ -40,6 +41,7 @@ class KnowledgeCardGenerator:
     def __init__(self, llm_client: LLMClient, prompt_library: PromptLibrary | None = None) -> None:
         self.llm_client = llm_client
         self.prompt_library = prompt_library or PromptLibrary()
+        self.llm_executor = PromptLLMExecutor(llm_client=self.llm_client, prompt_library=self.prompt_library)
 
     @classmethod
     def from_settings(cls, settings: Settings) -> "KnowledgeCardGenerator":
@@ -55,12 +57,11 @@ class KnowledgeCardGenerator:
             max_cards=max_cards,
             raw_text=raw_text,
         )
-        raw = self.llm_client.generate(
-            messages=[
-                LLMMessage(role="system", content=self.prompt_library.load("knowledge/system.txt")),
-                LLMMessage(role="user", content=prompt),
-            ],
+        raw = self.llm_executor.generate_prompt_text(
+            system_path="knowledge/system.txt",
+            prompt=prompt,
             temperature=0.2,
+            strip=False,
         )
         parsed = extract_json_object(raw)
         return self._normalize_cards(parsed, source_name=source_name)
