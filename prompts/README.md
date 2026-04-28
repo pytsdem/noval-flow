@@ -4,6 +4,10 @@
 
 ## 目录说明
 
+- `style_cards/shared_base.txt`
+  - 所有小说共用的基础风格卡
+- `style_cards/*.txt`
+  - 按题材方向拆分的风格聚焦卡，`src/novel_flow/services/style_cards.py` 会按 `style_direction` 自动加载
 - `writer/system.txt`
   - WriterAgent 的 system prompt
 - `writer/create_hook.txt`

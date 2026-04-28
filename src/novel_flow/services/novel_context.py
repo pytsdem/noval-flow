@@ -14,6 +14,7 @@ from novel_flow.models.schemas import (
     TwistDesign,
     WriterContext,
 )
+from novel_flow.services.style_cards import render_style_card
 from novel_flow.services.selectors import (
     get_character_card_by_name,
     get_character_milestone_by_name,
@@ -24,21 +25,6 @@ SelectionStrategy = Literal[
     "writer_context",
     "character_mindset_scoped_steps",
 ]
-
-_STYLE_CARD_TEXT = """[Style card]
-Genre: restrained historical romance with pressure, mistrust, and emotional misreading.
-POV: stay in limited perspective; never explain hidden truth from an omniscient distance.
-Language: readable modern Chinese prose with historical texture, not archaic imitation and not web-novel slang.
-Texture: scenes should feel lived-in and physically present. Let setting, objects, labor, etiquette, weather, money, and bodily discomfort quietly shape the page.
-Emotion: avoid naming feelings too quickly. Let emotion emerge through what the POV notices, avoids, says, misreads, touches, or cannot bring itself to do.
-Dialogue: keep it human and motivated. People should speak from position, need, habit, fear, and relationship history, not to serve the outline.
-Character landing: make people convincing through selective concrete detail such as posture, hands, clothing, injuries, routine, and forms of address, without turning detail into a checklist.
-Reveal discipline: clues may appear, but allowed clues must not be over-explained before reveal.
-Relationship movement: every chapter should deepen, strain, tilt, or re-price at least one relationship beat in a believable way.
-Backstory rule: if the past appears, let it arise naturally from present pressure, memory trigger, or action; do not paste in explanatory blocks.
-Rhythm: vary sentence weight and scene pace with the dramatic moment. Do not let the prose sound mechanically patterned.
-Immersion goal: the reader should feel inside the room, inside the body's reaction, and inside the character's limited understanding.
-"""
 
 _CN_NUMERAL_MAP = {
     "零": 0,
@@ -534,7 +520,10 @@ class NovelContextFormatter:
                 selection.timeline_consistency_notes,
             ),
             relevant_world_rules_text=cls._relevant_world_rules_text(selection.relevant_world_rules),
-            style_card_text=_STYLE_CARD_TEXT.strip(),
+            style_card_text=render_style_card(
+                premise=snapshot.premise,
+                chapter_brief=snapshot.chapter_brief,
+            ),
             active_twists=snapshot.active_twists,
             active_story_lines=snapshot.active_story_lines,
             scene_character_context_text=scene_character_context_text,

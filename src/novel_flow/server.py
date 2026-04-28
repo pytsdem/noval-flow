@@ -43,6 +43,7 @@ from novel_flow.services.reference_library import ReferenceLibrary
 from novel_flow.services.selectors import (
     get_character_card_by_name,
 )
+from novel_flow.services.style_cards import list_novel_type_options, resolve_style_profile
 
 if TYPE_CHECKING:
     from novel_flow.storage.sqlite_store import SQLiteStore
@@ -320,19 +321,31 @@ class NovelApp:
     def _clean_user_text(value: str) -> str:
         return value.replace("\r\n", "\n").replace("\r", "\n").rstrip()
 
-    def create_novel_shell(self, mode: str, *, query: str, style_request: str = "", title: str = "") -> dict[str, Any]:
+    def list_novel_type_options(self) -> list[dict[str, str]]:
+        return list_novel_type_options()
+
+    def create_novel_shell(
+        self,
+        mode: str,
+        *,
+        query: str,
+        style_request: str = "",
+        title: str = "",
+        novel_type: str = "",
+    ) -> dict[str, Any]:
         store = self._store(mode)
         now = datetime.now(timezone.utc)
         clean_query = self._clean_user_text(query)
         clean_style = self._clean_user_text(style_request)
         clean_title = self._clean_user_text(title).strip()
         title_hint = clean_title or (clean_query.strip().splitlines()[0][:24] or "Untitled Novel").strip()
+        style_profile = resolve_style_profile(novel_type=novel_type, style_request=clean_style)
         premise = StoryPremise(
             title=title_hint,
             high_concept="TBD",
             story_summary="",
-            genre="TBD",
-            target_style=clean_style or "TBD",
+            genre=style_profile["genre_label"],
+            target_style=style_profile["effective_style_request"],
             emotional_hook="TBD",
             central_conflict="TBD",
             core_hook="TBD",
@@ -349,6 +362,10 @@ class NovelApp:
                 "original_query": clean_query,
                 "user_topic": "",
                 "style_request": clean_style,
+                "effective_style_request": style_profile["effective_style_request"],
+                "novel_type": style_profile["novel_type"],
+                "novel_type_label": style_profile["novel_type_label"],
+                "style_direction": style_profile["style_direction"],
                 "assistant_persona_prompt": "",
                 "target_words": 100000,
                 "total_word_target": "10万字左右",
@@ -1560,7 +1577,14 @@ class NovelApp:
 
         return self._launch_run(mode, run_id, task)
 
-    def start_formal_novel(self, query: str, style_request: str = "", llm_provider: str | None = None) -> str:
+    def start_formal_novel(
+        self,
+        query: str,
+        style_request: str = "",
+        *,
+        novel_type: str = "",
+        llm_provider: str | None = None,
+    ) -> str:
         run_id = f"run_{uuid4().hex[:10]}"
         provider = self._normalize_llm_provider(llm_provider)
 
@@ -1578,6 +1602,7 @@ class NovelApp:
                         "formal",
                         query=query,
                         style_request=style_request,
+                        novel_type=novel_type,
                     )
                 )
                 self._save_output(
@@ -2462,6 +2487,9 @@ class _Handler(BaseHTTPRequestHandler):
         if parsed.path == "/api/novels":
             self._json(self.app.list_novels(qs.get("mode", ["formal"])[0]))
             return
+        if parsed.path == "/api/novel-types":
+            self._json({"ok": True, "items": self.app.list_novel_type_options()})
+            return
         if parsed.path == "/api/novel":
             self._json(self.app.get_novel(qs.get("mode", ["formal"])[0], qs.get("book_id", [""])[0]))
             return
@@ -2489,6 +2517,7 @@ class _Handler(BaseHTTPRequestHandler):
                             query=str(payload.get("query", "")),
                             style_request=str(payload.get("style_request", "")),
                             title=str(payload.get("title", "")),
+                            novel_type=str(payload.get("novel_type", "")),
                         ),
                     }
                 )
@@ -2500,6 +2529,7 @@ class _Handler(BaseHTTPRequestHandler):
                         "run_id": self.app.start_formal_novel(
                             str(payload.get("query", "")),
                             str(payload.get("style_request", "")),
+                            novel_type=str(payload.get("novel_type", "")),
                             llm_provider=llm_provider_text,
                         ),
                     }
@@ -2977,12 +3007,13 @@ textarea:focus,input:focus,select:focus,button:focus{outline:none;border-color:#
 @media (max-width: 980px){#main{flex-direction:column}#left{width:100%;max-width:none;min-width:0;border-right:none;border-bottom:1px solid #232834;max-height:42vh}#tabs{padding-top:8px}#tc{padding:14px}.field-grid{grid-template-columns:1fr}}
 </style></head><body>
 <div id='hdr'><div class='hdr-row'><div class='hdr-brand'><h1>Novel Flow</h1><span id='boot-pill' class='tag'>前端待初始化</span></div><div class='hdr-selects'><select id='modeSel' onchange='changeMode()'><option value='formal'>正式模式</option><option value='test'>测试模式</option></select><select id='modelSel' onchange='changeModel()'><option value='deepseek'>DeepSeek V4-Pro</option><option value='doubao'>豆包</option><option value='openai'>OpenAI</option><option value='codex'>Codex CLI</option></select><select id='novelSel' onchange='selectNovel(this.value)'><option value=''>选择小说</option></select><span id='stage-pill'>未开始</span></div><div class='hdr-primary'><button id='btnNew' onclick='openNewNovelDialog()'>新建小说</button><button id='btnContinue' onclick='continueFormal()'>写下一章</button><button id='btnStop' class='ghost' onclick='stopCurrentRun()' style='display:none'>停止运行</button><button class='danger' onclick='deleteNovel()'>删除小说</button><button id='btnBlueprint' onclick='testBlueprint()' style='display:none'>测试大纲</button><button id='btnWrite' onclick='testWrite()' style='display:none'>测试写正文</button><button id='btnCritique' onclick='testCritique()' style='display:none'>测试评价</button><button id='btnPatch' onclick='testPatch()' style='display:none'>测试修改</button></div></div><div class='hdr-row hdr-steps'><button id='btnStep1' class='step-btn' onclick=\"startConfiguredPlanningRun('step_1')\">1 大纲+蓝图</button><button id='btnStep2' class='step-btn' onclick=\"startConfiguredPlanningRun('step_2')\">2 背景系+世界观</button><button id='btnStep3' class='step-btn' onclick=\"startConfiguredPlanningRun('step_3')\">3 角色卡</button><button id='btnStep4' class='step-btn' onclick=\"startConfiguredPlanningRun('step_4')\">4 客观事件时间线</button><button id='btnStep5' class='step-btn' onclick=\"startConfiguredPlanningRun('step_5')\">5 角色发展线</button><button id='btnStep6' class='step-btn' onclick=\"startConfiguredPlanningRun('step_6')\">6 反转设计</button><button id='btnStep7' class='step-btn' onclick=\"startConfiguredPlanningRun('step_7')\">7 明线暗线发展线</button><button id='btnStep8' class='step-btn' onclick=\"startConfiguredPlanningRun('step_8')\">8 续生成一章摘要</button><button id='btnBlueprintReview' class='step-btn' onclick=\"startConfiguredPlanningRun('blueprint_review')\">Critic Blueprint</button></div></div>
-<div id='newNovelModal' class='modal'><div class='modal-card'><div class='modal-head'><div class='modal-title'>新建小说</div><div class='modal-desc'>这里先保存小说标题、原始题材需求和可选风格，不会自动继续到大纲生成。创建后请手动点击“1 大纲+蓝图”。</div></div><div class='modal-body'><div class='modal-section'><div class='modal-section-title'>基础信息</div><div class='field-grid'><div class='field full'><label>小说标题</label><input id='newTitleInput' placeholder='例如：她非良母' /><div class='field-help'>这里是书名，后续会显示在左上角小说切换列表里，也可以在用户输入页继续修改。</div></div><div class='field full'><label>题材/需求</label><textarea id='newQueryInput' placeholder='例如：都市情感反转，女主发现丈夫隐藏身份后反击'></textarea><div class='field-help'>写清题材、主角处境、核心冲突，或者你最想看到的关键局面。</div></div><div class='field full'><label>风格要求（可留空）</label><textarea id='newStyleInput' placeholder='例如：古言权谋、轻喜剧、短篇悬疑、第三人称群像；留空则由系统自行判断'></textarea><div class='field-help'>这里只在你明确填写时生效，不再默认固定文风或人称。</div></div></div></div><div class='modal-section'><div class='modal-section-title'>扩展配置</div><div class='config-placeholder'>后续可以在这里增加目标体量、章节数、叙事视角、禁用元素、参考卡片范围等配置。当前版本先使用系统默认决策。</div></div></div><div class='modal-actions'><button class='ghost' onclick='closeNewNovelDialog()'>取消</button><button onclick='startFormalFromDialog()'>保存需求</button></div></div></div>
+<div id='newNovelModal' class='modal'><div class='modal-card'><div class='modal-head'><div class='modal-title'>新建小说</div><div class='modal-desc'>这里先保存小说标题、原始题材需求、小说类型和可选风格，不会自动继续到大纲生成。创建后请手动点击“1 大纲+蓝图”。</div></div><div class='modal-body'><div class='modal-section'><div class='modal-section-title'>基础信息</div><div class='field-grid'><div class='field full'><label>小说标题</label><input id='newTitleInput' placeholder='例如：她非良母' /><div class='field-help'>这里是书名，后续会显示在左上角小说切换列表里，也可以在用户输入页继续修改。</div></div><div class='field full'><label>题材/需求</label><textarea id='newQueryInput' placeholder='例如：都市情感反转，女主发现丈夫隐藏身份后反击'></textarea><div class='field-help'>写清题材、主角处境、核心冲突，或者你最想看到的关键局面。</div></div><div class='field full'><label>小说类型</label><select id='newTypeSelect' onchange='updateNovelTypeHint()'><option value='auto'>加载中...</option></select><div id='newTypeHint' class='field-help'>不选也可以，系统会按题材需求和额外风格要求自动判断。</div></div><div class='field full'><label>风格要求（可留空）</label><textarea id='newStyleInput' placeholder='例如：古言权谋、轻喜剧、短篇悬疑、第三人称群像；留空则按所选类型自动匹配风格层'></textarea><div class='field-help'>这里是额外风格偏好。正文主流程不变，风格差异只走独立的风格层提示词。</div></div></div></div><div class='modal-section'><div class='modal-section-title'>扩展配置</div><div class='config-placeholder'>后续可以在这里增加目标体量、章节数、叙事视角、禁用元素、参考卡片范围等配置。当前版本先使用系统默认决策。</div></div></div><div class='modal-actions'><button class='ghost' onclick='closeNewNovelDialog()'>取消</button><button onclick='startFormalFromDialog()'>保存需求</button></div></div></div>
 <div id='main'><div id='left'><div id='subhdr'>左侧显示当前小说的历史运行记录，当前运行默认展开</div><div id='evs'><div class='empty'>选择小说或发起一次运行后查看过程</div></div></div><div id='right'><div id='tabs'><div class='tab active' onclick="showTab('input')">用户输入</div><div class='tab' onclick="showTab('blueprint')">小说信息</div><div class='tab' onclick="showTab('text')">小说正文</div><div class='tab' onclick="showTab('critic')">评价结果</div></div><div id='tc'><div id='pnl-input' class='pnl active'><div class='empty'>等待加载用户输入</div></div><div id='pnl-blueprint' class='pnl'><div class='empty'>等待加载小说信息</div></div><div id='pnl-text' class='pnl'><div class='empty'>等待加载小说正文</div></div><div id='pnl-critic' class='pnl'><div class='empty'>等待加载评价结果</div></div></div></div></div>
 <script>
 let mode='formal',llmProvider='deepseek',bookId='',pendingRunId='',runsCache=[],expandedRuns=new Set(),boxStates={},detailStates={},currentBook=null,pendingStepRevision=null,lastRightRenderKey='',lastLivePreviewKey='',runActiveItemKeys={};
 let refreshPaused=false,refreshPauseReason='',refreshPauseTimer=null,isMouseSelecting=false;
 const LLM_PROVIDER_STORAGE_KEY='novel_flow_llm_provider';
+const DEFAULT_STYLE_PLACEHOLDER='例如：古言权谋、轻喜剧、短篇悬疑、第三人称群像；留空则按所选类型自动匹配风格层';
 const STAGES={research:'调研中',planning:'大纲中',writing:'写作中',critique:'评价中',patching:'修改中',complete:'已完成'};
 const stageText=v=>STAGES[v]||v||'未开始',esc=v=>String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'),shortTs=v=>v?String(v).replace('T',' ').slice(0,19):'';
 async function api(path,opt){const r=await fetch(path,Object.assign({headers:{'Content-Type':'application/json'}},opt||{}));return await r.json();}
@@ -2991,6 +3022,7 @@ const validLlmProvider=v=>['deepseek','doubao','openai','codex'].includes(String
 function currentLlmProvider(){return validLlmProvider(llmProvider)?llmProvider:'deepseek';}
 function withLlmProvider(payload){return Object.assign({},payload||{}, {llm_provider:currentLlmProvider()});}
 function changeModel(){llmProvider=validLlmProvider(modelSel.value)?modelSel.value:'deepseek';try{localStorage.setItem(LLM_PROVIDER_STORAGE_KEY,llmProvider);}catch{}}
+let novelTypeOptions=[];
 let stepDrafts={},stepDraftDirty={},stepReviewNotes={},stepDraftBookId='';
 let stepDraftObjects={};
 function deepClone(value){return JSON.parse(JSON.stringify(value??{}));}
@@ -3881,9 +3913,13 @@ function setAllInputBlocks(open){document.querySelectorAll('#pnl-input details.i
 function setPanelSections(panelId,open){document.querySelectorAll(`#${panelId} details.section-card`).forEach(el=>{el.open=open;detailStates[el.dataset.detailKey]=open;});autoSizeTextareas(panelId);}
 function snapshotPanelDetailStates(panelId){const root=document.getElementById(panelId);if(!root)return;root.querySelectorAll('details[data-detail-key]').forEach(el=>{const key=el.dataset.detailKey;if(key)detailStates[key]=!!el.open;});}
 function normalizeMultiline(value){const cr=String.fromCharCode(13),lf=String.fromCharCode(10);return String(value??'').split(cr+lf).join(lf).split(cr).join(lf).trimEnd();}
-function openNewNovelDialog(){newNovelModal.style.display='flex';newTitleInput.focus();}
+function renderNovelTypeOptions(){const grouped={};for(const item of novelTypeOptions){const group=item.group||'其他';if(!grouped[group])grouped[group]=[];grouped[group].push(item);}newTypeSelect.innerHTML=Object.entries(grouped).map(([group,items])=>`<optgroup label="${esc(group)}">${items.map(item=>`<option value="${esc(item.value)}">${esc(item.label)}</option>`).join('')}</optgroup>`).join('');if(!newTypeSelect.value)newTypeSelect.value='auto';}
+function currentNovelTypeOption(){const value=String(newTypeSelect.value||'auto');return novelTypeOptions.find(item=>item.value===value)||novelTypeOptions.find(item=>item.value==='auto')||null;}
+function updateNovelTypeHint(){const option=currentNovelTypeOption();if(!option){newTypeHint.textContent='不选也可以，系统会按题材需求和额外风格要求自动判断。';newStyleInput.placeholder=DEFAULT_STYLE_PLACEHOLDER;return;}const base='不选也可以，系统会按题材需求和额外风格要求自动判断。';if(option.value==='auto'){newTypeHint.textContent=base;newStyleInput.placeholder=DEFAULT_STYLE_PLACEHOLDER;return;}newTypeHint.textContent=`将默认匹配到“${option.genre_label}”，风格层走“${option.direction_label}”。${option.description}`;if(!newStyleInput.value.trim()&&option.default_style_request){newStyleInput.placeholder=`例如：${option.default_style_request}`;}else{newStyleInput.placeholder=DEFAULT_STYLE_PLACEHOLDER;}}
+async function ensureNovelTypeOptions(){if(novelTypeOptions.length)return novelTypeOptions;const r=await api('/api/novel-types');if(!ensureOk(r))return [];novelTypeOptions=Array.isArray(r.items)?r.items:[];if(!novelTypeOptions.length){novelTypeOptions=[{value:'auto',label:'自动判断 / 通用言情',group:'通用',genre_label:'通用言情',direction_label:'通用连载',default_style_request:'',description:'不指定频道，系统自动判断。'}];}renderNovelTypeOptions();updateNovelTypeHint();return novelTypeOptions;}
+async function openNewNovelDialog(){newNovelModal.style.display='flex';await ensureNovelTypeOptions();newTitleInput.focus();}
 function closeNewNovelDialog(){newNovelModal.style.display='none';}
-async function startFormalFromDialog(){const title=newTitleInput.value.trim();const q=normalizeMultiline(newQueryInput.value);if(!q)return alert('请输入题材/需求。');const style=normalizeMultiline(newStyleInput.value);const r=await api('/api/novels/create',{method:'POST',body:JSON.stringify({mode,title,query:q,style_request:style})});if(!ensureOk(r))return;closeNewNovelDialog();bookId=r.book.id;pendingRunId='';pendingStepRevision=null;runsCache=[];expandedRuns=new Set();lastRightRenderKey='';lastLivePreviewKey='';runActiveItemKeys={};currentBook=r.book;stagePill.textContent='未开始';await loadNovels();novelSel.value=bookId;await refreshNovel();updateStopButton();}
+async function startFormalFromDialog(){const title=newTitleInput.value.trim();const q=normalizeMultiline(newQueryInput.value);if(!q)return alert('请输入题材/需求。');const style=normalizeMultiline(newStyleInput.value);const novelType=String(newTypeSelect.value||'auto');const r=await api('/api/novels/create',{method:'POST',body:JSON.stringify({mode,title,query:q,style_request:style,novel_type:novelType})});if(!ensureOk(r))return;closeNewNovelDialog();bookId=r.book.id;pendingRunId='';pendingStepRevision=null;runsCache=[];expandedRuns=new Set();lastRightRenderKey='';lastLivePreviewKey='';runActiveItemKeys={};currentBook=r.book;stagePill.textContent='未开始';await loadNovels();novelSel.value=bookId;await refreshNovel();updateStopButton();}
 function setPendingRunState(runId,{stage,pendingMessage,taskLabel,clearLivePreview=false,clearActiveItem=false}={}){
   pendingRunId=runId||'';
   if(clearLivePreview)lastLivePreviewKey='';
@@ -4092,7 +4128,7 @@ function renderCritic(c){
 }
 
 function showTab(name){document.querySelectorAll('.tab').forEach((e,i)=>e.classList.toggle('active',['input','blueprint','text','critic'][i]===name));document.querySelectorAll('.pnl').forEach(e=>e.classList.remove('active'));document.getElementById('pnl-'+name).classList.add('active');}
-const btnNew=document.getElementById('btnNew'),btnStep1=document.getElementById('btnStep1'),btnStep2=document.getElementById('btnStep2'),btnStep3=document.getElementById('btnStep3'),btnStep4=document.getElementById('btnStep4'),btnStep5=document.getElementById('btnStep5'),btnStep6=document.getElementById('btnStep6'),btnStep7=document.getElementById('btnStep7'),btnStep8=document.getElementById('btnStep8'),btnBlueprintReview=document.getElementById('btnBlueprintReview'),btnContinue=document.getElementById('btnContinue'),btnBlueprint=document.getElementById('btnBlueprint'),btnWrite=document.getElementById('btnWrite'),btnCritique=document.getElementById('btnCritique'),btnPatch=document.getElementById('btnPatch'),btnStop=document.getElementById('btnStop'),stagePill=document.getElementById('stage-pill'),bootPill=document.getElementById('boot-pill'),novelSel=document.getElementById('novelSel'),modeSel=document.getElementById('modeSel'),modelSel=document.getElementById('modelSel'),evs=document.getElementById('evs'),newNovelModal=document.getElementById('newNovelModal'),newTitleInput=document.getElementById('newTitleInput'),newQueryInput=document.getElementById('newQueryInput'),newStyleInput=document.getElementById('newStyleInput');
+const btnNew=document.getElementById('btnNew'),btnStep1=document.getElementById('btnStep1'),btnStep2=document.getElementById('btnStep2'),btnStep3=document.getElementById('btnStep3'),btnStep4=document.getElementById('btnStep4'),btnStep5=document.getElementById('btnStep5'),btnStep6=document.getElementById('btnStep6'),btnStep7=document.getElementById('btnStep7'),btnStep8=document.getElementById('btnStep8'),btnBlueprintReview=document.getElementById('btnBlueprintReview'),btnContinue=document.getElementById('btnContinue'),btnBlueprint=document.getElementById('btnBlueprint'),btnWrite=document.getElementById('btnWrite'),btnCritique=document.getElementById('btnCritique'),btnPatch=document.getElementById('btnPatch'),btnStop=document.getElementById('btnStop'),stagePill=document.getElementById('stage-pill'),bootPill=document.getElementById('boot-pill'),novelSel=document.getElementById('novelSel'),modeSel=document.getElementById('modeSel'),modelSel=document.getElementById('modelSel'),evs=document.getElementById('evs'),newNovelModal=document.getElementById('newNovelModal'),newTitleInput=document.getElementById('newTitleInput'),newQueryInput=document.getElementById('newQueryInput'),newTypeSelect=document.getElementById('newTypeSelect'),newTypeHint=document.getElementById('newTypeHint'),newStyleInput=document.getElementById('newStyleInput');
 function showFrontendError(message){
   if(bootPill)bootPill.textContent=`前端失败：${String(message||'未知错误').slice(0,40)}`;
   if(evs){
@@ -4121,6 +4157,7 @@ async function initApp(){
     if(modeSel)modeSel.value=mode;
     if(modelSel)modelSel.value=llmProvider;
     toggleButtons();
+    await ensureNovelTypeOptions();
     await loadNovels({autoSelectSingle:true});
     if(bootPill)bootPill.textContent=`前端已加载 ${Math.max((novelSel?.options?.length||1)-1,0)} 本`;
     updateStopButton();

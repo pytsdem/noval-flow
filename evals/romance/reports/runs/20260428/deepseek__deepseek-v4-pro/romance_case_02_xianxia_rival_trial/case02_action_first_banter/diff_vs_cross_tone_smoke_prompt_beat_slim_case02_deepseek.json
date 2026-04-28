@@ -1,0 +1,135 @@
+{
+  "baseline_label": "cross_tone_smoke_prompt_beat_slim_case02_deepseek",
+  "candidate_label": "case02_action_first_banter",
+  "compared_at": "2026-04-28T14:01:14.778688Z",
+  "average_score_deltas": {
+    "romance_tension_score": {
+      "baseline": 8.2,
+      "candidate": 8.7,
+      "delta": 0.5
+    },
+    "relationship_progression_score": {
+      "baseline": 7.8,
+      "candidate": 8.5,
+      "delta": 0.7
+    },
+    "emotional_resonance_score": {
+      "baseline": 8.4,
+      "candidate": 8.0,
+      "delta": -0.4
+    },
+    "character_attraction_score": {
+      "baseline": 8.67,
+      "candidate": 8.73,
+      "delta": 0.06
+    },
+    "hook_score": {
+      "baseline": 9.0,
+      "candidate": 9.25,
+      "delta": 0.25
+    },
+    "continuity_score": {
+      "baseline": 9.0,
+      "candidate": 9.0,
+      "delta": 0.0
+    },
+    "redundancy_score": {
+      "baseline": 7.42,
+      "candidate": 7.78,
+      "delta": 0.36
+    },
+    "mind_state_consistency_score": {
+      "baseline": 9.0,
+      "candidate": 9.0,
+      "delta": 0.0
+    },
+    "genre_fit_score": {
+      "baseline": 9.2,
+      "candidate": 9.0,
+      "delta": -0.2
+    }
+  },
+  "case_diffs": [
+    {
+      "case_id": "romance_case_02_xianxia_rival_trial",
+      "title": "心声同生契的规则秘境",
+      "baseline_verdict": "pass",
+      "candidate_verdict": "pass",
+      "score_deltas": {
+        "romance_tension_score": {
+          "baseline": 8.2,
+          "candidate": 8.7,
+          "delta": 0.5
+        },
+        "relationship_progression_score": {
+          "baseline": 7.8,
+          "candidate": 8.5,
+          "delta": 0.7
+        },
+        "emotional_resonance_score": {
+          "baseline": 8.4,
+          "candidate": 8.0,
+          "delta": -0.4
+        },
+        "character_attraction_score": {
+          "baseline": 8.67,
+          "candidate": 8.73,
+          "delta": 0.06
+        },
+        "hook_score": {
+          "baseline": 9.0,
+          "candidate": 9.25,
+          "delta": 0.25
+        },
+        "continuity_score": {
+          "baseline": 9.0,
+          "candidate": 9.0,
+          "delta": 0.0
+        },
+        "redundancy_score": {
+          "baseline": 7.42,
+          "candidate": 7.78,
+          "delta": 0.36
+        },
+        "mind_state_consistency_score": {
+          "baseline": 9.0,
+          "candidate": 9.0,
+          "delta": 0.0
+        },
+        "genre_fit_score": {
+          "baseline": 9.2,
+          "candidate": 9.0,
+          "delta": -0.2
+        }
+      },
+      "improved_metrics": [
+        "romance_tension_score",
+        "relationship_progression_score",
+        "redundancy_score"
+      ],
+      "declined_metrics": [
+        "emotional_resonance_score"
+      ],
+      "new_blockers": [],
+      "resolved_blockers": [],
+      "cost_deltas": {
+        "llm_calls": -1.0,
+        "patch_rounds": 0.0,
+        "duration_seconds": -331.71
+      }
+    }
+  ],
+  "improved_metrics": [
+    "redundancy_score",
+    "relationship_progression_score",
+    "romance_tension_score"
+  ],
+  "declined_metrics": [
+    "emotional_resonance_score"
+  ],
+  "blocked_case_delta": 0,
+  "new_blocker_case_ids": [],
+  "resolved_blocker_case_ids": [],
+  "baseline_path": "evals\\romance\\reports\\cross_tone_smoke_prompt_beat_slim_case02_deepseek\\summary.json",
+  "candidate_path": "evals\\romance\\reports\\case02_action_first_banter\\summary.json"
+}

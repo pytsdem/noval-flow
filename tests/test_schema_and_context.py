@@ -128,6 +128,7 @@ class SchemaAndContextTests(unittest.TestCase):
         self,
         *,
         chapter_brief: ChapterBrief | None = None,
+        premise: StoryPremise | None = None,
         worldbuilding: dict | None = None,
         character_cards: list[CharacterCard] | None = None,
         character_milestones: list[dict] | None = None,
@@ -136,7 +137,7 @@ class SchemaAndContextTests(unittest.TestCase):
     ):
         return NovelContextSelectorService.create_snapshot(
             chapter_brief=chapter_brief or self.chapter_brief,
-            premise=self.premise,
+            premise=premise or self.premise,
             twist_designs=[self.twist],
             story_lines=[self.line],
             worldbuilding=worldbuilding or {},
@@ -787,6 +788,37 @@ class SchemaAndContextTests(unittest.TestCase):
         self.assertEqual(PlanContentBlocksTool._target_block_count("target=5500-7000"), 5)
         self.assertEqual(PlanContentBlocksTool._target_block_count("8000字"), 6)
         self.assertEqual(PlanContentBlocksTool._target_block_count("new clues=1", fallback_count=4), 4)
+
+    def test_writer_context_style_card_changes_by_story_direction(self) -> None:
+        historical_context = self._writer_context(current_chapter_id="ch_001")
+        xianxia_premise = self.premise.model_copy(
+            update={
+                "genre": "xianxia fantasy romance",
+                "target_style": "light adventure banter",
+                "emotional_hook": "Banter under dangerous trial pressure.",
+                "story_summary": "A light xianxia bond trial forces banter and accidental closeness.",
+            }
+        )
+        xianxia_context = self._writer_context(current_chapter_id="ch_001", premise=xianxia_premise)
+        xianxia_block_context = ChapterToolPayloadBuilder.build_block_runtime_context(
+            context=xianxia_context,
+            block=ContentBlock(
+                block_id="ch_001.sc_001.b001",
+                chapter_id="ch_001",
+                block_index=1,
+                purpose="Pressure beat.",
+                target_chars=500,
+                end_state="The beat lands.",
+            ),
+            committed_blocks=[],
+        )
+
+        self.assertIn("古风权谋言情 / 克制虐恋", historical_context.style_card_text)
+        self.assertIn("高冲击信息，例如婚书、供词、指控、逼问或旧案词条，只完整击中一次", historical_context.style_card_text)
+        self.assertIn("轻松冒险 / 欢喜冤家", xianxia_context.style_card_text)
+        self.assertIn("规则、危险、任务压力先通过失败步骤、惩罚、物件反应、身体代价落地", xianxia_context.style_card_text)
+        self.assertIn("轻松冒险 / 欢喜冤家", xianxia_block_context["style_rules"])
+        self.assertNotEqual(historical_context.style_card_text, xianxia_context.style_card_text)
 
     def test_completed_memory_comes_from_actual_summaries(self) -> None:
         summary = ActualChapterSummary(

@@ -1,0 +1,210 @@
+{
+  "case_id": "romance_case_02_xianxia_rival_trial",
+  "title": "心声同生契的规则秘境",
+  "description": "穿书小师妹与冷面师兄被规则秘境误绑同生契，师兄能听见她吐槽心声却不能说破；轻松斗嘴、危机甜感和阴谋钩子必须同步成立。",
+  "tags": [
+    "xianxia",
+    "book-entry",
+    "inner-voice",
+    "rule-trial",
+    "banter-romance"
+  ],
+  "verdict": "pass",
+  "scores": {
+    "romance_tension_score": 8.7,
+    "relationship_progression_score": 8.5,
+    "emotional_resonance_score": 8.0,
+    "character_attraction_score": 8.73,
+    "hook_score": 9.25,
+    "continuity_score": 9.0,
+    "redundancy_score": 7.78,
+    "mind_state_consistency_score": 9.0,
+    "genre_fit_score": 9.0
+  },
+  "metrics": {
+    "romance_tension_score": {
+      "score": 8.7,
+      "reason": "男女主之间的试探、回避与靠近频繁且具体。心声外泄不能点破的设定，让每一次提前反应、袖口遮痕和嘴硬回怼都形成有效潜台词。互换物品和亲手佩戴的动作，把斗嘴推进到尴尬又亲密的边界，拉扯感成立。",
+      "evidence_summary": "云眠嘴上贬低护身铃‘不值钱’，心里却怕陆既白弄丢；陆既白接过时指尖多停一息，符灯认可以后他立刻查看自己手腕上的刻痕并用袖口遮住。第九盏灯下，陆既白问‘你怕什么’，云眠脱口‘怕你替我死’，同生契同步温热，情绪打压之下还在互怼。",
+      "improvement_hint": "可在下一次同生契加深感知共享时，添加一个因心声误读而产生的微小行动误会，让拉扯更黏稠。",
+      "source": "llm"
+    },
+    "relationship_progression_score": {
+      "score": 8.5,
+      "reason": "两人从云眠‘只想解契甩开师兄’变为‘意识到他总先护她’；陆既白从冷面监考人变成能接住她失误、暗中保护却不肯言明的共犯。同生契人为刻痕的发现和陆既白的默认，把关系推进到共享秘密的层次。",
+      "evidence_summary": "云眠在符灯触发后主动把护身铃塞给他，触到刻痕位置的袖口时僵了一下；第九盏灯后她直指‘你的手腕上也有’，陆既白没有否认，并在黑暗中说‘第九盏灯的规则没消失’，两人形成新的共谋态势。",
+      "improvement_hint": "下一章可让云眠因为刻痕而试探陆既白，要求他给出一个‘解释’，迫使他做出更明确的靠近或回避动作，以巩固变化。",
+      "source": "llm"
+    },
+    "emotional_resonance_score": {
+      "score": 8.0,
+      "reason": "情绪通过同生契共享痛感、符灯倒数、身体反应和停顿具体落实，而非空泛抒情。结尾‘它在跟着我们走’留下一层凉意，与轻快斗嘴形成反差，余波有效。部分地方解释略多，但整体仍能钩住读者。",
+      "evidence_summary": "同生契灼烧像‘两颗心脏用同一个频率搏动’，云眠被看穿后‘脸烧了起来’，手腕红痕‘用一种温和的频率跳动’，最后黑暗中的声音让读者心头一紧。",
+      "improvement_hint": "可减少一两次对红痕跳动的直接解释语句，改为只呈现触感或痛感，让情绪更克制、更依赖动作。",
+      "source": "llm"
+    },
+    "character_attraction_score": {
+      "score": 8.73,
+      "reason": "由男主吸引力、女主吸引力和双人化学反应加权合成。",
+      "evidence_summary": "男主：云眠在心里骂一句，他的剑就偏半寸；符灯亮起前他总能提前行动，事后只说是经验；‘你在心里骂我的次数比你嘴上多十倍’直接戳中云眠，同生契同时温热，他却不肯多说一句。；女主：她发现规则不同于原书后冷静分析触发规律，提出‘不是碰什么而是做什么’；明知危险仍交出护身铃，嘴上‘嫌破’心里怕丢；面对第九盏灯坦诚‘怕你替我死’，随后又咬牙要他把话说出来。；双人：亲手为对方戴上随身物时，距离近到能听见呼吸节奏变化；红痕跳动产生不属于自己的脉搏；第九盏灯下，云眠脱口‘怕你替我死’，陆既白回答‘你在心里骂我……会立刻找理由原谅我’，两人都被迫亮出底牌。",
+      "improvement_hint": "可设计一次因心声误听而发生的肢体碰撞或差点说漏嘴，增加电流感。",
+      "source": "hybrid"
+    },
+    "hook_score": {
+      "score": 9.25,
+      "reason": "由开篇钩子与结尾钩子均值合成。",
+      "evidence_summary": "开头：首段末‘云眠在心里骂了一句，陆既白的剑尖又偏了半寸’直接展现心声能被察觉的设定，读者瞬间被轻喜剧和悬念吸引。；结尾：黑暗里陆既白压低声音说‘第九盏灯的规则没消失……它在跟着我们走’，云眠握紧墨玉牌，墙上潦草篆字反而越发亮眼，完美收束又拧开新悬念。",
+      "improvement_hint": "无。",
+      "source": "hybrid"
+    },
+    "continuity_score": {
+      "score": 9.0,
+      "reason": "承接第一道门坍塌后符阵开启，同生契红痕加深，情节、情绪、人设和世界观规则均顺滑延续。护身铃位置等细节已经过修补，不再断裂。",
+      "evidence_summary": "从‘第一道门塌下时同生契发烫’直接过渡到‘第二道门内同生契又猛地一烫’；刻痕的出现与陆既白之前的异常反应呼应。",
+      "improvement_hint": "无。",
+      "source": "llm"
+    },
+    "redundancy_score": {
+      "score": 7.78,
+      "reason": "以 romance judge 为主分，并用重复/anti-slop 规则信号做向下修正，不再允许规则层把坏重复或直白心理解释救高。",
+      "evidence_summary": "Judge：红痕跳动在不同节点分别承载痛感叠加、契约感知共享和人为刻痕显现，每次推进线索或情绪。；Rule：第40段与第52段语义形状过近（相似度约 1.00）；“此契原本只该”重复 6 次；“契原本只该绑”重复 6 次；“原本只该绑死”重复 6 次；review_structure_and_continuity 命中过重复相关问题；Anti-slop：直白心理标签 8 处（如“她心里想、他说“在心里想”）；review_structure_and_continuity 命中过直白心理/解释问题",
+      "improvement_hint": "后续章节对红痕的描写可控制频率，在与核心线索或关系变化直接相关时才启用。",
+      "source": "hybrid"
+    },
+    "mind_state_consistency_score": {
+      "score": 9.0,
+      "reason": "云眠始终保持嘴硬心软、遇险先找规则漏洞；陆既白全程克制、毒舌，用行动代替解释，即使在被追问时刻也无过多失控。二人均未出现心智断裂。",
+      "evidence_summary": "云眠在倒数压力下脱口‘怕你替我死’，这属于高压下的坦诚而非失控，事后立刻怼回去；陆既白遮掩刻痕的动作始终自然，即使在云眠直接质问时也未慌乱。",
+      "improvement_hint": "无。",
+      "source": "llm"
+    },
+    "genre_fit_score": {
+      "score": 9.0,
+      "reason": "完美契合‘仙侠奇幻言情’和‘轻松冒险/欢喜冤家’风格：奇幻规则服务互动，同生契、符灯阵带来亲密压力，斗嘴密集且带甜，危机不沉重，结尾钩子奇幻而危险。",
+      "evidence_summary": "规则始终落到‘互换随身物’‘说出最想隐瞒之事’等逼迫关系变化的行为，而非空谈修炼；气氛始终保持轻快紧张，男女主互坑互救不断。",
+      "improvement_hint": "无。",
+      "source": "llm"
+    }
+  },
+  "breakdowns": {
+    "male_lead_attraction": {
+      "score": 8.6,
+      "reason": "陆既白以克制、毒舌和绝对的行动力形成魅力。他提前替云眠挡险，用袖口遮刻痕，面对第九盏灯规则时冷静说出她‘骂完就原谅他’，这种看穿却不点破的从容和一丝慌张，既强大又带着不易察觉的在意。",
+      "evidence_summary": "云眠在心里骂一句，他的剑就偏半寸；符灯亮起前他总能提前行动，事后只说是经验；‘你在心里骂我的次数比你嘴上多十倍’直接戳中云眠，同生契同时温热，他却不肯多说一句。",
+      "improvement_hint": "未来可在男主迫于无奈时泄露一个很小的破绽，让读者更清晰看见他冷静下的挣扎。",
+      "source": "llm"
+    },
+    "female_lead_attraction": {
+      "score": 8.5,
+      "reason": "云眠的嘴硬、机灵和临场决断力突出。她凭记忆对比原书，判断出‘契灯阵’，在倒数压力下说出真心话，又立刻以怼回去维护自尊。她的吐槽好笑，行动却诚实，主体性很强。",
+      "evidence_summary": "她发现规则不同于原书后冷静分析触发规律，提出‘不是碰什么而是做什么’；明知危险仍交出护身铃，嘴上‘嫌破’心里怕丢；面对第九盏灯坦诚‘怕你替我死’，随后又咬牙要他把话说出来。",
+      "improvement_hint": "可以让云眠更早主动观察陆既白的异常反应，以她的敏锐度，这种观察与猜想即便不说出口也能增加她的主动性。",
+      "source": "llm"
+    },
+    "lead_pair_chemistry": {
+      "score": 9.0,
+      "reason": "双人同场时，斗嘴与心照不宣的默契、同生契的身体共鸣以及规则压迫共同制造出持续的火花。互换物品和第九盏灯的坦白场景，把关系张力推到顶点。",
+      "evidence_summary": "亲手为对方戴上随身物时，距离近到能听见呼吸节奏变化；红痕跳动产生不属于自己的脉搏；第九盏灯下，云眠脱口‘怕你替我死’，陆既白回答‘你在心里骂我……会立刻找理由原谅我’，两人都被迫亮出底牌。",
+      "improvement_hint": "可设计一次因心声误听而发生的肢体碰撞或差点说漏嘴，增加电流感。",
+      "source": "llm"
+    },
+    "opening_hook_score": {
+      "score": 9.0,
+      "reason": "开头快速进入压迫：石门闭合，同生契发烫，七盏符灯同时亮起，云眠心里骂一句，陆既白的剑偏半寸。规则立刻给出，同时埋下与原书不符的悬疑，阅读冲动即刻建立。",
+      "evidence_summary": "首段末‘云眠在心里骂了一句，陆既白的剑尖又偏了半寸’直接展现心声能被察觉的设定，读者瞬间被轻喜剧和悬念吸引。",
+      "improvement_hint": "无。",
+      "source": "llm"
+    },
+    "ending_hook_score": {
+      "score": 9.5,
+      "reason": "结尾在符灯全灭后，第九盏灯的规则被宣布‘没消失，它在跟着我们走’，配合‘此契原本只该绑死人’的反复浮现，产生强烈的阴谋延续感和危险紧迫性，驱使读者急切想看后续。",
+      "evidence_summary": "黑暗里陆既白压低声音说‘第九盏灯的规则没消失……它在跟着我们走’，云眠握紧墨玉牌，墙上潦草篆字反而越发亮眼，完美收束又拧开新悬念。",
+      "improvement_hint": "无。",
+      "source": "llm"
+    },
+    "judge_genre_fit_score": {
+      "score": 9.0,
+      "reason": "完美契合‘仙侠奇幻言情’和‘轻松冒险/欢喜冤家’风格：奇幻规则服务互动，同生契、符灯阵带来亲密压力，斗嘴密集且带甜，危机不沉重，结尾钩子奇幻而危险。",
+      "evidence_summary": "规则始终落到‘互换随身物’‘说出最想隐瞒之事’等逼迫关系变化的行为，而非空谈修炼；气氛始终保持轻快紧张，男女主互坑互救不断。",
+      "improvement_hint": "无。",
+      "source": "llm"
+    },
+    "judge_redundancy_score": {
+      "score": 8.5,
+      "reason": "虽然多次描写红痕跳动和陆既白遮袖，但每次均有新的功能：初次为符灯认证后的刻痕出现，再为共享痛感传递，后为揭示新刻痕和墨色蔓延，并非单纯重复。",
+      "evidence_summary": "红痕跳动在不同节点分别承载痛感叠加、契约感知共享和人为刻痕显现，每次推进线索或情绪。",
+      "improvement_hint": "后续章节对红痕的描写可控制频率，在与核心线索或关系变化直接相关时才启用。",
+      "source": "llm"
+    },
+    "rule_redundancy_score": {
+      "score": 4.9,
+      "reason": "重复铺陈较明显，部分段落在重复同一心理、情绪、意象或动作模式，且没有形成有效回环。",
+      "evidence_summary": "第40段与第52段语义形状过近（相似度约 1.00）；“此契原本只该”重复 6 次；“契原本只该绑”重复 6 次；“原本只该绑死”重复 6 次；review_structure_and_continuity 命中过重复相关问题",
+      "improvement_hint": "优先删除重复解释，把腾出的篇幅换成新剧情功能、新代价、新误读、新线索或新关系变化。 同时检查 patch 是否只改字面而没改 block 功能。",
+      "source": "rule"
+    },
+    "rule_anti_slop_score": {
+      "score": 5.1,
+      "reason": "直白心理标签和解释性总结句偏多，正文更像在说明情绪而不是让读者看见情绪。",
+      "evidence_summary": "直白心理标签 8 处（如“她心里想、他说“在心里想”）；review_structure_and_continuity 命中过直白心理/解释问题",
+      "improvement_hint": "先清掉“她知道/他意识到/这让她更明白”类句式，再把篇幅换成新动作、新误读和新关系代价。",
+      "source": "rule"
+    }
+  },
+  "diagnosis": {
+    "strengths": [
+      "双人嘴硬心软的拉扯与心声外泄设定结合出色，潜台词丰富。",
+      "关系进展通过行动和代价具体落地，拒绝空泛抒情。",
+      "开头与结尾的钩子都极其锋利，精准切中追读心理。",
+      "男女主性格鲜明且互相激发，辨识度与化学反应俱佳。"
+    ],
+    "weaknesses": [
+      "部分情绪解释可以进一步精简，避免偶尔的内心复述。",
+      "红痕跳动的意象使用可略微节制，以防高潮中重复劳损。"
+    ],
+    "improvement_hints": [
+      "在后续关系重定价时，保留一两个未说透的念头，让读者更费猜想。",
+      "让男主在非战斗场景中因心声而出现一次微小的社交失误，增添反差。",
+      "对红痕等高频意象设置触发阈值，确保每次出现都是新突破点。"
+    ]
+  },
+  "hard_fail_flags": [],
+  "optimization_targets": [],
+  "cost_metrics": {
+    "llm_calls": 17,
+    "judge_llm_calls": 1,
+    "review_calls": 3,
+    "patch_rounds": 1,
+    "used_full_rewrite": false,
+    "duration_seconds": 1308.28,
+    "block_count": 4,
+    "patched_block_count": 2,
+    "patched_block_ratio": 0.5,
+    "generation_prompt_chars": 276227,
+    "judge_prompt_chars": 111613,
+    "tool_calls_by_name": {
+      "build_chapter_patch_plan": 1,
+      "build_character_mindset": 2,
+      "draft_block": 4,
+      "final_polish": 1,
+      "format_adjustment_suggestion": 1,
+      "judge_patched_chapter": 1,
+      "plan_content_blocks": 1,
+      "review_prose_and_humanity": 1,
+      "review_structure_and_continuity": 1,
+      "rewrite_blocks_by_plan": 1,
+      "summarize_actual_chapter": 1
+    }
+  },
+  "artifacts": {
+    "case_dir": "evals\\romance\\reports\\case02_action_first_banter\\romance_case_02_xianxia_rival_trial",
+    "case_input_json": "evals\\romance\\reports\\case02_action_first_banter\\romance_case_02_xianxia_rival_trial\\case_input.json",
+    "writer_context_json": "evals\\romance\\reports\\case02_action_first_banter\\romance_case_02_xianxia_rival_trial\\writer_context.json",
+    "chapter_execution_json": "evals\\romance\\reports\\case02_action_first_banter\\romance_case_02_xianxia_rival_trial\\chapter_execution.json",
+    "stage_log_json": "evals\\romance\\reports\\case02_action_first_banter\\romance_case_02_xianxia_rival_trial\\stage_log.json",
+    "final_text_txt": "evals\\romance\\reports\\case02_action_first_banter\\romance_case_02_xianxia_rival_trial\\final_text.txt",
+    "judge_json": "evals\\romance\\reports\\case02_action_first_banter\\romance_case_02_xianxia_rival_trial\\judge.json",
+    "result_json": "evals\\romance\\reports\\case02_action_first_banter\\romance_case_02_xianxia_rival_trial\\result.json"
+  },
+  "errors": []
+}

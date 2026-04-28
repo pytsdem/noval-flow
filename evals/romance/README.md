@@ -14,11 +14,19 @@ python -m evals.romance.runners.chapter_quality_eval --label baseline
 - `--cases romance_case_01_court_return`：只跑指定 case
 - `--suite evals/romance/suites/romance_cross_tone_smoke.yml`：跑 01 历史锚点 + 新 02/03 泛化 smoke suite
 - `--reports-root evals/romance/reports`：指定报告输出目录
-- `--compare-to evals/romance/reports/baseline/summary.json`：与已有 baseline 生成 diff
+- `--compare-to evals/romance/reports/runs/20260422/codex__gpt-5.2/multi_case__3cases/baseline/summary.json`：与已有 baseline 生成 diff
 
 ## 报告结构
 
-每次运行都会在 `evals/romance/reports/<label>/` 下生成：
+历史归档后的产物统一放在 `evals/romance/reports/runs/YYYYMMDD/provider__model/case_bucket/<label>/` 下。旧产物如果需要重新整理，可运行：
+
+```powershell
+python -X utf8 tools/organize_romance_reports.py
+```
+
+新的评测运行如果暂时还没有接入结构化路径 helper，仍可能先落在 `evals/romance/reports/<label>/`；整理脚本会把它们迁入统一归档结构。
+
+单次运行目录内会生成：
 
 - `summary.json`：聚合结果与每个 case 的专项分数
 - `report.md`：便于人工查看的 markdown 报告

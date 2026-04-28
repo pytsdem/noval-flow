@@ -7,8 +7,8 @@
 - 评测策略：单点评测优先，仅在单点证据足够强时才做完整端到端
 - 当前可用评测 provider：`doubao`
 - 当前终端里的 `codex exec` 会返回 `Access denied`，因此后续评测与诊断命令应显式使用 `LLM_PROVIDER=doubao`
-- 参考基线：`evals/romance/reports/baseline/summary.json`
-- 当前可运行 smoke：`evals/romance/reports/smoke_doubao_case01/summary.json`
+- 参考基线：`evals/romance/reports/runs/20260422/codex__gpt-5.2/multi_case__3cases/baseline/summary.json`
+- 当前可运行 smoke：`evals/romance/reports/runs/20260423/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/smoke_doubao_case01/summary.json`
 - 迭代 ledger：`evals/romance/reports/self_improve_live/iteration_log.md`
 
 ## 迭代记录规范
@@ -382,7 +382,7 @@
   - `python scripts/check_prompt_encoding.py`
   - `python -m unittest tests.test_final_polish_prompt tests.test_writing_chapter_agent tests.test_schema_and_context`
   - `LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_final_polish_anti_slop_case01`
-  - `python -m evals.romance.run_case_comparison --baseline evals/romance/reports/smoke_doubao_case01/summary.json --candidate evals/romance/reports/candidate_final_polish_anti_slop_case01/summary.json --output-dir evals/romance/reports/candidate_final_polish_anti_slop_case01`
+  - `python -m evals.romance.run_case_comparison --baseline evals/romance/reports/runs/20260423/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/smoke_doubao_case01/summary.json --candidate evals/romance/reports/candidate_final_polish_anti_slop_case01/summary.json --output-dir evals/romance/reports/candidate_final_polish_anti_slop_case01`
   - 离线 anti-slop 对比：对 baseline / candidate 最终正文重新跑 `AntiSlopRuleAnalyzer`
 - 指标变化（对比 `smoke_doubao_case01`）：
   - `romance_tension_score`: `8.5 -> 8.0`
@@ -438,7 +438,7 @@
   - `python -X utf8 - <<py` 逐文件编译 `evals/romance/*.py` 与 `tools/*.py`（共 `19` 个文件）
   - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
   - `LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_rewrite_local_anti_slop_case01`
-  - `python -m evals.romance.run_case_comparison --baseline evals/romance/reports/smoke_doubao_case01/summary.json --candidate evals/romance/reports/candidate_rewrite_local_anti_slop_case01/summary.json --output-dir evals/romance/reports/candidate_rewrite_local_anti_slop_case01`
+  - `python -m evals.romance.run_case_comparison --baseline evals/romance/reports/runs/20260423/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/smoke_doubao_case01/summary.json --candidate evals/romance/reports/candidate_rewrite_local_anti_slop_case01/summary.json --output-dir evals/romance/reports/candidate_rewrite_local_anti_slop_case01`
   - 离线 anti-slop 复核：对 baseline / candidate 的 `final_text.txt` 重新跑 `AntiSlopRuleAnalyzer`
 - 指标变化（对比 `smoke_doubao_case01`）：
   - `romance_tension_score`: `8.5 -> 7.5`
@@ -546,7 +546,7 @@
   - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
   - `LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_rewrite_rerank_case01`
   - `LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_rewrite_rerank_gatefix_case01`
-  - `python -m evals.romance.run_case_comparison --baseline evals/romance/reports/smoke_doubao_case01/summary.json --candidate evals/romance/reports/candidate_rewrite_rerank_gatefix_case01/summary.json --output-dir evals/romance/reports/candidate_rewrite_rerank_gatefix_case01`
+  - `python -m evals.romance.run_case_comparison --baseline evals/romance/reports/runs/20260423/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/smoke_doubao_case01/summary.json --candidate evals/romance/reports/candidate_rewrite_rerank_gatefix_case01/summary.json --output-dir evals/romance/reports/candidate_rewrite_rerank_gatefix_case01`
 - 关键证据：
   - 第一版 rerank（`candidate_rewrite_rerank_case01`）确实触发了 block 级候选选择，但 requirement case `case01` 的 `redundancy_score` 从 `9.0 -> 7.22`，整体不满足 keep 标准
   - 第二版在修掉 follow-up 误判后（`candidate_rewrite_rerank_gatefix_case01`），`redundancy_score` 回到 `9.0`，但核心 romance 指标没有赢过 baseline：
@@ -698,19 +698,19 @@
 - 改动文件：
   - `evals/romance/reports/self_improve_live/report.md`
   - `evals/romance/reports/self_improve_live/iteration_log.md`
-  - `evals/romance/reports/candidate_beat_card_case01_clean/summary.json`
-  - `evals/romance/reports/candidate_beat_card_case01_clean/report.md`
-  - `evals/romance/reports/candidate_beat_card_case01_clean/comparison.md`
-  - `evals/romance/reports/candidate_beat_card_case01_clean/comparison.json`
+  - `evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/summary.json`
+  - `evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/report.md`
+  - `evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/comparison.md`
+  - `evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/comparison.json`
 - 已做改动：
   - 用 `git worktree add --detach` 创建隔离 worktree，只包含 `codex_20260423_8` 的 beat card 代码，不带当前主工作区里未纳入本轮的 patch 层试验改动。
   - 在隔离 worktree 里显式使用 `LLM_PROVIDER=doubao` 跑单 case requirement eval：
     - `romance_case_01_court_return`
     - label: `candidate_beat_card_case01_clean`
-  - 跑 baseline vs candidate 的 pairwise comparison，并把本轮结果目录完整保留到 repo 的 `evals/romance/reports/candidate_beat_card_case01_clean/`
+  - 跑 baseline vs candidate 的 pairwise comparison，并把本轮结果目录完整保留到 repo 的 `evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/`
 - 验证：
   - `LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_beat_card_case01_clean`
-  - `python -m evals.romance.run_case_comparison --baseline evals/romance/reports/smoke_doubao_case01/summary.json --candidate evals/romance/reports/candidate_beat_card_case01_clean/summary.json --output-dir evals/romance/reports/candidate_beat_card_case01_clean`
+  - `python -m evals.romance.run_case_comparison --baseline evals/romance/reports/runs/20260423/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/smoke_doubao_case01/summary.json --candidate evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/summary.json --output-dir evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean`
 - 指标变化（对比 `smoke_doubao_case01`）：
   - `romance_tension_score`: `8.5 -> 8.5`
   - `relationship_progression_score`: `8.0 -> 8.0`
@@ -783,7 +783,7 @@
   - `python -m py_compile src/novel_flow/tools/write_chapter_full.py tests/test_writing_chapter_agent.py`（在 `data/_sandbox_iter16/`）
   - `PYTHONPATH=data/_sandbox_iter16/src python -m unittest tests.test_writing_chapter_agent tests.test_schema_and_context tests.test_romance_eval_harness`
   - `PYTHONPATH=data/_sandbox_iter16/src LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_agency_microaction_case01`
-  - `PYTHONPATH=data/_sandbox_iter16/src python -m evals.romance.run_case_comparison --baseline evals/romance/reports/candidate_beat_card_case01_clean/summary.json --candidate evals/romance/reports/candidate_agency_microaction_case01/summary.json --output-dir evals/romance/reports/candidate_agency_microaction_case01`
+  - `PYTHONPATH=data/_sandbox_iter16/src python -m evals.romance.run_case_comparison --baseline evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/summary.json --candidate evals/romance/reports/runs/20260427/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_agency_microaction_case01/summary.json --output-dir evals/romance/reports/runs/20260427/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_agency_microaction_case01`
 - 指标变化（对比 clean beat-card baseline `candidate_beat_card_case01_clean`）：
   - `romance_tension_score`: `8.5 -> 7.5`
   - `relationship_progression_score`: `8.0 -> 7.8`
@@ -854,7 +854,7 @@
   - `python -m py_compile src/novel_flow/config.py src/novel_flow/llm/factory.py tests/test_llm_factory.py`
   - `python -m py_compile evals/romance/*.py tools/*.py`
   - `PYTHONPATH=data/_sandbox_iter17/src LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_beat_card_initiative_case01`
-  - `PYTHONPATH=data/_sandbox_iter17/src python -X utf8 -m evals.romance.run_case_comparison --baseline data/_tmp_case01_clean_baseline.json --candidate data/_tmp_case01_initiative_candidate.json --output-dir evals/romance/reports/candidate_beat_card_initiative_case01`
+  - `PYTHONPATH=data/_sandbox_iter17/src python -X utf8 -m evals.romance.run_case_comparison --baseline data/_tmp_case01_clean_baseline.json --candidate data/_tmp_case01_initiative_candidate.json --output-dir evals/romance/reports/runs/20260427/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_initiative_case01`
 - 指标变化（对比 clean beat-card baseline `candidate_beat_card_case01_clean`）：
   - `romance_tension_score`: `8.5 -> 7.5`
   - `relationship_progression_score`: `8.0 -> 8.0`
@@ -931,13 +931,13 @@
   - `python -m py_compile evals/romance/*.py tools/*.py`
   - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
 - ???????
-  - ???? clean baseline?`evals/romance/reports/candidate_beat_card_case01_clean/summary.json`
+  - ???? clean baseline?`evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/summary.json`
   - ???????
     - `LLM_PROVIDER=deepseek`
     - `DEEPSEEK_MODEL=deepseek-v4-pro`
     - `python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label deepseek_v4_pro_case01_candidate`
   - ???
-    - `python -X utf8 -m evals.romance.run_case_comparison --baseline data/_tmp_case01_clean_baseline_nobom.json --candidate data/_tmp_case01_deepseek_candidate_nobom.json --output-dir evals/romance/reports/deepseek_v4_pro_case01_candidate`
+    - `python -X utf8 -m evals.romance.run_case_comparison --baseline data/_tmp_case01_clean_baseline_nobom.json --candidate data/_tmp_case01_deepseek_candidate_nobom.json --output-dir evals/romance/reports/runs/20260427/deepseek__deepseek-v4-pro/romance_case_01_court_return/deepseek_v4_pro_case01_candidate`
 - ??????? clean beat-card baseline `candidate_beat_card_case01_clean`??
   - `romance_tension_score`: `8.5 -> 8.0`
   - `relationship_progression_score`: `8.0 -> 7.5`
@@ -1114,8 +1114,8 @@
   - 使用本地运行时 `DeepSeek V4-Pro`（`.env` 已正式切到 `LLM_PROVIDER=deepseek`）跑隔离 `romance_case_01_court_return`。
   - 原始对比命令因为历史 baseline `summary.json` 含 BOM 失败，但 candidate run 已完整生成；后续用 `utf-8-sig` 清洗 baseline 与 candidate summary 后完成对比。
   - 证据目录：
-    - `evals/romance/reports/sequential_beat_case01_deepseek/`
-    - baseline: `evals/romance/reports/candidate_beat_card_case01_clean/summary.json`
+    - `evals/romance/reports/runs/20260427/deepseek__deepseek-v4-pro/romance_case_01_court_return/sequential_beat_case01_deepseek/`
+    - baseline: `evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/summary.json`
 - Files changed:
   - `evals/romance/reports/self_improve_live/report.md`
   - `evals/romance/reports/self_improve_live/iteration_log.md`
@@ -1167,7 +1167,7 @@
 - 主要发现：质量和 genre/tone 泛化成立，但长度控制失败；case02 写到 `9680 chars`，case03 最后 block 初稿重复前文并靠 patch 修复。
 - DeepSeek 观察：case02/03 质量高，但耗时长；无同 case A/B，不能判断优于 Doubao。
 - 结论：`partial_keep`，保留当前 prompt/beat 减法方向，但下一轮优先做长度硬约束和 beat 停止条件。
-- 详情：`evals/romance/reports/self_improve_live/cross_tone_smoke_prompt_beat_slim_summary.json` / `evals/romance/reports/self_improve_live/cross_tone_smoke_prompt_beat_slim_summary.md`
+- 详情：`evals/romance/reports/runs/20260428/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.json` / `evals/romance/reports/runs/20260428/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.md`
 
 ## Iteration 23 - Length Cap And Beat Value Turn Tightening
 
@@ -1188,3 +1188,536 @@
   - `git diff --check`
 - 结论：`keep_without_llm_eval`。本轮是静态减法修正，未重跑 LLM eval，避免在三案统一复测前继续烧成本。
 - 下一步：先只跑 `romance_case_02_xianxia_rival_trial`，看 `final_chars` 是否回落、`redundancy` 是否不恶化、`genre_fit/hook/relationship_progression` 是否保住。
+## Iteration 24 - Compact Beat Payload / Review / Planner Tightening On Case02
+
+- Date: `2026-04-28`
+- Root layer: `beat_payload_dedup_and_dramatic_job_tightening`
+- Hypothesis:
+  - If the active beat path stops re-feeding parallel chapter context and the planner stops over-splitting one pressure family into too many similar beats, `case02` should keep its light-adventure chemistry while lowering repetition and prompt bulk.
+- Files changed:
+  - `src/novel_flow/services/chapter_tool_payloads.py`
+  - `src/novel_flow/tools/review_block_quality.py`
+  - `src/novel_flow/tools/plan_content_blocks.py`
+  - `src/novel_flow/services/review_aggregator.py`
+  - `src/novel_flow/agents/writing_chapter_agent.py`
+  - `prompts/writer/draft_content_block.txt`
+  - `prompts/writer/revise_content_block.txt`
+  - `prompts/writer/review_block_quality.txt`
+  - `prompts/writer/plan_content_blocks.txt`
+  - `tests/test_schema_and_context.py`
+- What changed:
+  - `build_block_runtime_context` now returns only compact beat-driving fields:
+    - `chapter_goal`
+    - `hard_facts`
+    - `character_state`
+    - `previous_text_tail`
+    - `chapter_so_far`
+    - `style_rules`
+    - `delivered_beat_summary_text`
+  - Removed unused beat payload plumbing:
+    - dropped `loaded_skill_instructions_text` from `draft/revise` block payload builders and sequential beat drafting call sites
+    - removed `block_prompt_fields()` because `review_block_quality` now reads the block card directly
+  - Rewrote `draft_content_block` / `revise_content_block` Chinese guidance in clean UTF-8 and made anti-explanation / anti-second-cycle rules explicit.
+  - Rewrote `review_block_quality` into a compact prompt focused on:
+    - `repeated_delivered_signal`
+    - `repeated_signal_family`
+    - `overexplained_signal`
+    - `second_action_cycle`
+  - Tightened planner policy:
+    - max beat count is now `5`, not `6`
+    - removed the second extra fallback beat path
+    - added “one beat = one dominant dramatic job” guard
+- Verification:
+  - `python scripts/check_prompt_encoding.py`
+  - `python -m unittest tests.test_schema_and_context tests.test_writing_chapter_agent tests.test_prompt_rendering tests.test_romance_eval_harness`
+  - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
+  - `py_compile evals/romance/*.py tools/*.py` (run via Python glob wrapper on Windows)
+- Eval:
+  - Command:
+    - `LLM_PROVIDER=deepseek python -m evals.romance.runners.chapter_quality_eval --mode fast --cases romance_case_02_xianxia_rival_trial --label case02_compact_payload_drama --compare-to evals/romance/reports/runs/20260428/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/cross_tone_smoke_prompt_beat_slim_case02_deepseek/summary.json`
+  - Evidence directory:
+    - `evals/romance/reports/runs/20260428/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/case02_compact_payload_drama/`
+- Metrics / cost:
+  - Core metrics:
+    - `romance_tension_score: 8.2 -> 8.0`
+    - `relationship_progression_score: 7.8 -> 8.5`
+    - `emotional_resonance_score: 8.4 -> 7.5`
+    - `character_attraction_score: 8.67 -> 8.05`
+    - `hook_score: 9.0 -> 8.25`
+    - `continuity_score: 9.0 -> 9.0`
+    - `redundancy_score: 7.42 -> 7.82`
+    - `mind_state_consistency_score: 9.0 -> 9.0`
+    - `genre_fit_score: 9.2 -> 8.5`
+  - Cost / execution:
+    - `llm_calls: 18 -> 18`
+    - `review_calls: 3 -> 3`
+    - `patch_rounds: 1 -> 1`
+    - `patched_block_ratio: 0.50 -> 0.25`
+    - `generation_prompt_chars: 279843 -> 255210`
+    - `duration_seconds: 1639.99 -> 1649.69`
+    - planned beat count stayed at `4`
+- Diagnosis:
+  - The candidate did reduce repetition pressure and prompt bulk, and it needed fewer patched blocks.
+  - But it also flattened some of the light-adventure sparkle:
+    - more efficient beat execution
+    - weaker hook / banter flavor / emotional aftertaste
+  - Important structural finding:
+    - `review_block_quality` is not on the active hot path for sequential beat drafting, so tightening that prompt alone cannot materially rescue live generation quality; the next real lever is still the `draft_block` path itself.
+- Outcome:
+  - `reject`
+- Keep / reject:
+  - `keep as evidence`:
+    - payload dedup does help prompt size and patch ratio
+    - redundancy improved on `case02`
+  - `reject as default code path`:
+    - core romance / hook / genre-fit regressed too much for this branch to stay as the live candidate
+- Next step:
+  - Revert this candidate code and continue from the previous clean branch state.
+  - Next iteration should target one narrower root cause inside the active sequential drafting path:
+    - suppress translator-like explanation sentences
+    - keep more playful local voice / banter in `light_adventure_banter` chapters
+    - avoid solving repetition by sanding off chemistry
+
+## Iteration 25
+
+- Date: `2026-04-28`
+- Scope:
+  - one narrow hot-path fix inside sequential beat drafting
+  - no planner change, no payload-builder rewrite, no extra judge-layer tuning
+- Hypothesis:
+  - repetition on `case02` was no longer mainly “too many beats”; it was increasingly “draft_block explains the rule/emotion after already dramatizing it”
+  - the previous anti-repeat pass also sanded off some `light_adventure_banter` chemistry by compressing everything into efficient procedure
+- Files changed:
+  - `prompts/writer/draft_content_block.txt`
+  - `prompts/writer/revise_content_block.txt`
+  - `tests/test_prompt_rendering.py`
+- Change summary:
+  - tightened `draft_content_block` so rules, clues, and danger must first appear through:
+    - failed step
+    - penalty
+    - object change
+    - body reaction
+    - witness response
+  - added a hard anti-repeat rule in `draft_content_block`:
+    - one judgment lands once per beat
+    - do not restate “he reacted too fast / she is still mouth-hard / the rule changed” in new wording inside the same beat
+  - added explicit light-tone preservation in `draft_content_block`:
+    - if `style_rules` points to light / banter / playful tone, keep one short sideways line, teasing beat, or awkward near-contact beat when it changes pressure or relationship
+    - do not flatten the beat into pure procedure
+  - tightened `revise_content_block` so patching now prefers:
+    - keep the action version
+    - trim the explanatory restatement around it
+    - preserve one useful teasing / awkward-contact beat when it carries relationship movement
+    - avoid sanding the block into flat procedural prose
+  - added regression assertions in `tests/test_prompt_rendering.py` so these rules are locked into the prompt surface
+- Verification:
+  - `python scripts/check_prompt_encoding.py`
+  - `python -m unittest tests.test_prompt_rendering tests.test_writing_chapter_agent tests.test_romance_eval_harness tests.test_schema_and_context`
+  - `python -m py_compile evals/romance/*.py tools/*.py` (run via Python glob wrapper on Windows)
+  - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
+  - `python -m unittest tests.test_romance_eval_harness tests.test_writing_chapter_agent tests.test_schema_and_context`
+- Eval:
+  - Command:
+    - `LLM_PROVIDER=deepseek python -m evals.romance.runners.chapter_quality_eval --mode fast --cases romance_case_02_xianxia_rival_trial --label case02_action_first_banter --compare-to evals/romance/reports/runs/20260428/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/cross_tone_smoke_prompt_beat_slim_case02_deepseek/summary.json`
+  - Evidence directory:
+    - `evals/romance/reports/runs/20260428/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/case02_action_first_banter/`
+  - Comparison:
+    - `python -m evals.romance.runners.eval_run_comparison --baseline evals/romance/reports/runs/20260428/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/cross_tone_smoke_prompt_beat_slim_case02_deepseek/summary.json --candidate evals/romance/reports/runs/20260428/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/case02_action_first_banter/summary.json`
+- Metrics / cost:
+  - Core / guard deltas on `case02`:
+    - `romance_tension_score: 8.2 -> 8.7`
+    - `relationship_progression_score: 7.8 -> 8.5`
+    - `emotional_resonance_score: 8.4 -> 8.0`
+    - `character_attraction_score: 8.67 -> 8.73`
+    - `hook_score: 9.0 -> 9.25`
+    - `continuity_score: 9.0 -> 9.0`
+    - `redundancy_score: 7.42 -> 7.78`
+    - `mind_state_consistency_score: 9.0 -> 9.0`
+    - `genre_fit_score: 9.2 -> 9.0`
+  - Cost / execution:
+    - `llm_calls: 18 -> 17`
+    - `review_calls: 3 -> 3`
+    - `patch_rounds: 1 -> 1`
+    - `duration_seconds: 1639.99 -> 1308.28`
+  - Comparator decision:
+    - `accept_change = true`
+    - `pairwise_preferred_side = candidate`
+    - `pairwise_weighted_margin = +8.00`
+    - `core_metric_delta = +0.22`
+    - `guard_metric_delta = +0.12`
+- Diagnosis:
+  - this narrower prompt fix recovered on-page pressure and chemistry without reopening the bulky payload path
+  - the biggest gain came from forcing “show the rule through consequence first” before allowing even a short explanation
+  - preserving one short sideways banter / awkward-contact beat kept `light_adventure_banter` from collapsing into pure process writing
+  - remaining weakness is not planner fragmentation anymore; it is recurring high-signal imagery and occasional inner paraphrase:
+    - red-mark /刻痕 / 发烫 imagery can still appear a little too often
+    - some emotional explanation remains slightly more explicit than ideal
+- Outcome:
+  - `keep`
+- Keep / reject:
+  - `keep as current branch candidate`:
+    - improved core romance objectives
+    - kept continuity and mind-state flat
+    - improved redundancy
+    - lowered cost
+    - passed pairwise comparison
+  - `not yet declared new global baseline`:
+    - only `case02` was rerun this iteration
+    - cross-tone confirmation is still needed before broader rollout
+- Next step:
+  - run one cross-tone confirmation case (`case01` or `case03`) before treating this as the broader default
+  - next narrow target:
+    - reduce overused `红痕 / 刻痕 / 发烫` imagery frequency
+    - trim one more layer of inner paraphrase
+    - keep chemistry and local banter intact while doing so
+
+## Iteration 26
+
+- Date: `2026-04-28`
+- Scope:
+  - cross-tone confirmation for the `draft_block` action-first / anti-repeat prompt candidate
+  - one follow-up hotfix for repeated high-impact clue lines and repeated forcing questions
+- Files changed during experiment:
+  - `prompts/writer/draft_content_block.txt`
+  - `prompts/writer/revise_content_block.txt`
+  - `tests/test_prompt_rendering.py`
+- Experiment summary:
+  - first validation:
+    - `case01_action_first_guard`
+    - result: strong drop in `redundancy / continuity / mind-state / cost`
+  - follow-up hotfix:
+    - added “high-impact clue / hook line / forcing question should land once in full; later beats must carry consequence rather than replay the exact wording”
+    - reran as `case01_high_impact_once`
+- Verification:
+  - `python scripts/check_prompt_encoding.py`
+  - `python -m unittest tests.test_prompt_rendering tests.test_writing_chapter_agent tests.test_romance_eval_harness tests.test_schema_and_context`
+- Eval:
+  - `LLM_PROVIDER=deepseek python -m evals.romance.runners.chapter_quality_eval --mode fast --cases romance_case_01_court_return --label case01_action_first_guard --compare-to evals/romance/reports/runs/20260428/doubao__ep-m-20260319020545-gzfvt/romance_case_01_court_return/cross_tone_smoke_prompt_beat_slim_case01/summary.json`
+  - `python -m evals.romance.runners.eval_run_comparison --baseline evals/romance/reports/runs/20260428/doubao__ep-m-20260319020545-gzfvt/romance_case_01_court_return/cross_tone_smoke_prompt_beat_slim_case01/summary.json --candidate evals/romance/reports/runs/20260428/deepseek__deepseek-v4-pro/romance_case_01_court_return/case01_action_first_guard/summary.json`
+  - `LLM_PROVIDER=deepseek python -m evals.romance.runners.chapter_quality_eval --mode fast --cases romance_case_01_court_return --label case01_high_impact_once --compare-to evals/romance/reports/runs/20260428/doubao__ep-m-20260319020545-gzfvt/romance_case_01_court_return/cross_tone_smoke_prompt_beat_slim_case01/summary.json`
+  - `python -m evals.romance.runners.eval_run_comparison --baseline evals/romance/reports/runs/20260428/doubao__ep-m-20260319020545-gzfvt/romance_case_01_court_return/cross_tone_smoke_prompt_beat_slim_case01/summary.json --candidate evals/romance/reports/runs/20260428/deepseek__deepseek-v4-pro/romance_case_01_court_return/case01_high_impact_once/summary.json`
+- Metrics / cost:
+  - `case01_action_first_guard` vs baseline:
+    - `relationship_progression_score: 9.0 -> 8.0`
+    - `continuity_score: 9.0 -> 8.0`
+    - `redundancy_score: 7.82 -> 5.92`
+    - `mind_state_consistency_score: 9.0 -> 8.5`
+    - `llm_calls: 17 -> 21`
+    - `duration_seconds: 1182.64 -> 1780.12`
+    - comparator: `accept_change = false`, `pairwise_preferred_side = baseline`, `weighted_margin = -23.00`
+  - `case01_high_impact_once` vs baseline:
+    - `romance_tension_score: 8.5 -> 8.5`
+    - `relationship_progression_score: 9.0 -> 8.0`
+    - `emotional_resonance_score: 8.5 -> 9.0`
+    - `character_attraction_score: 8.67 -> 8.65`
+    - `hook_score: 9.1 -> 9.5`
+    - `continuity_score: 9.0 -> 8.0`
+    - `redundancy_score: 7.82 -> 7.20`
+    - `mind_state_consistency_score: 9.0 -> 9.0`
+    - `genre_fit_score: 9.0 -> 9.0`
+    - comparator: `accept_change = false`, `pairwise_preferred_side = baseline`, `weighted_margin = -6.00`
+- Diagnosis:
+  - the `case02` candidate did contain a real win for light banter chapters, but it does not generalize cleanly to the court-intrigue chapter family
+  - `case01` failure pattern is different:
+    - repeated high-impact clue reveal (`婚书背面的字句`)
+    - repeated pressure question forms (`你可愿意 / 你还不清 / 你欠我的`)
+    - continuity/cost drag once the chapter sprawls into too many post-court sub-scenes
+  - the hotfix improved `case01` materially over the first failed run:
+    - `emotional_resonance 8.0 -> 9.0`
+    - `hook 9.0 -> 9.5`
+    - `redundancy 5.92 -> 7.20`
+  - but it still did not beat the baseline on core relationship progression, continuity, and pairwise preference
+- Outcome:
+  - `reject as branch default`
+- Keep / reject:
+  - `keep as evidence only`:
+    - `case02_action_first_banter`
+    - `case01_action_first_guard`
+    - `case01_high_impact_once`
+  - `revert code`:
+    - prompt/test changes from Iteration 25/26 were restored after cross-tone rejection
+- Current branch state:
+  - code reverted to the pre-experiment state
+  - live report and evidence directories kept
+- Next step:
+  - do not keep broad prompt rules that try to solve both `light_adventure_banter` and `restrained_angst` in one surface block
+  - next promising direction is more explicit tone-aware control:
+    - a clue-lifecycle guard for intrigue chapters
+    - a separate playful-pressure guard for banter chapters
+    - or a smaller planner-side limit on “post-hook fallout scenes” in court chapters
+
+## Iteration 27
+
+- Date: `2026-04-28`
+- Scope:
+  - structural refactor only
+  - no new end-to-end romance eval this round
+- User direction:
+  - do not fork the whole writer workflow by direction
+  - if style must vary, isolate that variance in one dedicated style-layer prompt and keep other inputs stable
+- Files changed:
+  - `src/novel_flow/services/style_cards.py`
+  - `src/novel_flow/services/novel_context.py`
+  - `src/novel_flow/services/chapter_tool_payloads.py`
+  - `prompts/writer/draft_content_block.txt`
+  - `prompts/writer/revise_content_block.txt`
+  - `tests/test_schema_and_context.py`
+- Change summary:
+  - replaced the old fixed `style_card_text` with a dynamic style-card generator
+  - new shared architecture:
+    - one shared base style card for all fiction
+    - one direction-specific style focus layer chosen from premise/chapter signals
+  - initial direction families:
+    - `historical_intrigue`
+    - `light_adventure_banter`
+    - `urban_witty`
+    - `general`
+  - the active block prompts now explicitly treat `style_rules` as the style-only control layer, while keeping `chapter_goal / hard_facts / character_state / beat / chapter_so_far` unchanged
+  - widened the style-rules payload budget so the extra focus layer is not silently truncated
+- Why this is worth keeping:
+  - the repo had been feeding the same static style card into every chapter family
+  - that made it hard to keep a useful `case02` banter gain without harming `case01`
+  - this refactor creates the exact isolation boundary the user requested:
+    - shared workflow remains unified
+    - style variance has a single controlled surface
+- Verification:
+  - `python scripts/check_prompt_encoding.py`
+  - `python -m unittest tests.test_schema_and_context tests.test_prompt_rendering tests.test_writing_chapter_agent tests.test_romance_eval_harness`
+  - `python -m py_compile evals/romance/*.py tools/*.py` (run via Python glob wrapper on Windows)
+  - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
+  - `python -m unittest tests.test_romance_eval_harness tests.test_writing_chapter_agent tests.test_schema_and_context`
+- Outcome:
+  - `keep`
+- Keep / reject:
+  - `keep as architecture improvement`:
+    - style control now has a dedicated layer
+    - future prompt optimization can target one direction without forking the whole chapter writer
+  - `not yet claimed as prose-quality gain`:
+    - this round deliberately skipped new long evals to avoid extra token cost
+    - quality proof will come from the next style-layer experiment
+- Next step:
+  - move the successful `case02` banter tactics and the preferred `case01` court-pressure tactics into the new style layer instead of the shared block prompt
+  - then rerun one representative case per direction on the same shared writer path
+
+## Iteration 28
+
+- Date: `2026-04-28`
+- Scope:
+  - product / control-surface upgrade
+  - no new romance end-to-end eval this round
+- User direction:
+  - keep the shared writer workflow unified
+  - maintain style variance in one isolated style prompt layer
+  - when creating a new novel, let the user choose a mainstream romance category and map style automatically
+- Category research basis:
+  - synthesized a unified list from mainstream women-fiction surfaces and category trees commonly shown on:
+    - 起点女频 / 红袖类主频道
+    - 晋江言情频道
+    - 番茄女频常见分类
+  - normalized into one operator-facing taxonomy instead of mirroring every site 1:1
+- Files changed:
+  - `src/novel_flow/services/style_cards.py`
+  - `src/novel_flow/server.py`
+  - `tests/test_schema_and_context.py`
+  - `tests/test_style_cards.py`
+- Change summary:
+  - rewrote the style-card service into a clean UTF-8 Chinese-maintainable module
+  - added a backend-owned romance type registry with mainstream categories such as:
+    - `古代言情`
+    - `古代言情·宫廷权谋`
+    - `古代言情·宅斗婚恋`
+    - `现代言情`
+    - `现代言情·豪门总裁`
+    - `现代言情·职场婚恋`
+    - `现代言情·娱乐圈`
+    - `年代言情`
+    - `浪漫青春·校园甜宠`
+    - `仙侠言情`
+    - `幻想言情`
+    - `悬疑言情`
+    - `科幻言情 / 科幻空间`
+    - `快穿系统`
+  - each category now maps to:
+    - `genre_label`
+    - `style_direction`
+    - `direction_label`
+    - `default_style_request`
+  - `create_novel_shell` now accepts `novel_type` and persists:
+    - `premise.genre`
+    - effective style request
+    - `metadata.novel_type`
+    - `metadata.novel_type_label`
+    - `metadata.style_direction`
+  - the local web console new-novel dialog now exposes:
+    - a `小说类型` dropdown
+    - a dynamic helper text
+    - a style placeholder that updates when the selected category changes
+  - the shared writer path is still unified; only the style layer and initial category selection vary
+- Why this is worth keeping:
+  - it gives operators a stable, explicit entrypoint for “what kind of romance am I building” without forking the whole writer workflow
+  - it keeps style variance in one backend-owned mapping instead of scattering genre assumptions across prompts and UI strings
+  - it makes future tone-specific tuning easier while preserving one shared generation pipeline
+- Verification:
+  - `node vm.Script` parse check on extracted `server.py` frontend script
+  - `python -m unittest tests.test_style_cards tests.test_schema_and_context tests.test_prompt_rendering tests.test_writing_chapter_agent tests.test_romance_eval_harness`
+  - `python -m py_compile src/novel_flow/server.py src/novel_flow/services/style_cards.py tests/test_style_cards.py evals/romance/*.py tools/*.py` (run via Python glob wrapper on Windows)
+  - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
+  - `python -m unittest tests.test_romance_eval_harness tests.test_writing_chapter_agent tests.test_schema_and_context`
+  - browser-visible UI path checked locally with Playwright CLI on `http://127.0.0.1:8765/`:
+    - opened the `新建小说` modal
+    - verified the `小说类型` dropdown renders all options
+    - switched to `古代言情·宫廷权谋`
+    - confirmed helper text and style placeholder update correctly
+- Outcome:
+  - `keep`
+- Keep / reject:
+  - `keep as product / architecture improvement`:
+    - category-controlled style matching
+    - cleaner style-card ownership boundary
+    - maintainable Chinese style prompts
+  - `not yet claimed as prose-quality gain`:
+    - this round upgrades authoring control and style routing
+    - prose-quality evidence should come from later per-direction case validation
+- Next step:
+  - migrate the preferred `case01` intrigue cues and `case02` banter cues into the new direction cards instead of the shared block prompt
+  - then rerun one representative case per direction on the shared path
+
+## Iteration 29
+
+- Date: `2026-04-28`
+- Scope:
+  - report artifact reorganization only
+  - no prompt or model changes
+  - no new prose eval this round
+- User direction:
+  - the report outputs under `evals/romance/reports/` had become too cluttered
+  - rename and reorganize them by time, model, and case
+- Files changed:
+  - `tools/organize_romance_reports.py`
+  - `evals/romance/reports/index.md`
+  - `evals/romance/reports/catalog.json`
+  - `evals/romance/README.md`
+  - `evals/romance/reports/self_improve_live/report.md`
+  - `evals/romance/reports/self_improve_live/iteration_log.md`
+  - path references inside moved report artifacts
+- Change summary:
+  - moved run artifacts into a structured archive layout:
+    - `evals/romance/reports/runs/YYYYMMDD/provider__model/case_bucket/label/`
+  - moved the example template into:
+    - `evals/romance/reports/templates/sample_iteration/`
+  - kept `self_improve_live/` at the root because it is an operator-facing live log, not a frozen run artifact
+  - generated:
+    - `catalog.json` for old-path -> new-path mapping
+    - `index.md` for human browsing
+  - rewrote stored markdown/json path references so live reports and summary metadata now point at the new archive paths
+- Example archive paths:
+  - `evals/romance/reports/runs/20260428/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/case02_action_first_banter/`
+  - `evals/romance/reports/runs/20260427/deepseek__deepseek-v4-pro/romance_case_01_court_return/sequential_beat_case01_deepseek/`
+  - `evals/romance/reports/runs/20260422/codex__gpt-5.2/multi_case__3cases/baseline/`
+- Why this is worth keeping:
+  - the root reports directory is browsable again
+  - each archived path now directly answers:
+    - `什么时候跑的`
+    - `用的什么模型`
+    - `打的是哪个 case`
+  - the cleanup is repeatable via one script instead of manual directory surgery
+- Verification:
+  - `python -X utf8 tools/organize_romance_reports.py --dry-run`
+  - `python -X utf8 tools/organize_romance_reports.py`
+  - `python -X utf8 tools/organize_romance_reports.py --dry-run` returned `moved_count = 0` after migration
+  - `py_compile` on `tools/organize_romance_reports.py`
+- Outcome:
+  - `keep`
+- Keep / reject:
+  - `keep as repository hygiene improvement`
+  - `no prose-quality claim`
+- Next step:
+  - if needed, wire the same storage convention into future eval runners so fresh runs land in the structured archive directly instead of relying on a follow-up organizer pass
+
+## Iteration 30
+
+- Date: `2026-04-29`
+- Scope:
+  - live summary snapshot cleanup only
+  - no prompt, model, or prose-quality changes
+  - no new chapter eval this round
+- User direction:
+  - the remaining `self_improve_live` summary files looked out of place after the main archive reorganization
+  - move them into the same time / model / case naming scheme
+- Files changed:
+  - `tools/organize_romance_reports.py`
+  - `evals/romance/reports/self_improve_live/report.md`
+  - `evals/romance/reports/self_improve_live/iteration_log.md`
+  - moved:
+    - `evals/romance/reports/self_improve_live/cross_tone_smoke_prompt_beat_slim_summary.json`
+    - `evals/romance/reports/self_improve_live/cross_tone_smoke_prompt_beat_slim_summary.md`
+- Change summary:
+  - moved the mixed-provider cross-tone smoke summary pair into:
+    - `evals/romance/reports/runs/20260428/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.json`
+    - `evals/romance/reports/runs/20260428/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.md`
+  - kept the naming honest:
+    - `20260428` because the summary belongs to the April 28 cross-tone smoke batch
+    - `mixed__doubao-plus-deepseek` because this is not a single-model or same-provider A/B result
+    - `multi_case__3cases` because it aggregates three single-case evals
+  - upgraded the organizer script so future live snapshot bundles matching `*_summary.json` with case lists are auto-archived into the runs tree and the markdown companion is renamed to `summary.md`
+  - rewrote existing live-report references so the current ledger no longer points at removed `self_improve_live` paths
+- Why this is worth keeping:
+  - `self_improve_live/` stays focused on operator-facing logs instead of becoming a second artifact dump
+  - mixed-provider aggregate snapshots now follow the same browse logic as normal runs
+  - future cleanup of this file class is one command instead of a one-off manual move
+- Verification:
+  - `python -m py_compile tools/organize_romance_reports.py`
+  - `python -X utf8 tools/organize_romance_reports.py`
+  - `python -X utf8 tools/organize_romance_reports.py --dry-run` returned:
+    - `moved_count = 0`
+    - `live_summary_move_count = 0`
+- Outcome:
+  - `keep`
+- Keep / reject:
+  - `keep as archive hygiene improvement`
+  - `no prose-quality claim`
+- Next step:
+  - decide whether `implementation_summary.md` and `iteration_report.md` should remain live operator notes or receive a similar archive rule later
+
+## Iteration 31
+
+- Date: `2026-04-29`
+- Scope:
+  - self-improve live note placement cleanup only
+  - no prompt, model, eval runner, or prose-quality changes
+- User direction:
+  - continue the live-report cleanup and decide what to do with `implementation_summary.md` and `iteration_report.md`
+- Files changed:
+  - moved:
+    - `evals/romance/reports/self_improve_live/implementation_summary.md`
+    - `evals/romance/reports/self_improve_live/iteration_report.md`
+  - created:
+    - `evals/romance/reports/self_improve_live/notes/`
+  - updated:
+    - `evals/romance/reports/self_improve_live/report.md`
+    - `evals/romance/reports/self_improve_live/iteration_log.md`
+- Change summary:
+  - classified both files as one-off operator notes rather than live control files or frozen eval run artifacts
+  - moved them under:
+    - `evals/romance/reports/self_improve_live/notes/20260428_implementation_summary.md`
+    - `evals/romance/reports/self_improve_live/notes/20260428_iteration_report.md`
+  - kept `self_improve_live/` root reserved for the durable pair:
+    - `report.md`
+    - `iteration_log.md`
+- Why this is worth keeping:
+  - the live root is easier to scan and now clearly separates:
+    - canonical live logs
+    - ad-hoc explanatory notes
+  - these two files do not describe a frozen eval run and do not belong in `runs/`
+  - the `notes/` bucket preserves context without pretending the files are part of the primary ledger
+- Verification:
+  - `python -X utf8 - <<py` style spot-checks confirmed the files were moved and remain readable in UTF-8
+  - `python -m py_compile evals/romance/*.py tools/*.py`
+  - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
+- Outcome:
+  - `keep`
+- Keep / reject:
+  - `keep as live-note hygiene improvement`
+  - `no prose-quality claim`
+- Next step:
+  - if more one-off note files appear in `self_improve_live/`, place them under `self_improve_live/notes/` by default instead of the root

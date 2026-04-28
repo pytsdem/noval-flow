@@ -1,0 +1,624 @@
+[
+  {
+    "stage": "build_character_mindsets",
+    "character_mindsets": [
+      {
+        "character_id": "云眠",
+        "character_name": "云眠",
+        "surface_emotion": "强装镇定却忍不住嘴上吐槽，对陆既白摆出嫌弃和“别拖累我”的态度，行动上却下意识把护身的东西往他那边塞。",
+        "core_emotion": "暗藏的惧怕是怕因为自己误判连累师兄，更怕这秘境真有人要拿她当祭品，嘴硬只是不想暴露自己已经把他划进“得护着”的范围。",
+        "primary_goal": "按照规则互换随身物品，利用自己对原书的残存记忆试探符灯阵规律，活着通过第二道门。",
+        "hidden_need": "希望陆既白平安无事，甚至愿意替他承受部分危险，但绝不想让他看出来。",
+        "fear": "最怕因为自己错误触发符灯惩罚，害两人一起重伤或死在阵里，更怕同生契最终要她成为那个被牺牲的“祭品”。",
+        "attitude_to_key_others": {
+          "陆既白": "嘴上看他是冷面麻烦精，心里已把他当作唯一能依赖的高危队友，既嫌他管太多，又怕他真不管。"
+        },
+        "self_control_level": "medium_low",
+        "breaking_point_hint": "符灯照出她最想隐藏的念头时，可能会用更刻薄的吐槽拼命遮掩，手腕上的红痕跳动让她差点脱口质问师兄为什么总挡在她前面。",
+        "known_but_unspoken": "原书里的符灯阵解法已经全部偏离，每一盏都可能触发惩罚；陆既白每次都在她刚想到某个危险时就做出反应，但她归结为首席经验丰富或是巧合。",
+        "misbelief": "以为陆既白带她是被契约所迫，心里一定嫌她拖后腿，所以急着解契甩开她；以为自己把护身铃给他，他会嘲笑东西没用。",
+        "chapter_change_hint": "从单纯排斥同生契、只想解绑，转向怀疑契约背后有人刻意操纵；对陆既白的防备略微降低，开始不自觉地把他从“监工”看成“共犯”。"
+      },
+      {
+        "character_id": "陆既白",
+        "character_name": "陆既白",
+        "surface_emotion": "强压不耐的冷静",
+        "core_emotion": "对未知危险的警惕与无法明说的保护焦灼",
+        "primary_goal": "带云眠安全通过符灯阵并找出秘境被篡改的证据",
+        "hidden_need": "希望云眠看到自己并非冷漠无情，却害怕承认这份在意",
+        "fear": "因规则乱流导致云眠重伤，进而失去首席资格并暴露能听见她心声的秘密",
+        "attitude_to_key_others": {
+          "云眠": "嘴上嫌弃她麻烦，身体却总先挡在危险方向，视她为不可控变量却已无法冷眼旁观"
+        },
+        "self_control_level": "high",
+        "breaking_point_hint": "当云眠把护身铃再次塞来时，他接过的动作比预想中慢了一瞬，指尖泄出短暂的僵硬",
+        "known_but_unspoken": "同生契上多出的人为刻痕绝非意外，极可能是试炼前被植入的后门，但眼下不能声张",
+        "misbelief": "以为云眠的心声只是无关紧要的胆怯碎念，未察觉其中可能藏有预知般的信息",
+        "chapter_change_hint": "从单纯完成试炼的监考姿态，开始产生超出职责范围的保护欲，并决定瞒下刻痕独自追查幕后黑手"
+      }
+    ]
+  },
+  {
+    "stage": "plan_content_blocks",
+    "skill_ids": [
+      "base_style",
+      "reveal_guard",
+      "character_integrity",
+      "time_consistency_guard"
+    ],
+    "block_count": 4,
+    "blocks": [
+      {
+        "block_id": "ch_006.sc_001.b001",
+        "chapter_id": "ch_006",
+        "block_index": 1,
+        "purpose": "Open with immediate pressure: 符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。",
+        "characters": [
+          "云眠",
+          "陆既白"
+        ],
+        "active_lines": [
+          "line_rule_trial"
+        ],
+        "active_twists": [
+          "twist_inner_voice"
+        ],
+        "scene_goal": "符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。",
+        "must_reveal": [
+          "符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。"
+        ],
+        "must_hide": [
+          "不能让云眠知道陆既白能听见心声",
+          "不能解释幕后黑手身份",
+          "不能写成沉重宿命虐恋"
+        ],
+        "new_value": "Readers newly feel the opening pressure as an active public trap, not as background setup.",
+        "must_not_repeat": [
+          "不要把旧案背景或人物旧怨整段复述一遍。",
+          "不要在第一块就解释对方真实动机。",
+          "不要把本 beat 写成连续解规则、连续救场或连续走流程；必须出现新的误读、选择、代价、线索功能或关系变价。",
+          "不要把已交付事件换个角度重演；承接后直接推进新结果。"
+        ],
+        "relationship_delta": "关系从未正面碰撞的悬置，转为公开场域里必须立刻接招的压迫。",
+        "clue_delta": "这一块主要落地开场压力，不额外偷跑新 clue。",
+        "must_land_in_action": [
+          "必须把压迫落在动作、礼制或身体反应上。",
+          "不能只用总结句说气氛紧张。"
+        ],
+        "emotional_tone": "轻快、紧张、甜中带险，让读者想看他们继续互坑互救。",
+        "end_state": "The opening pressure lands and the focal character loses room to recover before speaking.",
+        "human_reaction_target": [
+          "Show one bodily or social restraint before the character tries to speak or act.",
+          "Let at least one witness or supporting character react like a living person under public pressure."
+        ],
+        "cost_shift": "The focal character loses face, time, or the chance to choose a gentler opening move.",
+        "reader_feeling_target": "Readers should feel the pressure closing around the character immediately.",
+        "paragraph_budget": "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长；硬上限 420 中文字符；理想 2~5 段，转折落地即停",
+        "target_chars": 420,
+        "paragraph_shape": [
+          "主动作",
+          "配角反应",
+          "人物细节/情绪泄露",
+          "礼法或环境补压"
+        ],
+        "micro_hook": "The character is forced to answer the opening pressure before they can recover their footing.",
+        "turn_type": "pressure_rise",
+        "character_anchor_line": {
+          "owner": "云眠",
+          "form": "reaction_line",
+          "surface_function": "用一句短促反应把开场压力钉在场面上。",
+          "hidden_function": "让读者看见角色在被压住时最先守的东西是体面、控制或骨气。",
+          "must_reveal_about_character": "这个人受压时首先暴露出的不是信息，而是性格里的硬处。",
+          "must_not_do": [
+            "不要写成功能性口号。",
+            "不要立刻跟解释性旁白。",
+            "不要为了漂亮把句子抻长。"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Do not open with background summary.",
+          "Do not turn the character into a plot explainer.",
+          "Do not replace scene with pure mental recap.",
+          "硬字数上限 420 中文字符；转折落地后立刻收束。",
+          "不要补第二轮同类动作、同类危机处理或事后心理解释。"
+        ],
+        "character_reentry_mode": {
+          "target_character": "云眠",
+          "identity_already_known": true,
+          "reentry_strategy": "用嘴硬、心声吐槽和临场小聪明立住她，不要写成纯倒霉。",
+          "first_signal": "Use a familiar subordinate, object, title, or power arrangement to signal re-entry immediately.",
+          "first_emotional_focus": "陆既白从冷面监考人，变成嘴上嫌弃但能接住她失误的人。",
+          "must_avoid": [
+            "Do not re-explain identity in narrator summary.",
+            "Do not make the re-entry feel like a fresh character introduction."
+          ]
+        },
+        "clue_reveal_mechanism": null,
+        "text": "",
+        "status": "draft",
+        "version": 1
+      },
+      {
+        "block_id": "ch_006.sc_001.b002",
+        "chapter_id": "ch_006",
+        "block_index": 2,
+        "purpose": "Push the chapter object through live pressure: 腕上的同生契红痕",
+        "characters": [
+          "云眠",
+          "陆既白"
+        ],
+        "active_lines": [
+          "line_rule_trial"
+        ],
+        "active_twists": [
+          "twist_inner_voice"
+        ],
+        "scene_goal": "腕上的同生契红痕",
+        "must_reveal": [
+          "腕上的同生契红痕",
+          "两人过了符灯阵，并确认同生契被人为加过东西。"
+        ],
+        "must_hide": [
+          "不能让云眠知道陆既白能听见心声",
+          "不能解释幕后黑手身份",
+          "不能写成沉重宿命虐恋"
+        ],
+        "new_value": "The chapter object becomes newly actionable, but only through a more expensive route.",
+        "must_not_repeat": [
+          "不要再重讲第一块已经建立的公开压迫。",
+          "不要把章目标只讲成抽象信息点。",
+          "不要把本 beat 写成连续解规则、连续救场或连续走流程；必须出现新的误读、选择、代价、线索功能或关系变价。",
+          "不要把已交付事件换个角度重演；承接后直接推进新结果。"
+        ],
+        "relationship_delta": "关系从单纯受压，转为带着程序和筹码差的试探性交锋。",
+        "clue_delta": "让章目标和小回报真正推进，但不要额外偷跑更高层真相。",
+        "must_land_in_action": [
+          "章目标必须通过对话、手续、动作选择或旁人反应被推进。",
+          "不能只写人物心里觉得机会出现了。"
+        ],
+        "emotional_tone": "一次意外互换随身物，把斗嘴推进到不太好笑的亲密边界。",
+        "end_state": "The characters gain a small procedural push, but the relational and practical cost rises with it.",
+        "human_reaction_target": [
+          "Show practical calculation, etiquette pressure, or controlled discomfort while the goal advances.",
+          "Make another person's reaction sharpen the cost of that progress."
+        ],
+        "cost_shift": "The focal character pays an extra social, procedural, or emotional price to move the goal forward.",
+        "reader_feeling_target": "Readers should feel that even progress arrives with humiliation, pressure, or residue.",
+        "paragraph_budget": "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长；硬上限 520 中文字符；理想 2~5 段，转折落地即停",
+        "target_chars": 520,
+        "paragraph_shape": [
+          "主动作",
+          "礼法或程序阻力",
+          "配角反应",
+          "代价落点"
+        ],
+        "micro_hook": "The procedural opening appears, but the price of taking it forward is now visible.",
+        "turn_type": "pressure_rise",
+        "character_anchor_line": {
+          "owner": "云眠",
+          "form": "dialogue",
+          "surface_function": "在推进程序或交涉时留下一句能顶住场面的短句。",
+          "hidden_function": "通过措辞、克制或算计显出角色真正的处事方式。",
+          "must_reveal_about_character": "这个人做事时先算代价、脸面还是底线。",
+          "must_not_do": [
+            "不要只传递剧情信息。",
+            "不要把潜台词解释出来。",
+            "不要写成一整段说理。"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Do not explain why the chapter object matters in abstract summary.",
+          "Do not let dialogue become pure information transfer.",
+          "Do not let action pause for a long strategic recap.",
+          "硬字数上限 520 中文字符；转折落地后立刻收束。",
+          "不要补第二轮同类动作、同类危机处理或事后心理解释。"
+        ],
+        "character_reentry_mode": null,
+        "clue_reveal_mechanism": null,
+        "text": "",
+        "status": "draft",
+        "version": 1
+      },
+      {
+        "block_id": "ch_006.sc_001.b003",
+        "chapter_id": "ch_006",
+        "block_index": 3,
+        "purpose": "Reprice relationship and expose pressure naturally: 陆既白从冷面监考人，变成嘴上嫌弃但能接住她失误的人。",
+        "characters": [
+          "云眠",
+          "陆既白"
+        ],
+        "active_lines": [
+          "line_rule_trial"
+        ],
+        "active_twists": [
+          "twist_inner_voice"
+        ],
+        "scene_goal": "云眠从只想甩开师兄，变成意识到他确实会在危险里先护她。",
+        "must_reveal": [
+          "云眠从只想甩开师兄，变成意识到他确实会在危险里先护她。",
+          "陆既白从冷面监考人，变成嘴上嫌弃但能接住她失误的人。",
+          "陆既白总能提前避开她心里刚吐槽的危险",
+          "同生契红痕边缘多出不属于古阵的刻痕"
+        ],
+        "must_hide": [
+          "不能让云眠知道陆既白能听见心声",
+          "不能解释幕后黑手身份",
+          "不能写成沉重宿命虐恋"
+        ],
+        "new_value": "Readers newly see the relationship reprice and at least one clue carrier, without getting a clean explanation.",
+        "must_not_repeat": [
+          "不要重复前一块已经完成的程序推进。",
+          "不要把关系变化再用作者总结句重复一遍。",
+          "不要把本 beat 写成连续解规则、连续救场或连续走流程；必须出现新的误读、选择、代价、线索功能或关系变价。",
+          "不要把已交付事件换个角度重演；承接后直接推进新结果。"
+        ],
+        "relationship_delta": "关系重新定价为更危险、更难判断，不能再停留在同一层敌意。",
+        "clue_delta": "至少有一个异常、停顿或反应被看见，但它还不能被解释清楚。",
+        "must_land_in_action": [
+          "关系变化必须落在称呼、停顿、避视、动作失手或他人先发现上。",
+          "不能只说她其实更危险了。"
+        ],
+        "emotional_tone": "一次意外互换随身物，把斗嘴推进到不太好笑的亲密边界。",
+        "end_state": "The relationship or emotional angle is repriced on the page and the situation becomes harder to read safely.",
+        "human_reaction_target": [
+          "At least one character should show a small failure of composure, bodily leak, silence, or self-directed sting.",
+          "If a clue appears, let somebody else notice it before the owner explains it."
+        ],
+        "cost_shift": "A clue or shift comes closer, but the relationship becomes harder to trust or manage.",
+        "reader_feeling_target": "Readers should remember the changed relationship pressure more than the raw information itself.",
+        "paragraph_budget": "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长；硬上限 560 中文字符；理想 2~5 段，转折落地即停",
+        "target_chars": 560,
+        "paragraph_shape": [
+          "关系压力",
+          "回避与失手",
+          "他人先发现",
+          "当事人回避解释"
+        ],
+        "micro_hook": "The clue is visible enough to keep the reader moving, but nobody will give it a clean explanation yet.",
+        "turn_type": "clue_shift",
+        "character_anchor_line": {
+          "owner": "云眠",
+          "form": "narrative_judgment",
+          "surface_function": "在关系重估或线索露出时留下一个贴近视角的判断句。",
+          "hidden_function": "让读者通过这句判断看见人物的误读、偏执、心虚或本能回避。",
+          "must_reveal_about_character": "这个人看人看事时最深的一层偏向或伤口。",
+          "must_not_do": [
+            "不要变成作者总结。",
+            "不要把真相说穿。",
+            "不要马上跟着完整解释。"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Do not summarize the emotional reprice in narrator voice.",
+          "Do not repeat the same cold, pain, blood, or frost image.",
+          "Do not turn a person into a puzzle device.",
+          "硬字数上限 560 中文字符；转折落地后立刻收束。",
+          "不要补第二轮同类动作、同类危机处理或事后心理解释。"
+        ],
+        "character_reentry_mode": null,
+        "clue_reveal_mechanism": {
+          "clue": "陆既白总能提前避开她心里刚吐槽的危险",
+          "style": "ritual_trigger",
+          "pressure_source": "符灯阵倒数和同生契痛感",
+          "surface_trigger": "互换随身物时红痕亮起",
+          "first_noticer": "陆既白",
+          "owner_reaction": "他立刻用袖口遮住刻痕，继续用冷话压过去"
+        },
+        "text": "",
+        "status": "draft",
+        "version": 1
+      },
+      {
+        "block_id": "ch_006.sc_001.b004",
+        "chapter_id": "ch_006",
+        "block_index": 4,
+        "purpose": "Close on changed cost and natural pull: 最后一盏符灯灭前，墙上浮出一行字：此契原本只该绑死人。",
+        "characters": [
+          "云眠",
+          "陆既白"
+        ],
+        "active_lines": [
+          "line_rule_trial"
+        ],
+        "active_twists": [
+          "twist_inner_voice"
+        ],
+        "scene_goal": "最后一盏符灯灭前，墙上浮出一行字：此契原本只该绑死人。",
+        "must_reveal": [
+          "最后一盏符灯灭前，墙上浮出一行字：此契原本只该绑死人。"
+        ],
+        "must_hide": [
+          "不能让云眠知道陆既白能听见心声",
+          "不能解释幕后黑手身份",
+          "不能写成沉重宿命虐恋"
+        ],
+        "new_value": "The chapter exits on a changed cost and a next move that is harder to avoid than before.",
+        "must_not_repeat": [
+          "不要把前一块已经落地的关系变化再解释一遍。",
+          "不要把结尾写成预告片口播。",
+          "不要把本 beat 写成连续解规则、连续救场或连续走流程；必须出现新的误读、选择、代价、线索功能或关系变价。",
+          "不要把已交付事件换个角度重演；承接后直接推进新结果。"
+        ],
+        "relationship_delta": "结尾要让关系或局势的代价更难回头，而不是停在同一位置。",
+        "clue_delta": "若有钩子，必须让钩子来自新代价或新事实，而不是重复旧悬念。",
+        "must_land_in_action": [
+          "尾钩必须先打到身体、动作、现场变化或实际损失上。",
+          "不能只用一句解释性判断代替收尾。"
+        ],
+        "emotional_tone": "轻快、紧张、甜中带险，让读者想看他们继续互坑互救。",
+        "end_state": "The chapter ends with a harder next step and a cost the character cannot step back from easily.",
+        "human_reaction_target": [
+          "Let the ending hit a body, action, breath, or practical loss before it becomes a hook.",
+          "Do not end on summary language alone."
+        ],
+        "cost_shift": "The character loses a buffer, an option, or a person they needed for the next move.",
+        "reader_feeling_target": "Readers should feel the next step has become both urgent and more expensive.",
+        "paragraph_budget": "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长；硬上限 420 中文字符；理想 2~5 段，转折落地即停",
+        "target_chars": 420,
+        "paragraph_shape": [
+          "结果落地",
+          "短反应",
+          "额外代价",
+          "尾钩或未竟动作"
+        ],
+        "micro_hook": "The chapter closes with a next move that is now harder, costlier, and impossible to ignore.",
+        "turn_type": "false_relief",
+        "character_anchor_line": {
+          "owner": "云眠",
+          "form": "inner_thought",
+          "surface_function": "在结尾变化落地时，用一句短念头或短反应把尾钩钉住。",
+          "hidden_function": "让结尾先立住人，再立住事件。",
+          "must_reveal_about_character": "这个人真正怕失去或真正放不下的东西。",
+          "must_not_do": [
+            "不要写成预告片文案。",
+            "不要只负责抛钩子。",
+            "不要把情绪解释得太满。"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Do not force a trailer-like ending turn.",
+          "Do not flatten the closing beat into explanation.",
+          "Do not spend the final sentence only naming the hook.",
+          "硬字数上限 420 中文字符；转折落地后立刻收束。",
+          "不要补第二轮同类动作、同类危机处理或事后心理解释。"
+        ],
+        "character_reentry_mode": null,
+        "clue_reveal_mechanism": null,
+        "text": "",
+        "status": "draft",
+        "version": 1
+      }
+    ]
+  },
+  {
+    "stage": "draft_beat_1",
+    "block_id": "ch_006.sc_001.b001",
+    "block_index": 1,
+    "chapter_length": 2308,
+    "delivered_beat_summary_text": "[Already delivered in this chapter]\nNo beat has landed yet."
+  },
+  {
+    "stage": "draft_beat_2",
+    "block_id": "ch_006.sc_001.b002",
+    "block_index": 2,
+    "chapter_length": 4974,
+    "delivered_beat_summary_text": "[Already delivered in this chapter]\n\nch_006.sc_001.b001 / Open with immediate pressure: 符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。\n- scene_goal: 符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。\n- new_value: Readers newly feel the opening pressure as an active public trap, not as background setup.\n- relationship_delta: 关系从未正面碰撞的悬置，转为公开场域里必须立刻接招的压迫。\n- clue_delta: 这一块主要落地开场压力，不额外偷跑新 clue。\n- end_state: The opening pressure lands and the focal character loses room to recover before speaking.\n- micro_hook: The character is forced to answer the opening pressure before they can recover their footing."
+  },
+  {
+    "stage": "draft_beat_3",
+    "block_id": "ch_006.sc_001.b003",
+    "block_index": 3,
+    "chapter_length": 6687,
+    "delivered_beat_summary_text": "[Already delivered in this chapter]\n\nch_006.sc_001.b001 / Open with immediate pressure: 符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。\n- scene_goal: 符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。\n- new_value: Readers newly feel the opening pressure as an active public trap, not as background setup.\n- relationship_delta: 关系从未正面碰撞的悬置，转为公开场域里必须立刻接招的压迫。\n- clue_delta: 这一块主要落地开场压力，不额外偷跑新 clue。\n- end_state: The opening pressure lands and the focal character loses room to recover before speaking.\n- micro_hook: The character is forced to answer the opening pressure before they can recover their footing.\n\nch_006.sc_001.b002 / Push the chapter object through live pressure: 腕上的同生契红痕\n- scene_goal: 腕上的同生契红痕\n- new_value: The chapter object becomes newly actionable, but only through a more expensive route.\n- relationship_delta: 关系从单纯受压，转为带着程序和筹码差的试探性交锋。\n- clue_delta: 让章目标和小回报真正推进，但不要额外偷跑更高层真相。\n- end_state: The characters gain a small procedural push, but the relational and practical cost rises with it.\n- micro_hook: The procedural opening appears, but the price of taking it forward is now visible."
+  },
+  {
+    "stage": "draft_beat_4",
+    "block_id": "ch_006.sc_001.b004",
+    "block_index": 4,
+    "chapter_length": 9173,
+    "delivered_beat_summary_text": "[Already delivered in this chapter]\n\nch_006.sc_001.b001 / Open with immediate pressure: 符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。\n- scene_goal: 符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。\n- new_value: Readers newly feel the opening pressure as an active public trap, not as background setup.\n- relationship_delta: 关系从未正面碰撞的悬置，转为公开场域里必须立刻接招的压迫。\n- clue_delta: 这一块主要落地开场压力，不额外偷跑新 clue。\n- end_state: The opening pressure lands and the focal character loses room to recover before speaking.\n- micro_hook: The character is forced to answer the opening pressure before they can recover their footing.\n\nch_006.sc_001.b002 / Push the chapter object through live pressure: 腕上的同生契红痕\n- scene_goal: 腕上的同生契红痕\n- new_value: The chapter object becomes newly actionable, but only through a more expensive route.\n- relationship_delta: 关系从单纯受压，转为带着程序和筹码差的试探性交锋。\n- clue_delta: 让章目标和小回报真正推进，但不要额外偷跑更高层真相。\n- end_state: The characters gain a small procedural push, but the relational and practical cost rises with it.\n- micro_hook: The procedural opening appears, but the price of taking it forward is now visible.\n\nch_006.sc_001.b003 / Reprice relationship and expose pressure naturally: 陆既白从冷面监考人，变成嘴上嫌弃但能接住她失误的人。\n- scene_goal: 云眠从只想甩开师兄，变成意识到他确实会在危险里先护她。\n- new_value: Readers newly see the relationship reprice and at least one clue carrier, without getting a clean explanation.\n- relationship_delta: 关系重新定价为更危险、更难判断，不能再停留在同一层敌意。\n- clue_delta: 至少有一个异常、停顿或反应被看见，但它还不能被解释清楚。\n- end_state: The relationship or emotional angle is repriced on the page and the situation becomes harder to read safely.\n- micro_hook: The clue is visible enough to keep the reader moving, but nobody will give it a clean explanation yet."
+  },
+  {
+    "stage": "write_chapter_full",
+    "mode": "sequential_beat_drafting",
+    "block_count": 4,
+    "chapter_length": 9173
+  },
+  {
+    "stage": "review_iteration_1",
+    "mode": "fast",
+    "skill_ids": [
+      "base_style"
+    ],
+    "tool_calls": [
+      "review_structure_and_continuity",
+      "review_prose_and_humanity"
+    ],
+    "review_reports": {
+      "review_structure_and_continuity": {
+        "pass": false,
+        "issues": [
+          {
+            "issue_id": "I1",
+            "severity": "high",
+            "problem_type": "continuity_break",
+            "reason": "b001 末尾石壁已浮现“此契原本只该绑死人”，b002 开头再次以同一行字浮现作为场景开场，事件重复且无中间时间流逝或新发标记，造成读者感知中的时光倒流/节拍重复。",
+            "target_blocks": [
+              "ch_006.sc_001.b002"
+            ],
+            "patch_hint": "删去 b002 开头的“此契原本只该绑死人。七个字浮在石壁上，符灯暗红色的光在字痕里缓慢流淌，像一道尚未干涸的旧伤口。”整句复现；直接从云眠盯着那行字的肢体反应和心理活动开始，例如“云眠盯着那行字，喉咙有些发干……”即可承上。"
+          },
+          {
+            "issue_id": "I2",
+            "severity": "high",
+            "problem_type": "state_continuity_break",
+            "reason": "b001 结尾护身铃已被陆既白亲手戴回云眠颈间（锁骨上方），b003 中云眠却“从腰间解下那枚护身铃”，物品位置前后矛盾。",
+            "target_blocks": [
+              "ch_006.sc_001.b003"
+            ],
+            "patch_hint": "将 b003 中“她从腰间解下那枚护身铃”改为从颈间取下（如“她抬手摸到颈间的银链，解下那枚护身铃”），或在前文插入一句说明她中途将护身铃重新系回腰间，确保位置连续。"
+          },
+          {
+            "issue_id": "I3",
+            "severity": "low",
+            "problem_type": "reveal_delay",
+            "reason": "b002 的 must_reveal 要求“两人过了符灯阵，并确认同生契被人为加过东西”，但 b002 仅推进到第七盏灯与契灯阵判断，未完成过阵或确认人为刻痕，实际完成在 b003–b004。虽整体仍覆盖，但造成块级落差。",
+            "target_blocks": [
+              "ch_006.sc_001.b002"
+            ],
+            "patch_hint": "在 b002 中插入一个小动作让云眠先注意到红痕上人为痕迹的存在（即使暂不能确认），例如她摸到腕上那道收窄的冷意，心里闪过“这不像是阵纹”即可，满足“确认”的初始触达。"
+          }
+        ],
+        "summary": "本章按计划块顺序推进，主要结构与压力升级基本成立，结尾钩子有力。需修补两处高严重性问题：b001与b002之间“此契原本只该绑死人”的字幕重复出场，以及护身铃从颈间到腰间的物品位置断裂；另建议小幅加强b002对章目标“人为刻痕”的初始感知，避免块级揭露落空。修补后可保持整体节奏与连续性。",
+        "passed": false
+      },
+      "review_prose_and_humanity": {
+        "pass": true,
+        "issues": [],
+        "summary": "本章散文风格流畅，情感通过身体动作、具体压力和代价落地，人物反应真实、有层次，对话及动作携带丰富潜台词，未发现需修补的文风或人味问题。",
+        "passed": true
+      },
+      "judge_patched_chapter": {
+        "pass": true,
+        "remaining_issues": [],
+        "newly_introduced_issues": [],
+        "recommendation": "补丁已有效解决重复和位置矛盾，新增刻痕触感与原有发现自然衔接，无新问题，无需再次补丁。",
+        "llm_pass": true,
+        "passed": true
+      }
+    },
+    "final_judge": {
+      "passed": false,
+      "blocking_reasons": [
+        "本章按计划块顺序推进，主要结构与压力升级基本成立，结尾钩子有力。需修补两处高严重性问题：b001与b002之间“此契原本只该绑死人”的字幕重复出场，以及护身铃从颈间到腰间的物品位置断裂；另建议小幅加强b002对章目标“人为刻痕”的初始感知，避免块级揭露落空。修补后可保持整体节奏与连续性。"
+      ],
+      "metrics": {
+        "review_tools": 2,
+        "issue_count": 3
+      }
+    }
+  },
+  {
+    "stage": "patch_round_1",
+    "patch_round": 1,
+    "patch_plan": {
+      "patch_targets": [
+        {
+          "target_type": "block",
+          "target_id": "ch_006.sc_001.b002",
+          "problem_type": "continuity_break_and_reveal_delay",
+          "goal": "消除与前一 beat 末尾的字幕重复，并让云眠在本 beat 内首次感知到红痕上的人为痕迹，使“确认人为刻痕”的初始触达提前落地。",
+          "instructions": [
+            "删去本 block 开头的‘“此契原本只该绑死人。”七个字浮在石壁上，符灯暗红色的光在字痕里缓慢流淌，像一道尚未干涸的旧伤口。’两句，直接从‘云眠盯着那行字，喉咙有些发干。她下意识摸向自己的手腕——’开始，确保场景连在 b001 石壁浮现文字之后。",
+            "在云眠摸向手腕、同生契红痕跳动时，增加一个极短的身体触感细节：她无意中发现红痕边缘有细微的异物感或凹凸，模糊意识到“不像是阵纹”，但不加任何解释，仅作为一个未成形的疑问掠过。例如在‘指甲轻轻刮着她的骨头’之后插入一句‘指腹擦过红痕边缘，竟触到一道不属于肌肤纹理的浅细凹痕’。",
+            "保持本 beat 所有其他剧情推进、人物对白、心声与压力感不变。"
+          ],
+          "local_context_needed": [
+            "prev_block",
+            "next_block",
+            "relationship_state"
+          ],
+          "source_issue_ids": [
+            "I1",
+            "I3"
+          ]
+        },
+        {
+          "target_type": "block",
+          "target_id": "ch_006.sc_001.b003",
+          "problem_type": "state_continuity_break",
+          "goal": "修复护身铃物品位置矛盾，使云眠从颈间而非腰间取下护身铃，确保连续性。",
+          "instructions": [
+            "将‘她从腰间解下那枚护身铃’改为从颈间取下的动作，如‘她抬手摸到颈间的银链，轻轻一挑，护身铃便滑进掌心’。",
+            "后续陆既白接过护身铃时，若提到他解下本命玉牌，保持原样；护身铃需要解下交换，并保持双方交换随身物的情绪张力不变。"
+          ],
+          "local_context_needed": [
+            "prev_block",
+            "relationship_state"
+          ],
+          "source_issue_ids": [
+            "I2"
+          ]
+        }
+      ],
+      "unchanged_blocks": [
+        "ch_006.sc_001.b001",
+        "ch_006.sc_001.b004"
+      ],
+      "global_constraints": [
+        "不得让云眠在本章知晓陆既白能听见心声，所有修补仍需保持这一隐藏设定。",
+        "同生契刻痕的人为性质只能让读者和陆既白察觉，云眠的感知必须停留在模糊、未确认的层面。",
+        "斗嘴节奏、轻喜剧暧昧张力与试炼压力不得因修补而减弱。",
+        "修补后字数需符合章节信息预算（3200-4200字），不额外拉长。"
+      ]
+    },
+    "rewrite_result": {
+      "patched_blocks": [
+        {
+          "block_id": "ch_006.sc_001.b002",
+          "old_summary": "Push the chapter object through live pressure: 腕上的同生契红痕",
+          "new_text": "云眠盯着那行字，喉咙有些发干。她下意识摸向自己的手腕——同生契的红痕正在跳动，不是痛的节奏，而是另一种更奇怪的感觉，像是有一根手指正沿着契约纹路慢慢划过，指甲轻轻刮着她的骨头。指腹擦过红痕边缘，竟触到一道不属于肌肤纹理的浅细凹痕，不深，却硬生生截断了契约纹路的走向，像是被人用极薄的刀刃沿着金纹外缘划了一刀。\n\n她手指一顿，低头去看，符灯红光晃得厉害，只来得及瞥见红痕边缘有一线极细的暗色阴影。还没来得及分辨那是血迹还是刻痕，手腕上又是一跳，痛感将指尖弹开。\n\n她压下那阵说不清的寒意，侧头看了陆既白一眼。他仍旧背对她，剑尖压低了半寸，袖口严密地遮住了方才那道人为刻痕。他的站姿纹丝不动，肩背线条绷得像一根拉到极限的弦。\n\n“师兄，”云眠开口，嗓音比自己预想的要哑一些，“这行字——原书里没有。”\n\n她说的是实话。原书里的符灯阵只有灯、惩罚和红光，从来没有出现过文字提示，更别提这种带恐吓意味的判词。\n\n陆既白头也不回，声音冷而平稳：“嗯。”\n\n就一个字。没有追问，没有惊讶，平静得好像他早就知道会生出这种东西。\n\n云眠心里那点微妙的违和感又浮上来。从进这道门开始，所有发生过的事都不对——同生契的刻痕不对，符灯的触发规律不对，就连石壁上这行字，用的也是“本该”两个字。不是警告，不是规则，而是某种被破坏过的旧约定。\n\n“此契原本只该绑死人。”\n\n她默念了一遍，突然觉得手腕上的红痕狠狠一抽。不是痛，是一种从骨骼深处漫上来的、不属于自己的凉意，像有另一个人正隔着契约注视她。\n\n“别盯着它看。”陆既白的声音忽然压过来，比刚才更冷，带着一种不容分说的命令感。\n\n云眠一愣，下意识转开视线，才发现自己方才一直盯着墙上那行字，盯得眼都花了，连符灯的红光都开始往瞳孔里渗。\n\n她猛眨了两下眼，往后退了一步，嘴上下意识地怼回去：“不看就不看，又不是什么好看的字。”\n\n陆既白终于侧过半张脸，剑锋上裂开的两条细线被符灯的光拉得更长，几乎要延伸到剑格。\n\n他的眼神在她脸上停了一瞬，然后移开，像在确认她没被什么东西附身。\n\n云眠捕捉到那个眼神，心里刺了一下。她没有读心术，但她看得出他刚才那一瞬在检查什么——不是检查她有没有受伤，而是检查她还是不是“她”。\n\n“我没被影响，”她硬邦邦地说，“就是看入神了而已。”\n\n陆既白没接话，转回去面向剩下的符灯。第五盏、第六盏已经全亮，暗红色的光覆盖了大半个石室，只剩下最后三盏尚未触发。按照原书的规律，这三盏才是真正的死门——前六盏是预判和惩罚，后三盏是终关判定，只要错一步，符灯阵会直接把闯阵者烧成灰。\n\n但原书的规律还管用吗？云眠心里没有底。前六盏已经触发了两轮惩罚，根本不按原书的次序来，像是整个阵的底层逻辑被人重新编排过。\n\n“先别动。”陆既白忽然开口，语气不再是单纯的命令，而像是在等她做一件事。\n\n云眠反应了一瞬才明白他的意思——他在等她判断。或者说，等她把心里那个正在成形的判断说出来。\n\n她咬了咬下唇，把脑子里乱七八糟的念头压下去，重新看向面前七盏符灯的布局。\n\n灯位分布和原书记载一样：前三盏是试探位，中三盏是隔绝位，后三盏是终关位。但触发顺序全乱了。前两盏她没有触碰到任何规则就自行亮起，第三盏在她靠近陆既白时亮起，第四盏在她给他戴上首席令时亮起，第五第六盏则是在石头浮出文字时同时亮起。\n\n如果灯是依据“动作”触发呢？不是碰了什么，而是做了什么。\n\n一个念头忽然冒出来，凉飕飕地滑过她的后颈——古书上那些符灯阵，有些版本不叫“符灯”，叫“契灯”。不是考验修为的灯，而是一对契约者的监视器。\n\n“师兄，”她压低声音，“这不是考验修为的阵。”\n\n陆既白的剑尖微微偏了一寸。他在听。\n\n“这是契灯阵，”云眠说，心跳快了几拍，连她自己都不确定这个判断对不对，“它监视的不是灵气波动，是契——”\n\n话没说完，第七盏灯亮了。\n\n不是暗红，而是冷白，刺眼得像一把刀捅进石室里所有红色光雾之中。白光直直打在石壁上，将“此契原本只该绑死人”七个字切成黑白分明的两道。\n\n然后石壁开始发出细微的咔嚓声，七个篆字上各裂开一条细缝，缝里渗出淡金色的光——那种光和她腕上同生契的金纹一模一样。\n\n云眠的血一下子凉了半截。\n\n“改口的代价，”她喃喃道，声音发抖但强撑着没退，“我说对了一半，它就要验另一半。”\n\n陆既白忽然转过身，一步跨到她面前，手掌扣住她的肩，力道不轻不重，刚刚好把她往后推了半步。\n\n“别说，”他低声道，声音第一次透出一点不属于冷静的情绪——不是慌，而是某种被她逼到边缘的紧绷，“你在心里想可以，别说出来。”\n\n云眠被他忽然靠近的动作噎了一下，本能地想推开他，却在指尖触到他袖口时僵住了。她碰到了那块被他遮住的刻痕位置，隔着衣料也能感觉到同生契在那里微微发热，温度比上次高了几分。\n\n她的心里忽然冒出一个她自己也没料到的疑问——他为什么每次都能在她说错话之前打断她？\n\n一次是巧合，两次是反应快，三次呢？\n\n这个疑问她没说出口，也不打算说出口。但陆既白扣在她肩上的手指忽然收紧了一下，像某种迟来的信号，仿佛他听到了她没说出的话。\n\n然后他松开手，退开一步，声音恢复那种刀背般的冷硬：“最后两盏灯交给我。你退后三步，不要出声，不要碰任何东西。”\n\n云眠没有立刻动。她盯着第七盏灯打在白光下的那七个裂开的字，又低头看了一眼自己的手腕。金色的契约纹正在缓慢地沿着红痕扩散，像一条第二层纹路在往皮肤下渗透。\n\n“退后。”陆既白重复了一遍，语气多加了一层不耐的催促。\n\n云眠往后退到三步之外，在心里骂了一句：这人急起来跟赶鸭子似的。\n\n她嘴上没出声，心里其实清楚他为什么催。如果她的判断是对的——这是契灯阵，监视的是契约双方的行为——那么刚才他说“在心里想可以，别说出来”的时候，第七盏灯的亮度确实减弱了一丝。不是熄灭，只是不再往外扩散。\n\n石壁上的七个字还在渗着淡金色的光，但裂缝没有继续扩大。\n\n陆既白没有回头看她，但他的剑尖重新抬了起来，指向第八盏依然暗着的符灯。他的左手垂在身侧，袖口严密如初，没有让手腕上那道人为刻痕露出一丝一毫。\n\n云眠看着他向第八盏灯迈出一步，心里忽然闪过一个不太理智的念头——她刚才说了四个字“契灯阵”，第七盏灯就亮了。那是不是意味着，只要她再准确地说出下一个关键词，可能会触发第八盏？\n\n“别试。”陆既白的脚步顿了一瞬，声音从前方压过来，像是隔着符灯的红光都能看穿她在想什么。\n\n云眠闭上嘴，把那个危险的念头摁回心里。但她在心里记下一笔：他每次都能在她打算做蠢事的前一刻出声。\n\n这不是反应快能解释的。这是——他在“等”她转这个念头。\n\n她没有把这个想法说出来。石室里只剩下符灯微弱的嗡鸣声，和她腕上同生契那一跳一跳的、不属于自己的温度。"
+        },
+        {
+          "block_id": "ch_006.sc_001.b003",
+          "old_summary": "Reprice relationship and expose pressure naturally: 陆既白从冷面监考人，变成嘴上嫌弃但能接住她失误的人。",
+          "new_text": "第八盏灯亮得毫无预兆。\n\n没有触发词，没有声音触碰，甚至连她手腕上的红痕都没有跳动——那盏灯就这么亮了，暗红色的光像一只睁开的眼睛，从石壁最高处直直打下来，照在陆既白正要落步的那块石板上。\n\n云眠在心里骂了一句很短的脏话。\n\n陆既白的剑尖在离石板半寸的地方硬生生停住。他的身体重心已经倾过去了，收势的代价是整个人往左侧偏了半步，靴底擦过石面发出刺耳的摩擦声。剑锋偏了——不是偏了半寸，是偏了三寸，那道本该斩在符灯红线上的剑气擦着灯缘飞过去，打在石壁上，碎成几缕细光。\n\n云眠手腕上的红痕猛地收紧，痛感像一根烧红的铁丝从腕骨一路窜到指尖。她咬住牙没出声，但心里同时闪过一个判断：他刚才那一下是为了躲什么——躲她心里骂的那句脏话里藏着的位置。\n\n那不是她能判断出来的危险。是符灯亮起之前，她先在心里想了一句“再往前一步那灯就该亮了”，然后陆既白的剑就在她还没想完的时候偏了。\n\n“站住别动。”陆既白的声音从偏了半步的位置传过来，气息比刚才重了半拍，但语调还是那种刀背似的冷。\n\n云眠没动。她盯着他重新调整重心的背影，看见他左手的袖口在刚才那一下急停里往上滑了一线——只滑了一线，半截手腕露出来，同生契的红痕比她的更暗，边缘多出三道不属于古阵纹路的刻痕，像有人用极细的刀尖在契约上补了几笔。\n\n她还没来得及看清，他已经把袖口拉了下去。\n\n动作很快，快得像什么都没发生。\n\n“第八盏亮了。”他说，仿佛刚才那个急停和剑气打偏都不值一提。“你退后，别靠太近。”\n\n云眠往后退了半步，没有再退。她盯着他的后背，心里那个记了又记的笔记又多了一行：他不是在“等”她转念头。他是在她念头刚冒出来、还没成形的时候就已经做出反应了。\n\n“你刚才——”她开口。\n\n“闭嘴。”陆既白打断她，剑尖重新对准第八盏灯的方向。“它亮了，但还没攻击。说明触发条件不是‘亮’，是别的。”\n\n云眠把嘴闭上。她不是被他吼住了，是她看见他重新握剑的手指关节比刚才白了一个度——他在用力，但不是为了握剑。\n\n是为了压住手腕上那道刚被遮起来的刻痕。\n\n第八盏符灯悬在他们头顶，红光不扩散也不熄灭，就那么悬着，像在等他们做下一个选择。\n\n云眠低头看了一眼自己腕上的红痕。痛感已经退到只剩一丝余温，但那行墙上的字还在她脑子里转——此契原本只该绑死人。\n\n她忽然想到一件事。\n\n“互换随身物。”她压低声音说，用的不是猜测的语气，是确定的语气。“规则是互换随身物，不是随便换，是换‘真正重要的’——刚才第七盏灯亮是因为我说了不该说的词，但第八盏灯亮，是因为我们还没完成交换。”\n\n陆既白回头看了她一眼。\n\n那一眼很短，但她在他眼睛里读到一种很奇怪的东西——不是意外，不是质疑，是确认。像她说了什么他早就知道、但一直在等她主动说出来的话。\n\n“你确定？”他问。\n\n“不确定。”云眠说，“但不试会死。”\n\n她抬手摸到颈间的银链，轻轻一挑，护身铃便滑进掌心，铜铃发出一声极轻的响，像某种不太情愿的告别。\n\n“给你。”\n\n陆既白低头看着她手里的铃铛，没有立刻接。\n\n“这东西对你很重要。”他说。不是问句。\n\n云眠心说废话，不重要怎么叫互换重要的随身物。但她嘴上说的是：“嫌破就算了。”\n\n他伸出手，指尖碰到铜铃的边，那一瞬间两人手腕上的红痕同时亮了一下——不是痛，是一种温热的、不属于自己的脉搏，从她的手腕传进他的指尖，又从他的指尖灌回她的手腕。\n\n云眠的手指差点松开铜铃。那感觉太近了，近得不像契约共享痛感，像是它非要把什么东西从她身体里推出来，塞到他手里去。\n\n陆既白接过了护身铃。他的手指稳得不像话，但动作比刚才慢了一拍。\n\n然后他从自己颈间解下一枚墨玉牌，放到她掌心里。玉牌还带着体温，边缘磨得光滑，正面刻着一个“陆”字，背面是一道剑痕。\n\n云眠认得这个东西。首席弟子的本命玉牌，试炼期间离身等于放弃所有特权保护。\n\n她抬头看他。\n\n“戴上。”他说，语气和刚才说“退后”一模一样。“符灯开始倒计数了。”\n\n石壁上果然浮出一串金色的数字，从十开始往下跳。\n\n云眠把玉牌挂上脖子，墨玉贴上胸口的那一下，凉得她打了个寒噤。\n\n但她的手腕上，同生契的红痕不再跳了。\n\n第八盏灯灭了一盏。\n\n还剩最后一盏。"
+        }
+      ],
+      "merged_chapter_text": "第二道门的石门在身后无声闭合，将第一道门的坍塌隔绝在外。门内的甬道只有三丈来长，尽头悬着七盏符灯，排列成北斗形状，灯芯尚未点燃，却已经散发出一种暖融融的、让人后颈发麻的光晕。\n\n云眠还没站稳，腕上的同生契就猛地一烫。\n\n那种感觉像有人拿烧红的铜钱按在腕骨上，不致命，但足够让人倒吸一口凉气。她本能地捂紧手腕，余光看见陆既白握剑的右手也微微收紧了一瞬——他什么也没说，但剑尖向下偏了半寸，剑锋恰好把她挡在身后靠墙的位置。\n\n然后七盏符灯在同一瞬间亮了。\n\n不是依次亮，是“刷”地齐齐亮起，明黄色光柱直打在甬道尽头，将两人的影子拉得又长又瘦，紧贴在潮湿的石壁上。云眠下意识往后退了半步，心里骂了一句——她骂得很短，只有两个字，连语气词都是挑的，但陆既白的剑尖又偏了半寸。\n\n他侧过头，眼风扫过来，语气淡得要命：“站好。”\n\n云眠本能地回了一句：“我站得好好的。”\n\n符灯光柱开始变换颜色，从左至右依次从明黄转成暗红，像沿着某种看不见的刻度在倒计时。石壁上映出的影子也随之变形，她看见自己的影子开始往符灯方向倾斜，仿佛被无形的手拽住肩膀往前扯。\n\n规则显现得很快，快得几乎没有给人思考的时间。\n\n第一盏符灯投射出一行金色篆字，悬在半空中，字迹端正得像是某种契约条款——“凡过此阵者，须以随身重要之物相换，彼此各出一件，不可收回，不可反悔。”\n\n云眠读完这句话，脑子里跳出的第一个念头是：这和原书里写的不一样。\n\n原书里符灯阵的规则是“各自献出一件法器”，不是交换，更不是“彼此各出一件”。换和献的区别太大，大到她甚至怀疑自己进错了秘境门。但她来不及细想了，因为第二盏符灯已经亮起，暗红色光芒照在篆字末尾新增的一行小字上——“若物件不足以证其心，符灯当验。”\n\n也就是说，东西不够重要，符灯不认。\n\n陆既白没有废话，抬手从腰间解下一枚青玉令牌，搁在第一盏符灯照出的石台上。令牌落在石面上发出清脆的响，台面立刻亮起一层浅金色的涟漪，像水面被石子砸开。\n\n“首席令，”他说，语气像在背清单，“能调内门三阁的人手，够重要了。”\n\n云眠看见他搁令牌的时候，袖口向下滑了一截，露出腕上同生契的红痕。那红痕比刚才更深了，边缘泛着一层若有若无的金光，像是符灯照出来的，又像是从里面透出来的。她心里闪过一个念头——首席令确实贵重，但那毕竟是外物。符灯要的是“重要之物”，不是“贵重之物”。\n\n她自己这念头刚冒出来，第三盏符灯就变了。\n\n暗红色的光柱突然转向，打在云眠胸口——不是照在她脸上，是照在她腰间的护身铃上。那枚银铃只有指节大小，挂在束腰绦带上，是成对的，另一只在她包袱里。铃身被符灯一照，立刻发出一声极轻极细的振鸣，像被谁弹了一下。\n\n符灯在“看”。\n\n云眠心里一紧，嘴上却脱口而出：“这东西不值钱。”\n\n陆既白已经伸手过来，动作快得像是提前演练过，指尖勾住护身铃的银链轻轻一挑，铃铛便从她腰带上脱离。他全程没碰到她的衣料，但手腕的红痕擦过她的手背，两处同生契的痛感在同一瞬间叠加——像一根细针从她的腕骨扎进去，又从他的腕骨穿出来。\n\n两人同时顿了顿。\n\n云眠咬了咬后槽牙，把铃铛塞进他手里，动作粗暴得像是在扔烫手山芋：“给你。护身铃，防三次致命伤，我只有这一对。够重要了吧。”\n\n她说这话的时候，心里想的其实是另一句——“这东西虽然旧，但能挡死劫，你别真给弄丢了。”\n\n陆既白低头看了一眼铃铛，手掌合拢，把它收进袖中。他什么也没说，但指尖在银链上多停了一息，那个停顿很短，短得像是铃铛挂住了他的袖口布料。\n\n符灯发出嗡鸣，认可了这次交换。但第四盏灯亮起来的时候，篆字又变了——规则追加了一条：“凡互换之物，须亲手为对方戴上。”\n\n云眠愣了一瞬。\n\n她还没反应过来，陆既白已经从袖中抽出那条银链，手指穿过链扣，铃铛悬在他指间。他垂下眼，伸手过来——那只手在半空中停了一瞬，随即绕过她颈侧，将银链扣在她后颈。铃铛落回她锁骨上方的位置，冰凉凉的，带着他身上那种极淡的剑鞘松香。\n\n她必须给他戴上首席令。\n\n云眠深吸一口气，拿起石台上的青玉令牌，递向他的腰间。首席令用的是玉链，比银链粗，扣环对准的位置在他腰带内侧。她够不到，只能往前走半步，手指蹭过他腰侧的衣料，将玉链绕了半圈，卡进扣环。\n\n这个距离太近了。\n\n近到她能听见他呼吸的节奏变了——变得更慢，更克制，像在压制什么。同生契在同一瞬间收紧，红痕像活物一样在两人腕上跳动，痛感不再是针刺，而是一种持续的、有节律的灼烧，像两颗心脏在用同一个频率搏动。\n\n她做完这个动作立刻退开，嘴上习惯性地补了一刀：“首席令挂腰上，师兄也不怕沉。”\n\n陆既白没接话。他在看自己的手腕。\n\n红痕边缘多出了一枚刻痕——不是符文，不是阵纹，而是一种她从未见过的、像是被人用指甲硬生生刻上去的人为痕迹。那刻痕位于同生契金色纹路的外缘，大约半粒米长，形状歪歪扭扭，像是随手划的一刀，却精准地切在两道契约纹的交汇点上。\n\n他立刻用袖口遮住刻痕，垂下手，动作自然得仿佛只是整理了一下袖子。\n\n然后他转过身，面向剩下的符灯，声音冷得像刀背：“别分神，继续。”\n\n云眠盯着他的背影看了两秒。她注意到他遮刻痕的动作，但此刻符灯的压力重新压下来，第五盏、第六盏灯同时亮起暗红色，石壁上浮现出一行新的篆字，字迹比之前的更潦草，像被谁匆匆涂抹过。\n\n“此契原本只该绑死人。”\n\n七个字浮在墙壁上，被符灯映得忽明忽暗。云眠只觉得手腕上的红痕狠狠跳了一下，像是有人拿这行字敲在她的骨头上。\n\n她看向陆既白。\n\n他没有回头。但他的剑尖向下压了半寸，剑锋映着符灯的光，那道光在剑身上裂成了两条细线，像一种看不见的裂缝正顺着剑脊蔓延。\n\n云眠盯着那行字，喉咙有些发干。她下意识摸向自己的手腕——同生契的红痕正在跳动，不是痛的节奏，而是另一种更奇怪的感觉，像是有一根手指正沿着契约纹路慢慢划过，指甲轻轻刮着她的骨头。指腹擦过红痕边缘，竟触到一道不属于肌肤纹理的浅细凹痕，不深，却硬生生截断了契约纹路的走向，像是被人用极薄的刀刃沿着金纹外缘划了一刀。\n\n她手指一顿，低头去看，符灯红光晃得厉害，只来得及瞥见红痕边缘有一线极细的暗色阴影。还没来得及分辨那是血迹还是刻痕，手腕上又是一跳，痛感将指尖弹开。\n\n她压下那阵说不清的寒意，侧头看了陆既白一眼。他仍旧背对她，剑尖压低了半寸，袖口严密地遮住了方才那道人为刻痕。他的站姿纹丝不动，肩背线条绷得像一根拉到极限的弦。\n\n“师兄，”云眠开口，嗓音比自己预想的要哑一些，“这行字——原书里没有。”\n\n她说的是实话。原书里的符灯阵只有灯、惩罚和红光，从来没有出现过文字提示，更别提这种带恐吓意味的判词。\n\n陆既白头也不回，声音冷而平稳：“嗯。”\n\n就一个字。没有追问，没有惊讶，平静得好像他早就知道会生出这种东西。\n\n云眠心里那点微妙的违和感又浮上来。从进这道门开始，所有发生过的事都不对——同生契的刻痕不对，符灯的触发规律不对，就连石壁上这行字，用的也是“本该”两个字。不是警告，不是规则，而是某种被破坏过的旧约定。\n\n“此契原本只该绑死人。”\n\n她默念了一遍，突然觉得手腕上的红痕狠狠一抽。不是痛，是一种从骨骼深处漫上来的、不属于自己的凉意，像有另一个人正隔着契约注视她。\n\n“别盯着它看。”陆既白的声音忽然压过来，比刚才更冷，带着一种不容分说的命令感。\n\n云眠一愣，下意识转开视线，才发现自己方才一直盯着墙上那行字，盯得眼都花了，连符灯的红光都开始往瞳孔里渗。\n\n她猛眨了两下眼，往后退了一步，嘴上下意识地怼回去：“不看就不看，又不是什么好看的字。”\n\n陆既白终于侧过半张脸，剑锋上裂开的两条细线被符灯的光拉得更长，几乎要延伸到剑格。\n\n他的眼神在她脸上停了一瞬，然后移开，像在确认她没被什么东西附身。\n\n云眠捕捉到那个眼神，心里刺了一下。她没有读心术，但她看得出他刚才那一瞬在检查什么——不是检查她有没有受伤，而是检查她还是不是“她”。\n\n“我没被影响，”她硬邦邦地说，“就是看入神了而已。”\n\n陆既白没接话，转回去面向剩下的符灯。第五盏、第六盏已经全亮，暗红色的光覆盖了大半个石室，只剩下最后三盏尚未触发。按照原书的规律，这三盏才是真正的死门——前六盏是预判和惩罚，后三盏是终关判定，只要错一步，符灯阵会直接把闯阵者烧成灰。\n\n但原书的规律还管用吗？云眠心里没有底。前六盏已经触发了两轮惩罚，根本不按原书的次序来，像是整个阵的底层逻辑被人重新编排过。\n\n“先别动。”陆既白忽然开口，语气不再是单纯的命令，而像是在等她做一件事。\n\n云眠反应了一瞬才明白他的意思——他在等她判断。或者说，等她把心里那个正在成形的判断说出来。\n\n她咬了咬下唇，把脑子里乱七八糟的念头压下去，重新看向面前七盏符灯的布局。\n\n灯位分布和原书记载一样：前三盏是试探位，中三盏是隔绝位，后三盏是终关位。但触发顺序全乱了。前两盏她没有触碰到任何规则就自行亮起，第三盏在她靠近陆既白时亮起，第四盏在她给他戴上首席令时亮起，第五第六盏则是在石头浮出文字时同时亮起。\n\n如果灯是依据“动作”触发呢？不是碰了什么，而是做了什么。\n\n一个念头忽然冒出来，凉飕飕地滑过她的后颈——古书上那些符灯阵，有些版本不叫“符灯”，叫“契灯”。不是考验修为的灯，而是一对契约者的监视器。\n\n“师兄，”她压低声音，“这不是考验修为的阵。”\n\n陆既白的剑尖微微偏了一寸。他在听。\n\n“这是契灯阵，”云眠说，心跳快了几拍，连她自己都不确定这个判断对不对，“它监视的不是灵气波动，是契——”\n\n话没说完，第七盏灯亮了。\n\n不是暗红，而是冷白，刺眼得像一把刀捅进石室里所有红色光雾之中。白光直直打在石壁上，将“此契原本只该绑死人”七个字切成黑白分明的两道。\n\n然后石壁开始发出细微的咔嚓声，七个篆字上各裂开一条细缝，缝里渗出淡金色的光——那种光和她腕上同生契的金纹一模一样。\n\n云眠的血一下子凉了半截。\n\n“改口的代价，”她喃喃道，声音发抖但强撑着没退，“我说对了一半，它就要验另一半。”\n\n陆既白忽然转过身，一步跨到她面前，手掌扣住她的肩，力道不轻不重，刚刚好把她往后推了半步。\n\n“别说，”他低声道，声音第一次透出一点不属于冷静的情绪——不是慌，而是某种被她逼到边缘的紧绷，“你在心里想可以，别说出来。”\n\n云眠被他忽然靠近的动作噎了一下，本能地想推开他，却在指尖触到他袖口时僵住了。她碰到了那块被他遮住的刻痕位置，隔着衣料也能感觉到同生契在那里微微发热，温度比上次高了几分。\n\n她的心里忽然冒出一个她自己也没料到的疑问——他为什么每次都能在她说错话之前打断她？\n\n一次是巧合，两次是反应快，三次呢？\n\n这个疑问她没说出口，也不打算说出口。但陆既白扣在她肩上的手指忽然收紧了一下，像某种迟来的信号，仿佛他听到了她没说出的话。\n\n然后他松开手，退开一步，声音恢复那种刀背般的冷硬：“最后两盏灯交给我。你退后三步，不要出声，不要碰任何东西。”\n\n云眠没有立刻动。她盯着第七盏灯打在白光下的那七个裂开的字，又低头看了一眼自己的手腕。金色的契约纹正在缓慢地沿着红痕扩散，像一条第二层纹路在往皮肤下渗透。\n\n“退后。”陆既白重复了一遍，语气多加了一层不耐的催促。\n\n云眠往后退到三步之外，在心里骂了一句：这人急起来跟赶鸭子似的。\n\n她嘴上没出声，心里其实清楚他为什么催。如果她的判断是对的——这是契灯阵，监视的是契约双方的行为——那么刚才他说“在心里想可以，别说出来”的时候，第七盏灯的亮度确实减弱了一丝。不是熄灭，只是不再往外扩散。\n\n石壁上的七个字还在渗着淡金色的光，但裂缝没有继续扩大。\n\n陆既白没有回头看她，但他的剑尖重新抬了起来，指向第八盏依然暗着的符灯。他的左手垂在身侧，袖口严密如初，没有让手腕上那道人为刻痕露出一丝一毫。\n\n云眠看着他向第八盏灯迈出一步，心里忽然闪过一个不太理智的念头——她刚才说了四个字“契灯阵”，第七盏灯就亮了。那是不是意味着，只要她再准确地说出下一个关键词，可能会触发第八盏？\n\n“别试。”陆既白的脚步顿了一瞬，声音从前方压过来，像是隔着符灯的红光都能看穿她在想什么。\n\n云眠闭上嘴，把那个危险的念头摁回心里。但她在心里记下一笔：他每次都能在她打算做蠢事的前一刻出声。\n\n这不是反应快能解释的。这是——他在“等”她转这个念头。\n\n她没有把这个想法说出来。石室里只剩下符灯微弱的嗡鸣声，和她腕上同生契那一跳一跳的、不属于自己的温度。\n\n第八盏灯亮得毫无预兆。\n\n没有触发词，没有声音触碰，甚至连她手腕上的红痕都没有跳动——那盏灯就这么亮了，暗红色的光像一只睁开的眼睛，从石壁最高处直直打下来，照在陆既白正要落步的那块石板上。\n\n云眠在心里骂了一句很短的脏话。\n\n陆既白的剑尖在离石板半寸的地方硬生生停住。他的身体重心已经倾过去了，收势的代价是整个人往左侧偏了半步，靴底擦过石面发出刺耳的摩擦声。剑锋偏了——不是偏了半寸，是偏了三寸，那道本该斩在符灯红线上的剑气擦着灯缘飞过去，打在石壁上，碎成几缕细光。\n\n云眠手腕上的红痕猛地收紧，痛感像一根烧红的铁丝从腕骨一路窜到指尖。她咬住牙没出声，但心里同时闪过一个判断：他刚才那一下是为了躲什么——躲她心里骂的那句脏话里藏着的位置。\n\n那不是她能判断出来的危险。是符灯亮起之前，她先在心里想了一句“再往前一步那灯就该亮了”，然后陆既白的剑就在她还没想完的时候偏了。\n\n“站住别动。”陆既白的声音从偏了半步的位置传过来，气息比刚才重了半拍，但语调还是那种刀背似的冷。\n\n云眠没动。她盯着他重新调整重心的背影，看见他左手的袖口在刚才那一下急停里往上滑了一线——只滑了一线，半截手腕露出来，同生契的红痕比她的更暗，边缘多出三道不属于古阵纹路的刻痕，像有人用极细的刀尖在契约上补了几笔。\n\n她还没来得及看清，他已经把袖口拉了下去。\n\n动作很快，快得像什么都没发生。\n\n“第八盏亮了。”他说，仿佛刚才那个急停和剑气打偏都不值一提。“你退后，别靠太近。”\n\n云眠往后退了半步，没有再退。她盯着他的后背，心里那个记了又记的笔记又多了一行：他不是在“等”她转念头。他是在她念头刚冒出来、还没成形的时候就已经做出反应了。\n\n“你刚才——”她开口。\n\n“闭嘴。”陆既白打断她，剑尖重新对准第八盏灯的方向。“它亮了，但还没攻击。说明触发条件不是‘亮’，是别的。”\n\n云眠把嘴闭上。她不是被他吼住了，是她看见他重新握剑的手指关节比刚才白了一个度——他在用力，但不是为了握剑。\n\n是为了压住手腕上那道刚被遮起来的刻痕。\n\n第八盏符灯悬在他们头顶，红光不扩散也不熄灭，就那么悬着，像在等他们做下一个选择。\n\n云眠低头看了一眼自己腕上的红痕。痛感已经退到只剩一丝余温，但那行墙上的字还在她脑子里转——此契原本只该绑死人。\n\n她忽然想到一件事。\n\n“互换随身物。”她压低声音说，用的不是猜测的语气，是确定的语气。“规则是互换随身物，不是随便换，是换‘真正重要的’——刚才第七盏灯亮是因为我说了不该说的词，但第八盏灯亮，是因为我们还没完成交换。”\n\n陆既白回头看了她一眼。\n\n那一眼很短，但她在他眼睛里读到一种很奇怪的东西——不是意外，不是质疑，是确认。像她说了什么他早就知道、但一直在等她主动说出来的话。\n\n“你确定？”他问。\n\n“不确定。”云眠说，“但不试会死。”\n\n她抬手摸到颈间的银链，轻轻一挑，护身铃便滑进掌心，铜铃发出一声极轻的响，像某种不太情愿的告别。\n\n“给你。”\n\n陆既白低头看着她手里的铃铛，没有立刻接。\n\n“这东西对你很重要。”他说。不是问句。\n\n云眠心说废话，不重要怎么叫互换重要的随身物。但她嘴上说的是：“嫌破就算了。”\n\n他伸出手，指尖碰到铜铃的边，那一瞬间两人手腕上的红痕同时亮了一下——不是痛，是一种温热的、不属于自己的脉搏，从她的手腕传进他的指尖，又从他的指尖灌回她的手腕。\n\n云眠的手指差点松开铜铃。那感觉太近了，近得不像契约共享痛感，像是它非要把什么东西从她身体里推出来，塞到他手里去。\n\n陆既白接过了护身铃。他的手指稳得不像话，但动作比刚才慢了一拍。\n\n然后他从自己颈间解下一枚墨玉牌，放到她掌心里。玉牌还带着体温，边缘磨得光滑，正面刻着一个“陆”字，背面是一道剑痕。\n\n云眠认得这个东西。首席弟子的本命玉牌，试炼期间离身等于放弃所有特权保护。\n\n她抬头看他。\n\n“戴上。”他说，语气和刚才说“退后”一模一样。“符灯开始倒计数了。”\n\n石壁上果然浮出一串金色的数字，从十开始往下跳。\n\n云眠把玉牌挂上脖子，墨玉贴上胸口的那一下，凉得她打了个寒噤。\n\n但她的手腕上，同生契的红痕不再跳了。\n\n第八盏灯灭了一盏。\n\n还剩最后一盏。\n\n最后一盏符灯悬在石室正中央，比其他八盏都要亮，暗红的光像一层薄血涂在地上。云眠低头看了一眼腕上的红痕，它安安分分地覆在皮肤下，不再跳，不再烫，反倒让她觉得不对劲。\n\n太安静了。安静得像什么东西在等他们犯错。\n\n“别盯着看。”陆既白的声音从前面传来，不大，刚好够压住符灯的嗡鸣，“第九盏灯还没出题。”\n\n他说得对。前面八盏符灯每一盏亮起时都附带一条规则——要么是篆字浮现在石壁上，要么是某种需要他们立刻做出选择的困境。但第九盏灯从亮起来到现在，什么都没发生。\n\n云眠心里冒出一个念头：也许第九盏灯的规则是“等待”。等他们自己露出破绽。\n\n她刚想到“破绽”两个字，陆既白忽然向左侧移了一步。那一步不大，刚好把她从符灯的直射光里遮出去。暗红的光落在他的肩线上，把他的影子拉成一道窄而直的屏障。\n\n云眠愣了一下。她没出声，没动，甚至连呼吸都没变。她在心里想的是“他在挡什么”——这句他甚至都不用听心声，换成任何人站在她这个角度都会这么想。\n\n但她没问。因为她的手腕忽然疼了一下。不是红痕发烫的那种疼，是一种细而尖的刺痛，像有人拿针从红痕的边缘扎进去，刚好扎在那道人为刻痕的位置。\n\n她猛地低下头，看见红痕的边缘多了一小截墨色的蔓延，像什么人拿笔在她皮肤下补了一画。\n\n陆既白在同一时刻抬起左手，用袖口遮住了自己的手腕。动作快，自然，像是拂掉袖子上不存在的灰。但云眠看到了——他遮住之前，他腕上的红痕也在同样的位置暗了一瞬。\n\n“师兄。”她叫他。\n\n他没回头。\n\n“第九盏灯的规则是什么？”\n\n石壁上忽然浮出字来。不是之前的篆书，是正楷，端端正正，像什么人拿尺子量过每一笔的位置。\n\n——“说出对方此刻最想隐瞒的一件事。”\n\n云眠的呼吸停了一拍。\n\n规则不难理解。难的是执行。她看向陆既白的背影，他的剑尖还压在地上，剑锋上那两条裂缝似乎又深了一点。他在等她说。或者他在想自己该怎么说。\n\n符灯的金色倒数从十跳到了七。\n\n云眠张嘴，又闭上。她可以说很多关于他的事——他反应太快，他总在她想到危险之前就挡过来，他用冷淡当墙把所有人隔在外面。但这些都不是“此刻最想隐瞒”的。此刻最想隐瞒的，是她猜到了却不敢确认的那件。\n\n她不能说。不是怕说错，是怕说对。\n\n倒数跳到五。\n\n陆既白转过身来。符灯的红光从他背后打过来，把他的表情涂成一片深浅不一的阴影，但她的腕上——他的腕上，同生契同时跳了一下，短促，温热，像是一个人在另一个人心里轻轻地按了一下。\n\n“云眠，”他说，语气和平时叫她“退后”没有两样，“你怕什么？”\n\n她脱口而出：“怕你替我死。”\n\n话音落下去，石室里忽然安静了一瞬。符灯的嗡鸣没有停，倒数也没有停，但那句话像在空气里撞到了什么东西，碎成无数细小的回声，从四面八方弹回来。\n\n——怕你替我死。\n\n这不是她原本想说的。她原本想说的是“怕你拖我后腿”或者“怕你嫌我麻烦”这种可以翻篇的废话。但第九盏灯把她的嘴撬开了，把一句她从没打算说出口的话拽了出来。\n\n陆既白没有立刻接话。他的表情在那片阴影里看不出变化。\n\n然后他说：“我不会。”\n\n云眠心说这算什么回答——不会替她死？还是不会让她死？她正要张嘴怼回去，手腕上那道刺痛又来了，比刚才更尖锐，像是刻痕的位置被人重新划了一刀。\n\n她下意识握住手腕，指尖刚好按在那截墨色的蔓延上。触感不是温热，是冰凉，凉得像谁把一截不属于她的骨头塞进了她的皮肤底下。\n\n陆既白在同一瞬间皱了一下眉——极短，短到如果不是她在盯着他看就会错过。\n\n同生契共享痛感。\n\n她疼了，他就疼了。\n\n倒数跳到三。\n\n“该你了。”云眠咬着牙把话推回去，“我最想隐瞒的事，你说。”\n\n陆既白看着她。她的护身铃挂在他的腰间，铜铃在他移动时没有响——他大概用灵力封住了铃舌，不让它在不该出声的时候出声。\n\n“你在心里骂我的次数，比你嘴上多十倍。”他说。\n\n云眠差点被这句话呛到。\n\n“这算什么——”她想说“这算什么隐瞒的事”，但话到嘴边忽然卡住了。因为她意识到他说得对。她嘴上骂他是“麻烦精”“冷面监工”“首席了不起”，但心里骂的那些要难听得多，也——更不像骂。\n\n“你骂完之后，”陆既白继续说，声音平稳得像在念一条不给任何人留面子的鉴定结论，“会立刻找一个理由原谅我。”\n\n石壁上的倒数停在了“二”。\n\n符灯的红光忽然暗了一瞬，像是第九盏灯也被什么话击中了一下。\n\n云眠的脸烧了起来。不是害羞，是恼羞成怒。她想说你少自作多情，但她说不出口，因为手腕上的红痕正在用一种极其温和的频率跳动着，像有另一个人把这句话从她心底捞起来以后，小心翼翼地放在了不那么疼的位置。\n\n倒数跳到一。\n\n第九盏灯灭了。\n\n石室里只剩下墙壁上那行正楷和先前那行潦草的篆字——“此契原本只该绑死人。”\n\n两行字并排浮在墙上，一正一歪，像两套不同的规则被硬生生拼在了一起。\n\n云眠低头看自己的手腕。红痕的边缘，那截墨色的蔓延已经缩回去了，但多出了一道极细的灰线，像一道被烧焦的旧疤痕，嵌在同生契原本的纹路旁边。\n\n陆既白放下袖子，动作自然得像是所有事都在他的预料之内。但云眠注意到他的手指在剑柄上多握了一瞬——那是他压住某句话时的习惯。\n\n“走了。”他说，“第二道门的出口应该在——”\n\n“你的手腕上也有。”云眠打断他。\n\n他停下脚步。\n\n“那道刻痕。”她说，“不是古阵留下的。有人在我们进秘境之前，在同生契上加了东西。”\n\n陆既白回过头来。符灯全灭的石室里只剩下他剑锋上那两道裂缝发出的微弱冷光，刚好照出他半张脸的轮廓。\n\n他没有否认。\n\n“你知道。”云眠说，“你一直知道。”\n\n他把护身铃往腰间按了按，铜铃发出一声极轻的闷响，像某种不太情愿的承认。\n\n“先出去。”他说，“出去再说。”\n\n墙上那行正楷开始消退，但那行潦草的篆字——“此契原本只该绑死人”——反而越浮越亮，亮到刺眼，亮到云眠不得不眯起眼睛。\n\n当最后一丝光亮消失时，她听见陆既白的声音从黑暗里传过来，压得很低，低到像是只说给她一个人听的。\n\n“第九盏灯的规则没消失。”\n\n云眠握紧了挂在胸前的墨玉牌。\n\n“它在跟着我们走。”",
+      "patch_report": [
+        {
+          "block_id": "ch_006.sc_001.b002",
+          "applied": true,
+          "notes": "已按 patch plan 重写目标 block。"
+        },
+        {
+          "block_id": "ch_006.sc_001.b003",
+          "applied": true,
+          "notes": "已按 patch plan 重写目标 block。"
+        }
+      ]
+    },
+    "judge_result": {
+      "pass": true,
+      "remaining_issues": [],
+      "newly_introduced_issues": [],
+      "recommendation": "补丁已有效解决重复和位置矛盾，新增刻痕触感与原有发现自然衔接，无新问题，无需再次补丁。",
+      "llm_pass": true,
+      "passed": true
+    },
+    "final_judge": {
+      "passed": true,
+      "blocking_reasons": [],
+      "metrics": {
+        "patch_round": 1,
+        "llm_pass_flag": true,
+        "remaining_issue_count": 0,
+        "introduced_issue_count": 0
+      },
+      "recommendation": "补丁已有效解决重复和位置矛盾，新增刻痕触感与原有发现自然衔接，无新问题，无需再次补丁。"
+    }
+  },
+  {
+    "stage": "final_polish",
+    "skill_ids": [
+      "base_style",
+      "chapter_finalize"
+    ],
+    "chapter_length": 9115
+  },
+  {
+    "stage": "format_adjustment",
+    "chapter_length": 9115,
+    "format_issues": []
+  },
+  {
+    "stage": "summarize_actual_chapter",
+    "chapter_id": "ch_006"
+  }
+]

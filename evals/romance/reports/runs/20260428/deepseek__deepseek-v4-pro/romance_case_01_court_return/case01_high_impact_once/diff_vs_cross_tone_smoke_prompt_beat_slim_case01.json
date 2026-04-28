@@ -1,0 +1,137 @@
+{
+  "baseline_label": "cross_tone_smoke_prompt_beat_slim_case01",
+  "candidate_label": "case01_high_impact_once",
+  "compared_at": "2026-04-28T15:05:16.262532Z",
+  "average_score_deltas": {
+    "romance_tension_score": {
+      "baseline": 8.5,
+      "candidate": 8.5,
+      "delta": 0.0
+    },
+    "relationship_progression_score": {
+      "baseline": 9.0,
+      "candidate": 8.0,
+      "delta": -1.0
+    },
+    "emotional_resonance_score": {
+      "baseline": 8.5,
+      "candidate": 9.0,
+      "delta": 0.5
+    },
+    "character_attraction_score": {
+      "baseline": 8.67,
+      "candidate": 8.65,
+      "delta": -0.02
+    },
+    "hook_score": {
+      "baseline": 9.1,
+      "candidate": 9.5,
+      "delta": 0.4
+    },
+    "continuity_score": {
+      "baseline": 9.0,
+      "candidate": 8.0,
+      "delta": -1.0
+    },
+    "redundancy_score": {
+      "baseline": 7.82,
+      "candidate": 7.2,
+      "delta": -0.62
+    },
+    "mind_state_consistency_score": {
+      "baseline": 9.0,
+      "candidate": 9.0,
+      "delta": 0.0
+    },
+    "genre_fit_score": {
+      "baseline": 9.0,
+      "candidate": 9.0,
+      "delta": 0.0
+    }
+  },
+  "case_diffs": [
+    {
+      "case_id": "romance_case_01_court_return",
+      "title": "围宫请婚的旧案重逢",
+      "baseline_verdict": "pass",
+      "candidate_verdict": "pass",
+      "score_deltas": {
+        "romance_tension_score": {
+          "baseline": 8.5,
+          "candidate": 8.5,
+          "delta": 0.0
+        },
+        "relationship_progression_score": {
+          "baseline": 9.0,
+          "candidate": 8.0,
+          "delta": -1.0
+        },
+        "emotional_resonance_score": {
+          "baseline": 8.5,
+          "candidate": 9.0,
+          "delta": 0.5
+        },
+        "character_attraction_score": {
+          "baseline": 8.67,
+          "candidate": 8.65,
+          "delta": -0.02
+        },
+        "hook_score": {
+          "baseline": 9.1,
+          "candidate": 9.5,
+          "delta": 0.4
+        },
+        "continuity_score": {
+          "baseline": 9.0,
+          "candidate": 8.0,
+          "delta": -1.0
+        },
+        "redundancy_score": {
+          "baseline": 7.82,
+          "candidate": 7.2,
+          "delta": -0.62
+        },
+        "mind_state_consistency_score": {
+          "baseline": 9.0,
+          "candidate": 9.0,
+          "delta": 0.0
+        },
+        "genre_fit_score": {
+          "baseline": 9.0,
+          "candidate": 9.0,
+          "delta": 0.0
+        }
+      },
+      "improved_metrics": [
+        "emotional_resonance_score",
+        "hook_score"
+      ],
+      "declined_metrics": [
+        "relationship_progression_score",
+        "continuity_score",
+        "redundancy_score"
+      ],
+      "new_blockers": [],
+      "resolved_blockers": [],
+      "cost_deltas": {
+        "llm_calls": 1.0,
+        "patch_rounds": 0.0,
+        "duration_seconds": 380.99
+      }
+    }
+  ],
+  "improved_metrics": [
+    "emotional_resonance_score",
+    "hook_score"
+  ],
+  "declined_metrics": [
+    "continuity_score",
+    "redundancy_score",
+    "relationship_progression_score"
+  ],
+  "blocked_case_delta": 0,
+  "new_blocker_case_ids": [],
+  "resolved_blocker_case_ids": [],
+  "baseline_path": "evals\\romance\\reports\\cross_tone_smoke_prompt_beat_slim_case01\\summary.json",
+  "candidate_path": "evals\\romance\\reports\\case01_high_impact_once\\summary.json"
+}

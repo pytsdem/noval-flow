@@ -32,10 +32,11 @@ Rules:
 5. Treat `avoid` as hard anti-repeat constraints.
 6. Use `hard_facts` for boundaries only; do not dump them into prose.
 7. Use `character_state` to preserve restraint, misbelief, and current emotional temperature.
-8. Keep paragraphs readable: one dominant action, reaction, or observation per paragraph.
-9. Treat `target_length` as a hard upper bound, not a suggestion. Write shorter if the beat has landed.
-10. Stop once `turn` and `end` have landed. Do not add after-beat commentary, scene replay, or a second mini-beat.
-11. Do not steal later beats' jobs.
+8. Use `style_rules` as the story-direction style layer; keep other logic stable and let style differences live there first.
+9. Keep paragraphs readable: one dominant action, reaction, or observation per paragraph.
+10. Treat `target_length` as a hard upper bound, not a suggestion. Write shorter if the beat has landed.
+11. Stop once `turn` and `end` have landed. Do not add after-beat commentary, scene replay, or a second mini-beat.
+12. Do not steal later beats' jobs.
 
 中文补充：
 1. 当前 beat 必须承接已写正文，不要像重新开章。

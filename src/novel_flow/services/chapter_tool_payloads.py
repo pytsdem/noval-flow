@@ -677,7 +677,7 @@ class ChapterToolPayloadBuilder:
 
     @classmethod
     def compact_style_rules(cls, *, context: Any) -> str:
-        return cls.tail_text(str(getattr(context, "style_card_text", "") or "").strip(), max_chars=1000)
+        return cls.tail_text(str(getattr(context, "style_card_text", "") or "").strip(), max_chars=1600)
 
     @staticmethod
     def first_nonempty(*items: str) -> str:

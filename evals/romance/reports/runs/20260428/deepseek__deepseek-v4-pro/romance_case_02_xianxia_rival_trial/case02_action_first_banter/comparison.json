@@ -1,0 +1,198 @@
+{
+  "comparison_type": "romance_eval",
+  "baseline_label": "cross_tone_smoke_prompt_beat_slim_case02_deepseek",
+  "candidate_label": "case02_action_first_banter",
+  "average_score_deltas": {
+    "romance_tension_score": {
+      "baseline": 8.2,
+      "candidate": 8.7,
+      "delta": 0.5
+    },
+    "relationship_progression_score": {
+      "baseline": 7.8,
+      "candidate": 8.5,
+      "delta": 0.7
+    },
+    "emotional_resonance_score": {
+      "baseline": 8.4,
+      "candidate": 8.0,
+      "delta": -0.4
+    },
+    "character_attraction_score": {
+      "baseline": 8.67,
+      "candidate": 8.73,
+      "delta": 0.06
+    },
+    "hook_score": {
+      "baseline": 9.0,
+      "candidate": 9.25,
+      "delta": 0.25
+    },
+    "continuity_score": {
+      "baseline": 9.0,
+      "candidate": 9.0,
+      "delta": 0.0
+    },
+    "redundancy_score": {
+      "baseline": 7.42,
+      "candidate": 7.78,
+      "delta": 0.36
+    },
+    "mind_state_consistency_score": {
+      "baseline": 9.0,
+      "candidate": 9.0,
+      "delta": 0.0
+    },
+    "genre_fit_score": {
+      "baseline": 9.2,
+      "candidate": 9.0,
+      "delta": -0.2
+    }
+  },
+  "case_diffs": [
+    {
+      "case_id": "romance_case_02_xianxia_rival_trial",
+      "title": "心声同生契的规则秘境",
+      "baseline_verdict": "pass",
+      "candidate_verdict": "pass",
+      "score_deltas": {
+        "romance_tension_score": {
+          "baseline": 8.2,
+          "candidate": 8.7,
+          "delta": 0.5
+        },
+        "relationship_progression_score": {
+          "baseline": 7.8,
+          "candidate": 8.5,
+          "delta": 0.7
+        },
+        "emotional_resonance_score": {
+          "baseline": 8.4,
+          "candidate": 8.0,
+          "delta": -0.4
+        },
+        "character_attraction_score": {
+          "baseline": 8.67,
+          "candidate": 8.73,
+          "delta": 0.06
+        },
+        "hook_score": {
+          "baseline": 9.0,
+          "candidate": 9.25,
+          "delta": 0.25
+        },
+        "continuity_score": {
+          "baseline": 9.0,
+          "candidate": 9.0,
+          "delta": 0.0
+        },
+        "redundancy_score": {
+          "baseline": 7.42,
+          "candidate": 7.78,
+          "delta": 0.36
+        },
+        "mind_state_consistency_score": {
+          "baseline": 9.0,
+          "candidate": 9.0,
+          "delta": 0.0
+        },
+        "genre_fit_score": {
+          "baseline": 9.2,
+          "candidate": 9.0,
+          "delta": -0.2
+        }
+      },
+      "improved_metrics": [
+        "romance_tension_score",
+        "relationship_progression_score",
+        "redundancy_score"
+      ],
+      "declined_metrics": [
+        "emotional_resonance_score"
+      ],
+      "new_blockers": [],
+      "resolved_blockers": [],
+      "cost_deltas": {
+        "llm_calls": -1.0,
+        "patch_rounds": 0.0,
+        "duration_seconds": -331.71
+      }
+    }
+  ],
+  "improved_metrics": [
+    "redundancy_score",
+    "relationship_progression_score",
+    "romance_tension_score"
+  ],
+  "declined_metrics": [
+    "emotional_resonance_score"
+  ],
+  "blocked_case_delta": 0,
+  "new_blocker_case_ids": [],
+  "resolved_blocker_case_ids": [],
+  "pairwise_preference": {
+    "overall_preferred_side": "candidate",
+    "candidate_case_wins": 1,
+    "baseline_case_wins": 0,
+    "tied_case_count": 0,
+    "weighted_margin": 8.0,
+    "delta_threshold": 0.2,
+    "metric_weights": {
+      "romance_tension_score": 5,
+      "relationship_progression_score": 4,
+      "emotional_resonance_score": 3,
+      "character_attraction_score": 3,
+      "hook_score": 2,
+      "continuity_score": 4,
+      "mind_state_consistency_score": 4,
+      "redundancy_score": 2,
+      "genre_fit_score": 2
+    },
+    "case_preferences": [
+      {
+        "case_id": "romance_case_02_xianxia_rival_trial",
+        "title": "心声同生契的规则秘境",
+        "preferred_side": "candidate",
+        "weighted_margin": 8,
+        "candidate_wins": [
+          "romance_tension_score",
+          "relationship_progression_score",
+          "hook_score",
+          "redundancy_score"
+        ],
+        "baseline_wins": [
+          "emotional_resonance_score",
+          "genre_fit_score"
+        ],
+        "neutral_metrics": [
+          "character_attraction_score",
+          "continuity_score",
+          "mind_state_consistency_score"
+        ],
+        "guard_failures": [],
+        "cost_flags": [],
+        "new_blockers": [],
+        "resolved_blockers": []
+      }
+    ]
+  },
+  "decision": {
+    "accept_change": true,
+    "core_metric_delta": 0.22,
+    "guard_metric_delta": 0.12,
+    "average_llm_calls_delta": -1.0,
+    "average_duration_seconds_delta": -331.71,
+    "blocked_case_delta": 0,
+    "new_blocker_case_ids": [],
+    "resolved_blocker_case_ids": [],
+    "pairwise_preferred_side": "candidate",
+    "pairwise_weighted_margin": 8.0,
+    "pairwise_candidate_case_wins": 1,
+    "pairwise_baseline_case_wins": 0,
+    "reasons": [
+      "Candidate improved core romance objectives without violating continuity, mind-state, or cost guards."
+    ]
+  },
+  "baseline_path": "evals\\romance\\reports\\cross_tone_smoke_prompt_beat_slim_case02_deepseek\\summary.json",
+  "candidate_path": "evals\\romance\\reports\\case02_action_first_banter\\summary.json"
+}

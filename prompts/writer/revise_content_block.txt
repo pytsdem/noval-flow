@@ -41,6 +41,7 @@ Light revision limits:
 5. Do not add new clues, truths, people, settings, or large new paragraphs.
 6. Do not change the ending hook or the handoff to the next beat.
 7. Preserve useful action, dialogue, object state, and continuity with `previous_text_tail`.
-8. 本 beat 不需要独立完成情绪闭环；不要总结关系，不要解释人物真实心意，不要替读者下结论。
-9. Treat `target_length` as a hard ceiling. Revision should usually shorten the block.
-10. If the block has two similar action cycles, keep the cycle with stronger relationship/cost/clue turn and delete the weaker one.
+8. Use `style_rules` as the story-direction style layer; when trimming repetition, preserve the style-specific pressure and chemistry it asks for.
+9. 本 beat 不需要独立完成情绪闭环；不要总结关系，不要解释人物真实心意，不要替读者下结论。
+10. Treat `target_length` as a hard ceiling. Revision should usually shorten the block.
+11. If the block has two similar action cycles, keep the cycle with stronger relationship/cost/clue turn and delete the weaker one.
