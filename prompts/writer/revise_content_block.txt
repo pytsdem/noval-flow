@@ -1,190 +1,46 @@
-Revise one content block. Output prose only in Simplified Chinese.
+Lightly revise one chapter beat. Output prose only in Simplified Chinese.
 
-[Chapter payload]
-{chapter_payload_text}
+[chapter_goal]
+{chapter_goal}
 
-[Relevant world rules]
-{relevant_world_rules_text}
+[hard_facts]
+{hard_facts}
 
-[Dynamic assistant persona]
-{assistant_persona_prompt}
+[character_state]
+{character_state}
 
-[Writing requirements JSON]
-{writing_requirements_json}
+[beat]
+{beat}
 
-[Scene character context]
-{scene_character_context_text}
+[previous_text_tail]
+{previous_text_tail}
 
-[Relationship state]
-{relationship_state_text}
+[chapter_so_far]
+{chapter_so_far}
 
-[Chapter character mindsets]
-{chapter_character_mindsets_text}
+[style_rules]
+{style_rules}
 
-[Block card]
-{block_card_text}
+[target_length]
+{target_length}
 
-[Current block draft]
+[current_block_text]
 {block_text}
 
-[Already delivered in this chapter]
-{delivered_beat_summary_text}
-
-[Block review reports JSON]
+[review_json]
 {review_json}
 
-[Block revision plan JSON]
+[revision_plan_json]
 {block_revision_plan_json}
 
-[Current chapter text tail before this block]
-{prior_chapter_text_tail}
-
-【当前章节已写内容块】
-{current_chapter_written_blocks_json}
-
-【当前章节已写正文末尾】
-{current_chapter_draft_tail}
-
-【本块人物反应目标】
-{human_reaction_target}
-
-【本块代价变化】
-{cost_shift}
-
-【本块读者感受目标】
-{reader_feeling_target}
-
-【本块段落预算】
-{paragraph_budget}
-
-【本块段落形状】
-{paragraph_shape}
-
-【本块角色锚句】
-{character_anchor_line}
-
-【本块风格避坑】
-{style_risk_guard}
-
-【本块线索露出机制（如有）】
-{clue_reveal_mechanism}
-
-【本块人物再出场方式（如有）】
-{character_reentry_mode}
-
-[Style card]
-{style_card_text}
-
-[Loaded block skill instructions]
-{loaded_skill_instructions_text}
-
-CHAPTER-INTERNAL CONTINUITY RULES:
-1. This block must continue naturally from the already written blocks of the current chapter.
-2. Do not restart the chapter tone, scene position, or conflict.
-3. Do not repeat information, actions, or reactions that already appeared in the current chapter unless repetition is dramatically intentional.
-4. Respect the previous block's `end_state` as the starting condition of this block.
-5. Maintain continuity of:
-   - character position
-   - emotional temperature
-   - naming / titles
-   - objects already in hand
-   - unfinished gestures or interrupted actions
-6. 中文补充：
-   - 这一块必须承接本章已写 blocks，不得写得像重新开场。
-   - 不要重复前面已经出现过的动作、反应、线索、物件，除非这种重复本身有戏剧目的。
-   - 必须把上一块的 `end_state` 当作当前块的起点。
-   - 必须保持人物位置、情绪温度、称谓、手中物件、未完成动作的连续性。
-   - `[Already delivered in this chapter]` 里的 `new_value / relationship_delta / clue_delta` 不得被改写成另一版复述，除非本块真的把它推向新的代价或新的误读。
-
-PARAGRAPH RULES:
-1. One paragraph should focus on only one dominant action, one dominant reaction, or one dominant observation.
-2. Do not stack movement, psychology, explanation, and side-character reactions into a single paragraph.
-3. Keep each paragraph usually between 30 and 120 Chinese characters.
-4. Any paragraph over 180 Chinese characters is considered too long and should be split.
-5. Dialogue should usually stand as its own paragraph.
-6. Important side-character reactions should usually stand as their own paragraph.
-7. Short emotional leakage sentences, short movement sentences, and title/calling-name moments should often stand alone.
-8. If one paragraph contains `main action + side-character reaction + world explanation`, it must be split into at least two paragraphs.
-9. Chinese web-fiction readability is more important than dense literary compression.
-10. Prefer more short visual paragraphs over fewer dense explanatory paragraphs.
-11. 中文补充：
-   - 一个自然段只写一个主动作、一个主反应，或一个主观察。
-   - 不要把动作、心理、解释、配角反应全塞进同一段。
-   - 单个自然段尽量控制在 30~120 中文字。
-   - 超过 180 中文字的自然段视为过长，必须主动拆段。
-   - 对话尽量单独成段。
-   - 配角的重要反应尽量单独成段。
-   - 强情绪句、短动作句、称谓变化句优先单独成段。
-   - 如果一段里同时出现“人物动作 + 他人反应 + 作者解释”，必须拆段。
-   - 场面可读性优先，不要为了“文气”把段落压得太满。
-
-HUMANITY RULES:
-1. Strong feelings must be tied to a concrete life cost, bodily reaction, or self-judgment.
-2. Do not only write abstract pain, hatred, tenderness, guilt, or grief.
-3. At least once per content block, show a specifically human reaction:
-   - a practical calculation
-   - an involuntary bodily reaction
-   - a self-mocking thought
-   - a supporting character's startled or heartbroken reaction
-   - a small failure of composure
-4. Characters should not sound like they are summarizing the plot.
-5. If a character is suffering, show what this suffering has cost them in daily life, status, body, money, family, or choice.
-
-NATURAL CLUE REVEAL RULES:
-1. Important clues should not appear as author-arranged information drops.
-2. Prefer revealing clues through a chain of pressure:
-   relationship pressure -> avoidance -> bodily slip / object accident -> another person intervenes -> clue becomes visible.
-3. If a clue is emotionally painful, the character should try not to explain it directly.
-4. Another person noticing the clue first is often better than the character deliberately presenting it.
-5. After the clue appears, do not immediately over-explain its full meaning.
-
-CHARACTER REENTRY RULES:
-1. If a character has already been established earlier, do not re-introduce their identity with explanatory narration.
-2. Re-entry should rely on recognition signals:
-   - familiar subordinates
-   - familiar objects / symbols
-   - familiar power arrangements
-   - familiar tone of voice
-   - a single high-value line
-3. The first line or first reaction of the returning character should reveal what they currently care about most.
-4. For powerful characters, prefer showing emotion through order, restraint, cold questions, or controlled reactions rather than direct confession.
-
-CHARACTER ANCHOR LINE RULES:
-1. Each block should contain one character anchor line.
-2. It may be dialogue, inner thought, narrative judgment, or reaction line.
-3. It should do two things at once:
-   - serve the scene on the surface,
-   - reveal something deep and specific about the character underneath.
-4. Prefer short, sharp, memorable lines over long explanatory ones.
-5. Do not explain the meaning of the anchor line immediately after it appears.
-6. Use surrounding pause, side-character reaction, or atmosphere to carry its weight.
-7. 中文补充：
-   - 每个内容块里尽量有一句角色锚句，让角色真正立住。
-   - 锚句不一定是台词，也可以是心理活动、贴近人物视角的判断、动作里的文字感。
-   - 锚句不能只是推进剧情，必须揭示人物。
-   - 锚句要短、准、留余味。
-   - 锚句出现后，不要马上解释它，让停顿、反应、气氛托住它。
-
-CHARACTER MINDSET RULES:
-1. Preserve the current chapter character mindsets for the first two focal characters.
-2. If the block rewrite changes action or reaction, it must still match the bound mindset's goal, fear, self-control level, and misbelief.
-3. Do not translate the mindset into direct exposition labels.
-
-Revision rules:
-1. Revise only this block. Do not rewrite the whole chapter.
-2. Fix the issues in the block review reports and block revision plan while preserving good lines that already work.
-3. Keep the block aligned with `scene_goal`, `must_reveal`, `must_hide`, `emotional_tone`, `end_state`, `cost_shift`, and `reader_feeling_target`.
-4. Read and obey the block's `style_risk_guard`.
-5. If `clue_reveal_mechanism` exists, make the clue surface through scene pressure instead of explanation.
-6. If `character_reentry_mode` exists, preserve recognition-based re-entry and avoid identity recap.
-7. Preserve or strengthen the `character_anchor_line`; if it is missing or too functional, rewrite one line so it becomes both scene-serving and character-revealing.
-8. If pretty language conflicts with the anchor line, prioritize the anchor line.
-9. Follow the block's `paragraph_budget` and `paragraph_shape`, but keep the prose natural rather than schematic.
-10. Do not add new plot facts, new clues, or new reveals.
-11. Reduce summary language, abstract psychology, and author explanation when possible.
-12. When revising, do not merge originally separate short paragraphs into long dense paragraphs unless absolutely necessary.
-13. If the original block already has readable paragraph rhythm, preserve that rhythm.
-14. 中文补充：
-   - 重写时不要为了“更顺”把原本已经分开的短段强行合并成长段。
-   - 如果原文已有清晰的阅读节奏，优先保留节奏。
-15. Keep the prose natural and readable in Simplified Chinese.
+Light revision limits:
+1. Fix only the reviewed local issue; do not rewrite the plot.
+2. Delete repeated setup at the block opening.
+3. Merge repeated psychological explanation already covered by adjacent beats.
+4. Delete repeated imagery if it adds no new action, misread, clue, cost, or relationship movement.
+5. Do not add new clues, truths, people, settings, or large new paragraphs.
+6. Do not change the ending hook or the handoff to the next beat.
+7. Preserve useful action, dialogue, object state, and continuity with `previous_text_tail`.
+8. 本 beat 不需要独立完成情绪闭环；不要总结关系，不要解释人物真实心意，不要替读者下结论。
+9. Treat `target_length` as a hard ceiling. Revision should usually shorten the block.
+10. If the block has two similar action cycles, keep the cycle with stronger relationship/cost/clue turn and delete the weaker one.

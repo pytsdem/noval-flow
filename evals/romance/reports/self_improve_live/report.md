@@ -1157,3 +1157,34 @@
   - 不回退顺序 beat 架构思路，但下一轮只打两个点：
     - 压 planner 输出的 beat 数量和每 beat 上下文体积
     - 缩短 `[Already delivered in this chapter]`，只保留最小必要增量，专门打 `redundancy` 和 prompt cost
+
+## Iteration 22 - Cross-Tone Smoke After Prompt/Beat Slimming
+
+- 主假设：减少 beat 数、压缩 writer prompt 和接入 genre/tone 后，三种言情子类型仍应保持正文质量，并暴露下一轮成本/重复瓶颈。
+- 验证：三案正文 eval 均通过；case01 使用 `doubao`，case02/03 使用 `deepseek-v4-pro`，因此 provider 对比不干净。
+- 平均分：`romance_tension 8.3`，`relationship_progression 8.4`，`hook 9.0`，`redundancy 7.8`，`genre_fit 9.13`。
+- 成本：平均 `llm_calls 17`，`generation_prompt_chars 241002.33`，`duration_seconds 1336.07`，仍偏高。
+- 主要发现：质量和 genre/tone 泛化成立，但长度控制失败；case02 写到 `9680 chars`，case03 最后 block 初稿重复前文并靠 patch 修复。
+- DeepSeek 观察：case02/03 质量高，但耗时长；无同 case A/B，不能判断优于 Doubao。
+- 结论：`partial_keep`，保留当前 prompt/beat 减法方向，但下一轮优先做长度硬约束和 beat 停止条件。
+- 详情：`evals/romance/reports/self_improve_live/cross_tone_smoke_prompt_beat_slim_summary.json` / `evals/romance/reports/self_improve_live/cross_tone_smoke_prompt_beat_slim_summary.md`
+
+## Iteration 23 - Length Cap And Beat Value Turn Tightening
+
+- 触发：人工读三案正文后，case02 暴露“太长、波澜弱、同生契发光/闯关/救人循环重复”，case03 暴露“流程细节挤压旧情复燃”，case01 尾段仍有解释偏满。
+- 主假设：问题不需要新增 pass，先把现有 beat planner、draft、revise、final polish 的字数上限和价值转折纪律收紧。
+- 改动：
+  - `plan_content_blocks` 要求每个 beat 必须产生新的 `value_turn`：误读、选择、代价、线索功能、关系重新定价或读者问题。
+  - 禁止相邻 beat 只是重复解同一规则、同类危机、同一动作模式；冒险/职场流程必须改变关系、代价或追读问题。
+  - `draft_block` 把 `target_length` 改成硬上限，落到 `turn/end` 即停，不追加第二个小 beat 或事后心理总结。
+  - `revise_block` 和 `chapter_final_polish` 默认只轻修短，不扩写；超长时优先删重复流程、规则解释、危机轮次和心理复述。
+  - payload 层把 block `target_chars` 转成硬上限说明；chapter final polish 从 `chapter_brief.info_budget` 推导整章硬上限。
+  - normalize 阶段会 clamp 异常偏大的 block `target_chars`，并把硬字数、停止条件、有效转折写入 beat guard。
+- 验证：
+  - `PYTHONPATH=src python3 -m unittest tests.test_prompt_rendering tests.test_schema_and_context tests.test_writing_chapter_agent`
+  - `PYTHONPATH=src python3 -m unittest tests.test_step_plan_evals tests.test_step_fixtures tests.test_romance_cross_tone_suite tests.test_requirement_cases tests.test_romance_eval_harness`
+  - `PYTHONPATH=src python3 -m py_compile ...`
+  - `python3 scripts/check_prompt_encoding.py`
+  - `git diff --check`
+- 结论：`keep_without_llm_eval`。本轮是静态减法修正，未重跑 LLM eval，避免在三案统一复测前继续烧成本。
+- 下一步：先只跑 `romance_case_02_xianxia_rival_trial`，看 `final_chars` 是否回落、`redundancy` 是否不恶化、`genre_fit/hook/relationship_progression` 是否保住。

@@ -291,3 +291,32 @@
   - 但 `redundancy 8.84 -> 8.62`、`duration_seconds 1214.45 -> 1768.8`、`llm_calls 18 -> 20`，所以 comparison 仍判 `accept_change = false`
 - Next step: 收缩 beat 数和上下文体积，专打 `redundancy` 与 prompt cost，再复跑 isolated `case01`
 - Report ref: `report.md` / `Iteration 21`
+
+## Iteration 22
+
+- Date: `2026-04-28`
+- Outcome: `partial_keep`
+- Theme: 三案跨类型/跨 tone 正文 smoke 验证 prompt/beat 瘦身后的质量与成本
+- Root layer: `chapter_generation_length_and_beat_overrun`
+- Files changed: `evals/romance/reports/self_improve_live/cross_tone_smoke_prompt_beat_slim_summary.json`, `evals/romance/reports/self_improve_live/cross_tone_smoke_prompt_beat_slim_summary.md`, `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
+- Success snapshot: all 3 cases passed; `genre_fit` = 9.0 / 9.2 / 9.2, `hook` >= 8.9, `continuity` >= 9.0, `mind_state_consistency` >= 8.9
+- Cost snapshot: `llm_calls` = 17 / 18 / 16, `generation_prompt_chars` = 202700 / 279843 / 240464, `duration_seconds` = 1182.64 / 1639.99 / 1185.57
+- Main issue: output length and late-beat repetition; case02 final `9680 chars`, case03 repeated b003 before patch
+- Next step: enforce `target_chars` as hard cap in draft/revise/final polish, add per-beat stop condition, and prevent later beats from re-narrating delivered events
+- Report ref: `report.md` / `Iteration 22`; detail ref: `cross_tone_smoke_prompt_beat_slim_summary.md`
+
+## Iteration 23
+
+- Date: `2026-04-28`
+- Outcome: `keep_without_llm_eval`
+- Theme: 针对三案读感做长度硬约束与 beat 价值转折收紧
+- Root layer: `beat_value_turn_and_length_control`
+- Files changed: `prompts/writer/plan_content_blocks.txt`, `prompts/writer/draft_content_block.txt`, `prompts/writer/revise_content_block.txt`, `prompts/writer/chapter_final_polish.txt`, `src/novel_flow/services/chapter_tool_payloads.py`, `src/novel_flow/tools/plan_content_blocks.py`, `src/novel_flow/tools/final_polish.py`, `src/novel_flow/agents/writing_chapter_agent.py`, `src/novel_flow/agents/writer.py`, `tests/test_schema_and_context.py`
+- Success snapshot:
+  - `target_chars` 从软建议改成 draft/revise/final polish 的硬上限语义，final polish 默认不得扩写
+  - block planner 现在要求每个 beat 有明确 `value_turn`，并阻止相邻 beat 只重复解规则、同类危机或同一动作循环
+  - normalize 阶段会收紧异常偏大的 block `target_chars`，并把硬字数、停止条件和有效转折写入 beat guard
+- Verification: `tests.test_prompt_rendering tests.test_schema_and_context tests.test_writing_chapter_agent` 通过；`tests.test_step_plan_evals tests.test_step_fixtures tests.test_romance_cross_tone_suite tests.test_requirement_cases tests.test_romance_eval_harness` 通过；`py_compile`、`git diff --check`、`scripts/check_prompt_encoding.py` 通过
+- LLM eval: 本轮未跑，避免在静态修正后立即重复花费
+- Next step: 先单跑 `romance_case_02_xianxia_rival_trial`，看 `final_chars / redundancy / genre_fit / hook` 是否同时改善，再决定是否复跑三案 suite
+- Report ref: `report.md` / `Iteration 23`

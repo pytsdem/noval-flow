@@ -14,6 +14,7 @@ CORE_METRICS = [
     "continuity_score",
     "redundancy_score",
     "mind_state_consistency_score",
+    "genre_fit_score",
 ]
 
 

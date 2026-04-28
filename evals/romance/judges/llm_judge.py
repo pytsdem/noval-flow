@@ -7,6 +7,7 @@ from novel_flow.prompting.templates import PromptLibrary
 from novel_flow.utils.json_generation import safe_json_generate
 
 from evals.romance.models import RomanceEvalCase, RomanceJudgePayload
+from evals.romance.genre_profiles import genre_profile_json, tone_profile_json
 
 
 class RomanceChapterJudge:
@@ -29,6 +30,8 @@ class RomanceChapterJudge:
             writer_context_json=writer_context_json,
             chapter_execution_json=chapter_execution_json,
             chapter_text=chapter_text,
+            genre_profile_json=genre_profile_json(case.genre_profile),
+            tone_profile_json=tone_profile_json(case.tone_profile),
         )
         payload = safe_json_generate(
             self.llm_client,

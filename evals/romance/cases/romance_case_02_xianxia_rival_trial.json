@@ -1,0 +1,301 @@
+{
+  "case_id": "romance_case_02_xianxia_rival_trial",
+  "title": "心声同生契的规则秘境",
+  "description": "穿书小师妹与冷面师兄被规则秘境误绑同生契，师兄能听见她吐槽心声却不能说破；轻松斗嘴、危机甜感和阴谋钩子必须同步成立。",
+  "tags": [
+    "xianxia",
+    "book-entry",
+    "inner-voice",
+    "rule-trial",
+    "banter-romance"
+  ],
+  "genre_profile": "xianxia_fantasy_romance",
+  "tone_profile": "light_adventure_banter",
+  "premise": {
+    "title": "全宗门都以为我在拖后腿",
+    "high_concept": "穿成倒霉炮灰小师妹的女主在规则秘境里被迫和冷面天才师兄同生同死，而师兄忽然能听见她满屏吐槽的心声。",
+    "theme_statement": "真正的靠近，常常从误会对方很麻烦开始。",
+    "story_summary": "云眠穿进一本仙门虐文，原本只想苟到退宗，却在秘境试炼中与陆既白误绑同生契。她嘴上嫌他端着，心里疯狂吐槽剧情；他表面冷淡，实际被她心声带偏判断，一边嫌弃一边救人。两人发现秘境规则和原书剧情都被人动过手脚。",
+    "genre": "xianxia fantasy romance",
+    "target_style": "轻快、有奇幻画面感、斗嘴中带心动",
+    "emotional_hook": "她以为自己在心里骂人没人听见，他却每一句都听得清清楚楚。",
+    "central_conflict": "两人必须合作活下去，却都不能完全暴露自己知道的东西。",
+    "core_hook": "同生契、心声外泄和规则秘境把欢喜冤家绑成一根绳。",
+    "escalation_path": [
+      "同生契生效",
+      "心声泄露造成误会和救场",
+      "发现秘境规则被人为改写"
+    ],
+    "twist_blueprint": [
+      "陆既白能听见女主心声，但不能让她知道",
+      "同生契不是意外，是有人借秘境筛掉他们"
+    ],
+    "ending_payoff": "两人会从互相嫌弃变成默认并肩，但契约背后的阴谋更大。",
+    "selling_points": [
+      "穿书心声",
+      "规则秘境",
+      "同生契",
+      "欢喜冤家"
+    ]
+  },
+  "chapter_brief": {
+    "chapter_id": "ch_006",
+    "title": "符灯听得见",
+    "chapter_type": "trial_pressure",
+    "active_lines": [
+      "line_rule_trial"
+    ],
+    "active_twists": [
+      "twist_inner_voice"
+    ],
+    "summary": "云眠和陆既白进入第二道秘境门，必须按规则互换一件随身物才能活过符灯阵；她嘴硬吐槽，他靠听见心声提前挡险，却发现同生契上多出一枚人为刻痕。",
+    "incoming_hook": "第一道门塌下时，同生契在两人腕上同时发烫。",
+    "opening_hook": "符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。",
+    "core_scene": "两人一边斗嘴一边破解符灯阵，女主用原书记忆误判规则，男主靠听见心声救场但必须装作只是反应快。",
+    "chapter_object": "腕上的同生契红痕",
+    "reader_emotion": "轻快、紧张、甜中带险，让读者想看他们继续互坑互救。",
+    "reader_belief": "读者应知道陆既白能听见云眠心声，但云眠仍不知道。",
+    "allowed_info": [
+      "同生契会共享轻伤痛感",
+      "符灯阵要求互换一件真正重要的随身物",
+      "秘境规则与云眠记得的原书不完全一致"
+    ],
+    "allowed_clues": [
+      "陆既白总能提前避开她心里刚吐槽的危险",
+      "同生契红痕边缘多出不属于古阵的刻痕"
+    ],
+    "forbidden": [
+      "不能让云眠知道陆既白能听见心声",
+      "不能解释幕后黑手身份",
+      "不能写成沉重宿命虐恋"
+    ],
+    "world_limit": "秘境规则必须落到行动选择，不能大段解释修炼体系。",
+    "character_focus": [
+      "云眠",
+      "陆既白"
+    ],
+    "character_shift": "云眠从只想甩开师兄，变成意识到他确实会在危险里先护她。",
+    "relationship_reprice": "陆既白从冷面监考人，变成嘴上嫌弃但能接住她失误的人。",
+    "emotional_turn": "一次意外互换随身物，把斗嘴推进到不太好笑的亲密边界。",
+    "backstory_trigger": "",
+    "scene_engine": "relationship_collision",
+    "clue_reveal_mechanism": {
+      "style": "ritual_trigger",
+      "pressure_source": "符灯阵倒数和同生契痛感",
+      "surface_trigger": "互换随身物时红痕亮起",
+      "first_noticer": "陆既白",
+      "owner_reaction": "他立刻用袖口遮住刻痕，继续用冷话压过去"
+    },
+    "character_reentry_focus": {
+      "云眠": "用嘴硬、心声吐槽和临场小聪明立住她，不要写成纯倒霉。"
+    },
+    "human_pain_anchor": "同生契让两人的痛感同时掠过腕骨，谁都没法假装离得很远。",
+    "romance_seed": "她把护身铃塞给他时嘴上嫌弃，心里却怕他真的受伤。",
+    "small_payoff": "两人过了符灯阵，并确认同生契被人为加过东西。",
+    "ending_pull": "最后一盏符灯灭前，墙上浮出一行字：此契原本只该绑死人。",
+    "info_budget": "target=3200-4200; new clues<=2; banter and romance pressure must both land"
+  },
+  "twist_designs": [
+    {
+      "twist_id": "twist_inner_voice",
+      "title": "师兄听见心声却不能说破",
+      "false_belief": "云眠以为自己的吐槽只在心里发生。",
+      "truth": "同生契让陆既白听见她部分心声，但他说破会触发契约反噬。",
+      "reader_alignment": "读者知道男主听见了，从他的克制反应里获得轻喜感和暧昧张力。",
+      "seed_from": "ch_004",
+      "reveal_at": "ch_018",
+      "allowed_clues": [
+        "他总能接住她刚在心里骂过的破绽",
+        "他偶尔会回答一句她没有说出口的话"
+      ],
+      "forbidden_reveals": [
+        "不能让女主本章发现心声外泄",
+        "不能解释契约全规则"
+      ],
+      "pov_lock": "可以让读者看见男主反应，但不展开完整契约解释。",
+      "related_characters": [
+        "云眠",
+        "陆既白"
+      ],
+      "payoff_effect": "女主发现后，所有斗嘴都会被重新定价为他一直听懂她。"
+    }
+  ],
+  "story_lines": [
+    {
+      "line_id": "line_rule_trial",
+      "name": "规则秘境",
+      "line_type": "adventure",
+      "visibility": "visible",
+      "core_question": "是谁改写秘境规则，把两人绑进同生契？",
+      "reader_hook_mode": "rule-mystery",
+      "start_state": "两人只知道同生契会共痛，却不知道它为什么选中他们。",
+      "midpoint_shift": "秘境不再像普通试炼，而像针对他们的筛杀局。",
+      "end_state": "两人带着契约线索回宗门反查。",
+      "carried_twists": [
+        "twist_inner_voice"
+      ],
+      "line_rules": [
+        "每次规则推进都必须改变两人的互动位置",
+        "战斗和试炼不能只炫技"
+      ]
+    }
+  ],
+  "character_cards": [
+    {
+      "name": "云眠",
+      "role": "穿书炮灰小师妹",
+      "occupation": "外门弟子",
+      "appearance": "发间常挂一枚护身铃，跑起来铃声比剑声还急",
+      "personality": "嘴硬、机灵、怕死但不丢人",
+      "initial_state": "只想按原书剧情苟过秘境，却发现剧情已经跑偏",
+      "motivation": "活着离开秘境，查明剧情为何偏移，避免自己成为同生契祭品。",
+      "behavior_pattern": "嘴上怂得很坦荡，真危险时先找规则漏洞；心声比行动诚实。",
+      "relationships": "把陆既白当高危男主和保命队友；被外门同伴羡慕又误会；被幕后人盯上信息差。",
+      "education_background": "外门杂学多，阵法基础差，但熟读原书剧情和宗门八卦。",
+      "career": "从炮灰外门弟子被迫卷入主线试炼，靠机灵和信息差续命。",
+      "arc": "从只想苟过剧情，到愿意为了陆既白主动改写原书危险节点。",
+      "development_axes": [
+        "苟命本能 vs 主动救人",
+        "原书先知 vs 现实偏移",
+        "嘴硬吐槽 vs 行动心动"
+      ]
+    },
+    {
+      "name": "陆既白",
+      "role": "冷面天才师兄",
+      "occupation": "内门首席弟子",
+      "appearance": "白衣束腕，剑穗极少晃动，越危险越冷静",
+      "personality": "克制、毒舌、责任感重",
+      "initial_state": "认为云眠麻烦，却被她心声扰得无法完全冷眼旁观",
+      "motivation": "护住云眠并查出谁篡改秘境，同时保住首席职责。",
+      "behavior_pattern": "先判断风险再开口，嘴上嫌弃，身体总先挡在危险方向。",
+      "relationships": "对云眠从麻烦到在意；被师门期待压着；怀疑执事堂有人动手脚。",
+      "education_background": "内门首席，自幼修剑与阵法，熟悉祖师旧纹但不懂变通人情。",
+      "career": "宗门最年轻首席，若试炼失败会失去本命剑进阶资格。",
+      "arc": "从把云眠当试炼变量，到承认她的“不按套路”正是破局关键。",
+      "development_axes": [
+        "首席责任 vs 私心保护",
+        "规则洁癖 vs 变通救人",
+        "冷面克制 vs 被心声扰乱"
+      ]
+    },
+    {
+      "name": "闻照",
+      "role": "秘境执事 / 暗中改阵者",
+      "social_background": "长老会边缘弟子，靠掌秘境入口获得权力",
+      "occupation": "试炼执事",
+      "appearance": "总戴半旧玉牌，笑时眼神不动",
+      "personality": "圆滑、嫉恨天才、善用规则漏洞",
+      "initial_state": "表面维持试炼秩序，暗中让同生契选中云眠和陆既白。",
+      "motivation": "逼出封契石室位置，夺回被首席一脉占据的资源。",
+      "behavior_pattern": "借规则伤人，不亲自出手。",
+      "arc": "从幕后改阵到被两人联手反向利用规则。",
+      "relationships": "忌惮陆既白，轻视云眠的信息差",
+      "development_axes": [
+        "规则管理者 vs 规则污染者",
+        "资源怨气 vs 权力欲"
+      ]
+    },
+    {
+      "name": "宋缨",
+      "role": "内门师姐 / 竞争者",
+      "social_background": "长老亲传，长期排在陆既白之后",
+      "occupation": "内门弟子",
+      "appearance": "红衣束发，剑鞘上刻满胜场符",
+      "personality": "骄傲、嘴硬、讲公平",
+      "initial_state": "误以为云眠靠契约拖累陆既白又抢资源。",
+      "motivation": "证明自己不输首席，也查清试炼为何失衡。",
+      "behavior_pattern": "先挑衅，后在关键处守规则底线。",
+      "arc": "从竞争压力源变成不稳定盟友。",
+      "relationships": "与陆既白竞争，与云眠互怼但可被行动说服",
+      "development_axes": [
+        "胜负心 vs 公平感",
+        "敌意试探 vs 临时结盟"
+      ]
+    }
+  ],
+  "worldbuilding": {
+    "story_engine": {
+      "world_rules": [
+        "同生契会共享痛感，但不共享完整记忆。",
+        "秘境规则必须通过行动验证，错误验证会触发符灯惩罚。",
+        "心声泄露不能被直接说破，否则契约会反噬。",
+        "镜雾秘境会把“最想隐藏的念头”转化成关卡提示，但提示只对绑定双方生效。",
+        "宗门试炼积分决定内门资源，首席若失败会被长老会收回本命剑试炼资格。",
+        "同生契每过一关都会加深一次感知共享，超过三次会出现短暂心跳同步。",
+        "秘境禁杀同门，但允许规则伤害，因此幕后人可以借阵法逼他们自损。",
+        "云眠知道原书走向，但剧情偏移后，旧记忆只能当危险预警，不能当答案。"
+      ],
+      "power_structure": "宗门首席、外门弟子和秘境执事之间存在资源与名声差距。",
+      "objective_conditions": [
+        "两人暂时无法解契",
+        "秘境出口只会在规则完成后出现"
+      ],
+      "worldbuilding_detail": {
+        "institutions": [
+          "青岚宗：看似清正，内外门资源差距极大",
+          "镜雾秘境：宗门祖师留下的规则试炼场",
+          "长老会：掌试炼积分和首席资格",
+          "执事堂：负责秘境入口，却有人篡改阵纹"
+        ],
+        "resource_limits": [
+          "云眠灵力弱但信息差强",
+          "陆既白战力高但受首席身份束缚",
+          "同生契让单人逞强变成双人受罚"
+        ],
+        "punishment_rules": [
+          "说破心声会反噬",
+          "拒绝协作会触发符灯扣命",
+          "攻击同门会被秘境标记逐出试炼"
+        ],
+        "usable_loopholes": [
+          "吐槽可误触提示",
+          "互换随身物可临时转移伤害",
+          "本命剑能识别旧版宗门阵纹"
+        ],
+        "romance_pressure": "规则不断把斗嘴变成肢体协作，把嫌弃变成不得不保护。"
+      }
+    },
+    "worldbuilding_detail": {
+      "institutions": [
+        "青岚宗：看似清正，内外门资源差距极大",
+        "镜雾秘境：宗门祖师留下的规则试炼场",
+        "长老会：掌试炼积分和首席资格",
+        "执事堂：负责秘境入口，却有人篡改阵纹"
+      ],
+      "resource_limits": [
+        "云眠灵力弱但信息差强",
+        "陆既白战力高但受首席身份束缚",
+        "同生契让单人逞强变成双人受罚"
+      ],
+      "punishment_rules": [
+        "说破心声会反噬",
+        "拒绝协作会触发符灯扣命",
+        "攻击同门会被秘境标记逐出试炼"
+      ],
+      "usable_loopholes": [
+        "吐槽可误触提示",
+        "互换随身物可临时转移伤害",
+        "本命剑能识别旧版宗门阵纹"
+      ],
+      "romance_pressure": "规则不断把斗嘴变成肢体协作，把嫌弃变成不得不保护。"
+    }
+  },
+  "character_milestones": [],
+  "actual_chapter_summaries": [],
+  "prior_character_mindsets": [],
+  "goals": {
+    "chapter_goal": "Use the rule trial to reveal the altered contract while keeping the adventure light and interactive.",
+    "emotional_goal": "Land banter, danger-with-sweetness, and accidental intimacy.",
+    "relationship_goal": "Move the pair from mutual irritation to functional trust under pressure.",
+    "hook_goal": "Open with inner-voice comedy and close on a darker contract clue.",
+    "continuation_drive": "Make the reader want to know who altered the contract."
+  },
+  "context_overrides": {
+    "assistant_persona_prompt": "写轻快仙侠言情，奇幻规则必须服务互动和关系变化。",
+    "writing_requirements": {
+      "target_words": "3200-4200"
+    },
+    "previous_chapter_full_text": "第一道秘境门塌下时，云眠腕上的红痕烫得她差点骂出声；陆既白却先一步扣住她的手，把她从碎石下拽了出去。"
+  }
+}

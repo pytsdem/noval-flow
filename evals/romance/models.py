@@ -48,6 +48,17 @@ class RomanceEvalCase(BaseModel):
     title: str
     description: str = ""
     tags: list[str] = Field(default_factory=list)
+    genre_profile: Literal[
+        "general_web_fiction",
+        "historical_romance_intrigue",
+        "xianxia_fantasy_romance",
+        "urban_modern_romance",
+    ] = "historical_romance_intrigue"
+    tone_profile: Literal[
+        "restrained_angst",
+        "light_adventure_banter",
+        "light_witty_reunion",
+    ] = "restrained_angst"
     premise: StoryPremise
     chapter_brief: ChapterBrief
     twist_designs: list[TwistDesign] = Field(default_factory=list)
@@ -87,6 +98,15 @@ class RomanceJudgePayload(BaseModel):
     continuity: RomanceMetricDetail
     redundancy: RomanceMetricDetail
     mind_state_consistency: RomanceMetricDetail
+    genre_fit: RomanceMetricDetail = Field(
+        default_factory=lambda: RomanceMetricDetail(
+            score=5.0,
+            reason="Judge did not return genre_fit; using neutral fallback.",
+            evidence_summary="No genre-fit evidence available.",
+            improvement_hint="Return genre_fit in the judge payload.",
+            source="fallback",
+        )
+    )
     diagnosis: RomanceJudgeDiagnosis = Field(default_factory=RomanceJudgeDiagnosis)
 
 

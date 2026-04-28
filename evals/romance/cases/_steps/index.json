@@ -1,0 +1,22 @@
+{
+  "kind": "romance_static_step_assets",
+  "version": "step_static_v2",
+  "location_policy": "Case metadata stays in evals/romance/cases/*.json; Step1-8 assets stay in evals/romance/cases/<case_id>/steps.json to avoid being loaded as requirement cases.",
+  "cases": [
+    {
+      "case_id": "romance_case_01_court_return",
+      "case_json": "evals/romance/cases/romance_case_01_court_return.json",
+      "steps_json": "evals/romance/cases/romance_case_01_court_return/steps.json"
+    },
+    {
+      "case_id": "romance_case_02_xianxia_rival_trial",
+      "case_json": "evals/romance/cases/romance_case_02_xianxia_rival_trial.json",
+      "steps_json": "evals/romance/cases/romance_case_02_xianxia_rival_trial/steps.json"
+    },
+    {
+      "case_id": "romance_case_03_urban_reunion_comedy",
+      "case_json": "evals/romance/cases/romance_case_03_urban_reunion_comedy.json",
+      "steps_json": "evals/romance/cases/romance_case_03_urban_reunion_comedy/steps.json"
+    }
+  ]
+}

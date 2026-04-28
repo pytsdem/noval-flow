@@ -16,6 +16,7 @@ class FinalPolishTool(LLMChapterTool):
             chapter_payload_text=payload["chapter_payload_text"],
             style_card_text=payload["style_card_text"],
             chapter_text=payload["chapter_text"],
+            target_length=payload.get("target_length", ""),
             loaded_skill_instructions_text=payload.get("loaded_skill_instructions_text", ""),
         )
         return {"chapter_text": self.generate_text(prompt=prompt, temperature=0.45)}

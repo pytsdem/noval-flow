@@ -425,6 +425,7 @@ class RomanceEvalHarness:
                 "lead_pair_chemistry": judge.lead_pair_chemistry,
                 "opening_hook_score": judge.opening_hook,
                 "ending_hook_score": judge.ending_hook,
+                "judge_genre_fit_score": judge.genre_fit,
                 "judge_redundancy_score": judge.redundancy,
                 "rule_redundancy_score": rule_redundancy,
                 "rule_anti_slop_score": rule_anti_slop,
@@ -1069,6 +1070,7 @@ class RomanceEvalHarness:
                 source="hybrid",
             ),
             "mind_state_consistency_score": judge.mind_state_consistency.model_copy(update={"source": "llm"}),
+            "genre_fit_score": judge.genre_fit.model_copy(update={"source": "llm"}),
         }
 
     @staticmethod
@@ -1103,6 +1105,7 @@ class RomanceEvalHarness:
                 source="rule",
             ),
             "mind_state_consistency_score": fallback("先修复 judge，再观察角色心智一致性评分。"),
+            "genre_fit_score": fallback("先修复 judge，再观察类型适配评分。"),
         }
 
     @staticmethod

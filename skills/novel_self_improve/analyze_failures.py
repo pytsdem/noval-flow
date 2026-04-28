@@ -1,4 +1,4 @@
-from evals.romance.run_workflow_diagnostics import main
+from evals.romance.runners.workflow_diagnostics_eval import main
 
 
 if __name__ == "__main__":

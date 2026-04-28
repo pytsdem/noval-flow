@@ -3,10 +3,10 @@
   "tools": [
     "python -m tools.seed_self_improve_cases",
     "python -m tools.export_eval_cases",
-    "python -m evals.romance.run_step_evals",
-    "python -m evals.romance.run_workflow_diagnostics",
-    "python -m evals.romance.run_romance_evals",
-    "python -m evals.romance.run_case_comparison"
+    "python -m evals.romance.runners.historical_step_gate_eval",
+    "python -m evals.romance.runners.workflow_diagnostics_eval",
+    "python -m evals.romance.runners.chapter_quality_eval",
+    "python -m evals.romance.runners.eval_run_comparison"
   ],
   "activation_mode": "explicit_only",
   "triggers": [

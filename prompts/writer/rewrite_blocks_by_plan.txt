@@ -42,5 +42,12 @@ Rules:
 6. If the target issue is repetition, compress or redirect instead of replacing it with fresh filler.
 7. End the rewritten block in a way that hands off cleanly to the next block.
 8. Preserve the bound chapter character mindsets: goal, fear, self-control, and misbelief should still read true after the rewrite.
+9. Treat this as a light patch:
+   - Delete repeated setup at the block opening.
+   - Merge repeated psychological explanation with adjacent block context.
+   - Delete repeated imagery if it brings no new action, misread, clue, cost, or relationship movement.
+   - Do not rewrite the plot.
+   - Do not add large new content.
+   - Do not change the chapter ending hook.
 
 Your output must be only the rewritten block text.

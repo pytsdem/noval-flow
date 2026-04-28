@@ -733,11 +733,60 @@ class SchemaAndContextTests(unittest.TestCase):
             self.assertTrue(block["must_land_in_action"])
             self.assertGreater(block["target_chars"], 0)
             self.assertLessEqual(block["target_chars"], 1200)
+            self.assertIn("硬上限", block["paragraph_budget"])
+            self.assertTrue(any("硬字数上限" in item for item in block["style_risk_guard"]))
+            self.assertTrue(any("连续解规则" in item for item in block["must_not_repeat"]))
 
         self.assertIn("Readers newly feel the opening pressure", blocks[0]["new_value"])
         self.assertIn("不要", blocks[0]["must_not_repeat"][0])
         self.assertIn("关系", blocks[1]["relationship_delta"])
         self.assertIn("线索", blocks[2]["clue_delta"])
+
+    def test_block_payloads_make_target_length_a_hard_ceiling(self) -> None:
+        context = self._writer_context(current_chapter_id="ch_001")
+        block_context = ChapterToolPayloadBuilder.build_block_runtime_context(
+            context=context,
+            block=ContentBlock(
+                block_id="ch_001.sc_001.b001",
+                chapter_id="ch_001",
+                block_index=1,
+                purpose="Pressure beat.",
+                target_chars=500,
+                end_state="The beat lands.",
+            ),
+            committed_blocks=[],
+        )
+        draft_payload = ChapterToolPayloadBuilder.build_draft_block_payload(
+            block=ContentBlock(
+                block_id="ch_001.sc_001.b001",
+                chapter_id="ch_001",
+                block_index=1,
+                purpose="Pressure beat.",
+                target_chars=500,
+                end_state="The beat lands.",
+            ),
+            block_context=block_context,
+            loaded_skill_instructions_text="",
+        )
+        polish_payload = ChapterToolPayloadBuilder.build_final_polish_payload(
+            context=context,
+            chapter_text="正文",
+            loaded_skill_instructions_text="",
+            chapter_brief=self.chapter_brief,
+        )
+
+        self.assertIn("Hard ceiling: 500", draft_payload["target_length"])
+        self.assertIn("Stop immediately", draft_payload["target_length"])
+        self.assertIn("Hard ceiling", polish_payload["target_length"])
+        self.assertIn("shorten", polish_payload["target_length"])
+
+    def test_plan_content_blocks_default_count_keeps_5000_char_chapter_to_four_beats(self) -> None:
+        self.assertEqual(PlanContentBlocksTool._target_block_count("3000字左右"), 3)
+        self.assertEqual(PlanContentBlocksTool._target_block_count("5000字"), 4)
+        self.assertEqual(PlanContentBlocksTool._target_block_count("target=4000-5500"), 4)
+        self.assertEqual(PlanContentBlocksTool._target_block_count("target=5500-7000"), 5)
+        self.assertEqual(PlanContentBlocksTool._target_block_count("8000字"), 6)
+        self.assertEqual(PlanContentBlocksTool._target_block_count("new clues=1", fallback_count=4), 4)
 
     def test_completed_memory_comes_from_actual_summaries(self) -> None:
         summary = ActualChapterSummary(

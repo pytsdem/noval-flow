@@ -29,6 +29,7 @@ def _case_payload(case_id: str) -> dict:
         "title": f"{case_id} title",
         "description": "Test romance eval case",
         "tags": ["test"],
+        "genre_profile": "historical_romance_intrigue",
         "premise": {
             "title": "Test",
             "high_concept": "High concept",
@@ -445,6 +446,7 @@ def _judge_payload(
     continuity: float = 7.7,
     redundancy: float = 7.1,
     mind: float = 7.8,
+    genre_fit: float = 8.0,
 ) -> str:
     def metric(score: float, reason: str, evidence: str, hint: str) -> dict:
         return {
@@ -467,6 +469,7 @@ def _judge_payload(
         "continuity": metric(continuity, "承接基本自然。", "前章余波仍在，人物状态没有断。", "中段过渡再紧一点。"),
         "redundancy": metric(redundancy, "有轻微重复。", "同一种防备被解释了两次。", "压缩重复的防备描写，换成新的试探动作。"),
         "mind_state_consistency": metric(mind, "角色心智基本稳定。", "高自控与误判都还能对上。", "避免让高自控角色过早说太满。"),
+        "genre_fit": metric(genre_fit, "类型承诺基本兑现。", "公开压力、误读和旧案线服务了关系重新定价。", "避免把权谋压力写成替代 romance 的主体。"),
         "diagnosis": {
             "strengths": [
                 "男女主对手戏有持续电流感",
@@ -547,6 +550,9 @@ class RomanceEvalHarnessTests(unittest.TestCase):
         case_result = summary.case_results[0]
         self.assertEqual(case_result.verdict, "pass")
         self.assertIn("romance_tension_score", case_result.scores)
+        self.assertIn("genre_fit_score", case_result.scores)
+        self.assertIn("historical_romance_intrigue", llm.calls[-1][-1].content)
+        self.assertIn("restrained_angst", llm.calls[-1][-1].content)
         self.assertTrue(Path(case_result.artifacts.final_text_txt).exists())
         self.assertGreater(case_result.cost_metrics.llm_calls, 0)
         self.assertEqual(summary.verdict_counts.get("pass"), 1)

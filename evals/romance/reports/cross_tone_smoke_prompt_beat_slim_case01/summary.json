@@ -1,0 +1,246 @@
+{
+  "label": "cross_tone_smoke_prompt_beat_slim_case01",
+  "mode": "fast",
+  "generated_at": "2026-04-28T06:50:39.903525Z",
+  "provider": "doubao",
+  "model": "ep-m-20260319020545-gzfvt",
+  "run_dir": "evals/romance/reports/cross_tone_smoke_prompt_beat_slim_case01",
+  "case_ids": [
+    "romance_case_01_court_return"
+  ],
+  "average_scores": {
+    "romance_tension_score": 8.5,
+    "relationship_progression_score": 9.0,
+    "emotional_resonance_score": 8.5,
+    "character_attraction_score": 8.67,
+    "hook_score": 9.1,
+    "continuity_score": 9.0,
+    "redundancy_score": 7.82,
+    "mind_state_consistency_score": 9.0,
+    "genre_fit_score": 9.0
+  },
+  "verdict_counts": {
+    "pass": 1
+  },
+  "blocked_case_ids": [],
+  "optimization_target_counts": {},
+  "case_results": [
+    {
+      "case_id": "romance_case_01_court_return",
+      "title": "围宫请婚的旧案重逢",
+      "description": "男主带兵归京后在朝堂公开请旨娶当年亲手送他流放的女主；全京城以为这是报复，女主却知道自己若不被他带走，当夜就会被灭口。",
+      "tags": [
+        "historical",
+        "misread-love",
+        "forced-marriage",
+        "public-revenge",
+        "court-pressure"
+      ],
+      "verdict": "pass",
+      "scores": {
+        "romance_tension_score": 8.5,
+        "relationship_progression_score": 9.0,
+        "emotional_resonance_score": 8.5,
+        "character_attraction_score": 8.67,
+        "hook_score": 9.1,
+        "continuity_score": 9.0,
+        "redundancy_score": 7.82,
+        "mind_state_consistency_score": 9.0,
+        "genre_fit_score": 9.0
+      },
+      "metrics": {
+        "romance_tension_score": {
+          "score": 8.5,
+          "reason": "男女主之间的拉扯、试探与克制性压迫成立，以旧恨为底色，藏着未明的在意与隐秘的依赖，符合「克制虐恋」的情绪设定。没有直白暧昧，但通过动作细节传递出错位的情绪张力。",
+          "evidence_summary": "谢临川看到沈知微旧伤时骤然收住嘲讽、攥刀的手松了又紧；沈知微全程回避对视，却死死压着婚书、听到嘲讽时指尖蜷起；两人同场时的目光回避、动作停顿，都体现了拉扯感。",
+          "improvement_hint": "可增加男女主之间的「错位互动」细节，比如沈知微无意间的眼神扫过谢临川，或谢临川刻意制造的微小肢体接触，强化双向的情绪试探，而非单向压迫。",
+          "source": "llm"
+        },
+        "relationship_progression_score": {
+          "score": 9.0,
+          "reason": "关系发生了明确且关键的变化：从朝堂上的仇人证人关系，转为名义上的未婚夫妻，且从「谢临川单方面报复」变为「两人绑定成危机共同体」，推进逻辑清晰。",
+          "evidence_summary": "赐婚落定后，沈知微从「待灭口的证人」变成「谢临川名义上的未婚妻」；谢临川从「只想报复的复仇者」，转为「意识到要保护沈知微的入局者」，心态和身份都有实质转变。",
+          "improvement_hint": "可在关系转变的节点增加「隐性承诺」细节，比如谢临川在散朝时的一个微小护动作，或沈知微下意识的依赖反应，让关系推进的痕迹更具象。",
+          "source": "llm"
+        },
+        "emotional_resonance_score": {
+          "score": 8.5,
+          "reason": "情绪通过动作细节落地，而非直白抒情，有余波留存，能钩住读者对角色处境的共情。克制的情绪表达符合「restrained_angst」的要求。",
+          "evidence_summary": "沈知微接婚书时像被烫到收指、呼吸漏半拍；谢临川看到旧伤时喉结卡住、声音发哑；结尾谢临川攥紧婚书的慌乱，都是具象的情绪落点。",
+          "improvement_hint": "可增加「情绪余波」的延续细节，比如沈知微回到住处后反复摩挲婚书暗痕，或谢临川在驿馆时的无意识动作（如摸向腰间佩刀又放下），让情绪更有后劲。",
+          "source": "llm"
+        },
+        "character_attraction_score": {
+          "score": 8.67,
+          "reason": "由男主吸引力、女主吸引力和双人化学反应加权合成。",
+          "evidence_summary": "男主：朝堂上以战功施压皇帝的强势；看到沈知微旧伤时的失控停顿；发现灭口指令后的矛盾心态（复仇欲与保护欲交织），都体现了他的复杂性。；女主：接旨前快速观察禁军站位判断处境；全程维持平静却用指尖紧绷、攥婚书传递恐惧；明知婚约是救命稻草却刻意回避谢临川的目光，都体现了她的主动性。；双人：朝堂上谢临川刻意避开旧伤的目光、嘲讽到一半收声；沈知微回避对视却下意识在意他的动作；散朝时谢临川用佩刀鞘蹭她宫装的细节，都体现了错位的化学反应。",
+          "improvement_hint": "可增加「双向感知」的细节，比如沈知微察觉到谢临川的停顿，或谢临川注意到她攥婚书的动作，让两人的互动从单向压迫转为双向试探。",
+          "source": "hybrid"
+        },
+        "hook_score": {
+          "score": 9.1,
+          "reason": "由开篇钩子与结尾钩子均值合成。",
+          "evidence_summary": "开头：开篇谢临川在朝堂直接请旨娶沈知微，满朝哗然，立刻引爆「复仇还是另有隐情」的悬念，节奏紧凑。；结尾：谢临川发现「今夜子时，杀新妇」的灭口指令，心态从复仇转为保护，留下「他如何救沈知微」「灭口者是谁」的新悬念，迫使读者追看下一章。",
+          "improvement_hint": "可在结尾增加一个「伏笔细节」，比如窗外闪过的黑影，或沈知微住处的异常动静，让危机更具象，钩子的紧迫感更强。",
+          "source": "hybrid"
+        },
+        "continuity_score": {
+          "score": 9.0,
+          "reason": "情节、情绪、人设承接自然，没有突兀跳变，旧伤、暗痕等设定前后统一，逻辑闭环完整。",
+          "evidence_summary": "沈知微的旧伤来源前后一致；谢临川的心态转变有铺垫（看到旧伤的失控）；灭口指令与前文沈知微的恐惧形成呼应，承接顺滑。",
+          "improvement_hint": "可增加「前情呼应」的细节，比如谢临川拿出婚书时，想起三年前沈知微递证词的场景，强化旧案与当前剧情的关联，让承接更紧密。",
+          "source": "llm"
+        },
+        "redundancy_score": {
+          "score": 7.82,
+          "reason": "以 romance judge 为主分，并用重复/anti-slop 规则信号做向下修正，不再允许规则层把坏重复或直白心理解释救高。",
+          "evidence_summary": "Judge：雪水湿痕在朝堂体现压迫感，在驿馆体现戾气；旧伤第一次是谢临川的回避，第二次是触发他情绪失控，都是有效回环而非重复。；Rule：review_structure_and_continuity 命中过重复相关问题；review_prose_and_humanity 命中过重复相关问题；Anti-slop：直白心理标签 5 处（如“他太清楚三年前那案的牵扯——先帝钦定、他清楚，北地旧部此刻驻在宫门外，三”）；解释性总结 1 处（如“他不愿承认的慌乱”）；review_prose_and_humanity 命中过直白心理/解释问题",
+          "improvement_hint": "先清掉“她知道/他意识到/这让她更明白”类句式，再把篇幅换成新动作、新误读和新关系代价。",
+          "source": "hybrid"
+        },
+        "mind_state_consistency_score": {
+          "score": 9.0,
+          "reason": "角色行为、话语符合当前心智状态，高自控人物的失控有合理触发点，没有逻辑失真。",
+          "evidence_summary": "谢临川的失控是因为旧伤触发旧情，符合他「表面冷酷、内心藏着旧在意」的心智；沈知微的克制是自保需求，符合她「隐忍聪慧」的人设。",
+          "improvement_hint": "可强化角色「自控与失控的边界」，比如谢临川收住嘲讽后立刻用更冷的语气掩饰，或沈知微指尖微动后立刻恢复平静，让心智一致性更严谨。",
+          "source": "llm"
+        },
+        "genre_fit_score": {
+          "score": 9.0,
+          "reason": "完全符合「historical_romance_intrigue」（古风权谋言情）与「restrained_angst」（克制虐恋）的设定，兑现了「隐忍误会、权谋绑定、爱而不能言」的读者承诺。",
+          "evidence_summary": "没有直白告白，通过细节传递情绪；权谋线（旧案、灭口、朝堂制衡）与言情线（旧恨、拉扯、危机共同体）紧密结合；克制的情绪表达符合「restrained_angst」的要求。",
+          "improvement_hint": "可进一步强化「权谋为言情服务」的逻辑，比如把灭口指令的线索和男女主的关系绑定，而非单纯推进剧情，让类型融合更紧密。",
+          "source": "llm"
+        }
+      },
+      "breakdowns": {
+        "male_lead_attraction": {
+          "score": 8.8,
+          "reason": "男主并非标签化的冷酷复仇者，表面强势压迫，内心藏着旧情与矛盾，人设立体有记忆点，行动逻辑自洽。",
+          "evidence_summary": "朝堂上以战功施压皇帝的强势；看到沈知微旧伤时的失控停顿；发现灭口指令后的矛盾心态（复仇欲与保护欲交织），都体现了他的复杂性。",
+          "improvement_hint": "可增加男主的「隐秘软肋」细节，比如他随身带着和旧案相关的小物件，或听到沈知微名字时的微表情变化，让他的矛盾感更有支撑。",
+          "source": "llm"
+        },
+        "female_lead_attraction": {
+          "score": 8.5,
+          "reason": "女主有主体性，并非被动接受命运的工具人，她的克制是自保策略，观察与选择体现了她的聪慧与隐忍，辨识度强。",
+          "evidence_summary": "接旨前快速观察禁军站位判断处境；全程维持平静却用指尖紧绷、攥婚书传递恐惧；明知婚约是救命稻草却刻意回避谢临川的目光，都体现了她的主动性。",
+          "improvement_hint": "可增加女主的「主动试探」细节，比如她在散朝时故意放慢脚步观察谢临川的反应，或用微小的动作传递隐晦信息，强化她的存在感。",
+          "source": "llm"
+        },
+        "lead_pair_chemistry": {
+          "score": 8.7,
+          "reason": "双人同场时的压差与潜台词火花明显，旧恨与未明的在意形成强烈张力，符合「克制虐恋」的化学反应要求。",
+          "evidence_summary": "朝堂上谢临川刻意避开旧伤的目光、嘲讽到一半收声；沈知微回避对视却下意识在意他的动作；散朝时谢临川用佩刀鞘蹭她宫装的细节，都体现了错位的化学反应。",
+          "improvement_hint": "可增加「双向感知」的细节，比如沈知微察觉到谢临川的停顿，或谢临川注意到她攥婚书的动作，让两人的互动从单向压迫转为双向试探。",
+          "source": "llm"
+        },
+        "opening_hook_score": {
+          "score": 9.0,
+          "reason": "开头快速建立冲突与悬念，直接抛出「复仇者请娶仇人」的核心矛盾，瞬间抓住读者注意力，符合追读要求。",
+          "evidence_summary": "开篇谢临川在朝堂直接请旨娶沈知微，满朝哗然，立刻引爆「复仇还是另有隐情」的悬念，节奏紧凑。",
+          "improvement_hint": "可在开头增加一个「微细节铺垫」，比如沈知微听到谢临川名字时的指尖微动，提前暗示两人的隐秘关联，让钩子更有层次感。",
+          "source": "llm"
+        },
+        "ending_hook_score": {
+          "score": 9.2,
+          "reason": "结尾留下明确的危机与角色心态转变，直接推动下一章的行动，钩子强劲且不生硬。",
+          "evidence_summary": "谢临川发现「今夜子时，杀新妇」的灭口指令，心态从复仇转为保护，留下「他如何救沈知微」「灭口者是谁」的新悬念，迫使读者追看下一章。",
+          "improvement_hint": "可在结尾增加一个「伏笔细节」，比如窗外闪过的黑影，或沈知微住处的异常动静，让危机更具象，钩子的紧迫感更强。",
+          "source": "llm"
+        },
+        "judge_genre_fit_score": {
+          "score": 9.0,
+          "reason": "完全符合「historical_romance_intrigue」（古风权谋言情）与「restrained_angst」（克制虐恋）的设定，兑现了「隐忍误会、权谋绑定、爱而不能言」的读者承诺。",
+          "evidence_summary": "没有直白告白，通过细节传递情绪；权谋线（旧案、灭口、朝堂制衡）与言情线（旧恨、拉扯、危机共同体）紧密结合；克制的情绪表达符合「restrained_angst」的要求。",
+          "improvement_hint": "可进一步强化「权谋为言情服务」的逻辑，比如把灭口指令的线索和男女主的关系绑定，而非单纯推进剧情，让类型融合更紧密。",
+          "source": "llm"
+        },
+        "judge_redundancy_score": {
+          "score": 8.5,
+          "reason": "重复意象（如雪水湿痕、旧伤）都有新的功能，没有无效重复铺陈，信息密度合理。",
+          "evidence_summary": "雪水湿痕在朝堂体现压迫感，在驿馆体现戾气；旧伤第一次是谢临川的回避，第二次是触发他情绪失控，都是有效回环而非重复。",
+          "improvement_hint": "可压缩部分朝堂权谋的冗余描写（如御史大夫的反应），把篇幅留给男女主的互动细节，减少非核心信息的重复。",
+          "source": "llm"
+        },
+        "rule_redundancy_score": {
+          "score": 8.2,
+          "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱；有效回环需带来新剧情功能、关系变化、误导、线索推进、情绪升级或读者期待。",
+          "evidence_summary": "review_structure_and_continuity 命中过重复相关问题；review_prose_and_humanity 命中过重复相关问题",
+          "improvement_hint": "继续保持一段一推进，允许有功能的回环，但避免把同层情绪解释回头再说一遍。 同时检查 patch 是否只改字面而没改 block 功能。",
+          "source": "rule"
+        },
+        "rule_anti_slop_score": {
+          "score": 5.1,
+          "reason": "直白心理标签和解释性总结句偏多，正文更像在说明情绪而不是让读者看见情绪。",
+          "evidence_summary": "直白心理标签 5 处（如“他太清楚三年前那案的牵扯——先帝钦定、他清楚，北地旧部此刻驻在宫门外，三”）；解释性总结 1 处（如“他不愿承认的慌乱”）；review_prose_and_humanity 命中过直白心理/解释问题",
+          "improvement_hint": "先清掉“她知道/他意识到/这让她更明白”类句式，再把篇幅换成新动作、新误读和新关系代价。",
+          "source": "rule"
+        }
+      },
+      "diagnosis": {
+        "strengths": [
+          "拉扯感通过具象动作落地，克制中藏着强烈情绪张力，符合克制虐恋的核心要求",
+          "关系推进明确，从仇人到危机共同体的转变逻辑清晰，有实质变化",
+          "开头结尾钩子强劲，悬念密集，具备强追读性",
+          "人设立体，男女主均非标签化角色，行动逻辑自洽"
+        ],
+        "weaknesses": [
+          "部分朝堂权谋描写占比略高，挤压了男女主互动的篇幅，言情张力可更聚焦",
+          "女主的主动性体现不足，多为被动自保，缺乏主动推动关系或剧情的细节",
+          "双人同场的直接互动较少，多为单向压迫，双向试探的细节不够",
+          "存在直白心理解释信号"
+        ],
+        "improvement_hints": [
+          "压缩非核心权谋描写，增加男女主私下的错位互动细节（如隔空观察、隐晦传递信息），强化双向拉扯",
+          "给女主增加主动试探的动作，比如故意留下旧案线索给谢临川，或利用婚约主动获取信息",
+          "把权谋线索（如灭口指令、旧案证据）更紧密地绑定到男女主关系上，让权谋成为推动言情的工具而非独立线",
+          "先清掉“她知道/他意识到/这让她更明白”类句式，再把篇幅换成新动作、新误读和新关系代价。"
+        ]
+      },
+      "hard_fail_flags": [],
+      "optimization_targets": [],
+      "cost_metrics": {
+        "llm_calls": 17,
+        "judge_llm_calls": 1,
+        "review_calls": 3,
+        "patch_rounds": 1,
+        "used_full_rewrite": false,
+        "duration_seconds": 1182.64,
+        "block_count": 4,
+        "patched_block_count": 2,
+        "patched_block_ratio": 0.5,
+        "generation_prompt_chars": 202700,
+        "judge_prompt_chars": 90582,
+        "tool_calls_by_name": {
+          "build_chapter_patch_plan": 1,
+          "build_character_mindset": 2,
+          "draft_block": 4,
+          "final_polish": 1,
+          "format_adjustment_suggestion": 1,
+          "judge_patched_chapter": 1,
+          "plan_content_blocks": 1,
+          "review_prose_and_humanity": 1,
+          "review_structure_and_continuity": 1,
+          "rewrite_blocks_by_plan": 1,
+          "summarize_actual_chapter": 1
+        }
+      },
+      "artifacts": {
+        "case_dir": "evals/romance/reports/cross_tone_smoke_prompt_beat_slim_case01/romance_case_01_court_return",
+        "case_input_json": "evals/romance/reports/cross_tone_smoke_prompt_beat_slim_case01/romance_case_01_court_return/case_input.json",
+        "writer_context_json": "evals/romance/reports/cross_tone_smoke_prompt_beat_slim_case01/romance_case_01_court_return/writer_context.json",
+        "chapter_execution_json": "evals/romance/reports/cross_tone_smoke_prompt_beat_slim_case01/romance_case_01_court_return/chapter_execution.json",
+        "stage_log_json": "evals/romance/reports/cross_tone_smoke_prompt_beat_slim_case01/romance_case_01_court_return/stage_log.json",
+        "final_text_txt": "evals/romance/reports/cross_tone_smoke_prompt_beat_slim_case01/romance_case_01_court_return/final_text.txt",
+        "judge_json": "evals/romance/reports/cross_tone_smoke_prompt_beat_slim_case01/romance_case_01_court_return/judge.json",
+        "result_json": "evals/romance/reports/cross_tone_smoke_prompt_beat_slim_case01/romance_case_01_court_return/result.json"
+      },
+      "errors": []
+    }
+  ],
+  "errors": [],
+  "compared_to": "",
+  "report_markdown": "evals/romance/reports/cross_tone_smoke_prompt_beat_slim_case01/report.md",
+  "report_json": "evals/romance/reports/cross_tone_smoke_prompt_beat_slim_case01/summary.json"
+}

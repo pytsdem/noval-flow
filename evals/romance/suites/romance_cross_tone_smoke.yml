@@ -1,0 +1,6 @@
+id: romance_cross_tone_smoke
+description: Low-cost smoke suite for cross-subgenre and cross-tone romance generalization with higher-concept hooks.
+cases:
+  - romance_case_01_court_return
+  - romance_case_02_xianxia_rival_trial
+  - romance_case_03_urban_reunion_comedy

@@ -9,6 +9,9 @@ Do final polish for the whole chapter. Output polished chapter prose only in Sim
 [Original chapter]
 {chapter_text}
 
+[Target length]
+{target_length}
+
 [Loaded finalize skill instructions]
 {loaded_skill_instructions_text}
 
@@ -34,3 +37,13 @@ Rules:
     - Dialogue should usually stand alone as its own paragraph.
     - Break explanatory material into shorter action + reaction + explanation beats when possible.
 16. Do not flatten already flavorful short lines just to make formatting uniform. A format-only cleanup will happen later.
+17. Treat this as light revision, not a rewrite:
+    - Delete repeated setup at block openings.
+    - Merge adjacent blocks' repeated psychological explanation.
+    - Delete repeated imagery when it adds no new action, misread, clue, cost, or relationship movement.
+    - Do not add large new passages.
+    - Do not change the ending hook.
+18. Treat target length as a hard ceiling:
+    - Final polish should normally shorten, not expand.
+    - If the chapter is over target, cut repeated process steps, repeated rule explanations, repeated crisis handling, and post-turn psychology.
+    - Preserve the opening hook, relationship turn, necessary clue, and ending hook before preserving atmosphere.

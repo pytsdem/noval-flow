@@ -507,6 +507,8 @@ class WriterAgent(BaseAgent):
                 chapter_payload_text=writer_context.chapter_payload_text,
                 style_card_text=writer_context.style_card_text,
                 chapter_text=chapter_text,
+                target_length="No numeric chapter target. Final polish should not expand the chapter.",
+                loaded_skill_instructions_text="",
             ),
             system_path="writer/system.txt",
             temperature=0.8,

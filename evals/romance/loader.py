@@ -44,6 +44,29 @@ def load_cases(case_dir: Path, *, case_ids: list[str] | None = None) -> list[Rom
     return cases
 
 
+def load_suite_case_ids(suite_path: Path) -> list[str]:
+    case_ids: list[str] = []
+    in_cases = False
+    for raw_line in suite_path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line == "cases:":
+            in_cases = True
+            continue
+        if in_cases:
+            if line.startswith("- "):
+                case_id = line[2:].strip().strip("'\"")
+                if case_id:
+                    case_ids.append(case_id)
+                continue
+            if not raw_line.startswith((" ", "\t")):
+                in_cases = False
+    if not case_ids:
+        raise ValueError(f"Suite has no cases: {suite_path}")
+    return case_ids
+
+
 def load_historical_cases(case_dir: Path, *, case_ids: list[str] | None = None) -> list[HistoricalEvalCase]:
     selected = set(case_ids or [])
     cases: list[HistoricalEvalCase] = []

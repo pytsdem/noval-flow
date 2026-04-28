@@ -35,6 +35,7 @@ PAIRWISE_METRIC_WEIGHTS = {
     "continuity_score": 4,
     "mind_state_consistency_score": 4,
     "redundancy_score": 2,
+    "genre_fit_score": 2,
 }
 
 PAIRWISE_DELTA_THRESHOLD = 0.2

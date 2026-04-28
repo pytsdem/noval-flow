@@ -664,6 +664,7 @@ class WritingChapterAgent(BaseAgent):
                 context=context,
                 chapter_text=chapter_text,
                 loaded_skill_instructions_text=self.skill_manager.format_for_model(finalize_skills),
+                chapter_brief=chapter_brief,
             ),
         )
         chapter_text = str(polished.get("chapter_text") or "").strip()

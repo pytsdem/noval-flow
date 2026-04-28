@@ -5,13 +5,14 @@
 ## 运行
 
 ```bash
-python -m evals.romance.run_romance_evals --label baseline
+python -m evals.romance.runners.chapter_quality_eval --label baseline
 ```
 
 常用参数：
 
 - `--mode fast|deep`：切换 `WritingChapterAgent` 模式
-- `--cases romance_case_01_court_return romance_case_02_sickbed_truce`：只跑指定 case
+- `--cases romance_case_01_court_return`：只跑指定 case
+- `--suite evals/romance/suites/romance_cross_tone_smoke.yml`：跑 01 历史锚点 + 新 02/03 泛化 smoke suite
 - `--reports-root evals/romance/reports`：指定报告输出目录
 - `--compare-to evals/romance/reports/baseline/summary.json`：与已有 baseline 生成 diff
 
@@ -56,6 +57,42 @@ python -m evals.romance.run_romance_evals --label baseline
    - `writing_requirements`
    - `scene_character_context_text`
    - `relationship_state_text`
+
+## Active Cases
+
+- `evals/romance/cases/romance_case_01_court_return.json`：历史锚点 requirement case，可 seed 到 `test_self_improve_court_return`。
+- `evals/romance/cases/romance_case_02_xianxia_rival_trial.json`：仙侠奇幻 + 轻松冒险 smoke case。
+- `evals/romance/cases/romance_case_03_urban_reunion_comedy.json`：都市现代 + 旧情复燃 smoke case。
+- 旧 02/03 requirement cases 已移到 `evals/romance/cases_legacy/`，默认 active eval 不再加载。
+
+## Step1-8 Static Eval
+
+用于评估离线 Step1-8 规划资产是否足够支撑后续正文生成：premise、story_engine、characters、timeline、milestones、twists、story_lines、chapter_briefs。
+
+本仓也提供 3 个 active case 的离线 Step1-8 fixture：
+
+- `evals/romance/cases/romance_case_01_court_return/steps.json`
+- `evals/romance/cases/romance_case_02_xianxia_rival_trial/steps.json`
+- `evals/romance/cases/romance_case_03_urban_reunion_comedy/steps.json`
+
+这些 fixture 不是 LLM 任务生成结果，而是静态基准材料：Step8 可读取 `step_1` 到 `step_7` 作为上下文、读取 `step_8.chapter_briefs` 作为候选输出；Step6 可读取 `step_1` 到 `step_5` 作为上下文、读取 `step_6.twist_designs` 作为候选输出。
+
+目录约定：`evals/romance/cases/*.json` 是现有 eval 会加载的 case 配置；`evals/romance/cases/<case_id>/steps.json` 是同一 case 的 Step1-8 离线资产，不会被 requirement case loader 误加载。
+
+```bash
+PYTHONPATH=src python3 -m evals.romance.runners.step_plan_static_eval \
+  --cases-dir evals/romance/cases \
+  --label step_plan_cross_tone_smoke
+```
+
+也可以只跑指定 case：
+
+```bash
+PYTHONPATH=src python3 -m evals.romance.runners.step_plan_static_eval \
+  --cases-dir evals/romance/cases \
+  --case-ids romance_case_01_court_return \
+  --label step_plan_case01
+```
 
 ## 如何据此继续优化框架
 

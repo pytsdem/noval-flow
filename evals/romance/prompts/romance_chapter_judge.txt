@@ -12,9 +12,16 @@
 你不是通用 prose judge。
 不要偏爱空泛抒情、漂亮废话、纯文艺句子堆砌。
 你要优先判断：这章是否真的更像“让人想继续追下去的言情连载正文”。
+不要把评测偏好写死成古风权谋、禁忌言情、虐恋或沉重风格；先看当前 genre_profile 和 tone_profile 的读者承诺。
 
 [Eval case JSON]
 {case_json}
+
+[Genre profile JSON]
+{genre_profile_json}
+
+[Tone profile JSON]
+{tone_profile_json}
 
 [Writer context JSON]
 {writer_context_json}
@@ -111,6 +118,13 @@
     "improvement_hint": "怎样让心智控制更稳。",
     "source": "llm"
   }},
+  "genre_fit": {{
+    "score": 0,
+    "reason": "说明文本是否同时满足当前 genre_profile 与 tone_profile，而不是通用审美。",
+    "evidence_summary": "总结文本和类型/情绪读者期待匹配或错位的证据。",
+    "improvement_hint": "怎样更贴合当前类型与情绪承诺，同时避免 profile 中的误奖项。",
+    "source": "llm"
+  }},
   "diagnosis": {{
     "strengths": [
       "简体中文，列出 2~4 条最有效的言情读感优势"
@@ -136,3 +150,9 @@
 9. 如果文本主要是在复述情绪结论、概括关系状态、重复标签，而不是把动作、停顿、称呼变化、选择代价、现场反馈写出来，那么它更像摘要式提纲，不是合格正文。此时 romance 相关分数和 hook 分数都要严厉压低。
 10. 不要让“设定很好”拯救“页上执行很空”。高概念重逢、旧案、休书、宫宴、朝堂等题材，如果没有在正文里兑现成具体场面，仍然要低分。
 11. 双人化学反应可以来自正面同场，也可以来自错位同场、旁观反应、转述回响；但无论形式如何，都必须在页上形成明确的关系定价变化，而不是只剩氛围。
+12. redundancy 通用判断：同一意象、信息、情绪或动作再次出现，如果带来新的剧情功能、关系变化、误导、线索推进、情绪升级或读者期待，可以视为有效回环；如果只是重复解释同一心理、重复同一情绪、重复同一动作模式，则扣分。
+13. genre_fit 只判断当前 genre_profile 与 tone_profile 是否兑现，不要因为文本更像另一种类型或另一种情绪风格而额外加分。
+14. 如果 tone_profile 是 `restrained_angst`，可以奖励克制、隐忍、误会压迫、爱而不能言，但不能奖励空洞虐、强行误会、过早说透。
+15. 如果 tone_profile 是 `light_adventure_banter`，可以奖励轻松斗嘴、危机中带甜、互动密度，但不能奖励沉重宿命感过强或只打怪不暧昧。
+16. 如果 tone_profile 是 `light_witty_reunion`，可以奖励现代对白、互怼暧昧、甜中带酸、现实压力，但不能奖励古风腔、霸总模板和大段伤痛独白。
+17. 不要默认认为越虐越好、越沉重越好、越解释完整越好、越通顺越好、越少重复越好；要看目标 genre/tone 下是否有新功能和追读价值。

@@ -55,16 +55,15 @@ Iteration traceability is part of the optimization standard. After each keep/rej
 
 ## Fixed Workflow
 
-### Step 1: Read the fixed requirement cases and their bound test books
+### Step 1: Read the active requirement case and its bound test book
 
-- Read the `3` fixed requirement-case files under `evals/romance/cases/`.
+- Read the active fixed requirement-case file under `evals/romance/cases/`.
 - Treat each case file's `user_input` block as the source-of-truth "new novel" input.
 - Use the fixed test-book bindings below instead of guessing by title:
   - `evals/romance/cases/romance_case_01_court_return.json` -> `test_self_improve_court_return`
-  - `evals/romance/cases/romance_case_02_sickbed_truce.json` -> `test_self_improve_sickbed_truce`
-- `evals/romance/cases/romance_case_03_betrothal_banquet.json` -> `test_self_improve_betrothal_banquet`
 - The registry file at `evals/romance/self_improve_registry.json` is the quick lookup source for these bindings.
-- These novels live in `data/novel_flow_test.db` and should be visible from the front-end in `test` mode.
+- The seeded novel lives in `data/novel_flow_test.db` and should be visible from the front-end in `test` mode.
+- Legacy requirement cases live under `evals/romance/cases_legacy/` and are not part of the default active eval directory.
 
 ### Step 2: Inspect the bound test books in the test DB before regenerating
 
@@ -190,5 +189,5 @@ These are foundational repo capabilities. Use them directly when useful, but do 
 
 - seed or reseed the fixed self-improve test novels: `python -m tools.seed_self_improve_cases --db data/novel_flow_test.db --cases-dir evals/romance/cases`
 - export cases: `powershell -ExecutionPolicy Bypass -File skills/novel_self_improve/export_cases.ps1`
-- run step eval: `python -m evals.romance.run_step_evals --cases evals/romance/exported_cases/latest --label latest_step_eval`
+- run step eval: `python -m evals.romance.runners.historical_step_gate_eval --cases evals/romance/exported_cases/latest --label latest_step_eval`
 - diagnostics wrapper: `python skills/novel_self_improve/analyze_failures.py`

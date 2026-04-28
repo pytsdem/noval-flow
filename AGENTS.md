@@ -54,13 +54,13 @@ Supported sampling strategies:
 Then run workflow diagnostics on the exported cases:
 
 ```powershell
-python -m evals.romance.run_workflow_diagnostics --cases evals/romance/exported_cases/latest --label latest_diagnostics
+python -m evals.romance.runners.workflow_diagnostics_eval --cases evals/romance/exported_cases/latest --label latest_diagnostics
 ```
 
 Run upstream step gate checks before trusting the exported cases for chapter generation:
 
 ```powershell
-python -m evals.romance.run_step_evals --cases evals/romance/exported_cases/latest --label latest_step_eval
+python -m evals.romance.runners.historical_step_gate_eval --cases evals/romance/exported_cases/latest --label latest_step_eval
 ```
 
 ## Replay Eval Workflow
@@ -70,11 +70,10 @@ Use two validation sets:
 1. Historical exported cases from the database
 2. Hand-maintained requirement cases in `evals/romance/cases/`
 
-The self-improve requirement cases are fixed "new novel input" fixtures that seed deterministic test books in `data/novel_flow_test.db`:
+The active self-improve requirement case is a fixed "new novel input" fixture that seeds a deterministic test book in `data/novel_flow_test.db`:
 
 - `evals/romance/cases/romance_case_01_court_return.json` -> `test_self_improve_court_return`
-- `evals/romance/cases/romance_case_02_sickbed_truce.json` -> `test_self_improve_sickbed_truce`
-- `evals/romance/cases/romance_case_03_betrothal_banquet.json` -> `test_self_improve_betrothal_banquet`
+- Legacy requirement cases live under `evals/romance/cases_legacy/` and are not part of the default active eval directory.
 
 Seed or reseed them with:
 
@@ -82,24 +81,24 @@ Seed or reseed them with:
 python -m tools.seed_self_improve_cases --db data/novel_flow_test.db --cases-dir evals/romance/cases
 ```
 
-When using the `novel_self_improve` skill, prefer these fixed `book_id` bindings over title matching.
+When using the `novel_self_improve` skill, prefer this fixed `book_id` binding over title matching.
 
 Run fixture requirement cases:
 
 ```powershell
-python -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --label fixture_baseline
+python -m evals.romance.runners.chapter_quality_eval --cases-dir evals/romance/cases --label fixture_baseline
 ```
 
 Replay exported historical cases:
 
 ```powershell
-python -m evals.romance.run_romance_evals --cases-dir evals/romance/exported_cases/latest --label historical_baseline
+python -m evals.romance.runners.chapter_quality_eval --cases-dir evals/romance/exported_cases/latest --label historical_baseline
 ```
 
 Compare baseline vs candidate:
 
 ```powershell
-python -m evals.romance.run_case_comparison --baseline evals/romance/reports/historical_baseline/summary.json --candidate evals/romance/reports/historical_candidate/summary.json
+python -m evals.romance.runners.eval_run_comparison --baseline evals/romance/reports/historical_baseline/summary.json --candidate evals/romance/reports/historical_candidate/summary.json
 ```
 
 ## Manual Baseline Commands
@@ -108,9 +107,9 @@ If you want to prepare a manual baseline snapshot, run the foundational commands
 
 ```powershell
 python -m tools.export_eval_cases --db data/novel_flow.db --output-dir evals/romance/exported_cases/latest --limit 10 --sample-mode low_score
-python -m evals.romance.run_step_evals --cases evals/romance/exported_cases/latest --label latest_step_eval
-python -m evals.romance.run_workflow_diagnostics --cases evals/romance/exported_cases/latest --label latest_diagnostics
-python -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --label fixture_baseline
+python -m evals.romance.runners.historical_step_gate_eval --cases evals/romance/exported_cases/latest --label latest_step_eval
+python -m evals.romance.runners.workflow_diagnostics_eval --cases evals/romance/exported_cases/latest --label latest_diagnostics
+python -m evals.romance.runners.chapter_quality_eval --cases-dir evals/romance/cases --label fixture_baseline
 ```
 
 ## Iteration Ledger

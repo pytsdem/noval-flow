@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import argparse
 import json
+from pathlib import Path
 
 from evals.romance.harness import RomanceEvalHarness
+from evals.romance.loader import load_suite_case_ids
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -11,6 +13,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--label", default="", help="Run label used for the output directory.")
     parser.add_argument("--mode", default="fast", choices=["fast", "deep"], help="WritingChapterAgent mode.")
     parser.add_argument("--cases", nargs="*", default=None, help="Optional case ids to run.")
+    parser.add_argument("--suite", default="", help="Optional YAML suite file listing case ids.")
     parser.add_argument(
         "--cases-dir",
         default="",
@@ -36,6 +39,9 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main() -> None:
     args = build_parser().parse_args()
+    case_ids = args.cases
+    if args.suite:
+        case_ids = load_suite_case_ids(Path(args.suite))
     harness = RomanceEvalHarness(
         mode=args.mode,
         case_dir=args.cases_dir or None,
@@ -50,7 +56,7 @@ def main() -> None:
     else:
         summary, diff = harness.run(
             label=args.label,
-            case_ids=args.cases,
+            case_ids=case_ids,
             compare_to=args.compare_to or None,
         )
     payload = {

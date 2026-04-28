@@ -1,232 +1,51 @@
-Plan the chapter as a sequence of content blocks. Return valid JSON only.
+Plan the chapter as a short sequence of beats. Return valid JSON only.
 
 [Chapter brief JSON]
 {chapter_brief_json}
 
-[Completed chapter memory]
-{completed_chapter_memory_text}
-
 [Chapter payload]
 {chapter_payload_text}
 
-[Relevant world rules]
+[Hard boundaries]
 {relevant_world_rules_text}
-
-[Timeline anchor facts]
 {timeline_anchor_facts_text}
 
-[Scene character context]
-{scene_character_context_text}
-
-[Relationship state]
-{relationship_state_text}
-
-[Chapter character mindsets]
+[Character state]
 {chapter_character_mindsets_text}
 
-[Style card]
+[Style]
 {style_card_text}
 
-[Target word count hint]
+[Target length]
 {target_word_count_text}
 
-Definition:
-- A content block is a writing-design unit, not one physical paragraph.
-- A block may contain multiple natural paragraphs.
-- A block should feel like one scene push, one emotional turn, one pressure move, or one clue movement.
-- Plan blocks as if you are a novelist designing live dramatic pressure before writing prose.
+Beat count:
+- Around 3000 Chinese chars: 3 beats
+- 4000~5500 Chinese chars: 4 beats
+- 5500~7000 Chinese chars: 5 beats
+- Above 7000 Chinese chars: at most 6 beats
+- Around 5000 Chinese chars: default 4 beats, not 6~8
 
-Core planning shift:
-- Do not flatten the chapter into information chunks.
-- Do not think like an outline summarizer.
-- Think in terms of scene pressure, human reaction, local turns, hidden cost, and reader momentum.
-- Every block must help make later prose less flat and less explanatory.
+Default beat schema:
+- `goal`: what this beat must accomplish on page
+- `start`: where it begins, based on prior beat consequence
+- `turn`: the visible change, pressure rise, cost, clue movement, or relationship reprice
+- `end`: the new state handed to the next beat
+- `avoid`: concrete things this beat must not repeat or reveal
 
-Block count rules:
-- 1500~2500 Chinese chars: 3~5 blocks
-- 2500~4000 Chinese chars: 4~6 blocks
-- 4000~5500 Chinese chars: 6~8 blocks
-- 5500~7000 Chinese chars: 7~10 blocks
+Compatibility output:
+- Return `{{"blocks":[...]}}` using the existing content-block fields.
+- Map compact fields into existing fields: `goal -> purpose/scene_goal`, `turn -> new_value/turn_type`, `end -> end_state`, `avoid -> must_not_repeat/must_hide/style_risk_guard`.
+- Keep `text` empty, `status` as `draft`, `version` as `1`.
+- Use stable ids like `ch_002.sc_001.b001`; normalization may renumber them.
 
-For a target around 5000 Chinese characters, prefer 6 to 8 blocks unless the chapter is intentionally highly compressed.
-
-Requirements:
-1. Each block must have:
-   - one dominant job,
-   - one local turn / complication / pressure rise / reveal / emotional slip,
-   - one clear landing state.
-2. Do not design flat blocks. Even a quiet block must contain a shift.
-3. Adjacent blocks must clearly change:
-   - the situation,
-   - the cost,
-   - the relationship angle,
-   - the clue pressure,
-   - or the reader's emotional state.
-4. Respect hidden truths, allowed clues, forbidden reveals, and current reader belief.
-5. Keep `text` as an empty string, `status` as `draft`, and `version` as `1`.
-6. Use stable ids like `ch_002.sc_001.b001`.
-7. Every block must include these fields:
-   - `block_id`
-   - `chapter_id`
-   - `block_index`
-   - `purpose`
-   - `characters`
-   - `active_lines`
-   - `active_twists`
-   - `scene_goal`
-   - `must_reveal`
-   - `must_hide`
-   - `new_value`
-   - `must_not_repeat`
-   - `relationship_delta`
-   - `clue_delta`
-   - `must_land_in_action`
-   - `emotional_tone`
-   - `end_state`
-   - `human_reaction_target`
-   - `cost_shift`
-   - `reader_feeling_target`
-   - `paragraph_budget`
-   - `target_chars`
-   - `paragraph_shape`
-   - `micro_hook`
-   - `turn_type`
-   - `character_anchor_line`
-   - `style_risk_guard`
-   - `text`
-   - `status`
-   - `version`
-8. Add `character_reentry_mode` only when an important already-established character is re-entering.
-9. Add `clue_reveal_mechanism` only when this block is responsible for naturally exposing a clue.
-
-Required field guidance:
-- `human_reaction_target`
-  Define the specifically human reaction that must land on the page.
-  Good targets include bodily leakage, practical calculation, self-mockery, startled witness reaction, social embarrassment, or a small failure of composure.
-
-- `cost_shift`
-  Define who becomes worse off by the end of this block and what extra price they pay.
-
-- `reader_feeling_target`
-  Say what the reader should directly feel when the block ends, not only what the reader should know.
-
-- `new_value`
-  State the one thing this block newly changes for the reader.
-  Good values include:
-  - a new public pressure,
-  - a newly visible cost,
-  - a relationship reprice,
-  - a clue becoming legible,
-  - or a changed next move.
-  Bad values are restatements of the previous block.
-
-- `must_not_repeat`
-  Name two to four things this block must not restate from earlier blocks.
-  Prefer concrete anti-repeat constraints such as:
-  - do not re-explain the same hatred,
-  - do not restate the same etiquette pressure,
-  - do not repeat the same injury / cold / blood image family,
-  - do not re-open background that the previous block already landed.
-
-- `relationship_delta`
-  State how the relationship is repriced in this block.
-  If the relationship does not materially change, say what new edge, debt, distance, or danger becomes visible instead.
-
-- `clue_delta`
-  State what clue pressure changes in this block.
-  If no clue advances, say that clearly and make the block carry pressure, relationship, or cost instead.
-
-- `must_land_in_action`
-  Give a short list describing how this block must carry its value through observable scene material.
-  Good carriers include:
-  - gesture,
-  - pause,
-  - address term,
-  - interrupted action,
-  - witness reaction,
-  - object handling,
-  - procedural choice.
-  Do not let this field contain abstract psychology summaries.
-
-- `paragraph_budget`
-  Use this default style unless the block truly needs a variation:
-  `建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长`
-  For high-tension or clue-reveal blocks, prefer 3~5 shorter paragraphs.
-
-- `target_chars`
-  Give one approximate Chinese-character budget for this block.
-  It should help the chapter stay balanced, but it is only a planning target, not a hard token count.
-  Higher-pressure or relationship-reprice blocks may take more space than quiet transition blocks.
-
-- `paragraph_shape`
-  Give a short ordered list describing how the natural paragraphs should be shaped inside this block.
-  Examples:
-  - `["主动作", "配角反应", "人物细节/情绪泄露", "礼法或环境补压"]`
-  - `["关系压力", "回避与失手", "他人先发现", "当事人回避解释"]`
-  - `["排场建立", "下属回话", "关键一句", "留白反应"]`
-
-- `micro_hook`
-  Define the small carry-forward pull at the end of this block.
-  It is not the final chapter hook. It is the local reason the reader keeps moving.
-
-- `turn_type`
-  Use one of:
-  - `pressure_rise`
-  - `clue_shift`
-  - `emotional_slip`
-  - `relationship_cut`
-  - `ritual_embarrassment`
-  - `witness_reaction`
-  - `false_relief`
-  - `withheld_answer`
-
-- `character_anchor_line`
-  Use this structure:
-  `{{"owner":"", "form":"dialogue | inner_thought | narrative_judgment | reaction_line", "surface_function":"", "hidden_function":"", "must_reveal_about_character":"", "must_not_do":[], "preferred_shape":"短、准、能留余味"}}`
-  Each block should preferably generate one character anchor line.
-  It does not have to be the first line, and it does not have to be dialogue.
-  It must serve the scene on the surface while making the character stand underneath.
-  It cannot be only a plot-function sentence.
-  It should not explain too much.
-  Prefer short, sharp, memorable lines.
-
-- `style_risk_guard`
-  Name the two to four easiest ways this block could be written badly.
-  Examples:
-  - repeating one image family,
-  - summary psychology instead of scene,
-  - dialogue that only explains plot,
-  - turning a person into a puzzle device,
-  - overpacking one paragraph.
-
-Optional field guidance:
-- `clue_reveal_mechanism`
-  Use this structure when needed:
-  `{{"clue":"", "style":"natural_exposure / object_accident / ritual_trigger / subordinate_report / withheld_reveal", "pressure_source":"", "surface_trigger":"", "first_noticer":"", "owner_reaction":""}}`
-  Important clues should emerge through pressure, avoidance, accident, witness reaction, and refusal to over-explain.
-
-- `character_reentry_mode`
-  Use this structure when needed:
-  `{{"target_character":"", "identity_already_known":true, "reentry_strategy":"", "first_signal":"", "first_emotional_focus":"", "must_avoid":[]}}`
-  Do not use this for first introductions. Re-entry should rely on recognition signals, not narrator recap.
-
-Planning style:
-1. The opening block must have a concrete hook, not abstract setup.
-2. Every 1~2 blocks, create a new wave:
-   - new pressure,
-   - new clue,
-   - new embarrassment,
-   - new misreading,
-   - new cost,
-   - new relationship change,
-   - or a withheld answer.
-3. If a clue appears, design the chain of pressure around it instead of treating it like an author handout.
-4. If the block is quiet, give the quiet a concrete unease, etiquette pressure, money pressure, bodily strain, or practical concern.
-5. If the chapter ends on a hook, land that hook through changed situation, bodily hit, or relationship cost, not a trailer sentence.
-6. Do not design blocks that read like summary bullets waiting to be expanded.
-7. The full sequence of blocks should feel like a serialized chapter, not like five flat outline segments.
-8. Prefer `character_anchor_line` over decorative flourish when they compete. If necessary, choose a sharper character anchor instead of prettier diction.
-9. Use the chapter character mindsets as hidden control signals for block design: let goals, fear, misbelief, and self-control level shape pressure, reaction target, and local turn.
-10. Do not restate mindset labels inside prose planning; translate them into action, hesitation, concealment, misreading, and cost.
-11. Treat each block like a beat card with an exclusive job. If two adjacent blocks could be merged without losing any reader value, your plan is too repetitive.
-12. Make `new_value`, `must_not_repeat`, and `must_land_in_action` concrete enough that a writer could avoid repeating the previous beat even when given the full chapter context.
+Planning rules:
+1. Every beat must add one new value; do not split one pressure into many tiny beats.
+2. Adjacent beats must change cost, relationship angle, clue pressure, or next action.
+3. Do not expose hidden truth beyond allowed clues.
+4. Prefer scene pressure and action carriers over explanation.
+5. If no clue advances, make the beat carry pressure, relationship, or cost instead.
+6. Each beat needs a clear value turn: a new misread, a new choice, a new cost, a new clue function, a new relationship reprice, or a new reader question.
+7. Do not plan several beats that only solve the same rule, chase the same crisis, or repeat the same action pattern.
+8. For trial/adventure/workplace crisis scenes, the external task must force a relationship change; it cannot be only a process walkthrough.
+9. Keep total planned `target_chars` close to the chapter target. Do not allocate room for detours or scene replays.

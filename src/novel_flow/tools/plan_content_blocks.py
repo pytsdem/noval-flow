@@ -60,15 +60,32 @@ class PlanContentBlocksTool(LLMChapterTool):
         chapter_brief: ChapterBrief,
         target_word_count_text: str,
     ) -> list[ContentBlock]:
-        if len(blocks) < 3:
-            blocks = self._fallback_blocks(chapter_brief)
-        trimmed = blocks[:10]
+        target_block_count = self._target_block_count(
+            target_word_count_text,
+            fallback_count=len(blocks),
+        )
+        if len(blocks) < target_block_count:
+            blocks = self._fallback_blocks(chapter_brief, count=target_block_count)
+        trimmed = blocks[:target_block_count]
         total_target_chars = self._target_total_chars(
             target_word_count_text=target_word_count_text,
             block_count=len(trimmed),
         )
         normalized: list[ContentBlock] = []
         for index, block in enumerate(trimmed, start=1):
+            turn_type = self._normalize_turn_type(block.turn_type, index=index)
+            fallback_target_chars = self._fallback_target_chars(
+                index=index,
+                total_blocks=len(trimmed),
+                turn_type=turn_type,
+                total_target_chars=total_target_chars,
+            )
+            planned_target_chars = int(block.target_chars or 0)
+            target_chars = (
+                min(planned_target_chars, max(260, int(round(fallback_target_chars * 1.15))))
+                if planned_target_chars > 0
+                else fallback_target_chars
+            )
             normalized.append(
                 block.model_copy(
                     update={
@@ -84,9 +101,11 @@ class PlanContentBlocksTool(LLMChapterTool):
                         "must_hide": self._clean_list(block.must_hide) or list(chapter_brief.forbidden[:4]),
                         "new_value": self._clean_text(block.new_value)
                         or self._fallback_new_value(index=index, chapter_brief=chapter_brief),
-                        "must_not_repeat": self._list_or_fallback(
-                            block.must_not_repeat,
-                            self._fallback_must_not_repeat(index=index, chapter_brief=chapter_brief),
+                        "must_not_repeat": self._with_value_turn_guards(
+                            self._list_or_fallback(
+                                block.must_not_repeat,
+                                self._fallback_must_not_repeat(index=index, chapter_brief=chapter_brief),
+                            )
                         ),
                         "relationship_delta": self._clean_text(block.relationship_delta)
                         or self._fallback_relationship_delta(index=index, chapter_brief=chapter_brief),
@@ -105,32 +124,29 @@ class PlanContentBlocksTool(LLMChapterTool):
                         "cost_shift": self._clean_text(block.cost_shift) or self._fallback_cost_shift(index=index, chapter_brief=chapter_brief),
                         "reader_feeling_target": self._clean_text(block.reader_feeling_target)
                         or self._fallback_reader_feeling(index=index, chapter_brief=chapter_brief),
-                        "paragraph_budget": self._clean_text(block.paragraph_budget) or DEFAULT_PARAGRAPH_BUDGET,
-                        "target_chars": (
-                            int(block.target_chars or 0)
-                            if int(block.target_chars or 0) > 0
-                            else self._fallback_target_chars(
-                                index=index,
-                                total_blocks=len(trimmed),
-                                turn_type=self._normalize_turn_type(block.turn_type, index=index),
-                                total_target_chars=total_target_chars,
-                            )
+                        "paragraph_budget": self._paragraph_budget_with_target(
+                            self._clean_text(block.paragraph_budget) or DEFAULT_PARAGRAPH_BUDGET,
+                            target_chars=target_chars,
                         ),
+                        "target_chars": target_chars,
                         "paragraph_shape": self._list_or_fallback(
                             block.paragraph_shape,
                             self._fallback_paragraph_shape(index=index),
                         ),
                         "micro_hook": self._clean_text(block.micro_hook)
                         or self._fallback_micro_hook(index=index, chapter_brief=chapter_brief),
-                        "turn_type": self._normalize_turn_type(block.turn_type, index=index),
+                        "turn_type": turn_type,
                         "character_anchor_line": self._normalize_character_anchor_line(
                             block.character_anchor_line,
                             index=index,
                             chapter_brief=chapter_brief,
                         ),
-                        "style_risk_guard": self._list_or_fallback(
-                            block.style_risk_guard,
-                            self._fallback_style_risks(index=index, chapter_brief=chapter_brief),
+                        "style_risk_guard": self._with_length_guards(
+                            self._list_or_fallback(
+                                block.style_risk_guard,
+                                self._fallback_style_risks(index=index, chapter_brief=chapter_brief),
+                            ),
+                            target_chars=target_chars,
                         ),
                         "character_reentry_mode": self._normalize_character_reentry_mode(block.character_reentry_mode),
                         "clue_reveal_mechanism": self._normalize_clue_reveal_mechanism(
@@ -146,7 +162,7 @@ class PlanContentBlocksTool(LLMChapterTool):
             )
         return normalized
 
-    def _fallback_blocks(self, chapter_brief: ChapterBrief) -> list[ContentBlock]:
+    def _fallback_blocks(self, chapter_brief: ChapterBrief, *, count: int = 4) -> list[ContentBlock]:
         focus_characters = list(chapter_brief.character_focus or [])
         active_lines = list(chapter_brief.active_lines or [])
         active_twists = list(chapter_brief.active_twists or [])
@@ -154,7 +170,7 @@ class PlanContentBlocksTool(LLMChapterTool):
         clues = list(chapter_brief.allowed_clues or [])
         clue_mechanism = self._fallback_clue_reveal_mechanism(chapter_brief) if clues else None
         reentry_mode = self._fallback_character_reentry_mode(chapter_brief)
-        return [
+        base_blocks = [
             ContentBlock(
                 block_id=f"{chapter_brief.chapter_id}.sc_001.b001",
                 chapter_id=chapter_brief.chapter_id,
@@ -342,6 +358,83 @@ class PlanContentBlocksTool(LLMChapterTool):
                 ],
             ),
         ]
+        target_count = max(3, min(6, int(count or 4)))
+        if target_count <= 4:
+            return base_blocks[:target_count]
+
+        extra_blocks = [
+            ContentBlock(
+                block_id=f"{chapter_brief.chapter_id}.sc_001.b004",
+                chapter_id=chapter_brief.chapter_id,
+                block_index=4,
+                purpose="Let the apparent progress create a second cost before the ending turn.",
+                characters=focus_characters,
+                active_lines=active_lines,
+                active_twists=active_twists,
+                scene_goal=self._clean_text(chapter_brief.emotional_turn) or self._clean_text(chapter_brief.relationship_reprice),
+                must_reveal=[item for item in [chapter_brief.emotional_turn] if self._clean_text(item)],
+                must_hide=forbidden[:4],
+                new_value="The prior progress now carries a fresh emotional or practical price.",
+                must_not_repeat=[
+                    "不要重复前面已经落地的线索露出。",
+                    "不要重新解释关系重新定价。",
+                ],
+                relationship_delta="关系压力继续加价，但不能回到上一块的同一层误读。",
+                clue_delta="不新增大线索时，只让既有线索产生更明确后果。",
+                must_land_in_action=[
+                    "让新增代价落在动作、选择、称呼或他人反应上。",
+                    "不要写成策略总结。",
+                ],
+                emotional_tone=self._clean_text(chapter_brief.emotional_turn),
+                end_state="The characters carry a second cost into the ending turn.",
+                human_reaction_target=["Show a small composure slip, practical concession, or avoided answer."],
+                cost_shift="A buffer or option narrows before the final hook.",
+                reader_feeling_target="Readers should feel the chapter tightening rather than circling.",
+                paragraph_budget=DEFAULT_PARAGRAPH_BUDGET,
+                target_chars=0,
+                paragraph_shape=["新增代价", "短反应", "选择收窄"],
+                micro_hook="The apparent way forward now costs more than it seemed.",
+                turn_type="emotional_slip",
+                style_risk_guard=["Do not repeat the same pressure image.", "Do not explain the turn twice."],
+            ),
+            ContentBlock(
+                block_id=f"{chapter_brief.chapter_id}.sc_001.b005",
+                chapter_id=chapter_brief.chapter_id,
+                block_index=5,
+                purpose="Hold the answer back while forcing a visible next move.",
+                characters=focus_characters,
+                active_lines=active_lines,
+                active_twists=active_twists,
+                scene_goal=self._clean_text(chapter_brief.small_payoff) or "Force the next move without clean explanation.",
+                must_reveal=[item for item in [chapter_brief.small_payoff] if self._clean_text(item)],
+                must_hide=forbidden[:4],
+                new_value="The chapter gains a visible next move while the larger answer stays withheld.",
+                must_not_repeat=[
+                    "不要重讲开场压力。",
+                    "不要把保留答案写成故弄玄虚。",
+                ],
+                relationship_delta="关系或局势出现新的行动方向，但信任不被直接修复。",
+                clue_delta="只推进可见后果，不解释隐藏原因。",
+                must_land_in_action=[
+                    "用动作或外部打断逼出下一步。",
+                    "不要靠旁白宣布悬念。",
+                ],
+                emotional_tone=self._clean_text(chapter_brief.reader_emotion),
+                end_state="The next move is forced, but the answer remains withheld.",
+                human_reaction_target=["Let someone choose, refuse, or fail to answer under pressure."],
+                cost_shift="The next move becomes unavoidable and less safe.",
+                reader_feeling_target="Readers should want the answer while seeing why nobody can say it yet.",
+                paragraph_budget=DEFAULT_PARAGRAPH_BUDGET,
+                target_chars=0,
+                paragraph_shape=["逼出下一步", "保留答案", "短钩子"],
+                micro_hook="The answer is withheld, but the next move cannot be postponed.",
+                turn_type="withheld_answer",
+                style_risk_guard=["Do not turn withholding into vague fog.", "Do not restate forbidden truth."],
+            ),
+        ]
+        closing_block = base_blocks[-1]
+        middle = base_blocks[:-1] + extra_blocks[: target_count - 4]
+        return middle + [closing_block]
 
     @staticmethod
     def _clean_text(value: str | None) -> str:
@@ -357,6 +450,23 @@ class PlanContentBlocksTool(LLMChapterTool):
         else:
             estimated = 3200 if block_count <= 4 else 4600 if block_count <= 6 else 5600
         return max(1800, min(7200, estimated))
+
+    @staticmethod
+    def _target_block_count(target_word_count_text: str, *, fallback_count: int = 0) -> int:
+        raw = str(target_word_count_text or "").lower()
+        if not any(marker in raw for marker in ("字", "char", "word", "target")):
+            return max(3, min(6, int(fallback_count or 3)))
+        values = [int(item) for item in re.findall(r"\d+", raw)]
+        if not values:
+            return 3
+        target = max(values) if len(values) >= 2 else values[0]
+        if target < 4000:
+            return 3
+        if target <= 5500:
+            return 4
+        if target <= 7000:
+            return 5
+        return 6
 
     @staticmethod
     def _fallback_target_chars(*, index: int, total_blocks: int, turn_type: str, total_target_chars: int) -> int:
@@ -389,6 +499,47 @@ class PlanContentBlocksTool(LLMChapterTool):
     def _list_or_fallback(cls, items: list[str] | None, fallback: list[str]) -> list[str]:
         cleaned = cls._clean_list(items)
         return cleaned or fallback
+
+    @classmethod
+    def _append_unique(cls, items: list[str], additions: list[str], *, limit: int = 6) -> list[str]:
+        result = cls._clean_list(items)
+        seen = set(result)
+        for item in additions:
+            clean = cls._clean_text(item)
+            if clean and clean not in seen:
+                result.append(clean)
+                seen.add(clean)
+        return result[:limit]
+
+    @classmethod
+    def _with_value_turn_guards(cls, items: list[str]) -> list[str]:
+        return cls._append_unique(
+            items,
+            [
+                "不要把本 beat 写成连续解规则、连续救场或连续走流程；必须出现新的误读、选择、代价、线索功能或关系变价。",
+                "不要把已交付事件换个角度重演；承接后直接推进新结果。",
+            ],
+            limit=6,
+        )
+
+    @classmethod
+    def _with_length_guards(cls, items: list[str], *, target_chars: int) -> list[str]:
+        return cls._append_unique(
+            items,
+            [
+                f"硬字数上限 {int(target_chars)} 中文字符；转折落地后立刻收束。",
+                "不要补第二轮同类动作、同类危机处理或事后心理解释。",
+            ],
+            limit=6,
+        )
+
+    @classmethod
+    def _paragraph_budget_with_target(cls, value: str, *, target_chars: int) -> str:
+        clean = cls._clean_text(value) or DEFAULT_PARAGRAPH_BUDGET
+        guard = f"硬上限 {int(target_chars)} 中文字符；理想 2~5 段，转折落地即停"
+        if guard in clean:
+            return clean
+        return f"{clean}；{guard}"
 
     @classmethod
     def _fallback_new_value(cls, *, index: int, chapter_brief: ChapterBrief) -> str:

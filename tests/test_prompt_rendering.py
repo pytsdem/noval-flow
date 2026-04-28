@@ -120,6 +120,14 @@ class PromptRenderingTests(unittest.TestCase):
             "patched_block_contexts_json": "[]",
             "minimal_context_text": "minimal patch context",
             "merged_chapter_text": "merged chapter text",
+            "chapter_goal": "chapter goal",
+            "hard_facts": "hard facts",
+            "character_state": "character state",
+            "beat": '{"goal":"goal","start":"start","turn":"turn","end":"end","avoid":[]}',
+            "previous_text_tail": "previous text tail",
+            "chapter_so_far": "chapter so far",
+            "style_rules": "style rules",
+            "target_length": "800",
         }
 
     def test_new_prompts_render_without_format_errors(self) -> None:
