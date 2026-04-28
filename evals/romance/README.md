@@ -94,6 +94,31 @@ PYTHONPATH=src python3 -m evals.romance.runners.step_plan_static_eval \
   --label step_plan_case01
 ```
 
+## Long Arc Step8 Eval
+
+用于评估几十章 `chapter_briefs` 是否像一条高级连载故事线，而不是只看前三章是否有钩子。它不评正文，只评 Step8 章节链：主旨对齐、类型/情绪稳定、上章尾钩到下章承接、升级曲线、角色发展线、反转埋线兑现、明暗线交织、追读检查点、信息预算和重复平台期。
+
+只评已有 fixture：
+
+```bash
+PYTHONPATH=src python3 -m evals.romance.runners.long_arc_step8_eval \
+  --cases-dir evals/romance/cases \
+  --label long_arc_step8_static
+```
+
+用 step1-7 连续生成 30 章 Step8，再评长线质量：
+
+```bash
+PYTHONPATH=src python3 -m evals.romance.runners.long_arc_step8_eval \
+  --cases-dir evals/romance/cases \
+  --case-ids romance_case_01_court_return \
+  --label long_arc_step8_case01_30ch \
+  --generate \
+  --target-chapters 30 \
+  --batch-size 2 \
+  --llm-provider deepseek
+```
+
 ## 如何据此继续优化框架
 
 建议看这几层：
