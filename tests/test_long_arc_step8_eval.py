@@ -36,6 +36,7 @@ class LongArcStep8EvalTests(unittest.TestCase):
             self.assertEqual(summary.case_ids, ["romance_case_01_court_return"])
             self.assertTrue(Path(summary.report_json).exists())
             self.assertTrue(Path(summary.report_markdown).exists())
+            self.assertTrue((Path(summary.report_json).parent / "long_arc_step8_eval_summary.json").exists())
             self.assertFalse(summary.generated)
 
 

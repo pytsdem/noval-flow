@@ -1,0 +1,75 @@
+{
+  "chapter_id": "ch_002",
+  "selection_summary_text": "本章核心角色为谢临川与沈知微；唯一活跃反转为‘她的证词不是真正的背叛’；唯一活跃故事线为‘军粮旧案’；关键世界规则包括殿前赐婚不可反悔、先帝旧判不可在朝堂直言翻案、北地旧部三日后必须交兵符、宫门夜禁可被伪装成内廷处置；相关过去事件为三年前谢临川被流放北地，以及昨夜沈知微收到灭口密令；当前时间锚点为谢临川归京次日早朝，时值隆冬清晨，距前章仅一夜。",
+  "time_anchor_text": "absolute: 谢临川归京次日早朝时辰；season: 隆冬，雪未化，鞋底雪水犹在；timeofday: 破晓至辰初，朝堂正开；relative_to_previous_chapter: 紧接ch_001夜间，沈知微彻夜未眠，谢临川自宫门入殿；must_not_conflict: 宫门外旧部未离京，三日兵符期限未至；禁军换防刚过，灭口密令仍在生效；不能出现雪化、时隔数日或旧部已离京等描述。",
+  "chapter_visible_context_text": "reader_should_know: 谢临川带军功回京但未得真正平反；沈知微是御前女史，昨夜收到灭口密令；两人曾因旧案决裂。reader_should_believe: 沈知微当年为自保背叛谢临川；谢临川请婚是为了羞辱报复她；这场婚约是权力压制。reader_should_not_know: 沈知微当年作证的真实动机；灭口密令来自谁；婚约实为救命绳；幕后主谋的任何信息。allowed_clues: 沈知微接旨前观察殿门禁军位置；她合上婚书时认出背面暗号而收紧手指；谢临川提及报复时避开了她腕上的旧伤；谢临川的请婚措辞看似冷漠周密，却给她留下了隙缝。forbidden_reveals: 不能揭示沈知微是为了救男主才作证；不能解释幕后主谋；不能让男主看穿灭口密令全貌；不能把请婚写成甜宠或提前坦白。current_character_state: 谢临川表面冷厉，将请婚包装成报复，内心压抑着旧恨与说不清的驱动；沈知微一夜未眠，持密令入殿，表面守礼接下 ‘羞辱’，实则借婚书的暗号看见了活路，却丝毫不敢流露异常。",
+  "completed_chapter_memory_text": "前一章ch_001结尾，谢临川带北地军功和旧部声势回京，但未获真正平反；沈知微收到灭口密令，仍须次日入殿记档；两人即将在朝堂重逢。读者已知谢临川未平反、沈知微被灭口盯上，并相信沈知微当年背叛过谢临川。关键线索：沈知微听到谢临川名字时捏皱了袖口；她烧毁密令只剩半枚暗号。人物状态：谢临川压着火准备朝堂动作，沈知微紧张但克制。两人尚未正式碰面，但即将被一场人人看成报复的婚约绑在一起。",
+  "step_1_story_foundation_text": "高概念：流放归来的定北王世子当众求娶当年亲手送他流放的女史。本章使命：谢临川在朝堂请婚，将婚约包装成报复，实则在无意间为沈知微提供灭口危机中的一线生机；沈知微从婚书背面认出暗号，被迫用最稳的礼数接旨。主题：有些婚约看似报复，其实是把仇人从死局里抢出来。情感钩子：他以为他在报复她，她却知道他正在救她。核心冲突：全京城视婚约为羞辱，但两人被迫进入更危险的误读，关系从仇敌重定为高危婚约同盟。",
+  "step_2_worldbuilding_text": "[Step 2 worldbuilding and structural rules]\n\nStory engine:\n- Hook strategy: 每章都要让婚约、旧案和关系至少有一处同时前进。\n- World rules: ['殿前赐婚一旦落定，任何人公开反悔都等同抗旨。', '旧案若牵涉先帝旧判，任何人都不能在朝堂上直言翻案。', '御前女史若被灭口，只会被记成畏罪自尽。', '北地旧部只能驻在宫门外三日，三日后必须交兵符，否则按拥兵自重论处。', '内库旧档每逢月末焚毁副册，沈知微只记得入口编号，不掌完整证据。', '赐婚前女方仍属宫中人，宫门夜禁后被带走可被伪装成内廷处置。', '谢临川公开越护沈知微，旧党越能指控他以私怨逼供旧案证人。', '太后党掌内廷，皇帝掌兵符，双方都不愿旧案真相一次浮出。']\n- Power structure: 皇权压顶，内阁与宗室互相牵制，旧案背后有更深的门阀利益。\n- Objective conditions: ['谢临川有军功和旧部声势，但无真正平反', '沈知微握着档册入口，也正处在灭口名单上']",
+  "step_3_character_packets_text": "谢临川——公开身份：定北王世子／归京前锋统领，曾被流放北地的旧案替罪羊；稳定特质：自控极强，越受压越冷，话少攻击准确；压力行为：公开冷言压人，越在意越把话说得像审问；本章可见任务：坚信沈知微背叛了自己，带兵归京后当众请旨娶她，将婚约伪装成报复，以此把她纳入自己掌控范围；行动限制：殿前无人可推翻先帝旧判，赐婚一旦出口即成活契约；禁止泄露隐藏动机。沈知微——公开身份：御前女史／旧案证人，寒门出身，靠识礼与记忆力爬到御前；稳定特质：克制聪明，越动情越无感；压力行为：越怕越守礼，越动情越退半步；本章可见任务：昨夜收到灭口密令，却必须在朝堂上把谢临川的请婚当成羞辱接下来，同时决不能让任何人看出自己被灭口盯上；行动限制：同上；禁止泄露隐藏动机。两人均以行为、停顿、称呼变化、回避和不完整回答暗示内心，不可直接给出动机独白。",
+  "step_4_event_timeline_text": "[Step 4 full event timeline]\n\n- evt_001 | 三年前冬\n  Title: 谢临川被押送离京\n  Description: 军粮旧案暴发后，谢家被褫夺兵权，谢临川被流放北地。\n  Trigger: 御前证词与内库账本同时指向谢家。\n  Consequence: 谢临川与沈知微彻底决裂。\n  Affected characters: 谢临川, 沈知微\n\n- evt_002 | 当下\n  Title: 谢临川带兵归京\n  Description: 北地战事平定后，他以军功换得回京述职资格，三千旧部停在宫门外等候裁撤。\n  Trigger: 边关大捷\n  Consequence: 旧案被迫再次浮出水面，他也获得当众请婚的筹码。\n  Affected characters: 谢临川, 沈知微\n\n- evt_003 | 昨夜\n  Title: 灭口密令落下\n  Description: 沈知微收到没有署名的密令，暗示她若在谢临川归京后多说一个字，今夜便会死于畏罪自尽。\n  Trigger: 谢临川归京触动旧案相关人\n  Consequence: 她必须在朝堂上接住谢临川的请婚，哪怕那看上去像羞辱。\n  Affected characters: 沈知微, 谢临川",
+  "step_5_character_milestones_text": "本章无新增角色里程碑更新。",
+  "step_6_twists_text": "活跃反转：twist_false_testimony ‘她的证词不是真正的背叛’。当前读者错误信念：沈知微为了自保把谢临川送去流放地，如今又被他当众求娶羞辱。读者应代入谢临川的报复爽感，同时不断被沈知微对婚书和禁军的异常反应牵动。允许线索：她提到旧案时会下意识收紧手指；她认得婚书背面的灭口暗号；她会在男主真正置于险地时本能打断。禁止揭示：不能直接说她是为了救男主；不能解释幕后主谋；不能让男主此章看穿灭口密令全貌；她不能有真实动机的完整独白。真相揭晓后的效果：公开请婚从报复名场面反转成他无意中替她挡过第一刀。",
+  "step_7_story_lines_text": "活跃故事线：line_old_case ‘军粮旧案’。核心问题：谢临川如何在赐婚和旧案都被权力场监视的情况下，撬出当年灭门局的缺口？当前状态：他以公开请婚将沈知微拖出灭口范围，但婚约也成为活契约。规则：前中期只能通过婚约、礼制、档册、口供和旁人反应挤出信息，每次推进必须同时重估两人关系。本章不能直接翻案或揭露旧案内幕，只能通过婚书暗号、殿前反应和权力限制埋线。",
+  "step_8_chapter_brief_text": "章节标题：请旨娶她。类型：forced_marriage_pressure。一句话任务：谢临川在朝堂谢恩时不提翻案，当众请旨娶沈知微；满朝以为他要羞辱旧案证人，沈知微却从婚书背面看见只有她认得的灭口暗号。引入钩子：第一章结尾谢临川归京，沈知微收到密令。开篇钩子：谢临川跪殿谢恩，第一句话是求陛下赐婚。核心场景：男主在满朝面前将婚约说成报复掌控，女主在众目下接住这份羞辱般的救命绳，不能让人看出被灭口。章节物件：婚书背面的旧案暗号。场景引擎：court_pressure。线索揭示方式：婚书转呈时背面暗号被沈知微首先看见，她立刻合上婚书以最稳的礼数接旨。读者情感目标：震惊、压迫、旧恨反噬和不该出现却救了命的亲密。应保留的读者信念：沈知微当年背叛过谢临川，但这场请婚不只是报复。人物转变：谢临川从复仇者转向用婚约掌控者；沈知微从旧案叛徒变成全京城眼中被羞辱、实则暂时被护住的未婚妻。情感转折：他本想让她被审判，却被她接旨的平静刺得失控。苦痛锚点：鞋底雪水未干，就得把最恨的人变成未婚妻。浪漫种子：接旨时不看他，却把婚书压在掌心像抓住割手的救命绳。小收束：赐婚落定，沈知微暂时离开灭口第一刀。结尾拉力：散朝后婚书背面那道暗号旁还有一行小字‘今夜子时，杀新妇’。信息预算：3200-4200字；公开婚姻钩子必须落地；新增线索≤2；关系转变必须在页面完成。活跃故事线：line_old_case；活跃反转：twist_false_testimony。允许的显性信息：谢临川回京并未平反、他当众请旨娶沈知微、沈知微昨夜已被灭口盯上。允许的无解释线索：婚书背面旧案暗号、谢临川说报复时避开她腕上旧伤、沈知微接旨前看殿门禁军。严格禁止：揭示她为保他作证、男主知道密令全貌、两人提前坦白、把请婚写成甜宠求婚。",
+  "chapter_payload_text": "[Chapter payload]\n\nChapter: ch_002 / 请旨娶她\nChapter type: forced_marriage_pressure\nOne-line mission: 谢临川在朝堂谢恩时没有按众人预想翻案，而是当众请旨娶沈知微；满朝以为他要羞辱旧案证人，沈知微却从他递上的婚书背面看见只有她认得的灭口暗号。\nIncoming hook: 第一章结尾，谢临川带着北地军功归京，宫门外的旧部还未散尽；同一夜，沈知微收到一封没有署名的灭口密令。\nOpening hook: 谢临川跪在殿中谢恩时，第一句话不是求翻案，而是求陛下赐婚。\nCore scene: 男主必须在满朝文武面前把婚约说成报复和掌控，女主则要在众目睽睽下接住这份羞辱般的救命绳，不能让任何人看出她已经被灭口盯上。\nChapter object: 婚书背面的一枚旧案暗号\nScene engine: court_pressure\nClue reveal mechanism: {'style': 'object_accident', 'pressure_source': '殿前赐婚和禁军换防', 'surface_trigger': '婚书转呈到沈知微手中时露出背面暗号', 'first_noticer': '沈知微', 'owner_reaction': '她立刻把婚书合上，用最稳的礼数接旨'}\nCharacter reentry focus: {'沈知微': '不要重讲她是谁，用接旨、看禁军、合婚书和称呼变化让读者重新记起她。'}\nReader emotion target: 让读者感到震惊、压迫、旧恨反噬和一种不该出现却救了命的亲密。\nReader belief to preserve: 读者仍应相信沈知微当年背叛过谢临川，但要意识到这场请婚不只是报复。\nCharacter shift: 谢临川从带兵归京的复仇者，转向用婚约把她拖进自己掌控范围的人。\nRelationship reprice: 沈知微从旧案叛徒，变成全京城眼中被他羞辱、实际上被他暂时护住的未婚妻。\nEmotional turn: 他原本想让她在众人面前尝到被审判的滋味，却先被她接旨时的平静刺得失控。\nBackstory trigger: None.\nHuman pain anchor: 谢临川鞋底的雪水还没干，就得把最恨的人当众变成自己的未婚妻。\nRomance seed: 她接旨时没有看他，却把婚书压在掌心，像抓住一根会割手的救命绳。\nSmall payoff: 谢临川成功让赐婚落定，沈知微暂时离开灭口密令的第一刀。\nEnding pull: 散朝后，谢临川才发现婚书背面那枚暗号旁边，还有一行极小的字：今夜子时，杀新妇。\nInfo budget: target=3200-4200; public marriage hook must land; new clues<=2; relationship shift must land on page\n\nActive story lines:\n- line_old_case: 谢临川要怎么在赐婚和旧案都被权力场监视的情况下，撬出当年灭门局的缺口？ | visibility=visible | rules=前中期只能通过婚约、礼制、档册、口供和旁人反应挤出信息; 每次推进都必须同时重估两人的关系\n\nActive twists:\n- twist_false_testimony: preserve false belief '沈知微为了自保，把谢临川送去了流放地，如今又被他当众求娶羞辱。'; reader alignment='前期让读者站在谢临川的报复爽感里，同时不断被女主对婚书和禁军的异常反应牵动。'; allowed clues=她提到旧案时会下意识收紧手指; 她认得婚书背面的灭口暗号; 她会在男主真正把自己置于险地时本能打断; forbidden reveals=不能直接说她是为了救男主; 不能解释幕后主谋; 不能让男主此章看穿灭口密令全貌; POV lock=在揭晓前不能给出她的完整真实动机独白。\n\nAllowed explicit information:\n- 谢临川回京并未得到真正平反\n- 他当众请旨娶沈知微\n- 沈知微昨夜已被灭口密令盯上\n\nAllowed clues without explanation:\n- 婚书背面有只有沈知微认得的旧案暗号\n- 谢临川说报复时避开了她腕上的旧伤\n- 沈知微接旨前先看了一眼殿门外的禁军位置\n\nForbidden content:\n- 不能揭示沈知微当年是为了保谢临川才作证\n- 不能让男主知道灭口密令全貌\n- 不能让两人提前坦白\n- 不能把请婚写成甜宠求婚\n- 不能直接说她是为了救男主\n- 不能解释幕后主谋\n- 不能让男主此章看穿灭口密令全貌",
+  "timeline_anchor_facts_text": "[Objective timeline anchors]\n\nRelevant prehistory and current anchor from step 4:\n- evt_001 | 三年前冬\n  Title: 谢临川被押送离京\n  Description: 军粮旧案暴发后，谢家被褫夺兵权，谢临川被流放北地。\n  Consequence: 谢临川与沈知微彻底决裂。\n  Affected characters: 谢临川, 沈知微\n\nConsistency notes:\n- Current chapter anchor is '谢临川被押送离京' at 三年前冬.",
+  "relevant_world_rules_text": "[Relevant world rules]\n\n1. 殿前无人可以公开推翻先帝旧判，赐婚一旦出口就会变成权力场里的活契约。\n2. 殿前赐婚一旦落定，任何人公开反悔都等同抗旨。\n3. 旧案若牵涉先帝旧判，任何人都不能在朝堂上直言翻案。\n4. 御前女史若被灭口，只会被记成畏罪自尽。\n5. 北地旧部只能驻在宫门外三日，三日后必须交兵符，否则按拥兵自重论处。\n6. 内库旧档每逢月末焚毁副册，沈知微只记得入口编号，不掌完整证据。",
+  "style_card_text": "[Style card]\nGenre: restrained historical romance with pressure, mistrust, and emotional misreading.\nPOV: stay in limited perspective; never explain hidden truth from an omniscient distance.\nLanguage: readable modern Chinese prose with historical texture, not archaic imitation and not web-novel slang.\nTexture: scenes should feel lived-in and physically present. Let setting, objects, labor, etiquette, weather, money, and bodily discomfort quietly shape the page.\nEmotion: avoid naming feelings too quickly. Let emotion emerge through what the POV notices, avoids, says, misreads, touches, or cannot bring itself to do.\nDialogue: keep it human and motivated. People should speak from position, need, habit, fear, and relationship history, not to serve the outline.\nCharacter landing: make people convincing through selective concrete detail such as posture, hands, clothing, injuries, routine, and forms of address, without turning detail into a checklist.\nReveal discipline: clues may appear, but allowed clues must not be over-explained before reveal.\nRelationship movement: every chapter should deepen, strain, tilt, or re-price at least one relationship beat in a believable way.\nBackstory rule: if the past appears, let it arise naturally from present pressure, memory trigger, or action; do not paste in explanatory blocks.\nRhythm: vary sentence weight and scene pace with the dramatic moment. Do not let the prose sound mechanically patterned.\nImmersion goal: the reader should feel inside the room, inside the body's reaction, and inside the character's limited understanding.",
+  "active_twists": [
+    {
+      "twist_id": "twist_false_testimony",
+      "title": "她的证词不是真正的背叛",
+      "false_belief": "沈知微为了自保，把谢临川送去了流放地，如今又被他当众求娶羞辱。",
+      "truth": "她当年在更大的灭门局里只能用伪证换谢临川一线生机，如今灭口密令落下，她仍不能把真相说出口。",
+      "reader_alignment": "前期让读者站在谢临川的报复爽感里，同时不断被女主对婚书和禁军的异常反应牵动。",
+      "seed_from": "ch_003",
+      "reveal_at": "ch_046",
+      "allowed_clues": [
+        "她提到旧案时会下意识收紧手指",
+        "她认得婚书背面的灭口暗号",
+        "她会在男主真正把自己置于险地时本能打断"
+      ],
+      "forbidden_reveals": [
+        "不能直接说她是为了救男主",
+        "不能解释幕后主谋",
+        "不能让男主此章看穿灭口密令全貌"
+      ],
+      "pov_lock": "在揭晓前不能给出她的完整真实动机独白。",
+      "related_characters": [
+        "沈知微",
+        "谢临川"
+      ],
+      "payoff_effect": "真相揭晓后，公开请婚会从报复名场面反转成他无意中替她挡过第一刀。"
+    }
+  ],
+  "active_story_lines": [
+    {
+      "line_id": "line_old_case",
+      "name": "军粮旧案",
+      "line_type": "mystery",
+      "visibility": "visible",
+      "core_question": "谢临川要怎么在赐婚和旧案都被权力场监视的情况下，撬出当年灭门局的缺口？",
+      "reader_hook_mode": "pressure",
+      "start_state": "他带兵归京却仍未平反，只能用一场人人看得见的请婚把沈知微拖出灭口范围。",
+      "midpoint_shift": "读者逐渐意识到女主不是单纯证人，而是旧案里最危险的活口。",
+      "end_state": "旧案的真实因果会与两人的感情线一起反噬回来。",
+      "carried_twists": [
+        "twist_false_testimony"
+      ],
+      "line_rules": [
+        "前中期只能通过婚约、礼制、档册、口供和旁人反应挤出信息",
+        "每次推进都必须同时重估两人的关系"
+      ]
+    }
+  ],
+  "scene_character_context_text": "[Scene character context]\n\n谢临川\n- 表面目标：在谢恩时当众请旨娶沈知微，把婚约做成报复。\n- 潜在矛盾：越想羞辱她，越会被她不像受辱的反应刺中。\n\n沈知微\n- 表面目标：按礼完成记档，接住赐婚时不能露出自己被救。\n- 潜在矛盾：她越想把婚约演成羞辱，越容易暴露自己在灭口倒计时里抓住了生路。",
+  "relationship_state_text": "[Relationship state]\n\n谢临川 -> 沈知微\n- 当前公开关系：旧案中的被害者与指证者，即将变成满朝注视下的未婚夫妻。\n- 暗流：恨意很真，在意也没有死；请婚看似报复，实则会挡掉第一轮灭口。\n- 本章目标：把关系推进到“报复名义下的救命婚约”，而不是单向羞辱。\n- 禁止捷径：不要让任何一方提前说破旧情、旧案真相或完整灭口密令。",
+  "assistant_persona_prompt": "你在写高张力古言言情章节。关系推进优先于漂亮句子，潜台词优先于直白告白。",
+  "writing_requirements_json": "{\n  \"target_words\": \"3200-4200\",\n  \"pace\": \"开头 400 字内落下当众请婚；中段必须出现婚书暗号；结尾必须留下灭口倒计时\",\n  \"guardrails\": [\n    \"不要把请婚写成甜宠求婚\",\n    \"不要让沈知微只当被羞辱工具人\",\n    \"不要把谢临川写成只会放狠话的模板男主\",\n    \"不要重复解释同一种恨意\"\n  ]\n}",
+  "completed_chapter_summary_bundle": "前一章ch_001结尾，谢临川带北地军功和旧部声势回京，但未获真正平反；沈知微收到灭口密令，仍须次日入殿记档；两人即将在朝堂重逢。读者已知谢临川未平反、沈知微被灭口盯上，并相信沈知微当年背叛过谢临川。关键线索：沈知微听到谢临川名字时捏皱了袖口；她烧毁密令只剩半枚暗号。人物状态：谢临川压着火准备朝堂动作，沈知微紧张但克制。两人尚未正式碰面，但即将被一场人人看成报复的婚约绑在一起。",
+  "previous_chapter_full_text": "第一章结尾，城门雪夜里，谢临川勒马停住，宫门外三千旧部的甲胄还带着北地霜色。副将问他先进驿馆还是先递牌子，他只说先换朝服。另一边，沈知微在灯下重抄次日的谢恩流程，第三次写错“定北”二字；窗缝里被人塞进一封无名密令，纸上只有半枚旧案暗号和一句话：子时前，闭口。",
+  "reference_pack": "参考方向：重生复仇/换身份/双重生古言的强钩子密度；本 case 用“公开请婚 + 报复假象 + 灭口倒计时”承载古风权谋言情。",
+  "chapter_character_mindsets": [],
+  "chapter_character_mindsets_text": ""
+}

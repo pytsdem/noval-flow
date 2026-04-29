@@ -233,7 +233,7 @@ def _sanitized_context_json() -> str:
             "step_5_character_milestones_text": "Relevant milestone packets",
             "step_6_twists_text": "Active twist packets",
             "step_7_story_lines_text": "Active story line packets",
-            "step_8_chapter_brief_text": "Current chapter brief packet",
+            "step_8_chapter_brief_text": "Current chapter contract packet",
             "scene_character_context_text": "[Scene character context]\\nHero under pressure\\nHeroine hiding a reaction",
             "relationship_state_text": "[Relationship state]\\nHostility with unresolved pull"
         },
@@ -545,8 +545,10 @@ class RomanceEvalHarnessTests(unittest.TestCase):
 
         self.assertIsNone(diff)
         self.assertEqual(len(summary.case_results), 1)
-        self.assertTrue((reports_root / "single_case" / "summary.json").exists())
-        self.assertTrue((reports_root / "single_case" / "report.md").exists())
+        run_dir = Path(summary.run_dir)
+        self.assertTrue((run_dir / "chapter_eval_summary.json").exists())
+        self.assertTrue((run_dir / "chapter_eval_report.md").exists())
+        self.assertTrue((run_dir / "summary.json").exists())
         case_result = summary.case_results[0]
         self.assertEqual(case_result.verdict, "pass")
         self.assertIn("romance_tension_score", case_result.scores)
@@ -554,6 +556,7 @@ class RomanceEvalHarnessTests(unittest.TestCase):
         self.assertIn("historical_romance_intrigue", llm.calls[-1][-1].content)
         self.assertIn("restrained_angst", llm.calls[-1][-1].content)
         self.assertTrue(Path(case_result.artifacts.final_text_txt).exists())
+        self.assertTrue(Path(case_result.artifacts.final_text_txt).name == "chapter_text__final.txt")
         self.assertGreater(case_result.cost_metrics.llm_calls, 0)
         self.assertEqual(summary.verdict_counts.get("pass"), 1)
 
@@ -587,7 +590,8 @@ class RomanceEvalHarnessTests(unittest.TestCase):
 
         self.assertIsNotNone(diff)
         assert diff is not None
-        self.assertTrue((reports_root / "candidate" / "diff_vs_baseline.md").exists())
+        self.assertTrue((Path(candidate_summary.run_dir) / "chapter_eval_diff_vs_baseline.md").exists())
+        self.assertTrue((Path(candidate_summary.run_dir) / "diff_vs_baseline.md").exists())
         self.assertGreater(
             diff.average_score_deltas["romance_tension_score"].delta,
             0.0,

@@ -53,6 +53,87 @@ Iteration traceability is part of the optimization standard. After each keep/rej
 - `evals/romance/reports/self_improve_live/report.md`
 - `evals/romance/reports/self_improve_live/iteration_log.md`
 
+Code quality and codebase shape are part of the optimization standard. Novel optimization is not permission to only add more prompts, fields, branches, or helper layers. When a change introduces a new control surface, also inspect what can be removed, merged, or simplified:
+
+- delete stale or superseded prompt text, payload fields, helper scripts, note files, and dead branches
+- merge overlapping concepts instead of keeping two names for the same idea
+- prefer replacement and simplification over additive branching when both can achieve the same quality gain
+- keep ownership boundaries clear so each layer has one reason to exist
+- reject "improvements" that rely on piling up redundant configuration or duplicated logic without consolidation
+
+In short: every novel optimization pass should consider both addition and subtraction, and should leave the repo clearer than before whenever practical.
+
+## Practical Optimization Heuristics
+
+Use these as default, reusable heuristics when improving long-form novel quality. They are intentionally generic and should outlive any single experiment.
+
+### Optimize the highest-leverage layer first
+
+- If the chapter contract is weak, do not expect downstream block prompts or polish rules to rescue the chapter consistently.
+- Prefer fixing the earliest layer that can prevent the failure, instead of repeatedly patching the latest visible symptom.
+- Typical order of leverage is:
+  - chapter contract / brief
+  - block or beat planning
+  - draft execution
+  - patch or review behavior
+  - final polish
+
+### Treat chapter planning as an execution contract, not a summary
+
+- A good chapter brief should specify what must change, what must be paid, and what must not repeat.
+- Prefer concrete contract fields over vague mood labels:
+  - relationship movement
+  - plot movement
+  - cost or consequence
+  - hook type
+  - forbidden repetition
+- If the plan cannot tell later layers what the chapter must accomplish, improve the plan before tuning prose.
+
+### Keep each beat or scene unit responsible for one unique change
+
+- Repetition often comes from adjacent beats carrying the same dramatic job under different wording.
+- Each beat should deliver one non-redundant value turn.
+- Require clear boundaries between beats:
+  - what this beat adds
+  - what this beat must not restate
+  - what consequence it hands to the next beat
+
+### Prefer action-carried revelation over explanation-carried revelation
+
+- Strong prose usually reveals emotion, relationship shift, and clues through action, props, body reaction, dialogue timing, and consequence.
+- Explanatory summary lines are usually lower value than observable dramatic evidence.
+- When optimizing prompts, prefer rules that force information to appear through scene behavior before adding interpretation.
+
+### Isolate style variance instead of forking the whole workflow
+
+- If different tone families need different flavor, isolate that variance in a dedicated style layer whenever possible.
+- Keep the planning, drafting, patching, and evaluation pipeline shared unless there is strong evidence that the architecture itself must split.
+- Tone-specific behavior should usually live in one clear control surface, not be scattered across many prompts.
+
+### Reduce payload duplication before adding stronger instructions
+
+- Repeated or overlapping input fields can cause the model to restate the same meaning in prose.
+- Before adding more prompt rules, inspect whether the current payload repeats the same idea through multiple fields.
+- Prefer a smaller, sharper execution payload over parallel context blocks that all describe the same state.
+
+### Use explicit length and pacing controls
+
+- Long-form quality degrades when beats overrun their dramatic job and start re-narrating completed material.
+- Make length targets, stop conditions, and pacing shape explicit instead of assuming the model will self-regulate.
+- Prefer preserving opening pressure, relationship turns, and end hooks over spending excess length on repeated explanation.
+
+### Validate generalization before promoting a default
+
+- A change that helps one tone family or one case may still be a bad default.
+- Before keeping a framework-level behavior, test at least one contrasting representative case whenever feasible.
+- Do not confuse a strong specialized result with a safe shared default.
+
+### Keep evidence legible and comparable
+
+- Save artifacts in a naming scheme that makes time, model, case, and purpose obvious.
+- Keep live reports focused on operator-facing summaries; archive frozen run outputs separately.
+- Make it easy to compare baseline vs candidate without reconstructing context from memory.
+
 ## Fixed Workflow
 
 ### Step 1: Read the active requirement case and its bound test book
@@ -182,6 +263,7 @@ If uncertain, inspect the changed files and choose targeted invalidation instead
 9. Do not treat frontend regressions as acceptable collateral damage if they block authors or hide debugging information.
 10. Do not leave behind one-off temporary files, debug dumps, or scratch directories when the task is complete.
 11. Do not convert one-off helper orchestration into a permanent repo control path unless the user explicitly asks for it.
+12. Do not treat additive complexity as free; whenever you add a new prompt rule, field, branch, or helper, check whether an older layer can be removed, merged, or renamed away.
 
 ## Foundational Commands
 

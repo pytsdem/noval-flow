@@ -10,6 +10,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
+from evals.romance.report_paths import build_structured_run_dir, normalize_reports_root, write_text_with_aliases
 from evals.romance.step_fixture_loader import iter_step_fixture_paths, load_step_fixture
 from novel_flow.agents.blueprint import BlueprintAgent
 from novel_flow.config import Settings
@@ -315,8 +316,7 @@ class LongArcStep8Evaluator:
 
 class LongArcStep8EvalRunner:
     def __init__(self, *, reports_root: str | Path = "evals/romance/reports") -> None:
-        self.reports_root = Path(reports_root)
-        self.reports_root.mkdir(parents=True, exist_ok=True)
+        self.reports_root, self.runs_root = normalize_reports_root(reports_root)
         self.evaluator = LongArcStep8Evaluator()
 
     def run(
@@ -343,8 +343,15 @@ class LongArcStep8EvalRunner:
                 raise FileNotFoundError(f"Missing step fixtures: {', '.join(missing)}")
 
         run_label = self._sanitize_label(label or ("long_arc_step8_generated" if generate else "long_arc_step8_static"))
-        run_dir = self.reports_root / run_label
-        run_dir.mkdir(parents=True, exist_ok=True)
+        run_paths = build_structured_run_dir(
+            self.reports_root,
+            task_slug="long_arc_step8_eval",
+            label=run_label,
+            case_ids=[path.parent.name for path in paths],
+            provider="analysis",
+            model="step8_generated" if generate else "step8_static",
+        )
+        run_dir = run_paths.run_dir
         reports = [
             self._evaluate_path(
                 path,
@@ -368,11 +375,15 @@ class LongArcStep8EvalRunner:
             average_score=_safe_mean([item.average_score for item in reports]),
             case_reports=reports,
         )
-        json_path = run_dir / "long_arc_step8_summary.json"
-        md_path = run_dir / "report.md"
+        json_path = run_dir / "long_arc_step8_eval_summary.json"
+        md_path = run_dir / "long_arc_step8_eval_report.md"
         summary = summary.model_copy(update={"report_json": str(json_path), "report_markdown": str(md_path)})
-        json_path.write_text(summary.model_dump_json(indent=2), encoding="utf-8")
-        md_path.write_text(render_long_arc_markdown(summary), encoding="utf-8")
+        write_text_with_aliases(
+            json_path,
+            summary.model_dump_json(indent=2),
+            alias_names=("long_arc_step8_summary.json",),
+        )
+        write_text_with_aliases(md_path, render_long_arc_markdown(summary), alias_names=("report.md",))
         return summary
 
     def _evaluate_path(
@@ -392,8 +403,9 @@ class LongArcStep8EvalRunner:
             payload = self._generate_step8(payload, target_chapters=target_chapters, batch_size=batch_size, llm_provider=llm_provider)
             case_dir = run_dir / case_id
             case_dir.mkdir(parents=True, exist_ok=True)
-            generated_path = str(case_dir / "generated_steps.json")
-            Path(generated_path).write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+            generated_file = case_dir / "step8_generated_steps.json"
+            generated_path = str(generated_file)
+            write_text_with_aliases(generated_file, json.dumps(payload, ensure_ascii=False, indent=2), alias_names=("generated_steps.json",))
         return self.evaluator.evaluate_case(
             case_id=case_id,
             source=str(path),

@@ -199,7 +199,7 @@
 - Outcome: `reject`
 - Theme: clean `case01` 已出现 hook 与 pairwise 收益，但还不足以把 beat card 宣称为正文稳定提升
 - Root layer: `clean_requirement_validation`
-- Files changed: `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`, `evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/*`
+- Files changed: `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`, `evals/romance/reports/runs/20260426/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/*`
 - Success snapshot:
   - 在隔离 worktree 里，beat card 版本对 `case01` 的 `hook_score` 从 `8.3 -> 8.75`
   - pairwise comparison 已经偏向 candidate，但 `redundancy` 轻微回撤且 `duration +36.27s`
@@ -212,7 +212,7 @@
 - Outcome: `reject`
 - Theme: 全局追加女主主动性与错位微动作纪律，反而把 beat-card baseline 的含蓄张力打散了
 - Root layer: `write_chapter_full_global_agency_prompt`
-- Files changed: `prompts/writer/write_chapter_full.txt`, `tests/test_writing_chapter_agent.py`（实验后未保留），以及 `evals/romance/reports/runs/20260427/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_agency_microaction_case01/*`
+- Files changed: `prompts/writer/write_chapter_full.txt`, `tests/test_writing_chapter_agent.py`（实验后未保留），以及 `evals/romance/reports/runs/20260427/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_agency_microaction_case01/*`
 - Success snapshot:
   - prompt 回归证明新纪律真实进入了 full chapter prompt
   - 但 clean `case01` 对比 beat-card baseline 后，`pairwise` 明确站回 baseline，且 `redundancy / continuity / hook` 一起回撤
@@ -225,7 +225,7 @@
 - Outcome: `reject`
 - Theme: 把 heroine agency 前移成 beat 级“主动方 / 主动动作”字段，但 `case01` core romance 仍不如 clean beat-card baseline；仅保留 DeepSeek provider 支持
 - Root layer: `beat_planning_initiative_owner_move`
-- Files changed: `src/novel_flow/config.py`, `src/novel_flow/llm/factory.py`, `.env.example`, `README.md`, `tests/test_llm_factory.py`（保留）；以及 `src/novel_flow/models/schemas.py`, `src/novel_flow/services/chapter_tool_payloads.py`, `src/novel_flow/tools/plan_content_blocks.py`, `prompts/writer/plan_content_blocks.txt`, `prompts/writer/write_chapter_full.txt`, `tests/test_schema_and_context.py`, `tests/test_writing_chapter_agent.py`（实验后未保留），并新增 `evals/romance/reports/runs/20260427/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_initiative_case01/*`
+- Files changed: `src/novel_flow/config.py`, `src/novel_flow/llm/factory.py`, `.env.example`, `README.md`, `tests/test_llm_factory.py`（保留）；以及 `src/novel_flow/models/schemas.py`, `src/novel_flow/services/chapter_tool_payloads.py`, `src/novel_flow/tools/plan_content_blocks.py`, `prompts/writer/plan_content_blocks.txt`, `prompts/writer/write_chapter_full.txt`, `tests/test_schema_and_context.py`, `tests/test_writing_chapter_agent.py`（实验后未保留），并新增 `evals/romance/reports/runs/20260427/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_initiative_case01/*`
 - Success snapshot:
   - 新增显式 `deepseek` provider，可独立配置 `DEEPSEEK_API_KEY / MODEL / BASE_URL`，也可作为 `codex` fallback
   - 但 `case01` 对比 clean beat-card baseline 时，`romance_tension 8.5 -> 7.5`、`character_attraction 8.25 -> 7.45`、`hook 8.75 -> 8.5`，`pairwise` 仍站回 baseline
@@ -239,7 +239,7 @@
 - Outcome: `partial_keep`
 - Theme: keep `DeepSeek V4-Pro` as default runtime, reject the local relationship-beat guidance prompt tweak
 - Root layer: `provider_default_switch_and_validation`
-- Files changed: `src/novel_flow/config.py`, `src/novel_flow/llm/factory.py`, `src/novel_flow/server.py`, `evals/romance/harness.py`, `.env.example`, `README.md`, `tests/test_llm_factory.py`, plus `evals/romance/reports/runs/20260427/deepseek__deepseek-v4-pro/romance_case_01_court_return/deepseek_v4_pro_case01_candidate/*`
+- Files changed: `src/novel_flow/config.py`, `src/novel_flow/llm/factory.py`, `src/novel_flow/server.py`, `evals/romance/harness.py`, `.env.example`, `README.md`, `tests/test_llm_factory.py`, plus `evals/romance/reports/runs/20260427/chapter_eval/deepseek__deepseek-v4-pro/romance_case_01_court_return/deepseek_v4_pro_case01_candidate/*`
 - Success snapshot:
   - repo defaults, `codex` fallback priority, UI model dropdown, and eval model naming all now point to `DeepSeek V4-Pro`
   - direct UI fetch confirmed the page now exposes `DeepSeek V4-Pro` as the default model option
@@ -298,12 +298,12 @@
 - Outcome: `partial_keep`
 - Theme: 三案跨类型/跨 tone 正文 smoke 验证 prompt/beat 瘦身后的质量与成本
 - Root layer: `chapter_generation_length_and_beat_overrun`
-- Files changed: `evals/romance/reports/runs/20260428/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.json`, `evals/romance/reports/runs/20260428/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.md`, `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
+- Files changed: `evals/romance/reports/runs/20260428/chapter_eval_rollup/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.json`, `evals/romance/reports/runs/20260428/chapter_eval_rollup/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.md`, `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
 - Success snapshot: all 3 cases passed; `genre_fit` = 9.0 / 9.2 / 9.2, `hook` >= 8.9, `continuity` >= 9.0, `mind_state_consistency` >= 8.9
 - Cost snapshot: `llm_calls` = 17 / 18 / 16, `generation_prompt_chars` = 202700 / 279843 / 240464, `duration_seconds` = 1182.64 / 1639.99 / 1185.57
 - Main issue: output length and late-beat repetition; case02 final `9680 chars`, case03 repeated b003 before patch
 - Next step: enforce `target_chars` as hard cap in draft/revise/final polish, add per-beat stop condition, and prevent later beats from re-narrating delivered events
-- Report ref: `report.md` / `Iteration 22`; detail ref: `evals/romance/reports/runs/20260428/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.md`
+- Report ref: `report.md` / `Iteration 22`; detail ref: `evals/romance/reports/runs/20260428/chapter_eval_rollup/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.md`
 
 ## Iteration 23
 
@@ -417,7 +417,7 @@
 - Outcome: `keep`
 - Title: `Archive live cross-tone summary snapshots into the structured runs tree`
 - Root layer: `live_summary_snapshot_hygiene`
-- Files changed: `tools/organize_romance_reports.py`, `evals/romance/reports/runs/20260428/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.json`, `evals/romance/reports/runs/20260428/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.md`, `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
+- Files changed: `tools/organize_romance_reports.py`, `evals/romance/reports/runs/20260428/chapter_eval_rollup/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.json`, `evals/romance/reports/runs/20260428/chapter_eval_rollup/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.md`, `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
 - Success snapshot:
   - removed the remaining cross-tone prompt/beat slim summary pair from `self_improve_live/`
   - archived them under `runs/20260428/mixed__doubao-plus-deepseek/multi_case__3cases/...`
@@ -439,3 +439,54 @@
   - preserved the note content without misclassifying it as a run artifact
 - Next step: send any future one-off operator notes under `self_improve_live/notes/` by default
 - Report ref: `report.md` / `Iteration 31`
+
+## Iteration 32
+
+- Date: `2026-04-29`
+- Outcome: `keep`
+- Title: `Promote Step8 into a contract layer and rename the active writer path around chapter contracts and beats`
+- Root layer: `chapter_contract_and_beat_semantics`
+- Files changed: `src/novel_flow/models/schemas.py`, `src/novel_flow/models/__init__.py`, `src/novel_flow/tools/plan_content_blocks.py`, `src/novel_flow/services/chapter_tool_payloads.py`, `src/novel_flow/services/novel_context.py`, `src/novel_flow/services/review_aggregator.py`, `src/novel_flow/agents/writer.py`, `src/novel_flow/agents/writing_chapter_agent.py`, `prompts/writer/step_8_chapter_briefs.txt`, `prompts/writer/plan_content_blocks.txt`, `prompts/writer/draft_content_block.txt`, `prompts/writer/review_block_quality.txt`, `prompts/writer/context_sanitization.txt`, `prompts/writer/review_chapter_engine.txt`, `prompts/writer/plan_review_tools.txt`, `prompts/writer/review_instruction_compliance.txt`, `prompts/writer/review_structure_and_continuity.txt`, `prompts/writer/rewrite_by_plan.txt`, `prompts/writer/make_scene_plan.txt`, `prompts/writer/summarize_actual_chapter.txt`, `prompts/critic/check_chapter_engine.txt`, `tests/test_schema_and_context.py`, `tests/test_writing_chapter_agent.py`, `tests/test_romance_eval_harness.py`, `tests/test_eval_case_exporter.py`
+- Success snapshot:
+  - Step8 now carries explicit contract fields: `cost_of_progress / hook_kind / pace_curve / must_not_repeat`
+  - the active planning and drafting path now speaks in `chapter contract / chapter beat` language instead of mixing new semantics with old labels
+  - contract alias properties let downstream layers share one meaning without breaking stored `chapter_briefs` / `content_blocks` payload shapes
+  - prompt encoding check passed and both the targeted writer tests and AGENTS minimum verification passed
+- Next step: replay one requirement case on top of the new contract/beat chain and measure whether the sharper Step8 contract reduces repeated beat purpose and improves prose discipline
+- Report ref: `report.md` / `Iteration 32`
+
+## Iteration 33
+
+- Date: `2026-04-29`
+- Outcome: `keep`
+- Title: `Add a planner-only beat-plan eval so Step8 and plan_content_blocks can be judged before prose generation`
+- Root layer: `upstream_planner_observability`
+- Files changed: `evals/romance/beat_plan_eval.py`, `evals/romance/runners/beat_plan_eval.py`, `tests/test_beat_plan_eval.py`
+- Success snapshot:
+  - new low-cost runner builds real writer context, executes the real `plan_content_blocks`, and scores the resulting beat plan without drafting prose
+  - beat-plan metrics now directly surface overlap, weak contract coverage, and muddy progression before full chapter cost
+  - overlap alerts identify the exact beat pairs and fields that collide
+- Next step: run this planner-only eval on the current contract/beat chain first whenever the target is Step8 or planner quality, then only escalate to prose replay if the beat plan clears
+- Report ref: `report.md` / `Iteration 33`
+
+## Iteration 34
+
+- Date: `2026-04-29`
+- Outcome: `reject_for_default_promotion`
+- Title: `Run the full Step8 -> beat plan -> prose validation on case01 for the new contract chain`
+- Root layer: `contract_to_prose_validation`
+- Files changed: `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
+- Success snapshot:
+  - static Step8 eval on `romance_case_01_court_return` returned `warn` with `average_score = 6.97`
+  - new beat-plan eval on the same case returned `pass` with `average_score = 9.14`
+  - full prose replay landed at `evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_01_court_return/step8_contract_case01_prose/summary.json`
+  - compared with `sequential_beat_case01_deepseek`, prose regressed on the main romance metrics:
+    - `romance_tension_score 9.2 -> 6.5`
+    - `relationship_progression_score 9.0 -> 8.0`
+    - `emotional_resonance_score 9.1 -> 8.5`
+    - `character_attraction_score 9.18 -> 8.25`
+    - `hook_score 9.65 -> 9.25`
+    - `redundancy_score 8.62 -> 7.42`
+    - `continuity_score` held at `9.0`
+- Next step: keep the contract/beat observability foundation, but optimize the `draft_block` execution layer so the sharper contract does not collapse into clue-procedure and investigation prose at the expense of romance tension
+- Report ref: `report.md` / `Iteration 34`

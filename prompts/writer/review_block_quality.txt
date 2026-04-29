@@ -1,4 +1,4 @@
-Review whether this content block works as a live fiction unit. Output JSON only.
+Review whether this chapter beat works as a live fiction unit. Output JSON only.
 
 [Chapter payload]
 {chapter_payload_text}

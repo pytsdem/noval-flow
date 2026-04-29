@@ -12,6 +12,7 @@ from evals.romance.history_models import (
 )
 from evals.romance.loader import load_historical_cases
 from evals.romance.models import RomanceCaseResult, RomanceRunSummary
+from evals.romance.report_paths import build_structured_run_dir, write_text_with_aliases
 from evals.romance.workflow_diagnostics import WorkflowDiagnosticsRunner
 
 
@@ -69,8 +70,15 @@ class StepEvalRunner:
         cases = load_historical_cases(Path(case_dir), case_ids=case_ids)
         eval_results = _eval_result_map(eval_summary)
         run_label = str(label or f"{Path(case_dir).name}_step_eval").strip()
-        run_dir = self.reports_root / run_label
-        run_dir.mkdir(parents=True, exist_ok=True)
+        run_paths = build_structured_run_dir(
+            self.reports_root,
+            task_slug="historical_step_gate_eval",
+            label=run_label,
+            case_ids=[case.case_id for case in cases],
+            provider="analysis",
+            model="gate",
+        )
+        run_dir = run_paths.run_dir
 
         case_reports: list[StepEvalCaseReport] = []
         notes: list[str] = []
@@ -93,11 +101,11 @@ class StepEvalRunner:
             gate_counts={key: verdict_counter.get(key, 0) for key in ("pass", "warn", "blocked")},
             notes=sorted(set(notes)),
         )
-        json_path = run_dir / "step_eval_summary.json"
-        md_path = run_dir / "report.md"
+        json_path = run_dir / "historical_step_gate_eval_summary.json"
+        md_path = run_dir / "historical_step_gate_eval_report.md"
         summary = summary.model_copy(update={"report_json": str(json_path), "report_markdown": str(md_path)})
-        json_path.write_text(summary.model_dump_json(indent=2), encoding="utf-8")
-        md_path.write_text(render_step_eval_markdown(summary), encoding="utf-8")
+        write_text_with_aliases(json_path, summary.model_dump_json(indent=2), alias_names=("step_eval_summary.json",))
+        write_text_with_aliases(md_path, render_step_eval_markdown(summary), alias_names=("report.md",))
         return summary
 
     @staticmethod

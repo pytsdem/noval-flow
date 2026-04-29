@@ -9,6 +9,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
+from evals.romance.report_paths import build_structured_run_dir, normalize_reports_root, write_text_with_aliases
 from evals.romance.step_fixture_loader import iter_step_fixture_paths, load_step_fixture
 from novel_flow.models.schemas import ChapterBrief
 
@@ -252,8 +253,7 @@ STEP_EVALUATORS = [
 
 class StepPlanEvalRunner:
     def __init__(self, *, reports_root: str | Path = "evals/romance/reports") -> None:
-        self.reports_root = Path(reports_root)
-        self.reports_root.mkdir(parents=True, exist_ok=True)
+        self.reports_root, self.runs_root = normalize_reports_root(reports_root)
 
     def run(
         self,
@@ -276,8 +276,15 @@ class StepPlanEvalRunner:
 
         reports = [self._evaluate_case(path) for path in paths]
         run_label = str(label or "step_plan_eval").strip()
-        run_dir = self.reports_root / run_label
-        run_dir.mkdir(parents=True, exist_ok=True)
+        run_paths = build_structured_run_dir(
+            self.reports_root,
+            task_slug="step_plan_static_eval",
+            label=run_label,
+            case_ids=[item.case_id for item in reports],
+            provider="analysis",
+            model="fixture",
+        )
+        run_dir = run_paths.run_dir
 
         verdict_counter = Counter(report.verdict for report in reports)
         average_score = round(mean(report.average_step_score for report in reports), 2) if reports else 0.0
@@ -289,11 +296,15 @@ class StepPlanEvalRunner:
             average_score=average_score,
             case_reports=reports,
         )
-        json_path = run_dir / "step_plan_eval_summary.json"
-        md_path = run_dir / "report.md"
+        json_path = run_dir / "step_plan_static_eval_summary.json"
+        md_path = run_dir / "step_plan_static_eval_report.md"
         summary = summary.model_copy(update={"report_json": str(json_path), "report_markdown": str(md_path)})
-        json_path.write_text(summary.model_dump_json(indent=2), encoding="utf-8")
-        md_path.write_text(render_step_plan_eval_markdown(summary), encoding="utf-8")
+        write_text_with_aliases(
+            json_path,
+            summary.model_dump_json(indent=2),
+            alias_names=("step_plan_eval_summary.json",),
+        )
+        write_text_with_aliases(md_path, render_step_plan_eval_markdown(summary), alias_names=("report.md",))
         return summary
 
     @staticmethod

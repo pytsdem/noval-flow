@@ -63,7 +63,7 @@ Rewrite the full chapter according to the revision plan. Output chapter prose on
 
 Hard rules:
 1. Only fix the requested problems. Do not invent new truth, new character, new clue, or new setting rule.
-2. Do not break chapter brief hard constraints, reader belief, or twist reveal boundaries.
+2. Do not break chapter contract hard constraints, reader belief, or twist reveal boundaries.
 3. Do not explain allowed clues.
 4. Keep continuity with completed chapter memory and time_anchor.
 5. If time changes, write the transition explicitly.

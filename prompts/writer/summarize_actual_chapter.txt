@@ -5,7 +5,7 @@ Keep only ids and schema-required field names in their required format.
 [Chapter text]
 {chapter_text}
 
-[Chapter brief JSON]
+[Chapter contract JSON]
 {chapter_brief_json}
 
 [Chapter payload]

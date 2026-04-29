@@ -1,0 +1,212 @@
+{
+  "comparison_type": "romance_eval",
+  "baseline_label": "cross_tone_smoke_prompt_beat_slim_case01",
+  "candidate_label": "case01_action_first_guard",
+  "average_score_deltas": {
+    "romance_tension_score": {
+      "baseline": 8.5,
+      "candidate": 8.5,
+      "delta": 0.0
+    },
+    "relationship_progression_score": {
+      "baseline": 9.0,
+      "candidate": 8.0,
+      "delta": -1.0
+    },
+    "emotional_resonance_score": {
+      "baseline": 8.5,
+      "candidate": 8.0,
+      "delta": -0.5
+    },
+    "character_attraction_score": {
+      "baseline": 8.67,
+      "candidate": 8.35,
+      "delta": -0.32
+    },
+    "hook_score": {
+      "baseline": 9.1,
+      "candidate": 9.0,
+      "delta": -0.1
+    },
+    "continuity_score": {
+      "baseline": 9.0,
+      "candidate": 8.0,
+      "delta": -1.0
+    },
+    "redundancy_score": {
+      "baseline": 7.82,
+      "candidate": 5.92,
+      "delta": -1.9
+    },
+    "mind_state_consistency_score": {
+      "baseline": 9.0,
+      "candidate": 8.5,
+      "delta": -0.5
+    },
+    "genre_fit_score": {
+      "baseline": 9.0,
+      "candidate": 9.0,
+      "delta": 0.0
+    }
+  },
+  "case_diffs": [
+    {
+      "case_id": "romance_case_01_court_return",
+      "title": "围宫请婚的旧案重逢",
+      "baseline_verdict": "pass",
+      "candidate_verdict": "needs_work",
+      "score_deltas": {
+        "romance_tension_score": {
+          "baseline": 8.5,
+          "candidate": 8.5,
+          "delta": 0.0
+        },
+        "relationship_progression_score": {
+          "baseline": 9.0,
+          "candidate": 8.0,
+          "delta": -1.0
+        },
+        "emotional_resonance_score": {
+          "baseline": 8.5,
+          "candidate": 8.0,
+          "delta": -0.5
+        },
+        "character_attraction_score": {
+          "baseline": 8.67,
+          "candidate": 8.35,
+          "delta": -0.32
+        },
+        "hook_score": {
+          "baseline": 9.1,
+          "candidate": 9.0,
+          "delta": -0.1
+        },
+        "continuity_score": {
+          "baseline": 9.0,
+          "candidate": 8.0,
+          "delta": -1.0
+        },
+        "redundancy_score": {
+          "baseline": 7.82,
+          "candidate": 5.92,
+          "delta": -1.9
+        },
+        "mind_state_consistency_score": {
+          "baseline": 9.0,
+          "candidate": 8.5,
+          "delta": -0.5
+        },
+        "genre_fit_score": {
+          "baseline": 9.0,
+          "candidate": 9.0,
+          "delta": 0.0
+        }
+      },
+      "improved_metrics": [],
+      "declined_metrics": [
+        "relationship_progression_score",
+        "emotional_resonance_score",
+        "character_attraction_score",
+        "continuity_score",
+        "redundancy_score",
+        "mind_state_consistency_score"
+      ],
+      "new_blockers": [],
+      "resolved_blockers": [],
+      "cost_deltas": {
+        "llm_calls": 4.0,
+        "patch_rounds": 1.0,
+        "duration_seconds": 597.48
+      }
+    }
+  ],
+  "improved_metrics": [],
+  "declined_metrics": [
+    "character_attraction_score",
+    "continuity_score",
+    "emotional_resonance_score",
+    "mind_state_consistency_score",
+    "redundancy_score",
+    "relationship_progression_score"
+  ],
+  "blocked_case_delta": 0,
+  "new_blocker_case_ids": [],
+  "resolved_blocker_case_ids": [],
+  "pairwise_preference": {
+    "overall_preferred_side": "baseline",
+    "candidate_case_wins": 0,
+    "baseline_case_wins": 1,
+    "tied_case_count": 0,
+    "weighted_margin": -23.0,
+    "delta_threshold": 0.2,
+    "metric_weights": {
+      "romance_tension_score": 5,
+      "relationship_progression_score": 4,
+      "emotional_resonance_score": 3,
+      "character_attraction_score": 3,
+      "hook_score": 2,
+      "continuity_score": 4,
+      "mind_state_consistency_score": 4,
+      "redundancy_score": 2,
+      "genre_fit_score": 2
+    },
+    "case_preferences": [
+      {
+        "case_id": "romance_case_01_court_return",
+        "title": "围宫请婚的旧案重逢",
+        "preferred_side": "baseline",
+        "weighted_margin": -23,
+        "candidate_wins": [],
+        "baseline_wins": [
+          "relationship_progression_score",
+          "emotional_resonance_score",
+          "character_attraction_score",
+          "continuity_score",
+          "mind_state_consistency_score",
+          "redundancy_score"
+        ],
+        "neutral_metrics": [
+          "romance_tension_score",
+          "hook_score",
+          "genre_fit_score"
+        ],
+        "guard_failures": [
+          "continuity_score",
+          "mind_state_consistency_score",
+          "redundancy_score"
+        ],
+        "cost_flags": [
+          "llm_calls>+3",
+          "duration_seconds>+20"
+        ],
+        "new_blockers": [],
+        "resolved_blockers": []
+      }
+    ]
+  },
+  "decision": {
+    "accept_change": false,
+    "core_metric_delta": -0.38,
+    "guard_metric_delta": -1.13,
+    "average_llm_calls_delta": 4.0,
+    "average_duration_seconds_delta": 597.48,
+    "blocked_case_delta": 0,
+    "new_blocker_case_ids": [],
+    "resolved_blocker_case_ids": [],
+    "pairwise_preferred_side": "baseline",
+    "pairwise_weighted_margin": -23.0,
+    "pairwise_candidate_case_wins": 0,
+    "pairwise_baseline_case_wins": 1,
+    "reasons": [
+      "Core romance objectives did not improve on average.",
+      "Continuity regressed beyond the safety threshold.",
+      "Mind-state consistency regressed beyond the safety threshold.",
+      "Redundancy regressed beyond the safety threshold.",
+      "Average llm_calls cost increased too much.",
+      "Average duration increased too much.",
+      "Pairwise case preference favored the baseline."
+    ]
+  },
+  "baseline_path": "evals\\romance\\reports\\runs\\20260428\\chapter_eval\\doubao__ep-m-20260319020545-gzfvt\\romance_case_01_court_return\\cross_tone_smoke_prompt_beat_slim_case01\\summary.json",
+  "candidate_path": "evals\\romance\\reports\\runs\\20260428\\chapter_eval\\deepseek__deepseek-v4-pro\\romance_case_01_court_return\\case01_action_first_guard\\summary.json"
+}

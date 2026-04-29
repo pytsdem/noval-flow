@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from evals.romance.models import RomanceRunDiff, RomanceRunSummary
+from evals.romance.report_paths import write_text_with_aliases
 
 
 CORE_METRICS = [
@@ -193,18 +194,29 @@ def render_diff_markdown(diff: RomanceRunDiff) -> str:
     return "\n".join(lines).strip() + "\n"
 
 
-def write_summary_files(summary: RomanceRunSummary, run_dir: Path) -> tuple[Path, Path]:
-    json_path = run_dir / "summary.json"
-    md_path = run_dir / "report.md"
-    json_path.write_text(summary.model_dump_json(indent=2), encoding="utf-8")
-    md_path.write_text(render_run_markdown(summary), encoding="utf-8")
+def write_summary_files(
+    summary: RomanceRunSummary,
+    run_dir: Path,
+    *,
+    task_prefix: str = "chapter_eval",
+) -> tuple[Path, Path]:
+    json_path = run_dir / f"{task_prefix}_summary.json"
+    md_path = run_dir / f"{task_prefix}_report.md"
+    write_text_with_aliases(json_path, summary.model_dump_json(indent=2), alias_names=("summary.json",))
+    write_text_with_aliases(md_path, render_run_markdown(summary), alias_names=("report.md",))
     return json_path, md_path
 
 
-def write_diff_files(diff: RomanceRunDiff, run_dir: Path, *, baseline_label: str) -> tuple[Path, Path]:
+def write_diff_files(
+    diff: RomanceRunDiff,
+    run_dir: Path,
+    *,
+    baseline_label: str,
+    task_prefix: str = "chapter_eval",
+) -> tuple[Path, Path]:
     safe_label = baseline_label.replace(" ", "_")
-    json_path = run_dir / f"diff_vs_{safe_label}.json"
-    md_path = run_dir / f"diff_vs_{safe_label}.md"
-    json_path.write_text(diff.model_dump_json(indent=2), encoding="utf-8")
-    md_path.write_text(render_diff_markdown(diff), encoding="utf-8")
+    json_path = run_dir / f"{task_prefix}_diff_vs_{safe_label}.json"
+    md_path = run_dir / f"{task_prefix}_diff_vs_{safe_label}.md"
+    write_text_with_aliases(json_path, diff.model_dump_json(indent=2), alias_names=(f"diff_vs_{safe_label}.json",))
+    write_text_with_aliases(md_path, render_diff_markdown(diff), alias_names=(f"diff_vs_{safe_label}.md",))
     return json_path, md_path

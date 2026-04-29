@@ -115,8 +115,10 @@ class WorkflowDiagnosticsTests(unittest.TestCase):
         summary = WorkflowDiagnosticsRunner(reports_root=reports_root).run(case_dir=case_dir, label="diag_run")
 
         self.assertEqual(summary.case_ids, ["case_001"])
-        self.assertTrue((reports_root / "diag_run" / "diagnostics_summary.json").exists())
-        self.assertTrue((reports_root / "diag_run" / "report.md").exists())
+        run_dir = Path(summary.report_json).parent
+        self.assertTrue((run_dir / "workflow_diagnostics_summary.json").exists())
+        self.assertTrue((run_dir / "workflow_diagnostics_report.md").exists())
+        self.assertTrue((run_dir / "diagnostics_summary.json").exists())
         report = summary.case_reports[0]
         self.assertIn("state_modeling_layer", report.workflow_layer_diagnostics)
         self.assertIn("mind_state_quality_score", report.step_diagnostics)

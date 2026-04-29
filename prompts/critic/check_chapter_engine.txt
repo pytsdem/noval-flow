@@ -3,7 +3,7 @@ Check chapter engine execution. Output JSON only.
 [Chapter payload]
 {chapter_payload_text}
 
-[Chapter brief JSON]
+[Chapter contract JSON]
 {chapter_brief_json}
 
 [Text to check]

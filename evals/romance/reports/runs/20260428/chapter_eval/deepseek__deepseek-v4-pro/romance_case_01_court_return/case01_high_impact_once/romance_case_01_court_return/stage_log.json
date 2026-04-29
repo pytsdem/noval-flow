@@ -1,0 +1,588 @@
+[
+  {
+    "stage": "build_character_mindsets",
+    "character_mindsets": [
+      {
+        "character_id": "谢临川",
+        "character_name": "谢临川",
+        "surface_emotion": "冷硬倨傲，带着报复性的居高临下",
+        "core_emotion": "被旧情与旧恨同时牵制的失衡，试图用掌控重新稳固自己",
+        "primary_goal": "在朝堂上将赐婚落地，把沈知微拖进自己的局里，让满朝目睹她沦为他的战利品",
+        "hidden_need": "从她接旨的瞬间捕获一丝旧日反应，以确认自己仍能动摇她",
+        "fear": "她若平静接下婚约，便证明他从未真正在她心里留下痕迹，这场请婚反而暴露自己的执念",
+        "attitude_to_key_others": {
+          "沈知微": "认定她危险且不可原谅，却无法自控地用审视去拆解她每一寸克制"
+        },
+        "self_control_level": "high",
+        "breaking_point_hint": "若她接旨时用最疏远的称呼，不给他任何破绽，他会在散朝后当众用旧事刺她",
+        "known_but_unspoken": "他清楚自己回京后第一件想确认的不是案子，而是她的眼神有没有变",
+        "misbelief": "他以为这场婚约是自己的报复和掌控，她的痛苦就是他的胜利",
+        "chapter_change_hint": "他发现她接旨时的反应不像被羞辱，倒像终于等到一条生路，这裂缝会让他开始怀疑她另有隐情"
+      },
+      {
+        "character_id": "沈知微",
+        "character_name": "沈知微",
+        "surface_emotion": "把旨意接得纹丝不动的尽礼平静",
+        "core_emotion": "怕他再次被拖进灭口局里，也怕自己一松口就毁掉他最后一点退路",
+        "primary_goal": "在不暴露灭口密令的前提下接住这场赐婚活过今夜",
+        "hidden_need": "确认谢临川请婚到底只是报复，还是无意中给了她退路",
+        "fear": "一旦她表现得像被救，幕后人会立刻改杀谢临川",
+        "attitude_to_key_others": {
+          "谢临川": "越想护住他，表面越只能更冷；认出婚书暗号时心跳漏了半拍，立即用礼数盖住"
+        },
+        "self_control_level": "high",
+        "breaking_point_hint": "若他散朝后拦下她低声说‘你欠我的不止一条命’，她握婚书的指节会骤然泛白",
+        "known_but_unspoken": "她知道赐婚只是把死期从散朝后挪到了婚约的缝隙里，幕后人仍在等一个意外",
+        "misbelief": "她以为只要把请婚演成羞辱，谢临川就不会意识到自己正在救她",
+        "chapter_change_hint": "她会发现婚书暗号出现得远比预期精准，有人对她的行踪了如指掌，婚约本身也在被人预写"
+      }
+    ]
+  },
+  {
+    "stage": "plan_content_blocks",
+    "skill_ids": [
+      "base_style",
+      "reveal_guard",
+      "character_integrity",
+      "time_consistency_guard"
+    ],
+    "block_count": 4,
+    "blocks": [
+      {
+        "block_id": "ch_002.sc_001.b001",
+        "chapter_id": "ch_002",
+        "block_index": 1,
+        "purpose": "Open with immediate pressure: 谢临川跪在殿中谢恩时，第一句话不是求翻案，而是求陛下赐婚。",
+        "characters": [
+          "谢临川",
+          "沈知微"
+        ],
+        "active_lines": [
+          "line_old_case"
+        ],
+        "active_twists": [
+          "twist_false_testimony"
+        ],
+        "scene_goal": "谢临川跪在殿中谢恩时，第一句话不是求翻案，而是求陛下赐婚。",
+        "must_reveal": [
+          "谢临川跪在殿中谢恩时，第一句话不是求翻案，而是求陛下赐婚。"
+        ],
+        "must_hide": [
+          "不能揭示沈知微当年是为了保谢临川才作证",
+          "不能让男主知道灭口密令全貌",
+          "不能让两人提前坦白",
+          "不能把请婚写成甜宠求婚"
+        ],
+        "new_value": "Readers newly feel the opening pressure as an active public trap, not as background setup.",
+        "must_not_repeat": [
+          "不要把旧案背景或人物旧怨整段复述一遍。",
+          "不要在第一块就解释对方真实动机。",
+          "不要把本 beat 写成连续解规则、连续救场或连续走流程；必须出现新的误读、选择、代价、线索功能或关系变价。",
+          "不要把已交付事件换个角度重演；承接后直接推进新结果。"
+        ],
+        "relationship_delta": "关系从未正面碰撞的悬置，转为公开场域里必须立刻接招的压迫。",
+        "clue_delta": "这一块主要落地开场压力，不额外偷跑新 clue。",
+        "must_land_in_action": [
+          "必须把压迫落在动作、礼制或身体反应上。",
+          "不能只用总结句说气氛紧张。"
+        ],
+        "emotional_tone": "让读者感到震惊、压迫、旧恨反噬和一种不该出现却救了命的亲密。",
+        "end_state": "The opening pressure lands and the focal character loses room to recover before speaking.",
+        "human_reaction_target": [
+          "Show one bodily or social restraint before the character tries to speak or act.",
+          "Let at least one witness or supporting character react like a living person under public pressure."
+        ],
+        "cost_shift": "The focal character loses face, time, or the chance to choose a gentler opening move.",
+        "reader_feeling_target": "Readers should feel the pressure closing around the character immediately.",
+        "paragraph_budget": "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长；硬上限 420 中文字符；理想 2~5 段，转折落地即停",
+        "target_chars": 420,
+        "paragraph_shape": [
+          "主动作",
+          "配角反应",
+          "人物细节/情绪泄露",
+          "礼法或环境补压"
+        ],
+        "micro_hook": "The character is forced to answer the opening pressure before they can recover their footing.",
+        "turn_type": "pressure_rise",
+        "character_anchor_line": {
+          "owner": "谢临川",
+          "form": "reaction_line",
+          "surface_function": "用一句短促反应把开场压力钉在场面上。",
+          "hidden_function": "让读者看见角色在被压住时最先守的东西是体面、控制或骨气。",
+          "must_reveal_about_character": "这个人受压时首先暴露出的不是信息，而是性格里的硬处。",
+          "must_not_do": [
+            "不要写成功能性口号。",
+            "不要立刻跟解释性旁白。",
+            "不要为了漂亮把句子抻长。"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Do not open with background summary.",
+          "Do not turn the character into a plot explainer.",
+          "Do not replace scene with pure mental recap.",
+          "硬字数上限 420 中文字符；转折落地后立刻收束。",
+          "不要补第二轮同类动作、同类危机处理或事后心理解释。"
+        ],
+        "character_reentry_mode": {
+          "target_character": "沈知微",
+          "identity_already_known": true,
+          "reentry_strategy": "不要重讲她是谁，用接旨、看禁军、合婚书和称呼变化让读者重新记起她。",
+          "first_signal": "Use a familiar subordinate, object, title, or power arrangement to signal re-entry immediately.",
+          "first_emotional_focus": "沈知微从旧案叛徒，变成全京城眼中被他羞辱、实际上被他暂时护住的未婚妻。",
+          "must_avoid": [
+            "Do not re-explain identity in narrator summary.",
+            "Do not make the re-entry feel like a fresh character introduction."
+          ]
+        },
+        "clue_reveal_mechanism": null,
+        "text": "",
+        "status": "draft",
+        "version": 1
+      },
+      {
+        "block_id": "ch_002.sc_001.b002",
+        "chapter_id": "ch_002",
+        "block_index": 2,
+        "purpose": "Push the chapter object through live pressure: 婚书背面的一枚旧案暗号",
+        "characters": [
+          "谢临川",
+          "沈知微"
+        ],
+        "active_lines": [
+          "line_old_case"
+        ],
+        "active_twists": [
+          "twist_false_testimony"
+        ],
+        "scene_goal": "婚书背面的一枚旧案暗号",
+        "must_reveal": [
+          "婚书背面的一枚旧案暗号",
+          "谢临川成功让赐婚落定，沈知微暂时离开灭口密令的第一刀。"
+        ],
+        "must_hide": [
+          "不能揭示沈知微当年是为了保谢临川才作证",
+          "不能让男主知道灭口密令全貌",
+          "不能让两人提前坦白",
+          "不能把请婚写成甜宠求婚"
+        ],
+        "new_value": "The chapter object becomes newly actionable, but only through a more expensive route.",
+        "must_not_repeat": [
+          "不要再重讲第一块已经建立的公开压迫。",
+          "不要把章目标只讲成抽象信息点。",
+          "不要把本 beat 写成连续解规则、连续救场或连续走流程；必须出现新的误读、选择、代价、线索功能或关系变价。",
+          "不要把已交付事件换个角度重演；承接后直接推进新结果。"
+        ],
+        "relationship_delta": "关系从单纯受压，转为带着程序和筹码差的试探性交锋。",
+        "clue_delta": "让章目标和小回报真正推进，但不要额外偷跑更高层真相。",
+        "must_land_in_action": [
+          "章目标必须通过对话、手续、动作选择或旁人反应被推进。",
+          "不能只写人物心里觉得机会出现了。"
+        ],
+        "emotional_tone": "他原本想让她在众人面前尝到被审判的滋味，却先被她接旨时的平静刺得失控。",
+        "end_state": "The characters gain a small procedural push, but the relational and practical cost rises with it.",
+        "human_reaction_target": [
+          "Show practical calculation, etiquette pressure, or controlled discomfort while the goal advances.",
+          "Make another person's reaction sharpen the cost of that progress."
+        ],
+        "cost_shift": "The focal character pays an extra social, procedural, or emotional price to move the goal forward.",
+        "reader_feeling_target": "Readers should feel that even progress arrives with humiliation, pressure, or residue.",
+        "paragraph_budget": "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长；硬上限 520 中文字符；理想 2~5 段，转折落地即停",
+        "target_chars": 520,
+        "paragraph_shape": [
+          "主动作",
+          "礼法或程序阻力",
+          "配角反应",
+          "代价落点"
+        ],
+        "micro_hook": "The procedural opening appears, but the price of taking it forward is now visible.",
+        "turn_type": "pressure_rise",
+        "character_anchor_line": {
+          "owner": "谢临川",
+          "form": "dialogue",
+          "surface_function": "在推进程序或交涉时留下一句能顶住场面的短句。",
+          "hidden_function": "通过措辞、克制或算计显出角色真正的处事方式。",
+          "must_reveal_about_character": "这个人做事时先算代价、脸面还是底线。",
+          "must_not_do": [
+            "不要只传递剧情信息。",
+            "不要把潜台词解释出来。",
+            "不要写成一整段说理。"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Do not explain why the chapter object matters in abstract summary.",
+          "Do not let dialogue become pure information transfer.",
+          "Do not let action pause for a long strategic recap.",
+          "硬字数上限 520 中文字符；转折落地后立刻收束。",
+          "不要补第二轮同类动作、同类危机处理或事后心理解释。"
+        ],
+        "character_reentry_mode": null,
+        "clue_reveal_mechanism": null,
+        "text": "",
+        "status": "draft",
+        "version": 1
+      },
+      {
+        "block_id": "ch_002.sc_001.b003",
+        "chapter_id": "ch_002",
+        "block_index": 3,
+        "purpose": "Reprice relationship and expose pressure naturally: 沈知微从旧案叛徒，变成全京城眼中被他羞辱、实际上被他暂时护住的未婚妻。",
+        "characters": [
+          "谢临川",
+          "沈知微"
+        ],
+        "active_lines": [
+          "line_old_case"
+        ],
+        "active_twists": [
+          "twist_false_testimony"
+        ],
+        "scene_goal": "谢临川从带兵归京的复仇者，转向用婚约把她拖进自己掌控范围的人。",
+        "must_reveal": [
+          "谢临川从带兵归京的复仇者，转向用婚约把她拖进自己掌控范围的人。",
+          "沈知微从旧案叛徒，变成全京城眼中被他羞辱、实际上被他暂时护住的未婚妻。",
+          "婚书背面有只有沈知微认得的旧案暗号",
+          "谢临川说报复时避开了她腕上的旧伤"
+        ],
+        "must_hide": [
+          "不能揭示沈知微当年是为了保谢临川才作证",
+          "不能让男主知道灭口密令全貌",
+          "不能让两人提前坦白",
+          "不能把请婚写成甜宠求婚"
+        ],
+        "new_value": "Readers newly see the relationship reprice and at least one clue carrier, without getting a clean explanation.",
+        "must_not_repeat": [
+          "不要重复前一块已经完成的程序推进。",
+          "不要把关系变化再用作者总结句重复一遍。",
+          "不要把本 beat 写成连续解规则、连续救场或连续走流程；必须出现新的误读、选择、代价、线索功能或关系变价。",
+          "不要把已交付事件换个角度重演；承接后直接推进新结果。"
+        ],
+        "relationship_delta": "关系重新定价为更危险、更难判断，不能再停留在同一层敌意。",
+        "clue_delta": "至少有一个异常、停顿或反应被看见，但它还不能被解释清楚。",
+        "must_land_in_action": [
+          "关系变化必须落在称呼、停顿、避视、动作失手或他人先发现上。",
+          "不能只说她其实更危险了。"
+        ],
+        "emotional_tone": "他原本想让她在众人面前尝到被审判的滋味，却先被她接旨时的平静刺得失控。",
+        "end_state": "The relationship or emotional angle is repriced on the page and the situation becomes harder to read safely.",
+        "human_reaction_target": [
+          "At least one character should show a small failure of composure, bodily leak, silence, or self-directed sting.",
+          "If a clue appears, let somebody else notice it before the owner explains it."
+        ],
+        "cost_shift": "A clue or shift comes closer, but the relationship becomes harder to trust or manage.",
+        "reader_feeling_target": "Readers should remember the changed relationship pressure more than the raw information itself.",
+        "paragraph_budget": "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长；硬上限 560 中文字符；理想 2~5 段，转折落地即停",
+        "target_chars": 560,
+        "paragraph_shape": [
+          "关系压力",
+          "回避与失手",
+          "他人先发现",
+          "当事人回避解释"
+        ],
+        "micro_hook": "The clue is visible enough to keep the reader moving, but nobody will give it a clean explanation yet.",
+        "turn_type": "clue_shift",
+        "character_anchor_line": {
+          "owner": "谢临川",
+          "form": "narrative_judgment",
+          "surface_function": "在关系重估或线索露出时留下一个贴近视角的判断句。",
+          "hidden_function": "让读者通过这句判断看见人物的误读、偏执、心虚或本能回避。",
+          "must_reveal_about_character": "这个人看人看事时最深的一层偏向或伤口。",
+          "must_not_do": [
+            "不要变成作者总结。",
+            "不要把真相说穿。",
+            "不要马上跟着完整解释。"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Do not summarize the emotional reprice in narrator voice.",
+          "Do not repeat the same cold, pain, blood, or frost image.",
+          "Do not turn a person into a puzzle device.",
+          "硬字数上限 560 中文字符；转折落地后立刻收束。",
+          "不要补第二轮同类动作、同类危机处理或事后心理解释。"
+        ],
+        "character_reentry_mode": null,
+        "clue_reveal_mechanism": {
+          "clue": "婚书背面有只有沈知微认得的旧案暗号",
+          "style": "object_accident",
+          "pressure_source": "殿前赐婚和禁军换防",
+          "surface_trigger": "婚书转呈到沈知微手中时露出背面暗号",
+          "first_noticer": "沈知微",
+          "owner_reaction": "她立刻把婚书合上，用最稳的礼数接旨"
+        },
+        "text": "",
+        "status": "draft",
+        "version": 1
+      },
+      {
+        "block_id": "ch_002.sc_001.b004",
+        "chapter_id": "ch_002",
+        "block_index": 4,
+        "purpose": "Close on changed cost and natural pull: 散朝后，谢临川才发现婚书背面那枚暗号旁边，还有一行极小的字：今夜子时，杀新妇。",
+        "characters": [
+          "谢临川",
+          "沈知微"
+        ],
+        "active_lines": [
+          "line_old_case"
+        ],
+        "active_twists": [
+          "twist_false_testimony"
+        ],
+        "scene_goal": "散朝后，谢临川才发现婚书背面那枚暗号旁边，还有一行极小的字：今夜子时，杀新妇。",
+        "must_reveal": [
+          "散朝后，谢临川才发现婚书背面那枚暗号旁边，还有一行极小的字：今夜子时，杀新妇。"
+        ],
+        "must_hide": [
+          "不能揭示沈知微当年是为了保谢临川才作证",
+          "不能让男主知道灭口密令全貌",
+          "不能让两人提前坦白",
+          "不能把请婚写成甜宠求婚"
+        ],
+        "new_value": "The chapter exits on a changed cost and a next move that is harder to avoid than before.",
+        "must_not_repeat": [
+          "不要把前一块已经落地的关系变化再解释一遍。",
+          "不要把结尾写成预告片口播。",
+          "不要把本 beat 写成连续解规则、连续救场或连续走流程；必须出现新的误读、选择、代价、线索功能或关系变价。",
+          "不要把已交付事件换个角度重演；承接后直接推进新结果。"
+        ],
+        "relationship_delta": "结尾要让关系或局势的代价更难回头，而不是停在同一位置。",
+        "clue_delta": "若有钩子，必须让钩子来自新代价或新事实，而不是重复旧悬念。",
+        "must_land_in_action": [
+          "尾钩必须先打到身体、动作、现场变化或实际损失上。",
+          "不能只用一句解释性判断代替收尾。"
+        ],
+        "emotional_tone": "让读者感到震惊、压迫、旧恨反噬和一种不该出现却救了命的亲密。",
+        "end_state": "The chapter ends with a harder next step and a cost the character cannot step back from easily.",
+        "human_reaction_target": [
+          "Let the ending hit a body, action, breath, or practical loss before it becomes a hook.",
+          "Do not end on summary language alone."
+        ],
+        "cost_shift": "The character loses a buffer, an option, or a person they needed for the next move.",
+        "reader_feeling_target": "Readers should feel the next step has become both urgent and more expensive.",
+        "paragraph_budget": "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长；硬上限 420 中文字符；理想 2~5 段，转折落地即停",
+        "target_chars": 420,
+        "paragraph_shape": [
+          "结果落地",
+          "短反应",
+          "额外代价",
+          "尾钩或未竟动作"
+        ],
+        "micro_hook": "The chapter closes with a next move that is now harder, costlier, and impossible to ignore.",
+        "turn_type": "false_relief",
+        "character_anchor_line": {
+          "owner": "谢临川",
+          "form": "inner_thought",
+          "surface_function": "在结尾变化落地时，用一句短念头或短反应把尾钩钉住。",
+          "hidden_function": "让结尾先立住人，再立住事件。",
+          "must_reveal_about_character": "这个人真正怕失去或真正放不下的东西。",
+          "must_not_do": [
+            "不要写成预告片文案。",
+            "不要只负责抛钩子。",
+            "不要把情绪解释得太满。"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Do not force a trailer-like ending turn.",
+          "Do not flatten the closing beat into explanation.",
+          "Do not spend the final sentence only naming the hook.",
+          "硬字数上限 420 中文字符；转折落地后立刻收束。",
+          "不要补第二轮同类动作、同类危机处理或事后心理解释。"
+        ],
+        "character_reentry_mode": null,
+        "clue_reveal_mechanism": null,
+        "text": "",
+        "status": "draft",
+        "version": 1
+      }
+    ]
+  },
+  {
+    "stage": "draft_beat_1",
+    "block_id": "ch_002.sc_001.b001",
+    "block_index": 1,
+    "chapter_length": 1592,
+    "delivered_beat_summary_text": "[Already delivered in this chapter]\nNo beat has landed yet."
+  },
+  {
+    "stage": "draft_beat_2",
+    "block_id": "ch_002.sc_001.b002",
+    "block_index": 2,
+    "chapter_length": 3233,
+    "delivered_beat_summary_text": "[Already delivered in this chapter]\n\nch_002.sc_001.b001 / Open with immediate pressure: 谢临川跪在殿中谢恩时，第一句话不是求翻案，而是求陛下赐婚。\n- scene_goal: 谢临川跪在殿中谢恩时，第一句话不是求翻案，而是求陛下赐婚。\n- new_value: Readers newly feel the opening pressure as an active public trap, not as background setup.\n- relationship_delta: 关系从未正面碰撞的悬置，转为公开场域里必须立刻接招的压迫。\n- clue_delta: 这一块主要落地开场压力，不额外偷跑新 clue。\n- end_state: The opening pressure lands and the focal character loses room to recover before speaking.\n- micro_hook: The character is forced to answer the opening pressure before they can recover their footing."
+  },
+  {
+    "stage": "draft_beat_3",
+    "block_id": "ch_002.sc_001.b003",
+    "block_index": 3,
+    "chapter_length": 4231,
+    "delivered_beat_summary_text": "[Already delivered in this chapter]\n\nch_002.sc_001.b001 / Open with immediate pressure: 谢临川跪在殿中谢恩时，第一句话不是求翻案，而是求陛下赐婚。\n- scene_goal: 谢临川跪在殿中谢恩时，第一句话不是求翻案，而是求陛下赐婚。\n- new_value: Readers newly feel the opening pressure as an active public trap, not as background setup.\n- relationship_delta: 关系从未正面碰撞的悬置，转为公开场域里必须立刻接招的压迫。\n- clue_delta: 这一块主要落地开场压力，不额外偷跑新 clue。\n- end_state: The opening pressure lands and the focal character loses room to recover before speaking.\n- micro_hook: The character is forced to answer the opening pressure before they can recover their footing.\n\nch_002.sc_001.b002 / Push the chapter object through live pressure: 婚书背面的一枚旧案暗号\n- scene_goal: 婚书背面的一枚旧案暗号\n- new_value: The chapter object becomes newly actionable, but only through a more expensive route.\n- relationship_delta: 关系从单纯受压，转为带着程序和筹码差的试探性交锋。\n- clue_delta: 让章目标和小回报真正推进，但不要额外偷跑更高层真相。\n- end_state: The characters gain a small procedural push, but the relational and practical cost rises with it.\n- micro_hook: The procedural opening appears, but the price of taking it forward is now visible."
+  },
+  {
+    "stage": "draft_beat_4",
+    "block_id": "ch_002.sc_001.b004",
+    "block_index": 4,
+    "chapter_length": 7546,
+    "delivered_beat_summary_text": "[Already delivered in this chapter]\n\nch_002.sc_001.b001 / Open with immediate pressure: 谢临川跪在殿中谢恩时，第一句话不是求翻案，而是求陛下赐婚。\n- scene_goal: 谢临川跪在殿中谢恩时，第一句话不是求翻案，而是求陛下赐婚。\n- new_value: Readers newly feel the opening pressure as an active public trap, not as background setup.\n- relationship_delta: 关系从未正面碰撞的悬置，转为公开场域里必须立刻接招的压迫。\n- clue_delta: 这一块主要落地开场压力，不额外偷跑新 clue。\n- end_state: The opening pressure lands and the focal character loses room to recover before speaking.\n- micro_hook: The character is forced to answer the opening pressure before they can recover their footing.\n\nch_002.sc_001.b002 / Push the chapter object through live pressure: 婚书背面的一枚旧案暗号\n- scene_goal: 婚书背面的一枚旧案暗号\n- new_value: The chapter object becomes newly actionable, but only through a more expensive route.\n- relationship_delta: 关系从单纯受压，转为带着程序和筹码差的试探性交锋。\n- clue_delta: 让章目标和小回报真正推进，但不要额外偷跑更高层真相。\n- end_state: The characters gain a small procedural push, but the relational and practical cost rises with it.\n- micro_hook: The procedural opening appears, but the price of taking it forward is now visible.\n\nch_002.sc_001.b003 / Reprice relationship and expose pressure naturally: 沈知微从旧案叛徒，变成全京城眼中被他羞辱、实际上被他暂时护住的未婚妻。\n- scene_goal: 谢临川从带兵归京的复仇者，转向用婚约把她拖进自己掌控范围的人。\n- new_value: Readers newly see the relationship reprice and at least one clue carrier, without getting a clean explanation.\n- relationship_delta: 关系重新定价为更危险、更难判断，不能再停留在同一层敌意。\n- clue_delta: 至少有一个异常、停顿或反应被看见，但它还不能被解释清楚。\n- end_state: The relationship or emotional angle is repriced on the page and the situation becomes harder to read safely.\n- micro_hook: The clue is visible enough to keep the reader moving, but nobody will give it a clean explanation yet."
+  },
+  {
+    "stage": "write_chapter_full",
+    "mode": "sequential_beat_drafting",
+    "block_count": 4,
+    "chapter_length": 7546
+  },
+  {
+    "stage": "review_iteration_1",
+    "mode": "fast",
+    "skill_ids": [
+      "base_style"
+    ],
+    "tool_calls": [
+      "review_structure_and_continuity",
+      "review_prose_and_humanity"
+    ],
+    "review_reports": {
+      "review_structure_and_continuity": {
+        "pass": false,
+        "issues": [
+          {
+            "issue_id": "I1",
+            "severity": "high",
+            "problem_type": "continuity_break",
+            "reason": "第四章结尾块（b004）计划要求“散朝后，谢临川才发现婚书背面那枚暗号旁边，还有一行极小的字：今夜子时，杀新妇”，但实际章节文字中谢临川并未发现该暗号与字，结尾完全以沈知微为视角，缺失了男主的发现转折，导致关系互动和悬念拉力未按计划扣回谢临川一侧。",
+            "target_blocks": [
+              "ch_002.sc_001.b004"
+            ],
+            "patch_hint": "在现有沈知微结尾前或并行插入一个谢临川的短场景：他在宫门外或与副将会合时，突然从某种渠道（如内侍传话、捡到遗落的帛片、或沈知微故意留下的线索）发现婚书背面暗号与“今夜子时，杀新妇”的字迹，让他意识到婚约背后有灭口阴谋，并立即调整部署，从而与沈知微的行动线形成双线压力。注意保持他不知密令全貌，只能猜出有人要杀新妇，加剧他的紧迫感与控制欲。"
+          }
+        ],
+        "summary": "本章朝堂赐婚场景和压力推进扎实，主要线索与关系重估有效，但结尾块b004未能兑现计划要求的男主发现暗号的情节，导致结尾钩子偏向女主独白，削弱了双人互动和下一章的紧张接驳，需按计划补入谢临川得知灭口暗号的发现时刻。",
+        "passed": false
+      },
+      "review_prose_and_humanity": {
+        "pass": true,
+        "issues": [],
+        "summary": "",
+        "passed": true
+      },
+      "judge_patched_chapter": {
+        "pass": true,
+        "remaining_issues": [],
+        "newly_introduced_issues": [],
+        "recommendation": "本次补丁准确解决了原区块的连续性问题，未引入明显新缺陷，无需再次修补或切换到深度复核。",
+        "llm_pass": true,
+        "passed": true
+      }
+    },
+    "final_judge": {
+      "passed": false,
+      "blocking_reasons": [
+        "本章朝堂赐婚场景和压力推进扎实，主要线索与关系重估有效，但结尾块b004未能兑现计划要求的男主发现暗号的情节，导致结尾钩子偏向女主独白，削弱了双人互动和下一章的紧张接驳，需按计划补入谢临川得知灭口暗号的发现时刻。"
+      ],
+      "metrics": {
+        "review_tools": 2,
+        "issue_count": 1
+      }
+    }
+  },
+  {
+    "stage": "patch_round_1",
+    "patch_round": 1,
+    "patch_plan": {
+      "patch_targets": [
+        {
+          "target_type": "block",
+          "target_id": "ch_002.sc_001.b004",
+          "problem_type": "continuity_break",
+          "goal": "在沈知微行动线的末尾补入谢临川发现婚书暗号的关键转折，使本章结尾同时承载‘沈知微展开自救’与‘谢临川得知杀新妇威胁’的双重拉力，确保散朝后他确实看见那行小字并立刻做出反应。",
+          "instructions": [
+            "在沈知微走进偏殿暗廊、霜爬宫墙的句子之后，新起一段，切换到谢临川视角。",
+            "叙述谢临川已出宫门或正在左掖门军中，一名内侍或副将匆匆呈上一张从尚仪局录册时偷偷摹下的帛片，指出婚书背面有一道奇怪的暗号和一行小字。",
+            "谢临川接过帛片，看清上面‘今夜子时，杀新妇’，瞳孔骤缩，指节攥白，立刻明白有人要在赐婚当夜杀沈知微，并将这道暗号与旧案密札上的标记联系起来（不作详细解释，只写他认出这是‘他们’的笔法）。",
+            "他压抑怒火和烦躁，低声对副将下令：北地旧部立即戒严内宫外围所有甬道，留意女史值庐与内库方向，子时前加两道暗哨。同时要求不得声张，不得让禁军察觉，不可暴露是她。",
+            "内心独白或简短叙述带出他的情绪：‘他本想用婚约困住她羞辱她，却发现自己先被这行字困进了新的危局里。’",
+            "结尾收回他的行动：‘他将帛片收进护腕夹层，翻身上马，沿宫墙外绕向东偏殿方向，霜风割脸，他第一次觉得赐婚这道枷锁，先勒紧的是自己的喉咙。’ 确保不解释灭口密令全貌、不揭示她为保他作证、不让他知道幕后主使，只让他猜到有人要杀新妇并急于阻止，强化复仇与保护交织的矛盾。"
+          ],
+          "local_context_needed": [
+            "prev_block (b003)：谢临川在内库与沈知微冲突后意识到她查的不是婚仪",
+            "next_block (无) b004 是章节最后一块",
+            "relationship_state：谢临川对沈知微恨意仍在，但已在以报复名义护她；沈知微刚从贺姑处离开，正往偏殿暗廊走，婚书在她袖中"
+          ],
+          "source_issue_ids": [
+            "I1"
+          ]
+        }
+      ],
+      "unchanged_blocks": [
+        "ch_002.sc_001.b001",
+        "ch_002.sc_001.b002",
+        "ch_002.sc_001.b003"
+      ],
+      "global_constraints": [
+        "全章保持谢临川的复仇者形象与掌控欲，不能将他写成完全原谅或甜宠态度；发现暗号后产生的保护冲动必须被旧恨和失控感缠绕。",
+        "不能通过这次修补揭示沈知微当年作证的真正原因，不能让谢临川看穿灭口密令的全局，只能让他知道婚约下存在立即的死亡威胁。",
+        "新增段落需与原有沈知微的结尾保持语气和节奏一致，不能突然转变为动作戏或心理独白长段，保持冷冽、压抑、细节推进的风格。",
+        "暗号的来源依然不能解释（只通过摹写帛片呈现），保留‘谁干的、为何在婚书上动手脚’的悬念。",
+        "谢临川的反应必须落在行动和关系重压上，而非纯粹解说信息，结尾要让人感到危机升级和两人距离的某种被迫拉近。"
+      ]
+    },
+    "rewrite_result": {
+      "patched_blocks": [
+        {
+          "block_id": "ch_002.sc_001.b004",
+          "old_summary": "Close on changed cost and natural pull: 散朝后，谢临川才发现婚书背面那枚暗号旁边，还有一行极小的字：今夜子时，杀新妇。",
+          "new_text": "内库的门在身后阖上时，沈知微没有回头。\n\n她沿着宫墙根走，脚步比来时轻，也更快。天光已经褪到殿脊后面，宫道上的石砖冻得发白，远处禁军换岗的铜锣响了两声——戌时初刻。她默数了一下锣点，发现今夜值守的换防比常例早了一刻。\n\n这意味着什么，她不必再翻旧档也清楚。\n\n婚书被她卷成细筒，握在袖中，右手掌心那道血印已经干了，裂开时扯着皮肉微微发紧。她没有松开。\n\n穿过内宫夹道时，一名小黄门提着灯笼迎面跑来，差点撞上她肩头。灯笼晃过去的一瞬，光照见了她袖口露出的婚书一角。小黄门立刻低下头，退到墙边，大气不敢出。\n\n消息已经传遍了。圣上在偏殿亲口赐婚，谢临川当众请旨，她沈知微接旨时行的是最恭顺的跪礼——没有人看见她合上婚书前多看了一眼背面，也没有人知道那道暗号在她眼底只停了半息。\n\n她走到女史值庐门口，推门的手顿了一下。\n\n门没关严。里面有人。\n\n她推门进去。案上那盏没来得及添油的灯已经快燃尽了，火苗贴着铜灯口，一跳一跳地吐着细烟。灯座底下压了一片素帛，帛角露出半个朱砂印戳——是内档房的勘验印。\n\n沈知微没有去动那片帛。她绕过案桌，先看了一眼窗屉的插销。\n\n插销被人拨开过，又草草合上，留下一道半指宽的缝隙。今夜没有风，那道缝隙却正好对准她方才坐过的位置。\n\n“找到你要的东西了？”\n\n声音从门后传来，没有带进脚步声。她不必转身也知道来人是谁。\n\n值庐管事的贺姑女史从暗处走出来，手里端着一碗温过的杏仁茶，脸上是和气而疲倦的笑。那种笑不包含任何好感，也不包含任何敌意——它只是宫里活久了的人递给你的最后一条软绳索：听话，喝下去，就当什么都没看见。\n\n“圣上赐婚是大事，”贺姑把茶碗放在案角，轻轻推到沈知微手边，“你不该散朝后先去内库。有人看见了，话说得不好听。”\n\n沈知微垂眼看着那碗杏仁茶，没有去碰。她认得这个品级的杏仁茶——每年岁末，内务司会给各房管事多发两钱苦杏仁，名义上用来调乳酪，实际上每回都恰好赶在档案覆核之前。喝完一杯，茶渍还没干透，人就已经记不起自己来查过什么。不死，只是脑子里缺了一角。\n\n她以前替贺姑值过一回夜，见过那包油纸裹着的杏仁，碾得不太细，碎壳还留在里面。\n\n“谢将军出宫前，托人带了一句话。”贺姑往后退了半步，站到灯光的边缘，“说婚仪的一切仪程由他亲自督办，请女史不必再查岁报了。”\n\n沈知微抬起眼。\n\n贺姑没有和她对视。老妇人的视线落在婚书露出的那一角绢面上，停在背面隐约透出的墨痕上，瞳仁像是被针尖扎了一下，飞快地移开。\n\n“你回去罢，”贺姑说，声音低下去，低到几乎被快要熄灭的灯芯吞掉，“今夜，不要留在值庐。”\n\n算是一句忠告。\n\n沈知微从袖中抽出婚书，当着贺姑的面放在案上，摊平，让背面朝上。暗号的笔画在灯下并不明显，但旁边那行小字——今夜子时，杀新妇——已经渗进绢丝里，墨迹干了，字却像是自己活了。\n\n贺姑退了半步，更深的半步。老妇人那张和气而疲倦的脸，此刻只剩疲倦。\n\n“你看见了，”沈知微说，声音很轻，“有人也看见你看见了。”\n\n贺姑的嘴唇动了动，没说出话来。\n\n沈知微把婚书重新卷起来，这一次没有收进袖子里，而是直接握在手中。她绕过案桌，走到窗前，取下窗屉的插销，将那扇窗推开半掌宽。冷风灌进来，吹得灯苗往下一伏，又猛地蹿高，把她半边脸的影子投在墙上，像被什么割开了一道口子。\n\n“外头换防早了一刻，”她说，“子时前第二班会换得比平时多。我今夜不留在值庐，但你得替我留一样东西。”\n\n她把一样东西放在案角，压在茶碗旁边。是一枚铜质的女史勘验签，签尾系着半截断绳——那是三年前内库大火时，她从档案架上被拖出来时扯断的。此后贺姑每回见她，总要问一句“签子找着了没”。\n\n今天不问了。\n\n贺姑拿起那枚勘验签，翻过去看了一眼编号，手指忽然攥紧了。她认得这签子的用途：它不止是勘验凭证，还是内库第三层架格的开签。三年前大火烧毁的那些档案里，有一层正好是军粮调运的副册。\n\n“你当年从火里抢出来的不是签子，”贺姑的声音哑了，“是签子能开的那一格里的东西。”\n\n沈知微没有说是，也没有说不是。她拉开门，踩着宫道上的薄霜往外走，走到女史值庐的院门口时，回头看了一眼。\n\n灯灭了。\n\n她走出去时，天已经黑透了。\n\n沈知微穿过女史值庐外的甬道，往东偏殿的方向走。这条道平时夜里不许单人行走，但今晚禁军的哨位全换了，新上岗的人还不认得各房的值夜名单。她低着眉眼，步子不快不慢，把自己走得像个奉命传话的寻常宫人。\n\n走到第三道拐角时，一只手从侧边伸出来，扣住了她小臂。\n\n力道不大，却恰好按在她袖口的血印上。她差一点就叫出声来，但那只手很快松了半寸，只虚虚圈着她小臂，像是怕她跑，又像是怕她疼。\n\n沈知微偏过头，借拐角壁龛的烛光看见了谢临川的半张脸。\n\n他已经换了一身暗青色的常服，肩上落了薄薄一层霜——他在这里站了很久。他的呼吸比方才在内库时稳了，但眼底那层压出来的躁怒还没退干净，剩下一层暗红色的倦意，混着被什么东西反复灼烧过后留下的冷灰。\n\n“你没有回值庐，”他说。不是问句。\n\n沈知微没有挣开他的手，只是把手里的婚书往袖口收了半寸，背面的字仍然朝内，对着她自己的脉搏。\n\n“将军的规矩我已经记住了，”她说，“女史散值后不得私入正殿。我走的是东偏殿甬道，没有违制。”\n\n“你在谈规矩？”\n\n他的声音忽然低下去，低到只有她听得见。\n\n“沈知微，”他说，“散朝后你去了内库，查的不是婚仪岁报。你查的是一份只有你和死人知道在哪儿的东西，对吗？”\n\n她没有接话。他的手指收紧了一点，隔着衣料贴在她小臂内侧的皮肤上，那个位置正好搭在脉搏上。她的脉跳得很快，快到不可能用“天冷”掩饰过去。\n\n他感觉到了。\n\n他的眼神变了——不是暴怒，不是那种居高临下的冷硬。是一种在没有预备的地方突然踩到旧伤的失防。像北地冰河上纵马，马蹄踏到一片看起来厚实的雪壳，实则底下是活水，一踩便碎。\n\n“三年前，你也是这副样子，”他说，“不肯解释，也不肯求饶。”\n\n沈知微抬起眼看着他。他的喉结动了一下，把后半句吞了回去。她想，他吞回去的那句一定是——“如今你还是什么都不肯说。”\n\n但她不能说。\n\n她把婚书从他手边抽出来，往后退了一步，退到避无可避的宫墙根下，脊背贴住冷硬的石砖。远处禁军换岗的靴声一重重碾过来，又碾远了。\n\n“将军今夜如果还有军务，”她轻声说，“该去宫门外了。”\n\n这是逐客令。\n\n谢临川看了她一眼，没有追问。他收回手，把方才按过她脉的那只手负到身后。她看见那只手的指节屈起来，攥得关节发白——和她方才握婚书时一模一样。\n\n他转身往宫门走去，走了大约十步，忽然停住。\n\n“北地旧部会在宫门外驻满三日，”他背对着她说，声量放得很平，像是说给夜色听的，“三日后我交兵符。这三日里，任何从宫中发出来的杀令，都要经过禁军哨道。禁军不认得你的名字，但认得出御前女史制服的绣纹——你最好别在夜里穿它。”\n\n他知道了。\n\n沈知微听懂了。他不知道杀令上写的是她的名字，不知道今夜子时的精准时刻，也不知道那个暗号背后的人到底是谁——但他已经猜到有人要在今夜杀人，杀的人是她。\n\n而他告诉她：别穿女史制服，别在夜里现身，别让禁军认得她。\n\n这是他给出的退路，以报复的腔调，穿着恨意的外衣，站在距离她十步远的夜色里，攥紧拳头，没有回头。\n\n他继续往前走，她靠着墙根站了很久，直到他的背影被宫门吞进去，才把手从袖中抽出来。\n\n掌心的血印绽开了一道新裂口，是被婚书背面的绢边割破的。\n\n她低头看那道小字。\n\n今夜子时，杀新妇。\n\n她又看了一遍。这一次，她没有感到恐惧。她感到一种更尖锐、更不该出现的东西，像冰碴子扎进旧伤里，疼，却让她从长达三年的麻木里猛地醒过来。\n\n他并不知道自己刚刚替她拖住了子时那刀的第一刀。\n\n但她知道——她必须赶在贺姑那碗杏仁茶被换成一碗真正的毒药之前，赶在禁军换防在子时前第二次加岗之前，把三年前她从火里抢出来的那份东西，放回它本该在的位置上。\n\n而唯一能让她在子时后活着走进内库的，就是这道他用来羞辱她的婚约。\n\n她将婚书贴肉收进袖中，走进了偏殿的暗廊。身后宫墙上，冰霜正缓慢地爬上那些被禁军哨火映亮的砖缝。\n\n谢临川刚出左掖门，一名副将便快步上前，将一片从尚仪局录册时偷偷摹下的帛片递进他手中。帛片上没有落款，只照实描下了婚书背面的暗号和那行极小的字——今夜子时，杀新妇。他借着马灯看清的瞬间瞳孔骤缩，指节攥得帛片发响。是他们的笔法，和旧案密札上的标记同出一手。他压住翻涌的躁怒，低声对副将下令：北地旧部立即戒严内宫外围所有甬道，留意女史值庐与内库方向，子时前加两道暗哨，不得声张，不得惊动禁军，更不可暴露是新妇。副将领命退下后，他独自站在马旁，指腹反复碾过那行字。他本想用婚约困住她、羞辱她，却发现自己先被这行字困进了新的危局里。他将帛片收进护腕夹层，翻身上马，沿宫墙外绕向东偏殿方向。霜风割脸，他第一次觉得赐婚这道枷锁，先勒紧的是自己的喉咙。"
+        }
+      ],
+      "merged_chapter_text": "殿前铜鹤嘴里吐出最后的香灰，禁军换防的靴声从右掖门滚过金砖，像碾碎薄冰。\n\n谢临川跪下时，朝靴底仍沾着北地驿道上的雪泥。满殿文武还没等来他为旧案喊出第一声冤，却先听见一句不疾不徐的话落在御前：“罪臣谢临川，请陛下赐婚。”\n\n殿中静了一息，随即私语如蚊蚋四起。他跪得笔直，半分不像罪臣，倒像刚打完胜仗回来讨赏的将军。那道目光越过大殿中线，当着所有人的面落到沈知微身上，不轻不重，像把一把未出鞘的刀慢慢搁在她喉前。\n\n沈知微站在女史列中，指节内收，神情未改。\n\n但方才进门时，她先看了一眼殿门外的禁军位置——右掖门多了两班，左银台少了当日轮值的熟脸。接旨前不过三息，她已经把殿内的刀数点了一遍。十二把，比常朝多了四把。\n\n婚书从御前女官手中转呈过来的时候，她双手去接。丝帛触手微凉，锦缎托底的重量比寻常旨意轻得多。她低头翻过——只翻了正面——目光却钉在了帛角反掀的那一侧。\n\n背面最下方，靠近押印边缘，有人用极细的墨线勾了一道纹。不是礼部钤印，不是内府押号。那纹样她认得。\n\n旧案里死去的司库官，当年递出最后一卷档册时，封泥下就压着同一道暗号。\n\n她合上婚书时用了极稳的手势，指腹压在帛面上，把暗号一并按进掌心。然后她屈膝、垂目、叩首，礼数比殿中任何人都要完整，声线平得像一页未翻动的簿册：“臣女领旨。”\n\n谢临川看着那道伏低的脊背，舌尖抵住了上颚。\n\n他曾设想过无数遍她当众接婚书的反应——颤手、失态、低头避开他的目光。偏偏没有这一种。她接旨接得太干净了，像接过一纸寻常公文，像把赐婚这件事从羞辱里摘干净了，只剩下仪制。他甚至看见她退后时，手指把婚书往袖口深处又送了一寸，动作轻巧而笃定，仿佛那东西不是他给的枷锁，而是她等了很久的护身符。\n\n别碰婚书。那与她无关。\n\n谢临川喉结微滚，指节在膝侧攥紧，冷硬的面具下忽然掀起一股说不清的烦躁。他原本准备的第二句——一句公开的、羞辱性的宣告——忽然失去了落脚点。她没给他那个台阶。她只用一声“臣女”，就把两人的距离拉回到了三年前的那个冬夜：她站在证人席上，用同样的两个字，把军粮旧案的罪名钉进他的案卷里。\n\n他的失控很短，不过眼睫一压，旁人甚至察觉不到呼吸乱了半拍。但他在收回目光时，视线掠过她接旨时露出的腕侧——旧伤仍在，藏在袖缘下不到半寸的地方，浅得只剩一道淡白的疤。\n\n她昨夜被灭口密令盯上，他查得到。\n\n他请婚，原本就是要让这道密令第一刀砍不下去。可此刻看着她把婚书按在掌心里，像抓住一根会割手的救命绳，他才意识到自己把事想得过于简单了。她想活的渴望太强烈了，强烈到不在乎救她的人是不是来讨债的。\n\n禁军换防的号角从午门外传进殿内，低沉的铜音贴着金砖滚过来。谢临川站起身时，官袍下摆在膝弯处压出两道深褶。他没有再看沈知微，却在转身入列时低声吩咐身旁副将：“让北地旧部在左掖门多盯一个人。”\n\n副将怔了一瞬：“盯谁？”\n\n“新妇。”\n\n这个词出口时，他听见自己齿间碾过一丝自己都说不清的意味。\n\n散朝后，谢临川在左银台拦下了沈知微。\n\n她仍将婚书攥在袖中，步子没停，却在离他三步远的地方自己站住了。这是她今日第一次正眼看他，目光从他肩头的风尘移到靴底的雪水，落到他护腕上那根磨损了一半的皮绳上时，瞳孔极快地缩了一下——那根皮绳，是她三年前亲手编的。\n\n“谢将军。”她用最疏远的称呼开口，语气像在念一块冰。\n\n他没有让路，垂下的目光却避开了她的腕侧。“你欠我的不止一条命，”他说，声量压得极低，低到只够她听清，“这道婚约，你还不清。”\n\n沈知微握着婚书的指节骤然泛白。\n\n她没有争辩，没有解释，只是在他侧身让开时从他肩畔擦过。走远之后，她在拐角处停了一息，把手从袖中抽出来，低头看了一眼掌心里被指甲掐出的月牙形血印。\n\n婚书背面那道暗号仍在——旁边还有一行极小的字，笔迹陌生，墨色尚新，像是内府裱婚书时才刚添上去的。\n\n今夜子时，杀新妇。\n\n婚书合上。\n\n不是收起来，不是藏进袖里。是合上——沈知微十指压住锦裱硬面，拇指贴着绢帛边缘，把背面的字按得纹丝不露。她的动作太稳，像接住的不是婚约，是一道不容旁人细看的军令。\n\n“沈女史，”左银台当值的内侍又唤了一声，“婚书须交尚仪局录册，三日后再还本主。”\n\n她颔首。唇边甚至起了一道极浅的弧，像谢恩时该有的礼数弧度。但那弧没有渗进眼底。\n\n她将婚书翻过来，背面朝上，单手递出。内侍伸手来取，她没松。\n\n“我记得录册时要对光验纸，”她声音平稳，像宫中随手翻档，“这道背面裱得不好，不用验了。”\n\n内侍怔了怔，没问她在打什么机锋，只取走婚书离开了。\n\n沈知微立在廊下，等那脚步声转入回廊尽头，才松了袖中攥紧的右手。\n\n掌心四枚月牙形血印，三深一浅。最深那道把皮掐破了，血珠子凝在指甲痕里，还没干透。\n\n她看着血印，没擦。只是把手指一根一根重新蜷回去。\n\n她认得那道暗号。\n\n那是旧案密札上才用的标记，页脚烙一半，页末烙一半，两张纸交叠才能拼出完整图形。当年她查到第三卷档册时，书案后凭空多了一把没封鞘的刀。她没有对任何人说过这件事，包括谢临川。\n\n而现在，这道只该出现在墨档里的暗号，被人用同一种画法写在了御赐婚书的背面。\n\n旁边还压着六个字。\n\n今夜子时，杀新妇。\n\n笔迹陌生，墨色尚新。不是裱婚书前写上的，是裱完以后才添上去的。\n\n她今天接旨前，左右没什么人碰过婚书。除了宣旨太监，只剩殿上捡卷的那一众侍笔内臣。\n\n但她不用查了。\n\n从这个暗号出现在婚书上那刻起，她需要执行的密令就被换了。昨夜是杀她就地，现在是把她的命安进婚约之后——让新妇死在谢临川手里，死在赐婚恩旨罩着的地方。届时只需说她畏罪，连取口供的步骤都可省去。\n\n沈知微把袖口掖紧，抬步往宫外走。\n\n禁军换防的第二遍号角恰好从午门传来，低沉的铜音滚过甬道，把她鞋尖前头的薄霜都震细了。她走得不快，步子落得极实，像每一步都踩在自己的算计时辰上。\n\n穿过金水桥时，她看了一眼左掖门的方向。\n\n谢临川的北地旧部就屯在门外，三日换防之限只剩最后两夜。那些人她不认识，但她知道他的用兵习惯——左掖门到御街西转角之间，必有两道暗哨，一明一暗，藏在官轿驻马处与铺兵换食的茶棚之间。如果他让旧部盯人，盯的不会是宫门，而是她出宫必走的那条窄巷。\n\n她没停。\n\n走到御街西转角，卖糖糕的老妇正收拾蒸笼。沈知微在她面前站住，把几枚铜钱搁在灶角，买了一块，没吃，只捏在手里。老妇认得她，招呼了声“姑娘”，她没应。\n\n她在听身后巷口的脚步。\n\n很轻，间距控制得极稳。不是便装侍卫的靴底数，是北地斥候的步法——每三步会顿半息，那是离鞘之前，在朝堂之外。\n\n是谢临川的人，不单是盯，是在护着。\n\n这个念头进来的时候，她没有觉得被接住，也没有觉得更安全。只是觉得手里的蒸糕烫得太快，油纸被水汽洇透了，贴在她指甲痕撕裂的伤口上，生生辣出一层冷汗。\n\n她把糕换了只手，转到下一道巷口时，偏过脸。\n\n“回去告诉你们将军，”她没看巷深处的阴影，只对着恰好能听见的音量说，“左掖门外盯人，不如盯自己枕边的旧案卷宗。”\n\n巷中没有回声，但她知道那人听见了。\n\n婚书被尚仪局拿走后，录册过目至少要半个时辰。若册本上被人夹进什么，她得在子时之前先进一趟内库。\n\n沈知微把蒸糕放进嘴里，咬了一口。糖馅滚烫，她嚼得极快，没有尝出味。\n\n她不能让他知道那道暗号。至少现在不能。\n\n否则他会立刻把婚约当成为她洗罪的凭据，把旧案翻成她受胁迫的证据。那些话只要在殿上说出来，等不到子时，他就得和她一起死在灭口局里。\n\n她咽下糖糕，把油纸折成小方塞进腰封。\n\n那道极小的字在眼底又浮了一遍——今夜子时，杀新妇。\n\n她抬起头。\n\n天色还亮，冬日的残阳从午门檐角斜打下来，落到她脸上时没什么温度。她沿着御街继续走，路过大理寺旁边的档房巷时，没有拐进去，而是提前在下一条暗巷折身，从那扇从来不上锁的后角门进了内库。\n\n这一次，她没有找旧案档册。\n\n她找的是一份三年前的婚仪岁报。\n\n内库的尘味比平时更重，像是有人在她之前刚刚翻动过旧册。\n\n沈知微没有点灯，沿着仅有的几扇高窗漏下的薄光摸到第三列柜架。婚仪岁报按年份装订，三年前的那卷搁在最底层，纸脊已经发软，抽出来时在指腹下碎了一层屑。她没敢用力，托着册脊跪下去，就着那点将尽的天光翻到冬月。\n\n页面空白处被人用炭条写过字，又被擦去，只留下浅浅的压痕。她将纸面斜过来，一个字一个字地辨。不是灭口密令的字迹，是更早的——像是三年前殿上录婚仪用度时随手记上的备注。她一直往下扫，扫到某一行时，手指突然顿住。\n\n——甲字二号库，灯油七斤。下附一行小注：备长夜录。\n\n长夜录。\n\n她闭了闭眼，喉咙里泛起方才吞下的糖糕那股钝甜。内库守夜人每逢岁末录册，确有常例备油，但三年前的婚仪岁报里不会有这条。有人在借旧档传话。\n\n她把岁报合上，刚直起腰，身侧的柜架便被一道人影截断了光。\n\n谢临川就站在距她三步远的过道口，朝服未换，靴底沾着的雪水已经渗进库房粗毡，洇出一道窄窄的暗痕。他没佩剑，左肩微侧着——那是北地回京后还没卸下来的习惯，留出拔刀的第一寸空间。\n\n“查婚仪？”他声音不高，却在这片安静的灰尘里像刀背刮过旧骨，“沈知微，你什么时候在意过礼数了。”\n\n她没转身，只把岁报推进原位，用袖口擦掉指上纸屑。“圣上赐婚，”她说，“女史核验仪制是分内事。”\n\n他没有接她的官称。\n\n她感觉到他的目光从她颈后慢慢移到她垂着的右手上——那道袖口仍未掩住掌心血印。\n\n他说：“我方才在殿外说过，这道婚约你还不清。”\n\n停了一息，又补了一句：“我也不会让你轻易还清。”\n\n沈知微终于转过身。他眼底有连日行军压出的血丝，却没有战场上该有的那种冷。那是一种被什么东西困住、又不得不装作掌控的躁怒。她的平静刺到的不是他的恨，是他预备好要收回的那一部分旧情。\n\n她垂下目光，从他身侧错开半步。\n\n“将军的意思，”她轻声说，“沈知微明白了。”\n\n她走过去时，婚书被他抬手按住一角。他没看背面，只看着她。\n\n“你欠我的不止一条命，”他说，“这场婚事怎么走，你得按我的规矩来。”\n\n她握婚书的指节骤然泛白，却没有挣开。\n\n他最终还是松了手。\n\n她踏出内库时，天已经擦黑。婚书被她压在掌心，背面那行小字像一根会割手的救命绳。她想，他并不知道自己刚刚替她拖住了子时那刀的第一刀。\n\n而他站在黑暗的库房里，踩着那卷没被拿走的婚仪岁报，忽然意识到她来找的，根本不是婚仪。\n\n内库的门在身后阖上时，沈知微没有回头。\n\n她沿着宫墙根走，脚步比来时轻，也更快。天光已经褪到殿脊后面，宫道上的石砖冻得发白，远处禁军换岗的铜锣响了两声——戌时初刻。她默数了一下锣点，发现今夜值守的换防比常例早了一刻。\n\n这意味着什么，她不必再翻旧档也清楚。\n\n婚书被她卷成细筒，握在袖中，右手掌心那道血印已经干了，裂开时扯着皮肉微微发紧。她没有松开。\n\n穿过内宫夹道时，一名小黄门提着灯笼迎面跑来，差点撞上她肩头。灯笼晃过去的一瞬，光照见了她袖口露出的婚书一角。小黄门立刻低下头，退到墙边，大气不敢出。\n\n消息已经传遍了。圣上在偏殿亲口赐婚，谢临川当众请旨，她沈知微接旨时行的是最恭顺的跪礼——没有人看见她合上婚书前多看了一眼背面，也没有人知道那道暗号在她眼底只停了半息。\n\n她走到女史值庐门口，推门的手顿了一下。\n\n门没关严。里面有人。\n\n她推门进去。案上那盏没来得及添油的灯已经快燃尽了，火苗贴着铜灯口，一跳一跳地吐着细烟。灯座底下压了一片素帛，帛角露出半个朱砂印戳——是内档房的勘验印。\n\n沈知微没有去动那片帛。她绕过案桌，先看了一眼窗屉的插销。\n\n插销被人拨开过，又草草合上，留下一道半指宽的缝隙。今夜没有风，那道缝隙却正好对准她方才坐过的位置。\n\n“找到你要的东西了？”\n\n声音从门后传来，没有带进脚步声。她不必转身也知道来人是谁。\n\n值庐管事的贺姑女史从暗处走出来，手里端着一碗温过的杏仁茶，脸上是和气而疲倦的笑。那种笑不包含任何好感，也不包含任何敌意——它只是宫里活久了的人递给你的最后一条软绳索：听话，喝下去，就当什么都没看见。\n\n“圣上赐婚是大事，”贺姑把茶碗放在案角，轻轻推到沈知微手边，“你不该散朝后先去内库。有人看见了，话说得不好听。”\n\n沈知微垂眼看着那碗杏仁茶，没有去碰。她认得这个品级的杏仁茶——每年岁末，内务司会给各房管事多发两钱苦杏仁，名义上用来调乳酪，实际上每回都恰好赶在档案覆核之前。喝完一杯，茶渍还没干透，人就已经记不起自己来查过什么。不死，只是脑子里缺了一角。\n\n她以前替贺姑值过一回夜，见过那包油纸裹着的杏仁，碾得不太细，碎壳还留在里面。\n\n“谢将军出宫前，托人带了一句话。”贺姑往后退了半步，站到灯光的边缘，“说婚仪的一切仪程由他亲自督办，请女史不必再查岁报了。”\n\n沈知微抬起眼。\n\n贺姑没有和她对视。老妇人的视线落在婚书露出的那一角绢面上，停在背面隐约透出的墨痕上，瞳仁像是被针尖扎了一下，飞快地移开。\n\n“你回去罢，”贺姑说，声音低下去，低到几乎被快要熄灭的灯芯吞掉，“今夜，不要留在值庐。”\n\n算是一句忠告。\n\n沈知微从袖中抽出婚书，当着贺姑的面放在案上，摊平，让背面朝上。暗号的笔画在灯下并不明显，但旁边那行小字——今夜子时，杀新妇——已经渗进绢丝里，墨迹干了，字却像是自己活了。\n\n贺姑退了半步，更深的半步。老妇人那张和气而疲倦的脸，此刻只剩疲倦。\n\n“你看见了，”沈知微说，声音很轻，“有人也看见你看见了。”\n\n贺姑的嘴唇动了动，没说出话来。\n\n沈知微把婚书重新卷起来，这一次没有收进袖子里，而是直接握在手中。她绕过案桌，走到窗前，取下窗屉的插销，将那扇窗推开半掌宽。冷风灌进来，吹得灯苗往下一伏，又猛地蹿高，把她半边脸的影子投在墙上，像被什么割开了一道口子。\n\n“外头换防早了一刻，”她说，“子时前第二班会换得比平时多。我今夜不留在值庐，但你得替我留一样东西。”\n\n她把一样东西放在案角，压在茶碗旁边。是一枚铜质的女史勘验签，签尾系着半截断绳——那是三年前内库大火时，她从档案架上被拖出来时扯断的。此后贺姑每回见她，总要问一句“签子找着了没”。\n\n今天不问了。\n\n贺姑拿起那枚勘验签，翻过去看了一眼编号，手指忽然攥紧了。她认得这签子的用途：它不止是勘验凭证，还是内库第三层架格的开签。三年前大火烧毁的那些档案里，有一层正好是军粮调运的副册。\n\n“你当年从火里抢出来的不是签子，”贺姑的声音哑了，“是签子能开的那一格里的东西。”\n\n沈知微没有说是，也没有说不是。她拉开门，踩着宫道上的薄霜往外走，走到女史值庐的院门口时，回头看了一眼。\n\n灯灭了。\n\n她走出去时，天已经黑透了。\n\n沈知微穿过女史值庐外的甬道，往东偏殿的方向走。这条道平时夜里不许单人行走，但今晚禁军的哨位全换了，新上岗的人还不认得各房的值夜名单。她低着眉眼，步子不快不慢，把自己走得像个奉命传话的寻常宫人。\n\n走到第三道拐角时，一只手从侧边伸出来，扣住了她小臂。\n\n力道不大，却恰好按在她袖口的血印上。她差一点就叫出声来，但那只手很快松了半寸，只虚虚圈着她小臂，像是怕她跑，又像是怕她疼。\n\n沈知微偏过头，借拐角壁龛的烛光看见了谢临川的半张脸。\n\n他已经换了一身暗青色的常服，肩上落了薄薄一层霜——他在这里站了很久。他的呼吸比方才在内库时稳了，但眼底那层压出来的躁怒还没退干净，剩下一层暗红色的倦意，混着被什么东西反复灼烧过后留下的冷灰。\n\n“你没有回值庐，”他说。不是问句。\n\n沈知微没有挣开他的手，只是把手里的婚书往袖口收了半寸，背面的字仍然朝内，对着她自己的脉搏。\n\n“将军的规矩我已经记住了，”她说，“女史散值后不得私入正殿。我走的是东偏殿甬道，没有违制。”\n\n“你在谈规矩？”\n\n他的声音忽然低下去，低到只有她听得见。\n\n“沈知微，”他说，“散朝后你去了内库，查的不是婚仪岁报。你查的是一份只有你和死人知道在哪儿的东西，对吗？”\n\n她没有接话。他的手指收紧了一点，隔着衣料贴在她小臂内侧的皮肤上，那个位置正好搭在脉搏上。她的脉跳得很快，快到不可能用“天冷”掩饰过去。\n\n他感觉到了。\n\n他的眼神变了——不是暴怒，不是那种居高临下的冷硬。是一种在没有预备的地方突然踩到旧伤的失防。像北地冰河上纵马，马蹄踏到一片看起来厚实的雪壳，实则底下是活水，一踩便碎。\n\n“三年前，你也是这副样子，”他说，“不肯解释，也不肯求饶。”\n\n沈知微抬起眼看着他。他的喉结动了一下，把后半句吞了回去。她想，他吞回去的那句一定是——“如今你还是什么都不肯说。”\n\n但她不能说。\n\n她把婚书从他手边抽出来，往后退了一步，退到避无可避的宫墙根下，脊背贴住冷硬的石砖。远处禁军换岗的靴声一重重碾过来，又碾远了。\n\n“将军今夜如果还有军务，”她轻声说，“该去宫门外了。”\n\n这是逐客令。\n\n谢临川看了她一眼，没有追问。他收回手，把方才按过她脉的那只手负到身后。她看见那只手的指节屈起来，攥得关节发白——和她方才握婚书时一模一样。\n\n他转身往宫门走去，走了大约十步，忽然停住。\n\n“北地旧部会在宫门外驻满三日，”他背对着她说，声量放得很平，像是说给夜色听的，“三日后我交兵符。这三日里，任何从宫中发出来的杀令，都要经过禁军哨道。禁军不认得你的名字，但认得出御前女史制服的绣纹——你最好别在夜里穿它。”\n\n他知道了。\n\n沈知微听懂了。他不知道杀令上写的是她的名字，不知道今夜子时的精准时刻，也不知道那个暗号背后的人到底是谁——但他已经猜到有人要在今夜杀人，杀的人是她。\n\n而他告诉她：别穿女史制服，别在夜里现身，别让禁军认得她。\n\n这是他给出的退路，以报复的腔调，穿着恨意的外衣，站在距离她十步远的夜色里，攥紧拳头，没有回头。\n\n他继续往前走，她靠着墙根站了很久，直到他的背影被宫门吞进去，才把手从袖中抽出来。\n\n掌心的血印绽开了一道新裂口，是被婚书背面的绢边割破的。\n\n她低头看那道小字。\n\n今夜子时，杀新妇。\n\n她又看了一遍。这一次，她没有感到恐惧。她感到一种更尖锐、更不该出现的东西，像冰碴子扎进旧伤里，疼，却让她从长达三年的麻木里猛地醒过来。\n\n他并不知道自己刚刚替她拖住了子时那刀的第一刀。\n\n但她知道——她必须赶在贺姑那碗杏仁茶被换成一碗真正的毒药之前，赶在禁军换防在子时前第二次加岗之前，把三年前她从火里抢出来的那份东西，放回它本该在的位置上。\n\n而唯一能让她在子时后活着走进内库的，就是这道他用来羞辱她的婚约。\n\n她将婚书贴肉收进袖中，走进了偏殿的暗廊。身后宫墙上，冰霜正缓慢地爬上那些被禁军哨火映亮的砖缝。\n\n谢临川刚出左掖门，一名副将便快步上前，将一片从尚仪局录册时偷偷摹下的帛片递进他手中。帛片上没有落款，只照实描下了婚书背面的暗号和那行极小的字——今夜子时，杀新妇。他借着马灯看清的瞬间瞳孔骤缩，指节攥得帛片发响。是他们的笔法，和旧案密札上的标记同出一手。他压住翻涌的躁怒，低声对副将下令：北地旧部立即戒严内宫外围所有甬道，留意女史值庐与内库方向，子时前加两道暗哨，不得声张，不得惊动禁军，更不可暴露是新妇。副将领命退下后，他独自站在马旁，指腹反复碾过那行字。他本想用婚约困住她、羞辱她，却发现自己先被这行字困进了新的危局里。他将帛片收进护腕夹层，翻身上马，沿宫墙外绕向东偏殿方向。霜风割脸，他第一次觉得赐婚这道枷锁，先勒紧的是自己的喉咙。",
+      "patch_report": [
+        {
+          "block_id": "ch_002.sc_001.b004",
+          "applied": true,
+          "notes": "已按 patch plan 重写目标 block。"
+        }
+      ]
+    },
+    "judge_result": {
+      "pass": true,
+      "remaining_issues": [],
+      "newly_introduced_issues": [],
+      "recommendation": "本次补丁准确解决了原区块的连续性问题，未引入明显新缺陷，无需再次修补或切换到深度复核。",
+      "llm_pass": true,
+      "passed": true
+    },
+    "final_judge": {
+      "passed": true,
+      "blocking_reasons": [],
+      "metrics": {
+        "patch_round": 1,
+        "llm_pass_flag": true,
+        "remaining_issue_count": 0,
+        "introduced_issue_count": 0
+      },
+      "recommendation": "本次补丁准确解决了原区块的连续性问题，未引入明显新缺陷，无需再次修补或切换到深度复核。"
+    }
+  },
+  {
+    "stage": "final_polish",
+    "skill_ids": [
+      "base_style",
+      "chapter_finalize"
+    ],
+    "chapter_length": 7348
+  },
+  {
+    "stage": "format_adjustment",
+    "chapter_length": 7350,
+    "format_issues": [
+      "Separated a dense paragraph to keep dialogue or reaction beats readable without changing plot facts.",
+      "Normalized blank lines while preserving short-paragraph rhythm and emotional pacing."
+    ]
+  },
+  {
+    "stage": "summarize_actual_chapter",
+    "chapter_id": "ch_002"
+  }
+]

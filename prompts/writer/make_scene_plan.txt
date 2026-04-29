@@ -12,7 +12,7 @@ Generate a scene_plan for the current chapter. Output JSON only.
 [Style card]
 {style_card_text}
 
-[Chapter brief JSON]
+[Chapter contract JSON]
 {chapter_brief_json}
 
 Output format:

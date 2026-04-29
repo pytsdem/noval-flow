@@ -23,8 +23,10 @@ class StepPlanEvalTests(unittest.TestCase):
 
         self.assertEqual(len(summary.case_reports), 3)
         self.assertGreaterEqual(summary.average_score, 6.5)
-        self.assertTrue((self.root / "reports" / "active_step_plan" / "step_plan_eval_summary.json").exists())
-        self.assertTrue((self.root / "reports" / "active_step_plan" / "report.md").exists())
+        run_dir = Path(summary.report_json).parent
+        self.assertTrue((run_dir / "step_plan_static_eval_summary.json").exists())
+        self.assertTrue((run_dir / "step_plan_static_eval_report.md").exists())
+        self.assertTrue((run_dir / "step_plan_eval_summary.json").exists())
         for case_report in summary.case_reports:
             self.assertEqual(len(case_report.step_reports), 8)
             self.assertIn(case_report.verdict, {"pass", "warn"})

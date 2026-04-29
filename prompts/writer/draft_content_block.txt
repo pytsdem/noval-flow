@@ -1,4 +1,4 @@
-Write one chapter beat. Output prose only in Simplified Chinese.
+Write one chapter beat under the active chapter contract. Output prose only in Simplified Chinese.
 
 [chapter_goal]
 {chapter_goal}
@@ -30,13 +30,14 @@ Rules:
 3. Make `turn` visible through action, dialogue, body, object handling, or witness reaction.
 4. End at `end`; leave a local pull without trailer-like explanation.
 5. Treat `avoid` as hard anti-repeat constraints.
-6. Use `hard_facts` for boundaries only; do not dump them into prose.
-7. Use `character_state` to preserve restraint, misbelief, and current emotional temperature.
-8. Use `style_rules` as the story-direction style layer; keep other logic stable and let style differences live there first.
-9. Keep paragraphs readable: one dominant action, reaction, or observation per paragraph.
-10. Treat `target_length` as a hard upper bound, not a suggestion. Write shorter if the beat has landed.
-11. Stop once `turn` and `end` have landed. Do not add after-beat commentary, scene replay, or a second mini-beat.
-12. Do not steal later beats' jobs.
+6. Treat `chapter_goal` as the active contract: mission, cost, and final hook already exist there; this beat should only cash one piece of that contract.
+7. Use `hard_facts` for boundaries only; do not dump them into prose.
+8. Use `character_state` to preserve restraint, misbelief, and current emotional temperature.
+9. Use `style_rules` as the story-direction style layer; keep other logic stable and let style differences live there first.
+10. Keep paragraphs readable: one dominant action, reaction, or observation per paragraph.
+11. Treat `target_length` as a hard upper bound, not a suggestion. Write shorter if the beat has landed.
+12. Stop once `turn` and `end` have landed. Do not add after-beat commentary, scene replay, or a second mini-beat.
+13. Do not steal later beats' jobs.
 
 中文补充：
 1. 当前 beat 必须承接已写正文，不要像重新开章。

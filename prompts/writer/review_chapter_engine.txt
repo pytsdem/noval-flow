@@ -1,6 +1,6 @@
 Review whether the chapter engine promised by the brief is actually functioning on the page. Output JSON only.
 
-[Step 8 chapter brief]
+[Step 8 chapter contract]
 {step_8_chapter_brief_text}
 
 [Chapter payload]

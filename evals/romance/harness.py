@@ -35,6 +35,7 @@ from evals.romance.models import (
     RomanceRunSummary,
     ScoreDelta,
 )
+from evals.romance.report_paths import build_structured_run_dir, normalize_reports_root, write_text_with_aliases
 from evals.romance.reporting import CORE_METRICS, write_diff_files, write_summary_files
 
 
@@ -234,8 +235,7 @@ class RomanceEvalHarness:
         self.llm_client = InstrumentedLLMClient(base_llm)
         self.mode = str(mode or "fast").strip().lower()
         self.case_dir = Path(case_dir or Path(__file__).resolve().parent / "cases")
-        self.reports_root = Path(reports_root or Path(__file__).resolve().parent / "reports")
-        self.reports_root.mkdir(parents=True, exist_ok=True)
+        self.reports_root, self.runs_root = normalize_reports_root(reports_root)
 
     def run(
         self,
@@ -246,8 +246,17 @@ class RomanceEvalHarness:
     ) -> tuple[RomanceRunSummary, RomanceRunDiff | None]:
         cases = load_cases(self.case_dir, case_ids=case_ids)
         run_label = _sanitize_label(label or f"{self.mode}_{datetime.now().strftime('%Y%m%d_%H%M%S')}")
-        run_dir = self.reports_root / run_label
-        run_dir.mkdir(parents=True, exist_ok=True)
+        provider_name = self.settings.llm_provider
+        model_name = self._effective_model_name()
+        run_paths = build_structured_run_dir(
+            self.reports_root,
+            task_slug="chapter_eval",
+            label=run_label,
+            case_ids=[case.case_id for case in cases],
+            provider=provider_name,
+            model=model_name,
+        )
+        run_dir = run_paths.run_dir
 
         results: list[RomanceCaseResult] = []
         run_errors: list[str] = []
@@ -262,8 +271,8 @@ class RomanceEvalHarness:
         summary = RomanceRunSummary(
             label=run_label,
             mode=self.mode,
-            provider=self.settings.llm_provider,
-            model=self._effective_model_name(),
+            provider=provider_name,
+            model=model_name,
             run_dir=str(run_dir),
             case_ids=[case.case_id for case in cases],
             average_scores=self._average_scores(results),
@@ -280,14 +289,14 @@ class RomanceEvalHarness:
                 "report_markdown": str(md_path),
             }
         )
-        json_path.write_text(summary.model_dump_json(indent=2), encoding="utf-8")
+        write_text_with_aliases(json_path, summary.model_dump_json(indent=2), alias_names=("summary.json",))
 
         diff: RomanceRunDiff | None = None
         if compare_to:
             diff = compare_run_summaries(compare_to, summary)
             write_diff_files(diff, run_dir, baseline_label=diff.baseline_label)
             summary = summary.model_copy(update={"compared_to": str(compare_to)})
-            json_path.write_text(summary.model_dump_json(indent=2), encoding="utf-8")
+            write_text_with_aliases(json_path, summary.model_dump_json(indent=2), alias_names=("summary.json",))
         return summary, diff
 
     def assemble_existing_run(
@@ -302,10 +311,9 @@ class RomanceEvalHarness:
             raise FileNotFoundError(f"Run directory does not exist: {run_path}")
 
         results: list[RomanceCaseResult] = []
-        for result_path in sorted(run_path.glob("*/result.json")):
-            results.append(
-                RomanceCaseResult.model_validate_json(result_path.read_text(encoding="utf-8"))
-            )
+        result_paths = sorted(run_path.glob("*/chapter_eval_case_result.json")) or sorted(run_path.glob("*/result.json"))
+        for result_path in result_paths:
+            results.append(RomanceCaseResult.model_validate_json(result_path.read_text(encoding="utf-8")))
         verdict_counts, blocked_case_ids, optimization_target_counts = self._summarize_results(results)
         summary = RomanceRunSummary(
             label=_sanitize_label(label or run_path.name),
@@ -327,21 +335,21 @@ class RomanceEvalHarness:
                 "report_markdown": str(md_path),
             }
         )
-        json_path.write_text(summary.model_dump_json(indent=2), encoding="utf-8")
+        write_text_with_aliases(json_path, summary.model_dump_json(indent=2), alias_names=("summary.json",))
 
         diff: RomanceRunDiff | None = None
         if compare_to:
             diff = compare_run_summaries(compare_to, summary)
             write_diff_files(diff, run_path, baseline_label=diff.baseline_label)
             summary = summary.model_copy(update={"compared_to": str(compare_to)})
-            json_path.write_text(summary.model_dump_json(indent=2), encoding="utf-8")
+            write_text_with_aliases(json_path, summary.model_dump_json(indent=2), alias_names=("summary.json",))
         return summary, diff
 
     def _run_case(self, *, case: RomanceEvalCase, run_dir: Path) -> RomanceCaseResult:
         case_dir = run_dir / case.case_id
         case_dir.mkdir(parents=True, exist_ok=True)
-        case_input_path = case_dir / "case_input.json"
-        case_input_path.write_text(case.model_dump_json(indent=2), encoding="utf-8")
+        case_input_path = case_dir / "chapter_eval_case_input.json"
+        write_text_with_aliases(case_input_path, case.model_dump_json(indent=2), alias_names=("case_input.json",))
 
         generation_start = len(self.llm_client.records)
         started_at = time.perf_counter()
@@ -349,8 +357,8 @@ class RomanceEvalHarness:
 
         writer_context = self._build_writer_context(case)
         writer_context_json = _json_text(_writer_context_to_dict(writer_context))
-        writer_context_path = case_dir / "writer_context.json"
-        writer_context_path.write_text(writer_context_json, encoding="utf-8")
+        writer_context_path = case_dir / "chapter_eval_writer_context.json"
+        write_text_with_aliases(writer_context_path, writer_context_json, alias_names=("writer_context.json",))
 
         registry = InstrumentedToolRegistry(
             ToolRegistry.build_default(
@@ -380,14 +388,14 @@ class RomanceEvalHarness:
         generation_calls = len(self.llm_client.records) - generation_start
 
         execution_json = execution.model_dump_json(indent=2)
-        execution_path = case_dir / "chapter_execution.json"
-        execution_path.write_text(execution_json, encoding="utf-8")
-        stage_log_path = case_dir / "stage_log.json"
-        stage_log_path.write_text(_json_text(execution.stage_log), encoding="utf-8")
-        final_text_path = case_dir / "final_text.txt"
-        final_text_path.write_text(execution.chapter_text, encoding="utf-8")
+        execution_path = case_dir / "chapter_eval_execution.json"
+        write_text_with_aliases(execution_path, execution_json, alias_names=("chapter_execution.json",))
+        stage_log_path = case_dir / "chapter_eval_stage_log.json"
+        write_text_with_aliases(stage_log_path, _json_text(execution.stage_log), alias_names=("stage_log.json",))
+        final_text_path = case_dir / "chapter_text__final.txt"
+        write_text_with_aliases(final_text_path, execution.chapter_text, alias_names=("final_text.txt",))
 
-        judge_payload_path = case_dir / "judge.json"
+        judge_payload_path = case_dir / "chapter_eval_judge.json"
         judge_errors: list[str] = []
         judge_detail: dict[str, RomanceMetricDetail] = {}
         breakdowns: dict[str, RomanceMetricDetail] = {}
@@ -412,7 +420,7 @@ class RomanceEvalHarness:
                 chapter_execution_json=execution_json,
                 chapter_text=execution.chapter_text,
             )
-            judge_payload_path.write_text(judge.model_dump_json(indent=2), encoding="utf-8")
+            write_text_with_aliases(judge_payload_path, judge.model_dump_json(indent=2), alias_names=("judge.json",))
             diagnosis = judge.diagnosis
             judge_detail = self._judge_metrics_to_core(
                 judge=judge,
@@ -438,7 +446,8 @@ class RomanceEvalHarness:
                 diagnosis.improvement_hints.append(rule_anti_slop.improvement_hint)
         except Exception as exc:
             judge_errors.append(f"romance_judge_failed: {exc}")
-            judge_payload_path.write_text(
+            write_text_with_aliases(
+                judge_payload_path,
                 _json_text(
                     {
                         "error": str(exc),
@@ -446,7 +455,7 @@ class RomanceEvalHarness:
                         "rule_anti_slop": rule_anti_slop.model_dump(mode="json"),
                     }
                 ),
-                encoding="utf-8",
+                alias_names=("judge.json",),
             )
             judge_detail = self._fallback_core_metrics(
                 rule_redundancy=rule_redundancy,
@@ -502,8 +511,8 @@ class RomanceEvalHarness:
             ),
             errors=judge_errors,
         )
-        result_path = case_dir / "result.json"
-        result_path.write_text(result.model_dump_json(indent=2), encoding="utf-8")
+        result_path = case_dir / "chapter_eval_case_result.json"
+        write_text_with_aliases(result_path, result.model_dump_json(indent=2), alias_names=("result.json",))
         return result
 
     def _build_writer_context(self, case: RomanceEvalCase) -> Any:

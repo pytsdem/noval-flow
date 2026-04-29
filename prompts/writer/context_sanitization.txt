@@ -67,7 +67,7 @@ Input blocks:
 [Step 7 story lines]
 {step_7_story_lines_text}
 
-[Step 8 chapter brief]
+[Step 8 chapter contract]
 {step_8_chapter_brief_text}
 
 [Chapter payload]

@@ -1,16 +1,15 @@
 生成 step8 的 `chapter_briefs`。
 
-你不是“作者提纲生成器”，而是“正文写作发动机”。
-你的任务不是概括这一章会发生什么，而是为正文写作设计一个能直接落地的章节驱动器：
-1. 找到这一章最该写锋利的核心场面。
-2. 找到这一章最具体、最扎人的痛感锚点。
-3. 设计这一章关键线索如何自然露出，而不是作者直接发答案。
-4. 设计重要人物再出场时如何唤起读者前文记忆，而不是重新解释身份。
-5. 作为言情小说，给出这一章最轻的一点禁忌感、旧情残响或不正常关注。
-6. 让这一章结尾只留下一个主钩子，让读者清楚记住一个问题并自然想追下一章。
+你的任务不是写“章节摘要”，而是写“章节契约”。
+这份契约要能直接约束后续 planner / writer / review：
+- 这一章必须完成什么变化
+- 这一章必须付出什么代价
+- 这一章必须避免什么重复
+- 这一章最后只留什么主钩子
 
 只输出有效 JSON。
-不要输出 Markdown，不要输出解释，不要输出分析过程，不要输出 `chapter_plans`、`scene_beats`、`batch`、`merged_chapter_brief_count` 或任何额外字段。
+不要输出 Markdown，不要输出解释，不要输出分析过程，不要输出 `chapter_plans`、`scene_beats` 或任何额外字段。
+
 输出格式只能是：
 {{
   "chapter_briefs": [
@@ -18,48 +17,86 @@
       "chapter_id": "ch_001",
       "title": "归京",
       "chapter_type": "opening",
-      "active_lines": ["line_01", "line_04"],
+      "active_lines": ["line_01"],
       "active_twists": ["twist_01"],
 
-      "summary": "主角想做什么，被什么限制，本章如何间接推进。",
-      "incoming_hook": "",
-      "opening_hook": "当前动作或当前压力。",
-      "core_scene": "这一章真正的中心场面，必须是可直接写成正文的具体场面。",
-      "chapter_object": "本章有真实剧情功能的物件、命令、文书、任务、仪式、地点或线索载体。",
-      "reader_emotion": "读者先站谁，先误判谁，仍保留什么异样感。",
+      "summary": "这一章的章节使命。只写：主角想做什么、被什么限制、如何间接推进。",
+      "incoming_hook": "承接上一章留下来的主钩子。第一章可为空。",
+      "opening_hook": "开场立刻落地的压力或动作。",
+      "core_scene": "这一章最该写锋利的中心场面。",
+      "chapter_object": "本章真正推动场面的对象、文书、任务、证据、地点或规则载体。",
+      "reader_emotion": "读者先站谁、先误判谁、保留什么异样感。",
       "reader_belief": "读者此时倾向相信什么。",
 
-      "allowed_info": ["本章可明写事实 1"],
-      "allowed_clues": ["动作型线索 1"],
-      "forbidden": ["正文中禁止出现的具体内容 1"],
-      "world_limit": "本章最关键的一条礼法、权力或制度限制。",
+      "allowed_info": ["本章可以明写的信息 1"],
+      "allowed_clues": ["只能是动作型 clue 1"],
+      "forbidden": ["本章绝对不能明写的内容 1"],
+      "world_limit": "本章最关键的一条礼法、权力、制度或地理限制。",
 
       "character_focus": ["角色甲", "角色乙"],
-      "character_shift": "本章内发生的具体立场、身份或状态变化。",
+      "character_shift": "本章内角色立场或策略的具体变化。",
       "relationship_reprice": "哪段关系从什么变成什么。",
       "emotional_turn": "从 A 到 B。",
       "backstory_trigger": "",
+      "cost_of_progress": "本章为了推进而必须支付的具体代价。",
+      "hook_kind": "question",
+      "pace_curve": "steady_climb",
+      "must_not_repeat": [
+        "这一章不能重复的判断、意象、流程或关系结论 1"
+      ],
 
       "scene_engine": "opening_pressure",
       "clue_reveal_mechanism": {{
         "style": "natural_exposure",
         "pressure_source": "是谁逼出了线索",
-        "surface_trigger": "什么动作、物件、事故或仪式让线索露出来",
-        "first_noticer": "谁先注意到",
-        "owner_reaction": "当事人如何回避解释"
+        "surface_trigger": "什么动作、物件、仪式或事故让线索露出",
+        "first_noticer": "谁先看到",
+        "owner_reaction": "当事人如何压住、回避或不解释"
       }},
       "character_reentry_focus": {{
-        "角色名": "写清 first signal、读者被唤起的记忆方向、第一反应最该体现什么、以及 must avoid。不要重新解释身份。"
+        "角色名": "这一章里怎样唤起读者对他/她的既有记忆，而不是重新介绍身份。"
       }},
-      "human_pain_anchor": "最具体、最扎人的身体、礼法、身份、生活代价或失去体面的痛感锚点。",
-      "romance_seed": "最轻的一点禁忌感、旧情残响或不正常关注，不是直接爱情。",
+      "human_pain_anchor": "本章最具体、最扎人的身体、体面、身份、礼法或生活代价锚点。",
+      "romance_seed": "很轻但真实的危险感、旧情余震或异常关注。",
 
-      "small_payoff": "克制自然的小兑现。",
-      "ending_pull": "只保留一个主钩子。",
-      "info_budget": "新线索=1；新人物=0；新关系结论=1"
+      "small_payoff": "本章克制自然的小兑现。",
+      "ending_pull": "本章唯一主钩子。",
+      "info_budget": "目标 2800-3400 字；新 clue=1；新关系结论=1"
     }}
   ]
 }}
+
+允许的 `hook_kind`：
+- `question`
+- `cost`
+- `deadline`
+- `reveal`
+- `danger`
+- `aftermath`
+- `withheld_answer`
+
+允许的 `pace_curve`：
+- `front_loaded`
+- `steady_climb`
+- `mid_pivot`
+- `late_snap`
+- `aftershock`
+
+硬约束：
+1. `summary` 是章节使命，不是流水账。
+2. `core_scene` 只能有一个中心场面；不要一章堆多个主场面。
+3. `allowed_clues` 必须是动作型 clue，不能写“他眼神复杂”“她似乎有苦衷”。
+4. `cost_of_progress` 必须具体到身体、礼法、程序、关系、体面、时间、选择权之一。
+5. `must_not_repeat` 必须可执行，不能写空话。
+6. `small_payoff` 必须克制，不要写成大揭露。
+7. `ending_pull` 只能保留一个主钩子。
+8. `info_budget` 要像节奏契约，不要只写模糊字数。
+9. 第一章尤其不能过满：只留一个主场面、一个主代价、一个主钩子。
+
+判断标准：
+- 这份 brief 能不能直接约束正文，而不是只让作者自己看懂。
+- 每章和上一章相比，是否真的更危险、更贵、更难回头，而不是换句话重复。
+- 是否明确告诉后续 writer：这章绝不能重写什么。
 
 用户需求：
 {research_query}
@@ -70,242 +107,32 @@
 当前批次 batch JSON：
 {batch_window_json}
 
-step1 主故事骨架摘要 JSON：
+step1 主故事骨架 JSON：
 {story_spine_json}
 
-作用：
-- 用它判断全书主驱动力、核心冲突、言情主张力、长期兑现方向。
-- `summary`、`reader_belief`、`ending_pull` 都必须服务全书骨架，而不是只顾这一章热闹。
-
-step2 世界限制与制度边界 JSON：
+step2 世界与制度 JSON：
 {worldbuilding_json}
-
-作用：
-- 用它约束 `world_limit`。
-- 决定本章哪些行动、礼法、权力关系、地理移动、制度程序是真能发生的。
 
 step3 角色卡 JSON：
 {character_bible_json}
 
-作用：
-- 用它约束 `character_focus`、`character_shift`、`character_reentry_focus`、`romance_seed`。
-- 必须尊重角色姓名、身份、年龄段、外貌锚点、性格底色、说话方式、行为规则。
-
-step4 前情事件时间线 JSON：
+step4 事件时间线 JSON：
 {event_timeline_json}
-
-作用：
-- 用它决定 `incoming_hook`、`backstory_trigger`、连续性和前情承接。
-- 不得写出时间线中尚未发生的结果。
 
 step5 角色阶段 JSON：
 {character_milestones_json}
 
-作用：
-- 用它判断人物此时能到哪一步，不能把后期人格、后期关系状态、后期认知提前写出来。
-
 step6 反转设计 JSON：
 {twist_designs_json}
-
-作用：
-- 用它约束 `reader_belief`、`allowed_clues`、`forbidden`。
-- `reader_belief` 必须服务 false belief，但不能提前坐死反转。
 
 step7 故事线 JSON：
 {story_lines_json}
 
-作用：
-- 用它约束 `active_lines` 和本章推进方向。
-- 章节推进必须能挂在线上，但不要把整条线在一章里讲完。
-
-前序 chapter_briefs JSON：
+前序 chapter briefs JSON：
 {previous_chapter_briefs_json}
 
-作用：
-- 用它承接已生成章节的 `ending_pull`、信息预算、人物关系递进和钩子债务。
-- 如果当前批次不是第一批，从第二章开始 `incoming_hook` 必须明确承接上一章 `ending_pull`。
+目标章节总数：
+{target_chapter_count}
 
 额外参考资料：
 {reference_pack}
-
-总目标：
-1. 每一条 `chapter_brief` 都要更像“正文发动机”，不是“作者知道很多但正文写不出来的提纲”。
-2. 一章只保留一个最该写锋利的 `core_scene`，不要一章塞太多核心戏剧点。
-3. 优先设计场面压力、人物代价、关系重估、动作型 clue、结尾主牵引，而不是大段解释。
-4. 第一章尤其要克制，不能过满，必须给后续章节留空间。
-
-批次规则：
-1. 只生成 `batch_window_json.chapter_ids` 对应章节的 `chapter_briefs`。
-2. 输出顺序必须与 `batch_window_json.chapter_ids` 完全一致。
-3. `chapter_id` 必须严格等于当前批次提供的 `chapter_ids`。
-4. 不得跳过上一章留下的主钩子，不得让上一章 `ending_pull` 无故消失。
-
-硬性字段规则：
-1. `active_lines` 只能选自 step7，最多 3 条。
-2. `active_twists` 只能选自 step6，最多 3 条。
-3. `allowed_info` 最多 4 条，且只能写本章可明写的事实，不能混入推测。
-4. `allowed_clues` 最多 3 条，且必须全部是动作型 clue。
-5. `forbidden` 最多 5 条，必须具体到正文可执行，不能写空话。
-6. `character_focus` 最多 5 人。
-7. `ending_pull` 一章只保留一个主钩子，不要并列两三个大问题。
-8. `small_payoff` 必须克制自然，不能是大真相、硬桥段或夸张炸点。
-9. 所有自然语言内容都必须使用简体中文。
-
-5 个关键新增字段定义：
-1. `core_scene`
-定义：本章真正的中心场面。
-要求：
-- 必须是具体场面，不是抽象主题。
-- 不能只是剧情总结。
-- 必须像一句可以直接展开成正文的场面描述。
-
-2. `clue_reveal_mechanism`
-定义：本章关键线索如何自然露出。
-结构：
-{{
-  "style": "",
-  "pressure_source": "",
-  "surface_trigger": "",
-  "first_noticer": "",
-  "owner_reaction": ""
-}}
-要求：
-- `style` 只能是 `direct_pressure`、`natural_exposure`、`object_accident`、`overheard`、`ritual_trigger`、`subordinate_report`、`withheld_reveal` 之一。
-- `pressure_source` 写清是谁逼出了线索。
-- `surface_trigger` 写清是什么动作、物件、事故、仪式让线索露出来。
-- `first_noticer` 写清谁先看到或先意识到。
-- `owner_reaction` 写清当事人如何不解释、岔开、压住或回避。
-- 如果本章没有关键线索披露，输出空对象 `{{}}`。
-
-3. `character_reentry_focus`
-定义：重要人物再出场时如何唤起读者前文记忆。
-要求：
-- 只用于已建立身份的人物，不用于初登场人物。
-- 必须通过下属反应、排场、物件、称谓、熟悉语气、关键台词来重建存在感。
-- 不要重新解释他或她是谁。
-- 每个值都必须写清 `first signal` 和 `must avoid`。
-- 如果本章没有重要人物再出场，输出空对象 `{{}}`。
-
-4. `human_pain_anchor`
-定义：本章最具体、最扎人的痛感锚点。
-要求：
-- 不能写成抽象恨、抽象悲伤、抽象愧疚。
-- 必须落在身体、礼法、身份、生活代价、失去体面、失去选择权等具体层面。
-- 要能直接帮助正文写出“人味”。
-
-5. `romance_seed`
-定义：本章最轻的一点禁忌感、旧情残响或不正常关注。
-要求：
-- 不是直接爱情，不要写告白，不要写“他们相爱了”。
-- 只能是一点危险感、身体距离、称谓异常、过度关注、礼法之内的越界、旧情余震。
-- 必须轻，但必须真实可写。
-
-现有字段重写规则：
-1. `summary`
-只写三件事：
-- 主角想做什么。
-- 被什么限制。
-- 本章如何间接推进。
-不要写成整章流水账。
-
-2. `reader_emotion`
-写成：
-- 读者先站谁。
-- 读者先误判谁。
-- 读者保留什么异样感。
-不要一上来把人物彻底坐死。
-
-3. `reader_belief`
-用“读者此时倾向相信……”的方式写。
-它必须服务 false belief，但不能提前锁死最终反转。
-
-4. `allowed_clues`
-强制只写动作型 clue。
-只允许：
-- 停顿
-- 手势
-- 物件
-- 称谓
-- 身体反应
-- 他人观察
-- 仪式细节
-- 下属或配角反应
-禁止：
-- “他眼神复杂”
-- “她似乎有苦衷”
-- “他其实还在意”
-
-5. `small_payoff`
-优先设计为：
-- 一个称谓
-- 一个动作
-- 一个礼法场面
-- 一个被看见的物件
-- 一句短而疼的话
-不要设计成“作者很会想桥段”。
-
-6. `ending_pull`
-一章只保留一个主钩子。
-必须自然带去下一章，不要同时塞两三个大炸点。
-
-7. `backstory_trigger`
-没有就留空。
-如果有，必须是动作、声音、物件、称谓、伤痕、制度压力等具体触发物。
-不要写“回忆起过去”。
-
-8. `chapter_object`
-必须是真正推动场面的对象，优先是物件、命令、文书、任务、仪式、地点或线索载体。
-不能只是抽象目标。
-
-9. `world_limit`
-只写本章最关键的一条礼法、制度、权力或地理边界。
-不要写百科介绍。
-
-10. `relationship_reprice`
-必须写清“哪段关系从什么变成什么”。
-不能只写“更复杂了”。
-
-11. `emotional_turn`
-必须写成“从 A 到 B”。
-
-线索自然露出规则：
-如果本章有线索披露，优先遵守这条路径：
-关系压力
--> 角色回避
--> 身体或物件失手
--> 他人介入或注意
--> 线索自然露出
--> 当事人回避解释
-要求：
-- 优先用 `clue_reveal_mechanism` 约束过程，而不是直接给答案。
-- 第一章如果有线索，更优先 `natural_exposure`、`object_accident`、`withheld_reveal`，不要上来硬揭。
-
-重要人物再出场规则：
-如果人物前文已经建立身份，再出场时不要重复解释他或她是谁。
-优先通过：
-- 下属反应
-- 排场
-- 熟悉物件
-- 熟悉称谓
-- 一句最值钱的话
-来唤起读者记忆。
-如果本章有重要人物再出场，`character_reentry_focus` 必须生成。
-
-第一章特别规则：
-1. 第一章尤其不能过满，只保留一个主场面、一个主痛点、一个主钩子。
-2. 第一章允许读者误判，但不允许一次性放出过多真相。
-3. 第一章若有线索披露，必须尽量自然露出，不要像作者发线索卡。
-4. 第一章若有重要人物再出场，必须通过 `character_reentry_focus` 唤起记忆，而不是重讲身份。
-5. 第一章也必须给出 `romance_seed`，但只能是很轻的一点危险感、旧情残响或异常关注。
-
-输出前自检：
-1. 每章是否只有一个最该写锋利的 `core_scene`？
-2. `summary` 是否只写“想做什么 + 被什么限制 + 如何间接推进”？
-3. `allowed_clues` 是否全部动作化、可见、可写、无作者解释？
-4. 有线索披露时，是否给出合适的 `clue_reveal_mechanism`？
-5. 有重要人物再出场时，是否给出 `character_reentry_focus`？
-6. `human_pain_anchor` 是否足够具体，能直接落到身体、礼法、身份或代价？
-7. `romance_seed` 是否足够轻，却仍有危险感或异常关注？
-8. `small_payoff` 是否克制自然？
-9. `ending_pull` 是否只保留一个主钩子？
-10. 这条 `chapter_brief` 是否更适合直接驱动正文，而不是只适合作者自己看？

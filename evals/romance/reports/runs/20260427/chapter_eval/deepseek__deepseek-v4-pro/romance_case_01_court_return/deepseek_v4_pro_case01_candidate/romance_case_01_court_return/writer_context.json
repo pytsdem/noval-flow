@@ -1,0 +1,75 @@
+{
+  "chapter_id": "ch_012",
+  "selection_summary_text": "relevant_roles：谢临川（归京世子/前锋统领）与沈知微（御前女史）是本篇章核心。relevant_twists：twist_false_testimony（她的证词不是真正的背叛），保持读者误读。relevant_lines：line_old_case（军粮旧案），朝堂层面只能通过档册与旁人反应推进。relevant_world_rules：殿前礼制严禁翻案直提先帝旧判，御前女史不可失态。relevant_past_events：三年前冬谢临川因军粮旧案被流放，沈知微御前作证致二人决裂。current_time_anchor：三年前流放事件后第三年冬，清晨早朝，紧接ch_011归京次日入殿。",
+  "time_anchor_text": "absolute：三年前冬流放事件后第三个冬季，清晨早朝时分；season：隆冬，殿外有雪，殿内地寒；timeofday：拂晓至辰时，百官列班的常朝时刻；relative_to_previous_chapter：ch_011发生在归京当日黄昏至夜间传旨，本章为次日清晨奉诏入殿，相隔不过一夜；must_not_conflict：不能发生在归京前、不能早过传旨之日、谢临川脚上皮靴雪水未干的状态须与当日殿外天气一致，旧案名目出现时沈知微的年龄和职衔须与三年前后续履历衔接。",
+  "chapter_visible_context_text": "reader_should_know：谢临川以军功换得回京资格，但并未真正平反；三年前军粮旧案的原始档册仍在内库封存；沈知微如今在御前做记档女史，对旧案仍有本能反应。reader_should_believe：沈知微当年为了自保背叛了谢临川，将他送上了流放路。reader_should_not_know：沈知微当年作证实是为了保谢临川一线生机；旧案幕后有更大势力；她的全部真实动机。allowed_clues：她在旧案名目上停顿了一拍；她下意识避开男主手上的旧伤；提到证词时换了一个更疏远的称呼；她收紧袖口的不易察觉动作。forbidden_reveals：不能直接说她是为了救男主；不能解释真正的幕后主谋；不能让男主在这一章看穿她的保护意图。current_character_state：谢临川压着旧火入殿，表面冷静，试探中带着未消的怨恨，但对沈知微的异常举止过分敏感；沈知微整夜未眠却强作镇定，必须在御前扮演曾经作证的女史，所有真实情绪被礼制死死压住。",
+  "completed_chapter_memory_text": "ch_011 已完成。萧瑟冬夜，谢临川带着北地军功回京，圣旨传入驿馆，命他次日列班入殿谢恩。他并未得到平反，而旧案仍被压在先帝判词之下。沈知微提前得知消息，枯坐至天明，御前女史的身份让她毫无退路。读者已知二人尚未重逢，但彼此已因这场逼近的朝堂碰面而呼吸沉重。沈知微听到谢临川名字时下意识捏皱了袖口，这一细节已埋下。所有人（包括读者）仍坚信她三年前背叛了谢临川。",
+  "step_1_story_foundation_text": "高概念：被流放三年的定北王世子回京翻案，却发现当年在御前指证他的女史仍站在权力中心。主题：旧恨与旧情都不会在权力场里原样归来。故事梗概：谢临川以军功换回京资格，试图从旧案的缝里撬开一道口子；沈知微当年亲手把他送上流放之路，如今却在一次次回避里暴露出更危险的真相。类型：历史言情。风格：克制、压迫、潜台词强。情感钩子：旧爱旧恨同场，谁都不能先露底。本章使命：谢临川在朝堂上借调档册试探旧案，却被沈知微以更冷的方式顶回去；两人的敌意第一次出现了无法忽视的停顿。",
+  "step_2_worldbuilding_text": "[Step 2 worldbuilding and structural rules]\n\nStory engine:\n- Hook strategy: 每章都要让关系和旧案至少有一处同时前进。\n- World rules: ['殿前礼制严格，所有私人情绪都必须包在规矩里。', '旧案若牵涉先帝旧判，任何人都不能在朝堂上直言翻案。', '御前记档女史不能离席失态，否则等同向所有人认罪。']\n- Power structure: 皇权压顶，内阁与宗室互相牵制，旧案背后有更深的门阀利益。\n- Objective conditions: ['谢临川有军功但无实权', '沈知微握着档册入口却站在最危险的位置']",
+  "step_3_character_packets_text": "谢临川 | 公开身份：定北王世子、归京前锋统领、功勋世家嫡子，曾被当作旧案替罪羊流放。可视目标：坚信沈知微背叛了自己，却又对她一举一动过分敏感。行动边界：围绕此矛盾心理行动，但不可在殿前公开推翻先帝旧判，也不能当场逼问女主。外在表现：自控极强，越受压越冷，话少却攻击准确，常留半句逼对方先露反应。内在锁死：真实翻案策略不可明示。允许迹象：停顿、偏转、克制、改称。\n沈知微 | 公开身份：御前记档女史，寒门出身，凭识礼和记忆力站到御前。可视目标：必须在所有人眼前继续扮演那个曾经作证的人。行动边界：维持此角色，但绝不可在殿前失态，也不能直接回应旧案细节。外在表现：越心乱越规矩、越冷，真正动情时反而像毫无感觉。允许迹象：停顿、回避、收袖、改称呼。",
+  "step_4_event_timeline_text": "[Step 4 full event timeline]\n\n- evt_001 | 三年前冬\n  Title: 谢临川被押送离京\n  Description: 军粮旧案暴发后，谢家被褫夺兵权，谢临川被流放北地。\n  Trigger: 御前证词与内库账本同时指向谢家。\n  Consequence: 谢临川与沈知微彻底决裂。\n  Affected characters: 谢临川, 沈知微\n\n- evt_002 | 当下\n  Title: 谢临川战功归京\n  Description: 北地战事平定后，他以军功换得回京述职资格。\n  Trigger: 边关大捷\n  Consequence: 旧案被迫再次浮出水面。\n  Affected characters: 谢临川, 沈知微",
+  "step_5_character_milestones_text": "谢临川：无本章具体触发或转折标注，只保留从带刺报复欲向更冷静试探的内在转向。沈知微：无本章具体触发或转折标注，只保留从单纯旧日叛徒形象向“仍会影响谢临川呼吸的人”的转变。",
+  "step_6_twists_text": "twist_false_testimony | 标题：她的证词不是真正的背叛。读者误读：沈知微为自保把谢临川送去流放地。对齐策略：前期让读者坚定站在谢临川一边，同时被女主反常牵动。本章播种：不解释真相，仅通过她提到旧案时停顿、下意识避开男主旧伤、换用更疏远称呼等线索，强化表面背叛形象并埋下异常。禁止：直接说出她是为了救男主、解释幕后主谋、让男主看穿她。POV锁：不给出她的完整真实动机独白。",
+  "step_7_story_lines_text": "line_old_case | 类型：悬疑。能见度：可见。核心问题：谢临川如何在不允许翻案的朝局里先撬开旧案缺口？本章推进：他借调档册的名义首次在朝堂触及旧案实物，但被沈知微以冷回应挡住。中期变奏线索：读者将逐渐发现沈知微知道的远多于她能说的。规则：前中期只能通过礼制、档册、旁人反应挤出信息，且每一次推进都必须重估二人关系。本章新露信息：旧案原始档册仍在内库，沈知微对旧案名目有本能反应。",
+  "step_8_chapter_brief_text": "章回：ch_012 雪靴未干。类型：关系挤压。概要：谢临川朝堂借调档册试探旧案，被沈知微更冷地顶回，敌意首次出现无法忽视的停顿。引子：昨夜军功归京，今晨奉诏入殿。开场钩子：圣旨刚念到旧案名目，沈知微抬起了眼。核心场景：男主在百官面前接住羞辱与机会，女主在众目下继续扮演对立面。章回物件：三年前军粮转运原始档册。读者情绪：寒意、怨恨与不应出现的在意。人物转变：谢临川从带刺报复转向冷静试探；沈知微从单纯叛徒变成仍能影响他呼吸的人。情感拐点：他原想当众逼她失态，最终失控边缘先成自己。人类痛苦锚点：他鞋底雪水未干，跪在曾判他死路的人面前接旨。情感种子：她改口叫他“谢世子”时，他先注意到她声音比三年前更冷。小回报：谢临川成功拿到查阅档册的口子。结尾拉扯：刚出殿门，便知负责抄录旧档的第一名书吏昨夜死了。信息预算：3200-4200字，新线索不超过2条，关系转变必须落地。",
+  "chapter_payload_text": "[Chapter payload]\n\nChapter: ch_012 / 雪靴未干\nChapter type: relationship_pressure\nOne-line mission: 谢临川在朝堂上借调档册试探旧案，却被沈知微以更冷的方式顶回去；两人的敌意第一次出现了无法忽视的停顿。\nIncoming hook: 昨夜他带着北地军功归京，今晨奉诏入殿。\nOpening hook: 圣旨刚念到旧案名目，沈知微就抬起了眼。\nCore scene: 男主必须在文武百官面前接住羞辱与机会，女主则要在众目睽睽之下继续扮演站在他对面的人。\nChapter object: 三年前军粮转运的原始档册\nScene engine: court_pressure\nClue reveal mechanism: {'style': 'natural_exposure', 'pressure_source': '殿前公开问答和旧案名目', 'surface_trigger': '内库档册被抬上殿时的称呼变化', 'first_noticer': '谢临川', 'owner_reaction': '沈知微立刻把情绪压回礼制里'}\nCharacter reentry focus: {'沈知微': '不要重讲她是谁，用礼制、袖口、称呼和避视来让读者重新记起她。'}\nReader emotion target: 让读者感到寒意、怨恨和一种不该出现却压不住的在意。\nReader belief to preserve: 读者仍应相信沈知微当年背叛过谢临川，但要开始怀疑事情没那么简单。\nCharacter shift: 谢临川从带刺的报复欲，转向更冷静也更危险的试探。\nRelationship reprice: 沈知微从单纯的旧日叛徒，变成仍然会影响谢临川判断和呼吸的人。\nEmotional turn: 他原本想当众逼她失态，最后失控边缘的人却先成了他自己。\nBackstory trigger: None.\nHuman pain anchor: 谢临川鞋底的雪水还没干，就得跪在曾经判他死路的人面前接旨。\nRomance seed: 她改口叫他“谢世子”的那一刻，他竟先注意到的是她声音比三年前更冷。\nSmall payoff: 谢临川成功拿到查阅档册的口子。\nEnding pull: 他刚走出殿门，就得知负责抄录旧档的第一名书吏昨夜死了。\nInfo budget: target=3200-4200; new clues<=2; relationship shift must land on page\n\nActive story lines:\n- line_old_case: 谢临川要怎么在不能翻案的朝局里先撬出旧案的缺口？ | visibility=visible | rules=前中期只能通过礼制、档册、口供和旁人反应挤出信息; 每次推进都必须同时重估两人的关系\n\nActive twists:\n- twist_false_testimony: preserve false belief '沈知微为了自保，把谢临川送去了流放地。'; reader alignment='前期让读者坚定站在谢临川这边，同时不断被女主的反常牵动。'; allowed clues=她提到旧案时会下意识收紧手指; 她从不正面回应当年证词细节; 她会在男主真正受伤时本能偏头; forbidden reveals=不能直接说她是为了救男主; 不能解释幕后主谋; 不能让男主此章看穿她; POV lock=在揭晓前不能给出她的完整真实动机独白。\n\nAllowed explicit information:\n- 谢临川回京并未得到真正平反\n- 旧案原始档册仍在内库\n- 沈知微对旧案名目有本能反应\n\nAllowed clues without explanation:\n- 沈知微在旧案名目上停顿了一拍\n- 她下意识避开了男主手上的旧伤\n- 提到证词时她换了一个更疏远的称呼\n\nForbidden content:\n- 不能揭示沈知微当年是为了保谢临川才作证\n- 不能直接洗白女主\n- 不能让两人提前坦白\n- 不能直接说她是为了救男主\n- 不能解释幕后主谋\n- 不能让男主此章看穿她",
+  "timeline_anchor_facts_text": "[Objective timeline anchors]\n\nRelevant prehistory and current anchor from step 4:\n- evt_001 | 三年前冬\n  Title: 谢临川被押送离京\n  Description: 军粮旧案暴发后，谢家被褫夺兵权，谢临川被流放北地。\n  Consequence: 谢临川与沈知微彻底决裂。\n  Affected characters: 谢临川, 沈知微\n\nConsistency notes:\n- Current chapter anchor is '谢临川被押送离京' at 三年前冬.",
+  "relevant_world_rules_text": "[Relevant world rules]\n\n1. 殿前无人可以公开推翻先帝旧判，谢临川也不能当场逼问女主。\n2. 殿前礼制严格，所有私人情绪都必须包在规矩里。\n3. 旧案若牵涉先帝旧判，任何人都不能在朝堂上直言翻案。\n4. 御前记档女史不能离席失态，否则等同向所有人认罪。\n5. 皇权压顶，内阁与宗室互相牵制，旧案背后有更深的门阀利益。\n6. 谢临川有军功但无实权",
+  "style_card_text": "[Style card]\nGenre: restrained historical romance with pressure, mistrust, and emotional misreading.\nPOV: stay in limited perspective; never explain hidden truth from an omniscient distance.\nLanguage: readable modern Chinese prose with historical texture, not archaic imitation and not web-novel slang.\nTexture: scenes should feel lived-in and physically present. Let setting, objects, labor, etiquette, weather, money, and bodily discomfort quietly shape the page.\nEmotion: avoid naming feelings too quickly. Let emotion emerge through what the POV notices, avoids, says, misreads, touches, or cannot bring itself to do.\nDialogue: keep it human and motivated. People should speak from position, need, habit, fear, and relationship history, not to serve the outline.\nCharacter landing: make people convincing through selective concrete detail such as posture, hands, clothing, injuries, routine, and forms of address, without turning detail into a checklist.\nReveal discipline: clues may appear, but allowed clues must not be over-explained before reveal.\nRelationship movement: every chapter should deepen, strain, tilt, or re-price at least one relationship beat in a believable way.\nBackstory rule: if the past appears, let it arise naturally from present pressure, memory trigger, or action; do not paste in explanatory blocks.\nRhythm: vary sentence weight and scene pace with the dramatic moment. Do not let the prose sound mechanically patterned.\nImmersion goal: the reader should feel inside the room, inside the body's reaction, and inside the character's limited understanding.",
+  "active_twists": [
+    {
+      "twist_id": "twist_false_testimony",
+      "title": "她的证词不是真正的背叛",
+      "false_belief": "沈知微为了自保，把谢临川送去了流放地。",
+      "truth": "她当年在更大的灭门局里只能用伪证换谢临川一线生机。",
+      "reader_alignment": "前期让读者坚定站在谢临川这边，同时不断被女主的反常牵动。",
+      "seed_from": "ch_003",
+      "reveal_at": "ch_046",
+      "allowed_clues": [
+        "她提到旧案时会下意识收紧手指",
+        "她从不正面回应当年证词细节",
+        "她会在男主真正受伤时本能偏头"
+      ],
+      "forbidden_reveals": [
+        "不能直接说她是为了救男主",
+        "不能解释幕后主谋",
+        "不能让男主此章看穿她"
+      ],
+      "pov_lock": "在揭晓前不能给出她的完整真实动机独白。",
+      "related_characters": [
+        "沈知微",
+        "谢临川"
+      ],
+      "payoff_effect": "真相揭晓后，所有试探和敌意都会被重新解释。"
+    }
+  ],
+  "active_story_lines": [
+    {
+      "line_id": "line_old_case",
+      "name": "军粮旧案",
+      "line_type": "mystery",
+      "visibility": "visible",
+      "core_question": "谢临川要怎么在不能翻案的朝局里先撬出旧案的缺口？",
+      "reader_hook_mode": "pressure",
+      "start_state": "他只能以军功换回一个回京资格，仍然碰不到旧案核心证据。",
+      "midpoint_shift": "读者逐渐意识到女主知道的比她能说出来的多得多。",
+      "end_state": "旧案的真实因果会与两人的感情线一起反噬回来。",
+      "carried_twists": [
+        "twist_false_testimony"
+      ],
+      "line_rules": [
+        "前中期只能通过礼制、档册、口供和旁人反应挤出信息",
+        "每次推进都必须同时重估两人的关系"
+      ]
+    }
+  ],
+  "scene_character_context_text": "[Scene character context]\n\n谢临川\n- 表面目标：在谢恩时争到碰旧案档册的口子。\n- 潜在矛盾：越想逼沈知微露破绽，越容易先被她牵动。\n\n沈知微\n- 表面目标：按礼完成记档，不让任何人看出她对旧案的异常反应。\n- 潜在矛盾：她越想压住在意，越容易把礼数用得过冷。",
+  "relationship_state_text": "[Relationship state]\n\n谢临川 -> 沈知微\n- 当前公开关系：旧案中的指证者与被指证者，关系冰冷敌对。\n- 暗流：恨意很真，在意也没有死。\n- 本章目标：把关系推进到“互相牵制、互相试探”，而不是单向辱骂。\n- 禁止捷径：不要让任何一方提前说破旧情或真相。",
+  "assistant_persona_prompt": "你在写高张力古言言情章节。关系推进优先于漂亮句子，潜台词优先于直白告白。",
+  "writing_requirements_json": "{\n  \"target_words\": \"3200-4200\",\n  \"pace\": \"开头 400 字内建立重逢压力；中段至少一次关系重估；结尾必须留下更硬的追读点\",\n  \"guardrails\": [\n    \"不要把沈知微写成纯工具人或纯冷脸标签\",\n    \"不要把谢临川写成只会放狠话的模板男主\",\n    \"不要重复解释同一种恨意\"\n  ]\n}",
+  "completed_chapter_summary_bundle": "ch_011 已完成。萧瑟冬夜，谢临川带着北地军功回京，圣旨传入驿馆，命他次日列班入殿谢恩。他并未得到平反，而旧案仍被压在先帝判词之下。沈知微提前得知消息，枯坐至天明，御前女史的身份让她毫无退路。读者已知二人尚未重逢，但彼此已因这场逼近的朝堂碰面而呼吸沉重。沈知微听到谢临川名字时下意识捏皱了袖口，这一细节已埋下。所有人（包括读者）仍坚信她三年前背叛了谢临川。",
+  "previous_chapter_full_text": "城门雪夜里，谢临川勒马停住，望见宫城灯火时没有下马。副将问他先进驿馆还是先递牌子，他只说先换朝服。另一边，沈知微在灯下重抄次日的谢恩流程，第三次写错了“定北”二字。",
+  "reference_pack": "参考方向：高压朝堂重逢、误读型旧情、礼制压住情绪但压不住细节。",
+  "chapter_character_mindsets": [],
+  "chapter_character_mindsets_text": ""
+}

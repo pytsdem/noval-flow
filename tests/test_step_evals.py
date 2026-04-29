@@ -63,7 +63,10 @@ class StepEvalRunnerTests(unittest.TestCase):
 
         summary = StepEvalRunner(reports_root=self.root / "reports").run(case_dir=case_dir, label="step_gate")
 
-        self.assertTrue((self.root / "reports" / "step_gate" / "step_eval_summary.json").exists())
+        run_dir = Path(summary.report_json).parent
+        self.assertTrue((run_dir / "historical_step_gate_eval_summary.json").exists())
+        self.assertTrue((run_dir / "historical_step_gate_eval_report.md").exists())
+        self.assertTrue((run_dir / "step_eval_summary.json").exists())
         self.assertEqual(summary.gate_counts["blocked"], 1)
         report = summary.case_reports[0]
         self.assertEqual(report.gate_decision.verdict, "blocked")

@@ -200,7 +200,7 @@ def _book(
                 "step_5_character_milestones_text": "character milestones",
                 "step_6_twists_text": "twist packets",
                 "step_7_story_lines_text": "story line packets",
-                "step_8_chapter_brief_text": "chapter brief packet",
+                "step_8_chapter_brief_text": "chapter contract packet",
                 "timeline_anchor_facts_text": "same day, court hall",
                 "relevant_world_rules_text": "No open challenge during the ritual.",
                 "style_card_text": "restrained, pressure-heavy",

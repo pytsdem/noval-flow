@@ -9,7 +9,7 @@ Review chapter structure and continuity for a fast patch-oriented loop. Output J
 [Relationship state]
 {relationship_state_text}
 
-[Chapter brief]
+[Chapter contract]
 {chapter_brief_json}
 
 [Planned blocks]

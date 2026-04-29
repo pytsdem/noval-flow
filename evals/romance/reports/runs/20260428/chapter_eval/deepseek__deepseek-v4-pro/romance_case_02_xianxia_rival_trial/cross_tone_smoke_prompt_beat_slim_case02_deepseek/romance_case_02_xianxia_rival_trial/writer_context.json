@@ -1,0 +1,73 @@
+{
+  "chapter_id": "ch_006",
+  "selection_summary_text": "relevant_roles: 云眠(外门穿书小师妹，嘴硬吐槽，想苟过秘境却跑偏) / 陆既白(冷面首席师兄，能听见女主心声但不能说破，靠默读心声救人)。relevant_twists: twist_inner_voice(男主听见心声却必须伪装)。relevant_lines: line_rule_trial(秘境规则被篡改，同生契将两人绑进筛杀局)。relevant_world_rules: 同生契共享轻伤痛感、符灯阵要求互换真正重要的随身物、秘境规则必须通过行动验证、秘境提示只对绑定双方生效、秘境禁杀同门但允许规则伤害。relevant_past_events: 第一道门塌下时同生契在两人腕上同时发烫；云眠记得原书剧情但秘境已跑偏；两人暂未解契。current_time_anchor: 紧接第一道门塌下之后，秘境试炼第二日傍晚申时前后，季节春末，无具体年代，不得与任何已有事件时间线冲突(无已知绝对时间)。",
+  "time_anchor_text": "absolute: 秘境试炼第二日申时(午后至黄昏)。season: 春末。timeofday: 傍晚，光线渐暗，符灯亮起。relative_to_previous_chapter: 紧接第一道门塌下、同生契发烫之后，两人进入第二道门，时间连续无跳跃。must_not_conflict: 无已知外部时间锚点，只需保持内部连贯，不得提前揭露幕后者或天机。",
+  "chapter_visible_context_text": "reader_should_know: 同生契会共享轻伤痛感；符灯阵要求两人互换一件真正重要的随身物才能通过；秘境规则与云眠记得的原书不完全一致。reader_should_believe: 云眠的吐槽只在心里，陆既白只是反应快。reader_should_not_know: 云眠心声被陆既白听见；同生契被他人加了人为刻痕及背后阴谋；契约全规则。allowed_clues: 陆既白总能提前避开她心里刚吐槽的危险；同生契红痕边缘多出一枚不属于古阵的刻痕。forbidden_reveals: 不能让云眠发现心声外泄；不能解释契约反噬或全规则；不能揭示幕后黑手。current_character_state: 云眠从只想甩开师兄，逐渐转为意识到他会在危险里护她；陆既白从冷面监考人，转为嘴上嫌弃却能接住她失误的人，但两人关系仍在斗嘴与微妙亲密之间。",
+  "completed_chapter_memory_text": "",
+  "step_1_story_foundation_text": "全宗门都以为我在拖后腿。高概念: 穿成炮灰小师妹在规则秘境与师兄同生同死，师兄忽然能听见她心声。主题: 真正的靠近常从误会对方很麻烦开始。本章任务: 进入第二道门，互换随身物破解符灯阵。升级路径: 同生契生效→心声泄露造成误会和救场→发现契约被人为加过东西。伏笔蓝图: 师兄能听见心声却不能说破；同生契非意外而是筛选局。卖点: 穿书心声、规则秘境、同生契欢喜冤家。",
+  "step_2_worldbuilding_text": "[Step 2 worldbuilding and structural rules]\n\nStory engine:\n- World rules: ['同生契会共享痛感，但不共享完整记忆。', '秘境规则必须通过行动验证，错误验证会触发符灯惩罚。', '心声泄露不能被直接说破，否则契约会反噬。', '镜雾秘境会把“最想隐藏的念头”转化成关卡提示，但提示只对绑定双方生效。', '宗门试炼积分决定内门资源，首席若失败会被长老会收回本命剑试炼资格。', '同生契每过一关都会加深一次感知共享，超过三次会出现短暂心跳同步。', '秘境禁杀同门，但允许规则伤害，因此幕后人可以借阵法逼他们自损。', '云眠知道原书走向，但剧情偏移后，旧记忆只能当危险预警，不能当答案。']\n- Power structure: 宗门首席、外门弟子和秘境执事之间存在资源与名声差距。\n- Objective conditions: ['两人暂时无法解契', '秘境出口只会在规则完成后出现']",
+  "step_3_character_packets_text": "云眠: 公共身份穿书炮灰小师妹/外门弟子，稳定特质嘴硬机灵怕死不丢人，压力行为嘴上怂坦荡、真危险时找规则漏洞、心声比行动诚实。本章可见任务: 想按原书苟过秘境却发现剧情跑偏；行动线围绕‘想苟却发现跑偏’但不允许大段解释修炼体系。行为规则: 嘴硬吐槽，心声诚实；禁止揭示隐藏动机。允许外在迹象: 停顿、转移、回避、称呼改变、不完整回答。陆既白: 公共身份冷面天才师兄/内门首席，稳定特质克制毒舌责任感重，压力行为先判断再开口，身体总先挡在危险方向。本章可见任务: 认为云眠麻烦却被心声扰得无法完全冷眼旁观；行动线围绕‘认为麻烦却放不下’但不允许大段解释体系。行为规则: 先判风险后开口，表面嫌弃却先挡；禁止揭示隐藏动机。允许外在: 停顿、克制、回避、改口等。全局禁止: 不能让云眠知道心声外泄；不能解释幕后黑手身份；不能写成沉重宿命虐恋。",
+  "step_4_event_timeline_text": "[Step 4 full event timeline]\nNo event_timeline facts available.",
+  "step_5_character_milestones_text": "本章无匹配的长期人物里程碑。仅推动当前章节的角色转变：云眠从想甩开变为意识到他会护她，陆既白从监考人变为能接住她失误的人。",
+  "step_6_twists_text": "twist_inner_voice: 师兄听见心声却不能说破。云眠假信念: 吐槽只在心里发生。读者对齐: 读者知道男主听见，从他克制反应获得轻喜感和暧昧张力。播种章: ch_004，揭示章 ch_018。允许线索: 他总能接住她心里刚骂的破绽，偶尔回答一句未出口的话。禁止揭示: 不能让女主本章发现心声外泄，不能解释契约全规则。POV锁: 可让读者看到男主反应，但不展开契约解释。",
+  "step_7_story_lines_text": "line_rule_trial: 规则秘境冒险线，可见。核心问题: 是谁改写秘境规则把两人绑进同生契？读者钩子: 规则谜团。当前状态: 两人只知共痛，不知道为何选中他们。中点转折: 秘境像针对他们的筛杀局。关联伏笔: twist_inner_voice。规则要求: 每次规则推进必须改变两人的互动位置；战斗试炼不能只炫技。",
+  "step_8_chapter_brief_text": "章节id: ch_006，标题: 符灯听得见，类型: trial_pressure。摘要: 云眠和陆既白进入第二道门，必须按规则互换一件随身物才能活过符灯阵；她嘴硬吐槽，他靠听见心声提前挡险，却发现同生契上多出一枚人为刻痕。入钩: 第一道门塌下时同生契在两人腕上同时发烫。开钩: 符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。核心场景: 两人斗嘴破阵，女主用原书记忆误判规则，男主靠心声救场却装作只是反应快。章节目标物: 腕上同生契红痕。读者情感目标: 轻快、紧张、甜中带险。读者信念保护: 读者知男主能听见心声，女主不知。人物改变: 云眠从只想甩开师兄，变成意识到他会在危险里先护她；关系重定价: 陆既白从冷面监考人变成嘴上嫌弃但能接住她失误的人。情感转折: 互换随身物将斗嘴推进亲密边界。小收尾: 过了符灯阵，确认同生契被人为加过东西。结尾钩子: 最后一盏符灯灭前，墙上浮出文字‘此契原本只该绑死人’。信息预算: 3200-4200字，新线索≤2，斗嘴与暧昧压力都必须落地。活跃故事线: line_rule_trial。活跃伏笔: twist_inner_voice。允许明确信息: 同生契共享轻伤痛感；符灯阵要求互换真正重要的随身物；秘境规则与原书不一致。允许线索: 陆既白总能提前避开她心里吐槽的危险；红痕边缘多出非古阵刻痕。禁止内容: 不能让云眠知道心声外泄；不能解释幕后黑手；不能写成沉重虐恋；不能解释契约全规则。",
+  "chapter_payload_text": "[Chapter payload]\n\nChapter: ch_006 / 符灯听得见\nChapter type: trial_pressure\nOne-line mission: 云眠和陆既白进入第二道秘境门，必须按规则互换一件随身物才能活过符灯阵；她嘴硬吐槽，他靠听见心声提前挡险，却发现同生契上多出一枚人为刻痕。\nIncoming hook: 第一道门塌下时，同生契在两人腕上同时发烫。\nOpening hook: 符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。\nCore scene: 两人一边斗嘴一边破解符灯阵，女主用原书记忆误判规则，男主靠听见心声救场但必须装作只是反应快。\nChapter object: 腕上的同生契红痕\nScene engine: relationship_collision\nClue reveal mechanism: {'style': 'ritual_trigger', 'pressure_source': '符灯阵倒数和同生契痛感', 'surface_trigger': '互换随身物时红痕亮起', 'first_noticer': '陆既白', 'owner_reaction': '他立刻用袖口遮住刻痕，继续用冷话压过去'}\nCharacter reentry focus: {'云眠': '用嘴硬、心声吐槽和临场小聪明立住她，不要写成纯倒霉。'}\nReader emotion target: 轻快、紧张、甜中带险，让读者想看他们继续互坑互救。\nReader belief to preserve: 读者应知道陆既白能听见云眠心声，但云眠仍不知道。\nCharacter shift: 云眠从只想甩开师兄，变成意识到他确实会在危险里先护她。\nRelationship reprice: 陆既白从冷面监考人，变成嘴上嫌弃但能接住她失误的人。\nEmotional turn: 一次意外互换随身物，把斗嘴推进到不太好笑的亲密边界。\nBackstory trigger: None.\nHuman pain anchor: 同生契让两人的痛感同时掠过腕骨，谁都没法假装离得很远。\nRomance seed: 她把护身铃塞给他时嘴上嫌弃，心里却怕他真的受伤。\nSmall payoff: 两人过了符灯阵，并确认同生契被人为加过东西。\nEnding pull: 最后一盏符灯灭前，墙上浮出一行字：此契原本只该绑死人。\nInfo budget: target=3200-4200; new clues<=2; banter and romance pressure must both land\n\nActive story lines:\n- line_rule_trial: 是谁改写秘境规则，把两人绑进同生契？ | visibility=visible | rules=每次规则推进都必须改变两人的互动位置; 战斗和试炼不能只炫技\n\nActive twists:\n- twist_inner_voice: preserve false belief '云眠以为自己的吐槽只在心里发生。'; reader alignment='读者知道男主听见了，从他的克制反应里获得轻喜感和暧昧张力。'; allowed clues=他总能接住她刚在心里骂过的破绽; 他偶尔会回答一句她没有说出口的话; forbidden reveals=不能让女主本章发现心声外泄; 不能解释契约全规则; POV lock=可以让读者看见男主反应，但不展开完整契约解释。\n\nAllowed explicit information:\n- 同生契会共享轻伤痛感\n- 符灯阵要求互换一件真正重要的随身物\n- 秘境规则与云眠记得的原书不完全一致\n\nAllowed clues without explanation:\n- 陆既白总能提前避开她心里刚吐槽的危险\n- 同生契红痕边缘多出不属于古阵的刻痕\n\nForbidden content:\n- 不能让云眠知道陆既白能听见心声\n- 不能解释幕后黑手身份\n- 不能写成沉重宿命虐恋\n- 不能让女主本章发现心声外泄\n- 不能解释契约全规则",
+  "timeline_anchor_facts_text": "[Objective timeline anchors]\nNo strongly relevant timeline anchors found for this chapter.",
+  "relevant_world_rules_text": "[Relevant world rules]\n\n1. 秘境规则必须落到行动选择，不能大段解释修炼体系。\n2. 同生契会共享痛感，但不共享完整记忆。\n3. 秘境规则必须通过行动验证，错误验证会触发符灯惩罚。\n4. 心声泄露不能被直接说破，否则契约会反噬。\n5. 镜雾秘境会把“最想隐藏的念头”转化成关卡提示，但提示只对绑定双方生效。\n6. 宗门试炼积分决定内门资源，首席若失败会被长老会收回本命剑试炼资格。",
+  "style_card_text": "[Style card]\nGenre: restrained historical romance with pressure, mistrust, and emotional misreading.\nPOV: stay in limited perspective; never explain hidden truth from an omniscient distance.\nLanguage: readable modern Chinese prose with historical texture, not archaic imitation and not web-novel slang.\nTexture: scenes should feel lived-in and physically present. Let setting, objects, labor, etiquette, weather, money, and bodily discomfort quietly shape the page.\nEmotion: avoid naming feelings too quickly. Let emotion emerge through what the POV notices, avoids, says, misreads, touches, or cannot bring itself to do.\nDialogue: keep it human and motivated. People should speak from position, need, habit, fear, and relationship history, not to serve the outline.\nCharacter landing: make people convincing through selective concrete detail such as posture, hands, clothing, injuries, routine, and forms of address, without turning detail into a checklist.\nReveal discipline: clues may appear, but allowed clues must not be over-explained before reveal.\nRelationship movement: every chapter should deepen, strain, tilt, or re-price at least one relationship beat in a believable way.\nBackstory rule: if the past appears, let it arise naturally from present pressure, memory trigger, or action; do not paste in explanatory blocks.\nRhythm: vary sentence weight and scene pace with the dramatic moment. Do not let the prose sound mechanically patterned.\nImmersion goal: the reader should feel inside the room, inside the body's reaction, and inside the character's limited understanding.",
+  "active_twists": [
+    {
+      "twist_id": "twist_inner_voice",
+      "title": "师兄听见心声却不能说破",
+      "false_belief": "云眠以为自己的吐槽只在心里发生。",
+      "truth": "同生契让陆既白听见她部分心声，但他说破会触发契约反噬。",
+      "reader_alignment": "读者知道男主听见了，从他的克制反应里获得轻喜感和暧昧张力。",
+      "seed_from": "ch_004",
+      "reveal_at": "ch_018",
+      "allowed_clues": [
+        "他总能接住她刚在心里骂过的破绽",
+        "他偶尔会回答一句她没有说出口的话"
+      ],
+      "forbidden_reveals": [
+        "不能让女主本章发现心声外泄",
+        "不能解释契约全规则"
+      ],
+      "pov_lock": "可以让读者看见男主反应，但不展开完整契约解释。",
+      "related_characters": [
+        "云眠",
+        "陆既白"
+      ],
+      "payoff_effect": "女主发现后，所有斗嘴都会被重新定价为他一直听懂她。"
+    }
+  ],
+  "active_story_lines": [
+    {
+      "line_id": "line_rule_trial",
+      "name": "规则秘境",
+      "line_type": "adventure",
+      "visibility": "visible",
+      "core_question": "是谁改写秘境规则，把两人绑进同生契？",
+      "reader_hook_mode": "rule-mystery",
+      "start_state": "两人只知道同生契会共痛，却不知道它为什么选中他们。",
+      "midpoint_shift": "秘境不再像普通试炼，而像针对他们的筛杀局。",
+      "end_state": "两人带着契约线索回宗门反查。",
+      "carried_twists": [
+        "twist_inner_voice"
+      ],
+      "line_rules": [
+        "每次规则推进都必须改变两人的互动位置",
+        "战斗和试炼不能只炫技"
+      ]
+    }
+  ],
+  "scene_character_context_text": "云眠\n- Public identity: 穿书炮灰小师妹 / 外门弟子\n- Stable trait (book-level): 嘴硬、机灵、怕死但不丢人\n- Pressure behavior (scene-usable): 嘴上怂得很坦荡，真危险时先找规则漏洞；心声比行动诚实。\n- Current drive (chapter-facing): 只想按原书剧情苟过秘境，却发现剧情已经跑偏\n- Action lane: move around '只想按原书剧情苟过秘境，却发现剧情已经跑偏' without breaking '秘境规则必须落到行动选择，不能大段解释修炼体系。'.\n- Behavioral rules: 嘴上怂得很坦荡，真危险时先找规则漏洞；心声比行动诚实。; Stay inside chapter limit: 秘境规则必须落到行动选择，不能大段解释修炼体系。\n- Hidden truth lock: do not state unrevealed motive, sacrifice, or final arc destination.\n- Allowed outer signs: pause, deflection, restraint, changed address, avoidance, incomplete answer.\n\n陆既白\n- Public identity: 冷面天才师兄 / 内门首席弟子\n- Stable trait (book-level): 克制、毒舌、责任感重\n- Pressure behavior (scene-usable): 先判断风险再开口，嘴上嫌弃，身体总先挡在危险方向。\n- Current drive (chapter-facing): 认为云眠麻烦，却被她心声扰得无法完全冷眼旁观\n- Action lane: move around '认为云眠麻烦，却被她心声扰得无法完全冷眼旁观' without breaking '秘境规则必须落到行动选择，不能大段解释修炼体系。'.\n- Behavioral rules: 先判断风险再开口，嘴上嫌弃，身体总先挡在危险方向。; Stay inside chapter limit: 秘境规则必须落到行动选择，不能大段解释修炼体系。\n- Hidden truth lock: do not state unrevealed motive, sacrifice, or final arc destination.\n- Allowed outer signs: pause, deflection, restraint, changed address, avoidance, incomplete answer.\n\nGlobal chapter bans:\n- 不能让云眠知道陆既白能听见心声\n- 不能解释幕后黑手身份\n- 不能写成沉重宿命虐恋",
+  "relationship_state_text": "云眠 -> 陆既白\n- Current public read: 陆既白从冷面监考人，变成嘴上嫌弃但能接住她失误的人。\n- Emotional pressure now: 一次意外互换随身物，把斗嘴推进到不太好笑的亲密边界。\n- Target reprice this chapter: 陆既白从冷面监考人，变成嘴上嫌弃但能接住她失误的人。\n- Forbidden shortcut: do not skip misreading, cost, or unrevealed truth.",
+  "assistant_persona_prompt": "写轻快仙侠言情，奇幻规则必须服务互动和关系变化。",
+  "writing_requirements_json": "{\n  \"target_words\": \"3200-4200\"\n}",
+  "completed_chapter_summary_bundle": "",
+  "previous_chapter_full_text": "第一道秘境门塌下时，云眠腕上的红痕烫得她差点骂出声；陆既白却先一步扣住她的手，把她从碎石下拽了出去。",
+  "reference_pack": "",
+  "chapter_character_mindsets": [],
+  "chapter_character_mindsets_text": ""
+}

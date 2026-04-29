@@ -1,0 +1,143 @@
+{
+  "baseline_label": "sequential_beat_case01_deepseek",
+  "candidate_label": "step8_contract_case01_prose",
+  "compared_at": "2026-04-28T18:05:00.889945Z",
+  "average_score_deltas": {
+    "romance_tension_score": {
+      "baseline": 9.2,
+      "candidate": 6.5,
+      "delta": -2.7
+    },
+    "relationship_progression_score": {
+      "baseline": 9.0,
+      "candidate": 8.0,
+      "delta": -1.0
+    },
+    "emotional_resonance_score": {
+      "baseline": 9.1,
+      "candidate": 8.5,
+      "delta": -0.6
+    },
+    "character_attraction_score": {
+      "baseline": 9.18,
+      "candidate": 8.25,
+      "delta": -0.93
+    },
+    "hook_score": {
+      "baseline": 9.65,
+      "candidate": 9.25,
+      "delta": -0.4
+    },
+    "continuity_score": {
+      "baseline": 9.0,
+      "candidate": 9.0,
+      "delta": 0.0
+    },
+    "redundancy_score": {
+      "baseline": 8.62,
+      "candidate": 7.42,
+      "delta": -1.2
+    },
+    "mind_state_consistency_score": {
+      "baseline": 9.4,
+      "candidate": 9.0,
+      "delta": -0.4
+    },
+    "genre_fit_score": {
+      "baseline": 0.0,
+      "candidate": 9.5,
+      "delta": 9.5
+    }
+  },
+  "case_diffs": [
+    {
+      "case_id": "romance_case_01_court_return",
+      "title": "围宫请婚的旧案重逢",
+      "baseline_verdict": "pass",
+      "candidate_verdict": "needs_work",
+      "score_deltas": {
+        "romance_tension_score": {
+          "baseline": 9.2,
+          "candidate": 6.5,
+          "delta": -2.7
+        },
+        "relationship_progression_score": {
+          "baseline": 9.0,
+          "candidate": 8.0,
+          "delta": -1.0
+        },
+        "emotional_resonance_score": {
+          "baseline": 9.1,
+          "candidate": 8.5,
+          "delta": -0.6
+        },
+        "character_attraction_score": {
+          "baseline": 9.18,
+          "candidate": 8.25,
+          "delta": -0.93
+        },
+        "hook_score": {
+          "baseline": 9.65,
+          "candidate": 9.25,
+          "delta": -0.4
+        },
+        "continuity_score": {
+          "baseline": 9.0,
+          "candidate": 9.0,
+          "delta": 0.0
+        },
+        "redundancy_score": {
+          "baseline": 8.62,
+          "candidate": 7.42,
+          "delta": -1.2
+        },
+        "mind_state_consistency_score": {
+          "baseline": 9.4,
+          "candidate": 9.0,
+          "delta": -0.4
+        },
+        "genre_fit_score": {
+          "baseline": 0.0,
+          "candidate": 9.5,
+          "delta": 9.5
+        }
+      },
+      "improved_metrics": [
+        "genre_fit_score"
+      ],
+      "declined_metrics": [
+        "romance_tension_score",
+        "relationship_progression_score",
+        "emotional_resonance_score",
+        "character_attraction_score",
+        "hook_score",
+        "redundancy_score",
+        "mind_state_consistency_score"
+      ],
+      "new_blockers": [],
+      "resolved_blockers": [],
+      "cost_deltas": {
+        "llm_calls": -1.0,
+        "patch_rounds": 0.0,
+        "duration_seconds": -556.35
+      }
+    }
+  ],
+  "improved_metrics": [
+    "genre_fit_score"
+  ],
+  "declined_metrics": [
+    "character_attraction_score",
+    "emotional_resonance_score",
+    "hook_score",
+    "mind_state_consistency_score",
+    "redundancy_score",
+    "relationship_progression_score",
+    "romance_tension_score"
+  ],
+  "blocked_case_delta": 0,
+  "new_blocker_case_ids": [],
+  "resolved_blocker_case_ids": [],
+  "baseline_path": "C:\\Users\\19237\\workspace\\noval-flow\\evals\\romance\\reports\\runs\\20260427\\chapter_eval\\deepseek__deepseek-v4-pro\\romance_case_01_court_return\\sequential_beat_case01_deepseek\\summary.json",
+  "candidate_path": "C:\\Users\\19237\\workspace\\noval-flow\\evals\\romance\\reports\\runs\\20260428\\chapter_eval\\deepseek__deepseek-v4-pro\\romance_case_01_court_return\\step8_contract_case01_prose\\summary.json"
+}

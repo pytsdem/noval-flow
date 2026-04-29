@@ -1,0 +1,190 @@
+{
+  "label": "long_arc_step8_static_smoke",
+  "generated_at": "2026-04-28T09:38:27.413649Z",
+  "source_case_dir": "evals/romance/cases",
+  "generated": false,
+  "target_chapters": 0,
+  "batch_size": 0,
+  "case_ids": [
+    "romance_case_01_court_return",
+    "romance_case_02_xianxia_rival_trial",
+    "romance_case_03_urban_reunion_comedy"
+  ],
+  "verdict_counts": {
+    "pass": 0,
+    "warn": 0,
+    "blocked": 3
+  },
+  "average_score": 7.93,
+  "case_reports": [
+    {
+      "case_id": "romance_case_01_court_return",
+      "source": "evals/romance/cases/romance_case_01_court_return/steps.json",
+      "generated_step8_path": "",
+      "chapter_count": 3,
+      "verdict": "blocked",
+      "average_score": 8.04,
+      "metrics": {
+        "story_spine_alignment": {
+          "score": 10.0,
+          "reason": "aligned_chapters=3/3, functional_briefs=3/3"
+        },
+        "genre_tone_consistency": {
+          "score": 8.53,
+          "reason": "style=克制、压迫、潜台词强的古言言情 克制、压迫、潜台词强的古言言情; relation_hits=3, pressure_hits=11"
+        },
+        "chapter_chain_causality": {
+          "score": 10.0,
+          "reason": "incoming_hooks=2/2, ending_to_incoming_overlap=2/2"
+        },
+        "escalation_curve": {
+          "score": 6.87,
+          "reason": "early_intensity=3.0, late_intensity=1.0, scene_engines=3, turn_chapters=2/3"
+        },
+        "character_arc_alignment": {
+          "score": 9.5,
+          "reason": "known_focus=3/3, arc_ready=3/3, premature_closure=0"
+        },
+        "twist_seed_payoff": {
+          "score": 8.8,
+          "reason": "active_twists=Counter({'twist_false_testimony': 3}), clue_chapters=3/3, guarded=3/3"
+        },
+        "line_interlock": {
+          "score": 4.7,
+          "reason": "line_spread=1/2, multi_line_chapters=0/3, dominant_ratio=1.00"
+        },
+        "reader_retention_curve": {
+          "score": 4.0,
+          "reason": "ch3:strong_endings=0/3"
+        },
+        "information_budget_control": {
+          "score": 9.0,
+          "reason": "controlled=3/3, overloaded=0"
+        },
+        "repetition_plateau": {
+          "score": 9.0,
+          "reason": "repeated_pairs=0/2, repeated_scene_engine=0/2"
+        }
+      },
+      "warning_metrics": [],
+      "blocking_metrics": [
+        "line_interlock",
+        "reader_retention_curve"
+      ]
+    },
+    {
+      "case_id": "romance_case_02_xianxia_rival_trial",
+      "source": "evals/romance/cases/romance_case_02_xianxia_rival_trial/steps.json",
+      "generated_step8_path": "",
+      "chapter_count": 3,
+      "verdict": "blocked",
+      "average_score": 7.89,
+      "metrics": {
+        "story_spine_alignment": {
+          "score": 10.0,
+          "reason": "aligned_chapters=3/3, functional_briefs=3/3"
+        },
+        "genre_tone_consistency": {
+          "score": 6.74,
+          "reason": "style=轻快、有奇幻画面感、斗嘴中带心动 ; relation_hits=2, pressure_hits=3"
+        },
+        "chapter_chain_causality": {
+          "score": 8.75,
+          "reason": "incoming_hooks=2/2, ending_to_incoming_overlap=1/2"
+        },
+        "escalation_curve": {
+          "score": 8.37,
+          "reason": "early_intensity=2.0, late_intensity=2.0, scene_engines=3, turn_chapters=2/3"
+        },
+        "character_arc_alignment": {
+          "score": 9.5,
+          "reason": "known_focus=3/3, arc_ready=3/3, premature_closure=0"
+        },
+        "twist_seed_payoff": {
+          "score": 8.8,
+          "reason": "active_twists=Counter({'twist_inner_voice': 3}), clue_chapters=3/3, guarded=3/3"
+        },
+        "line_interlock": {
+          "score": 4.7,
+          "reason": "line_spread=1/2, multi_line_chapters=0/3, dominant_ratio=1.00"
+        },
+        "reader_retention_curve": {
+          "score": 4.0,
+          "reason": "ch3:strong_endings=1/3"
+        },
+        "information_budget_control": {
+          "score": 9.0,
+          "reason": "controlled=3/3, overloaded=0"
+        },
+        "repetition_plateau": {
+          "score": 9.0,
+          "reason": "repeated_pairs=0/2, repeated_scene_engine=0/2"
+        }
+      },
+      "warning_metrics": [
+        "genre_tone_consistency"
+      ],
+      "blocking_metrics": [
+        "line_interlock",
+        "reader_retention_curve"
+      ]
+    },
+    {
+      "case_id": "romance_case_03_urban_reunion_comedy",
+      "source": "evals/romance/cases/romance_case_03_urban_reunion_comedy/steps.json",
+      "generated_step8_path": "",
+      "chapter_count": 3,
+      "verdict": "blocked",
+      "average_score": 7.86,
+      "metrics": {
+        "story_spine_alignment": {
+          "score": 10.0,
+          "reason": "aligned_chapters=3/3, functional_briefs=3/3"
+        },
+        "genre_tone_consistency": {
+          "score": 6.92,
+          "reason": "style=现代、轻快、对白有节奏，现实事件推动暧昧 ; relation_hits=2, pressure_hits=4"
+        },
+        "chapter_chain_causality": {
+          "score": 7.5,
+          "reason": "incoming_hooks=2/2, ending_to_incoming_overlap=0/2"
+        },
+        "escalation_curve": {
+          "score": 9.2,
+          "reason": "early_intensity=1.0, late_intensity=2.0, scene_engines=3, turn_chapters=3/3"
+        },
+        "character_arc_alignment": {
+          "score": 9.5,
+          "reason": "known_focus=3/3, arc_ready=3/3, premature_closure=0"
+        },
+        "twist_seed_payoff": {
+          "score": 8.8,
+          "reason": "active_twists=Counter({'twist_old_breakup': 3}), clue_chapters=3/3, guarded=3/3"
+        },
+        "line_interlock": {
+          "score": 4.7,
+          "reason": "line_spread=1/2, multi_line_chapters=0/3, dominant_ratio=1.00"
+        },
+        "reader_retention_curve": {
+          "score": 4.0,
+          "reason": "ch3:strong_endings=1/3"
+        },
+        "information_budget_control": {
+          "score": 9.0,
+          "reason": "controlled=3/3, overloaded=0"
+        },
+        "repetition_plateau": {
+          "score": 9.0,
+          "reason": "repeated_pairs=0/2, repeated_scene_engine=0/2"
+        }
+      },
+      "warning_metrics": [],
+      "blocking_metrics": [
+        "line_interlock",
+        "reader_retention_curve"
+      ]
+    }
+  ],
+  "report_json": "evals/romance/reports/runs/20260428/long_arc_step8_eval/analysis__step8-static/multi_case__3cases/long_arc_step8_static_smoke/long_arc_step8_summary.json",
+  "report_markdown": "evals/romance/reports/runs/20260428/long_arc_step8_eval/analysis__step8-static/multi_case__3cases/long_arc_step8_static_smoke/report.md"
+}

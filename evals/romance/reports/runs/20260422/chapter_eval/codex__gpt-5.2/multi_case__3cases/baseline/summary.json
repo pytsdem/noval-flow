@@ -1,0 +1,401 @@
+{
+  "label": "baseline",
+  "mode": "fast",
+  "generated_at": "2026-04-22T18:28:31.671874Z",
+  "provider": "codex",
+  "model": "gpt-5.2",
+  "run_dir": "evals\\romance\\reports\\runs\\20260422\\chapter_eval\\codex__gpt-5.2\\multi_case__3cases\\baseline",
+  "case_ids": [
+    "romance_case_01_court_return",
+    "romance_case_02_sickbed_truce",
+    "romance_case_03_betrothal_banquet"
+  ],
+  "average_scores": {
+    "romance_tension_score": 8.7,
+    "relationship_progression_score": 8.1,
+    "emotional_resonance_score": 8.35,
+    "character_attraction_score": 8.34,
+    "hook_score": 8.85,
+    "continuity_score": 8.5,
+    "redundancy_score": 8.21,
+    "mind_state_consistency_score": 8.75
+  },
+  "case_results": [
+    {
+      "case_id": "romance_case_01_court_return",
+      "title": "旧案重逢的朝堂试探",
+      "description": "男主流放归京，女主作为旧案证人再次与他在朝堂对上。核心看点是误读下的拉扯、克制与试探，以及结尾对下一章的强牵引。",
+      "tags": [
+        "historical",
+        "misread-love",
+        "court-pressure",
+        "high-tension-reunion"
+      ],
+      "scores": {
+        "romance_tension_score": 8.7,
+        "relationship_progression_score": 8.0,
+        "emotional_resonance_score": 8.3,
+        "character_attraction_score": 8.23,
+        "hook_score": 8.85,
+        "continuity_score": 8.4,
+        "redundancy_score": 8.31,
+        "mind_state_consistency_score": 8.7
+      },
+      "metrics": {
+        "romance_tension_score": {
+          "score": 8.7,
+          "reason": "拉扯成立且高压：两人同场被礼制钉死，情绪只能从“称呼、停顿、目光落点、笔锋失手”里泄出来。男主把刀藏在规矩里去逼反应，女主用更冷的规矩回击并把破绽压回去，敌意与在意互相绞着走，读者能清楚感到“谁先动就输”。",
+          "evidence_summary": "旧案名目一出女主笔声停顿、袖口细褶；男主明确在等她如何称呼；“谢世子”落下前笔尖点墨，男主胸口被撞、呼吸滞；女主避开他旧伤却又停半息；她强调“殿前不言证词”把私事封死，反而更像在对他下刀。",
+          "improvement_hint": "下一章可在“规矩对规矩”里再加一次更尖的互相试探（不加解释句），让女主的冷不仅是顶回去，而是主动把他推进某个更危险/更可控的程序里，拉扯会更像“互相牵制”而不是单向施压。",
+          "source": "llm"
+        },
+        "relationship_progression_score": {
+          "score": 8.0,
+          "reason": "关系有有效变化：从“未正式碰面、只在想象里定罪”推进到“殿前公开对峙+形成新的互相牵制规则”。男主拿到查档口子，同时第一次被女主的称呼与身体反应刺到，态度从纯报复更明显转向冷静、危险的试探；女主则把两人关系重新定价为必须用礼制硬封的高危对象。",
+          "evidence_summary": "两人首次正面照面并完成一轮公事攻防；称呼从可能的旧名退为“谢世子”，把关系推回冰面；男主以“治罪/循例”换到档册入口，关系从仇敌变成“她掌流程、他掌推进”的互锁；结尾书吏之死把“你一动旧案就有人动你”钉成共同处境。",
+          "improvement_hint": "让本章末尾或下一章开头出现更明确的“关系重估落点”：例如男主在得到危险信号后，把她的冷从“背叛”里剥离出一部分，形成一个新的暂时性判断（仍可误读），让推进更可量化、更像连载的台阶。",
+          "source": "llm"
+        },
+        "emotional_resonance_score": {
+          "score": 8.3,
+          "reason": "情绪推进具体且有余波：从入殿的冷痛与羞辱压迫，推进到称呼刺痛带来的失衡，再到“准查旧档”的短暂开口与随即更冷的危险回灌，结尾以死亡消息把寒意从情绪转成现实威胁，读者会想立刻看下一步怎么查、怎么活。",
+          "evidence_summary": "雪靴渗水、青石入骨→旧案名目点到全殿静→“谢世子”刺出胸口闷痛与呼吸滞→拿到准许但暗处目光压来→出宫即闻监陪书吏死讯，胜利立刻变成引线。",
+          "improvement_hint": "减少同类“冷/静”的重复强调，把余波更多落在“他接下来要怎么在规矩内动、她要怎么在规矩内挡/导”的具体选择上，用选择推进情绪，而不是用更重的形容词加温度。",
+          "source": "llm"
+        },
+        "character_attraction_score": {
+          "score": 8.23,
+          "reason": "由男主吸引力、女主吸引力和双人化学反应加权合成。",
+          "evidence_summary": "男主：用“依旧例核对/军务陈条”切入旧案；把“治罪”说得极淡把自己递到刀口；全程盯女主细节（笔、袖、目光）却不失态；听到书吏死讯时第一反应是压锋与判断局势。；女主：旧案名目时笔停、袖口细褶；称呼换为“谢世子”；强调“殿前不言证词”把私情封死；避开他旧伤但停半息；记“旧档”时指尖顿一下后用更大力压下。；双人：男主等称呼、被“谢世子”刺到仍不失控；女主用称呼与“殿前不言证词”把刀抵回去；她的视线在他旧伤处短暂停留又收回；全殿旁观反应把两人的张力放大成“谁都听得见但谁都不能说”。",
+          "improvement_hint": "把化学反应再推进一小格：让两人同场时出现一次“互相改变对方一句话的走向”的瞬间（不是告白，是措辞被迫改口/停顿），读者会更清楚感到对方确实能影响彼此的决策。",
+          "source": "hybrid"
+        },
+        "hook_score": {
+          "score": 8.85,
+          "reason": "由开篇钩子与结尾钩子均值合成。",
+          "evidence_summary": "开头：入殿即用声响与冷痛把读者拉进场；很快抛出“军粮转运旧案”；女主笔停与抬眼作为第一钩子，冲突与关系压力同时上桌。；结尾：守卫低声禀报“本该今日监陪查旧档的第一名书吏昨夜死了、上头不许张扬”，把“准查”瞬间变成“有人提前布置阻断”；男主不问细节先判断“有人算准他会伸手”，留下更大的幕后问题。",
+          "improvement_hint": "若要更强，可让尾钩多一个“即时后果”但仍不解释：例如暗示内库监陪名册要重排/无人敢接差，使读者明确下一章第一道现实阻力是什么。",
+          "source": "hybrid"
+        },
+        "continuity_score": {
+          "score": 8.4,
+          "reason": "承接自然、规矩边界稳：紧接上章“次日入殿”，男主未平反的处境与殿前禁忌贯彻到他的措辞策略；女主不失态、只在细微处泄漏；皇帝裁示设限也符合世界规则，整体连贯可信。",
+          "evidence_summary": "男主以军务核对名义触旧案而非当殿翻案；女主以流程与“殿前不言证词”控场；“内库档册出入需经她记簿备案”补足权责链；结尾危险从殿内延伸到殿外，章间牵引顺滑。",
+          "improvement_hint": "后续注意维持同一套权责逻辑：既然她是流程关键，下一章她对“监陪重排/封口命令”的反应可以用更具体的程序动作呈现，避免忽然变成纯旁观者。",
+          "source": "llm"
+        },
+        "redundancy_score": {
+          "score": 8.31,
+          "reason": "由 romance judge 与规则型重复检测混合得出。",
+          "evidence_summary": "Judge：冷痛/静默/停顿的同类表达在多个段落出现；男主对称呼的生理反应重复描写；但每次重复大多带着不同功能点（笔点墨、避伤目光、皇帝准许、暗处目光）所以不至于拖垮节奏。；Rule：未检测到明显高相似段落或高频重复短语。",
+          "improvement_hint": "压缩同类“冷与静”的句子，把重复换成新变化：用“选择、程序、后果”推进（例如一句更具体的目光/手势/流程变化）来承压，读者会觉得更像剧情在走而非氛围在堆。",
+          "source": "hybrid"
+        },
+        "mind_state_consistency_score": {
+          "score": 8.7,
+          "reason": "心智一致性强：两位高自控人物都没有无理由失控。男主被刺到但迅速压回并继续按规矩推进；女主出现停顿与笔锋失手，但立刻归位到礼制与例条，符合“越心乱越冷更守礼”的设定。",
+          "evidence_summary": "男主用“治罪/循例”把情绪收进公事；女主在旧案与称呼处有微小失衡（点墨、停半息、袖口细褶）但全程不离席不失态；她避伤目光是本能泄漏但仍可被误读为冷漠，符合锁真相要求。",
+          "improvement_hint": "后续保持“破绽的尺度”稳定：女主的失衡继续用更小、更可否认的身体反应呈现，不要突然升级为明显关切；男主的失控边缘最好通过措辞变化与行动更快更狠来体现，而非情绪爆发。",
+          "source": "llm"
+        }
+      },
+      "breakdowns": {
+        "male_lead_attraction": {
+          "score": 8.2,
+          "reason": "男主有压迫感与辨识度：话少、锋利、能把个人恨意包装成合规的公事推进；在被称呼刺痛时仍能迅速收束情绪，显示高自控与危险的耐心，符合“越受压越冷”的人设。",
+          "evidence_summary": "用“依旧例核对/军务陈条”切入旧案；把“治罪”说得极淡把自己递到刀口；全程盯女主细节（笔、袖、目光）却不失态；听到书吏死讯时第一反应是压锋与判断局势。",
+          "improvement_hint": "可给他一个更独特的“只属于谢临川的处理方式”落点：不是多狠话，而是更精准的一步棋（例如他立刻改变查档策略/选择某个替代入口），让他的魅力从冷硬升级为“智与狠的个人风格”。",
+          "source": "llm"
+        },
+        "female_lead_attraction": {
+          "score": 7.9,
+          "reason": "女主辨识度强（冷、稳、用礼制封情绪），但主体性更多体现在“压回去”而非“主动改写局面”。她的魅力来自极小的破绽与极快的归位，能吊住读者怀疑，但如果后续仍只靠“冷+停顿”，容易变成标签重复。",
+          "evidence_summary": "旧案名目时笔停、袖口细褶；称呼换为“谢世子”；强调“殿前不言证词”把私情封死；避开他旧伤但停半息；记“旧档”时指尖顿一下后用更大力压下。",
+          "improvement_hint": "下一章在不洗白、不自曝动机的前提下，给她一次更硬的“主动选择”：比如她以程序名义调整监陪/路径/时间，表面是规矩，实则把他往某个方向推，存在感会从冷感提升为能改局势的人。",
+          "source": "llm"
+        },
+        "lead_pair_chemistry": {
+          "score": 8.5,
+          "reason": "同场有电流感：两人对彼此的注意力都超出公事尺度，但又必须把一切包进规矩里，形成强烈的压差与潜台词火花。读者能感到他们不是“吵架”，而是在互相逼对方露底。",
+          "evidence_summary": "男主等称呼、被“谢世子”刺到仍不失控；女主用称呼与“殿前不言证词”把刀抵回去；她的视线在他旧伤处短暂停留又收回；全殿旁观反应把两人的张力放大成“谁都听得见但谁都不能说”。",
+          "improvement_hint": "把化学反应再推进一小格：让两人同场时出现一次“互相改变对方一句话的走向”的瞬间（不是告白，是措辞被迫改口/停顿），读者会更清楚感到对方确实能影响彼此的决策。",
+          "source": "llm"
+        },
+        "opening_hook_score": {
+          "score": 8.6,
+          "reason": "开头抓得快：雪靴渗水、跪石入骨立刻给身体压迫；紧接旧案名目点到，全殿静与女主抬眼直接把“高压重逢”扣住，读者容易一口气读下去。",
+          "evidence_summary": "入殿即用声响与冷痛把读者拉进场；很快抛出“军粮转运旧案”；女主笔停与抬眼作为第一钩子，冲突与关系压力同时上桌。",
+          "improvement_hint": "可在前200字内更早埋一粒“她在场”的微信号（比如记档席笔声/墨香/袖口细节先出现），让抬眼那一下更像“早就在等这一刻”，钩子更狠。",
+          "source": "llm"
+        },
+        "ending_hook_score": {
+          "score": 9.1,
+          "reason": "尾钩强且不生硬：刚拿到查旧档口子，监陪书吏立刻死且被封口，因果链直接绑定下一章行动（怎么查、谁在盯、谁敢陪），危险升级清晰，读者追读驱动力很硬。",
+          "evidence_summary": "守卫低声禀报“本该今日监陪查旧档的第一名书吏昨夜死了、上头不许张扬”，把“准查”瞬间变成“有人提前布置阻断”；男主不问细节先判断“有人算准他会伸手”，留下更大的幕后问题。",
+          "improvement_hint": "若要更强，可让尾钩多一个“即时后果”但仍不解释：例如暗示内库监陪名册要重排/无人敢接差，使读者明确下一章第一道现实阻力是什么。",
+          "source": "llm"
+        },
+        "judge_redundancy_score": {
+          "score": 7.4,
+          "reason": "整体信息密度不错，但存在一定重复铺陈：多次用“更静、更冷、停半息、呼吸滞”反复加压，氛围强化有效但容易让读者感觉在同一情绪坡上踩多脚；称呼“谢世子”带来的刺痛也重复强调了两次。",
+          "evidence_summary": "冷痛/静默/停顿的同类表达在多个段落出现；男主对称呼的生理反应重复描写；但每次重复大多带着不同功能点（笔点墨、避伤目光、皇帝准许、暗处目光）所以不至于拖垮节奏。",
+          "improvement_hint": "压缩同类“冷与静”的句子，把重复换成新变化：用“选择、程序、后果”推进（例如一句更具体的目光/手势/流程变化）来承压，读者会觉得更像剧情在走而非氛围在堆。",
+          "source": "llm"
+        },
+        "rule_redundancy_score": {
+          "score": 10.0,
+          "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱。",
+          "evidence_summary": "未检测到明显高相似段落或高频重复短语。",
+          "improvement_hint": "继续保持一段一推进，避免把同层情绪解释回头再说一遍。 同时检查 patch 是否只改字面而没改 block 功能。",
+          "source": "rule"
+        }
+      },
+      "diagnosis": {
+        "strengths": [
+          "礼制高压下的潜台词拉扯很硬，称呼与笔锋细节能让读者自动起疑",
+          "男主“用规矩当刀”的推进方式有连载感：每一步都在为后续查案铺路",
+          "尾钩把“旧案危险”从氛围落到人命与封口，追读驱动力强"
+        ],
+        "weaknesses": [
+          "同类冷感与静默的表达略多，局部像在重复加压而非持续升级变化",
+          "女主的主体性目前主要是“顶回去”，主动改局面的动作还不够清晰",
+          "中段对“谢世子”刺痛的强调略重复，若不加新变化容易磨损锋利度"
+        ],
+        "improvement_hints": [
+          "下一章让女主以程序名义做一次主动布局（不解释动机），把她从“冷”升级为“能改路径的人”",
+          "把重复的氛围句子换成更具体的动作后果（监陪重排、档册流转、旁观者的微反应），用变化制造更强升级",
+          "让男主在得知书吏之死后立刻调整策略（仍合规），把魅力从“能忍”推到“能算、能狠、能活”"
+        ]
+      },
+      "cost_metrics": {
+        "llm_calls": 21,
+        "judge_llm_calls": 1,
+        "review_calls": 4,
+        "patch_rounds": 2,
+        "used_full_rewrite": false,
+        "duration_seconds": 3694.14,
+        "block_count": 5,
+        "patched_block_count": 5,
+        "patched_block_ratio": 1.0,
+        "generation_prompt_chars": 298577,
+        "judge_prompt_chars": 101312,
+        "tool_calls_by_name": {
+          "build_chapter_patch_plan": 2,
+          "build_character_mindset": 2,
+          "final_polish": 1,
+          "format_adjustment_suggestion": 1,
+          "judge_patched_chapter": 2,
+          "plan_content_blocks": 1,
+          "review_prose_and_humanity": 1,
+          "review_structure_and_continuity": 1,
+          "rewrite_blocks_by_plan": 2,
+          "summarize_actual_chapter": 1,
+          "write_chapter_full": 1
+        }
+      },
+      "artifacts": {
+        "case_dir": "evals\\romance\\reports\\runs\\20260422\\chapter_eval\\codex__gpt-5.2\\multi_case__3cases\\baseline\\romance_case_01_court_return",
+        "case_input_json": "evals\\romance\\reports\\runs\\20260422\\chapter_eval\\codex__gpt-5.2\\multi_case__3cases\\baseline\\romance_case_01_court_return\\case_input.json",
+        "writer_context_json": "evals\\romance\\reports\\runs\\20260422\\chapter_eval\\codex__gpt-5.2\\multi_case__3cases\\baseline\\romance_case_01_court_return\\writer_context.json",
+        "chapter_execution_json": "evals\\romance\\reports\\runs\\20260422\\chapter_eval\\codex__gpt-5.2\\multi_case__3cases\\baseline\\romance_case_01_court_return\\chapter_execution.json",
+        "stage_log_json": "evals\\romance\\reports\\runs\\20260422\\chapter_eval\\codex__gpt-5.2\\multi_case__3cases\\baseline\\romance_case_01_court_return\\stage_log.json",
+        "final_text_txt": "evals\\romance\\reports\\runs\\20260422\\chapter_eval\\codex__gpt-5.2\\multi_case__3cases\\baseline\\romance_case_01_court_return\\final_text.txt",
+        "judge_json": "evals\\romance\\reports\\runs\\20260422\\chapter_eval\\codex__gpt-5.2\\multi_case__3cases\\baseline\\romance_case_01_court_return\\judge.json",
+        "result_json": "evals\\romance\\reports\\runs\\20260422\\chapter_eval\\codex__gpt-5.2\\multi_case__3cases\\baseline\\romance_case_01_court_return\\result.json"
+      },
+      "errors": []
+    },
+    {
+      "case_id": "romance_case_02_sickbed_truce",
+      "title": "雨夜药庐的被迫共处",
+      "description": "刺杀余波后，男主带伤躲进女主药庐。场景需要同时成立身体接触、互相防备、暂时合作与情绪余波。",
+      "tags": [
+        "forced-proximity",
+        "injury-care",
+        "aftermath",
+        "romance-tension"
+      ],
+      "scores": {
+        "romance_tension_score": 8.7,
+        "relationship_progression_score": 8.2,
+        "emotional_resonance_score": 8.4,
+        "character_attraction_score": 8.45,
+        "hook_score": 8.85,
+        "continuity_score": 8.6,
+        "redundancy_score": 8.12,
+        "mind_state_consistency_score": 8.8
+      },
+      "metrics": {
+        "romance_tension_score": {
+          "score": 8.7,
+          "reason": "“救命”和“审问”同场推进得很紧：顾砚用冷命令与断句把求生伪装成上位试探，林晚用医嘱与规矩挡回去却不得不贴身处理伤口；旧铜钱、旧疤、残页让两人的停顿与回避都带潜台词，靠近是被逼的、拉开是硬撑的，拉扯成立且有压迫感。",
+          "evidence_summary": "掀袍见他掌心旧铜钱时她呼吸一滞又立刻稳住；解腰封滑出残页与铜钱，两人同时屏息侧耳确认外头无回返；缝伤时他用“这纸……见过？”“这印格……”的半句试探，她用“别说话/气要稳”压回并以收线更紧代替回答；他故意不收残页留在灯下等她再露破绽。",
+          "improvement_hint": "再补一处更锋利的“权力反转”瞬间（例如她用一句更短更硬的规矩把他按回去，或他在最痛时被迫听她一句话），让拉扯不只靠靠近本身，还靠“谁在决定边界”发热。",
+          "source": "llm"
+        },
+        "relationship_progression_score": {
+          "score": 8.2,
+          "reason": "关系有清晰变化：从“互疑旧识”推进到“仍互疑但已出现实际依赖与同战壕动作”。顾砚伤到走不出巷口，林晚不止救治，还把他藏进内室、清痕、压声控光；他也开始替她预备说辞，说明他把她的风险算进去了，但信任并未建立，符合连载推进。",
+          "evidence_summary": "林晚闩门遮灯、缝伤后强硬留宿并按规矩安置内室；她替他抹掉血水泥印、藏血衣、把残页塞进药柜底层；顾砚眩黑摔回榻上后不再硬走，默认她的安排，并交代“若有人问就说我闯错院”，把锅往自己身上揽一半；敲门暗号出现时他被她按住选择噤声配合。",
+          "improvement_hint": "本章内还可以再给一个“可验证的互相让步/站队”小回报：比如他主动收住一次更深的追问换她的合作，或她提出一个条件让他必须遵守，关系重标价会更明确、更好记。",
+          "source": "llm"
+        },
+        "emotional_resonance_score": {
+          "score": 8.4,
+          "reason": "情绪落在身体与环境里，不靠抒情堆词：疼痛、热血烫指、控声控光的紧绷把“压着不说的心软”写得具体；结尾暗号敲门把读者情绪吊在门闩上，余波够强，能推下一章。",
+          "evidence_summary": "针入皮肉、线带血珠、他每次呼吸牵刀口与强忍不出声；她一边下针一边反复确认门窗与外头梆子脚步；残页出现后她动作骤快、视线刻意绕开；末尾三下敲门节奏规矩，她肩背瞬绷、先摸门闩不摸火折，他想起身却被疼压回，读者被迫跟着屏息。",
+          "improvement_hint": "在中后段加入一个更清晰的“假松气—被打断”对比（哪怕只是一句更短的呼吸回落），再被外界微讯号切断，会让情绪曲线更有起伏，余波更扎实。",
+          "source": "llm"
+        },
+        "character_attraction_score": {
+          "score": 8.45,
+          "reason": "由男主吸引力、女主吸引力和双人化学反应加权合成。",
+          "evidence_summary": "男主：进屋先下指令遮灯闩门；把残页留在灯下当诱饵观察她；把旧铜钱塞入袖口贴腕骨当忍痛锚点；敲门时压下想喊的冲动，接受她按住他的安排，并给她“闯错院”的说辞。；女主：开门后立刻遮灯、闩门、栓窗、听巡夜；面对他“别碰”直接回以“要活就配合”；缝伤手稳、控声控光；残页出现后迅速折起藏进药柜底层；暗号敲门时先按住他噤声，再无声走向门闩准备应对。；双人：他用命令伪装求助，她用规矩逼他配合；残页与铜钱落案后两人同步侧耳与屏息形成同频；她指背擦到旧疤，他肌肉瞬绷却不躲，化学反应落在身体；他问半句，她用收线更紧、结头更死替代回答，形成“对话在动作里”的火花。",
+          "improvement_hint": "增加一次更明确的“误读对撞”镜头：让读者同时看见他把她的回避读成有罪、她把他的逼问读成旧账，以一句更短的交锋或一次物件交换完成，会更有电流感。",
+          "source": "hybrid"
+        },
+        "hook_score": {
+          "score": 8.85,
+          "reason": "由开篇钩子与结尾钩子均值合成。",
+          "evidence_summary": "开头：雨冷血腥+门缝暖光；她先遮灯再开门、拖他入屋立刻落闩；掀袍见伤口后紧接撞见他掌心攥着旧铜钱，形成强开章钩子。；结尾：敲门节奏规矩且重复；林晚先摸门闩不摸火折、呼吸都轻了；顾砚欲起身被缝口扯痛压回并吞回喊声；她按住他让他噤声，最终手指扣住门闩将要开门，读者被迫继续读下去。",
+          "improvement_hint": "尾声可再添一粒“代价提示”的细节（例如她指腹在门闩上微微发白、或内室里他把呼吸压到几乎听不见），强化“开门就是一笔账”的感觉，但仍不要提前给出门外身份。",
+          "source": "hybrid"
+        },
+        "continuity_score": {
+          "score": 8.6,
+          "reason": "承接与约束整体自然：夜禁、不能惊动外人、伤势必须留宿都通过动作闭环落实；物件状态也跟得住（铜钱入袖、残页入柜），章节末的空间位置与风险都能无缝接下一章。",
+          "evidence_summary": "多次通过闩门、压灯、遮窗、侧耳梆子与脚步来强化夜禁限制；声响出现后人物立刻停住确认外头无回返；顾砚眩黑摔回榻上证明无法离开；铜钱被他塞进袖口贴腕骨，残页被她折好藏进药柜抽屉。",
+          "improvement_hint": "后续可把“控声控光”的表达再做差异化：少用同一句式重复，多用不同外界压力信号（滴水忽断、风鼓窗纸、墙外轻步）来承接紧张，连贯会更高级。",
+          "source": "llm"
+        },
+        "redundancy_score": {
+          "score": 8.12,
+          "reason": "由 romance judge 与规则型重复检测混合得出。",
+          "evidence_summary": "Judge：多次写灯罩压低/灯影缩与雨声拟态；几次“同时顿住侧耳听外头”的结构重复；清理痕迹段落动作信息量大，稍接近流程堆叠。；Rule：review_prose_and_humanity 命中过重复相关问题",
+          "improvement_hint": "压缩一次“侧耳确认”与一次“压灯”描写并合并到关键节点；把其中一处雨声意象替换为更具体的室内声音（线穿针、布巾摩擦、药臼轻响），用新信息换掉同类重复。",
+          "source": "hybrid"
+        },
+        "mind_state_consistency_score": {
+          "score": 8.8,
+          "reason": "两人的心智与行为一致性强：顾砚高自控、越痛越短越硬，试探藏在职责口吻里且不突然失控；林晚越害怕越沉，用规矩与动作挡情绪，不解释、不摊牌；暗号出现时她的选择链条也符合“先控住他、再面对外部风险”的生存逻辑。",
+          "evidence_summary": "顾砚不说软话、不表白，只用命令与半句逼问推进；他在最危险处能吞回喊声并配合藏身；林晚对残页与敲门的反应都是“动作先于解释”（摸门闩、折纸藏匿、按住他噤声），恐惧外露但不崩盘。",
+          "improvement_hint": "后续尽量让两人的“破绽形态”更区分：顾砚用呼吸节拍/指节力度泄露，林晚用手上速度/用力方式泄露，少用同一种“停顿”写法，心智表现会更真实更耐读。",
+          "source": "llm"
+        }
+      },
+      "breakdowns": {
+        "male_lead_attraction": {
+          "score": 8.2,
+          "reason": "男主魅力来自自控与策略：重伤仍用命令口吻维持位置感，试探不靠长推理而靠物件摆放与短问句；同时他并非无脑强硬，关键处会吞回声音、配合她的禁声与藏身，显得有脑子也有分寸。",
+          "evidence_summary": "进屋先下指令遮灯闩门；把残页留在灯下当诱饵观察她；把旧铜钱塞入袖口贴腕骨当忍痛锚点；敲门时压下想喊的冲动，接受她按住他的安排，并给她“闯错院”的说辞。",
+          "improvement_hint": "在不软化人设的前提下，再给他一处更“立体”的选择：比如他察觉她承担的重罪风险后用一句更利落的安排替她留后路（仍不解释动机），能让他不只“硬”，还有更可追的底线与担当。",
+          "source": "llm"
+        },
+        "female_lead_attraction": {
+          "score": 8.5,
+          "reason": "女主主体性很强：她不是被动温柔，而是用规矩、动作与空间管理掌控局面；她的恐惧不靠哭诉，而靠“更沉、更快、更冷”的处理方式外露，辨识度高，也更让人信她能在危险里活下来。",
+          "evidence_summary": "开门后立刻遮灯、闩门、栓窗、听巡夜；面对他“别碰”直接回以“要活就配合”；缝伤手稳、控声控光；残页出现后迅速折起藏进药柜底层；暗号敲门时先按住他噤声，再无声走向门闩准备应对。",
+          "improvement_hint": "可再强化她对他试探的“反制”而非纯回避：比如她用一句看似医嘱实则反问的短句，把他的怀疑逼回去一点点，让她的主动性更锋利。",
+          "source": "llm"
+        },
+        "lead_pair_chemistry": {
+          "score": 8.6,
+          "reason": "双人同场有电：他在语言上想压她，她在行动上压他；权力在“命令/医嘱”“逼问/缝合”之间来回换手，旧物与触碰把暧昧与危险拧在一起，既有压差也有潜台词火花。",
+          "evidence_summary": "他用命令伪装求助，她用规矩逼他配合；残页与铜钱落案后两人同步侧耳与屏息形成同频；她指背擦到旧疤，他肌肉瞬绷却不躲，化学反应落在身体；他问半句，她用收线更紧、结头更死替代回答，形成“对话在动作里”的火花。",
+          "improvement_hint": "增加一次更明确的“误读对撞”镜头：让读者同时看见他把她的回避读成有罪、她把他的逼问读成旧账，以一句更短的交锋或一次物件交换完成，会更有电流感。",
+          "source": "llm"
+        },
+        "opening_hook_score": {
+          "score": 8.5,
+          "reason": "开头抓人快：雨夜带伤翻进后院、她开门只开一寸并立刻压灯闩门，异样感与危险立住；旧铜钱很早进入视线，把“旧情/旧账”与“当下生死”瞬间捆在一起，追读动力足。",
+          "evidence_summary": "雨冷血腥+门缝暖光；她先遮灯再开门、拖他入屋立刻落闩；掀袍见伤口后紧接撞见他掌心攥着旧铜钱，形成强开章钩子。",
+          "improvement_hint": "可略压缩一两处环境比喻，把“铜钱露出”的镜头更狠更快（更像一记拍桌），并让巡夜梆子或巷口脚步更贴近一分，开头压迫会更立刻。",
+          "source": "llm"
+        },
+        "ending_hook_score": {
+          "score": 9.2,
+          "reason": "尾钩非常强且不生硬：三下暗号敲门把外部危险直接拍到门板上，林晚的身体反应与选择（按住他、走向门闩）都在推进下一章的问题；同时不揭身份、不解暗号，悬念干净。",
+          "evidence_summary": "敲门节奏规矩且重复；林晚先摸门闩不摸火折、呼吸都轻了；顾砚欲起身被缝口扯痛压回并吞回喊声；她按住他让他噤声，最终手指扣住门闩将要开门，读者被迫继续读下去。",
+          "improvement_hint": "尾声可再添一粒“代价提示”的细节（例如她指腹在门闩上微微发白、或内室里他把呼吸压到几乎听不见），强化“开门就是一笔账”的感觉，但仍不要提前给出门外身份。",
+          "source": "llm"
+        },
+        "judge_redundancy_score": {
+          "score": 7.6,
+          "reason": "重复控制在可接受范围，但仍有同质段落：压灯、听雨、侧耳确认的节拍出现多次，部分“像……”式比喻也较密，容易让压迫感变成规律；好处是氛围稳，但中段会略显可预测。",
+          "evidence_summary": "多次写灯罩压低/灯影缩与雨声拟态；几次“同时顿住侧耳听外头”的结构重复；清理痕迹段落动作信息量大，稍接近流程堆叠。",
+          "improvement_hint": "压缩一次“侧耳确认”与一次“压灯”描写并合并到关键节点；把其中一处雨声意象替换为更具体的室内声音（线穿针、布巾摩擦、药臼轻响），用新信息换掉同类重复。",
+          "source": "llm"
+        },
+        "rule_redundancy_score": {
+          "score": 9.1,
+          "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱。",
+          "evidence_summary": "review_prose_and_humanity 命中过重复相关问题",
+          "improvement_hint": "继续保持一段一推进，避免把同层情绪解释回头再说一遍。 同时检查 patch 是否只改字面而没改 block 功能。",
+          "source": "rule"
+        }
+      },
+      "diagnosis": {
+        "strengths": [
+          "救命与审问同场，张力持续不松",
+          "铜钱+残页把悬疑线与旧情残响绑得很紧，物件驱动有效",
+          "夜禁控声控光的细节让“藏人一夜”的压迫可信",
+          "结尾暗号敲门悬停够狠，强力推动追读"
+        ],
+        "weaknesses": [
+          "部分节拍与意象重复（压灯、雨声、侧耳确认），中段略规律化",
+          "关系推进主要落在“被迫留宿/共同藏匿”，还缺一次更硬的互相让步或站队回报",
+          "清理痕迹段落信息密但略接近动作清单，压迫感有轻微平台期"
+        ],
+        "improvement_hints": [
+          "补一处“互相保护/互相让步”的可验证小回报（不洗清怀疑），让关系重标价更明确",
+          "压缩重复的环境控制动作，用更独特的外部微讯号替换同类描写",
+          "让试探更多落在称呼、物件交换、误读对撞上，少靠点题式问句",
+          "为下一章“开门后的第一应对”埋一个可立刻启用的动作伏笔（不解释暗号身份）"
+        ]
+      },
+      "cost_metrics": {
+        "llm_calls": 18,
+        "judge_llm_calls": 1,
+        "review_calls": 4,
+        "patch_rounds": 2,
+        "used_full_rewrite": false,
+        "duration_seconds": 2977.48,
+        "block_count": 6,
+        "patched_block_count": 4,
+        "patched_block_ratio": 0.67,
+        "generation_prompt_chars": 271520,
+        "judge_prompt_chars": 102932,
+        "tool_calls_by_name": {
+          "build_chapter_patch_plan": 2,
+          "build_character_mindset": 2,
+          "final_polish": 1,
+          "format_adjustment_suggestion": 1,
+          "judge_patched_chapter": 2,
+          "plan_content_blocks": 1,
+          "review_prose_and_humanity": 1,
+          "review_structure_and_continuity": 1,
+          "rewrite_blocks_by_plan": 2,
+          "summarize_actual_chapter": 1,
+          "write_chapter_full": 1
+        }
+      },
+      "artifacts": {
+        "case_dir": "evals\\romance\\reports\\runs\\20260422\\chapter_eval\\codex__gpt-5.2\\multi_case__3cases\\baseline\\romance_case_02_sickbed_truce",
+        "case_input_json": "evals\\romance\\reports\\runs\\20260422\\chapter_eval\\codex__gpt-5.2\\multi_case__3cases\\baseline\\romance_case_02_sickbed_truce\\case_input.json",
+        "writer_context_json": "evals\\romance\\reports\\runs\\20260422\\chapter_eval\\codex__gpt-5.2\\multi_case__3cases\\baseline\\romance_case_02_sickbed_truce\\writer_context.json",
+        "chapter_execution_json": "evals\\romance\\reports\\runs\\20260422\\chapter_eval\\codex__gpt-5.2\\multi_case__3cases\\baseline\\romance_case_02_sickbed_truce\\chapter_execution.json",
+        "stage_log_json": "evals\\romance\\reports\\runs\\20260422\\chapter_eval\\codex__gpt-5.2\\multi_case__3cases\\baseline\\romance_case_02_sickbed_truce\\stage_log.json",
+        "final_text_txt": "evals\\romance\\reports\\runs\\20260422\\chapter_eval\\codex__gpt-5.2\\multi_case__3cases\\baseline\\romance_case_02_sickbed_truce\\final_text.txt",
+        "judge_json": "evals\\romance\\reports\\runs\\20260422\\chapter_eval\\codex__gpt-5.2\\multi_case__3cases\\baseline\\romance_case_02_sickbed_truce\\judge.json",
+        "result_json": "evals\\romance\\reports\\runs\\20260422\\chapter_eval\\codex__gpt-5.2\\multi_case__3cases\\baseline\\romance_case_02_sickbed_truce\\result.json"
+      },
+      "errors": []
+    }
+  ],
+  "errors": [
+    "romance_case_03_betrothal_banquet: [Errno 22] Invalid argument"
+  ],
+  "compared_to": "",
+  "report_markdown": "evals\\romance\\reports\\runs\\20260422\\chapter_eval\\codex__gpt-5.2\\multi_case__3cases\\baseline\\report.md",
+  "report_json": "evals\\romance\\reports\\runs\\20260422\\chapter_eval\\codex__gpt-5.2\\multi_case__3cases\\baseline\\summary.json"
+}

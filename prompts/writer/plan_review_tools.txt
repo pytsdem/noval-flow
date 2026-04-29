@@ -9,7 +9,7 @@ Choose which review tools to call next. Output JSON only.
 [Recommended review order]
 {recommended_tools}
 
-[Chapter brief]
+[Chapter contract]
 {chapter_brief_json}
 
 [Chapter payload]

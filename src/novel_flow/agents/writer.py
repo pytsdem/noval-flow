@@ -18,9 +18,9 @@ from novel_flow.models.schemas import (
     BookBlueprint,
     BookDocument,
     Chapter,
-    ChapterBrief,
+    ChapterContract,
+    ChapterBeat,
     CharacterMindset,
-    ContentBlock,
     CriticReport,
     IssueCard,
     IssueLocation,
@@ -120,7 +120,7 @@ class WriterAgent(BaseAgent):
             reference_pack=reference_pack,
         )
         actual_summaries = self._actual_summaries_from_book(book)
-        def _persist_committed_block(block: ContentBlock) -> None:
+        def _persist_committed_block(block: ChapterBeat) -> None:
             if runtime_store is None or not run_id:
                 return
             now_text = datetime.now(timezone.utc).isoformat()
@@ -167,7 +167,7 @@ class WriterAgent(BaseAgent):
             on_chapter_preview_updated=_persist_chapter_preview,
         )
         scene = (
-            self._chapter_scene_from_content_blocks(chapter_id=chapter_brief.chapter_id, blocks=execution.content_blocks)
+            self._chapter_scene_from_chapter_beats(chapter_id=chapter_brief.chapter_id, beats=execution.content_blocks)
             if any(str(item.text or "").strip() for item in execution.content_blocks)
             else self._chapter_scene_from_text(chapter_id=chapter_brief.chapter_id, text=execution.chapter_text)
         )
@@ -441,7 +441,7 @@ class WriterAgent(BaseAgent):
                     return self._chapter_full_text(chapter)
         return ""
 
-    def _make_scene_plan(self, *, writer_context: WriterContext, chapter_brief: ChapterBrief) -> ScenePlan:
+    def _make_scene_plan(self, *, writer_context: WriterContext, chapter_brief: ChapterContract) -> ScenePlan:
         payload = safe_json_generate(
             self.llm_client,
             self._messages(
@@ -528,7 +528,7 @@ class WriterAgent(BaseAgent):
             temperature=0.74,
         )
 
-    def _summarize_actual_chapter(self, *, chapter_text: str, chapter_brief: ChapterBrief, writer_context: WriterContext) -> ActualChapterSummary:
+    def _summarize_actual_chapter(self, *, chapter_text: str, chapter_brief: ChapterContract, writer_context: WriterContext) -> ActualChapterSummary:
         payload = safe_json_generate(
             self.llm_client,
             self._messages(
@@ -547,7 +547,7 @@ class WriterAgent(BaseAgent):
         )
         return ActualChapterSummary.model_validate(payload)
 
-    def _run_scene_critics(self, *, text: str, writer_context: WriterContext, chapter_brief: ChapterBrief, scene_card: SceneCard) -> list[dict[str, Any]]:
+    def _run_scene_critics(self, *, text: str, writer_context: WriterContext, chapter_brief: ChapterContract, scene_card: SceneCard) -> list[dict[str, Any]]:
         common = {
             "chapter_payload_text": writer_context.chapter_payload_text,
             "scene_or_chapter_text": text,
@@ -569,7 +569,7 @@ class WriterAgent(BaseAgent):
             self._run_critic_prompt("critic/check_prose_quality.txt", **common),
         ]
 
-    def _check_chapter_engine(self, *, chapter_text: str, writer_context: WriterContext, chapter_brief: ChapterBrief) -> dict[str, Any]:
+    def _check_chapter_engine(self, *, chapter_text: str, writer_context: WriterContext, chapter_brief: ChapterContract) -> dict[str, Any]:
         return self._run_critic_prompt(
             "critic/check_chapter_engine.txt",
             chapter_payload_text=writer_context.chapter_payload_text,
@@ -743,12 +743,12 @@ class WriterAgent(BaseAgent):
     def _join_issues(report: dict[str, Any]) -> str:
         return "\n".join(str(item).strip() for item in report.get("issues", []) or [] if str(item).strip())
 
-    def _chapter_briefs_from_book(self, book: BookDocument) -> list[ChapterBrief]:
+    def _chapter_briefs_from_book(self, book: BookDocument) -> list[ChapterContract]:
         story_blueprint = dict(book.metadata.get("story_blueprint", {}) or {})
         if "chapter_briefs" not in story_blueprint:
             raise ValueError(UPGRADE_ERROR)
         try:
-            return [ChapterBrief.model_validate(item) for item in story_blueprint.get("chapter_briefs", [])]
+            return [ChapterContract.model_validate(item) for item in story_blueprint.get("chapter_briefs", [])]
         except Exception as exc:
             raise ValueError(UPGRADE_ERROR) from exc
 
@@ -877,45 +877,45 @@ class WriterAgent(BaseAgent):
         )
 
     @staticmethod
-    def _chapter_scene_from_content_blocks(*, chapter_id: str, blocks: list[ContentBlock]) -> Scene:
+    def _chapter_scene_from_chapter_beats(*, chapter_id: str, beats: list[ChapterBeat]) -> Scene:
         scene_id = f"{chapter_id}.sc_001"
         scene_blocks = [
             TextBlock(
-                id=block.block_id,
-                text=block.text,
-                purpose=block.purpose,
+                id=beat.block_id,
+                text=beat.text,
+                purpose=beat.purpose,
                 metadata={
-                    "chapter_id": block.chapter_id,
-                    "block_index": block.block_index,
-                    "characters": list(block.characters),
-                    "active_lines": list(block.active_lines),
-                    "active_twists": list(block.active_twists),
-                    "scene_goal": block.scene_goal,
-                    "must_reveal": list(block.must_reveal),
-                    "must_hide": list(block.must_hide),
-                    "emotional_tone": block.emotional_tone,
-                    "end_state": block.end_state,
-                    "human_reaction_target": list(block.human_reaction_target),
-                    "cost_shift": block.cost_shift,
-                    "reader_feeling_target": block.reader_feeling_target,
-                    "paragraph_budget": block.paragraph_budget,
-                    "micro_hook": block.micro_hook,
-                    "turn_type": block.turn_type,
-                    "paragraph_shape": list(block.paragraph_shape),
-                    "character_anchor_line": block.character_anchor_line.model_dump(mode="json") if block.character_anchor_line else None,
-                    "style_risk_guard": list(block.style_risk_guard),
-                    "character_reentry_mode": block.character_reentry_mode.model_dump(mode="json") if block.character_reentry_mode else None,
-                    "clue_reveal_mechanism": block.clue_reveal_mechanism.model_dump(mode="json") if block.clue_reveal_mechanism else None,
-                    "status": block.status,
-                    "version": block.version,
+                    "chapter_id": beat.chapter_id,
+                    "block_index": beat.block_index,
+                    "characters": list(beat.characters),
+                    "active_lines": list(beat.active_lines),
+                    "active_twists": list(beat.active_twists),
+                    "scene_goal": beat.scene_goal,
+                    "must_reveal": list(beat.must_reveal),
+                    "must_hide": list(beat.must_hide),
+                    "emotional_tone": beat.emotional_tone,
+                    "end_state": beat.end_state,
+                    "human_reaction_target": list(beat.human_reaction_target),
+                    "cost_shift": beat.cost_shift,
+                    "reader_feeling_target": beat.reader_feeling_target,
+                    "paragraph_budget": beat.paragraph_budget,
+                    "micro_hook": beat.micro_hook,
+                    "turn_type": beat.turn_type,
+                    "paragraph_shape": list(beat.paragraph_shape),
+                    "character_anchor_line": beat.character_anchor_line.model_dump(mode="json") if beat.character_anchor_line else None,
+                    "style_risk_guard": list(beat.style_risk_guard),
+                    "character_reentry_mode": beat.character_reentry_mode.model_dump(mode="json") if beat.character_reentry_mode else None,
+                    "clue_reveal_mechanism": beat.clue_reveal_mechanism.model_dump(mode="json") if beat.clue_reveal_mechanism else None,
+                    "status": beat.status,
+                    "version": beat.version,
                 },
             )
-            for block in blocks
+            for beat in beats
         ]
         return Scene(
             id=scene_id,
-            title="Chapter content blocks",
-            summary="Committed content blocks",
+            title="Chapter beats",
+            summary="Committed chapter beats",
             blocks=scene_blocks,
         )
 

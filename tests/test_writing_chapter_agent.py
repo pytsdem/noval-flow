@@ -11,10 +11,10 @@ from novel_flow.llm.base import LLMClient, LLMMessage
 from novel_flow.models.schemas import (
     ActualChapterSummary,
     BookBlueprint,
-    ChapterBrief,
+    ChapterBeat,
+    ChapterContract,
     ChapterExecutionResult,
     CharacterCard,
-    ContentBlock,
     CriticReport,
     StoryLine,
     StoryPremise,
@@ -69,7 +69,7 @@ class WritingChapterAgentTests(unittest.TestCase):
             carried_twists=["twist_01"],
             line_rules=["Only indirect routes early."],
         )
-        self.chapter_brief = ChapterBrief(
+        self.chapter_brief = ChapterContract(
             chapter_id="ch_002",
             title="Cold Return",
             chapter_type="opening",
@@ -144,7 +144,7 @@ class WritingChapterAgentTests(unittest.TestCase):
                 "step_5_character_milestones_text": "[Step 5 relevant character milestones]\n\nHero\n- Revenge line: return under pressure -> shift to indirect investigation",
                 "step_6_twists_text": "[Step 6 active twist packets]\n\ntwist_01 / Hidden motive\n- False belief: Readers think she betrayed him.\n- Reader alignment: Readers side with him before reveal.\n- Seed from: ch_001\n- Reveal at: ch_018\n- Allowed clues: She pauses at the case term.\n- Forbidden reveals: Do not reveal she saved him.\n- POV lock: No true inner thought before reveal.\n- Related characters: Heroine\n- Payoff effect: Relationship gets re-priced after reveal.\n- Truth: hidden until reveal chapter; do not narrate it directly.",
                 "step_7_story_lines_text": "[Step 7 active story line packets]\n\nline_case / Old case\n- Type: mystery\n- Visibility: visible\n- Core question: How can he reopen the case indirectly?\n- Reader hook mode: pressure\n- Start state: He is blocked publicly.\n- Midpoint shift: Preserve later re-pricing without stating concealed truth.\n- End state: Preserve later re-pricing without stating concealed truth.\n- Carried twists: twist_01\n- Line rules: Only indirect routes early.",
-                "step_8_chapter_brief_text": "[Step 8 current chapter brief]\n\nChapter id: ch_002\nTitle: Cold Return\nChapter type: opening\nSummary: He returns under pressure and chooses an indirect path.",
+                "step_8_chapter_brief_text": "[Step 8 current chapter contract]\n\nChapter id: ch_002\nTitle: Cold Return\nChapter type: opening\nChapter mission: He returns under pressure and chooses an indirect path.",
                 "scene_character_context_text": "[Scene character context]\n\nHero\n- Public identity: dismissed commander / former general\n- Surface goal in this chapter: He wants revenge but cannot act directly.",
                 "relationship_state_text": "[Relationship state]\n\nHero -> Heroine\n- Current public relationship: She feels less like a simple traitor and more like a controlled threat.\n- Emotional temperature: Hatred turns into cold strategic pressure.\n- This chapter should move toward: Hatred turns into cold strategic pressure.\n- Forbidden shortcut: do not skip misreading, cost, or unrevealed truth.",
             },
@@ -693,7 +693,7 @@ class WritingChapterAgentTests(unittest.TestCase):
 
     def test_plan_review_tools_keeps_chapter_hot_path_converged(self) -> None:
         agent = WritingChapterAgent(llm_client=RecordingSequenceLLM([]))
-        content_blocks = [ContentBlock.model_validate(item) for item in json.loads(self._planned_blocks_json())["blocks"]]
+        content_blocks = [ChapterBeat.model_validate(item) for item in json.loads(self._planned_blocks_json())["blocks"]]
 
         tool_names = agent._plan_review_tools(
             chapter_brief=self.chapter_brief,
@@ -735,7 +735,7 @@ class WritingChapterAgentTests(unittest.TestCase):
 
     def test_build_current_chapter_context_keeps_recent_blocks_and_tail(self) -> None:
         blocks = [
-            ContentBlock(
+            ChapterBeat(
                 block_id=f"ch_002.sc_001.b{index:03d}",
                 chapter_id="ch_002",
                 block_index=index,
@@ -1337,7 +1337,7 @@ class WritingChapterAgentTests(unittest.TestCase):
         self.assertEqual(chapter.id, "ch_002")
         self.assertTrue(chapter.is_finalized)
         self.assertIn("hall gave him no mercy", chapter.final_text)
-        self.assertEqual(chapter.scenes[0].summary, "Committed content blocks")
+        self.assertEqual(chapter.scenes[0].summary, "Committed chapter beats")
         self.assertIn("He returned in silence", chapter.scenes[0].blocks[0].text)
         self.assertGreaterEqual(len(chapter.content_blocks), 4)
         self.assertEqual(len(chapter.character_mindsets), 2)
@@ -1407,7 +1407,7 @@ class WritingChapterAgentTests(unittest.TestCase):
             relationship_state_text="",
             style_card_text="",
         )
-        committed_block = ContentBlock(
+        committed_block = ChapterBeat(
             block_id="ch_002.sc_001.b001",
             chapter_id="ch_002",
             block_index=1,

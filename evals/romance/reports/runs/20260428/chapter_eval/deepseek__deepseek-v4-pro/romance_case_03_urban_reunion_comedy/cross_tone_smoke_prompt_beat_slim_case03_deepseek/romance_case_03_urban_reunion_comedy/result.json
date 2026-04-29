@@ -1,0 +1,213 @@
+{
+  "case_id": "romance_case_03_urban_reunion_comedy",
+  "title": "全网直播事故里的前任救场",
+  "description": "活动策划女主与空降品牌负责人前任被迫抢救直播发布会，轻松互怼、现实压力、旧情复燃和信息差钩子必须同时成立。",
+  "tags": [
+    "urban",
+    "workplace",
+    "livestream-crisis",
+    "exes-reunion",
+    "witty-romance"
+  ],
+  "verdict": "pass",
+  "scores": {
+    "romance_tension_score": 8.2,
+    "relationship_progression_score": 8.4,
+    "emotional_resonance_score": 8.5,
+    "character_attraction_score": 8.62,
+    "hook_score": 8.9,
+    "continuity_score": 9.2,
+    "redundancy_score": 8.17,
+    "mind_state_consistency_score": 8.9,
+    "genre_fit_score": 9.2
+  },
+  "metrics": {
+    "romance_tension_score": {
+      "score": 8.2,
+      "reason": "男女主在工作互怼中夹杂旧情试探，周聿白嘴上挑剔手上兜底，许知夏用称呼和公事口吻维持边界，但细节暴露默契。结尾追问与回避形成拉扯，不和解反而张力未减。",
+      "evidence_summary": "周聿白递咖啡且是无糖的，许知夏认出后喝了一口；他紧张时转戒指被余光捕捉；备用U盘日期是分手日，许知夏发现后只按进侧袋；结尾问题抛出后她以工作话术岔开，但语速慢半拍。",
+      "improvement_hint": "可让许知夏在结尾与后续章节中通过一个更明确的身体回避（如关掉对讲、起身调整设备）强化内心防御的裂缝，使拉扯更持续。",
+      "source": "llm"
+    },
+    "relationship_progression_score": {
+      "score": 8.4,
+      "reason": "关系从把她当难伺候甲方变为承认他仍然最会接住漏洞的人，但未和解。周聿白从前任麻烦变成危机中懂她的人，且结尾抛出旧情问题，将关系推回未了旧情，变化清晰。",
+      "evidence_summary": "许知夏开头嘲讽他挑毛病，后来接过咖啡，协作时互相补位，最后她转身切机位时手指多停半秒；周聿白提供备用方案、扣手机护短、离开时停顿，是兜底者形象。",
+      "improvement_hint": "下一章可让许知夏因他离开后独自面对U盘时有更明显的情感反应，推动她对关系重估的下一步。",
+      "source": "llm"
+    },
+    "emotional_resonance_score": {
+      "score": 8.5,
+      "reason": "情绪通过动作、停顿和环境细节有效传达，克制但余波绵长。倒计时压迫下互怼中的酸涩感真实，结尾U盘收起的动作让情绪延续。",
+      "evidence_summary": "许知夏手指在U盘上停顿、咖啡冰麻指尖、手肘撞伤、屏幕前指节轻响、结尾拉链声响融入空调声，周聿白脱西装蹲地上接线、转戒指，以及低声追问后对方回避时他的无声。",
+      "improvement_hint": "毋需加强，保持克制即可。可留意偶尔让配角反应更明显，增强氛围余波。",
+      "source": "llm"
+    },
+    "character_attraction_score": {
+      "score": 8.62,
+      "reason": "由男主吸引力、女主吸引力和双人化学反应加权合成。",
+      "evidence_summary": "男主：第一句挑刺反光板，第二句报备用机位；凌晨两点做备用方案而不通知；搬发射机时脱西装卷袖子；扣手机挡住黑稿；处理舆情时冷静；结尾追问时又适度克制。；女主：她回怼“周总见缝插针挑毛病”，迅速处理带宽卡顿，左手把U盘按进侧袋，结尾手指在键帽上轻蹭；手肘淤青被指出仍说“没事”。；双人：周聿白递咖啡与U盘，许知夏接过并喝下；两人跑向设备舱和一起处理带宽卡顿时的短句交替；结尾他低声问“回来找我”后她的停顿和回避。",
+      "improvement_hint": "可增加一个旁观者（如唐悦或方负责人）的瞬间反应，折射两人间的异样氛围，增强化学反应的客观性。",
+      "source": "hybrid"
+    },
+    "hook_score": {
+      "score": 8.9,
+      "reason": "由开篇钩子与结尾钩子均值合成。",
+      "evidence_summary": "开头：首句“彩排结束第七分钟，消息就来了”直给压力；周聿白进门先批评再递咖啡；U盘标签日期潜藏旧日信息。；结尾：周聿白问“当年你真的一次都没想过回来找我？”，许知夏只回“周总，第二组切换还有十五秒”，语速慢半拍；结尾她收U盘拉链声响与空调声相融。",
+      "improvement_hint": "可让周聿白离开后许知夏有一个更明确的停顿（如瞥一眼门口），或让导播无意问一句，加强尾钩的情绪回响。",
+      "source": "hybrid"
+    },
+    "continuity_score": {
+      "score": 9.2,
+      "reason": "修复后时间线连贯，从彩排后到开播一路推进，无倒转或断裂。人物行为与前期设定承接自然，情绪进展与事件同步。",
+      "evidence_summary": "修补版去除了时间回溯，从主视觉→耳返→黑稿→倒计时→开播线性推进；许知夏从前讨厌甲方逐步松动，周聿白从挑剔到兜底，都平滑。",
+      "improvement_hint": "无需大改，可确保后续章节对U盘日期线索的延续。",
+      "source": "llm"
+    },
+    "redundancy_score": {
+      "score": 8.17,
+      "reason": "以 romance judge 为主分，并用重复/anti-slop 规则信号做向下修正，不再允许规则层把坏重复或直白心理解释救高。",
+      "evidence_summary": "Judge：无糖咖啡只出现一次并揭示记得细节；U盘标签日期作为线索仅展示两次，一次发现一次收起，未重复解释。；Rule：第22段与第65段语义形状过近（相似度约 0.78）；第102段与第147段语义形状过近（相似度约 1.00）；“耳机里倒计时”重复 3 次；review_structure_and_continuity 命中过重复相关问题；review_prose_and_humanity 命中过重复相关问题；Anti-slop：直白心理标签 4 处（如“我还清楚我场地的舞美结构了、她知道他说的是对的，也知道他扣手机”）；解释性总结 1 处（如“他紧张”）；review_prose_and_humanity 命中过直白心理/解释问题；judge_patched_chapter 命中过直白心理/解释问题",
+      "improvement_hint": "先清掉“她知道/他意识到/这让她更明白”类句式，再把篇幅换成新动作、新误读和新关系代价。",
+      "source": "hybrid"
+    },
+    "mind_state_consistency_score": {
+      "score": 8.9,
+      "reason": "许知夏保持高自控，用公事话术回避脆弱，只在细节中泄露情绪；周聿白毒舌护短，追问后立即收敛，符合人物心智状态。",
+      "evidence_summary": "许知夏被戳旧伤时没追问，被问时用切换任务岔开；周聿白脱西装、拧瓶盖、扣手机体现克制，离开时停顿摸口袋是细微破绽。",
+      "improvement_hint": "无重大偏差，后续可警惕不要让周聿白过早崩溃。",
+      "source": "llm"
+    },
+    "genre_fit_score": {
+      "score": 9.2,
+      "reason": "完全符合urban modern romance与light witty reunion：现代职场背景，对白有节奏，互怼中带甜和酸，现实压力驱动情节，旧情线索克制浮现，无古风或霸总模板。",
+      "evidence_summary": "发布会直播事故是核心事件，对话短促职业；咖啡、戒指等细节制造暧昧；黑稿和品牌压力作为外部推手；结尾不和解保持甜中带酸。",
+      "improvement_hint": "继续保持对白节奏和克制情感，避免解释过多内心。",
+      "source": "llm"
+    }
+  },
+  "breakdowns": {
+    "male_lead_attraction": {
+      "score": 8.7,
+      "reason": "周聿白毒舌、细致、护短且行动力强，有职场魅力。他不是空降拯救者，而是提前准备预案、快速指挥的务实角色。小动作（转戒指、拧瓶盖）增加辨识度。",
+      "evidence_summary": "第一句挑刺反光板，第二句报备用机位；凌晨两点做备用方案而不通知；搬发射机时脱西装卷袖子；扣手机挡住黑稿；处理舆情时冷静；结尾追问时又适度克制。",
+      "improvement_hint": "可丰富他的内心矛盾，在后续通过回忆或独处场景补齐他做预案时的心理，使魅力更立体。",
+      "source": "llm"
+    },
+    "female_lead_attraction": {
+      "score": 8.3,
+      "reason": "许知夏专业、嘴快、扛压且不愿示弱，同时有记忆点动作（绕对讲机挂绳、手肘撞伤不示疼）。她在高压下不崩，用玩笑化解，被戳旧伤时迅速转公事，有主体性。",
+      "evidence_summary": "她回怼“周总见缝插针挑毛病”，迅速处理带宽卡顿，左手把U盘按进侧袋，结尾手指在键帽上轻蹭；手肘淤青被指出仍说“没事”。",
+      "improvement_hint": "后续可让她在独处时展露更多脆弱瞬间，以维持人物立体感。",
+      "source": "llm"
+    },
+    "lead_pair_chemistry": {
+      "score": 8.8,
+      "reason": "同场戏对白有节奏、动作有互补，潜台词丰富。两人步频一致、同时接答倒计时、她认出无糖咖啡、他转戒指，这些细节堆出旧情未了的电流感。",
+      "evidence_summary": "周聿白递咖啡与U盘，许知夏接过并喝下；两人跑向设备舱和一起处理带宽卡顿时的短句交替；结尾他低声问“回来找我”后她的停顿和回避。",
+      "improvement_hint": "可增加一个旁观者（如唐悦或方负责人）的瞬间反应，折射两人间的异样氛围，增强化学反应的客观性。",
+      "source": "llm"
+    },
+    "opening_hook_score": {
+      "score": 8.8,
+      "reason": "以技术事故和倒计时压力快速切入，周聿白的出场带出专业挑刺与前任身份的双重冲突，迅速建立追看兴趣。",
+      "evidence_summary": "首句“彩排结束第七分钟，消息就来了”直给压力；周聿白进门先批评再递咖啡；U盘标签日期潜藏旧日信息。",
+      "improvement_hint": "可在周聿白开口前增加一两个许知夏的内心闪回（三年前类似场景），强化前任重逢感。",
+      "source": "llm"
+    },
+    "ending_hook_score": {
+      "score": 9.0,
+      "reason": "直播间掌声中抛出分手旧问，许知夏不答且用工作岔开，留下强烈悬念。大危机虽暂时解决，但关系悬而未决，推动读者追问原因并期待下章。",
+      "evidence_summary": "周聿白问“当年你真的一次都没想过回来找我？”，许知夏只回“周总，第二组切换还有十五秒”，语速慢半拍；结尾她收U盘拉链声响与空调声相融。",
+      "improvement_hint": "可让周聿白离开后许知夏有一个更明确的停顿（如瞥一眼门口），或让导播无意问一句，加强尾钩的情绪回响。",
+      "source": "llm"
+    },
+    "judge_genre_fit_score": {
+      "score": 9.2,
+      "reason": "完全符合urban modern romance与light witty reunion：现代职场背景，对白有节奏，互怼中带甜和酸，现实压力驱动情节，旧情线索克制浮现，无古风或霸总模板。",
+      "evidence_summary": "发布会直播事故是核心事件，对话短促职业；咖啡、戒指等细节制造暧昧；黑稿和品牌压力作为外部推手；结尾不和解保持甜中带酸。",
+      "improvement_hint": "继续保持对白节奏和克制情感，避免解释过多内心。",
+      "source": "llm"
+    },
+    "judge_redundancy_score": {
+      "score": 9.0,
+      "reason": "修补后几乎没有重复解释或同层情绪铺陈。咖啡、U盘、戒指等元素各出现一次并推进功能，不冗余。",
+      "evidence_summary": "无糖咖啡只出现一次并揭示记得细节；U盘标签日期作为线索仅展示两次，一次发现一次收起，未重复解释。",
+      "improvement_hint": "保持克制，不要在后文再过多追加解释同一线索。",
+      "source": "llm"
+    },
+    "rule_redundancy_score": {
+      "score": 5.1,
+      "reason": "重复铺陈较明显，部分段落在重复同一心理、情绪、意象或动作模式，且没有形成有效回环。",
+      "evidence_summary": "第22段与第65段语义形状过近（相似度约 0.78）；第102段与第147段语义形状过近（相似度约 1.00）；“耳机里倒计时”重复 3 次；review_structure_and_continuity 命中过重复相关问题；review_prose_and_humanity 命中过重复相关问题",
+      "improvement_hint": "优先删除重复解释，把腾出的篇幅换成新剧情功能、新代价、新误读、新线索或新关系变化。 同时检查 patch 是否只改字面而没改 block 功能。",
+      "source": "rule"
+    },
+    "rule_anti_slop_score": {
+      "score": 4.85,
+      "reason": "直白心理标签和解释性总结句偏多，正文更像在说明情绪而不是让读者看见情绪。",
+      "evidence_summary": "直白心理标签 4 处（如“我还清楚我场地的舞美结构了、她知道他说的是对的，也知道他扣手机”）；解释性总结 1 处（如“他紧张”）；review_prose_and_humanity 命中过直白心理/解释问题；judge_patched_chapter 命中过直白心理/解释问题",
+      "improvement_hint": "先清掉“她知道/他意识到/这让她更明白”类句式，再把篇幅换成新动作、新误读和新关系代价。",
+      "source": "rule"
+    }
+  },
+  "diagnosis": {
+    "strengths": [
+      "对白与动作高效推进关系，互怼中带甜",
+      "男主角毒舌护短、行动力强的魅力成立",
+      "倒计时压力与旧情线索交织，追读感强",
+      "结尾钩子留下明确情感疑问"
+    ],
+    "weaknesses": [
+      "男女主同场戏以外缺乏旁观者反应强化氛围",
+      "许知夏的内心脆弱面几乎全压在动作细节上，适度扩大外显可提升共振",
+      "中段存在重复铺陈信号",
+      "存在直白心理解释信号"
+    ],
+    "improvement_hints": [
+      "增加一个配角（如唐悦）看到两人协作后的嘀咕，旁观反应强化化学反应",
+      "下一章让许知夏独自面对U盘时有一个更强烈的动作选择（如删除标签或低头看日期），深化内心",
+      "优先删除重复解释，把腾出的篇幅换成新剧情功能、新代价、新误读、新线索或新关系变化。 同时检查 patch 是否只改字面而没改 block 功能。",
+      "先清掉“她知道/他意识到/这让她更明白”类句式，再把篇幅换成新动作、新误读和新关系代价。"
+    ]
+  },
+  "hard_fail_flags": [],
+  "optimization_targets": [],
+  "cost_metrics": {
+    "llm_calls": 16,
+    "judge_llm_calls": 1,
+    "review_calls": 3,
+    "patch_rounds": 1,
+    "used_full_rewrite": false,
+    "duration_seconds": 1185.57,
+    "block_count": 3,
+    "patched_block_count": 1,
+    "patched_block_ratio": 0.33,
+    "generation_prompt_chars": 240464,
+    "judge_prompt_chars": 86457,
+    "tool_calls_by_name": {
+      "build_chapter_patch_plan": 1,
+      "build_character_mindset": 2,
+      "draft_block": 3,
+      "final_polish": 1,
+      "format_adjustment_suggestion": 1,
+      "judge_patched_chapter": 1,
+      "plan_content_blocks": 1,
+      "review_prose_and_humanity": 1,
+      "review_structure_and_continuity": 1,
+      "rewrite_blocks_by_plan": 1,
+      "summarize_actual_chapter": 1
+    }
+  },
+  "artifacts": {
+    "case_dir": "evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_03_urban_reunion_comedy/cross_tone_smoke_prompt_beat_slim_case03_deepseek/romance_case_03_urban_reunion_comedy",
+    "case_input_json": "evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_03_urban_reunion_comedy/cross_tone_smoke_prompt_beat_slim_case03_deepseek/romance_case_03_urban_reunion_comedy/case_input.json",
+    "writer_context_json": "evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_03_urban_reunion_comedy/cross_tone_smoke_prompt_beat_slim_case03_deepseek/romance_case_03_urban_reunion_comedy/writer_context.json",
+    "chapter_execution_json": "evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_03_urban_reunion_comedy/cross_tone_smoke_prompt_beat_slim_case03_deepseek/romance_case_03_urban_reunion_comedy/chapter_execution.json",
+    "stage_log_json": "evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_03_urban_reunion_comedy/cross_tone_smoke_prompt_beat_slim_case03_deepseek/romance_case_03_urban_reunion_comedy/stage_log.json",
+    "final_text_txt": "evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_03_urban_reunion_comedy/cross_tone_smoke_prompt_beat_slim_case03_deepseek/romance_case_03_urban_reunion_comedy/final_text.txt",
+    "judge_json": "evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_03_urban_reunion_comedy/cross_tone_smoke_prompt_beat_slim_case03_deepseek/romance_case_03_urban_reunion_comedy/judge.json",
+    "result_json": "evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_03_urban_reunion_comedy/cross_tone_smoke_prompt_beat_slim_case03_deepseek/romance_case_03_urban_reunion_comedy/result.json"
+  },
+  "errors": []
+}

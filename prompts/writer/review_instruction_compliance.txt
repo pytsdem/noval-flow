@@ -1,6 +1,6 @@
 Review chapter instruction compliance. Output JSON only.
 
-[Chapter brief JSON]
+[Chapter contract JSON]
 {chapter_brief_json}
 
 [Chapter payload]

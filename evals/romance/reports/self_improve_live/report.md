@@ -7,8 +7,8 @@
 - 评测策略：单点评测优先，仅在单点证据足够强时才做完整端到端
 - 当前可用评测 provider：`doubao`
 - 当前终端里的 `codex exec` 会返回 `Access denied`，因此后续评测与诊断命令应显式使用 `LLM_PROVIDER=doubao`
-- 参考基线：`evals/romance/reports/runs/20260422/codex__gpt-5.2/multi_case__3cases/baseline/summary.json`
-- 当前可运行 smoke：`evals/romance/reports/runs/20260423/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/smoke_doubao_case01/summary.json`
+- 参考基线：`evals/romance/reports/runs/20260422/chapter_eval/codex__gpt-5.2/multi_case__3cases/baseline/summary.json`
+- 当前可运行 smoke：`evals/romance/reports/runs/20260423/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/smoke_doubao_case01/summary.json`
 - 迭代 ledger：`evals/romance/reports/self_improve_live/iteration_log.md`
 
 ## 迭代记录规范
@@ -382,7 +382,7 @@
   - `python scripts/check_prompt_encoding.py`
   - `python -m unittest tests.test_final_polish_prompt tests.test_writing_chapter_agent tests.test_schema_and_context`
   - `LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_final_polish_anti_slop_case01`
-  - `python -m evals.romance.run_case_comparison --baseline evals/romance/reports/runs/20260423/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/smoke_doubao_case01/summary.json --candidate evals/romance/reports/candidate_final_polish_anti_slop_case01/summary.json --output-dir evals/romance/reports/candidate_final_polish_anti_slop_case01`
+  - `python -m evals.romance.run_case_comparison --baseline evals/romance/reports/runs/20260423/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/smoke_doubao_case01/summary.json --candidate evals/romance/reports/candidate_final_polish_anti_slop_case01/summary.json --output-dir evals/romance/reports/candidate_final_polish_anti_slop_case01`
   - 离线 anti-slop 对比：对 baseline / candidate 最终正文重新跑 `AntiSlopRuleAnalyzer`
 - 指标变化（对比 `smoke_doubao_case01`）：
   - `romance_tension_score`: `8.5 -> 8.0`
@@ -438,7 +438,7 @@
   - `python -X utf8 - <<py` 逐文件编译 `evals/romance/*.py` 与 `tools/*.py`（共 `19` 个文件）
   - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
   - `LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_rewrite_local_anti_slop_case01`
-  - `python -m evals.romance.run_case_comparison --baseline evals/romance/reports/runs/20260423/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/smoke_doubao_case01/summary.json --candidate evals/romance/reports/candidate_rewrite_local_anti_slop_case01/summary.json --output-dir evals/romance/reports/candidate_rewrite_local_anti_slop_case01`
+  - `python -m evals.romance.run_case_comparison --baseline evals/romance/reports/runs/20260423/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/smoke_doubao_case01/summary.json --candidate evals/romance/reports/candidate_rewrite_local_anti_slop_case01/summary.json --output-dir evals/romance/reports/candidate_rewrite_local_anti_slop_case01`
   - 离线 anti-slop 复核：对 baseline / candidate 的 `final_text.txt` 重新跑 `AntiSlopRuleAnalyzer`
 - 指标变化（对比 `smoke_doubao_case01`）：
   - `romance_tension_score`: `8.5 -> 7.5`
@@ -546,7 +546,7 @@
   - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
   - `LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_rewrite_rerank_case01`
   - `LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_rewrite_rerank_gatefix_case01`
-  - `python -m evals.romance.run_case_comparison --baseline evals/romance/reports/runs/20260423/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/smoke_doubao_case01/summary.json --candidate evals/romance/reports/candidate_rewrite_rerank_gatefix_case01/summary.json --output-dir evals/romance/reports/candidate_rewrite_rerank_gatefix_case01`
+  - `python -m evals.romance.run_case_comparison --baseline evals/romance/reports/runs/20260423/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/smoke_doubao_case01/summary.json --candidate evals/romance/reports/candidate_rewrite_rerank_gatefix_case01/summary.json --output-dir evals/romance/reports/candidate_rewrite_rerank_gatefix_case01`
 - 关键证据：
   - 第一版 rerank（`candidate_rewrite_rerank_case01`）确实触发了 block 级候选选择，但 requirement case `case01` 的 `redundancy_score` 从 `9.0 -> 7.22`，整体不满足 keep 标准
   - 第二版在修掉 follow-up 误判后（`candidate_rewrite_rerank_gatefix_case01`），`redundancy_score` 回到 `9.0`，但核心 romance 指标没有赢过 baseline：
@@ -698,19 +698,19 @@
 - 改动文件：
   - `evals/romance/reports/self_improve_live/report.md`
   - `evals/romance/reports/self_improve_live/iteration_log.md`
-  - `evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/summary.json`
-  - `evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/report.md`
-  - `evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/comparison.md`
-  - `evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/comparison.json`
+  - `evals/romance/reports/runs/20260426/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/summary.json`
+  - `evals/romance/reports/runs/20260426/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/report.md`
+  - `evals/romance/reports/runs/20260426/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/comparison.md`
+  - `evals/romance/reports/runs/20260426/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/comparison.json`
 - 已做改动：
   - 用 `git worktree add --detach` 创建隔离 worktree，只包含 `codex_20260423_8` 的 beat card 代码，不带当前主工作区里未纳入本轮的 patch 层试验改动。
   - 在隔离 worktree 里显式使用 `LLM_PROVIDER=doubao` 跑单 case requirement eval：
     - `romance_case_01_court_return`
     - label: `candidate_beat_card_case01_clean`
-  - 跑 baseline vs candidate 的 pairwise comparison，并把本轮结果目录完整保留到 repo 的 `evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/`
+  - 跑 baseline vs candidate 的 pairwise comparison，并把本轮结果目录完整保留到 repo 的 `evals/romance/reports/runs/20260426/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/`
 - 验证：
   - `LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_beat_card_case01_clean`
-  - `python -m evals.romance.run_case_comparison --baseline evals/romance/reports/runs/20260423/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/smoke_doubao_case01/summary.json --candidate evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/summary.json --output-dir evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean`
+  - `python -m evals.romance.run_case_comparison --baseline evals/romance/reports/runs/20260423/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/smoke_doubao_case01/summary.json --candidate evals/romance/reports/runs/20260426/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/summary.json --output-dir evals/romance/reports/runs/20260426/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean`
 - 指标变化（对比 `smoke_doubao_case01`）：
   - `romance_tension_score`: `8.5 -> 8.5`
   - `relationship_progression_score`: `8.0 -> 8.0`
@@ -783,7 +783,7 @@
   - `python -m py_compile src/novel_flow/tools/write_chapter_full.py tests/test_writing_chapter_agent.py`（在 `data/_sandbox_iter16/`）
   - `PYTHONPATH=data/_sandbox_iter16/src python -m unittest tests.test_writing_chapter_agent tests.test_schema_and_context tests.test_romance_eval_harness`
   - `PYTHONPATH=data/_sandbox_iter16/src LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_agency_microaction_case01`
-  - `PYTHONPATH=data/_sandbox_iter16/src python -m evals.romance.run_case_comparison --baseline evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/summary.json --candidate evals/romance/reports/runs/20260427/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_agency_microaction_case01/summary.json --output-dir evals/romance/reports/runs/20260427/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_agency_microaction_case01`
+  - `PYTHONPATH=data/_sandbox_iter16/src python -m evals.romance.run_case_comparison --baseline evals/romance/reports/runs/20260426/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/summary.json --candidate evals/romance/reports/runs/20260427/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_agency_microaction_case01/summary.json --output-dir evals/romance/reports/runs/20260427/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_agency_microaction_case01`
 - 指标变化（对比 clean beat-card baseline `candidate_beat_card_case01_clean`）：
   - `romance_tension_score`: `8.5 -> 7.5`
   - `relationship_progression_score`: `8.0 -> 7.8`
@@ -854,7 +854,7 @@
   - `python -m py_compile src/novel_flow/config.py src/novel_flow/llm/factory.py tests/test_llm_factory.py`
   - `python -m py_compile evals/romance/*.py tools/*.py`
   - `PYTHONPATH=data/_sandbox_iter17/src LLM_PROVIDER=doubao python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label candidate_beat_card_initiative_case01`
-  - `PYTHONPATH=data/_sandbox_iter17/src python -X utf8 -m evals.romance.run_case_comparison --baseline data/_tmp_case01_clean_baseline.json --candidate data/_tmp_case01_initiative_candidate.json --output-dir evals/romance/reports/runs/20260427/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_initiative_case01`
+  - `PYTHONPATH=data/_sandbox_iter17/src python -X utf8 -m evals.romance.run_case_comparison --baseline data/_tmp_case01_clean_baseline.json --candidate data/_tmp_case01_initiative_candidate.json --output-dir evals/romance/reports/runs/20260427/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_initiative_case01`
 - 指标变化（对比 clean beat-card baseline `candidate_beat_card_case01_clean`）：
   - `romance_tension_score`: `8.5 -> 7.5`
   - `relationship_progression_score`: `8.0 -> 8.0`
@@ -931,13 +931,13 @@
   - `python -m py_compile evals/romance/*.py tools/*.py`
   - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
 - ???????
-  - ???? clean baseline?`evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/summary.json`
+  - ???? clean baseline?`evals/romance/reports/runs/20260426/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/summary.json`
   - ???????
     - `LLM_PROVIDER=deepseek`
     - `DEEPSEEK_MODEL=deepseek-v4-pro`
     - `python -X utf8 -m evals.romance.run_romance_evals --cases-dir evals/romance/cases --cases romance_case_01_court_return --label deepseek_v4_pro_case01_candidate`
   - ???
-    - `python -X utf8 -m evals.romance.run_case_comparison --baseline data/_tmp_case01_clean_baseline_nobom.json --candidate data/_tmp_case01_deepseek_candidate_nobom.json --output-dir evals/romance/reports/runs/20260427/deepseek__deepseek-v4-pro/romance_case_01_court_return/deepseek_v4_pro_case01_candidate`
+    - `python -X utf8 -m evals.romance.run_case_comparison --baseline data/_tmp_case01_clean_baseline_nobom.json --candidate data/_tmp_case01_deepseek_candidate_nobom.json --output-dir evals/romance/reports/runs/20260427/chapter_eval/deepseek__deepseek-v4-pro/romance_case_01_court_return/deepseek_v4_pro_case01_candidate`
 - ??????? clean beat-card baseline `candidate_beat_card_case01_clean`??
   - `romance_tension_score`: `8.5 -> 8.0`
   - `relationship_progression_score`: `8.0 -> 7.5`
@@ -1114,8 +1114,8 @@
   - 使用本地运行时 `DeepSeek V4-Pro`（`.env` 已正式切到 `LLM_PROVIDER=deepseek`）跑隔离 `romance_case_01_court_return`。
   - 原始对比命令因为历史 baseline `summary.json` 含 BOM 失败，但 candidate run 已完整生成；后续用 `utf-8-sig` 清洗 baseline 与 candidate summary 后完成对比。
   - 证据目录：
-    - `evals/romance/reports/runs/20260427/deepseek__deepseek-v4-pro/romance_case_01_court_return/sequential_beat_case01_deepseek/`
-    - baseline: `evals/romance/reports/runs/20260426/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/summary.json`
+    - `evals/romance/reports/runs/20260427/chapter_eval/deepseek__deepseek-v4-pro/romance_case_01_court_return/sequential_beat_case01_deepseek/`
+    - baseline: `evals/romance/reports/runs/20260426/chapter_eval/doubao__doubao-seed-1-8-251228/romance_case_01_court_return/candidate_beat_card_case01_clean/summary.json`
 - Files changed:
   - `evals/romance/reports/self_improve_live/report.md`
   - `evals/romance/reports/self_improve_live/iteration_log.md`
@@ -1167,7 +1167,7 @@
 - 主要发现：质量和 genre/tone 泛化成立，但长度控制失败；case02 写到 `9680 chars`，case03 最后 block 初稿重复前文并靠 patch 修复。
 - DeepSeek 观察：case02/03 质量高，但耗时长；无同 case A/B，不能判断优于 Doubao。
 - 结论：`partial_keep`，保留当前 prompt/beat 减法方向，但下一轮优先做长度硬约束和 beat 停止条件。
-- 详情：`evals/romance/reports/runs/20260428/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.json` / `evals/romance/reports/runs/20260428/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.md`
+- 详情：`evals/romance/reports/runs/20260428/chapter_eval_rollup/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.json` / `evals/romance/reports/runs/20260428/chapter_eval_rollup/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.md`
 
 ## Iteration 23 - Length Cap And Beat Value Turn Tightening
 
@@ -1234,9 +1234,9 @@
   - `py_compile evals/romance/*.py tools/*.py` (run via Python glob wrapper on Windows)
 - Eval:
   - Command:
-    - `LLM_PROVIDER=deepseek python -m evals.romance.runners.chapter_quality_eval --mode fast --cases romance_case_02_xianxia_rival_trial --label case02_compact_payload_drama --compare-to evals/romance/reports/runs/20260428/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/cross_tone_smoke_prompt_beat_slim_case02_deepseek/summary.json`
+    - `LLM_PROVIDER=deepseek python -m evals.romance.runners.chapter_quality_eval --mode fast --cases romance_case_02_xianxia_rival_trial --label case02_compact_payload_drama --compare-to evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/cross_tone_smoke_prompt_beat_slim_case02_deepseek/summary.json`
   - Evidence directory:
-    - `evals/romance/reports/runs/20260428/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/case02_compact_payload_drama/`
+    - `evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/case02_compact_payload_drama/`
 - Metrics / cost:
   - Core metrics:
     - `romance_tension_score: 8.2 -> 8.0`
@@ -1318,11 +1318,11 @@
   - `python -m unittest tests.test_romance_eval_harness tests.test_writing_chapter_agent tests.test_schema_and_context`
 - Eval:
   - Command:
-    - `LLM_PROVIDER=deepseek python -m evals.romance.runners.chapter_quality_eval --mode fast --cases romance_case_02_xianxia_rival_trial --label case02_action_first_banter --compare-to evals/romance/reports/runs/20260428/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/cross_tone_smoke_prompt_beat_slim_case02_deepseek/summary.json`
+    - `LLM_PROVIDER=deepseek python -m evals.romance.runners.chapter_quality_eval --mode fast --cases romance_case_02_xianxia_rival_trial --label case02_action_first_banter --compare-to evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/cross_tone_smoke_prompt_beat_slim_case02_deepseek/summary.json`
   - Evidence directory:
-    - `evals/romance/reports/runs/20260428/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/case02_action_first_banter/`
+    - `evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/case02_action_first_banter/`
   - Comparison:
-    - `python -m evals.romance.runners.eval_run_comparison --baseline evals/romance/reports/runs/20260428/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/cross_tone_smoke_prompt_beat_slim_case02_deepseek/summary.json --candidate evals/romance/reports/runs/20260428/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/case02_action_first_banter/summary.json`
+    - `python -m evals.romance.runners.eval_run_comparison --baseline evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/cross_tone_smoke_prompt_beat_slim_case02_deepseek/summary.json --candidate evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/case02_action_first_banter/summary.json`
 - Metrics / cost:
   - Core / guard deltas on `case02`:
     - `romance_tension_score: 8.2 -> 8.7`
@@ -1392,10 +1392,10 @@
   - `python scripts/check_prompt_encoding.py`
   - `python -m unittest tests.test_prompt_rendering tests.test_writing_chapter_agent tests.test_romance_eval_harness tests.test_schema_and_context`
 - Eval:
-  - `LLM_PROVIDER=deepseek python -m evals.romance.runners.chapter_quality_eval --mode fast --cases romance_case_01_court_return --label case01_action_first_guard --compare-to evals/romance/reports/runs/20260428/doubao__ep-m-20260319020545-gzfvt/romance_case_01_court_return/cross_tone_smoke_prompt_beat_slim_case01/summary.json`
-  - `python -m evals.romance.runners.eval_run_comparison --baseline evals/romance/reports/runs/20260428/doubao__ep-m-20260319020545-gzfvt/romance_case_01_court_return/cross_tone_smoke_prompt_beat_slim_case01/summary.json --candidate evals/romance/reports/runs/20260428/deepseek__deepseek-v4-pro/romance_case_01_court_return/case01_action_first_guard/summary.json`
-  - `LLM_PROVIDER=deepseek python -m evals.romance.runners.chapter_quality_eval --mode fast --cases romance_case_01_court_return --label case01_high_impact_once --compare-to evals/romance/reports/runs/20260428/doubao__ep-m-20260319020545-gzfvt/romance_case_01_court_return/cross_tone_smoke_prompt_beat_slim_case01/summary.json`
-  - `python -m evals.romance.runners.eval_run_comparison --baseline evals/romance/reports/runs/20260428/doubao__ep-m-20260319020545-gzfvt/romance_case_01_court_return/cross_tone_smoke_prompt_beat_slim_case01/summary.json --candidate evals/romance/reports/runs/20260428/deepseek__deepseek-v4-pro/romance_case_01_court_return/case01_high_impact_once/summary.json`
+  - `LLM_PROVIDER=deepseek python -m evals.romance.runners.chapter_quality_eval --mode fast --cases romance_case_01_court_return --label case01_action_first_guard --compare-to evals/romance/reports/runs/20260428/chapter_eval/doubao__ep-m-20260319020545-gzfvt/romance_case_01_court_return/cross_tone_smoke_prompt_beat_slim_case01/summary.json`
+  - `python -m evals.romance.runners.eval_run_comparison --baseline evals/romance/reports/runs/20260428/chapter_eval/doubao__ep-m-20260319020545-gzfvt/romance_case_01_court_return/cross_tone_smoke_prompt_beat_slim_case01/summary.json --candidate evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_01_court_return/case01_action_first_guard/summary.json`
+  - `LLM_PROVIDER=deepseek python -m evals.romance.runners.chapter_quality_eval --mode fast --cases romance_case_01_court_return --label case01_high_impact_once --compare-to evals/romance/reports/runs/20260428/chapter_eval/doubao__ep-m-20260319020545-gzfvt/romance_case_01_court_return/cross_tone_smoke_prompt_beat_slim_case01/summary.json`
+  - `python -m evals.romance.runners.eval_run_comparison --baseline evals/romance/reports/runs/20260428/chapter_eval/doubao__ep-m-20260319020545-gzfvt/romance_case_01_court_return/cross_tone_smoke_prompt_beat_slim_case01/summary.json --candidate evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_01_court_return/case01_high_impact_once/summary.json`
 - Metrics / cost:
   - `case01_action_first_guard` vs baseline:
     - `relationship_progression_score: 9.0 -> 8.0`
@@ -1611,9 +1611,9 @@
     - `index.md` for human browsing
   - rewrote stored markdown/json path references so live reports and summary metadata now point at the new archive paths
 - Example archive paths:
-  - `evals/romance/reports/runs/20260428/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/case02_action_first_banter/`
-  - `evals/romance/reports/runs/20260427/deepseek__deepseek-v4-pro/romance_case_01_court_return/sequential_beat_case01_deepseek/`
-  - `evals/romance/reports/runs/20260422/codex__gpt-5.2/multi_case__3cases/baseline/`
+  - `evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_02_xianxia_rival_trial/case02_action_first_banter/`
+  - `evals/romance/reports/runs/20260427/chapter_eval/deepseek__deepseek-v4-pro/romance_case_01_court_return/sequential_beat_case01_deepseek/`
+  - `evals/romance/reports/runs/20260422/chapter_eval/codex__gpt-5.2/multi_case__3cases/baseline/`
 - Why this is worth keeping:
   - the root reports directory is browsable again
   - each archived path now directly answers:
@@ -1653,8 +1653,8 @@
     - `evals/romance/reports/self_improve_live/cross_tone_smoke_prompt_beat_slim_summary.md`
 - Change summary:
   - moved the mixed-provider cross-tone smoke summary pair into:
-    - `evals/romance/reports/runs/20260428/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.json`
-    - `evals/romance/reports/runs/20260428/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.md`
+    - `evals/romance/reports/runs/20260428/chapter_eval_rollup/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.json`
+    - `evals/romance/reports/runs/20260428/chapter_eval_rollup/mixed__doubao-plus-deepseek/multi_case__3cases/cross_tone_smoke_prompt_beat_slim_mixed_provider/summary.md`
   - kept the naming honest:
     - `20260428` because the summary belongs to the April 28 cross-tone smoke batch
     - `mixed__doubao-plus-deepseek` because this is not a single-model or same-provider A/B result
@@ -1721,3 +1721,213 @@
   - `no prose-quality claim`
 - Next step:
   - if more one-off note files appear in `self_improve_live/`, place them under `self_improve_live/notes/` by default instead of the root
+
+## Iteration 32
+
+- Date: `2026-04-29`
+- Scope:
+  - rename the active Step8 / planner / writer hot path from `brief + content block` semantics into `chapter contract + chapter beat` semantics
+  - strengthen Step8 so the chapter plan behaves like an execution contract instead of a soft summary
+  - keep backward compatibility where the repo still stores `chapter_briefs` and `content_blocks`
+- User direction:
+  - clean up the current naming instead of leaving the new beat semantics hidden behind old labels
+  - push the roadmap of upgrading Step8 into a real contract layer
+  - do not only add new fields; also simplify and merge old overlapping language
+- Files changed:
+  - `src/novel_flow/models/schemas.py`
+  - `src/novel_flow/models/__init__.py`
+  - `src/novel_flow/tools/plan_content_blocks.py`
+  - `src/novel_flow/services/chapter_tool_payloads.py`
+  - `src/novel_flow/services/novel_context.py`
+  - `src/novel_flow/services/review_aggregator.py`
+  - `src/novel_flow/agents/writing_chapter_agent.py`
+  - `src/novel_flow/agents/writer.py`
+  - `prompts/writer/step_8_chapter_briefs.txt`
+  - `prompts/writer/plan_content_blocks.txt`
+  - `prompts/writer/draft_content_block.txt`
+  - `prompts/writer/review_block_quality.txt`
+  - `prompts/writer/context_sanitization.txt`
+  - `prompts/writer/review_chapter_engine.txt`
+  - `prompts/writer/plan_review_tools.txt`
+  - `prompts/writer/review_instruction_compliance.txt`
+  - `prompts/writer/review_structure_and_continuity.txt`
+  - `prompts/writer/rewrite_by_plan.txt`
+  - `prompts/writer/make_scene_plan.txt`
+  - `prompts/writer/summarize_actual_chapter.txt`
+  - `prompts/critic/check_chapter_engine.txt`
+  - `tests/test_schema_and_context.py`
+  - `tests/test_writing_chapter_agent.py`
+  - `tests/test_romance_eval_harness.py`
+  - `tests/test_eval_case_exporter.py`
+- Change summary:
+  - upgraded `ChapterBrief` into a contract-aware shape by adding:
+    - `cost_of_progress`
+    - `hook_kind`
+    - `pace_curve`
+    - `must_not_repeat`
+  - added contract-facing aliases and views so the runtime can talk in one language without breaking stored payload shape:
+    - `ChapterContract`
+    - `ChapterBeat`
+    - `contract_view()`
+    - `chapter_mission / plot_carrier / relationship_delta / must_payoff / final_hook / pace_contract`
+  - rewired `plan_content_blocks` to treat Step8 as the contract source and each block as a beat that cashes one contract unit
+  - rewired the active writer path to speak `chapter contract / chapter beat` in type hints, stage logs, preview summaries, and review guidance
+  - rewrote Step8 prompt into a shorter contract-generation prompt instead of a loose chapter-summary prompt
+  - cleaned up downstream prompt labels so the active writer/review/sanitizer prompts no longer keep saying `chapter brief` or `content block` on the hot path
+- Why this is worth keeping:
+  - this is the highest-leverage upstream layer for long-form quality because it gives the planner and writer a sharper contract before prose starts
+  - it removes one of the current code-quality drags: the repo had already semantically moved to beats, but names and prompt labels still told the model and the operator an older story
+  - it is additive where needed, but also subtractive:
+    - merged overlapping contract language through alias properties instead of keeping two drifting meanings
+    - removed many stale `brief / content block` labels from the active runtime path
+- Evidence and verification:
+  - `python scripts/check_prompt_encoding.py`
+  - `python -m py_compile src/novel_flow/models/schemas.py src/novel_flow/models/__init__.py src/novel_flow/services/chapter_tool_payloads.py src/novel_flow/services/novel_context.py src/novel_flow/services/review_aggregator.py src/novel_flow/agents/writer.py src/novel_flow/agents/writing_chapter_agent.py src/novel_flow/tools/plan_content_blocks.py tests/test_schema_and_context.py tests/test_writing_chapter_agent.py tests/test_romance_eval_harness.py tests/test_eval_case_exporter.py`
+  - `python -m unittest tests.test_prompt_rendering tests.test_schema_and_context tests.test_writing_chapter_agent tests.test_romance_eval_harness`
+  - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
+  - `python -m unittest tests.test_romance_eval_harness tests.test_writing_chapter_agent tests.test_schema_and_context`
+  - `python -X utf8 - <<py` equivalent compile sweep over `evals/romance/*.py` and `tools/*.py` succeeded with `compiled 20 files`
+- Cost impact:
+  - `no new chapter-generation or eval LLM cost in this iteration`
+  - `temporary test DB folders created by unittest were deleted after verification`
+- Outcome:
+  - `keep`
+- Keep / reject:
+  - `keep as contract-layer and naming-layer foundation`
+  - `no direct prose-score claim yet because no new chapter-quality replay was run in this iteration`
+- Next step:
+  - run requirement-case replay on top of this cleaner contract/beat chain, starting with a low-cost upstream check and then one isolated chapter eval to see whether the sharper contract reduces repeat and improves beat discipline in prose
+
+## Iteration 33
+
+- Date: `2026-04-29`
+- Scope:
+  - add a planner-only / beat-plan-only eval layer
+  - no prose prompt, writer behavior, or model changes
+  - no new end-to-end chapter-generation cost in this iteration
+- User direction:
+  - stop paying full chapter cost just to discover the beat plan itself was muddy
+  - add a direct way to test whether `plan_content_blocks` outputs clearer beats with less overlap
+- Files changed:
+  - `evals/romance/beat_plan_eval.py`
+  - `evals/romance/runners/beat_plan_eval.py`
+  - `tests/test_beat_plan_eval.py`
+- Change summary:
+  - added a real planner-only eval runner that:
+    - builds a real writer context from a romance eval case
+    - runs the actual `plan_content_blocks` tool
+    - stops before chapter drafting
+  - added rule-based beat-plan metrics so we can catch planner failures cheaply:
+    - `beat_count_fit`
+    - `beat_uniqueness_score`
+    - `adjacent_separation_score`
+    - `must_not_repeat_quality`
+    - `contract_coverage_score`
+    - `progression_clarity_score`
+    - `dramatic_pressure_flow_score`
+  - added overlap alerts with pair-level evidence showing which beat ids collide and whether the collision is in:
+    - `new_value`
+    - `relationship_delta`
+    - `clue_delta`
+    - `end_state`
+  - per-case artifacts now include:
+    - `case_input.json`
+    - `writer_context.json`
+    - `beat_plan.json`
+    - `result.json`
+  - the new CLI entrypoint is:
+    - `python -m evals.romance.runners.beat_plan_eval --cases-dir ... --label ...`
+- Why this is worth keeping:
+  - it moves one expensive class of diagnosis upstream
+  - we can now tell whether Step8 / planner changes improved beat separation before paying for full prose
+  - it gives concrete evidence for the exact problem the user called out:
+    - adjacent beats repeating the same dramatic job under new wording
+- Verification:
+  - `python -m py_compile evals/romance/beat_plan_eval.py evals/romance/runners/beat_plan_eval.py tests/test_beat_plan_eval.py`
+  - `python -m unittest tests.test_beat_plan_eval`
+  - `python -X utf8 - <<py` compile sweep over `evals/romance/*.py` and `tools/*.py` succeeded with `compiled 21 files`
+  - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
+  - `python -m unittest tests.test_romance_eval_harness tests.test_beat_plan_eval`
+- Outcome:
+  - `keep`
+- Keep / reject:
+  - `keep as upstream observability and evaluation improvement`
+  - `no prose-quality claim yet`
+- Next step:
+  - use this beat-plan eval as the new cheap gate before any future chapter replay when the iteration target is Step8 or planner quality
+  - first real use should be one requirement case on the current contract/beat chain, then decide whether a prose replay is still needed
+
+## Iteration 34
+
+- Date: `2026-04-29`
+- Scope:
+  - run the full validation chain for the kept `chapter contract + beat` changes
+  - cover `Step8 static -> beat-plan eval -> full prose replay`
+  - use one requirement case only to keep cost bounded
+- Case and model:
+  - case: `romance_case_01_court_return`
+  - provider/model: `deepseek / deepseek-v4-pro`
+- Commands:
+  - `python -X utf8 -m evals.romance.runners.step_plan_static_eval --cases-dir evals/romance/cases --case-ids romance_case_01_court_return --label step8_contract_case01_static`
+  - `python -X utf8 -m evals.romance.runners.beat_plan_eval --cases-dir evals/romance/cases --case-ids romance_case_01_court_return --label step8_contract_case01_beat`
+  - full prose replay was run through a direct harness script after the wrapper command exposed a report-assembly path glitch; the resulting kept run lives at:
+    - `evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_01_court_return/step8_contract_case01_prose`
+  - baseline for prose comparison:
+    - `evals/romance/reports/runs/20260427/chapter_eval/deepseek__deepseek-v4-pro/romance_case_01_court_return/sequential_beat_case01_deepseek/summary.json`
+- Upstream results:
+  - Step8 static eval: `warn`, `average_score = 6.97`
+  - beat-plan eval: `pass`, `average_score = 9.14`
+  - this means the new contract layer and planner are now legible and well-separated enough to pass the cheap upstream gate on this case
+- Prose results:
+  - candidate summary:
+    - `evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_01_court_return/step8_contract_case01_prose/summary.json`
+  - candidate report:
+    - `evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_01_court_return/step8_contract_case01_prose/report.md`
+  - candidate verdict: `needs_work`
+  - average scores:
+    - `romance_tension_score = 6.5`
+    - `relationship_progression_score = 8.0`
+    - `emotional_resonance_score = 8.5`
+    - `character_attraction_score = 8.25`
+    - `hook_score = 9.25`
+    - `continuity_score = 9.0`
+    - `redundancy_score = 7.42`
+    - `mind_state_consistency_score = 9.0`
+    - `genre_fit_score = 9.5`
+- Diff vs baseline:
+  - diff file:
+    - `evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_01_court_return/step8_contract_case01_prose/diff_vs_sequential_beat_case01_deepseek.md`
+  - metric deltas:
+    - `romance_tension_score 9.2 -> 6.5 (-2.7)`
+    - `relationship_progression_score 9.0 -> 8.0 (-1.0)`
+    - `emotional_resonance_score 9.1 -> 8.5 (-0.6)`
+    - `character_attraction_score 9.18 -> 8.25 (-0.93)`
+    - `hook_score 9.65 -> 9.25 (-0.4)`
+    - `continuity_score 9.0 -> 9.0 (+0.0)`
+    - `redundancy_score 8.62 -> 7.42 (-1.2)`
+    - `mind_state_consistency_score 9.4 -> 9.0 (-0.4)`
+  - only `genre_fit_score` improved in the current diff view
+- Diagnosis:
+  - the current contract/beat chain is good at structuring the chapter, but the prose execution drifted toward clue procedure and investigation logic
+  - the chapter still reads coherent and on-genre, but it lost too much of the old `sequential_beat_case01_deepseek` romance heat
+  - this is a classic “upstream plan clearer than downstream dramatization” failure:
+    - the contract says what should happen
+    - the beat plan separates the units
+    - but `draft_block` is still over-cashing the chapter in terms of process, clues, and explanation of mechanism instead of two-person pressure
+- Keep / reject:
+  - `keep` the contract-layer and beat-plan observability work from Iteration 32/33 as structural improvements
+  - `reject` promoting the current default prose behavior as a framework win
+  - specifically: this chain is not ready to replace the existing `sequential_beat_case01_deepseek` baseline for prose quality
+- Cost and tooling notes:
+  - one wrapper path in `chapter_quality_eval` still has a report-assembly glitch when used this way, so the clean prose summary was assembled through the direct harness path instead of the CLI wrapper
+  - no temporary scratch files were left behind; only structured run artifacts were kept
+- Next step:
+  - do not touch Step8 again first
+  - optimize the `draft_block` execution layer so that a strong chapter contract is cashed out as:
+    - more two-person pressure
+    - fewer clue-procedure paragraphs
+    - less “how the document moved” and more “what this exchange cost them”
+  - in practice the next target should be:
+    - action-carried emotional leakage
+    - fewer procedural explanation sentences
+    - more direct relationship pressure inside each beat

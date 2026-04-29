@@ -1,0 +1,263 @@
+{
+  "case_id": "romance_case_01_court_return",
+  "title": "围宫请婚的旧案重逢",
+  "description": "男主带兵归京后在朝堂公开请旨娶当年亲手送他流放的女主；全京城以为这是报复，女主却知道自己若不被他带走，当夜就会被灭口。",
+  "tags": [
+    "historical",
+    "misread-love",
+    "forced-marriage",
+    "public-revenge",
+    "court-pressure"
+  ],
+  "verdict": "needs_work",
+  "scores": {
+    "romance_tension_score": 8.5,
+    "relationship_progression_score": 8.0,
+    "emotional_resonance_score": 8.0,
+    "character_attraction_score": 8.35,
+    "hook_score": 9.0,
+    "continuity_score": 8.0,
+    "redundancy_score": 5.92,
+    "mind_state_consistency_score": 8.5,
+    "genre_fit_score": 9.0
+  },
+  "metrics": {
+    "romance_tension_score": {
+      "score": 8.5,
+      "reason": "男女主在朝堂、偏殿两场同场戏中，通过质问、回避、称呼变化和身体细节实现了高强度潜台词拉扯。谢临川的报复性逼问与沈知微的疏离回应形成双向压迫，而婚书背后共同的灭口危机让这场拉扯从个人恩怨升级为生死共担，完全符合 restrained_angst 的要求。",
+      "evidence_summary": "‘你可愿意？’两次出现，将公事和私情绑在一起；‘世子’称呼反复出现，成为她切割旧情、他失控的信号；婚书被两人先后发现背面暗号，拉扯从单向羞辱变成双向危险感知。",
+      "improvement_hint": "可在某个同场瞬间，让两人在沉默中通过一个不可控的肢体疏漏（如袖口触碰又收回）加剧电流感，避免纯对话的张力重复。",
+      "source": "llm"
+    },
+    "relationship_progression_score": {
+      "score": 8.0,
+      "reason": "关系从朝堂上众人眼中的报复婚约，经婚书暗号揭示，到偏殿中‘无意生路’的给出，最后在谢临川看到杀令后主动下令保护，完成了从对立到高危同盟的实质性转变。每一步都有新的代价和新的依赖。",
+      "evidence_summary": "沈知微从接旨时的待死之人，变成抓住婚约作为救命绳；谢临川从报复者转为主动提供活路的人，最后更以‘先活过子时’作为行动目标。关系定价在尾端被彻底重写。",
+      "improvement_hint": "下一轮可在谢临川下令保护后，增加一个沈知微接到口信时的瞬间反应（哪怕不写心理，仅用动作），使关系变化在她这边形成更明确的回应。",
+      "source": "llm"
+    },
+    "emotional_resonance_score": {
+      "score": 8.0,
+      "reason": "情绪完全通过动作、停顿、环境和物件传递，如靴底雪水、金砖血滴、婚书纸边割手、偏殿水印和脚步声，克制而具体。结尾‘先活过子时’留下很强的余波，让读者在压迫感中感受到一种未说出口的保护欲。",
+      "evidence_summary": "金砖上的一星血，偏殿门槛内侧的血迹和水印，她掌心贴住的婚书，结尾窗外不属于风的脚步声，都细密地推高了紧张和情感浓度。",
+      "improvement_hint": "可在某个场景让环境直接与人物内心产生纠缠，例如风突然灌入的瞬间，让她不由自主地微微侧身，像在等待什么，但立刻收住，强化被迫的克制。",
+      "source": "llm"
+    },
+    "character_attraction_score": {
+      "score": 8.35,
+      "reason": "由男主吸引力、女主吸引力和双人化学反应加权合成。",
+      "evidence_summary": "男主：‘旧事未了’四字含蓄带刃；靴底雪水未干就将最恨之人变成未婚妻；看到她看禁军如看伏兵时，立即下令召她明日来行帐，行动力强且充满推理和急迫。；女主：接旨时余光扫过禁军布防，立刻认出暗号并合上婚书；偏殿中面对追问以‘看时辰’搪塞，同时用最远的称呼拉开距离，却在心底记下生路。；双人：他问‘你可愿意’时她答‘礼不可废’；他靠近一步她无法后退，却用空洞眼神迎上；他目光下落至她腕上旧伤，她纹丝不动——这些均构成高密度潜台词火花。",
+      "improvement_hint": "在某个无言瞬间，让旁观者（如近旁的太监或武官）有一个微小的反应（如屏息或后退），从外部烘托两人之间的气压，增强戏剧感。",
+      "source": "hybrid"
+    },
+    "hook_score": {
+      "score": 9.0,
+      "reason": "由开篇钩子与结尾钩子均值合成。",
+      "evidence_summary": "开头：首段环境引入，第二段对话直接抛出请婚，随后群臣的窸窣、侍郎的反对、皇帝沉默后的‘准’，在极短篇幅内落地了全章最大冲突。；结尾：婚书背面的字迹被发现，谢临川生出保护急务；紧接着沈知微在住所听见不属于风的脚步声，两个视角同时指向今夜子时的危险，将悬念叠加。",
+      "improvement_hint": "可在下令‘传口信’后，多给一句环境变化（如雪忽然变大，遮蔽宫道），增强天时压人的紧迫感，让尾钩更锋锐。",
+      "source": "hybrid"
+    },
+    "continuity_score": {
+      "score": 8.0,
+      "reason": "从朝堂到偏殿到内库到营帐再回住所，时间线一气呵成，情绪承接自然，事件环环相扣。旧伤、称呼、禁军观察等元素被复现但每次都带来新的意义，没有断裂感。",
+      "evidence_summary": "靴底的雪水从开篇的丹墀，到偏殿门口的薄冰，最后营帐外的新雪，贯穿始终；她腕上的旧伤在偏殿被提及，与前文形成呼应，所有细节咬合紧密。",
+      "improvement_hint": "可在偏殿结束到谢临川返回营帐之间，插入极短的过渡（如他走出宫门，侧目看了一眼北地旧部的方向），使空间转换的连续性更佳。",
+      "source": "llm"
+    },
+    "redundancy_score": {
+      "score": 5.92,
+      "reason": "以 romance judge 为主分，并用重复/anti-slop 规则信号做向下修正，不再允许规则层把坏重复或直白心理解释救高。",
+      "evidence_summary": "Judge：内库廊下和偏殿夹道两处内容高度重复，都是她背靠墙壁看清婚书字迹并咬唇忍痛，后者仅多了一句‘将婚书拢入袖中’，差异不大。谢临川营帐翻看则是第四次出现相同信息。；Rule：第51段与第134段语义形状过近（相似度约 1.00）；“今夜子时杀新”重复 3 次；“夜子时杀新妇”重复 3 次；review_structure_and_continuity 命中过重复相关问题；review_prose_and_humanity 命中过重复相关问题；Anti-slop：直白心理标签 22 处（如“她知道从今日起，她的每一步都由他说、他们知道婚书一定会经过她的手，知道她”）；解释性总结 2 处（如“他当时只觉得愤怒、他方才所有的愤怒”）；review_prose_and_humanity 命中过直白心理/解释问题",
+      "improvement_hint": "先清掉“她知道/他意识到/这让她更明白”类句式，再把篇幅换成新动作、新误读和新关系代价。",
+      "source": "hybrid"
+    },
+    "mind_state_consistency_score": {
+      "score": 8.5,
+      "reason": "两个角色心智高度一致：谢临川始终保持冷硬外壳，只在袖中、喉结、视线失控等机械性细节中微量泄漏；沈知微自始至终以过度平静包裹恐惧，她的观察、忍耐和快速计算都未突破生存本能的边界。",
+      "evidence_summary": "谢临川在殿上目送她时袖中手指攥紧，偏殿对‘世子’称呼时下颌绷紧；沈知微从接旨到偏殿圆谎，声音始终平稳，只有被纸边割伤时才肯借疼痛压住颤抖，完全符合二人设定。",
+      "improvement_hint": "在谢临川发现婚书背面字迹时，可加入一瞬间的呼吸停滞，但立刻被压制，确保这种破防仍被自控包裹，防止外露过度。",
+      "source": "llm"
+    },
+    "genre_fit_score": {
+      "score": 9.0,
+      "reason": "文本精准兑现了 historical_romance_intrigue 和 restrained_angst 的双重承诺：权力场中的婚约压迫、旧案暗线、误读与试探，情感表达极度克制，所有起伏都发生在礼制之下和潜台词之中，毫无甜宠或直白煽情。",
+      "evidence_summary": "朝堂赐婚作为权力活契约，婚书背面的暗号连接旧案阴谋，人物关系每一步都伴着政治风险；情感完全通过动作、物件和回避传达，如用‘世子’称谓直接切割旧情，用‘雪水还没干’锚定人物处境，完美贴合 profile。",
+      "improvement_hint": "可根据 profile 中 ‘motif_policy’ 的要求，下一轮再复现旧伤、称呼、袖口等意象时，增加新的关系代价或线索推进，避免变成风格装饰。",
+      "source": "llm"
+    }
+  },
+  "breakdowns": {
+    "male_lead_attraction": {
+      "score": 8.5,
+      "reason": "谢临川被塑造成冷厉、自控极强却在细节处泄露在意的角色。公开请婚的刀锋度，对‘世子’称呼的敏感，发现暗号后立时改变行动的决断，使他既有压迫感又有保护欲，非常立体。",
+      "evidence_summary": "‘旧事未了’四字含蓄带刃；靴底雪水未干就将最恨之人变成未婚妻；看到她看禁军如看伏兵时，立即下令召她明日来行帐，行动力强且充满推理和急迫。",
+      "improvement_hint": "适度增加一句独处时更私人的反应，比如他握紧婚书时，手指无意中擦过她指尖曾经渗血的位置，强化他意识到她在被灭口之前已经受伤的瞬间。",
+      "source": "llm"
+    },
+    "female_lead_attraction": {
+      "score": 8.0,
+      "reason": "沈知微展现了超强的观察力、克制力和生存意志。她在满朝注视下接旨时识别暗号，在偏殿冷静圆谎，并迅速将谢临川的无心之言转化为生存策略，极有辨识度和主动性。",
+      "evidence_summary": "接旨时余光扫过禁军布防，立刻认出暗号并合上婚书；偏殿中面对追问以‘看时辰’搪塞，同时用最远的称呼拉开距离，却在心底记下生路。",
+      "improvement_hint": "可在她独自思考如何交出入口编号时，增加一个更具体的记忆闪回（如旧案现场石壁上的同样标记），而非仅用概述，增强她的内在动力和辨识度。",
+      "source": "llm"
+    },
+    "lead_pair_chemistry": {
+      "score": 8.5,
+      "reason": "双人同场戏（殿前对话、偏殿对峙）依靠简短的对话、回避的目光、近身的压迫和旧伤的回忆形成了极强压差。两人都高度克制，但每一次对视或避视都如同拉扯的刀刃，化学反应浓烈。",
+      "evidence_summary": "他问‘你可愿意’时她答‘礼不可废’；他靠近一步她无法后退，却用空洞眼神迎上；他目光下落至她腕上旧伤，她纹丝不动——这些均构成高密度潜台词火花。",
+      "improvement_hint": "在某个无言瞬间，让旁观者（如近旁的太监或武官）有一个微小的反应（如屏息或后退），从外部烘托两人之间的气压，增强戏剧感。",
+      "source": "llm"
+    },
+    "opening_hook_score": {
+      "score": 9.0,
+      "reason": "开头在400字内通过谢临川当众请婚、朝堂哗然、皇帝准旨迅速拉起强烈悬念和冲突，没有任何铺垫拖延，直击‘报复婚约’这一核心钩子，读感非常抓人。",
+      "evidence_summary": "首段环境引入，第二段对话直接抛出请婚，随后群臣的窸窣、侍郎的反对、皇帝沉默后的‘准’，在极短篇幅内落地了全章最大冲突。",
+      "improvement_hint": "可考虑在‘准’字落下后，立刻给一个谢临川极短的生理反应（如袖中手指微松），作为他内心真实情绪的极细微泄漏。",
+      "source": "llm"
+    },
+    "ending_hook_score": {
+      "score": 9.0,
+      "reason": "结尾在谢临川发现婚书背面‘今夜子时，杀新妇’后，以‘先活过子时’收束，同时留下沈知微住所窗外不明脚步声的悬念，形成双线倒计时钩子，极度推动追读。",
+      "evidence_summary": "婚书背面的字迹被发现，谢临川生出保护急务；紧接着沈知微在住所听见不属于风的脚步声，两个视角同时指向今夜子时的危险，将悬念叠加。",
+      "improvement_hint": "可在下令‘传口信’后，多给一句环境变化（如雪忽然变大，遮蔽宫道），增强天时压人的紧迫感，让尾钩更锋锐。",
+      "source": "llm"
+    },
+    "judge_genre_fit_score": {
+      "score": 9.0,
+      "reason": "文本精准兑现了 historical_romance_intrigue 和 restrained_angst 的双重承诺：权力场中的婚约压迫、旧案暗线、误读与试探，情感表达极度克制，所有起伏都发生在礼制之下和潜台词之中，毫无甜宠或直白煽情。",
+      "evidence_summary": "朝堂赐婚作为权力活契约，婚书背面的暗号连接旧案阴谋，人物关系每一步都伴着政治风险；情感完全通过动作、物件和回避传达，如用‘世子’称谓直接切割旧情，用‘雪水还没干’锚定人物处境，完美贴合 profile。",
+      "improvement_hint": "可根据 profile 中 ‘motif_policy’ 的要求，下一轮再复现旧伤、称呼、袖口等意象时，增加新的关系代价或线索推进，避免变成风格装饰。",
+      "source": "llm"
+    },
+    "judge_redundancy_score": {
+      "score": 6.5,
+      "reason": "‘今夜子时，杀新妇’字迹被重复发现四次（接旨时、内库廊下、偏殿夹道、营帐翻看），其中内库和偏殿夹道的重复揭示虽在不同视角下完成，但情绪功能部分重叠。此外‘你可愿意’出现两次，第二次在偏殿虽有深化，但仍带着重复隐患。",
+      "evidence_summary": "内库廊下和偏殿夹道两处内容高度重复，都是她背靠墙壁看清婚书字迹并咬唇忍痛，后者仅多了一句‘将婚书拢入袖中’，差异不大。谢临川营帐翻看则是第四次出现相同信息。",
+      "improvement_hint": "合并内库和偏殿夹道两段为一次完整的揭示，让‘今夜子时，杀新妇’只被沈知微发现一次，然后通过她的反应带出紧迫感；谢临川的翻看则可保留，或通过他的视角增加新的信息（如笔迹辨认的联想）。",
+      "source": "llm"
+    },
+    "rule_redundancy_score": {
+      "score": 5.6,
+      "reason": "重复铺陈较明显，部分段落在重复同一心理、情绪、意象或动作模式，且没有形成有效回环。",
+      "evidence_summary": "第51段与第134段语义形状过近（相似度约 1.00）；“今夜子时杀新”重复 3 次；“夜子时杀新妇”重复 3 次；review_structure_and_continuity 命中过重复相关问题；review_prose_and_humanity 命中过重复相关问题",
+      "improvement_hint": "优先删除重复解释，把腾出的篇幅换成新剧情功能、新代价、新误读、新线索或新关系变化。 同时检查 patch 是否只改字面而没改 block 功能。",
+      "source": "rule"
+    },
+    "rule_anti_slop_score": {
+      "score": 3.6,
+      "reason": "直白心理标签和解释性总结句偏多，正文更像在说明情绪而不是让读者看见情绪。",
+      "evidence_summary": "直白心理标签 22 处（如“她知道从今日起，她的每一步都由他说、他们知道婚书一定会经过她的手，知道她”）；解释性总结 2 处（如“他当时只觉得愤怒、他方才所有的愤怒”）；review_prose_and_humanity 命中过直白心理/解释问题",
+      "improvement_hint": "先清掉“她知道/他意识到/这让她更明白”类句式，再把篇幅换成新动作、新误读和新关系代价。",
+      "source": "rule"
+    }
+  },
+  "diagnosis": {
+    "strengths": [
+      "公开请婚与婚书暗号双钩子强力拉动追读，节奏紧凑。",
+      "男女主双人同场戏通过简短对话和回避动作产生极高潜台词张力。",
+      "情绪完全由身体、物件和空间细节承载，无直白煽情却余波强烈。",
+      "结尾多线倒计时（灭口、脚步声、召见）形成不可抗拒的下一章牵引。"
+    ],
+    "weaknesses": [
+      "婚书背面的‘今夜子时，杀新妇’信息被重复揭示多次，冗余削弱了初次冲击。",
+      "沈知微在独自场景中的内心活动偶尔偏向概述（如‘她得想办法活过今夜’），削弱了沉浸感。",
+      "偏殿对话中‘你可愿意’的二次出现与殿前那次虽功能不同，但仍产生轻微重复感。",
+      "存在直白心理解释信号"
+    ],
+    "improvement_hints": [
+      "合并或删减婚书暗号的重复展示，确保该信息只被关键视角发现一次。",
+      "将沈知微的内心决断转化为更具体的动作选择或记忆闪回，避免概述句。",
+      "在偏殿问答处，可替换一种不同性质的逼问（如直接问‘你怕什么’），避免与殿前问题形式雷同。",
+      "先清掉“她知道/他意识到/这让她更明白”类句式，再把篇幅换成新动作、新误读和新关系代价。"
+    ]
+  },
+  "hard_fail_flags": [
+    {
+      "flag_type": "redundancy_drag",
+      "severity": "high",
+      "reason": "重复铺陈仅 5.9 分，已经低于 高风险阈值。以 romance judge 为主分，并用重复/anti-slop 规则信号做向下修正，不再允许规则层把坏重复或直白心理解释救高。",
+      "evidence_summary": "Judge：内库廊下和偏殿夹道两处内容高度重复，都是她背靠墙壁看清婚书字迹并咬唇忍痛，后者仅多了一句‘将婚书拢入袖中’，差异不大。谢临川营帐翻看则是第四次出现相同信息。；Rule：第51段与第134段语义形状过近（相似度约 1.00）；“今夜子时杀新”重复 3 次；“夜子时杀新妇”重复 3 次；review_structure_and_continuity 命中过重复相关问题；review_prose_and_humanity 命中过重复相关问题；Anti-slop：直白心理标签 22 处（如“她知道从今日起，她的每一步都由他说、他们知道婚书一定会经过她的手，知道她”）；解释性总结 2 处（如“他当时只觉得愤怒、他方才所有的愤怒”）；review_prose_and_humanity 命中过直白心理/解释问题；婚书背面的‘今夜子时，杀新妇’信息被重复揭示多次，冗余削弱了初次冲击。",
+      "related_metrics": [
+        "redundancy_score"
+      ],
+      "suggested_modules": [
+        "prompts/writer/plan_content_blocks.txt",
+        "prompts/writer/write_chapter_full.txt"
+      ],
+      "source": "heuristic"
+    }
+  ],
+  "optimization_targets": [
+    {
+      "target_module": "prompts/writer/plan_content_blocks.txt",
+      "issue_type": "redundancy",
+      "severity": "high",
+      "confidence": 0.77,
+      "reason": "重复铺陈当前 5.9 分。以 romance judge 为主分，并用重复/anti-slop 规则信号做向下修正，不再允许规则层把坏重复或直白心理解释救高。",
+      "evidence_summary": "Judge：内库廊下和偏殿夹道两处内容高度重复，都是她背靠墙壁看清婚书字迹并咬唇忍痛，后者仅多了一句‘将婚书拢入袖中’，差异不大。谢临川营帐翻看则是第四次出现相同信息。；Rule：第51段与第134段语义形状过近（相似度约 1.00）；“今夜子时杀新”重复 3 次；“夜子时杀新妇”重复 3 次；review_structure_and_continuity 命中过重复相关问题；review_prose_and_humanity 命中过重复相关问题；Anti-slop：直白心理标签 22 处（如“她知道从今日起，她的每一步都由他说、他们知道婚书一定会经过她的手，知道她”）；解释性总结 2 处（如“他当时只觉得愤怒、他方才所有的愤怒”）；review_prose_and_humanity 命中过直白心理/解释问题；婚书背面的‘今夜子时，杀新妇’信息被重复揭示多次，冗余削弱了初次冲击。",
+      "patch_hint": "减少同一情绪或判断的解释型复述，让每个 block 都新增信息、代价或关系变化。",
+      "related_metrics": [
+        "redundancy_score"
+      ],
+      "expected_metric_gains": [
+        "redundancy_score",
+        "emotional_resonance_score",
+        "hook_score"
+      ]
+    },
+    {
+      "target_module": "prompts/writer/write_chapter_full.txt",
+      "issue_type": "redundancy",
+      "severity": "high",
+      "confidence": 0.77,
+      "reason": "重复铺陈当前 5.9 分。以 romance judge 为主分，并用重复/anti-slop 规则信号做向下修正，不再允许规则层把坏重复或直白心理解释救高。",
+      "evidence_summary": "Judge：内库廊下和偏殿夹道两处内容高度重复，都是她背靠墙壁看清婚书字迹并咬唇忍痛，后者仅多了一句‘将婚书拢入袖中’，差异不大。谢临川营帐翻看则是第四次出现相同信息。；Rule：第51段与第134段语义形状过近（相似度约 1.00）；“今夜子时杀新”重复 3 次；“夜子时杀新妇”重复 3 次；review_structure_and_continuity 命中过重复相关问题；review_prose_and_humanity 命中过重复相关问题；Anti-slop：直白心理标签 22 处（如“她知道从今日起，她的每一步都由他说、他们知道婚书一定会经过她的手，知道她”）；解释性总结 2 处（如“他当时只觉得愤怒、他方才所有的愤怒”）；review_prose_and_humanity 命中过直白心理/解释问题；婚书背面的‘今夜子时，杀新妇’信息被重复揭示多次，冗余削弱了初次冲击。",
+      "patch_hint": "减少同一情绪或判断的解释型复述，让每个 block 都新增信息、代价或关系变化。",
+      "related_metrics": [
+        "redundancy_score"
+      ],
+      "expected_metric_gains": [
+        "redundancy_score",
+        "emotional_resonance_score",
+        "hook_score"
+      ]
+    }
+  ],
+  "cost_metrics": {
+    "llm_calls": 21,
+    "judge_llm_calls": 1,
+    "review_calls": 4,
+    "patch_rounds": 2,
+    "used_full_rewrite": false,
+    "duration_seconds": 1780.12,
+    "block_count": 4,
+    "patched_block_count": 3,
+    "patched_block_ratio": 0.75,
+    "generation_prompt_chars": 368817,
+    "judge_prompt_chars": 127029,
+    "tool_calls_by_name": {
+      "build_chapter_patch_plan": 2,
+      "build_character_mindset": 2,
+      "draft_block": 4,
+      "final_polish": 1,
+      "format_adjustment_suggestion": 1,
+      "judge_patched_chapter": 2,
+      "plan_content_blocks": 1,
+      "review_prose_and_humanity": 1,
+      "review_structure_and_continuity": 1,
+      "rewrite_blocks_by_plan": 2,
+      "summarize_actual_chapter": 1
+    }
+  },
+  "artifacts": {
+    "case_dir": "evals\\romance\\reports\\runs\\20260428\\chapter_eval\\deepseek__deepseek-v4-pro\\romance_case_01_court_return\\case01_action_first_guard\\romance_case_01_court_return",
+    "case_input_json": "evals\\romance\\reports\\runs\\20260428\\chapter_eval\\deepseek__deepseek-v4-pro\\romance_case_01_court_return\\case01_action_first_guard\\romance_case_01_court_return\\case_input.json",
+    "writer_context_json": "evals\\romance\\reports\\runs\\20260428\\chapter_eval\\deepseek__deepseek-v4-pro\\romance_case_01_court_return\\case01_action_first_guard\\romance_case_01_court_return\\writer_context.json",
+    "chapter_execution_json": "evals\\romance\\reports\\runs\\20260428\\chapter_eval\\deepseek__deepseek-v4-pro\\romance_case_01_court_return\\case01_action_first_guard\\romance_case_01_court_return\\chapter_execution.json",
+    "stage_log_json": "evals\\romance\\reports\\runs\\20260428\\chapter_eval\\deepseek__deepseek-v4-pro\\romance_case_01_court_return\\case01_action_first_guard\\romance_case_01_court_return\\stage_log.json",
+    "final_text_txt": "evals\\romance\\reports\\runs\\20260428\\chapter_eval\\deepseek__deepseek-v4-pro\\romance_case_01_court_return\\case01_action_first_guard\\romance_case_01_court_return\\final_text.txt",
+    "judge_json": "evals\\romance\\reports\\runs\\20260428\\chapter_eval\\deepseek__deepseek-v4-pro\\romance_case_01_court_return\\case01_action_first_guard\\romance_case_01_court_return\\judge.json",
+    "result_json": "evals\\romance\\reports\\runs\\20260428\\chapter_eval\\deepseek__deepseek-v4-pro\\romance_case_01_court_return\\case01_action_first_guard\\romance_case_01_court_return\\result.json"
+  },
+  "errors": []
+}
