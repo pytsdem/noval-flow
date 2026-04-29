@@ -1914,6 +1914,11 @@
     - the contract says what should happen
     - the beat plan separates the units
     - but `draft_block` is still over-cashing the chapter in terms of process, clues, and explanation of mechanism instead of two-person pressure
+  - important interpretation:
+    - the candidate is not failing because it is shorter
+    - the candidate chapter is about `5.6k` chars, while the old baseline is about `12.1k`
+    - the shorter size is closer to the intended steady-state target for a single chapter
+    - the actual failure is budget allocation: too much of the `5.6k` chapter is spent on clue procedure, document flow, and investigation framing, and too little is spent on two-person pressure, emotional leakage, and relationship repricing
 - Keep / reject:
   - `keep` the contract-layer and beat-plan observability work from Iteration 32/33 as structural improvements
   - `reject` promoting the current default prose behavior as a framework win
@@ -1927,7 +1932,33 @@
     - more two-person pressure
     - fewer clue-procedure paragraphs
     - less “how the document moved” and more “what this exchange cost them”
+  - hard length rule for the next pass:
+    - keep one chapter in roughly the `4.5k - 6k` range
+    - do not treat “go back to `10k+`” as the default fix for this regression
+    - improve quality by reallocating budget, not by re-inflating chapter length
   - in practice the next target should be:
     - action-carried emotional leakage
     - fewer procedural explanation sentences
     - more direct relationship pressure inside each beat
+
+## Iteration 35
+
+- Date: `2026-04-29`
+- Scope:
+  - record the post-eval length interpretation so future iterations do not optimize toward the wrong remedy
+- Clarification:
+  - the current prose candidate is not considered weak because it is `~5k` chars
+  - the old `~12k` baseline is longer than the intended steady-state target for one chapter
+  - the problem is that the current shorter chapter spends too much of its budget on:
+    - clue handling
+    - document / procedure logic
+    - investigation framing
+  - and too little on:
+    - two-person pressure
+    - emotional leakage
+    - relationship repricing inside each beat
+- Keep / reject:
+  - `keep` the shorter chapter-length target as the working direction
+  - `reject` any future diagnosis that treats “go back to 10k+” as the default fix for this regression
+- Next step:
+  - optimize `draft_block` under an explicit `4.5k - 6k` chapter budget and shift budget from procedure into romance tension

@@ -490,3 +490,17 @@
     - `continuity_score` held at `9.0`
 - Next step: keep the contract/beat observability foundation, but optimize the `draft_block` execution layer so the sharper contract does not collapse into clue-procedure and investigation prose at the expense of romance tension
 - Report ref: `report.md` / `Iteration 34`
+
+## Iteration 35
+
+- Date: `2026-04-29`
+- Outcome: `keep`
+- Title: `Lock in the chapter-length interpretation after the case01 prose replay`
+- Root layer: `evaluation_interpretation_guardrail`
+- Files changed: `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
+- Success snapshot:
+  - recorded that the `~5.6k` candidate chapter length is closer to the intended steady-state target than the old `~12.1k` baseline
+  - explicitly documented that the regression is about budget allocation, not insufficient total length
+  - set the next-pass rule to keep chapter length roughly in the `4.5k - 6k` range while shifting budget from clue procedure into romance pressure
+- Next step: optimize `draft_block` under the shorter target length instead of letting future iterations expand chapter size to recover lost scores
+- Report ref: `report.md` / `Iteration 35`
