@@ -7,6 +7,7 @@ import sys
 import tempfile
 import time
 from pathlib import Path
+from typing import TextIO
 from uuid import uuid4
 
 from novel_flow import events as ev
@@ -72,6 +73,7 @@ class CodexCLIClient(LLMClient):
                         self._format_cli_failure(
                             return_code=proc.poll(),
                             stderr_file=stderr_file,
+                            stderr_stream=stderr_sink,
                             default_message="codex exec closed stdin before reading the prompt.",
                         )
                     ) from exc
@@ -89,6 +91,7 @@ class CodexCLIClient(LLMClient):
                                 self._format_cli_failure(
                                     return_code=return_code,
                                     stderr_file=stderr_file,
+                                    stderr_stream=stderr_sink,
                                     default_message=f"codex exec failed (exit {return_code}).",
                                 )
                             )
@@ -198,8 +201,10 @@ class CodexCLIClient(LLMClient):
         *,
         return_code: int | None,
         stderr_file: Path,
+        stderr_stream: TextIO | None = None,
         default_message: str,
     ) -> str:
+        self._release_stderr_stream(stderr_stream)
         stderr_text = self._read_text_if_exists(stderr_file)
         if stderr_text:
             compact = " ".join(stderr_text.split())
@@ -207,6 +212,19 @@ class CodexCLIClient(LLMClient):
         if return_code not in (None, 0):
             return f"{default_message} (exit {return_code})"
         return default_message
+
+    @staticmethod
+    def _release_stderr_stream(stderr_stream: TextIO | None) -> None:
+        if stderr_stream is None or stderr_stream.closed:
+            return
+        try:
+            stderr_stream.flush()
+        except Exception:
+            pass
+        try:
+            stderr_stream.close()
+        except Exception:
+            pass
 
     @staticmethod
     def _write_debug_preview(preview: str) -> None:

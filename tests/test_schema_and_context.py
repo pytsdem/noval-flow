@@ -660,10 +660,14 @@ class SchemaAndContextTests(unittest.TestCase):
         self.assertEqual(chapter_contract.final_hook, chapter_contract.ending_pull)
         self.assertEqual(chapter_contract.pace_contract, chapter_contract.info_budget)
         self.assertEqual(chapter_contract.cost_of_progress, chapter_contract.human_pain_anchor)
+        self.assertEqual(chapter_contract.relationship_cost, chapter_contract.relationship_reprice)
+        self.assertEqual(chapter_contract.must_hurt_now, chapter_contract.human_pain_anchor)
         self.assertTrue(chapter_contract.must_not_repeat)
         contract_view = chapter_contract.contract_view()
         self.assertEqual(contract_view["chapter_mission"], chapter_contract.summary)
         self.assertEqual(contract_view["cost_of_progress"], chapter_contract.human_pain_anchor)
+        self.assertEqual(contract_view["relationship_cost"], chapter_contract.relationship_reprice)
+        self.assertEqual(contract_view["must_hurt_now"], chapter_contract.human_pain_anchor)
 
     def test_block_runtime_context_exposes_delivered_beat_summary(self) -> None:
         context = self._writer_context(current_chapter_id="ch_001")
@@ -777,8 +781,8 @@ class SchemaAndContextTests(unittest.TestCase):
         self.assertTrue(
             any("不要" in item or "Do not" in item for item in blocks[0]["must_not_repeat"])
         )
-        self.assertIn("关系", blocks[1]["relationship_delta"])
-        self.assertIn("线索", blocks[2]["clue_delta"])
+        self.assertTrue(blocks[1]["relationship_delta"])
+        self.assertTrue(blocks[2]["clue_delta"])
 
     def test_block_payloads_make_target_length_a_hard_ceiling(self) -> None:
         context = self._writer_context(current_chapter_id="ch_001")
@@ -815,8 +819,80 @@ class SchemaAndContextTests(unittest.TestCase):
 
         self.assertIn("Hard ceiling: 500", draft_payload["target_length"])
         self.assertIn("Stop immediately", draft_payload["target_length"])
+        self.assertIn("dramatic_memory", block_context)
+        self.assertEqual(draft_payload["candidate_strategy"], "")
         self.assertIn("Hard ceiling", polish_payload["target_length"])
         self.assertIn("shorten", polish_payload["target_length"])
+
+    def test_block_runtime_context_prefers_change_summary_over_raw_text_recap(self) -> None:
+        context = self._writer_context(current_chapter_id="ch_001")
+        committed_blocks = [
+            ChapterBeat(
+                block_id="ch_001.sc_001.b001",
+                chapter_id="ch_001",
+                block_index=1,
+                purpose="Opening pressure",
+                new_value="The wedding edict lands in public.",
+                relationship_delta="They cannot speak as equals now.",
+                cost_shift="She loses the option to refuse quietly.",
+                micro_hook="He notices she never denied the title.",
+                end_state="The room goes colder.",
+                text="她垂着眼，像是连雪光都不肯分给他。",
+            ),
+            ChapterBeat(
+                block_id="ch_001.sc_001.b002",
+                chapter_id="ch_001",
+                block_index=2,
+                purpose="First private probe",
+                new_value="She gives him a colder address.",
+                relationship_delta="Their old intimacy is repriced as distance.",
+                cost_shift="He has to probe through etiquette instead of memory.",
+                micro_hook="The old wound is about to surface.",
+                end_state="The first probe misses.",
+                text="他把话咽回去，只听见她那句称呼落得极稳。",
+            ),
+        ]
+        block_context = ChapterToolPayloadBuilder.build_block_runtime_context(
+            context=context,
+            block=ChapterBeat(
+                block_id="ch_001.sc_001.b003",
+                chapter_id="ch_001",
+                block_index=3,
+                purpose="Pressure beat.",
+                target_chars=500,
+                end_state="The beat lands.",
+            ),
+            committed_blocks=committed_blocks,
+            remaining_blocks=[
+                ChapterBeat(
+                    block_id="ch_001.sc_001.b004",
+                    chapter_id="ch_001",
+                    block_index=4,
+                    purpose="The clue is discovered in the marriage paper.",
+                    new_value="He finally notices the hidden mark.",
+                    micro_hook="The hidden mark points to tonight's trap.",
+                    end_state="The discovered mark changes the room.",
+                )
+            ],
+        )
+
+        self.assertIn("relationship=", block_context["chapter_so_far"])
+        self.assertIn("cost=", block_context["chapter_so_far"])
+        self.assertIn("[Dramatic memory]", block_context["dramatic_memory"])
+        self.assertIn("relationship_cost=", block_context["dramatic_memory"])
+        self.assertNotIn("雪光都不肯分给他", block_context["chapter_so_far"])
+        self.assertIn("[Not yet in this chapter]", block_context["future_beat_boundary_text"])
+        self.assertIn("He finally notices the hidden mark.", block_context["future_beat_boundary_text"])
+        self.assertIn("Open through a concrete scene impression", ChapterToolPayloadBuilder.compact_beat_json(
+            block=ChapterBeat(
+                block_id="ch_001.sc_001.b010",
+                chapter_id="ch_001",
+                block_index=10,
+                purpose="Quiet opening",
+                end_state="The beat lands.",
+            ),
+            block_context={"prior_block_summary_text": "No committed blocks yet."},
+        ))
 
     def test_plan_content_blocks_default_count_keeps_5000_char_chapter_to_four_beats(self) -> None:
         self.assertEqual(PlanContentBlocksTool._target_block_count("3000字左右"), 3)

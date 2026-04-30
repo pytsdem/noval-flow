@@ -126,8 +126,12 @@ class PromptRenderingTests(unittest.TestCase):
             "beat": '{"goal":"goal","start":"start","turn":"turn","end":"end","avoid":[]}',
             "previous_text_tail": "previous text tail",
             "chapter_so_far": "chapter so far",
+            "future_beats_not_yet": "future beats",
+            "dramatic_memory": "dramatic memory",
+            "candidate_strategy": "relationship_cost_first",
             "style_rules": "style rules",
             "target_length": "800",
+            "revision_brief_text": "revision brief",
         }
 
     def test_new_prompts_render_without_format_errors(self) -> None:

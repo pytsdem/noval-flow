@@ -504,3 +504,206 @@
   - set the next-pass rule to keep chapter length roughly in the `4.5k - 6k` range while shifting budget from clue procedure into romance pressure
 - Next step: optimize `draft_block` under the shorter target length instead of letting future iterations expand chapter size to recover lost scores
 - Report ref: `report.md` / `Iteration 35`
+
+## Iteration 36
+
+- Date: `2026-04-29`
+- Outcome: `keep`
+- Title: `Research five current hot ancient-romance chapter ones and benchmark our case01 prose against them`
+- Root layer: `external_market_research_and_prose_diagnosis`
+- Files changed: `evals/romance/reports/market_research/20260429_hot_ancient_openings_vs_case01.md`, `evals/romance/reports/market_research/20260429_hot_ancient_openings_vs_case01.json`, `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
+- Success snapshot:
+  - verified that the user complaint about excessive `他……` / `她……` openings is correct
+  - measured `pronoun_sentence_open_ratio = 25.69%` on the latest candidate vs `5.70%` sample average across five hot ancient-romance openings
+  - confirmed the issue already existed in the old baseline (`26.05%`), so the root belongs to the shared `draft_block` prose execution layer
+  - confirmed that the current eval verdict is directionally reasonable: the prose is strong on hook and pressure, but weak on relationship heat and heroine voice compared with the market samples
+- Next step: optimize `draft_block` around sentence-open variation, action-first revelation, and stricter procedure-budget control instead of reworking Step8 first
+- Report ref: `report.md` / `Iteration 36`
+
+## Iteration 37
+
+- Date: `2026-04-29`
+- Outcome: `keep`
+- Title: `Create a reusable positive-example corpus folder instead of leaving market research as one-off reports`
+- Root layer: `reference_corpus_infrastructure`
+- Files changed: `evals/romance/positive_examples/README.md`, `evals/romance/positive_examples/index.json`, `evals/romance/positive_examples/ancient_openings/*/entry.json`, `evals/romance/positive_examples/ancient_openings/*/notes.md`, `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
+- Success snapshot:
+  - created a stable positive-example corpus root under `evals/romance/positive_examples/`
+  - recorded five hot ancient-romance opening cards with links, short excerpts, tags, opening patterns, and what-to-learn notes
+  - explicitly kept full copyrighted chapter text out of the repo while preserving reusable analytical value
+- Next step: use the positive-example corpus directly when tuning `draft_block` for sentence openings, heroine voice, and action-carried revelation
+- Report ref: `report.md` / `Iteration 37`
+
+## Iteration 38
+
+- Date: `2026-04-29`
+- Outcome: `keep`
+- Title: `Add authorized-fulltext slots to the positive-example corpus without storing scraped commercial full chapters`
+- Root layer: `reference_corpus_fulltext_boundary`
+- Files changed: `evals/romance/positive_examples/README.md`, `evals/romance/positive_examples/index.json`, `evals/romance/positive_examples/licensed_texts/README.md`, `evals/romance/positive_examples/licensed_texts/*/README.md`, `evals/romance/positive_examples/ancient_openings/*/entry.json`, `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
+- Success snapshot:
+  - created a stable `licensed_texts/` subtree for future high-fidelity comparison
+  - recorded the per-sample `authorized_text_slot` in each positive-example card
+  - kept the repo ready for word-level analysis without committing scraped full commercial chapters
+- Next step: if the user provides authorized full text, place it in the prepared slot and use it for finer-grained wording analysis
+- Report ref: `report.md` / `Iteration 38`
+
+## Iteration 39
+
+- Date: `2026-04-30`
+- Outcome: `keep`
+- Title: `Remove the empty licensed_texts subtree and collapse the positive-example corpus back to sample cards only`
+- Root layer: `reference_corpus_simplification`
+- Files changed: `evals/romance/positive_examples/README.md`, `evals/romance/positive_examples/index.json`, `evals/romance/positive_examples/ancient_openings/*/entry.json`, `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
+- Success snapshot:
+  - deleted the unused `licensed_texts/` subtree
+  - removed the per-sample `authorized_text_slot` references
+  - kept the positive-example corpus lean and focused on reusable sample cards only
+- Next step: keep using the sample-card corpus until there is a concrete, content-backed need for a separate fulltext ingestion flow
+- Report ref: `report.md` / `Iteration 39`
+
+## Iteration 40
+
+- Date: `2026-04-30`
+- Outcome: `keep`
+- Title: `Analyze five high-visibility Fanqie ancient-romance chapter ones and extract opening-level writing lessons`
+- Root layer: `market_opening_reference_expansion`
+- Files changed: `evals/romance/reports/market_research/20260430_fanqie_hot5_openings_deep_dive.md`, `evals/romance/reports/market_research/20260430_fanqie_hot5_openings_deep_dive.json`, `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
+- Success snapshot:
+  - documented the opening shape, hook type, and reusable techniques for five current high-visibility Fanqie ancient-romance samples
+  - confirmed again that hot openings rely on fast cut-ins, heroine voice, and concrete situation hooks more than on mechanism-heavy exposition
+  - strengthened the diagnosis that our next prose gains should come from `draft_block`, not more Step8 complexity
+- Next step: use the Fanqie opening analysis together with the earlier positive-example corpus when tightening first-beat heroine voice and hook delivery
+- Report ref: `report.md` / `Iteration 40`
+
+## Iteration 41
+
+- Date: `2026-04-30`
+- Outcome: `keep`
+- Title: `Promote the Fanqie hot-opening research into reusable per-novel positive-example cards`
+- Root layer: `reference_corpus_structuring`
+- Files changed: `evals/romance/positive_examples/README.md`, `evals/romance/positive_examples/index.json`, `evals/romance/positive_examples/fanqie_openings/*/entry.json`, `evals/romance/positive_examples/fanqie_openings/*/notes.md`, `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
+- Success snapshot:
+  - added a second positive-example collection for five high-visibility Fanqie ancient-romance chapter ones
+  - expanded each sample into its own folder with detailed hook / technique / lesson notes
+  - kept the corpus within the non-fulltext policy while making it much easier to reuse during future prose optimization
+- Next step: use these per-novel cards when tightening heroine voice, first-beat cut-ins, and anti-explanation rules in `draft_block`
+- Report ref: `report.md` / `Iteration 41`
+
+## Iteration 42
+
+- Date: `2026-04-30`
+- Outcome: `keep`
+- Title: `Deepen all ten positive-example cards with chapter-one story summaries and narrative-rhythm analysis`
+- Root layer: `reference_corpus_depth_upgrade`
+- Files changed: `evals/romance/positive_examples/README.md`, `evals/romance/positive_examples/ancient_openings/*/entry.json`, `evals/romance/positive_examples/ancient_openings/*/notes.md`, `evals/romance/positive_examples/fanqie_openings/*/entry.json`, `evals/romance/positive_examples/fanqie_openings/*/notes.md`, `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
+- Success snapshot:
+  - added chapter-one story summaries, opening-flow beats, narrative-rhythm notes, retention mechanics, and strong-point analysis to all ten reference samples
+  - upgraded the corpus from light sample cards into reusable opening-study references
+  - made it much easier to compare our first-beat and first-chapter prose choices against concrete market examples
+- Next step: use the new rhythm / retention fields when rewriting `draft_block`, especially for heroine-first cut-ins and anti-explanation pacing
+- Report ref: `report.md` / `Iteration 42`
+
+## Iteration 43
+
+- Date: `2026-04-30`
+- Outcome: `keep`
+- Title: `Merge the two ancient-romance positive-example folders into one unified corpus directory`
+- Root layer: `reference_corpus_consolidation`
+- Files changed: `evals/romance/positive_examples/README.md`, `evals/romance/positive_examples/index.json`, `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
+- Success snapshot:
+  - moved the five Fanqie samples under the same `ancient_openings/` directory as the five existing Xiaoxiang samples
+  - simplified the corpus so all ten ancient-romance opening references now live in one folder
+  - removed the need to remember two sibling directories for the same subject area
+- Next step: let the user paste any legally usable text directly into the unified ancient-opening corpus without worrying about platform split
+- Report ref: `report.md` / `Iteration 43`
+
+## Iteration 44
+
+- Date: `2026-04-30`
+- Outcome: `keep`
+- Title: `Replace the old ancient-opening cards with a local fulltext ten-book EPUB corpus`
+- Root layer: `reference_corpus_rebuild`
+- Files changed: `tools/rebuild_local_ancient_openings.py`, `evals/romance/positive_examples/README.md`, `evals/romance/positive_examples/index.json`, `evals/romance/positive_examples/ancient_openings/*/chapter1.txt`, `evals/romance/positive_examples/ancient_openings/*/entry.json`, `evals/romance/positive_examples/ancient_openings/*/notes.md`, `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
+- Success snapshot:
+  - replaced the previous public-link-based reference cards with ten local EPUB-based ancient-romance chapter-one samples
+  - stored `chapter1.txt` for all ten samples, alongside structured metadata and much deeper first-chapter analysis
+  - established a reusable rebuild script so the corpus can be regenerated from future local EPUB sets without manual folder-by-folder editing
+- Next step: derive reusable opening-rhythm templates and anti-`他/她...` heuristics from this fulltext corpus before the next `draft_block` iteration
+- Report ref: `report.md` / `Iteration 44`
+
+## Iteration 45
+
+- Date: `2026-04-30`
+- Outcome: `keep`
+- Title: `Replace the ten-book EPUB corpus with a curated five-book local TXT three-chapter corpus`
+- Root layer: `reference_corpus_rebuild`
+- Files changed: `tools/rebuild_local_ancient_openings.py`, `evals/romance/positive_examples/README.md`, `evals/romance/positive_examples/index.json`, `evals/romance/positive_examples/ancient_openings/*/chapter1.txt`, `evals/romance/positive_examples/ancient_openings/*/chapter2.txt`, `evals/romance/positive_examples/ancient_openings/*/chapter3.txt`, `evals/romance/positive_examples/ancient_openings/*/entry.json`, `evals/romance/positive_examples/ancient_openings/*/notes.md`, `evals/romance/reports/market_research/20260430_local_selected_ancient_three_chapters_deep_dive.md`, `evals/romance/reports/market_research/20260430_local_selected_ancient_three_chapters_deep_dive.json`, `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
+- Success snapshot:
+  - removed the prior ten active sample folders and rebuilt `ancient_openings/` from the user’s higher-quality `我的筛选` TXT set
+  - expanded preservation from one chapter to three chapters per sample, so each reference now stores `chapter1-3.txt`
+  - upgraded every sample card into a detailed three-chapter拆书分析，covering per-chapter story summaries, progression, rhythm, retention, information-release, and standout lines
+  - added a fresh aggregate report specifically for these five curated samples
+- Next step: convert this corpus into reusable templates for chapter-one pressure choice, chapter-two conflict locking, and chapter-three escalation before the next prose iteration
+- Report ref: `report.md` / `Iteration 45`
+
+## Iteration 46
+
+- Date: `2026-04-30`
+- Outcome: `partial_keep`
+- Title: `Add beat-boundary execution guards and fast-patch structural stop to stabilize the contract+beat prose path`
+- Root layer: `draft_execution_layer`
+- Files changed: `src/novel_flow/agents/writing_chapter_agent.py`, `src/novel_flow/services/chapter_tool_payloads.py`, `src/novel_flow/tools/draft_block.py`, `src/novel_flow/tools/revise_block.py`, `prompts/writer/draft_content_block.txt`, `prompts/writer/revise_content_block.txt`, `tests/test_schema_and_context.py`, `tests/test_writing_chapter_agent.py`, `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
+- Success snapshot:
+  - fixed the immediate structural failure mode in the current `contract + beat` chain by adding:
+    - explicit future-beat boundary context
+    - a local beat trim pass when a draft overruns its target ceiling
+    - a fast-mode stop when the patch plan requests unsupported beat deletion or reordering
+  - improved the broken `case01` contract run from:
+    - `romance_tension 6.5`
+    - `continuity 3.5`
+    - `redundancy 2.0`
+    - `mind_state_consistency 6.5`
+    to:
+    - `romance_tension 7.8`
+    - `continuity 8.5`
+    - `redundancy 8.44`
+    - `mind_state_consistency 9.0`
+  - confirmed that the repaired run is still below the strongest earlier `sequential_beat_case01_deepseek` prose baseline, so this is an execution keep but not a new best-default prose keep
+- Next step: keep the new execution guards, then continue in `draft_execution_layer` by restoring hotter body-detail tension and relationship electricity inside the same `4.5k-6k` budget
+- Report ref: `report.md` / `Iteration 46`
+
+## Iteration 47
+
+- Date: `2026-04-30`
+- Outcome: `partial_keep`
+- Title: `Cut low-ROI deep prose steps, parallelize beat candidates, and add layered validation`
+- Root layer: `draft_execution_layer`
+- Files changed: `src/novel_flow/agents/writing_chapter_agent.py`, `evals/romance/runners/layered_validation_eval.py`, `tests/test_writing_chapter_agent.py`, `evals/romance/reports/self_improve_live/report.md`, `evals/romance/reports/self_improve_live/iteration_log.md`
+- Success snapshot:
+  - confirmed the six-upgrades deep replay had mixed effect instead of a clean default win:
+    - upstream / planner signal was real
+    - `case02` passed
+    - but `case01` remained blocked and `case03` failed before prose with `Invalid argument`
+  - identified the main cost sink from the existing deep replay:
+    - `draft_block=8`
+    - `revise_block_if_needed=8`
+    - `review_block_quality=4`
+    - `review_character_integrity=4`
+    - `review_reveal_leak=4`
+    - `review_time_consistency=4`
+  - kept the useful parts:
+    - multi-candidate drafting
+    - prose-surface selection
+    - revision brief
+  - removed / reduced the weak-ROI parts:
+    - deep block reviews now collapse to `review_block_quality` only
+    - block review runs only when surface signals are weak enough to justify it
+    - surface-triggered revise is now stricter instead of defaulting too often
+  - added safe generation parallelism:
+    - same-beat candidate drafts now run in parallel, which is the highest-value parallel unit that does not break sequential beat dependency
+  - added a new layered validation runner:
+    - `step static -> beat plan -> bounded fast prose -> bounded deep prose`
+    - fast/deep escalation now defaults to a tiny bounded subset instead of all-case deep replay first
+- Next step: use the leaner deep path to rerun a bounded prose validation, then decide whether the remaining gap is mainly “voice/temperature” or still “relationship-cost execution”
+- Report ref: `report.md` / `Iteration 47`

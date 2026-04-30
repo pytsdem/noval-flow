@@ -19,7 +19,15 @@ from novel_flow.services.novel_context import NovelContextFormatter, NovelContex
 from novel_flow.services.tool_registry import ToolRegistry
 
 from evals.romance.instrumentation import InstrumentedLLMClient, InstrumentedToolRegistry
-from evals.romance.judges import AntiSlopRuleAnalyzer, RedundancyRuleAnalyzer, RomanceChapterJudge
+from evals.romance.judges import (
+    ActionCarriedRevealRuleAnalyzer,
+    AntiSlopRuleAnalyzer,
+    ExplanationDensityRuleAnalyzer,
+    PronounLeadRuleAnalyzer,
+    RedundancyRuleAnalyzer,
+    RelationshipCostRealizationRuleAnalyzer,
+    RomanceChapterJudge,
+)
 from evals.romance.loader import load_cases
 from evals.romance.models import (
     RomanceCaseArtifacts,
@@ -410,6 +418,10 @@ class RomanceEvalHarness:
             chapter_text=execution.chapter_text,
             review_reports=execution.review_reports,
         )
+        rule_pronoun_lead = PronounLeadRuleAnalyzer().analyze(chapter_text=execution.chapter_text)
+        rule_explanation_density = ExplanationDensityRuleAnalyzer().analyze(chapter_text=execution.chapter_text)
+        rule_action_carried_reveal = ActionCarriedRevealRuleAnalyzer().analyze(chapter_text=execution.chapter_text)
+        rule_relationship_cost = RelationshipCostRealizationRuleAnalyzer().analyze(chapter_text=execution.chapter_text)
 
         judge_start = len(self.llm_client.records)
         self.llm_client.set_phase(f"judge:{case.case_id}")
@@ -437,6 +449,10 @@ class RomanceEvalHarness:
                 "judge_redundancy_score": judge.redundancy,
                 "rule_redundancy_score": rule_redundancy,
                 "rule_anti_slop_score": rule_anti_slop,
+                "rule_pronoun_lead_score": rule_pronoun_lead,
+                "rule_explanation_density_score": rule_explanation_density,
+                "rule_action_carried_reveal_score": rule_action_carried_reveal,
+                "rule_relationship_cost_realization_score": rule_relationship_cost,
             }
             if rule_redundancy.score < 7.0 and not any("重复" in item for item in diagnosis.weaknesses):
                 diagnosis.weaknesses.append("中段存在重复铺陈信号")
@@ -444,6 +460,18 @@ class RomanceEvalHarness:
             if rule_anti_slop.score < 7.0 and not any(token in item for item in diagnosis.weaknesses for token in ("直白", "心理", "解释")):
                 diagnosis.weaknesses.append("存在直白心理解释信号")
                 diagnosis.improvement_hints.append(rule_anti_slop.improvement_hint)
+            if rule_pronoun_lead.score < 7.0 and not any("代词" in item for item in diagnosis.weaknesses):
+                diagnosis.weaknesses.append("句首代词密度偏高，场面起句不足")
+                diagnosis.improvement_hints.append(rule_pronoun_lead.improvement_hint)
+            if rule_explanation_density.score < 7.0 and not any("解释句" in item for item in diagnosis.weaknesses):
+                diagnosis.weaknesses.append("解释句密度偏高，动作后常被作者翻译")
+                diagnosis.improvement_hints.append(rule_explanation_density.improvement_hint)
+            if rule_action_carried_reveal.score < 7.0 and not any("动作" in item or "场面" in item for item in diagnosis.weaknesses):
+                diagnosis.weaknesses.append("关键信息更多靠说明而非动作/场面露出")
+                diagnosis.improvement_hints.append(rule_action_carried_reveal.improvement_hint)
+            if rule_relationship_cost.score < 7.0 and not any("代价" in item for item in diagnosis.weaknesses):
+                diagnosis.weaknesses.append("线索推进没有稳定兑现成关系或人身代价")
+                diagnosis.improvement_hints.append(rule_relationship_cost.improvement_hint)
         except Exception as exc:
             judge_errors.append(f"romance_judge_failed: {exc}")
             write_text_with_aliases(
@@ -453,6 +481,10 @@ class RomanceEvalHarness:
                         "error": str(exc),
                         "rule_redundancy": rule_redundancy.model_dump(mode="json"),
                         "rule_anti_slop": rule_anti_slop.model_dump(mode="json"),
+                        "rule_pronoun_lead": rule_pronoun_lead.model_dump(mode="json"),
+                        "rule_explanation_density": rule_explanation_density.model_dump(mode="json"),
+                        "rule_action_carried_reveal": rule_action_carried_reveal.model_dump(mode="json"),
+                        "rule_relationship_cost_realization": rule_relationship_cost.model_dump(mode="json"),
                     }
                 ),
                 alias_names=("judge.json",),
@@ -464,6 +496,10 @@ class RomanceEvalHarness:
             breakdowns = {
                 "rule_redundancy_score": rule_redundancy,
                 "rule_anti_slop_score": rule_anti_slop,
+                "rule_pronoun_lead_score": rule_pronoun_lead,
+                "rule_explanation_density_score": rule_explanation_density,
+                "rule_action_carried_reveal_score": rule_action_carried_reveal,
+                "rule_relationship_cost_realization_score": rule_relationship_cost,
             }
             diagnosis = RomanceJudgeDiagnosis(
                 strengths=[],

@@ -1,0 +1,27 @@
+{
+  "version": 3,
+  "updated_at": "2026-04-30",
+  "policy": {
+    "store_full_original_text": true,
+    "scope": "user_supplied_local_txt_only",
+    "note": "仅保存来自用户本地提供的 TXT 前三章全文，不从公开站点抓取整章版权文本。"
+  },
+  "collections": [
+    {
+      "id": "ancient_openings_local_txt_three_chapter_corpus",
+      "label": "古代言情前三章正例库",
+      "theme": "古代言情 / 前三章拆书 / 本地全文样本",
+      "platforms": [
+        "本地TXT资源（我的筛选）"
+      ],
+      "sample_count": 5,
+      "entries": [
+        "ancient_openings/shizun_zai_xiu_wuqingdao",
+        "ancient_openings/liangchenmeijin",
+        "ancient_openings/zhongsheng_jiangmenduhou",
+        "ancient_openings/hebutongzhoudu",
+        "ancient_openings/bei_wuqingdao_xiaoshidi_daozhui"
+      ]
+    }
+  ]
+}

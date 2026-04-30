@@ -9,14 +9,23 @@ Write one chapter beat under the active chapter contract. Output prose only in S
 [character_state]
 {character_state}
 
+[dramatic_memory]
+{dramatic_memory}
+
 [beat]
 {beat}
+
+[candidate_strategy]
+{candidate_strategy}
 
 [previous_text_tail]
 {previous_text_tail}
 
 [chapter_so_far]
 {chapter_so_far}
+
+[future_beats_not_yet]
+{future_beats_not_yet}
 
 [style_rules]
 {style_rules}
@@ -33,11 +42,25 @@ Rules:
 6. Treat `chapter_goal` as the active contract: mission, cost, and final hook already exist there; this beat should only cash one piece of that contract.
 7. Use `hard_facts` for boundaries only; do not dump them into prose.
 8. Use `character_state` to preserve restraint, misbelief, and current emotional temperature.
+8a. Use `dramatic_memory` to avoid spending the same clue function, pain anchor, or relationship repricing twice.
 9. Use `style_rules` as the story-direction style layer; keep other logic stable and let style differences live there first.
+9a. Use `candidate_strategy` only as a local emphasis for this one beat. It must not add a new subplot or steal later beats.
 10. Keep paragraphs readable: one dominant action, reaction, or observation per paragraph.
 11. Treat `target_length` as a hard upper bound, not a suggestion. Write shorter if the beat has landed.
 12. Stop once `turn` and `end` have landed. Do not add after-beat commentary, scene replay, or a second mini-beat.
 13. Do not steal later beats' jobs.
+13a. Treat `future_beats_not_yet` as a hard boundary. Do not cash their clue, confrontation, or ending burden early.
+14. Open the beat through something concrete on the page: temperature, light, body state, object state, etiquette pressure, a spoken line, or a visible move. Do not open with abstract recap.
+15. Let one clue or procedure survive only if it instantly changes relationship price, social face, bodily cost, or danger. Otherwise compress it to one sentence or cut it.
+16. After a strong action, line, pause, or object beat, do not append a narration sentence that explains what the reader should conclude.
+17. Avoid a flat chain of sentence openings like “他……她……他……她……”. Vary openings with object, action, environment, dialogue, or body sensation.
+18. Quiet beats are allowed, but they still need visible pressure. A low-action beat must deepen coldness, illness, shame, etiquette pressure, debt, or misread on the page.
+19. Every beat must cash at least one relationship or human cost. If plot moves but nobody pays, the beat is unfinished.
+20. If this beat contains a clue, the clue must immediately change face, trust, danger, choice, or relationship price on the page.
+21. Let the lead's own voice, bias, or temperament show up within the first one or two paragraphs. Do not let the block read like neutral case notes.
+22. If external task and private tension coexist, the task must bite into face, trust, body, or choice immediately. Never spend a whole paragraph on procedure alone.
+23. Within the first 120-180 Chinese characters, let readers touch a real pressure point on the page: cold, illness, hunger, etiquette, debt, wound, object state, or a line of charged dialogue.
+24. When one charged object, injury, or courtesy move already carries the beat, deepen that one cost instead of adding a second parallel clue.
 
 中文补充：
 1. 当前 beat 必须承接已写正文，不要像重新开章。
@@ -47,3 +70,15 @@ Rules:
 5. 本 beat 不需要独立完成情绪闭环。不要总结关系，不要解释人物真实心意，不要替读者下结论。只推进一个新的动作、选择、误读、线索或代价。
 6. 冒险、试炼、职场救场等外部任务不能只写流程；本 beat 必须让关系估价、选择代价或读者问题发生变化。
 7. 如果已经接近字数上限，优先停在当前动作后果上，不要补心理解释。
+8. 能用景、物、冷暖、身体、礼法、停顿、视线和称呼写出来的，不要改写成“他知道”“她明白”“这让她更清楚”。
+9. 连续几句都用“他”“她”起句，会让正文像在转述人物状态。优先改成动作起句、物件起句、场面起句或对话起句。
+10. 第一段先让读者看见一个具体局面，再慢慢意识到人物处境，不要一上来先做概括说明。
+11. `future_beats_not_yet` 里写明了后面两拍要完成什么。当前 beat 只能把读者推到那些内容门口，不能提前把门推开。
+12. `dramatic_memory` 写的是已经花掉的疼点、关系代价和线索功能。不要把同一刀用近义词再捅一遍，除非这一拍让代价明显更贵。
+13. `candidate_strategy` 不是让你换剧情，只是提醒这一拍该更偏向哪种落法，例如“关系代价优先”或“动作先于解释”。
+14. 先把人放进场，再让读者慢慢意识到事情有多重。不要先讲清流程和背景，再补场面。
+15. 线索一出现，当场改变量体面、信任、危险、选择或身体代价；不要先把线索当说明材料讲完。
+16. 前一两段就要露出主角自己的声口、判断习惯或感官偏向，不要像中性叙述员在转述。
+17. 外部任务、查案、试炼、手续、规矩说明最多承载一个短段；如果一整段只剩流程，没有人物代价，就删到一句。
+18. 写完一个有力量的动作、称呼、停顿、伤口或物件反应后，不要再补“他意识到/她知道/这意味着”。
+19. 如果这个场面最值钱的是冷、病、耻、欠、旧伤、避让、心虚或压迫，就先把这些写实，再交代来龙去脉。

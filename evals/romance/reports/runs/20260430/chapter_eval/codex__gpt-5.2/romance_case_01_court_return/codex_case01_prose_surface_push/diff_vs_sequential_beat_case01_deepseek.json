@@ -1,0 +1,60 @@
+{
+  "baseline_label": "sequential_beat_case01_deepseek",
+  "candidate_label": "codex_case01_prose_surface_push",
+  "compared_at": "2026-04-30T06:23:35.248722Z",
+  "average_score_deltas": {
+    "romance_tension_score": {
+      "baseline": 9.2,
+      "candidate": 0.0,
+      "delta": -9.2
+    },
+    "relationship_progression_score": {
+      "baseline": 9.0,
+      "candidate": 0.0,
+      "delta": -9.0
+    },
+    "emotional_resonance_score": {
+      "baseline": 9.1,
+      "candidate": 0.0,
+      "delta": -9.1
+    },
+    "character_attraction_score": {
+      "baseline": 9.18,
+      "candidate": 0.0,
+      "delta": -9.18
+    },
+    "hook_score": {
+      "baseline": 9.65,
+      "candidate": 0.0,
+      "delta": -9.65
+    },
+    "continuity_score": {
+      "baseline": 9.0,
+      "candidate": 0.0,
+      "delta": -9.0
+    },
+    "redundancy_score": {
+      "baseline": 8.62,
+      "candidate": 0.0,
+      "delta": -8.62
+    },
+    "mind_state_consistency_score": {
+      "baseline": 9.4,
+      "candidate": 0.0,
+      "delta": -9.4
+    },
+    "genre_fit_score": {
+      "baseline": 0.0,
+      "candidate": 0.0,
+      "delta": 0.0
+    }
+  },
+  "case_diffs": [],
+  "improved_metrics": [],
+  "declined_metrics": [],
+  "blocked_case_delta": 0,
+  "new_blocker_case_ids": [],
+  "resolved_blocker_case_ids": [],
+  "baseline_path": "evals\\romance\\reports\\runs\\20260427\\chapter_eval\\deepseek__deepseek-v4-pro\\romance_case_01_court_return\\sequential_beat_case01_deepseek\\summary.json",
+  "candidate_path": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\codex__gpt-5.2\\romance_case_01_court_return\\codex_case01_prose_surface_push\\chapter_eval_summary.json"
+}

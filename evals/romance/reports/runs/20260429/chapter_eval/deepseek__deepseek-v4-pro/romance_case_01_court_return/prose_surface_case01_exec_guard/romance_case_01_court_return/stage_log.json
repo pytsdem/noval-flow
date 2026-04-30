@@ -1,0 +1,627 @@
+[
+  {
+    "stage": "build_character_mindsets",
+    "character_mindsets": [
+      {
+        "character_id": "谢临川",
+        "character_name": "谢临川",
+        "surface_emotion": "冷峻从容",
+        "core_emotion": "旧恨焦灼与戒备",
+        "primary_goal": "用赐婚把沈知微圈进自己控制之下，向朝堂展示他对旧案证人的主宰权",
+        "hidden_need": "确认她面对羞辱婚事时的真实反应，以此验证当年决裂中她到底有多少真心",
+        "fear": "她拒不接旨或当庭失态，导致赐恩变抗旨，他失去唯一能把她划出灭口范围的手段",
+        "attitude_to_key_others": {
+          "沈知微": "恨她冷漠如旧，又怕她真不知自己已在灭口名单上"
+        },
+        "self_control_level": "high",
+        "breaking_point_hint": "若她接旨时露出讥讽或过分平静，他会用最刺人的旧称当面叫她，让冷硬面具出现裂纹",
+        "known_but_unspoken": "他从北地旧部密报中得知沈知微已被列为灭口目标，这场婚约是他能绕开翻案最快把她圈进自己名下的手段",
+        "misbelief": "他以为自己对她的恨意纯粹，当众请婚只是为了折辱和掌控",
+        "chapter_change_hint": "散朝后发现婚书背面杀意暗语时，他会意识到这场婚约并非全由自己掌控，复仇逻辑生出第一道裂纹"
+      },
+      {
+        "character_id": "沈知微",
+        "character_name": "沈知微",
+        "surface_emotion": "当众臣服",
+        "core_emotion": "恐惧与割裂的愧疚——怕稍一回应便把他拖入死局，更怕自己压下所有反应时，其实正在错过他无意识抛来的最后一条生路。",
+        "primary_goal": "用毫无破绽的接旨姿态盖住灭口密令，同时从婚书暗号中读出执行时限，不让人察觉她已破译。",
+        "hidden_need": "从暗号中确认幕后人是否已把谢临川划入灭口范围，并判断婚约能否暂时顶掉内廷对她的人身控制。",
+        "fear": "一旦她在殿上表现出识破暗号的痕迹，幕后人会就地抬高杀局，连谢临川一起灭口。",
+        "attitude_to_key_others": {
+          "谢临川": "表面越发恭顺疏远，心底却因他当众讨婚而更怕他被自己牵累出事"
+        },
+        "self_control_level": "high",
+        "breaking_point_hint": "当目光掠过婚书背面暗号旁的小字时，她的拇指会不自主按进纸纹，在边缘留下极轻的褶皱。",
+        "known_but_unspoken": "她知道婚书背面那行小字是旧档暗码，对应‘今夜子时，杀新妇’的灭口指令。",
+        "misbelief": "她认为谢临川的请婚只是将她绑在身边慢慢报复，没意识到这道婚约恰好中断了内廷对她的即时处置权。",
+        "chapter_change_hint": "她会发现婚约不是刑罚，而是将她与他一起绑进倒计时的死局入口，自己必须抢在子时前找到出路。"
+      }
+    ]
+  },
+  {
+    "stage": "plan_content_blocks",
+    "skill_ids": [
+      "base_style",
+      "reveal_guard",
+      "character_integrity",
+      "time_consistency_guard"
+    ],
+    "block_count": 4,
+    "blocks": [
+      {
+        "block_id": "ch_002.sc_001.b001",
+        "chapter_id": "ch_002",
+        "block_index": 1,
+        "purpose": "Open the chapter contract with immediate pressure: 谢临川跪在殿中谢恩时，第一句话不是求翻案，而是求陛下赐婚。",
+        "characters": [
+          "谢临川",
+          "沈知微"
+        ],
+        "active_lines": [
+          "line_old_case"
+        ],
+        "active_twists": [
+          "twist_false_testimony"
+        ],
+        "scene_goal": "谢临川跪在殿中谢恩时，第一句话不是求翻案，而是求陛下赐婚。",
+        "must_reveal": [
+          "谢临川跪在殿中谢恩时，第一句话不是求翻案，而是求陛下赐婚。"
+        ],
+        "must_hide": [
+          "不能揭示沈知微当年是为了保谢临川才作证",
+          "不能让男主知道灭口密令全貌",
+          "不能让两人提前坦白",
+          "不能把请婚写成甜宠求婚"
+        ],
+        "new_value": "Readers newly feel the opening pressure as an active public trap, not as background setup.",
+        "must_not_repeat": [
+          "不要把旧案背景或人物旧怨整段复述一遍。",
+          "不要在第一块就解释对方真实动机。",
+          "不能揭示沈知微当年是为了保谢临川才作证",
+          "不能让男主知道灭口密令全貌",
+          "不能让两人提前坦白",
+          "Do not restate the same relationship judgment in multiple beats."
+        ],
+        "relationship_delta": "关系从未正面碰撞的悬置，转为公开场域里必须立刻接招的压迫。",
+        "clue_delta": "这一块主要落地开场压力，不额外偷跑新 clue。",
+        "must_land_in_action": [
+          "必须把压迫落在动作、礼制或身体反应上。",
+          "不能只用总结句说气氛紧张。"
+        ],
+        "emotional_tone": "让读者感到震惊、压迫、旧恨反噬和一种不该出现却救了命的亲密。",
+        "end_state": "The opening pressure lands and the focal character loses room to recover before speaking.",
+        "human_reaction_target": [
+          "Show one bodily or social restraint before the character tries to speak or act.",
+          "Let at least one witness or supporting character react like a living person under public pressure."
+        ],
+        "cost_shift": "The focal character loses face, time, or the chance to choose a gentler opening move.",
+        "reader_feeling_target": "Readers should feel the pressure closing around the character immediately.",
+        "paragraph_budget": "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长；硬上限 420 中文字符；理想 2~5 段，转折落地即停",
+        "target_chars": 420,
+        "paragraph_shape": [
+          "主动作",
+          "配角反应",
+          "人物细节/情绪泄露",
+          "礼法或环境补压"
+        ],
+        "micro_hook": "The character is forced to answer the opening pressure before they can recover their footing.",
+        "turn_type": "pressure_rise",
+        "character_anchor_line": {
+          "owner": "谢临川",
+          "form": "reaction_line",
+          "surface_function": "用一句短促反应把开场压力钉在场面上。",
+          "hidden_function": "让读者看见角色在被压住时最先守的东西是体面、控制或骨气。",
+          "must_reveal_about_character": "这个人受压时首先暴露出的不是信息，而是性格里的硬处。",
+          "must_not_do": [
+            "不要写成功能性口号。",
+            "不要立刻跟解释性旁白。",
+            "不要为了漂亮把句子抻长。"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Do not open with background summary.",
+          "Do not turn the character into a plot explainer.",
+          "Do not replace scene with pure mental recap.",
+          "硬字数上限 420 中文字符；转折落地后立刻收束。",
+          "不要补第二轮同类动作、同类危机处理或事后心理解释。"
+        ],
+        "character_reentry_mode": {
+          "target_character": "沈知微",
+          "identity_already_known": true,
+          "reentry_strategy": "不要重讲她是谁，用接旨、看禁军、合婚书和称呼变化让读者重新记起她。",
+          "first_signal": "Use a familiar subordinate, object, title, or power arrangement to signal re-entry immediately.",
+          "first_emotional_focus": "沈知微从旧案叛徒，变成全京城眼中被他羞辱、实际上被他暂时护住的未婚妻。",
+          "must_avoid": [
+            "Do not re-explain identity in narrator summary.",
+            "Do not make the re-entry feel like a fresh character introduction."
+          ]
+        },
+        "clue_reveal_mechanism": null,
+        "text": "",
+        "status": "draft",
+        "version": 1
+      },
+      {
+        "block_id": "ch_002.sc_001.b002",
+        "chapter_id": "ch_002",
+        "block_index": 2,
+        "purpose": "Push the plot carrier through live pressure: 婚书背面的一枚旧案暗号",
+        "characters": [
+          "谢临川",
+          "沈知微"
+        ],
+        "active_lines": [
+          "line_old_case"
+        ],
+        "active_twists": [
+          "twist_false_testimony"
+        ],
+        "scene_goal": "婚书背面的一枚旧案暗号",
+        "must_reveal": [
+          "婚书背面的一枚旧案暗号",
+          "谢临川成功让赐婚落定，沈知微暂时离开灭口密令的第一刀。"
+        ],
+        "must_hide": [
+          "不能揭示沈知微当年是为了保谢临川才作证",
+          "不能让男主知道灭口密令全貌",
+          "不能让两人提前坦白",
+          "不能把请婚写成甜宠求婚"
+        ],
+        "new_value": "The chapter object becomes newly actionable, but only through a more expensive route.",
+        "must_not_repeat": [
+          "不要再重讲第一块已经建立的公开压迫。",
+          "不要把章目标只讲成抽象信息点。",
+          "不能揭示沈知微当年是为了保谢临川才作证",
+          "不能让男主知道灭口密令全貌",
+          "不能让两人提前坦白",
+          "Do not restate the same relationship judgment in multiple beats."
+        ],
+        "relationship_delta": "关系从单纯受压，转为带着程序和筹码差的试探性交锋。",
+        "clue_delta": "让章目标和小回报真正推进，但不要额外偷跑更高层真相。",
+        "must_land_in_action": [
+          "章目标必须通过对话、手续、动作选择或旁人反应被推进。",
+          "不能只写人物心里觉得机会出现了。"
+        ],
+        "emotional_tone": "他原本想让她在众人面前尝到被审判的滋味，却先被她接旨时的平静刺得失控。",
+        "end_state": "The characters gain a small procedural push, but the relational and practical cost rises with it.",
+        "human_reaction_target": [
+          "Show practical calculation, etiquette pressure, or controlled discomfort while the goal advances.",
+          "Make another person's reaction sharpen the cost of that progress."
+        ],
+        "cost_shift": "The focal character pays an extra social, procedural, or emotional price to move the goal forward.",
+        "reader_feeling_target": "Readers should feel that even progress arrives with humiliation, pressure, or residue.",
+        "paragraph_budget": "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长；硬上限 520 中文字符；理想 2~5 段，转折落地即停",
+        "target_chars": 520,
+        "paragraph_shape": [
+          "主动作",
+          "礼法或程序阻力",
+          "配角反应",
+          "代价落点"
+        ],
+        "micro_hook": "The procedural opening appears, but the price of taking it forward is now visible.",
+        "turn_type": "pressure_rise",
+        "character_anchor_line": {
+          "owner": "谢临川",
+          "form": "dialogue",
+          "surface_function": "在推进程序或交涉时留下一句能顶住场面的短句。",
+          "hidden_function": "通过措辞、克制或算计显出角色真正的处事方式。",
+          "must_reveal_about_character": "这个人做事时先算代价、脸面还是底线。",
+          "must_not_do": [
+            "不要只传递剧情信息。",
+            "不要把潜台词解释出来。",
+            "不要写成一整段说理。"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Do not explain why the chapter object matters in abstract summary.",
+          "Do not let dialogue become pure information transfer.",
+          "Do not let action pause for a long strategic recap.",
+          "硬字数上限 520 中文字符；转折落地后立刻收束。",
+          "不要补第二轮同类动作、同类危机处理或事后心理解释。"
+        ],
+        "character_reentry_mode": null,
+        "clue_reveal_mechanism": null,
+        "text": "",
+        "status": "draft",
+        "version": 1
+      },
+      {
+        "block_id": "ch_002.sc_001.b003",
+        "chapter_id": "ch_002",
+        "block_index": 3,
+        "purpose": "Reprice relationship and expose pressure naturally: 沈知微从旧案叛徒，变成全京城眼中被他羞辱、实际上被他暂时护住的未婚妻。",
+        "characters": [
+          "谢临川",
+          "沈知微"
+        ],
+        "active_lines": [
+          "line_old_case"
+        ],
+        "active_twists": [
+          "twist_false_testimony"
+        ],
+        "scene_goal": "谢临川从带兵归京的复仇者，转向用婚约把她拖进自己掌控范围的人。",
+        "must_reveal": [
+          "谢临川从带兵归京的复仇者，转向用婚约把她拖进自己掌控范围的人。",
+          "沈知微从旧案叛徒，变成全京城眼中被他羞辱、实际上被他暂时护住的未婚妻。",
+          "婚书背面有只有沈知微认得的旧案暗号",
+          "谢临川说报复时避开了她腕上的旧伤"
+        ],
+        "must_hide": [
+          "不能揭示沈知微当年是为了保谢临川才作证",
+          "不能让男主知道灭口密令全貌",
+          "不能让两人提前坦白",
+          "不能把请婚写成甜宠求婚"
+        ],
+        "new_value": "Readers newly see the relationship reprice and at least one clue carrier, without getting a clean explanation.",
+        "must_not_repeat": [
+          "不要重复前一块已经完成的程序推进。",
+          "不要把关系变化再用作者总结句重复一遍。",
+          "不能揭示沈知微当年是为了保谢临川才作证",
+          "不能让男主知道灭口密令全貌",
+          "不能让两人提前坦白",
+          "Do not restate the same relationship judgment in multiple beats."
+        ],
+        "relationship_delta": "关系重新定价为更危险、更难判断，不能再停留在同一层敌意。",
+        "clue_delta": "至少有一个异常、停顿或反应被看见，但它还不能被解释清楚。",
+        "must_land_in_action": [
+          "关系变化必须落在称呼、停顿、避视、动作失手或他人先发现上。",
+          "不能只说她其实更危险了。"
+        ],
+        "emotional_tone": "他原本想让她在众人面前尝到被审判的滋味，却先被她接旨时的平静刺得失控。",
+        "end_state": "The relationship or emotional angle is repriced on the page and the situation becomes harder to read safely.",
+        "human_reaction_target": [
+          "At least one character should show a small failure of composure, bodily leak, silence, or self-directed sting.",
+          "If a clue appears, let somebody else notice it before the owner explains it."
+        ],
+        "cost_shift": "A clue or shift comes closer, but the relationship becomes harder to trust or manage.",
+        "reader_feeling_target": "Readers should remember the changed relationship pressure more than the raw information itself.",
+        "paragraph_budget": "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长；硬上限 560 中文字符；理想 2~5 段，转折落地即停",
+        "target_chars": 560,
+        "paragraph_shape": [
+          "关系压力",
+          "回避与失手",
+          "他人先发现",
+          "当事人回避解释"
+        ],
+        "micro_hook": "The clue is visible enough to keep the reader moving, but nobody will give it a clean explanation yet.",
+        "turn_type": "clue_shift",
+        "character_anchor_line": {
+          "owner": "谢临川",
+          "form": "narrative_judgment",
+          "surface_function": "在关系重估或线索露出时留下一个贴近视角的判断句。",
+          "hidden_function": "让读者通过这句判断看见人物的误读、偏执、心虚或本能回避。",
+          "must_reveal_about_character": "这个人看人看事时最深的一层偏向或伤口。",
+          "must_not_do": [
+            "不要变成作者总结。",
+            "不要把真相说穿。",
+            "不要马上跟着完整解释。"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Do not summarize the emotional reprice in narrator voice.",
+          "Do not repeat the same cold, pain, blood, or frost image.",
+          "Do not turn a person into a puzzle device.",
+          "硬字数上限 560 中文字符；转折落地后立刻收束。",
+          "不要补第二轮同类动作、同类危机处理或事后心理解释。"
+        ],
+        "character_reentry_mode": null,
+        "clue_reveal_mechanism": {
+          "clue": "婚书背面有只有沈知微认得的旧案暗号",
+          "style": "object_accident",
+          "pressure_source": "殿前赐婚和禁军换防",
+          "surface_trigger": "婚书转呈到沈知微手中时露出背面暗号",
+          "first_noticer": "沈知微",
+          "owner_reaction": "她立刻把婚书合上，用最稳的礼数接旨"
+        },
+        "text": "",
+        "status": "draft",
+        "version": 1
+      },
+      {
+        "block_id": "ch_002.sc_001.b004",
+        "chapter_id": "ch_002",
+        "block_index": 4,
+        "purpose": "Close on changed cost and the contract hook: 散朝后，谢临川才发现婚书背面那枚暗号旁边，还有一行极小的字：今夜子时，杀新妇。",
+        "characters": [
+          "谢临川",
+          "沈知微"
+        ],
+        "active_lines": [
+          "line_old_case"
+        ],
+        "active_twists": [
+          "twist_false_testimony"
+        ],
+        "scene_goal": "散朝后，谢临川才发现婚书背面那枚暗号旁边，还有一行极小的字：今夜子时，杀新妇。",
+        "must_reveal": [
+          "散朝后，谢临川才发现婚书背面那枚暗号旁边，还有一行极小的字：今夜子时，杀新妇。"
+        ],
+        "must_hide": [
+          "不能揭示沈知微当年是为了保谢临川才作证",
+          "不能让男主知道灭口密令全貌",
+          "不能让两人提前坦白",
+          "不能把请婚写成甜宠求婚"
+        ],
+        "new_value": "The chapter exits on a changed cost and a next move that is harder to avoid than before.",
+        "must_not_repeat": [
+          "不要把前一块已经落地的关系变化再解释一遍。",
+          "不要把结尾写成预告片口播。",
+          "不能揭示沈知微当年是为了保谢临川才作证",
+          "不能让男主知道灭口密令全貌",
+          "不能让两人提前坦白",
+          "Do not restate the same relationship judgment in multiple beats."
+        ],
+        "relationship_delta": "结尾要让关系或局势的代价更难回头，而不是停在同一位置。",
+        "clue_delta": "若有钩子，必须让钩子来自新代价或新事实，而不是重复旧悬念。",
+        "must_land_in_action": [
+          "尾钩必须先打到身体、动作、现场变化或实际损失上。",
+          "不能只用一句解释性判断代替收尾。"
+        ],
+        "emotional_tone": "让读者感到震惊、压迫、旧恨反噬和一种不该出现却救了命的亲密。",
+        "end_state": "The chapter ends with a harder next step and a cost the character cannot step back from easily.",
+        "human_reaction_target": [
+          "Let the ending hit a body, action, breath, or practical loss before it becomes a hook.",
+          "Do not end on summary language alone."
+        ],
+        "cost_shift": "The character loses a buffer, an option, or a person they needed for the next move.",
+        "reader_feeling_target": "Readers should feel the next step has become both urgent and more expensive.",
+        "paragraph_budget": "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长；硬上限 420 中文字符；理想 2~5 段，转折落地即停",
+        "target_chars": 420,
+        "paragraph_shape": [
+          "结果落地",
+          "短反应",
+          "额外代价",
+          "尾钩或未竟动作"
+        ],
+        "micro_hook": "The chapter closes with a next move that is now harder, costlier, and impossible to ignore.",
+        "turn_type": "false_relief",
+        "character_anchor_line": {
+          "owner": "谢临川",
+          "form": "inner_thought",
+          "surface_function": "在结尾变化落地时，用一句短念头或短反应把尾钩钉住。",
+          "hidden_function": "让结尾先立住人，再立住事件。",
+          "must_reveal_about_character": "这个人真正怕失去或真正放不下的东西。",
+          "must_not_do": [
+            "不要写成预告片文案。",
+            "不要只负责抛钩子。",
+            "不要把情绪解释得太满。"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Do not force a trailer-like ending turn.",
+          "Do not flatten the closing beat into explanation.",
+          "Do not spend the final sentence only naming the hook.",
+          "硬字数上限 420 中文字符；转折落地后立刻收束。",
+          "不要补第二轮同类动作、同类危机处理或事后心理解释。"
+        ],
+        "character_reentry_mode": null,
+        "clue_reveal_mechanism": null,
+        "text": "",
+        "status": "draft",
+        "version": 1
+      }
+    ]
+  },
+  {
+    "stage": "draft_beat_1",
+    "block_id": "ch_002.sc_001.b001",
+    "block_index": 1,
+    "chapter_length": 349,
+    "delivered_beat_summary_text": "[Already delivered in this chapter]\nNo beat has landed yet."
+  },
+  {
+    "stage": "draft_beat_2",
+    "block_id": "ch_002.sc_001.b002",
+    "block_index": 2,
+    "chapter_length": 928,
+    "delivered_beat_summary_text": "[Already delivered in this chapter]\n\nch_002.sc_001.b001 / Open the chapter contract with immediate pressure: 谢临川跪在殿中谢恩时，第一句话不是求翻案，而是求陛下赐婚。\n- scene_goal: 谢临川跪在殿中谢恩时，第一句话不是求翻案，而是求陛下赐婚。\n- new_value: Readers newly feel the opening pressure as an active public trap, not as background setup.\n- relationship_delta: 关系从未正面碰撞的悬置，转为公开场域里必须立刻接招的压迫。\n- clue_delta: 这一块主要落地开场压力，不额外偷跑新 clue。\n- end_state: The opening pressure lands and the focal character loses room to recover before speaking.\n- micro_hook: The character is forced to answer the opening pressure before they can recover their footing."
+  },
+  {
+    "stage": "draft_beat_3",
+    "block_id": "ch_002.sc_001.b003",
+    "block_index": 3,
+    "chapter_length": 1396,
+    "delivered_beat_summary_text": "[Already delivered in this chapter]\n\nch_002.sc_001.b001 / Open the chapter contract with immediate pressure: 谢临川跪在殿中谢恩时，第一句话不是求翻案，而是求陛下赐婚。\n- scene_goal: 谢临川跪在殿中谢恩时，第一句话不是求翻案，而是求陛下赐婚。\n- new_value: Readers newly feel the opening pressure as an active public trap, not as background setup.\n- relationship_delta: 关系从未正面碰撞的悬置，转为公开场域里必须立刻接招的压迫。\n- clue_delta: 这一块主要落地开场压力，不额外偷跑新 clue。\n- end_state: The opening pressure lands and the focal character loses room to recover before speaking.\n- micro_hook: The character is forced to answer the opening pressure before they can recover their footing.\n\nch_002.sc_001.b002 / Push the plot carrier through live pressure: 婚书背面的一枚旧案暗号\n- scene_goal: 婚书背面的一枚旧案暗号\n- new_value: The chapter object becomes newly actionable, but only through a more expensive route.\n- relationship_delta: 关系从单纯受压，转为带着程序和筹码差的试探性交锋。\n- clue_delta: 让章目标和小回报真正推进，但不要额外偷跑更高层真相。\n- end_state: The characters gain a small procedural push, but the relational and practical cost rises with it.\n- micro_hook: The procedural opening appears, but the price of taking it forward is now visible."
+  },
+  {
+    "stage": "draft_beat_4",
+    "block_id": "ch_002.sc_001.b004",
+    "block_index": 4,
+    "chapter_length": 1941,
+    "delivered_beat_summary_text": "[Already delivered in this chapter]\n\nch_002.sc_001.b001 / Open the chapter contract with immediate pressure: 谢临川跪在殿中谢恩时，第一句话不是求翻案，而是求陛下赐婚。\n- scene_goal: 谢临川跪在殿中谢恩时，第一句话不是求翻案，而是求陛下赐婚。\n- new_value: Readers newly feel the opening pressure as an active public trap, not as background setup.\n- relationship_delta: 关系从未正面碰撞的悬置，转为公开场域里必须立刻接招的压迫。\n- clue_delta: 这一块主要落地开场压力，不额外偷跑新 clue。\n- end_state: The opening pressure lands and the focal character loses room to recover before speaking.\n- micro_hook: The character is forced to answer the opening pressure before they can recover their footing.\n\nch_002.sc_001.b002 / Push the plot carrier through live pressure: 婚书背面的一枚旧案暗号\n- scene_goal: 婚书背面的一枚旧案暗号\n- new_value: The chapter object becomes newly actionable, but only through a more expensive route.\n- relationship_delta: 关系从单纯受压，转为带着程序和筹码差的试探性交锋。\n- clue_delta: 让章目标和小回报真正推进，但不要额外偷跑更高层真相。\n- end_state: The characters gain a small procedural push, but the relational and practical cost rises with it.\n- micro_hook: The procedural opening appears, but the price of taking it forward is now visible.\n\nch_002.sc_001.b003 / Reprice relationship and expose pressure naturally: 沈知微从旧案叛徒，变成全京城眼中被他羞辱、实际上被他暂时护住的未婚妻。\n- scene_goal: 谢临川从带兵归京的复仇者，转向用婚约把她拖进自己掌控范围的人。\n- new_value: Readers newly see the relationship reprice and at least one clue carrier, without getting a clean explanation.\n- relationship_delta: 关系重新定价为更危险、更难判断，不能再停留在同一层敌意。\n- clue_delta: 至少有一个异常、停顿或反应被看见，但它还不能被解释清楚。\n- end_state: The relationship or emotional angle is repriced on the page and the situation becomes harder to read safely.\n- micro_hook: The clue is visible enough to keep the reader moving, but nobody will give it a clean explanation yet."
+  },
+  {
+    "stage": "write_chapter_full",
+    "mode": "sequential_beat_drafting",
+    "block_count": 4,
+    "chapter_length": 1941
+  },
+  {
+    "stage": "review_iteration_1",
+    "mode": "fast",
+    "skill_ids": [
+      "base_style"
+    ],
+    "tool_calls": [
+      "review_structure_and_continuity",
+      "review_prose_and_humanity"
+    ],
+    "review_reports": {
+      "review_structure_and_continuity": {
+        "pass": false,
+        "issues": [
+          {
+            "issue_id": "I1",
+            "severity": "high",
+            "problem_type": "missing_beat",
+            "reason": "章节合约中要求的两个线索（allowed_clues）未在正文中出现：① “谢临川说报复时避开了她腕上的旧伤”；② “沈知微接旨前先看了一眼殿门外的禁军位置”。腕伤线索同时是 block 3 的 must_reveal 项，完全缺失会导致人物行为逻辑断裂。",
+            "target_blocks": [
+              "ch_002.sc_001.b002",
+              "ch_002.sc_001.b003"
+            ],
+            "patch_hint": "1. 在 block 2（内侍将婚书递到沈知微手中之前），添加一个极短的动作：沈知微在起身走向殿中时，飞快地朝殿门外禁军方向斜了一眼，随即垂下视线。 2. 在 block 3 谢临川对沈知微说“沈女史，往后日子还长”的前后，插入一个描写：他说这句话时目光扫过她右手腕处的一小截旧疤，但在碰到那块皮肤之前就把视线挪开了，仿佛刻意避开；或者在叙述中带出“他报复的话说到一半，视线却绕过了她腕上那道旧伤”。这样既能完成线索投放，又符合“恨意未死、但不忍”的暗涌。"
+          },
+          {
+            "issue_id": "I2",
+            "severity": "low",
+            "problem_type": "emotional_turn_weakening",
+            "reason": "章节合约中 block 2-3 的情绪转向描述为“他原本想让她在众人面前尝到被审判的滋味，却先被她接旨时的平静刺得失控”，正文里谢临川观察到沈知微的僵硬，但情绪反馈偏内敛，缺少“被刺得失控”的直观外化，使得这段关系转折的冲击力略低于预期。",
+            "target_blocks": [
+              "ch_002.sc_001.b003"
+            ],
+            "patch_hint": "不影响整体结构，建议在 block 3 谢临川检查婚书凸起时或临别时，加入一个瞬间的生理失控微反应，例如指节突然发白、呼吸微滞、袖中婚书被捏出一道额外的褶皱等，让他随后迅速用冷硬表情盖过去，这样能更贴合“刺得失控”的心理描写，同时不泄露关键信息。"
+          }
+        ],
+        "summary": "本章结构基本紧凑，四块连缀从开局压力到结尾钩子自然贯通，赐婚程序、暗号露出、关系重新定价和“今夜子时，杀新妇”的威胁交接都已完成。主要遗漏是两个合约要求的线索：沈知微看禁军的位置判断和谢临川对腕伤的回避，需在对应块中快速补入。此外情绪转向可稍加外化，让谢临川的失控感更可见，但不影响核心连续性。",
+        "passed": false
+      },
+      "review_prose_and_humanity": {
+        "pass": false,
+        "issues": [
+          {
+            "issue_id": "I1",
+            "severity": "medium",
+            "problem_type": "未满足合约揭示要求",
+            "reason": "块3的must_reveal包含「谢临川说报复时避开了她腕上的旧伤」，但正文未出现该细节，线索缺失。",
+            "target_blocks": [
+              "ch_002.sc_001.b003"
+            ],
+            "patch_hint": "在块3谢临川与沈知微互动或他观察她时，加入一笔：他说话时目光从她腕上旧伤处移开，或刻意不看。不必显式解释，用动作带出即可。"
+          },
+          {
+            "issue_id": "I2",
+            "severity": "medium",
+            "problem_type": "未落地人性痛感锚点",
+            "reason": "合约要求「谢临川鞋底的雪水还没干，就得把最恨的人当众变成自己的未婚妻」作为human pain anchor，但正文无相关描写。",
+            "target_blocks": [
+              "ch_002.sc_001.b001"
+            ],
+            "patch_hint": "在块1谢临川伏身叩首或起身时，加入鞋底潮湿、雪水渗入袍摆的触感细节，让身体负担与心理压力同步出现。"
+          }
+        ],
+        "summary": "章节整体节奏和潜台词处理合格，但遗漏两处合约必须落地的细节：腕上旧伤的回避动作和雪水未干的身体感受。补上后人物会更稳，关系压力的身体质感更足。",
+        "passed": false
+      }
+    },
+    "final_judge": {
+      "passed": false,
+      "blocking_reasons": [
+        "本章结构基本紧凑，四块连缀从开局压力到结尾钩子自然贯通，赐婚程序、暗号露出、关系重新定价和“今夜子时，杀新妇”的威胁交接都已完成。主要遗漏是两个合约要求的线索：沈知微看禁军的位置判断和谢临川对腕伤的回避，需在对应块中快速补入。此外情绪转向可稍加外化，让谢临川的失控感更可见，但不影响核心连续性。",
+        "章节整体节奏和潜台词处理合格，但遗漏两处合约必须落地的细节：腕上旧伤的回避动作和雪水未干的身体感受。补上后人物会更稳，关系压力的身体质感更足。"
+      ],
+      "metrics": {
+        "review_tools": 2,
+        "issue_count": 4
+      }
+    }
+  },
+  {
+    "stage": "patch_round_1_structural_stop",
+    "patch_round": 1,
+    "patch_plan": {
+      "patch_targets": [
+        {
+          "target_type": "block",
+          "target_id": "ch_002.sc_001.b001",
+          "problem_type": "missing_human_pain_anchor",
+          "goal": "开场即植入“鞋底雪水未干”的身体触感，使心理压迫与物理不适同步，落实 human pain anchor。",
+          "instructions": [
+            "在谢临川伏身叩首、额头抵上金砖缝之前，或在描述“膝下那方玉砖冷得像北地的冻土”之后，插入一句他的袍摆与鞋底的状态：例如“袍摆下摆还洇着北地雪渍，鞋底残雪半化，布履从脚心往上泛出一层潮凉。”",
+            "确保这一细节与殿内的沉水香、炭火烘热形成触觉对比，不打断原有叩首的节奏，只是把一个身体负担轻轻搁进场景里。"
+          ],
+          "local_context_needed": [
+            "prev_block",
+            "next_block",
+            "relationship_state"
+          ],
+          "source_issue_ids": [
+            "I2"
+          ]
+        },
+        {
+          "target_type": "block",
+          "target_id": "ch_002.sc_001.b002",
+          "problem_type": "missing_clue",
+          "goal": "补入“沈知微接旨前先看了一眼殿门外的禁军位置”这一允许线索，体现她对环境中威胁的警觉。",
+          "instructions": [
+            "在沈知微从女史队列起身走向殿中接旨的过程中（即在她起身时或迈出第一步前），插入一个极短的动作：她在站直身子、裙幅擦过金砖的间隙，目光极快地朝殿门外禁军换防后的位置斜了一眼，随即垂下眼睫，迈步时步子依旧规矩不乱。",
+            "这个动作要轻到几乎不被殿内大多数人察觉，但叙事镜头可以捕捉到它；谢临川的角度也可以因为它过于快速而无法明确判断，但感知到一丝不对。",
+            "动作必须发生在婚书递到她手中之前，不要干扰接旨流程的连贯性。"
+          ],
+          "local_context_needed": [
+            "prev_block",
+            "next_block"
+          ],
+          "source_issue_ids": [
+            "I1"
+          ]
+        },
+        {
+          "target_type": "block",
+          "target_id": "ch_002.sc_001.b003",
+          "problem_type": "missing_clue",
+          "goal": "补入“谢临川说报复时避开了她腕上的旧伤”的 must_reveal 线索，同时轻微外化情绪转向中被平静刺到的失控感。",
+          "instructions": [
+            "在谢临川对沈知微说“沈女史，往后日子还长”之后，或在她答“公子指教得是”之前，插入他的视线运动：他原本带着嘲弄或冷意看着她，但在目光掠过她右手腕时，恰好落在一小截旧疤的边缘。叙述只需点出“那道疤很浅，像旧案里没烧尽的一页”，然后他的视线像被烫到一样迅速撤回，重新对上她的眼。",
+            "在视线撤回的同一瞬间或紧接着，可以勾一笔他身体的细微失控，例如袖中握着婚书的指节猛地收紧，指节泛白，又或是呼吸微滞一拍，然后被他用更冷的微笑或话语盖过去。但不要过度渲染，点到即止。",
+            "整个过程必须保持谢临川不知真相、未明说的状态，只传达恨意中那一份无法忽视的心软与自我克制。",
+            "确保改动后，块3的关系重新定价仍然保持“沈知微从叛徒变成他当众羞辱、实则庇护的未婚妻”这一层，不要让读者误以为他已知道真相，也不要软化他对她的恨到不合理程度。"
+          ],
+          "local_context_needed": [
+            "prev_block",
+            "next_block",
+            "relationship_state"
+          ],
+          "source_issue_ids": [
+            "I1",
+            "I2"
+          ]
+        }
+      ],
+      "unchanged_blocks": [
+        "ch_002.sc_001.b004"
+      ],
+      "global_constraints": [
+        "所有新增描写须保持原文古风、冷硬、以动作和感官细节推进的语调，不得添加解释性旁白或内心独白。",
+        "不得泄露沈知微当年为保谢临川而作证的真相，不得让男主知晓灭口密令全貌，不得让二人提前坦白。",
+        "新增的线索（看禁军、避腕伤）必须作为可被感知但未被解读的异常存在，维护章节的谜团压力和阅读假象。",
+        "确保各块修改后的情绪与线索流转连贯，尤其是块2和块3之间的衔接不因新加动作而出现裂痕。"
+      ]
+    },
+    "final_judge": {
+      "passed": false,
+      "blocking_reasons": [
+        "Patch plan requires deleting or reordering beats. Fast local patch cannot safely do that; keep the current draft and suggest deep structural rewrite."
+      ],
+      "metrics": {
+        "patch_round": 1,
+        "llm_pass_flag": false,
+        "remaining_issue_count": 0,
+        "introduced_issue_count": 0
+      },
+      "recommendation": "Patch plan requires deleting or reordering beats. Fast local patch cannot safely do that; keep the current draft and suggest deep structural rewrite."
+    }
+  },
+  {
+    "stage": "final_polish",
+    "skill_ids": [
+      "base_style",
+      "chapter_finalize"
+    ],
+    "chapter_length": 1925
+  },
+  {
+    "stage": "format_adjustment",
+    "chapter_length": 1925,
+    "format_issues": []
+  },
+  {
+    "stage": "summarize_actual_chapter",
+    "chapter_id": "ch_002"
+  }
+]

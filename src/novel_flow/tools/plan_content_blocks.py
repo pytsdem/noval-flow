@@ -111,6 +111,7 @@ class PlanContentBlocksTool(LLMChapterTool):
                             )
                         ),
                         "relationship_delta": self._clean_text(block.relationship_delta)
+                        or self._clean_text(chapter_contract.relationship_cost)
                         or self._fallback_relationship_delta(index=index, chapter_contract=chapter_contract),
                         "clue_delta": self._clean_text(block.clue_delta)
                         or self._fallback_clue_delta(index=index, chapter_contract=chapter_contract),
@@ -125,6 +126,7 @@ class PlanContentBlocksTool(LLMChapterTool):
                             self._fallback_human_reaction(index=index),
                         ),
                         "cost_shift": self._clean_text(block.cost_shift)
+                        or self._clean_text(chapter_contract.must_hurt_now)
                         or self._clean_text(chapter_contract.cost_of_progress)
                         or self._fallback_cost_shift(index=index, chapter_contract=chapter_contract),
                         "reader_feeling_target": self._clean_text(block.reader_feeling_target)

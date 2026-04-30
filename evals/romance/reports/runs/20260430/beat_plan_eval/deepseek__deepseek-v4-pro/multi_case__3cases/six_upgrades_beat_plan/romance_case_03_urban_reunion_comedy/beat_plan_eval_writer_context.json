@@ -1,0 +1,74 @@
+{
+  "chapter_id": "ch_004",
+  "selection_summary_text": "relevant_roles: 许知夏（活动策划负责人/发布会项目总控），周聿白（品牌方负责人/品牌市场负责人）。relevant_twists: twist_old_breakup（当年分手不是单纯不爱，仅限线索通过工作细节泄露）。relevant_lines: line_launch_crisis（直播发布会翻车线，核心是事故制造与查证）。relevant_world_rules: 发布会直播不可随意延迟；所有私人情绪必须让位给倒计时；乙方不能顶撞甲方，甲方不能承认替乙方兜底；周聿白空降只有临时决策权；许知夏预算被砍过，备用方案意味着人情债。relevant_past_events: 彩排刚结束，最终版主视觉U盘损坏；艺人耳返失灵；黑稿开始发酵。current_time_anchor: 彩排结束后，开播前十七分钟，时间紧迫倒计时推进中。",
+  "time_anchor_text": "absolute: 未明确给出现代都市具体日期，但时间点锁定为某日彩排结束后，距正式开播仅17分钟。season: 未指定，但环境为室内发布会后台，不受季节影响。timeofday: 未知具体时段，推测为晚间或下午临近黄金时段，需与直播排期一致。relative_to_previous_chapter: 紧接上一章彩排结束，以许知夏收到主视觉损坏消息为衔接点。must_not_conflict: 不得与前后章时序矛盾；开播倒计时必须连贯，所有动作均在此17分钟内发生；外部事件（如黑稿投放）时间线需与此并行但无需精确标注绝对时分。",
+  "chapter_visible_context_text": "reader_should_know: 周聿白空降品牌方，表面上挑剔许知夏；发布会面临主视觉损坏、耳返失灵和黑稿三重危机；两人曾交往但分手，存在未解心结。reader_should_believe: 两人分开确有原因，但默契未断；周聿白似乎只是公事公办，许知夏只想守住项目；黑稿可能有人陷害。reader_should_not_know: 周聿白提前知道有人要让发布会翻车；许知夏当年离开的债务与家庭变故真相；分手日的备用方案意义。allowed_clues: 许知夏回避家庭话题、对钱和违约金敏感；周聿白记得她喝无糖冰美式、紧张时转戒指；备用方案命名日期为分手日。forbidden_reveals: 不能解释债务全貌；不能让男主立刻知道真相；不能长篇伤痛独白；不能两人和解。current_character_state: 许知夏高压下表面镇定，用吐槽掩饰刺痛，实则对旧情仍有波动；周聿白外冷内护，通过挑剔递送预案，内心保留当年未释怀的疑问。",
+  "completed_chapter_memory_text": "",
+  "step_1_story_foundation_text": "Title: 前任空降甲方以后。High concept: 一场全网直播发布会翻车前夜，活动负责人发现空降来挑刺的品牌方负责人，是她三年前不欢而散的前任。Theme statement: 成熟不是不心动，而是心动时还能把台子撑住。Story summary: 许知夏负责一场高关注新品发布会，临开播前设备、艺人和舆论同时出问题。临时空降的品牌负责人周聿白是她前任，两人表面互怼拆台，实际都在替对方补漏洞。每次专业配合都擦到当年没说清的分手旧伤。Genre: urban modern romance。Target style: 现代、轻快、对白有节奏，现实事件推动暧昧。Emotional hook: 最会挑你毛病的人，也是最清楚怎么替你兜底的人。Central conflict: 发布会必须救，旧账不能当众翻，但两人越配合越像从没分开。Core hook: 前任变甲方，全网直播倒计时把破镜重圆压进职场危机。Ending payoff: 两人从公事合作重新滑向私人问题，但不会立刻和解。Current chapter mission: 发布会开播前十七分钟，主视觉文件损坏、艺人耳返失灵、黑稿开始发酵；许知夏和周聿白一路互怼救场，配合默契却不断碰到旧伤，结尾他问出当年她是否真的一次都没想过回来找他。",
+  "step_2_worldbuilding_text": "[Step 2 worldbuilding and structural rules]\n\nStory engine:\n- World rules: ['大型发布会直播不可随意延迟，延迟会触发违约和舆论风险。', '品牌方、艺人团队、执行公司之间互相甩锅。', '所有私人情绪都必须让位给倒计时。', '直播主视觉、艺人流程、舆情预案三条线任一失败都会让项目被撤。', '乙方负责人不能公开顶撞甲方，甲方负责人也不能承认私下替乙方兜底。', '事故期间所有聊天记录都可能成为追责证据，玩笑和旧情都必须藏在工作话术里。', '周聿白空降只拥有临时决策权，发布会后品牌高层会复盘追责。', '许知夏团队预算被砍过一次，任何备用方案都意味着她提前自掏人情债。']\n- Power structure: 品牌方掌预算，执行公司扛落地风险，艺人团队掌临场曝光。\n- Objective conditions: ['许知夏不能当场和甲方撕破脸', '周聿白不能公开承认自己提前介入了事故预案']",
+  "step_3_character_packets_text": "许知夏 - Public identity: 活动策划负责人 / 发布会项目总控。Stable trait: 专业、嘴快、扛压强，不愿示弱。Pressure behavior: 压力越大越开玩笑，真正被戳痛就立刻切成工作口吻。Current drive: [隐藏]，表面任务是只想把发布会救下来，并和前任保持甲乙方边界。Action lane: 救场与维持边界，不违反直播倒计时规则。Behavioral rules: 压力越大越开玩笑，被戳痛切换工作口吻；所有情绪必须被工作打断。Hidden truth lock: 不泄露未揭示动机或牺牲。Allowed outer signs: 停顿、转移、克制、改变称呼、回避、不完整回答。\n\n周聿白 - Public identity: 品牌方负责人 / 品牌市场负责人。Stable trait: 毒舌、细致、外冷内护短。Pressure behavior: 先挑漏洞再补方案，嘴上像否定，动作像兜底。Current drive: [隐藏]，表面挑剔许知夏，实际提前替她准备风险预案。Action lane: 挑刺并兜底，不违反直播倒计时规则。Behavioral rules: 先挑漏洞再补方案；所有情绪必须被工作打断。Hidden truth lock: 不泄露未揭示动机或牺牲。Allowed outer signs: 停顿、转移、克制、改变称呼、回避、不完整回答。\n\nGlobal chapter bans: 不能写成霸总训话；不能用古风腔；不能大段伤痛独白；不能让两人本章和解。",
+  "step_4_event_timeline_text": "[Step 4 full event timeline]\nNo event_timeline facts available.",
+  "step_5_character_milestones_text": "无相关角色里程碑匹配当前章节重点。",
+  "step_6_twists_text": "twist_old_breakup / 当年分手不是单纯不爱 - False belief: 周聿白以为许知夏当年为了前途直接丢下他。Reader alignment: 前期让读者感到两人都有委屈，但不急着判定谁对谁错。Seed from: ch_002。Reveal at: ch_020。Allowed clues: 她回避当年的家庭电话；她对钱和违约金格外敏感；他保留了分手日那版备用方案。Forbidden reveals: 不能本章解释债务全貌；不能让男主立刻知道真相。POV lock: 不写长篇伤痛独白，只让工作细节擦出旧伤。Payoff effect: 真相揭开后，所有互怼和兜底都会被重新解释。",
+  "step_7_story_lines_text": "line_launch_crisis / 直播发布会翻车线 - Type: workplace。Visibility: visible。Core question: 是谁在发布会前连续制造事故，想让许知夏背锅？Reader hook mode: deadline-pressure。Start state: 发布会临近开播，技术和舆论都出现异常。Midpoint shift: 周聿白从挑刺甲方变成共同查事故的人。End state: 两人查到黑稿源头与品牌内部竞争有关。Carried twists: twist_old_breakup。Line rules: 现实事件必须明确推进，不能只有情绪；对白要像现代职场人，互怼必须带信息和行动。",
+  "step_8_chapter_brief_text": "Chapter id: ch_004。Title: 倒计时十七分钟。Chapter type: workplace_crisis。Chapter mission: 发布会开播前十七分钟，主视觉文件损坏、艺人耳返失灵、黑稿开始发酵；许知夏和周聿白一路互怼救场，配合默契却不断碰到旧伤，结尾他问出当年她是否真的一次都没想过回来找他。Incoming hook: 彩排刚结束，许知夏收到技术台消息：最终版主视觉打不开。Opening hook: 周聿白推门进来第一句话是挑刺，第二句话却准确报出了备用机位的位置。Core scene: 两人在后台、导播间和舞台侧快速处理直播事故，用现代对白和职业动作推进关系。Plot carrier: 损坏的主视觉U盘。Reader emotion: 轻松紧张、甜中带酸、想看他们继续互怼又破防。Reader belief: 读者应相信两人确实分开过，也能感到他们的默契没有断。World limit: 直播倒计时不可暂停，所有情绪都必须被工作任务打断。Character delta: 许知夏从把他当难伺候甲方，变成承认他仍然最会接住她的临场漏洞。Relationship delta: 周聿白从前任麻烦，变成危机中仍懂她工作节奏的人。Emotional turn: 一场救场把互怼从职业对抗推回旧情未了。Cost of progress: 越临近开播，耳机里的倒计时越像把私人旧账一秒一秒往外推。Hook kind: question。Pace curve: steady_climb。Must not repeat: 不能写成霸总训话；不能用古风腔；不能大段伤痛独白；不要重复相同关系判断；不要用解释代替后果。Backstory trigger: 备用方案文件名。Clue reveal mechanism: 对象事故，压力源为倒计时和黑稿，打开备用方案时看到文件名日期，第一发现人许知夏，周聿白反应是切回公事要求她看导播屏。Character reentry focus: 许知夏用专业反应、吐槽和临场调度立住。Human pain anchor: 倒计时像把私人旧账推出。Romance seed: 他嘴上嫌她方案乱，手里已经按她习惯把所有备用文件排好。Must payoff: 发布会成功开播，第一轮黑稿被压下去。Final hook: 直播间掌声响起时，周聿白低声问她：当年你真的一次都没想过回来找我？Pace contract: 3000-3800字，现代对白带动关系。Active lines: line_launch_crisis。Active twists: twist_old_breakup。Allowed info: 周聿白提前准备了备用视觉方案；有人在开播前投放黑稿；许知夏当年没有解释分手原因。Allowed clues: 周聿白记得她喝无糖冰美式；许知夏知道他紧张时会转戒指；备用方案命名日期是分手那天。Forbidden: 不能写成霸总训话；不能用古风腔；不能大段伤痛独白；不能让两人本章和解。",
+  "chapter_payload_text": "[Chapter contract payload]\n\nChapter: ch_004 / 倒计时十七分钟\nChapter type: workplace_crisis\nChapter mission: 发布会开播前十七分钟，主视觉文件损坏、艺人耳返失灵、黑稿开始发酵；许知夏和周聿白一路互怼救场，配合默契却不断碰到旧伤，结尾他问出当年她是否真的一次都没想过回来找他。\nIncoming hook: 彩排刚结束，许知夏收到技术台消息：最终版主视觉打不开。\nOpening hook: 周聿白推门进来第一句话是挑刺，第二句话却准确报出了备用机位的位置。\nCore scene: 两人在后台、导播间和舞台侧快速处理直播事故，用现代对白和职业动作推进关系，而不是站着解释旧情。\nPlot carrier: 损坏的主视觉U盘\nScene engine: relationship_collision\nClue reveal mechanism: {'style': 'object_accident', 'pressure_source': '直播倒计时和黑稿发酵', 'surface_trigger': '打开备用方案时看到文件名日期', 'first_noticer': '许知夏', 'owner_reaction': '周聿白立刻切回公事，要求她先看导播屏'}\nCharacter reentry focus: {'许知夏': '用专业反应、吐槽和临场调度立住她，不要写成只会内耗。'}\nReader emotion target: 轻松紧张、甜中带酸、想看他们继续互怼又破防。\nReader belief to preserve: 读者应相信两人确实分开过，也能感到他们的默契没有断。\nCharacter delta: 许知夏从把他当难伺候甲方，变成承认他仍然最会接住她的临场漏洞。\nRelationship delta: 周聿白从前任麻烦，变成危机中仍懂她工作节奏的人。\nEmotional turn: 一场救场把互怼从职业对抗推回旧情未了。\nCost of progress: 越临近开播，耳机里的倒计时越像把私人旧账一秒一秒往外推。\nHook kind: question\nPace curve: steady_climb\nMust not repeat: 不能写成霸总训话; 不能用古风腔; 不能大段伤痛独白; Do not restate the same relationship judgment in multiple beats.; Do not replay finished pressure with explanation instead of consequence.\nBackstory trigger: 备用方案文件名\nHuman pain anchor: 越临近开播，耳机里的倒计时越像把私人旧账一秒一秒往外推。\nRomance seed: 他嘴上嫌她方案乱，手里却已经按她习惯把所有备用文件排好了。\nMust payoff: 发布会成功开播，第一轮黑稿被压下去。\nFinal hook: 直播间掌声响起时，周聿白低声问她：当年你真的一次都没想过回来找我？\nPace contract: target=3000-3800; modern dialogue must carry relationship movement\n\nActive story lines:\n- line_launch_crisis: 是谁在发布会前连续制造事故，想让许知夏背锅？ | visibility=visible | rules=现实事件必须明确推进，不能只有情绪; 对白要像现代职场人，互怼必须带信息和行动\n\nActive twists:\n- twist_old_breakup: preserve false belief '周聿白以为许知夏当年为了前途直接丢下他。'; reader alignment='前期让读者感到两人都有委屈，但不急着判定谁对谁错。'; allowed clues=她回避当年的家庭电话; 她对钱和违约金格外敏感; 他保留了分手日那版备用方案; forbidden reveals=不能本章解释债务全貌; 不能让男主立刻知道真相; POV lock=不写长篇伤痛独白，只让工作细节擦出旧伤。\n\nAllowed explicit information:\n- 周聿白提前准备了备用视觉方案\n- 有人在开播前投放黑稿\n- 许知夏当年没有解释分手原因\n\nAllowed clues without explanation:\n- 周聿白记得她工作时喝无糖冰美式\n- 许知夏知道他紧张时会转戒指\n- 备用方案命名日期是他们分手那天\n\nForbidden content:\n- 不能写成霸总训话\n- 不能用古风腔\n- 不能大段伤痛独白\n- 不能让两人本章和解\n- 不能本章解释债务全貌\n- 不能让男主立刻知道真相",
+  "timeline_anchor_facts_text": "[Objective timeline anchors]\nNo strongly relevant timeline anchors found for this chapter.",
+  "relevant_world_rules_text": "[Relevant world rules]\n\n1. 直播倒计时不可暂停，所有情绪都必须被工作任务打断。\n2. 大型发布会直播不可随意延迟，延迟会触发违约和舆论风险。\n3. 品牌方、艺人团队、执行公司之间互相甩锅。\n4. 所有私人情绪都必须让位给倒计时。\n5. 直播主视觉、艺人流程、舆情预案三条线任一失败都会让项目被撤。\n6. 乙方负责人不能公开顶撞甲方，甲方负责人也不能承认私下替乙方兜底。",
+  "style_card_text": "[风格底卡]\n- 视角：坚持有限视角，不要从全知角度替人物解释真相。\n- 语言：使用适配题材的现代中文网文叙述，避免机械、概括、像评语一样的 AI 总结腔。\n- 质地：让环境、物件、礼法、劳动、钱、天气、身体负担和空间关系自然落在页上，而不是只给抽象氛围词。\n- 情绪：不要太快命名情绪，优先通过人物看见了什么、躲开了什么、碰了什么、说漏了什么来让情绪自己浮出来。\n- 对话：人物说话要来自身份、需求、习惯、恐惧和旧关系，不要只是替大纲传话。\n- 人物落地：用手、姿势、衣着、伤口、称呼、惯性动作等少量具体细节让人立住，不要把细节写成清单。\n- 揭示纪律：线索可以出现，但未到揭示点前不要替读者完整解释。\n- 关系推进：每章至少要让一段关系更深、更绷、更偏、更重新定价一次，而且推进要可信。\n- 背景处理：过去只能从当下压力、记忆触发或动作后果里长出来，不要整段说明书式插入。\n- 节奏：句子轻重和场面速度要跟戏走，不要每段都写成同一节拍。\n- 沉浸目标：让读者感觉自己在房间里、在身体反应里、在人物有限理解里。\n\n[风格聚焦]\n方向：现代言情 / 都市拉扯。\n- 让工作、时间差、消息、饭局、楼道、电梯、手机、公开场合和社会体面承担压力，而不是抽象心情。\n- 斗嘴要带出边界变化、尴尬、嘴硬、吃醋、遮掩或社交代价，不要只追求金句密度。\n- 反复出现的物件、地点、日常流程，只有在暴露新的社交成本、亲密信号或误会时才值得再写。",
+  "active_twists": [
+    {
+      "twist_id": "twist_old_breakup",
+      "title": "当年分手不是单纯不爱",
+      "false_belief": "周聿白以为许知夏当年为了前途直接丢下他。",
+      "truth": "许知夏当年背着债务和家庭变故离开，不想把他拖进来。",
+      "reader_alignment": "前期让读者感到两人都有委屈，但不急着判定谁对谁错。",
+      "seed_from": "ch_002",
+      "reveal_at": "ch_020",
+      "allowed_clues": [
+        "她回避当年的家庭电话",
+        "她对钱和违约金格外敏感",
+        "他保留了分手日那版备用方案"
+      ],
+      "forbidden_reveals": [
+        "不能本章解释债务全貌",
+        "不能让男主立刻知道真相"
+      ],
+      "pov_lock": "不写长篇伤痛独白，只让工作细节擦出旧伤。",
+      "related_characters": [
+        "许知夏",
+        "周聿白"
+      ],
+      "payoff_effect": "真相揭开后，所有互怼和兜底都会被重新解释。"
+    }
+  ],
+  "active_story_lines": [
+    {
+      "line_id": "line_launch_crisis",
+      "name": "直播发布会翻车线",
+      "line_type": "workplace",
+      "visibility": "visible",
+      "core_question": "是谁在发布会前连续制造事故，想让许知夏背锅？",
+      "reader_hook_mode": "deadline-pressure",
+      "start_state": "发布会临近开播，技术和舆论都出现异常。",
+      "midpoint_shift": "周聿白从挑刺甲方变成共同查事故的人。",
+      "end_state": "两人查到黑稿源头与品牌内部竞争有关。",
+      "carried_twists": [
+        "twist_old_breakup"
+      ],
+      "line_rules": [
+        "现实事件必须明确推进，不能只有情绪",
+        "对白要像现代职场人，互怼必须带信息和行动"
+      ]
+    }
+  ],
+  "scene_character_context_text": "许知夏 - Public identity: 活动策划负责人 / 发布会项目总控。Stable trait (book-level): 专业、嘴快、扛压强，不愿示弱。Pressure behavior (scene-usable): 压力越大越开玩笑，真正被戳痛就立刻切成工作口吻。Current drive (chapter-facing): [隐藏]。Visible scene task: 只想把发布会救下来，并和前任保持甲乙方边界。Action lane: 救场与维持边界，不违反直播倒计时规则。Behavioral rules: 压力越大越开玩笑，被戳痛切换工作口吻；所有情绪必须被工作打断。Hidden truth lock: 不泄露未揭示动机或牺牲。Allowed outer signs: 停顿、转移、克制、改变称呼、回避、不完整回答。\n\n周聿白 - Public identity: 品牌方负责人 / 品牌市场负责人。Stable trait (book-level): 毒舌、细致、外冷内护短。Pressure behavior (scene-usable): 先挑漏洞再补方案，嘴上像否定，动作像兜底。Current drive (chapter-facing): [隐藏]。Visible scene task: 表面挑剔许知夏，实际提前替她准备风险预案。Action lane: 挑刺并兜底，不违反直播倒计时规则。Behavioral rules: 先挑漏洞再补方案；所有情绪必须被工作打断。Hidden truth lock: 不泄露未揭示动机或牺牲。Allowed outer signs: 停顿、转移、克制、改变称呼、回避、不完整回答。\n\nGlobal chapter bans: 不能写成霸总训话；不能用古风腔；不能大段伤痛独白；不能让两人本章和解。",
+  "relationship_state_text": "许知夏 -> 周聿白 - Current public read: 周聿白从前任麻烦，变成危机中仍懂她工作节奏的人。Emotional pressure now: 一场救场把互怼从职业对抗推回旧情未了。Target relationship delta this chapter: 周聿白从前任麻烦，变成危机中仍懂她工作节奏的人。Cost that must land: 越临近开播，耳机里的倒计时越像把私人旧账一秒一秒往外推。Forbidden shortcut: 不可跳过误解、代价或未揭示真相。",
+  "assistant_persona_prompt": "写现代都市言情，靠对白、工作动作和潜台词推进，不要古风腔或霸总模板。",
+  "writing_requirements_json": "{\n  \"target_words\": \"3000-3800\"\n}",
+  "completed_chapter_summary_bundle": "",
+  "previous_chapter_full_text": "彩排结束后，许知夏刚把艺人团队送回休息室，就看见周聿白站在导播台旁，像三年前那样先皱眉再看她。",
+  "reference_pack": "",
+  "chapter_character_mindsets": [],
+  "chapter_character_mindsets_text": ""
+}

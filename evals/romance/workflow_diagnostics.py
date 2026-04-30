@@ -13,7 +13,14 @@ from evals.romance.history_models import (
     WorkflowDiagnosticsCaseReport,
     WorkflowDiagnosticsSummary,
 )
-from evals.romance.judges.rule_metrics import AntiSlopRuleAnalyzer, RedundancyRuleAnalyzer
+from evals.romance.judges.rule_metrics import (
+    ActionCarriedRevealRuleAnalyzer,
+    AntiSlopRuleAnalyzer,
+    ExplanationDensityRuleAnalyzer,
+    PronounLeadRuleAnalyzer,
+    RedundancyRuleAnalyzer,
+    RelationshipCostRealizationRuleAnalyzer,
+)
 from evals.romance.loader import load_historical_cases
 from evals.romance.models import RomanceCaseResult, RomanceMetricDetail, RomanceRunSummary
 from evals.romance.report_paths import build_structured_run_dir, normalize_reports_root, write_text_with_aliases
@@ -199,7 +206,19 @@ class WorkflowDiagnosticsRunner:
             "anti_slop_score": AntiSlopRuleAnalyzer().analyze(
                 chapter_text=case.outputs.final_text,
                 review_reports=_latest_review_reports(case),
-            )
+            ),
+            "pronoun_lead_score": PronounLeadRuleAnalyzer().analyze(
+                chapter_text=case.outputs.final_text,
+            ),
+            "explanation_density_score": ExplanationDensityRuleAnalyzer().analyze(
+                chapter_text=case.outputs.final_text,
+            ),
+            "action_carried_reveal_score": ActionCarriedRevealRuleAnalyzer().analyze(
+                chapter_text=case.outputs.final_text,
+            ),
+            "relationship_cost_realization_score": RelationshipCostRealizationRuleAnalyzer().analyze(
+                chapter_text=case.outputs.final_text,
+            ),
         }
 
     def _final_text_scores(
@@ -348,6 +367,14 @@ class WorkflowDiagnosticsRunner:
         final_judge = dict(case.intermediates.final_judge or {})
         anti_slop_detail = diagnostic_signals.get("anti_slop_score")
         anti_slop_score = anti_slop_detail.score if anti_slop_detail is not None else 7.0
+        pronoun_detail = diagnostic_signals.get("pronoun_lead_score")
+        pronoun_score = pronoun_detail.score if pronoun_detail is not None else 7.0
+        explanation_detail = diagnostic_signals.get("explanation_density_score")
+        explanation_score = explanation_detail.score if explanation_detail is not None else 7.0
+        action_reveal_detail = diagnostic_signals.get("action_carried_reveal_score")
+        action_reveal_score = action_reveal_detail.score if action_reveal_detail is not None else 7.0
+        relationship_cost_detail = diagnostic_signals.get("relationship_cost_realization_score")
+        relationship_cost_score = relationship_cost_detail.score if relationship_cost_detail is not None else 7.0
 
         input_completeness = mean(
             [
@@ -386,6 +413,10 @@ class WorkflowDiagnosticsRunner:
                 final_text_scores["character_attraction_score"].score,
                 final_text_scores["continuity_score"].score,
                 anti_slop_score,
+                pronoun_score,
+                explanation_score,
+                action_reveal_score,
+                relationship_cost_score,
             ]
         )
         revision_score = self._patch_effectiveness_score(case)
@@ -447,6 +478,10 @@ class WorkflowDiagnosticsRunner:
                     f"relationship_progression={final_text_scores['relationship_progression_score'].score:.2f}",
                     f"continuity={final_text_scores['continuity_score'].score:.2f}",
                     f"anti_slop={anti_slop_score:.2f}",
+                    f"pronoun_lead={pronoun_score:.2f}",
+                    f"explanation_density={explanation_score:.2f}",
+                    f"action_reveal={action_reveal_score:.2f}",
+                    f"relationship_cost={relationship_cost_score:.2f}",
                     f"failing_tools={','.join(case.metrics.failing_tools) or 'none'}",
                 ],
                 improvement_hint="Prefer fixing drafting behavior and plan execution over hiding issues in judge prompts or summary-style explanation sentences.",
@@ -621,7 +656,17 @@ class WorkflowDiagnosticsRunner:
             if redundancy_detail is not None and redundancy_detail.score < 7.0:
                 redundancy_cases.append(report.case_id)
             anti_slop_detail = report.diagnostic_signals.get("anti_slop_score")
-            if anti_slop_detail is not None and anti_slop_detail.score < 7.0:
+            pronoun_detail = report.diagnostic_signals.get("pronoun_lead_score")
+            explanation_detail = report.diagnostic_signals.get("explanation_density_score")
+            action_reveal_detail = report.diagnostic_signals.get("action_carried_reveal_score")
+            relationship_cost_detail = report.diagnostic_signals.get("relationship_cost_realization_score")
+            if (
+                (anti_slop_detail is not None and anti_slop_detail.score < 7.0)
+                or (pronoun_detail is not None and pronoun_detail.score < 7.0)
+                or (explanation_detail is not None and explanation_detail.score < 7.0)
+                or (action_reveal_detail is not None and action_reveal_detail.score < 7.0)
+                or (relationship_cost_detail is not None and relationship_cost_detail.score < 7.0)
+            ):
                 slop_cases.append(report.case_id)
             if sum(1 for detail in report.final_text_scores.values() if detail.score < 7.0) >= 2:
                 for tag in report.tags:

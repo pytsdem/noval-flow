@@ -209,6 +209,8 @@ class ChapterBrief(StrictBaseModel):
     emotional_turn: str
     backstory_trigger: str
     cost_of_progress: str = ""
+    relationship_cost: str = ""
+    must_hurt_now: str = ""
     hook_kind: Literal[
         "question",
         "cost",
@@ -271,6 +273,18 @@ class ChapterBrief(StrictBaseModel):
                 or str(self.world_limit or "").strip()
                 or str(self.emotional_turn or "").strip()
             )
+        if not str(self.relationship_cost or "").strip():
+            self.relationship_cost = (
+                str(self.relationship_reprice or "").strip()
+                or str(self.cost_of_progress or "").strip()
+                or str(self.human_pain_anchor or "").strip()
+            )
+        if not str(self.must_hurt_now or "").strip():
+            self.must_hurt_now = (
+                str(self.human_pain_anchor or "").strip()
+                or str(self.relationship_cost or "").strip()
+                or str(self.cost_of_progress or "").strip()
+            )
         if not list(self.must_not_repeat or []):
             guards = [str(item or "").strip() for item in self.forbidden[:3] if str(item or "").strip()]
             guards.extend(
@@ -321,6 +335,8 @@ class ChapterBrief(StrictBaseModel):
             "character_delta": self.character_delta,
             "relationship_delta": self.relationship_delta,
             "cost_of_progress": str(self.cost_of_progress or "").strip(),
+            "relationship_cost": str(self.relationship_cost or "").strip(),
+            "must_hurt_now": str(self.must_hurt_now or "").strip(),
             "must_payoff": self.must_payoff,
             "final_hook": self.final_hook,
             "hook_kind": self.hook_kind,

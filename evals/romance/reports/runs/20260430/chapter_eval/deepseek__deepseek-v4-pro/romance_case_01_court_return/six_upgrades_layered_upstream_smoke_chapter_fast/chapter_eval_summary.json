@@ -1,0 +1,32 @@
+{
+  "label": "six_upgrades_layered_upstream_smoke_chapter_fast",
+  "mode": "fast",
+  "generated_at": "2026-04-30T05:59:08.345620Z",
+  "provider": "deepseek",
+  "model": "deepseek-v4-pro",
+  "run_dir": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\romance_case_01_court_return\\six_upgrades_layered_upstream_smoke_chapter_fast",
+  "case_ids": [
+    "romance_case_01_court_return"
+  ],
+  "average_scores": {
+    "romance_tension_score": 0.0,
+    "relationship_progression_score": 0.0,
+    "emotional_resonance_score": 0.0,
+    "character_attraction_score": 0.0,
+    "hook_score": 0.0,
+    "continuity_score": 0.0,
+    "redundancy_score": 0.0,
+    "mind_state_consistency_score": 0.0,
+    "genre_fit_score": 0.0
+  },
+  "verdict_counts": {},
+  "blocked_case_ids": [],
+  "optimization_target_counts": {},
+  "case_results": [],
+  "errors": [
+    "romance_case_01_court_return: [Errno 22] Invalid argument"
+  ],
+  "compared_to": "",
+  "report_markdown": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\romance_case_01_court_return\\six_upgrades_layered_upstream_smoke_chapter_fast\\chapter_eval_report.md",
+  "report_json": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\romance_case_01_court_return\\six_upgrades_layered_upstream_smoke_chapter_fast\\chapter_eval_summary.json"
+}

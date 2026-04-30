@@ -1,0 +1,647 @@
+{
+  "label": "six_upgrades_deep_allcases",
+  "mode": "deep",
+  "generated_at": "2026-04-30T05:07:36.992296Z",
+  "provider": "deepseek",
+  "model": "deepseek-v4-pro",
+  "run_dir": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\multi_case__3cases\\six_upgrades_deep_allcases",
+  "case_ids": [
+    "romance_case_01_court_return",
+    "romance_case_02_xianxia_rival_trial",
+    "romance_case_03_urban_reunion_comedy"
+  ],
+  "average_scores": {
+    "romance_tension_score": 7.5,
+    "relationship_progression_score": 8.25,
+    "emotional_resonance_score": 7.0,
+    "character_attraction_score": 7.55,
+    "hook_score": 8.88,
+    "continuity_score": 5.0,
+    "redundancy_score": 8.0,
+    "mind_state_consistency_score": 8.5,
+    "genre_fit_score": 8.5
+  },
+  "verdict_counts": {
+    "blocked": 1,
+    "pass": 1
+  },
+  "blocked_case_ids": [
+    "romance_case_01_court_return"
+  ],
+  "optimization_target_counts": {
+    "prompts/writer/plan_content_blocks.txt": 3,
+    "prompts/writer/write_chapter_full.txt": 3
+  },
+  "case_results": [
+    {
+      "case_id": "romance_case_01_court_return",
+      "title": "围宫请婚的旧案重逢",
+      "description": "男主带兵归京后在朝堂公开请旨娶当年亲手送他流放的女主；全京城以为这是报复，女主却知道自己若不被他带走，当夜就会被灭口。",
+      "tags": [
+        "historical",
+        "misread-love",
+        "forced-marriage",
+        "public-revenge",
+        "court-pressure"
+      ],
+      "verdict": "blocked",
+      "scores": {
+        "romance_tension_score": 6.5,
+        "relationship_progression_score": 8.0,
+        "emotional_resonance_score": 6.0,
+        "character_attraction_score": 6.55,
+        "hook_score": 8.75,
+        "continuity_score": 3.0,
+        "redundancy_score": 7.0,
+        "mind_state_consistency_score": 8.0,
+        "genre_fit_score": 7.5
+      },
+      "metrics": {
+        "romance_tension_score": {
+          "score": 6.5,
+          "reason": "拉扯感成立但偏冷，主要靠恨意和权谋驱动，缺少暧昧、试探与情感电流。谢临川用旧案逼问，沈知微以礼数疏离，本质是躲闪而非真正的恋爱拉扯。尽管双方存在旧情残余的潜台词，但页上未兑现为有效的双向波动。",
+          "evidence_summary": "朝堂上谢临川突然请婚，沈知微平静接旨，形成表面羞辱与暗中自保的错位；对峙时她称“谢大人”刺痛他，他避及腕伤旧事却仍失控，动作和称呼变化是唯一的情感泄漏。",
+          "improvement_hint": "在不打破隐忍的前提下，为沈知微增加一个下意识的在意动作（如接旨前指尖摩挲旧物），或在谢临川逼问时让她露出一个只有他能读懂的微小破绽，让双人间的张力从权谋场中挤出更多私人记忆。",
+          "source": "llm"
+        },
+        "relationship_progression_score": {
+          "score": 8.0,
+          "reason": "关系发生了明确且多维的变化：从旧案仇敌变为“全京城眼中的报复未婚夫妻”，并且因婚书暗号而实际上打开了救命同盟的可能。关系定价被重新确立，且谢临川发现灭口威胁后，掌控意图出现裂痕，为下一章的进一步变化留足了空间。",
+          "evidence_summary": "本章开头两人是旧案对立的证人/受害者，结尾已经绑定为赐婚未婚夫妻，且谢临川发现了婚书上的“杀新妇”威胁，意识到这场婚约并不简单掌握在自己手中。",
+          "improvement_hint": "可在散朝前让沈知微在退下时极轻微地向谢临川的方向偏了偏头，暗示婚约日后尚有联系，使保护同盟的萌芽提前出现一瞬。",
+          "source": "llm"
+        },
+        "emotional_resonance_score": {
+          "score": 6.0,
+          "reason": "情绪克制但解释性语句削弱了沉浸感，余波的拉力不足。谢临川的失控被概括为“像被捅到旧伤口的条件反射”，宣告了情绪种类却未留给读者咀嚼空间。沈知微全程近乎工具化的冷静，缺少能引发共情的内心波动。",
+          "evidence_summary": "结尾谢临川发现杀新妇字迹时仅有动作描述，无多余情绪命名，此处是有效留白；但中对峙段落的解释句打破了自我克制，让紧张感滑向了旁白式总结。",
+          "improvement_hint": "删除“她终于有了反应——但那种反应不是恐惧，也不是屈服”等命名句，直接用一连串身体反应（喉结滚动、后退半步、指节攥白）推进；在沈知微处增加一个极轻微的生理信号，如接旨后袖口下手腕的脉动快了一下。",
+          "source": "llm"
+        },
+        "character_attraction_score": {
+          "score": 6.55,
+          "reason": "由男主吸引力、女主吸引力和双人化学反应加权合成。",
+          "evidence_summary": "男主：开场雪水未干的细节、阁臣问话时他按白指节、当众把未婚妻和罪臣焊在同一句话里的进攻性措辞、失控后攥紧的指节，都提供了人情味。结尾他攥婚书追出的背影强化了孤执。；女主：入殿先看禁军人数、发现暗号瞬间合拢婚书并把指节捏白、面对质问用“谢大人”称呼并后退半步，都是有效的个性表达。但她始终在躲避，缺乏哪怕一瞬主动设局的迹象。；双人：他前进一步，她后退半步；他逼问旧伤，她用官称和礼数完全隔断；旁观者的议论代替了私密磁场。唯一的火花是她掐出指痕时的瞬间破绽，但未被他赋予任何私人的解读。",
+          "improvement_hint": "下次同场时，让他在说锋利话之前无意识做了某个她以前熟悉的动作（如习惯性轻掸左袖），令她极短暂的停顿，不必点明，只让动作留下潜台词。",
+          "source": "hybrid"
+        },
+        "hook_score": {
+          "score": 8.75,
+          "reason": "由开篇钩子与结尾钩子均值合成。",
+          "evidence_summary": "开头：“罪臣谢临川，请旨赐婚。”一句劈开朝堂的预期，接着群臣反应、阁臣质问、皇帝准奏，紧凑不拖沓，读者立刻被卷入报复婚约的震惊中。；结尾：发现暗杀字迹后，立即接“新妇仪程备齐”的呼喊和禁军押送，时间差和身份转变的危机同时压出。结尾他攥着婚书走向宫门，形成完全的不安全感。",
+          "improvement_hint": "可在最后一句“往宫门方向走出去”之前，让一名老内侍惊慌地瞥他一眼，暗示宫中有人察觉他已发现密令，增加一层暴露风险。",
+          "source": "hybrid"
+        },
+        "continuity_score": {
+          "score": 3.0,
+          "reason": "存在严重的连续性断裂：婚书在第二块被沈知微收入袖口，第三块中她已带着婚书离开，第四块婚书却凭空出现在御案上让谢临川拿起，物品位置矛盾。此外，沈知微独自告退到被禁军依仪程送出宫之间缺少过渡。",
+          "evidence_summary": "b002明确写她合拢十指压住婚书并退到女官班次；b003她拢袖带走婚书；b004开头却写“婚书搁在御案边上，被过来收拾的公公布料子时碰歪了半寸。他伸手把婚书拈起来”，这是逻辑错误。",
+          "improvement_hint": "必须修改b004开头，让谢临川在空殿中低头发现沈知微遗落在地的婚书，而非在御案；并在b003结尾她告退时，加一句内侍上前引她去备仪程的过渡，使禁军护送自然衔接。",
+          "source": "llm"
+        },
+        "redundancy_score": {
+          "score": 7.0,
+          "reason": "以 romance judge 为主分，并用重复/anti-slop 规则信号做向下修正，不再允许规则层把坏重复或直白心理解释救高。",
+          "evidence_summary": "Judge：谢临川多次表现出恨意，但分层推进：一开始冷静埋婚约，继而是公开逼问，最后是私下被平静刺伤而失控。冗余点仅出现在解释她掐痕反应的那一句上。；Rule：未检测到明显高相似段落或高频重复短语。；Anti-slop：review_prose_and_humanity 命中过直白心理/解释问题",
+          "improvement_hint": "继续让情绪落在动作、停顿、对话余味和误读上，而不是补写判断句。",
+          "source": "hybrid"
+        },
+        "mind_state_consistency_score": {
+          "score": 8.0,
+          "reason": "角色行为与预设心智状态高度契合。谢临川高自控下出现缝隙，但整体仍保持冷硬；沈知微在巨大恐惧中用过度平静维持礼数，崩溃点很小且立刻收回，符合其克制人设。",
+          "evidence_summary": "谢临川请婚时稳稳按白指节、面对阁臣挑衅不卑不亢，质问时后槽牙咬紧但未失态；沈知微看见暗号只顿了一拍便稳住，被他逼近时指尖发白又迅速松开，都符合人物自控力和各自的心智弱点。",
+          "improvement_hint": "沈知微在告退转身后，可添一笔她走出殿门时脚尖在门槛上轻微绊了一下，随即稳住，用一瞬间的身体失足暗示高强度自控后的疲劳，但不打破整体克制。",
+          "source": "llm"
+        },
+        "genre_fit_score": {
+          "score": 7.5,
+          "reason": "文本契合古风权谋言情的权力操作和克制虐恋的隐忍基调，朝堂、婚约、旧案、灭口等元素有效兑现。但言情浓度略低于预期，本章更偏重权谋设定和外部压力，男女主间的私人情感层次较薄，距离“克制但强烈的情感张力”的读者承诺仍有距离。",
+          "evidence_summary": "权谋元素（朝堂、婚约、旧案、灭口）充分，情绪表达隐忍，没有直白告白或随意和解，符合克制虐恋要求。但全章的情感推进基本停留在敌对和权宜，缺少虐恋中常见的“越爱越伤”的私人化刺痛，更像政治悬疑加婚约设定，而非情感主轴。",
+          "improvement_hint": "在暗号发现或争执段落后，让谢临川无意识做了个三年前沈知微熟悉的微小动作（如按旧伤时下意识看向她曾经站过的位置），不必言明，给言情线一颗私密钩子。",
+          "source": "llm"
+        }
+      },
+      "breakdowns": {
+        "male_lead_attraction": {
+          "score": 7.5,
+          "reason": "谢临川的形象鲜明，冷硬中有裂缝，动作细节（雪水、拇指按骨节、旧伤蜷肩）有辨识度，不是模板复仇男主。但他的魅力更多来自场景压迫，缺少个人化的、让人一眼记住的独特行事方式。",
+          "evidence_summary": "开场雪水未干的细节、阁臣问话时他按白指节、当众把未婚妻和罪臣焊在同一句话里的进攻性措辞、失控后攥紧的指节，都提供了人情味。结尾他攥婚书追出的背影强化了孤执。",
+          "improvement_hint": "在他质问沈知微时，增加一个只有两人懂的旧事代称（如某次冬日共阅过的书名），显示他并非全在算旧账，让冷硬中有更具体的情感纹路。",
+          "source": "llm"
+        },
+        "female_lead_attraction": {
+          "score": 7.0,
+          "reason": "沈知微极度克制、识暗号、观禁军、用礼数退敌，展现了一个聪明且被逼到极限的女主。但她在本章几乎完全被动，主动选择仅止于接旨和维持表象，主体性稍弱。",
+          "evidence_summary": "入殿先看禁军人数、发现暗号瞬间合拢婚书并把指节捏白、面对质问用“谢大人”称呼并后退半步，都是有效的个性表达。但她始终在躲避，缺乏哪怕一瞬主动设局的迹象。",
+          "improvement_hint": "在她告退前，可让她在转身时把婚书从袖口抽出一角又迅速塞回，像在计算下一步的用具，暗示她已经开始打算如何用婚姻为饵，增强主动性。",
+          "source": "llm"
+        },
+        "lead_pair_chemistry": {
+          "score": 5.5,
+          "reason": "两人同场戏以敌对和疏离为主，缺少能产生化学反应的瞬间。谢临川的怒火撞上沈知微的冰块，没有溅出任何残留的旧情火星，只是硬碰硬地弹开。缺乏一种即使恨也不由自主被对方牵动的微妙感。",
+          "evidence_summary": "他前进一步，她后退半步；他逼问旧伤，她用官称和礼数完全隔断；旁观者的议论代替了私密磁场。唯一的火花是她掐出指痕时的瞬间破绽，但未被他赋予任何私人的解读。",
+          "improvement_hint": "下次同场时，让他在说锋利话之前无意识做了某个她以前熟悉的动作（如习惯性轻掸左袖），令她极短暂的停顿，不必点明，只让动作留下潜台词。",
+          "source": "llm"
+        },
+        "opening_hook_score": {
+          "score": 9.0,
+          "reason": "开头在400字内直接落下当众请婚，用雪水、旧伤、朝堂静默迅速建立压力与异样感，冲突清晰，反套路，钩子极强。",
+          "evidence_summary": "“罪臣谢临川，请旨赐婚。”一句劈开朝堂的预期，接着群臣反应、阁臣质问、皇帝准奏，紧凑不拖沓，读者立刻被卷入报复婚约的震惊中。",
+          "improvement_hint": "可考虑在谢临川说出沈知微名字时，增加一个朝堂内某一老臣私语提及她身份的细节，使朝堂氛围更立体，但现有强度已足够。",
+          "source": "llm"
+        },
+        "ending_hook_score": {
+          "score": 8.5,
+          "reason": "结尾以“今夜子时，杀新妇”收束，制造了强烈的悬念和倒计时压力，直接驱动读者点击下一章。谢临川追出的场面在紧迫感中结束，留下了行动预期。",
+          "evidence_summary": "发现暗杀字迹后，立即接“新妇仪程备齐”的呼喊和禁军押送，时间差和身份转变的危机同时压出。结尾他攥着婚书走向宫门，形成完全的不安全感。",
+          "improvement_hint": "可在最后一句“往宫门方向走出去”之前，让一名老内侍惊慌地瞥他一眼，暗示宫中有人察觉他已发现密令，增加一层暴露风险。",
+          "source": "llm"
+        },
+        "judge_genre_fit_score": {
+          "score": 7.5,
+          "reason": "文本契合古风权谋言情的权力操作和克制虐恋的隐忍基调，朝堂、婚约、旧案、灭口等元素有效兑现。但言情浓度略低于预期，本章更偏重权谋设定和外部压力，男女主间的私人情感层次较薄，距离“克制但强烈的情感张力”的读者承诺仍有距离。",
+          "evidence_summary": "权谋元素（朝堂、婚约、旧案、灭口）充分，情绪表达隐忍，没有直白告白或随意和解，符合克制虐恋要求。但全章的情感推进基本停留在敌对和权宜，缺少虐恋中常见的“越爱越伤”的私人化刺痛，更像政治悬疑加婚约设定，而非情感主轴。",
+          "improvement_hint": "在暗号发现或争执段落后，让谢临川无意识做了个三年前沈知微熟悉的微小动作（如按旧伤时下意识看向她曾经站过的位置），不必言明，给言情线一颗私密钩子。",
+          "source": "llm"
+        },
+        "judge_redundancy_score": {
+          "score": 7.0,
+          "reason": "整体没有严重的信息或情绪重复，敌意与报复感在不同场景中以不同形式递进（朝堂突然袭击→当众羞辱→私下失控），但b003结尾对沈知微反应的解释段落略有感觉上的冗余——用两个比喻句重描同一瞬间，没有带来新信息。",
+          "evidence_summary": "谢临川多次表现出恨意，但分层推进：一开始冷静埋婚约，继而是公开逼问，最后是私下被平静刺伤而失控。冗余点仅出现在解释她掐痕反应的那一句上。",
+          "improvement_hint": "将‘像一个人被突然捅到旧伤口时的条件反射’这层意思通过外部动作传递，而不是解释性比喻，即可消除唯一轻微冗余。",
+          "source": "llm"
+        },
+        "rule_redundancy_score": {
+          "score": 10.0,
+          "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱；有效回环需带来新剧情功能、关系变化、误导、线索推进、情绪升级或读者期待。",
+          "evidence_summary": "未检测到明显高相似段落或高频重复短语。",
+          "improvement_hint": "继续保持一段一推进，允许有功能的回环，但避免把同层情绪解释回头再说一遍。 同时检查 patch 是否只改字面而没改 block 功能。",
+          "source": "rule"
+        },
+        "rule_anti_slop_score": {
+          "score": 9.1,
+          "reason": "规则检测显示正文较少依赖直白心理标签或解释性总结句。",
+          "evidence_summary": "review_prose_and_humanity 命中过直白心理/解释问题",
+          "improvement_hint": "继续让情绪落在动作、停顿、对话余味和误读上，而不是补写判断句。",
+          "source": "rule"
+        },
+        "rule_pronoun_lead_score": {
+          "score": 7.63,
+          "reason": "句首代词有轻中度偏高，正文会更像在转述人物状态，而不是让场面自己说话。",
+          "evidence_summary": "句首代词占比 12%（18/150 句）；样例“他开口时声音不高不低，刚好够前排几个、“她当年录的供词，是把你们谢家钉死在”；连续代词起句 3 处",
+          "improvement_hint": "优先把至少一半的“他/她”起句改成动作起句、物件起句、环境起句或对话起句。",
+          "source": "rule"
+        },
+        "rule_explanation_density_score": {
+          "score": 10.0,
+          "reason": "解释句密度较低，正文更多通过场面和动作递送信息。",
+          "evidence_summary": "未检测到明显解释句密度问题。",
+          "improvement_hint": "继续让动作、停顿、物件和旁人反应承担解释工作，不要把结论写在句面上。",
+          "source": "rule"
+        },
+        "rule_action_carried_reveal_score": {
+          "score": 10.0,
+          "reason": "关键信息主要通过动作、物件、身体和场面自己露出来，解释性翻译较少。",
+          "evidence_summary": "body_or_object_hits=132 | social_pressure_hits=48 | dialogue_hits=31 | explanation_ratio=1%",
+          "improvement_hint": "继续先给场面、动作和物件，再让读者自己得出结论。",
+          "source": "rule"
+        },
+        "rule_relationship_cost_realization_score": {
+          "score": 9.28,
+          "reason": "推进一出现就会变成关系代价或人身代价，人物在场上真有付出。",
+          "evidence_summary": "social_pressure_hits=48 | procedure_hits=1 | pronoun_lead_ratio=12% | explanation_ratio=1%",
+          "improvement_hint": "继续让每一次 clue、动作或试探都立刻改变面子、信任、危险或选择权。",
+          "source": "rule"
+        }
+      },
+      "diagnosis": {
+        "strengths": [
+          "开场当众请婚的钩子精准而强劲，立即打破常规朝堂叙事，制造追读冲动。",
+          "婚书暗号与结尾灭口倒计时的双重悬念设置巧妙，使情节压力层层叠加。",
+          "男主从冷静操控到被冷静反刺的转折有情感真实感，人物弧光开始建立。",
+          "环境物件（雪水、旧伤、禁军甲片）成为情绪载体，增强了压抑氛围。"
+        ],
+        "weaknesses": [
+          "存在严重连续性断裂：婚书在沈知微带走后凭空出现在御案，逻辑错误破坏沉浸感。",
+          "双人同场戏缺乏化学反应，敌意与疏离虽有依据，但没有挤出残留旧情或私密磁场，导致言情拉力不足。",
+          "沈知微全程被动，主体性较弱，削弱了她作为言情女主的魅力和读者共情。",
+          "情感解释句（如“不是恐惧，而是条件反射”）过度命名，让关键时刻从沉浸滑向解说。"
+        ],
+        "improvement_hints": [
+          "立即修补婚书位置引起的连续性断裂，改由谢临川发现沈知微遗落在地的婚书，确保物品逻辑。",
+          "为双人同场增加一个只有两人能懂的私人细节（旧物、旧称、或旧日习惯性动作），让恨意中隐现在意。",
+          "削减解释性旁白，更多依靠动作顺序、呼吸变化、称呼切换、袖口收紧等外部细节传递情绪。",
+          "在散朝过渡处增加一句内侍引沈知微去备仪程的交代，使后续禁军接送不显突兀，并让女主在退场时露出一瞬警惕的眼神，暗示她在计算下一步。"
+        ]
+      },
+      "hard_fail_flags": [
+        {
+          "flag_type": "continuity_break",
+          "severity": "blocker",
+          "reason": "连贯性仅 3.0 分，已经低于 阻断阈值。存在严重的连续性断裂：婚书在第二块被沈知微收入袖口，第三块中她已带着婚书离开，第四块婚书却凭空出现在御案上让谢临川拿起，物品位置矛盾。此外，沈知微独自告退到被禁军依仪程送出宫之间缺少过渡。",
+          "evidence_summary": "b002明确写她合拢十指压住婚书并退到女官班次；b003她拢袖带走婚书；b004开头却写“婚书搁在御案边上，被过来收拾的公公布料子时碰歪了半寸。他伸手把婚书拈起来”，这是逻辑错误。；存在严重连续性断裂：婚书在沈知微带走后凭空出现在御案，逻辑错误破坏沉浸感。",
+          "related_metrics": [
+            "continuity_score"
+          ],
+          "suggested_modules": [
+            "prompts/writer/plan_content_blocks.txt",
+            "prompts/writer/write_chapter_full.txt"
+          ],
+          "source": "heuristic"
+        }
+      ],
+      "optimization_targets": [
+        {
+          "target_module": "prompts/writer/plan_content_blocks.txt",
+          "issue_type": "continuity",
+          "severity": "blocker",
+          "confidence": 0.94,
+          "reason": "连贯性当前 3.0 分。存在严重的连续性断裂：婚书在第二块被沈知微收入袖口，第三块中她已带着婚书离开，第四块婚书却凭空出现在御案上让谢临川拿起，物品位置矛盾。此外，沈知微独自告退到被禁军依仪程送出宫之间缺少过渡。",
+          "evidence_summary": "b002明确写她合拢十指压住婚书并退到女官班次；b003她拢袖带走婚书；b004开头却写“婚书搁在御案边上，被过来收拾的公公布料子时碰歪了半寸。他伸手把婚书拈起来”，这是逻辑错误。；存在严重连续性断裂：婚书在沈知微带走后凭空出现在御案，逻辑错误破坏沉浸感。",
+          "patch_hint": "优先修补前情承接、因果顺序和场景转折，不要用更华丽的 prose 掩盖断裂。",
+          "related_metrics": [
+            "continuity_score"
+          ],
+          "expected_metric_gains": [
+            "continuity_score",
+            "mind_state_consistency_score",
+            "relationship_progression_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "continuity",
+          "severity": "blocker",
+          "confidence": 0.94,
+          "reason": "连贯性当前 3.0 分。存在严重的连续性断裂：婚书在第二块被沈知微收入袖口，第三块中她已带着婚书离开，第四块婚书却凭空出现在御案上让谢临川拿起，物品位置矛盾。此外，沈知微独自告退到被禁军依仪程送出宫之间缺少过渡。",
+          "evidence_summary": "b002明确写她合拢十指压住婚书并退到女官班次；b003她拢袖带走婚书；b004开头却写“婚书搁在御案边上，被过来收拾的公公布料子时碰歪了半寸。他伸手把婚书拈起来”，这是逻辑错误。；存在严重连续性断裂：婚书在沈知微带走后凭空出现在御案，逻辑错误破坏沉浸感。",
+          "patch_hint": "优先修补前情承接、因果顺序和场景转折，不要用更华丽的 prose 掩盖断裂。",
+          "related_metrics": [
+            "continuity_score"
+          ],
+          "expected_metric_gains": [
+            "continuity_score",
+            "mind_state_consistency_score",
+            "relationship_progression_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/plan_content_blocks.txt",
+          "issue_type": "redundancy",
+          "severity": "medium",
+          "confidence": 0.7,
+          "reason": "重复铺陈当前 7.0 分。以 romance judge 为主分，并用重复/anti-slop 规则信号做向下修正，不再允许规则层把坏重复或直白心理解释救高。",
+          "evidence_summary": "Judge：谢临川多次表现出恨意，但分层推进：一开始冷静埋婚约，继而是公开逼问，最后是私下被平静刺伤而失控。冗余点仅出现在解释她掐痕反应的那一句上。；Rule：未检测到明显高相似段落或高频重复短语。；Anti-slop：review_prose_and_humanity 命中过直白心理/解释问题；情感解释句（如“不是恐惧，而是条件反射”）过度命名，让关键时刻从沉浸滑向解说。",
+          "patch_hint": "减少同一情绪或判断的解释型复述，让每个 block 都新增信息、代价或关系变化。",
+          "related_metrics": [
+            "redundancy_score"
+          ],
+          "expected_metric_gains": [
+            "redundancy_score",
+            "emotional_resonance_score",
+            "hook_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "redundancy",
+          "severity": "medium",
+          "confidence": 0.7,
+          "reason": "重复铺陈当前 7.0 分。以 romance judge 为主分，并用重复/anti-slop 规则信号做向下修正，不再允许规则层把坏重复或直白心理解释救高。",
+          "evidence_summary": "Judge：谢临川多次表现出恨意，但分层推进：一开始冷静埋婚约，继而是公开逼问，最后是私下被平静刺伤而失控。冗余点仅出现在解释她掐痕反应的那一句上。；Rule：未检测到明显高相似段落或高频重复短语。；Anti-slop：review_prose_and_humanity 命中过直白心理/解释问题；情感解释句（如“不是恐惧，而是条件反射”）过度命名，让关键时刻从沉浸滑向解说。",
+          "patch_hint": "减少同一情绪或判断的解释型复述，让每个 block 都新增信息、代价或关系变化。",
+          "related_metrics": [
+            "redundancy_score"
+          ],
+          "expected_metric_gains": [
+            "redundancy_score",
+            "emotional_resonance_score",
+            "hook_score"
+          ]
+        }
+      ],
+      "cost_metrics": {
+        "llm_calls": 47,
+        "judge_llm_calls": 1,
+        "review_calls": 18,
+        "patch_rounds": 0,
+        "used_full_rewrite": false,
+        "duration_seconds": 3345.66,
+        "block_count": 4,
+        "patched_block_count": 2,
+        "patched_block_ratio": 0.5,
+        "generation_prompt_chars": 512442,
+        "judge_prompt_chars": 90358,
+        "tool_calls_by_name": {
+          "build_chapter_patch_plan": 1,
+          "build_character_mindset": 2,
+          "draft_block": 8,
+          "final_polish": 1,
+          "format_adjustment_suggestion": 1,
+          "plan_content_blocks": 1,
+          "review_block_quality": 4,
+          "review_character_integrity": 4,
+          "review_prose_and_humanity": 1,
+          "review_reveal_leak": 4,
+          "review_structure_and_continuity": 1,
+          "review_time_consistency": 4,
+          "revise_block_if_needed": 8,
+          "summarize_actual_chapter": 1
+        }
+      },
+      "artifacts": {
+        "case_dir": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\multi_case__3cases\\six_upgrades_deep_allcases\\romance_case_01_court_return",
+        "case_input_json": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\multi_case__3cases\\six_upgrades_deep_allcases\\romance_case_01_court_return\\chapter_eval_case_input.json",
+        "writer_context_json": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\multi_case__3cases\\six_upgrades_deep_allcases\\romance_case_01_court_return\\chapter_eval_writer_context.json",
+        "chapter_execution_json": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\multi_case__3cases\\six_upgrades_deep_allcases\\romance_case_01_court_return\\chapter_eval_execution.json",
+        "stage_log_json": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\multi_case__3cases\\six_upgrades_deep_allcases\\romance_case_01_court_return\\chapter_eval_stage_log.json",
+        "final_text_txt": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\multi_case__3cases\\six_upgrades_deep_allcases\\romance_case_01_court_return\\chapter_text__final.txt",
+        "judge_json": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\multi_case__3cases\\six_upgrades_deep_allcases\\romance_case_01_court_return\\chapter_eval_judge.json",
+        "result_json": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\multi_case__3cases\\six_upgrades_deep_allcases\\romance_case_01_court_return\\result.json"
+      },
+      "errors": []
+    },
+    {
+      "case_id": "romance_case_02_xianxia_rival_trial",
+      "title": "心声同生契的规则秘境",
+      "description": "穿书小师妹与冷面师兄被规则秘境误绑同生契，师兄能听见她吐槽心声却不能说破；轻松斗嘴、危机甜感和阴谋钩子必须同步成立。",
+      "tags": [
+        "xianxia",
+        "book-entry",
+        "inner-voice",
+        "rule-trial",
+        "banter-romance"
+      ],
+      "verdict": "pass",
+      "scores": {
+        "romance_tension_score": 8.5,
+        "relationship_progression_score": 8.5,
+        "emotional_resonance_score": 8.0,
+        "character_attraction_score": 8.55,
+        "hook_score": 9.0,
+        "continuity_score": 7.0,
+        "redundancy_score": 9.0,
+        "mind_state_consistency_score": 9.0,
+        "genre_fit_score": 9.5
+      },
+      "metrics": {
+        "romance_tension_score": {
+          "score": 8.5,
+          "reason": "本章在符灯阵规则压迫下，男女主之间形成了持续的拉扯感：陆既白因听见心声而分心，只能靠冷面动作掩饰；云眠表面嘴硬吐槽，实际开始依赖他。两人通过共享痛感、互换贴身物、肢体接触（挡住金线、格开她的手）等持续推拉，潜台词丰富，张力始终在线。",
+          "evidence_summary": "开头陆既白剑偏半寸，因心头骂声分神；他侧身用影子护她、冷声说“还嫌自己没站够错的位置”；云眠咽回反驳、发现刻痕时他想阻止；他握住她可能碰伤疤的手；最后跨线前他拽回痛感，云眠念头“是把铃交出去，怕他真的受伤”。动作与言词始终错位，拉扯到位。",
+          "improvement_hint": "可将云眠隐约感知到他“偏剑”并非偶然的疑惑略微强化一句，拉长她怀疑和嘴上不承认的瞬间，让拉扯再微调两极。",
+          "source": "llm"
+        },
+        "relationship_progression_score": {
+          "score": 8.5,
+          "reason": "关系从互相嫌弃推进到了不得已守护的边界：陆既白由单纯嫌麻烦变为用行动兜底，云眠从想甩开他转为承认他会先护自己。互换随身物更是把距离推进到不好笑的亲密。",
+          "evidence_summary": "陆既白先放下玉牌、挡住金线、遮掩刻痕；云眠从下意识缩手到主动交铃，跨线时脚底粘住因“怕他受伤”的念头。两人发现同生契被人为刻痕，被迫共享痛感与触感，信任开始萌芽。关系定价已经改变。",
+          "improvement_hint": "可在云眠意识到“他确实会先护我”处增一个小的心理回闪或呼吸停顿，让此转折更深刻，但不打破轻快节奏。",
+          "source": "llm"
+        },
+        "emotional_resonance_score": {
+          "score": 8.0,
+          "reason": "情绪推进有层次，从符灯压迫的紧张，到共享痛感的牢靠，再到互换物品的亲密和结尾惊惧，余波强烈。疼痛不是空写，而是落在行动选择上，让读者共情。",
+          "evidence_summary": "腕间薄刃般刺痛、红痕缩紧、十六盏符灯赤红转灰白、铃舌闷响、拇指湿润感渗进指纹——这些身体反应都落到了情绪上。结尾墙上暗红旧字的出现瞬间将轻快气氛切到悬疑，余味很足。",
+          "improvement_hint": "在中段可加一句云眠下意识摩挲护身铃的小动作，让“怕他受伤”的情绪前奏更可感，避免转折略快。",
+          "source": "llm"
+        },
+        "character_attraction_score": {
+          "score": 8.55,
+          "reason": "由男主吸引力、女主吸引力和双人化学反应加权合成。",
+          "evidence_summary": "男主：他收鞘时指节先白一瞬、侧身挡光、剑横心口、拇指一抹水珠消失，紧接着她指腹传来湿润，这些高控制下的裂缝和不动声色的保护，塑造了强记忆点。称她不再叫‘师妹’也是冷面下的松动。；女主：开篇心里骂一句导致男主剑偏；脱口“这灯好像在看我们”；手指不自觉地按上腕痕；最后念头成形“怕他真的受伤”才跨过金线。用动作和心声双重立住人物，不依赖旁白解释。；双人：身影被符灯逼得缠在一起，他冷脸护她却口出冷语；剑鞘格开她的手，收鞘却快半拍；“闭嘴，看地上”不再带刺；最后的跨线命令中，他把痛全拽回自己身上，说“我不碰你的东西”，暧昧和拉扯完全立住。",
+          "improvement_hint": "保持。",
+          "source": "hybrid"
+        },
+        "hook_score": {
+          "score": 9.0,
+          "reason": "由开篇钩子与结尾钩子均值合成。",
+          "evidence_summary": "开头：剑锋陡然偏半寸直接链接到心声，未解释但读者秒懂；随即刻痛、冷面收剑、影子紧贴等，异样感来得快，且没有拖堂。；结尾：跨完线符灯灭，看似通关，但墙上旧字带着干涸暗红血痕出现，瞬间拨开轻快幕布，露出阴谋一角。结尾干净有力，非预告式口号。",
+          "improvement_hint": "无。",
+          "source": "hybrid"
+        },
+        "continuity_score": {
+          "score": 7.0,
+          "reason": "整体承接上一章腕印发烫、石门崩塌，顺畅；但内部一处连续性断裂：陆既白小臂上‘那道新的红’在之前未有伏笔，略显突兀。",
+          "evidence_summary": "上一章结尾腕间同生契发烫，本章延续，开篇即痛，承接自然。然而b004突然出现小臂新红痕，前文b001和b003只描写腕部红痕，读者会困惑。其余时间、空间等一致性无问题。",
+          "improvement_hint": "在b003末尾（如云眠扫见他‘左手无名指指节泛白’时）加一句‘袖口下隐约多出一道向小臂延伸的红痕’，即可无缝衔接。",
+          "source": "llm"
+        },
+        "redundancy_score": {
+          "score": 9.0,
+          "reason": "以 romance judge 为主分，并用重复/anti-slop 规则信号做向下修正，不再允许规则层把坏重复或直白心理解释救高。",
+          "evidence_summary": "Judge：红痕出现三次均推进作用：1.引发开场痛；2.映出刻痕；3.按腕收痛。铃铛、符灯等意象都在变化中推进，未原地踏步。；Rule：未检测到明显高相似段落或高频重复短语。；Anti-slop：直白心理标签 1 处（如“她看得很清楚”）",
+          "improvement_hint": "继续让情绪落在动作、停顿、对话余味和误读上，而不是补写判断句。",
+          "source": "hybrid"
+        },
+        "mind_state_consistency_score": {
+          "score": 9.0,
+          "reason": "所有角色行为皆贴合当前心智状态：陆既白高自控，听到心声只能掩饰，从不失控透露；云眠嘴硬且怕死，但本能会在关键时选择信赖，没有不合时宜的勇气或软弱。",
+          "evidence_summary": "陆既白用冷话压住每个裂缝，握剑指节发白却立即收住；云眠每次想顶嘴都咽回，跨线时念头成形才行动，完全符合她‘嘴上怂，真危险先找漏洞’的特质。",
+          "improvement_hint": "无。",
+          "source": "llm"
+        },
+        "genre_fit_score": {
+          "score": 9.5,
+          "reason": "文本完美兑现轻快冒险 / 欢喜冤家的情绪承诺：仙侠奇幻服务了互动，试炼规则推动关系变化，大量斗嘴与危机甜感并存，结尾沉重但不越线。",
+          "evidence_summary": "同生契、符灯阵、刻痕等奇幻设定都落在行动选择与亲密代价上，没有大段解释修炼体系；互动密度高，甜感来自挡剑、遮光、抹水珠等行动，而非表白；结尾虽惊悚仍保持轻快叙事节奏。完全符合profile。",
+          "improvement_hint": "无。",
+          "source": "llm"
+        }
+      },
+      "breakdowns": {
+        "male_lead_attraction": {
+          "score": 8.5,
+          "reason": "陆既白高冷克制、手脚永远比嘴快，嘴上冷漠但身体先挡危险，这种反差成立且迷人。不听心声却反应奇快，给读者轻喜感和苏感。",
+          "evidence_summary": "他收鞘时指节先白一瞬、侧身挡光、剑横心口、拇指一抹水珠消失，紧接着她指腹传来湿润，这些高控制下的裂缝和不动声色的保护，塑造了强记忆点。称她不再叫‘师妹’也是冷面下的松动。",
+          "improvement_hint": "可在某个动作后让他的拇指无意识摩挲剑柄或微皱的眉头一瞬，增加层次但不破坏克制人设。",
+          "source": "llm"
+        },
+        "female_lead_attraction": {
+          "score": 8.0,
+          "reason": "云眠嘴硬机灵、怕死却不丢人，眼尖发现符灯异样，吐槽心声真实。在不得不交出护身铃时展现出隐性勇气，主体性成立。",
+          "evidence_summary": "开篇心里骂一句导致男主剑偏；脱口“这灯好像在看我们”；手指不自觉地按上腕痕；最后念头成形“怕他真的受伤”才跨过金线。用动作和心声双重立住人物，不依赖旁白解释。",
+          "improvement_hint": "可稍微增加她主动观察陆既白反常反应的细节，让她的洞察力更强，呈现更机灵。",
+          "source": "llm"
+        },
+        "lead_pair_chemistry": {
+          "score": 9.0,
+          "reason": "双人同场戏几乎每个动作都暗藏拒绝与靠近的拉锯，冷硬言语与保护性行动形成明显压差，电流感强。",
+          "evidence_summary": "身影被符灯逼得缠在一起，他冷脸护她却口出冷语；剑鞘格开她的手，收鞘却快半拍；“闭嘴，看地上”不再带刺；最后的跨线命令中，他把痛全拽回自己身上，说“我不碰你的东西”，暧昧和拉扯完全立住。",
+          "improvement_hint": "保持。",
+          "source": "llm"
+        },
+        "opening_hook_score": {
+          "score": 9.0,
+          "reason": "开头一句‘符灯亮起的瞬间，云眠在心里骂了一句’立即用开场压力、男主分心剑偏，将轻喜感和危险同时抛出，非常抓人。",
+          "evidence_summary": "剑锋陡然偏半寸直接链接到心声，未解释但读者秒懂；随即刻痛、冷面收剑、影子紧贴等，异样感来得快，且没有拖堂。",
+          "improvement_hint": "无。",
+          "source": "llm"
+        },
+        "ending_hook_score": {
+          "score": 9.0,
+          "reason": "结尾以‘此契原本只该绑死人’收尾，制造了强烈的规则谜团和生命威胁，为下一章铺设明确悬念，兼具信息差和情感代价。",
+          "evidence_summary": "跨完线符灯灭，看似通关，但墙上旧字带着干涸暗红血痕出现，瞬间拨开轻快幕布，露出阴谋一角。结尾干净有力，非预告式口号。",
+          "improvement_hint": "无。",
+          "source": "llm"
+        },
+        "judge_genre_fit_score": {
+          "score": 9.5,
+          "reason": "文本完美兑现轻快冒险 / 欢喜冤家的情绪承诺：仙侠奇幻服务了互动，试炼规则推动关系变化，大量斗嘴与危机甜感并存，结尾沉重但不越线。",
+          "evidence_summary": "同生契、符灯阵、刻痕等奇幻设定都落在行动选择与亲密代价上，没有大段解释修炼体系；互动密度高，甜感来自挡剑、遮光、抹水珠等行动，而非表白；结尾虽惊悚仍保持轻快叙事节奏。完全符合profile。",
+          "improvement_hint": "无。",
+          "source": "llm"
+        },
+        "judge_redundancy_score": {
+          "score": 9.0,
+          "reason": "几乎没有重复表达，每个节拍都带来新的压力、信息或关系波动，意象和动作虽重复（红痕、痛感）但都附加新功能（痛感分配偏移、触感共享），非无效反复。",
+          "evidence_summary": "红痕出现三次均推进作用：1.引发开场痛；2.映出刻痕；3.按腕收痛。铃铛、符灯等意象都在变化中推进，未原地踏步。",
+          "improvement_hint": "无。",
+          "source": "llm"
+        },
+        "rule_redundancy_score": {
+          "score": 10.0,
+          "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱；有效回环需带来新剧情功能、关系变化、误导、线索推进、情绪升级或读者期待。",
+          "evidence_summary": "未检测到明显高相似段落或高频重复短语。",
+          "improvement_hint": "继续保持一段一推进，允许有功能的回环，但避免把同层情绪解释回头再说一遍。 同时检查 patch 是否只改字面而没改 block 功能。",
+          "source": "rule"
+        },
+        "rule_anti_slop_score": {
+          "score": 9.35,
+          "reason": "规则检测显示正文较少依赖直白心理标签或解释性总结句。",
+          "evidence_summary": "直白心理标签 1 处（如“她看得很清楚”）",
+          "improvement_hint": "继续让情绪落在动作、停顿、对话余味和误读上，而不是补写判断句。",
+          "source": "rule"
+        },
+        "rule_pronoun_lead_score": {
+          "score": 8.49,
+          "reason": "句首代词密度较低，句面更容易保留场面感、物件感和人物声口。",
+          "evidence_summary": "句首代词占比 13%（16/120 句）；样例“他收剑回鞘，目光从她脸上一掠而过，在、他盯着那盏灯，左手按在剑柄上，虎口收”；连续代词起句 1 处",
+          "improvement_hint": "继续让场景、物件、动作、冷暖和对话来带起句子，而不是不断用代词起句。",
+          "source": "rule"
+        },
+        "rule_explanation_density_score": {
+          "score": 9.75,
+          "reason": "解释句密度较低，正文更多通过场面和动作递送信息。",
+          "evidence_summary": "解释句占比 1%（1/120 句）；样例“符光映出的刻痕，她看得很清楚。”",
+          "improvement_hint": "继续让动作、停顿、物件和旁人反应承担解释工作，不要把结论写在句面上。",
+          "source": "rule"
+        },
+        "rule_action_carried_reveal_score": {
+          "score": 10.0,
+          "reason": "关键信息主要通过动作、物件、身体和场面自己露出来，解释性翻译较少。",
+          "evidence_summary": "body_or_object_hits=95 | social_pressure_hits=17 | dialogue_hits=18 | explanation_ratio=1%",
+          "improvement_hint": "继续先给场面、动作和物件，再让读者自己得出结论。",
+          "source": "rule"
+        },
+        "rule_relationship_cost_realization_score": {
+          "score": 9.4,
+          "reason": "推进一出现就会变成关系代价或人身代价，人物在场上真有付出。",
+          "evidence_summary": "social_pressure_hits=17 | procedure_hits=0 | pronoun_lead_ratio=13% | explanation_ratio=1%",
+          "improvement_hint": "继续让每一次 clue、动作或试探都立刻改变面子、信任、危险或选择权。",
+          "source": "rule"
+        }
+      },
+      "diagnosis": {
+        "strengths": [
+          "心声与动作的错位带来强烈的轻喜感和暧昧张力，且不穿帮，信息差运用极佳。",
+          "同生契的痛感与触感共享让每一次身体反应都成为关系推进的杠杆，奇幻设定服务情感。",
+          "双人互动始终在冷话与热动作中推拉，化学反应强，结尾阴谋钩子收束有力。",
+          "女主嘴硬但心动通过细碎动作与念头自然流露，人设稳且讨喜。"
+        ],
+        "weaknesses": [
+          "总字数偏少，导致两处情感转折（云眠确认他会护她、交出铃铛的内心挣扎）展开略浅。",
+          "陆既白小臂红痕的连续性存在小断裂，需要提前一两句暗示以避免瞬间抽离。"
+        ],
+        "improvement_hints": [
+          "在b003中为陆既白小臂红痕埋一句短小伏笔，例如云眠瞥见他袖口下隐隐新痕。",
+          "将云眠跨线前的犹豫稍做延长，加入一句对铜铃的模糊触感回忆，增强情感韧性。",
+          "可在痛感分配的瞬间，让云眠闪过‘为什么他总是刚好挡在前面’的念头，深化她意识到他护她的转折。"
+        ]
+      },
+      "hard_fail_flags": [],
+      "optimization_targets": [
+        {
+          "target_module": "prompts/writer/plan_content_blocks.txt",
+          "issue_type": "continuity",
+          "severity": "medium",
+          "confidence": 0.7,
+          "reason": "连贯性当前 7.0 分。整体承接上一章腕印发烫、石门崩塌，顺畅；但内部一处连续性断裂：陆既白小臂上‘那道新的红’在之前未有伏笔，略显突兀。",
+          "evidence_summary": "上一章结尾腕间同生契发烫，本章延续，开篇即痛，承接自然。然而b004突然出现小臂新红痕，前文b001和b003只描写腕部红痕，读者会困惑。其余时间、空间等一致性无问题。；陆既白小臂红痕的连续性存在小断裂，需要提前一两句暗示以避免瞬间抽离。",
+          "patch_hint": "优先修补前情承接、因果顺序和场景转折，不要用更华丽的 prose 掩盖断裂。",
+          "related_metrics": [
+            "continuity_score"
+          ],
+          "expected_metric_gains": [
+            "continuity_score",
+            "mind_state_consistency_score",
+            "relationship_progression_score"
+          ]
+        },
+        {
+          "target_module": "prompts/writer/write_chapter_full.txt",
+          "issue_type": "continuity",
+          "severity": "medium",
+          "confidence": 0.7,
+          "reason": "连贯性当前 7.0 分。整体承接上一章腕印发烫、石门崩塌，顺畅；但内部一处连续性断裂：陆既白小臂上‘那道新的红’在之前未有伏笔，略显突兀。",
+          "evidence_summary": "上一章结尾腕间同生契发烫，本章延续，开篇即痛，承接自然。然而b004突然出现小臂新红痕，前文b001和b003只描写腕部红痕，读者会困惑。其余时间、空间等一致性无问题。；陆既白小臂红痕的连续性存在小断裂，需要提前一两句暗示以避免瞬间抽离。",
+          "patch_hint": "优先修补前情承接、因果顺序和场景转折，不要用更华丽的 prose 掩盖断裂。",
+          "related_metrics": [
+            "continuity_score"
+          ],
+          "expected_metric_gains": [
+            "continuity_score",
+            "mind_state_consistency_score",
+            "relationship_progression_score"
+          ]
+        }
+      ],
+      "cost_metrics": {
+        "llm_calls": 49,
+        "judge_llm_calls": 1,
+        "review_calls": 18,
+        "patch_rounds": 0,
+        "used_full_rewrite": false,
+        "duration_seconds": 2660.85,
+        "block_count": 4,
+        "patched_block_count": 3,
+        "patched_block_ratio": 0.75,
+        "generation_prompt_chars": 464435,
+        "judge_prompt_chars": 77582,
+        "tool_calls_by_name": {
+          "build_chapter_patch_plan": 1,
+          "build_character_mindset": 2,
+          "draft_block": 8,
+          "final_polish": 1,
+          "format_adjustment_suggestion": 1,
+          "plan_content_blocks": 1,
+          "review_block_quality": 4,
+          "review_character_integrity": 4,
+          "review_prose_and_humanity": 1,
+          "review_reveal_leak": 4,
+          "review_structure_and_continuity": 1,
+          "review_time_consistency": 4,
+          "revise_block_if_needed": 8,
+          "summarize_actual_chapter": 1
+        }
+      },
+      "artifacts": {
+        "case_dir": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\multi_case__3cases\\six_upgrades_deep_allcases\\romance_case_02_xianxia_rival_trial",
+        "case_input_json": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\multi_case__3cases\\six_upgrades_deep_allcases\\romance_case_02_xianxia_rival_trial\\chapter_eval_case_input.json",
+        "writer_context_json": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\multi_case__3cases\\six_upgrades_deep_allcases\\romance_case_02_xianxia_rival_trial\\chapter_eval_writer_context.json",
+        "chapter_execution_json": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\multi_case__3cases\\six_upgrades_deep_allcases\\romance_case_02_xianxia_rival_trial\\chapter_eval_execution.json",
+        "stage_log_json": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\multi_case__3cases\\six_upgrades_deep_allcases\\romance_case_02_xianxia_rival_trial\\chapter_eval_stage_log.json",
+        "final_text_txt": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\multi_case__3cases\\six_upgrades_deep_allcases\\romance_case_02_xianxia_rival_trial\\chapter_text__final.txt",
+        "judge_json": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\multi_case__3cases\\six_upgrades_deep_allcases\\romance_case_02_xianxia_rival_trial\\chapter_eval_judge.json",
+        "result_json": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\multi_case__3cases\\six_upgrades_deep_allcases\\romance_case_02_xianxia_rival_trial\\result.json"
+      },
+      "errors": []
+    }
+  ],
+  "errors": [
+    "romance_case_03_urban_reunion_comedy: [Errno 22] Invalid argument"
+  ],
+  "compared_to": "",
+  "report_markdown": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\multi_case__3cases\\six_upgrades_deep_allcases\\chapter_eval_report.md",
+  "report_json": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\deepseek__deepseek-v4-pro\\multi_case__3cases\\six_upgrades_deep_allcases\\chapter_eval_summary.json"
+}

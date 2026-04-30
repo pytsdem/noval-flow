@@ -1,0 +1,84 @@
+{
+  "case_id": "romance_case_01_court_return",
+  "title": "围宫请婚的旧案重逢",
+  "tags": [
+    "historical",
+    "misread-love",
+    "forced-marriage",
+    "public-revenge",
+    "court-pressure"
+  ],
+  "verdict": "pass",
+  "beat_count": 4,
+  "target_beat_count": 4,
+  "average_score": 9.14,
+  "metrics": {
+    "beat_count_fit": {
+      "score": 9.2,
+      "reason": "Beat count fits best when it stays near the pace contract target and the scene-engine range.",
+      "evidence_summary": "scene_engine=court_pressure; beats=4; pace_contract_target=4; preferred_range=4-5",
+      "improvement_hint": "If the chapter is a single-pressure scene, push it back toward 4-5 beats before tuning prose.",
+      "source": "rule"
+    },
+    "beat_uniqueness_score": {
+      "score": 9.4,
+      "reason": "Each beat should add a non-redundant value turn instead of rephrasing the same dramatic job.",
+      "evidence_summary": "No duplicate-value alerts.",
+      "improvement_hint": "If two beats can be summarized by the same sentence, merge them or rewrite the later beat into a new consequence.",
+      "source": "rule"
+    },
+    "adjacent_separation_score": {
+      "score": 9.3,
+      "reason": "Adjacent beats should hand off consequence, not restate the same job with different wording.",
+      "evidence_summary": "Adjacent beats stay distinct.",
+      "improvement_hint": "Check adjacent beats first. If new_value, relationship_delta, clue_delta, and end_state are all close, the later beat is probably redundant.",
+      "source": "rule"
+    },
+    "must_not_repeat_quality": {
+      "score": 8.9,
+      "reason": "Per-beat anti-repeat guards work best when they are present, specific, and clearly inherit chapter-level repeat bans.",
+      "evidence_summary": "beats_with_guards=4/4; contract_seeded=4/4; unique_guards=12/24",
+      "improvement_hint": "Do not stop at 'do not repeat the last beat'. Name exactly what the previous beat already finished.",
+      "source": "rule"
+    },
+    "contract_coverage_score": {
+      "score": 10.0,
+      "reason": "A strong beat plan visibly cashes the chapter contract instead of inventing a parallel mini-outline.",
+      "evidence_summary": "covered=6/6; missing=none",
+      "improvement_hint": "If Step8 names cost, payoff, and hook, the last half of the beat plan should show exactly where they land.",
+      "source": "rule"
+    },
+    "progression_clarity_score": {
+      "score": 7.2,
+      "reason": "A clear plan opens sharply, changes in the middle, and cuts forward at the end.",
+      "evidence_summary": "opening_anchor=True; final_hook_anchor=False; unique_turn_types=3/4; repeated_adjacent_turns=1",
+      "improvement_hint": "Let beat one open pressure, let the last beat cut to the next chapter, and keep middle beats from repeating the same turn type.",
+      "source": "rule"
+    },
+    "dramatic_pressure_flow_score": {
+      "score": 10.0,
+      "reason": "Dramatic pressure rises when beats carry action, human reaction, cost, and hook instead of summary-only movement.",
+      "evidence_summary": "action_ready=4/4; reaction_ready=4/4; cost_ready=4/4; hook_ready=4/4",
+      "improvement_hint": "If a beat advances the chapter only through explanation, add action landing, human reaction, or explicit cost before touching prose.",
+      "source": "rule"
+    }
+  },
+  "overlap_alerts": [],
+  "warnings": [],
+  "cost_metrics": {
+    "llm_calls": 3,
+    "context_llm_calls": 1,
+    "planning_llm_calls": 2,
+    "duration_seconds": 516.18,
+    "context_prompt_chars": 15126,
+    "planning_prompt_chars": 21183
+  },
+  "artifacts": {
+    "case_dir": "evals\\romance\\reports\\runs\\20260430\\beat_plan_eval\\deepseek__deepseek-v4-pro\\romance_case_01_court_return\\six_upgrades_layered_upstream_smoke_beat_plan\\romance_case_01_court_return",
+    "case_input_json": "evals\\romance\\reports\\runs\\20260430\\beat_plan_eval\\deepseek__deepseek-v4-pro\\romance_case_01_court_return\\six_upgrades_layered_upstream_smoke_beat_plan\\romance_case_01_court_return\\beat_plan_eval_case_input.json",
+    "writer_context_json": "evals\\romance\\reports\\runs\\20260430\\beat_plan_eval\\deepseek__deepseek-v4-pro\\romance_case_01_court_return\\six_upgrades_layered_upstream_smoke_beat_plan\\romance_case_01_court_return\\beat_plan_eval_writer_context.json",
+    "beat_plan_json": "evals\\romance\\reports\\runs\\20260430\\beat_plan_eval\\deepseek__deepseek-v4-pro\\romance_case_01_court_return\\six_upgrades_layered_upstream_smoke_beat_plan\\romance_case_01_court_return\\beat_plan__generated.json",
+    "result_json": "evals\\romance\\reports\\runs\\20260430\\beat_plan_eval\\deepseek__deepseek-v4-pro\\romance_case_01_court_return\\six_upgrades_layered_upstream_smoke_beat_plan\\romance_case_01_court_return\\beat_plan_eval_case_result.json"
+  },
+  "errors": []
+}

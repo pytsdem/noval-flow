@@ -1,0 +1,381 @@
+{
+  "case_id": "romance_case_01_court_return",
+  "title": "围宫请婚的旧案重逢",
+  "description": "男主带兵归京后在朝堂公开请旨娶当年亲手送他流放的女主；全京城以为这是报复，女主却知道自己若不被他带走，当夜就会被灭口。",
+  "tags": [
+    "historical",
+    "misread-love",
+    "forced-marriage",
+    "public-revenge",
+    "court-pressure"
+  ],
+  "verdict": "blocked",
+  "scores": {
+    "romance_tension_score": 5.0,
+    "relationship_progression_score": 5.0,
+    "emotional_resonance_score": 5.0,
+    "character_attraction_score": 5.0,
+    "hook_score": 5.0,
+    "continuity_score": 5.0,
+    "redundancy_score": 8.2,
+    "mind_state_consistency_score": 5.0,
+    "genre_fit_score": 5.0
+  },
+  "metrics": {
+    "romance_tension_score": {
+      "score": 5.0,
+      "reason": "LLM judge 失败，使用中性降级分数 5.0。此分数只用于保留报告结构，不建议据此做趋势判断。",
+      "evidence_summary": "未获取到可靠的 judge 证据摘要。",
+      "improvement_hint": "先修复 judge，再观察拉扯感评分。",
+      "source": "fallback"
+    },
+    "relationship_progression_score": {
+      "score": 5.0,
+      "reason": "LLM judge 失败，使用中性降级分数 5.0。此分数只用于保留报告结构，不建议据此做趋势判断。",
+      "evidence_summary": "未获取到可靠的 judge 证据摘要。",
+      "improvement_hint": "先修复 judge，再观察关系推进评分。",
+      "source": "fallback"
+    },
+    "emotional_resonance_score": {
+      "score": 5.0,
+      "reason": "LLM judge 失败，使用中性降级分数 5.0。此分数只用于保留报告结构，不建议据此做趋势判断。",
+      "evidence_summary": "未获取到可靠的 judge 证据摘要。",
+      "improvement_hint": "先修复 judge，再观察情绪共鸣评分。",
+      "source": "fallback"
+    },
+    "character_attraction_score": {
+      "score": 5.0,
+      "reason": "LLM judge 失败，使用中性降级分数 5.0。此分数只用于保留报告结构，不建议据此做趋势判断。",
+      "evidence_summary": "未获取到可靠的 judge 证据摘要。",
+      "improvement_hint": "先修复 judge，再观察角色吸引力评分。",
+      "source": "fallback"
+    },
+    "hook_score": {
+      "score": 5.0,
+      "reason": "LLM judge 失败，使用中性降级分数 5.0。此分数只用于保留报告结构，不建议据此做趋势判断。",
+      "evidence_summary": "未获取到可靠的 judge 证据摘要。",
+      "improvement_hint": "先修复 judge，再观察章节钩子评分。",
+      "source": "fallback"
+    },
+    "continuity_score": {
+      "score": 5.0,
+      "reason": "LLM judge 失败，使用中性降级分数 5.0。此分数只用于保留报告结构，不建议据此做趋势判断。",
+      "evidence_summary": "未获取到可靠的 judge 证据摘要。",
+      "improvement_hint": "先修复 judge，再观察连贯性评分。",
+      "source": "fallback"
+    },
+    "redundancy_score": {
+      "score": 8.2,
+      "reason": "LLM judge 失败，本项退化为规则型重复/anti-slop 检测。",
+      "evidence_summary": "规则重复：review_structure_and_continuity 命中过重复相关问题；review_prose_and_humanity 命中过重复相关问题；Anti-slop：review_structure_and_continuity 命中过直白心理/解释问题；review_prose_and_humanity 命中过直白心理/解释问题",
+      "improvement_hint": "继续保持一段一推进，允许有功能的回环，但避免把同层情绪解释回头再说一遍。 同时检查 patch 是否只改字面而没改 block 功能。",
+      "source": "rule"
+    },
+    "mind_state_consistency_score": {
+      "score": 5.0,
+      "reason": "LLM judge 失败，使用中性降级分数 5.0。此分数只用于保留报告结构，不建议据此做趋势判断。",
+      "evidence_summary": "未获取到可靠的 judge 证据摘要。",
+      "improvement_hint": "先修复 judge，再观察角色心智一致性评分。",
+      "source": "fallback"
+    },
+    "genre_fit_score": {
+      "score": 5.0,
+      "reason": "LLM judge 失败，使用中性降级分数 5.0。此分数只用于保留报告结构，不建议据此做趋势判断。",
+      "evidence_summary": "未获取到可靠的 judge 证据摘要。",
+      "improvement_hint": "先修复 judge，再观察类型适配评分。",
+      "source": "fallback"
+    }
+  },
+  "breakdowns": {
+    "rule_redundancy_score": {
+      "score": 8.2,
+      "reason": "规则检测显示段落功能分布较开，重复铺陈信号较弱；有效回环需带来新剧情功能、关系变化、误导、线索推进、情绪升级或读者期待。",
+      "evidence_summary": "review_structure_and_continuity 命中过重复相关问题；review_prose_and_humanity 命中过重复相关问题",
+      "improvement_hint": "继续保持一段一推进，允许有功能的回环，但避免把同层情绪解释回头再说一遍。 同时检查 patch 是否只改字面而没改 block 功能。",
+      "source": "rule"
+    },
+    "rule_anti_slop_score": {
+      "score": 8.2,
+      "reason": "规则检测显示正文较少依赖直白心理标签或解释性总结句。",
+      "evidence_summary": "review_structure_and_continuity 命中过直白心理/解释问题；review_prose_and_humanity 命中过直白心理/解释问题",
+      "improvement_hint": "继续让情绪落在动作、停顿、对话余味和误读上，而不是补写判断句。",
+      "source": "rule"
+    },
+    "rule_pronoun_lead_score": {
+      "score": 10.0,
+      "reason": "句首代词密度较低，句面更容易保留场面感、物件感和人物声口。",
+      "evidence_summary": "句首代词占比 7%（10/146 句）；样例“她当年一言，断臣前程，使臣在北地三冬、他顿了顿，声线更低，却更硬。”",
+      "improvement_hint": "继续让场景、物件、动作、冷暖和对话来带起句子，而不是不断用代词起句。",
+      "source": "rule"
+    },
+    "rule_explanation_density_score": {
+      "score": 10.0,
+      "reason": "解释句密度较低，正文更多通过场面和动作递送信息。",
+      "evidence_summary": "未检测到明显解释句密度问题。",
+      "improvement_hint": "继续让动作、停顿、物件和旁人反应承担解释工作，不要把结论写在句面上。",
+      "source": "rule"
+    },
+    "rule_action_carried_reveal_score": {
+      "score": 10.0,
+      "reason": "关键信息主要通过动作、物件、身体和场面自己露出来，解释性翻译较少。",
+      "evidence_summary": "body_or_object_hits=108 | social_pressure_hits=64 | dialogue_hits=33 | explanation_ratio=2%",
+      "improvement_hint": "继续先给场面、动作和物件，再让读者自己得出结论。",
+      "source": "rule"
+    },
+    "rule_relationship_cost_realization_score": {
+      "score": 9.28,
+      "reason": "推进一出现就会变成关系代价或人身代价，人物在场上真有付出。",
+      "evidence_summary": "social_pressure_hits=64 | procedure_hits=1 | pronoun_lead_ratio=9% | explanation_ratio=2%",
+      "improvement_hint": "继续让每一次 clue、动作或试探都立刻改变面子、信任、危险或选择权。",
+      "source": "rule"
+    }
+  },
+  "diagnosis": {
+    "strengths": [],
+    "weaknesses": [
+      "LLM judge 未返回可用结果，本次使用降级分数。"
+    ],
+    "improvement_hints": [
+      "先修复 judge 输出，再重新跑评测以获取可靠趋势。"
+    ]
+  },
+  "hard_fail_flags": [
+    {
+      "flag_type": "continuity_break",
+      "severity": "high",
+      "reason": "连贯性仅 5.0 分，已经低于 高风险阈值。LLM judge 失败，使用中性降级分数 5.0。此分数只用于保留报告结构，不建议据此做趋势判断。",
+      "evidence_summary": "未获取到可靠的 judge 证据摘要。",
+      "related_metrics": [
+        "continuity_score"
+      ],
+      "suggested_modules": [
+        "prompts/writer/plan_content_blocks.txt",
+        "prompts/writer/write_chapter_full.txt"
+      ],
+      "source": "fallback"
+    },
+    {
+      "flag_type": "hook_underpowered",
+      "severity": "high",
+      "reason": "章节钩子仅 5.0 分，已经低于 高风险阈值。LLM judge 失败，使用中性降级分数 5.0。此分数只用于保留报告结构，不建议据此做趋势判断。",
+      "evidence_summary": "未获取到可靠的 judge 证据摘要。",
+      "related_metrics": [
+        "hook_score"
+      ],
+      "suggested_modules": [
+        "prompts/writer/step_8_chapter_briefs.txt",
+        "prompts/writer/plan_content_blocks.txt"
+      ],
+      "source": "fallback"
+    },
+    {
+      "flag_type": "mind_state_break",
+      "severity": "high",
+      "reason": "角色心智一致性仅 5.0 分，已经低于 高风险阈值。LLM judge 失败，使用中性降级分数 5.0。此分数只用于保留报告结构，不建议据此做趋势判断。",
+      "evidence_summary": "未获取到可靠的 judge 证据摘要。",
+      "related_metrics": [
+        "mind_state_consistency_score"
+      ],
+      "suggested_modules": [
+        "prompts/writer/build_character_mindset.txt",
+        "prompts/writer/write_chapter_full.txt"
+      ],
+      "source": "fallback"
+    },
+    {
+      "flag_type": "relationship_progression_break",
+      "severity": "high",
+      "reason": "关系推进仅 5.0 分，已经低于 高风险阈值。LLM judge 失败，使用中性降级分数 5.0。此分数只用于保留报告结构，不建议据此做趋势判断。",
+      "evidence_summary": "未获取到可靠的 judge 证据摘要。",
+      "related_metrics": [
+        "relationship_progression_score"
+      ],
+      "suggested_modules": [
+        "prompts/writer/step_8_chapter_briefs.txt",
+        "prompts/writer/write_chapter_full.txt"
+      ],
+      "source": "fallback"
+    },
+    {
+      "flag_type": "romance_pull_weak",
+      "severity": "high",
+      "reason": "追读拉力均值仅 5.0 分，说明正文的情绪拉力和关系电流还没真正立起来。",
+      "evidence_summary": "拉扯感：未获取到可靠的 judge 证据摘要。；情绪余波：未获取到可靠的 judge 证据摘要。",
+      "related_metrics": [
+        "romance_tension_score",
+        "emotional_resonance_score"
+      ],
+      "suggested_modules": [
+        "prompts/writer/plan_content_blocks.txt",
+        "prompts/writer/write_chapter_full.txt"
+      ],
+      "source": "heuristic"
+    }
+  ],
+  "optimization_targets": [
+    {
+      "target_module": "evals/romance/judges/llm_judge.py",
+      "issue_type": "judge_reliability",
+      "severity": "high",
+      "confidence": 0.92,
+      "reason": "本 case 的 romance judge 未返回可用结构，当前评测结果只适合作为降级参考。",
+      "evidence_summary": "romance_judge_failed: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: 'C:\\\\Users\\\\19237\\\\workspace\\\\noval-flow\\\\data\\\\codex_cli_l1ub6czl.txt'",
+      "patch_hint": "先修复 judge schema / prompt / JSON 稳定性，再根据完整评测结果指导 Codex 改正文链路。",
+      "related_metrics": [],
+      "expected_metric_gains": []
+    },
+    {
+      "target_module": "evals/romance/prompts/romance_chapter_judge.txt",
+      "issue_type": "judge_reliability",
+      "severity": "high",
+      "confidence": 0.92,
+      "reason": "本 case 的 romance judge 未返回可用结构，当前评测结果只适合作为降级参考。",
+      "evidence_summary": "romance_judge_failed: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: 'C:\\\\Users\\\\19237\\\\workspace\\\\noval-flow\\\\data\\\\codex_cli_l1ub6czl.txt'",
+      "patch_hint": "先修复 judge schema / prompt / JSON 稳定性，再根据完整评测结果指导 Codex 改正文链路。",
+      "related_metrics": [],
+      "expected_metric_gains": []
+    },
+    {
+      "target_module": "prompts/writer/plan_content_blocks.txt",
+      "issue_type": "continuity",
+      "severity": "high",
+      "confidence": 0.76,
+      "reason": "连贯性当前 5.0 分。LLM judge 失败，使用中性降级分数 5.0。此分数只用于保留报告结构，不建议据此做趋势判断。",
+      "evidence_summary": "未获取到可靠的 judge 证据摘要。",
+      "patch_hint": "优先修补前情承接、因果顺序和场景转折，不要用更华丽的 prose 掩盖断裂。",
+      "related_metrics": [
+        "continuity_score"
+      ],
+      "expected_metric_gains": [
+        "continuity_score",
+        "mind_state_consistency_score",
+        "relationship_progression_score"
+      ]
+    },
+    {
+      "target_module": "prompts/writer/write_chapter_full.txt",
+      "issue_type": "continuity",
+      "severity": "high",
+      "confidence": 0.76,
+      "reason": "连贯性当前 5.0 分。LLM judge 失败，使用中性降级分数 5.0。此分数只用于保留报告结构，不建议据此做趋势判断。",
+      "evidence_summary": "未获取到可靠的 judge 证据摘要。",
+      "patch_hint": "优先修补前情承接、因果顺序和场景转折，不要用更华丽的 prose 掩盖断裂。",
+      "related_metrics": [
+        "continuity_score"
+      ],
+      "expected_metric_gains": [
+        "continuity_score",
+        "mind_state_consistency_score",
+        "relationship_progression_score"
+      ]
+    },
+    {
+      "target_module": "prompts/writer/build_character_mindset.txt",
+      "issue_type": "mind_state_consistency",
+      "severity": "high",
+      "confidence": 0.76,
+      "reason": "角色心智一致性当前 5.0 分。LLM judge 失败，使用中性降级分数 5.0。此分数只用于保留报告结构，不建议据此做趋势判断。",
+      "evidence_summary": "未获取到可靠的 judge 证据摘要。",
+      "patch_hint": "把 fear、hidden_need、misbelief 和 self_control_level 变成正文硬约束，禁止角色越级表态或突然失控。",
+      "related_metrics": [
+        "mind_state_consistency_score"
+      ],
+      "expected_metric_gains": [
+        "mind_state_consistency_score",
+        "continuity_score",
+        "emotional_resonance_score"
+      ]
+    },
+    {
+      "target_module": "prompts/writer/write_chapter_full.txt",
+      "issue_type": "mind_state_consistency",
+      "severity": "high",
+      "confidence": 0.76,
+      "reason": "角色心智一致性当前 5.0 分。LLM judge 失败，使用中性降级分数 5.0。此分数只用于保留报告结构，不建议据此做趋势判断。",
+      "evidence_summary": "未获取到可靠的 judge 证据摘要。",
+      "patch_hint": "把 fear、hidden_need、misbelief 和 self_control_level 变成正文硬约束，禁止角色越级表态或突然失控。",
+      "related_metrics": [
+        "mind_state_consistency_score"
+      ],
+      "expected_metric_gains": [
+        "mind_state_consistency_score",
+        "continuity_score",
+        "emotional_resonance_score"
+      ]
+    },
+    {
+      "target_module": "prompts/writer/step_8_chapter_briefs.txt",
+      "issue_type": "relationship_progression",
+      "severity": "high",
+      "confidence": 0.75,
+      "reason": "关系推进当前 5.0 分。LLM judge 失败，使用中性降级分数 5.0。此分数只用于保留报告结构，不建议据此做趋势判断。",
+      "evidence_summary": "未获取到可靠的 judge 证据摘要。",
+      "patch_hint": "让 step 8 明确本章关系要发生什么变化，再要求正文用可见动作或选择把变化兑现出来。",
+      "related_metrics": [
+        "relationship_progression_score"
+      ],
+      "expected_metric_gains": [
+        "relationship_progression_score",
+        "romance_tension_score",
+        "hook_score"
+      ]
+    },
+    {
+      "target_module": "prompts/writer/write_chapter_full.txt",
+      "issue_type": "relationship_progression",
+      "severity": "high",
+      "confidence": 0.75,
+      "reason": "关系推进当前 5.0 分。LLM judge 失败，使用中性降级分数 5.0。此分数只用于保留报告结构，不建议据此做趋势判断。",
+      "evidence_summary": "未获取到可靠的 judge 证据摘要。",
+      "patch_hint": "让 step 8 明确本章关系要发生什么变化，再要求正文用可见动作或选择把变化兑现出来。",
+      "related_metrics": [
+        "relationship_progression_score"
+      ],
+      "expected_metric_gains": [
+        "relationship_progression_score",
+        "romance_tension_score",
+        "hook_score"
+      ]
+    }
+  ],
+  "cost_metrics": {
+    "llm_calls": 25,
+    "judge_llm_calls": 1,
+    "review_calls": 3,
+    "patch_rounds": 1,
+    "used_full_rewrite": false,
+    "duration_seconds": 3278.66,
+    "block_count": 4,
+    "patched_block_count": 1,
+    "patched_block_ratio": 0.25,
+    "generation_prompt_chars": 312163,
+    "judge_prompt_chars": 94933,
+    "tool_calls_by_name": {
+      "build_chapter_patch_plan": 2,
+      "build_character_mindset": 2,
+      "draft_block": 8,
+      "final_polish": 1,
+      "format_adjustment_suggestion": 1,
+      "judge_patched_chapter": 1,
+      "plan_content_blocks": 1,
+      "review_prose_and_humanity": 1,
+      "review_structure_and_continuity": 1,
+      "revise_block_if_needed": 4,
+      "rewrite_blocks_by_plan": 1,
+      "summarize_actual_chapter": 1
+    }
+  },
+  "artifacts": {
+    "case_dir": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\codex__gpt-5.2\\romance_case_01_court_return\\codex_case01_prose_surface_push_v2\\romance_case_01_court_return",
+    "case_input_json": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\codex__gpt-5.2\\romance_case_01_court_return\\codex_case01_prose_surface_push_v2\\romance_case_01_court_return\\chapter_eval_case_input.json",
+    "writer_context_json": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\codex__gpt-5.2\\romance_case_01_court_return\\codex_case01_prose_surface_push_v2\\romance_case_01_court_return\\chapter_eval_writer_context.json",
+    "chapter_execution_json": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\codex__gpt-5.2\\romance_case_01_court_return\\codex_case01_prose_surface_push_v2\\romance_case_01_court_return\\chapter_eval_execution.json",
+    "stage_log_json": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\codex__gpt-5.2\\romance_case_01_court_return\\codex_case01_prose_surface_push_v2\\romance_case_01_court_return\\chapter_eval_stage_log.json",
+    "final_text_txt": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\codex__gpt-5.2\\romance_case_01_court_return\\codex_case01_prose_surface_push_v2\\romance_case_01_court_return\\chapter_text__final.txt",
+    "judge_json": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\codex__gpt-5.2\\romance_case_01_court_return\\codex_case01_prose_surface_push_v2\\romance_case_01_court_return\\chapter_eval_judge.json",
+    "result_json": "evals\\romance\\reports\\runs\\20260430\\chapter_eval\\codex__gpt-5.2\\romance_case_01_court_return\\codex_case01_prose_surface_push_v2\\romance_case_01_court_return\\result.json"
+  },
+  "errors": [
+    "romance_judge_failed: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: 'C:\\\\Users\\\\19237\\\\workspace\\\\noval-flow\\\\data\\\\codex_cli_l1ub6czl.txt'"
+  ]
+}

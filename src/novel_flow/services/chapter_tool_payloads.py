@@ -104,13 +104,14 @@ class ChapterToolPayloadBuilder:
         context: Any,
         block: ChapterBeat,
         committed_blocks: list[ChapterBeat],
+        remaining_blocks: list[ChapterBeat] | None = None,
     ) -> dict[str, Any]:
         current_chapter_context = NovelContextFormatter.format_current_chapter_context(
             NovelContextSelectorService.select_current_chapter_context(
                 block.chapter_id,
                 committed_blocks,
-                max_blocks=4,
-                tail_chars=700,
+                max_blocks=3,
+                tail_chars=420,
             )
         )
         prior_summary_lines = ["[Earlier committed blocks]"]
@@ -144,11 +145,26 @@ class ChapterToolPayloadBuilder:
                 )
         else:
             delivered_summary_lines.append("No beat has landed yet.")
+        future_summary_lines = ["[Not yet in this chapter]"]
+        future_blocks = list(remaining_blocks or [])
+        if future_blocks:
+            for item in future_blocks[:2]:
+                future_summary_lines.extend(
+                    [
+                        "",
+                        f"{item.block_id} / {item.purpose}",
+                        f"- next_turn: {item.new_value or item.relationship_delta or item.clue_delta or 'None.'}",
+                        f"- later_end: {item.end_state or item.micro_hook or 'None.'}",
+                    ]
+                )
+        else:
+            future_summary_lines.append("No later beat remains.")
         prior_tail = str(current_chapter_context["current_chapter_draft_tail"] or "")
         return {
             "chapter_goal": cls.compact_chapter_goal(context=context),
             "hard_facts": cls.compact_hard_facts(context=context, block=block),
             "character_state": cls.compact_character_state(context=context),
+            "dramatic_memory": cls.compact_dramatic_memory(committed_blocks=committed_blocks),
             "previous_text_tail": cls.tail_text(prior_tail, max_chars=700),
             "chapter_so_far": cls.compact_chapter_so_far(committed_blocks=committed_blocks),
             "style_rules": cls.compact_style_rules(context=context),
@@ -165,6 +181,7 @@ class ChapterToolPayloadBuilder:
             "current_chapter_draft_tail": prior_tail,
             "prior_block_summary_text": "\n".join(prior_summary_lines).strip(),
             "delivered_beat_summary_text": "\n".join(delivered_summary_lines).strip(),
+            "future_beat_boundary_text": "\n".join(future_summary_lines).strip(),
             "prior_chapter_text_tail": prior_tail,
             "style_card_text": context.style_card_text,
         }
@@ -176,14 +193,18 @@ class ChapterToolPayloadBuilder:
         block: ChapterBeat,
         block_context: dict[str, Any],
         loaded_skill_instructions_text: str,
+        candidate_strategy: str = "",
     ) -> dict[str, Any]:
         return {
             "chapter_goal": block_context.get("chapter_goal", ""),
             "hard_facts": block_context.get("hard_facts", ""),
             "character_state": block_context.get("character_state", ""),
+            "dramatic_memory": block_context.get("dramatic_memory", ""),
             "beat": cls.compact_beat_json(block=block, block_context=block_context),
+            "candidate_strategy": candidate_strategy,
             "previous_text_tail": block_context.get("previous_text_tail", ""),
             "chapter_so_far": block_context.get("chapter_so_far", ""),
+            "future_beats_not_yet": block_context.get("future_beat_boundary_text", ""),
             "style_rules": block_context.get("style_rules", ""),
             "target_length": cls.target_length_guard(block.target_chars),
         }
@@ -198,16 +219,20 @@ class ChapterToolPayloadBuilder:
         review_reports: dict[str, Any],
         block_revision_plan: dict[str, Any],
         loaded_skill_instructions_text: str,
+        candidate_strategy: str = "",
+        revision_brief_text: str = "",
     ) -> dict[str, Any]:
         return {
             **cls.build_draft_block_payload(
                 block=block,
                 block_context=block_context,
                 loaded_skill_instructions_text=loaded_skill_instructions_text,
+                candidate_strategy=candidate_strategy,
             ),
             "block_text": block_text,
             "review_json": cls.json_text(review_reports),
             "block_revision_plan_json": cls.json_text(block_revision_plan),
+            "revision_brief_text": revision_brief_text,
         }
 
     @classmethod
@@ -608,15 +633,20 @@ class ChapterToolPayloadBuilder:
     @classmethod
     def compact_beat_json(cls, *, block: ChapterBeat, block_context: dict[str, Any] | None = None) -> str:
         previous = str((block_context or {}).get("prior_block_summary_text") or "").strip()
-        start = ""
         if previous and "No committed blocks yet." not in previous:
-            start = cls.tail_text(previous, max_chars=420)
+            start = "Continue from the live consequence already on the page; keep the room, pressure, and unfinished reaction moving without recap."
         else:
-            start = "Open from the chapter's live pressure; do not recap."
+            start = "Open through a concrete scene impression, body state, object state, temperature, etiquette pressure, or line of dialogue; no abstract recap."
         payload = {
-            "goal": cls.first_nonempty(block.scene_goal, block.purpose, block.new_value),
+            "goal": cls.compact_beat_goal(block),
             "start": start,
-            "turn": cls.first_nonempty(block.new_value, block.relationship_delta, block.clue_delta, block.turn_type),
+            "turn": cls.first_nonempty(
+                block.new_value,
+                block.relationship_delta,
+                block.cost_shift,
+                block.clue_delta,
+                block.turn_type,
+            ),
             "end": cls.first_nonempty(block.end_state, block.micro_hook),
             "avoid": cls.compact_avoid(block),
         }
@@ -627,17 +657,28 @@ class ChapterToolPayloadBuilder:
         avoid = list(block.must_not_repeat or [])
         avoid.extend(block.must_hide or [])
         avoid.extend(block.style_risk_guard[:1] if block.style_risk_guard else [])
-        cleaned = [str(item or "").strip() for item in avoid if str(item or "").strip()]
-        return cleaned[:5]
+        avoid.extend(
+            [
+                "Do not start several nearby sentences with 他/她/我.",
+                "Do not explain an action or pause with a follow-up summary sentence.",
+                "Procedure only stays if it changes relationship, cost, or danger right now.",
+            ]
+        )
+        cleaned: list[str] = []
+        for item in avoid:
+            text = str(item or "").strip()
+            if text and text not in cleaned:
+                cleaned.append(text)
+        return cleaned[:7]
 
     @classmethod
     def compact_chapter_goal(cls, *, context: Any) -> str:
         lines = [
             str(getattr(context, "chapter_payload_text", "") or "").strip(),
-            str(getattr(context, "assistant_persona_prompt", "") or "").strip(),
+            str(getattr(context, "step_8_chapter_brief_text", "") or "").strip(),
             str(getattr(context, "writing_requirements_json", "") or "").strip(),
         ]
-        return cls.tail_text("\n\n".join(item for item in lines if item), max_chars=1800)
+        return cls.tail_text("\n\n".join(item for item in lines if item), max_chars=1200)
 
     @classmethod
     def compact_hard_facts(cls, *, context: Any, block: ChapterBeat) -> str:
@@ -652,37 +693,73 @@ class ChapterToolPayloadBuilder:
             "[Must hide]",
             cls.json_text(list(block.must_hide or [])),
         ]
-        return cls.tail_text("\n".join(lines), max_chars=1400)
+        return cls.tail_text("\n".join(lines), max_chars=1100)
 
     @classmethod
     def compact_character_state(cls, *, context: Any) -> str:
         text = str(getattr(context, "chapter_character_mindsets_text", "") or "").strip()
         if not text:
             text = str(getattr(context, "chapter_visible_context_text", "") or "").strip()
-        return cls.tail_text(text, max_chars=1200)
+        return cls.tail_text(text, max_chars=900)
+
+    @classmethod
+    def compact_dramatic_memory(cls, *, committed_blocks: list[ChapterBeat]) -> str:
+        if not committed_blocks:
+            return "No dramatic debt has been spent yet in this chapter."
+        lines = ["[Dramatic memory]"]
+        for block in committed_blocks[-3:]:
+            parts = [
+                f"{block.block_id}",
+                f"pressure={block.scene_goal}" if str(block.scene_goal or "").strip() else "",
+                f"relationship_cost={block.relationship_delta}" if str(block.relationship_delta or "").strip() else "",
+                f"human_cost={block.cost_shift}" if str(block.cost_shift or "").strip() else "",
+                f"clue={block.clue_delta}" if str(block.clue_delta or "").strip() else "",
+                f"hook={block.micro_hook}" if str(block.micro_hook or "").strip() else "",
+            ]
+            lines.append(" | ".join(item for item in parts if item))
+        lines.append("Do not spend the same pain, clue function, or relationship repricing twice without making it costlier.")
+        return "\n".join(lines).strip()
 
     @classmethod
     def compact_chapter_so_far(cls, *, committed_blocks: list[ChapterBeat]) -> str:
         if not committed_blocks:
             return "No beat has landed yet."
         lines: list[str] = []
-        for block in committed_blocks[-3:]:
+        for block in committed_blocks[-2:]:
             lines.append(
-                " / ".join(
-                    item
-                    for item in [
-                        block.end_state,
-                        block.micro_hook,
-                        cls.tail_text(str(block.text or ""), max_chars=180),
-                    ]
-                    if str(item or "").strip()
+                " | ".join(
+                    item for item in [
+                        f"{block.block_id}",
+                        f"landed={block.end_state}" if str(block.end_state or "").strip() else "",
+                        f"new={block.new_value}" if str(block.new_value or "").strip() else "",
+                        f"relationship={block.relationship_delta}" if str(block.relationship_delta or "").strip() else "",
+                        f"cost={block.cost_shift}" if str(block.cost_shift or "").strip() else "",
+                        f"hook={block.micro_hook}" if str(block.micro_hook or "").strip() else "",
+                    ] if item
                 )
             )
         return "\n".join(lines).strip()
 
     @classmethod
     def compact_style_rules(cls, *, context: Any) -> str:
-        return cls.tail_text(str(getattr(context, "style_card_text", "") or "").strip(), max_chars=1600)
+        return cls.tail_text(str(getattr(context, "style_card_text", "") or "").strip(), max_chars=1200)
+
+    @classmethod
+    def compact_beat_goal(cls, block: ChapterBeat) -> str:
+        parts: list[str] = []
+        if str(block.scene_goal or "").strip():
+            parts.append(f"scene_goal={block.scene_goal}")
+        elif str(block.purpose or "").strip():
+            parts.append(f"purpose={block.purpose}")
+        if str(block.relationship_delta or "").strip():
+            parts.append(f"relationship_cost={block.relationship_delta}")
+        elif str(block.cost_shift or "").strip():
+            parts.append(f"human_cost={block.cost_shift}")
+        if str(block.clue_delta or "").strip():
+            parts.append(f"clue_turn={block.clue_delta}")
+        if str(block.reader_feeling_target or "").strip():
+            parts.append(f"reader_feeling={block.reader_feeling_target}")
+        return " | ".join(parts) if parts else cls.first_nonempty(block.new_value, block.purpose, block.scene_goal)
 
     @staticmethod
     def first_nonempty(*items: str) -> str:

@@ -22,6 +22,7 @@ from novel_flow.models.schemas import (
 )
 from novel_flow.services.novel_context import build_current_chapter_context
 from novel_flow.services.patcher import PatchExecutor
+from novel_flow.services.prose_lint import ProseSurfaceSignals, analyze_prose_surface
 from novel_flow.services.skill_manager import SkillManager
 from novel_flow.services.skill_registry import SkillRegistry
 from novel_flow.services.tool_registry import ToolRegistry
@@ -710,6 +711,29 @@ class WritingChapterAgentTests(unittest.TestCase):
             ],
         )
 
+    def test_deep_block_review_gate_skips_strong_surface(self) -> None:
+        strong_surface = ProseSurfaceSignals(
+            pronoun_lead_ratio=0.08,
+            explanation_ratio=0.04,
+            action_carried_reveal_score=8.4,
+            relationship_cost_realization_score=8.2,
+            procedure_pressure=1.0,
+            overall_score=8.9,
+            evidence={},
+        )
+        weak_surface = ProseSurfaceSignals(
+            pronoun_lead_ratio=0.31,
+            explanation_ratio=0.24,
+            action_carried_reveal_score=5.8,
+            relationship_cost_realization_score=5.9,
+            procedure_pressure=4.2,
+            overall_score=6.2,
+            evidence={},
+        )
+
+        self.assertFalse(WritingChapterAgent._should_run_block_review(strong_surface))
+        self.assertTrue(WritingChapterAgent._should_run_block_review(weak_surface))
+
     def test_writing_chapter_agent_defaults_to_fast_mode(self) -> None:
         agent = WritingChapterAgent(llm_client=RecordingSequenceLLM([]))
 
@@ -987,6 +1011,83 @@ class WritingChapterAgentTests(unittest.TestCase):
         self.assertEqual(result["metrics"]["remaining_issue_count"], 0)
         self.assertEqual(result["metrics"]["introduced_issue_count"], 0)
         self.assertEqual(result["blocking_reasons"], [])
+
+    def test_patch_plan_detects_structural_reorder_or_delete_requests(self) -> None:
+        structural = {
+            "patch_targets": [
+                {
+                    "target_id": "ch_002.sc_001.b002",
+                    "problem_type": "block_order",
+                    "goal": "将 b002 移至 b004 之后，并删除重复的 b003。",
+                    "instructions": ["重排顺序。", "移除 b003。"],
+                }
+            ]
+        }
+        local = {
+            "patch_targets": [
+                {
+                    "target_id": "ch_002.sc_001.b002",
+                    "problem_type": "duplicate_emotion",
+                    "goal": "压缩重复情绪并加强交接。",
+                    "instructions": ["删掉重复的冷意描写。"],
+                }
+            ]
+        }
+
+        self.assertTrue(WritingChapterAgent._patch_plan_requires_structural_rebuild(structural))
+        self.assertFalse(WritingChapterAgent._patch_plan_requires_structural_rebuild(local))
+
+    def test_beat_boundary_revision_trigger_flags_length_overrun(self) -> None:
+        block = ChapterBeat(
+            block_id="ch_002.sc_001.b001",
+            chapter_id="ch_002",
+            block_index=1,
+            purpose="Open with pressure.",
+            target_chars=500,
+            end_state="The pressure lands.",
+        )
+
+        self.assertFalse(
+            WritingChapterAgent._needs_beat_boundary_revision(
+                block=block,
+                block_text="短句落地。\n\n第二段收住。",
+            )
+        )
+        self.assertTrue(
+            WritingChapterAgent._needs_beat_boundary_revision(
+                block=block,
+                block_text="这是一段会明显超过字数上限的文字。" * 60,
+            )
+        )
+
+    def test_candidate_strategies_prioritize_voice_and_relationship_cost(self) -> None:
+        block = ChapterBeat(
+            block_id="ch_002.sc_001.b003",
+            chapter_id="ch_002",
+            block_index=3,
+            purpose="Reprice the relationship.",
+            relationship_delta="She becomes more dangerous to read.",
+            clue_delta="A pause becomes legible as clue pressure.",
+            end_state="The room reads her silence differently.",
+        )
+
+        strategies = WritingChapterAgent._candidate_strategies_for_block(block)
+
+        self.assertEqual(strategies[0], "voice_and_body_first")
+        self.assertIn("relationship_cost_first", strategies)
+        self.assertNotIn("balanced_scene", strategies)
+
+    def test_surface_revision_prefers_lower_explanation_and_stronger_cost(self) -> None:
+        original = "她知道自己不能退。她明白他不会信。她只是站着，说明今晚已经没有余地。"
+        revised = "雪光压在她袖口上，她没退，只把那句称呼压得更低。案前的人都听见了，他也没法当作没听见。"
+        self.assertTrue(
+            WritingChapterAgent._should_keep_revised_block(
+                original_text=original,
+                revised_text=revised,
+                original_surface=analyze_prose_surface(original),
+                revised_surface=analyze_prose_surface(revised),
+            )
+        )
 
     def test_fast_mode_retries_when_patch_judge_sets_pass_true_but_requests_followup(self) -> None:
         first_rewrite = "Paragraph two is less blunt, but the handoff still frays at the edge."

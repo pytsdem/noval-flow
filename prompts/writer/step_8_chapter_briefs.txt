@@ -39,6 +39,8 @@
       "emotional_turn": "从 A 到 B。",
       "backstory_trigger": "",
       "cost_of_progress": "本章为了推进而必须支付的具体代价。",
+      "relationship_cost": "本章哪一拍会让关系、脸面、信任或彼此判断变得更贵。",
+      "must_hurt_now": "本章必须当场落地的疼点：身体、体面、身份、礼法、选择权或关系代价。",
       "hook_kind": "question",
       "pace_curve": "steady_climb",
       "must_not_repeat": [
@@ -87,6 +89,8 @@
 2. `core_scene` 只能有一个中心场面；不要一章堆多个主场面。
 3. `allowed_clues` 必须是动作型 clue，不能写“他眼神复杂”“她似乎有苦衷”。
 4. `cost_of_progress` 必须具体到身体、礼法、程序、关系、体面、时间、选择权之一。
+4a. `relationship_cost` 不能只写“更复杂了”，必须写明谁更难开口、更难后退、或更难再相信谁。
+4b. `must_hurt_now` 必须是本章就要落到场面上的疼点，不能拖成后文再说。
 5. `must_not_repeat` 必须可执行，不能写空话。
 6. `small_payoff` 必须克制，不要写成大揭露。
 7. `ending_pull` 只能保留一个主钩子。

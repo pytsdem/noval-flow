@@ -42,7 +42,7 @@ Compatibility output:
 Planning rules:
 1. Every beat must add one new value; do not split one pressure into many tiny beats.
 2. Adjacent beats must change cost, relationship angle, clue pressure, or next action.
-3. Respect the chapter contract first: mission, cost_of_progress, must_not_repeat, final hook, and pace contract override decorative ideas.
+3. Respect the chapter contract first: mission, cost_of_progress, relationship_cost, must_hurt_now, must_not_repeat, final hook, and pace contract override decorative ideas.
 4. Do not expose hidden truth beyond allowed clues.
 5. Prefer scene pressure and action carriers over explanation.
 6. If no clue advances, make the beat carry pressure, relationship, or cost instead.
@@ -50,3 +50,5 @@ Planning rules:
 8. Do not plan several beats that only solve the same rule, chase the same crisis, or repeat the same action pattern.
 9. For trial/adventure/workplace crisis scenes, the external task must force a relationship change; it cannot be only a process walkthrough.
 10. Keep total planned `target_chars` close to the chapter target. Do not allocate room for detours or scene replays.
+11. If a beat advances clue or procedure, make sure it also raises relationship cost, body cost, face cost, or danger in the same beat.
+12. If the chapter contract says something must hurt now, at least one early beat must cash that pain on page instead of only naming it abstractly.

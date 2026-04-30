@@ -1,0 +1,105 @@
+{
+  "date": "2026-04-29",
+  "scope": "current_hot_ancient_romance_openings_vs_latest_case01_prose",
+  "copyright_note": "Only short excerpts, source links, and analytical notes are preserved. Full chapter texts are not copied.",
+  "source_platform": {
+    "name": "潇湘书院",
+    "rank_url": "https://www.xxsy.net/"
+  },
+  "candidate": {
+    "path": "C:/Users/19237/workspace/noval-flow/evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_01_court_return/step8_contract_case01_prose/romance_case_01_court_return/final_text.txt",
+    "summary_path": "C:/Users/19237/workspace/noval-flow/evals/romance/reports/runs/20260428/chapter_eval/deepseek__deepseek-v4-pro/romance_case_01_court_return/step8_contract_case01_prose/summary.json",
+    "char_count": 5637,
+    "sentence_count": 253,
+    "pronoun_sentence_open_ratio": 0.2569,
+    "pronoun_paragraph_open_ratio": 0.268,
+    "baseline_pronoun_sentence_open_ratio": 0.2605,
+    "verdict_interpretation": "评测大体合理，当前问题不是长度，而是篇幅被 clue/procedure 占走，导致 romance tension 被稀释。"
+  },
+  "sample_aggregate": {
+    "sample_count": 5,
+    "avg_char_count": 2295.4,
+    "avg_pronoun_sentence_open_ratio": 0.057,
+    "avg_pronoun_paragraph_open_ratio": 0.0699
+  },
+  "samples": [
+    {
+      "title": "花醉满堂",
+      "book_url": "https://www.xxsy.net/book/24055465809174104",
+      "chapter_url": "https://www.xxsy.net/chapter/24055465809174104/65228049385323992",
+      "chapter_title": "第一章苏容",
+      "short_excerpt": "压抑的哭声",
+      "char_count": 3080,
+      "sentence_count": 103,
+      "pronoun_sentence_open_ratio": 0.0971,
+      "pronoun_paragraph_open_ratio": 0.1194,
+      "opening_pattern": "哭声唤醒 + 主仆对话 + 未婚夫新闻炸弹",
+      "key_gap_vs_candidate": "人物声音立得更快，信息通过对话而不是解释句释放。"
+    },
+    {
+      "title": "寒门大俗人",
+      "book_url": "https://www.xxsy.net/book/23563092501128104",
+      "chapter_url": "https://www.xxsy.net/chapter/23563092501128104/63876132327448954",
+      "chapter_title": "第1章，缺吃少喝的边关",
+      "short_excerpt": "太热了！太渴了！",
+      "char_count": 2163,
+      "sentence_count": 61,
+      "pronoun_sentence_open_ratio": 0.0328,
+      "pronoun_paragraph_open_ratio": 0.0484,
+      "opening_pattern": "边关大景 + 身体困境 + 短句打击感",
+      "key_gap_vs_candidate": "环境直接转成身体痛感，而不是先观察再解释。"
+    },
+    {
+      "title": "权臣的在逃白月光",
+      "book_url": "https://www.xxsy.net/book/24078177401403004",
+      "chapter_url": "https://www.xxsy.net/chapter/24078177401403004/66532521281636430",
+      "chapter_title": "第一章",
+      "short_excerpt": "夜如浓墨，大雨如注。",
+      "char_count": 2841,
+      "sentence_count": 91,
+      "pronoun_sentence_open_ratio": 0.0769,
+      "pronoun_paragraph_open_ratio": 0.0667,
+      "opening_pattern": "夜雨关城 + 守军规矩 + 来车排查",
+      "key_gap_vs_candidate": "场面压力更靠可见动作推进，而不是快速转入机制解释。"
+    },
+    {
+      "title": "吃瓜贵妃的自我修养",
+      "book_url": "https://www.xxsy.net/book/25324751901314504",
+      "chapter_url": "https://www.xxsy.net/chapter/25324751901314504/67989613364429214",
+      "chapter_title": "001：楚贵妃死了",
+      "short_excerpt": "楚贵妃死了！",
+      "char_count": 2262,
+      "sentence_count": 58,
+      "pronoun_sentence_open_ratio": 0.0517,
+      "pronoun_paragraph_open_ratio": 0.0577,
+      "opening_pattern": "新闻炸弹 + 连锁后果 + 女主自我反应",
+      "key_gap_vs_candidate": "女主声口更鲜明，不是只有冷静和正确。"
+    },
+    {
+      "title": "大小姐她总是不求上进",
+      "book_url": "https://www.xxsy.net/book/24604915301478504",
+      "chapter_url": "https://www.xxsy.net/chapter/24604915301478504/66212880822879621",
+      "chapter_title": "第一章秦家被抄家了",
+      "short_excerpt": "屯卦。",
+      "char_count": 1131,
+      "sentence_count": 38,
+      "pronoun_sentence_open_ratio": 0.0263,
+      "pronoun_paragraph_open_ratio": 0.0571,
+      "opening_pattern": "卦象起手 + 风雨征兆 + 家劫将至",
+      "key_gap_vs_candidate": "概念物和意象物能承担句首变化，不需要持续依赖人称代词。"
+    }
+  ],
+  "key_findings": [
+    "当前最新正文的他/她句首比例大约是热门样本均值的 4.5 倍。",
+    "这个问题不是最新候选独有，旧 baseline 也有，说明根在 draft_block 执行层。",
+    "当前正文的 strongest hook 来自朝堂请婚和子时杀新妇，但后续预算过度流向婚书、暗号、程序和查验。",
+    "评测对低 romance_tension 的判断是合理的，因为外部危险强于双人压迫。",
+    "下一步不该再优先动 Step8，而该直接打正文句法习惯、解释句和 clue/procedure 预算。"
+  ],
+  "next_actions": [
+    "在 draft_block 增加反代词起手纪律，降低默认他/她句首密度。",
+    "减少动作后立刻补充解释判断的句子。",
+    "限制 procedure/clue 在单章中的预算，把线索改成关系施压工具。",
+    "给女主增加半寸泄露和更鲜明的个人声口。"
+  ]
+}

@@ -1,0 +1,648 @@
+[
+  {
+    "stage": "build_character_mindsets",
+    "character_mindsets": [
+      {
+        "character_id": "云眠",
+        "character_name": "云眠",
+        "surface_emotion": "嘴硬烦躁，铃铛乱响也盖不住边骂边照做的狼狈",
+        "core_emotion": "被契约拖入未知的惧意，混杂不得已依赖师兄的不甘",
+        "primary_goal": "活着闯过符灯阵，用最短时间摸清规则避免痛到自己",
+        "hidden_need": "想要一个不需要她嘴硬撑场面也能安全的位置",
+        "fear": "同生契继续加深，就此被钉死在同生同死的绳索上再也解不开",
+        "attitude_to_key_others": {
+          "陆既白": "嫌弃他又冷又毒舌，但危险时身体比嘴先指望他救场"
+        },
+        "self_control_level": "medium_low",
+        "breaking_point_hint": "当发现同生契上多出那枚人为刻痕时，调侃的语气会陡然断裂，暂时说不出玩笑话",
+        "known_but_unspoken": "原书里没有这盏符灯阵的规则，眼前一切要么是剧情偏移后的新杀招，要么是有人故意筛她出局",
+        "misbelief": "只要坚持按原书记忆判断规则，就算不灵也比主动试探更安全，至少不会先踩坑",
+        "chapter_change_hint": "从“这人麻烦归麻烦但别拖累我”慢慢滑向“他真接住了我的失误”，开始把师兄划进求生本能里的自己人区域，虽然嘴上绝不会认"
+      },
+      {
+        "character_id": "陆既白",
+        "character_name": "陆既白",
+        "surface_emotion": "冷峻而不耐烦",
+        "core_emotion": "被心声搅动的紧绷牵挂",
+        "primary_goal": "护住云眠并破解符灯阵，安全通过第二道秘境门",
+        "hidden_need": "在不暴露心声秘密的前提下，确认她不会因误判而受伤，并让她不自觉信赖他的判断",
+        "fear": "同生契刻痕异变导致两人一同折损，或自己来不及在规则惩罚前救下她",
+        "attitude_to_key_others": {
+          "云眠": "嘴上嫌弃她漏洞百出，身体却先一步挡向危险方向，把她从麻烦升格为必须兜底的对象"
+        },
+        "self_control_level": "high",
+        "breaking_point_hint": "当云眠的吐槽无意中戳中他听见却不能说破的话时，他握剑柄的指节会瞬间泛白，随即用更毒的言语遮掩",
+        "known_but_unspoken": "云眠对秘境规则的判断并非单纯的莽撞，她脑中存在一套错误但自恰的旧信息，似被刻意误导过的痕迹",
+        "misbelief": "云眠口无遮拦、乱用不知哪来的错误记忆，纯粹是学艺不精又想走捷径",
+        "chapter_change_hint": "从把云眠视为需要不断救场的变量，开始隐约察觉她的不按套路正是破解被篡改秘境的关键线索"
+      }
+    ]
+  },
+  {
+    "stage": "plan_content_blocks",
+    "skill_ids": [
+      "base_style",
+      "reveal_guard",
+      "character_integrity",
+      "time_consistency_guard"
+    ],
+    "block_count": 4,
+    "blocks": [
+      {
+        "block_id": "ch_006.sc_001.b001",
+        "chapter_id": "ch_006",
+        "block_index": 1,
+        "purpose": "Open the chapter contract with immediate pressure: 符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。",
+        "characters": [
+          "云眠",
+          "陆既白"
+        ],
+        "active_lines": [
+          "line_rule_trial"
+        ],
+        "active_twists": [
+          "twist_inner_voice"
+        ],
+        "scene_goal": "符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。",
+        "must_reveal": [
+          "符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。"
+        ],
+        "must_hide": [
+          "不能让云眠知道陆既白能听见心声",
+          "不能解释幕后黑手身份",
+          "不能写成沉重宿命虐恋"
+        ],
+        "new_value": "Readers newly feel the opening pressure as an active public trap, not as background setup.",
+        "must_not_repeat": [
+          "不要把旧案背景或人物旧怨整段复述一遍。",
+          "不要在第一块就解释对方真实动机。",
+          "不能让云眠知道陆既白能听见心声",
+          "不能解释幕后黑手身份",
+          "不能写成沉重宿命虐恋",
+          "Do not restate the same relationship judgment in multiple beats."
+        ],
+        "relationship_delta": "关系从未正面碰撞的悬置，转为公开场域里必须立刻接招的压迫。",
+        "clue_delta": "这一块主要落地开场压力，不额外偷跑新 clue。",
+        "must_land_in_action": [
+          "必须把压迫落在动作、礼制或身体反应上。",
+          "不能只用总结句说气氛紧张。"
+        ],
+        "emotional_tone": "轻快、紧张、甜中带险，让读者想看他们继续互坑互救。",
+        "end_state": "The opening pressure lands and the focal character loses room to recover before speaking.",
+        "human_reaction_target": [
+          "Show one bodily or social restraint before the character tries to speak or act.",
+          "Let at least one witness or supporting character react like a living person under public pressure."
+        ],
+        "cost_shift": "The focal character loses face, time, or the chance to choose a gentler opening move.",
+        "reader_feeling_target": "Readers should feel the pressure closing around the character immediately.",
+        "paragraph_budget": "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长；硬上限 420 中文字符；理想 2~5 段，转折落地即停",
+        "target_chars": 420,
+        "paragraph_shape": [
+          "主动作",
+          "配角反应",
+          "人物细节/情绪泄露",
+          "礼法或环境补压"
+        ],
+        "micro_hook": "The character is forced to answer the opening pressure before they can recover their footing.",
+        "turn_type": "pressure_rise",
+        "character_anchor_line": {
+          "owner": "云眠",
+          "form": "reaction_line",
+          "surface_function": "用一句短促反应把开场压力钉在场面上。",
+          "hidden_function": "让读者看见角色在被压住时最先守的东西是体面、控制或骨气。",
+          "must_reveal_about_character": "这个人受压时首先暴露出的不是信息，而是性格里的硬处。",
+          "must_not_do": [
+            "不要写成功能性口号。",
+            "不要立刻跟解释性旁白。",
+            "不要为了漂亮把句子抻长。"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Do not open with background summary.",
+          "Do not turn the character into a plot explainer.",
+          "Do not replace scene with pure mental recap.",
+          "硬字数上限 420 中文字符；转折落地后立刻收束。",
+          "不要补第二轮同类动作、同类危机处理或事后心理解释。"
+        ],
+        "character_reentry_mode": {
+          "target_character": "云眠",
+          "identity_already_known": true,
+          "reentry_strategy": "用嘴硬、心声吐槽和临场小聪明立住她，不要写成纯倒霉。",
+          "first_signal": "Use a familiar subordinate, object, title, or power arrangement to signal re-entry immediately.",
+          "first_emotional_focus": "陆既白从冷面监考人，变成嘴上嫌弃但能接住她失误的人。",
+          "must_avoid": [
+            "Do not re-explain identity in narrator summary.",
+            "Do not make the re-entry feel like a fresh character introduction."
+          ]
+        },
+        "clue_reveal_mechanism": null,
+        "text": "",
+        "status": "draft",
+        "version": 1
+      },
+      {
+        "block_id": "ch_006.sc_001.b002",
+        "chapter_id": "ch_006",
+        "block_index": 2,
+        "purpose": "Push the plot carrier through live pressure: 腕上的同生契红痕",
+        "characters": [
+          "云眠",
+          "陆既白"
+        ],
+        "active_lines": [
+          "line_rule_trial"
+        ],
+        "active_twists": [
+          "twist_inner_voice"
+        ],
+        "scene_goal": "腕上的同生契红痕",
+        "must_reveal": [
+          "腕上的同生契红痕",
+          "两人过了符灯阵，并确认同生契被人为加过东西。"
+        ],
+        "must_hide": [
+          "不能让云眠知道陆既白能听见心声",
+          "不能解释幕后黑手身份",
+          "不能写成沉重宿命虐恋"
+        ],
+        "new_value": "The chapter object becomes newly actionable, but only through a more expensive route.",
+        "must_not_repeat": [
+          "不要再重讲第一块已经建立的公开压迫。",
+          "不要把章目标只讲成抽象信息点。",
+          "不能让云眠知道陆既白能听见心声",
+          "不能解释幕后黑手身份",
+          "不能写成沉重宿命虐恋",
+          "Do not restate the same relationship judgment in multiple beats."
+        ],
+        "relationship_delta": "关系从单纯受压，转为带着程序和筹码差的试探性交锋。",
+        "clue_delta": "让章目标和小回报真正推进，但不要额外偷跑更高层真相。",
+        "must_land_in_action": [
+          "章目标必须通过对话、手续、动作选择或旁人反应被推进。",
+          "不能只写人物心里觉得机会出现了。"
+        ],
+        "emotional_tone": "一次意外互换随身物，把斗嘴推进到不太好笑的亲密边界。",
+        "end_state": "The characters gain a small procedural push, but the relational and practical cost rises with it.",
+        "human_reaction_target": [
+          "Show practical calculation, etiquette pressure, or controlled discomfort while the goal advances.",
+          "Make another person's reaction sharpen the cost of that progress."
+        ],
+        "cost_shift": "The focal character pays an extra social, procedural, or emotional price to move the goal forward.",
+        "reader_feeling_target": "Readers should feel that even progress arrives with humiliation, pressure, or residue.",
+        "paragraph_budget": "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长；硬上限 520 中文字符；理想 2~5 段，转折落地即停",
+        "target_chars": 520,
+        "paragraph_shape": [
+          "主动作",
+          "礼法或程序阻力",
+          "配角反应",
+          "代价落点"
+        ],
+        "micro_hook": "The procedural opening appears, but the price of taking it forward is now visible.",
+        "turn_type": "pressure_rise",
+        "character_anchor_line": {
+          "owner": "云眠",
+          "form": "dialogue",
+          "surface_function": "在推进程序或交涉时留下一句能顶住场面的短句。",
+          "hidden_function": "通过措辞、克制或算计显出角色真正的处事方式。",
+          "must_reveal_about_character": "这个人做事时先算代价、脸面还是底线。",
+          "must_not_do": [
+            "不要只传递剧情信息。",
+            "不要把潜台词解释出来。",
+            "不要写成一整段说理。"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Do not explain why the chapter object matters in abstract summary.",
+          "Do not let dialogue become pure information transfer.",
+          "Do not let action pause for a long strategic recap.",
+          "硬字数上限 520 中文字符；转折落地后立刻收束。",
+          "不要补第二轮同类动作、同类危机处理或事后心理解释。"
+        ],
+        "character_reentry_mode": null,
+        "clue_reveal_mechanism": null,
+        "text": "",
+        "status": "draft",
+        "version": 1
+      },
+      {
+        "block_id": "ch_006.sc_001.b003",
+        "chapter_id": "ch_006",
+        "block_index": 3,
+        "purpose": "Reprice relationship and expose pressure naturally: 陆既白从冷面监考人，变成嘴上嫌弃但能接住她失误的人。",
+        "characters": [
+          "云眠",
+          "陆既白"
+        ],
+        "active_lines": [
+          "line_rule_trial"
+        ],
+        "active_twists": [
+          "twist_inner_voice"
+        ],
+        "scene_goal": "云眠从只想甩开师兄，变成意识到他确实会在危险里先护她。",
+        "must_reveal": [
+          "云眠从只想甩开师兄，变成意识到他确实会在危险里先护她。",
+          "陆既白从冷面监考人，变成嘴上嫌弃但能接住她失误的人。",
+          "陆既白总能提前避开她心里刚吐槽的危险",
+          "同生契红痕边缘多出不属于古阵的刻痕"
+        ],
+        "must_hide": [
+          "不能让云眠知道陆既白能听见心声",
+          "不能解释幕后黑手身份",
+          "不能写成沉重宿命虐恋"
+        ],
+        "new_value": "Readers newly see the relationship reprice and at least one clue carrier, without getting a clean explanation.",
+        "must_not_repeat": [
+          "不要重复前一块已经完成的程序推进。",
+          "不要把关系变化再用作者总结句重复一遍。",
+          "不能让云眠知道陆既白能听见心声",
+          "不能解释幕后黑手身份",
+          "不能写成沉重宿命虐恋",
+          "Do not restate the same relationship judgment in multiple beats."
+        ],
+        "relationship_delta": "关系重新定价为更危险、更难判断，不能再停留在同一层敌意。",
+        "clue_delta": "至少有一个异常、停顿或反应被看见，但它还不能被解释清楚。",
+        "must_land_in_action": [
+          "关系变化必须落在称呼、停顿、避视、动作失手或他人先发现上。",
+          "不能只说她其实更危险了。"
+        ],
+        "emotional_tone": "一次意外互换随身物，把斗嘴推进到不太好笑的亲密边界。",
+        "end_state": "The relationship or emotional angle is repriced on the page and the situation becomes harder to read safely.",
+        "human_reaction_target": [
+          "At least one character should show a small failure of composure, bodily leak, silence, or self-directed sting.",
+          "If a clue appears, let somebody else notice it before the owner explains it."
+        ],
+        "cost_shift": "A clue or shift comes closer, but the relationship becomes harder to trust or manage.",
+        "reader_feeling_target": "Readers should remember the changed relationship pressure more than the raw information itself.",
+        "paragraph_budget": "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长；硬上限 560 中文字符；理想 2~5 段，转折落地即停",
+        "target_chars": 560,
+        "paragraph_shape": [
+          "关系压力",
+          "回避与失手",
+          "他人先发现",
+          "当事人回避解释"
+        ],
+        "micro_hook": "The clue is visible enough to keep the reader moving, but nobody will give it a clean explanation yet.",
+        "turn_type": "clue_shift",
+        "character_anchor_line": {
+          "owner": "云眠",
+          "form": "narrative_judgment",
+          "surface_function": "在关系重估或线索露出时留下一个贴近视角的判断句。",
+          "hidden_function": "让读者通过这句判断看见人物的误读、偏执、心虚或本能回避。",
+          "must_reveal_about_character": "这个人看人看事时最深的一层偏向或伤口。",
+          "must_not_do": [
+            "不要变成作者总结。",
+            "不要把真相说穿。",
+            "不要马上跟着完整解释。"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Do not summarize the emotional reprice in narrator voice.",
+          "Do not repeat the same cold, pain, blood, or frost image.",
+          "Do not turn a person into a puzzle device.",
+          "硬字数上限 560 中文字符；转折落地后立刻收束。",
+          "不要补第二轮同类动作、同类危机处理或事后心理解释。"
+        ],
+        "character_reentry_mode": null,
+        "clue_reveal_mechanism": {
+          "clue": "陆既白总能提前避开她心里刚吐槽的危险",
+          "style": "ritual_trigger",
+          "pressure_source": "符灯阵倒数和同生契痛感",
+          "surface_trigger": "互换随身物时红痕亮起",
+          "first_noticer": "陆既白",
+          "owner_reaction": "他立刻用袖口遮住刻痕，继续用冷话压过去"
+        },
+        "text": "",
+        "status": "draft",
+        "version": 1
+      },
+      {
+        "block_id": "ch_006.sc_001.b004",
+        "chapter_id": "ch_006",
+        "block_index": 4,
+        "purpose": "Close on changed cost and the contract hook: 最后一盏符灯灭前，墙上浮出一行字：此契原本只该绑死人。",
+        "characters": [
+          "云眠",
+          "陆既白"
+        ],
+        "active_lines": [
+          "line_rule_trial"
+        ],
+        "active_twists": [
+          "twist_inner_voice"
+        ],
+        "scene_goal": "最后一盏符灯灭前，墙上浮出一行字：此契原本只该绑死人。",
+        "must_reveal": [
+          "最后一盏符灯灭前，墙上浮出一行字：此契原本只该绑死人。"
+        ],
+        "must_hide": [
+          "不能让云眠知道陆既白能听见心声",
+          "不能解释幕后黑手身份",
+          "不能写成沉重宿命虐恋"
+        ],
+        "new_value": "The chapter exits on a changed cost and a next move that is harder to avoid than before.",
+        "must_not_repeat": [
+          "不要把前一块已经落地的关系变化再解释一遍。",
+          "不要把结尾写成预告片口播。",
+          "不能让云眠知道陆既白能听见心声",
+          "不能解释幕后黑手身份",
+          "不能写成沉重宿命虐恋",
+          "Do not restate the same relationship judgment in multiple beats."
+        ],
+        "relationship_delta": "结尾要让关系或局势的代价更难回头，而不是停在同一位置。",
+        "clue_delta": "若有钩子，必须让钩子来自新代价或新事实，而不是重复旧悬念。",
+        "must_land_in_action": [
+          "尾钩必须先打到身体、动作、现场变化或实际损失上。",
+          "不能只用一句解释性判断代替收尾。"
+        ],
+        "emotional_tone": "轻快、紧张、甜中带险，让读者想看他们继续互坑互救。",
+        "end_state": "The chapter ends with a harder next step and a cost the character cannot step back from easily.",
+        "human_reaction_target": [
+          "Let the ending hit a body, action, breath, or practical loss before it becomes a hook.",
+          "Do not end on summary language alone."
+        ],
+        "cost_shift": "The character loses a buffer, an option, or a person they needed for the next move.",
+        "reader_feeling_target": "Readers should feel the next step has become both urgent and more expensive.",
+        "paragraph_budget": "建议 2~5 个自然段；单段尽量 30~120 中文字；超过 180 中文字视为过长；硬上限 420 中文字符；理想 2~5 段，转折落地即停",
+        "target_chars": 420,
+        "paragraph_shape": [
+          "结果落地",
+          "短反应",
+          "额外代价",
+          "尾钩或未竟动作"
+        ],
+        "micro_hook": "The chapter closes with a next move that is now harder, costlier, and impossible to ignore.",
+        "turn_type": "false_relief",
+        "character_anchor_line": {
+          "owner": "云眠",
+          "form": "inner_thought",
+          "surface_function": "在结尾变化落地时，用一句短念头或短反应把尾钩钉住。",
+          "hidden_function": "让结尾先立住人，再立住事件。",
+          "must_reveal_about_character": "这个人真正怕失去或真正放不下的东西。",
+          "must_not_do": [
+            "不要写成预告片文案。",
+            "不要只负责抛钩子。",
+            "不要把情绪解释得太满。"
+          ],
+          "preferred_shape": "短、准、能留余味"
+        },
+        "style_risk_guard": [
+          "Do not force a trailer-like ending turn.",
+          "Do not flatten the closing beat into explanation.",
+          "Do not spend the final sentence only naming the hook.",
+          "硬字数上限 420 中文字符；转折落地后立刻收束。",
+          "不要补第二轮同类动作、同类危机处理或事后心理解释。"
+        ],
+        "character_reentry_mode": null,
+        "clue_reveal_mechanism": null,
+        "text": "",
+        "status": "draft",
+        "version": 1
+      }
+    ]
+  },
+  {
+    "stage": "draft_beat_1",
+    "block_id": "ch_006.sc_001.b001",
+    "block_index": 1,
+    "candidate_count": 2,
+    "selected_strategy": "relationship_cost_first",
+    "surface_score": 10.0,
+    "action_carried_reveal_score": 9.46,
+    "relationship_cost_realization_score": 9.38,
+    "pronoun_lead_ratio": 0.0667,
+    "explanation_ratio": 0.0,
+    "revised": true,
+    "chapter_length": 379,
+    "delivered_beat_summary_text": "[Already delivered in this chapter]\nNo beat has landed yet."
+  },
+  {
+    "stage": "draft_beat_2",
+    "block_id": "ch_006.sc_001.b002",
+    "block_index": 2,
+    "candidate_count": 2,
+    "selected_strategy": "balanced_scene",
+    "surface_score": 10.0,
+    "action_carried_reveal_score": 9.79,
+    "relationship_cost_realization_score": 9.48,
+    "pronoun_lead_ratio": 0.1562,
+    "explanation_ratio": 0.0,
+    "revised": false,
+    "chapter_length": 1020,
+    "delivered_beat_summary_text": "[Already delivered in this chapter]\n\nch_006.sc_001.b001 / Open the chapter contract with immediate pressure: 符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。\n- scene_goal: 符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。\n- new_value: Readers newly feel the opening pressure as an active public trap, not as background setup.\n- relationship_delta: 关系从未正面碰撞的悬置，转为公开场域里必须立刻接招的压迫。\n- clue_delta: 这一块主要落地开场压力，不额外偷跑新 clue。\n- end_state: The opening pressure lands and the focal character loses room to recover before speaking.\n- micro_hook: The character is forced to answer the opening pressure before they can recover their footing."
+  },
+  {
+    "stage": "draft_beat_3",
+    "block_id": "ch_006.sc_001.b003",
+    "block_index": 3,
+    "candidate_count": 2,
+    "selected_strategy": "relationship_cost_first",
+    "surface_score": 10.0,
+    "action_carried_reveal_score": 9.24,
+    "relationship_cost_realization_score": 8.94,
+    "pronoun_lead_ratio": 0.0714,
+    "explanation_ratio": 0.0,
+    "revised": false,
+    "chapter_length": 1626,
+    "delivered_beat_summary_text": "[Already delivered in this chapter]\n\nch_006.sc_001.b001 / Open the chapter contract with immediate pressure: 符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。\n- scene_goal: 符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。\n- new_value: Readers newly feel the opening pressure as an active public trap, not as background setup.\n- relationship_delta: 关系从未正面碰撞的悬置，转为公开场域里必须立刻接招的压迫。\n- clue_delta: 这一块主要落地开场压力，不额外偷跑新 clue。\n- end_state: The opening pressure lands and the focal character loses room to recover before speaking.\n- micro_hook: The character is forced to answer the opening pressure before they can recover their footing.\n\nch_006.sc_001.b002 / Push the plot carrier through live pressure: 腕上的同生契红痕\n- scene_goal: 腕上的同生契红痕\n- new_value: The chapter object becomes newly actionable, but only through a more expensive route.\n- relationship_delta: 关系从单纯受压，转为带着程序和筹码差的试探性交锋。\n- clue_delta: 让章目标和小回报真正推进，但不要额外偷跑更高层真相。\n- end_state: The characters gain a small procedural push, but the relational and practical cost rises with it.\n- micro_hook: The procedural opening appears, but the price of taking it forward is now visible."
+  },
+  {
+    "stage": "draft_beat_4",
+    "block_id": "ch_006.sc_001.b004",
+    "block_index": 4,
+    "candidate_count": 2,
+    "selected_strategy": "relationship_cost_first",
+    "surface_score": 10.0,
+    "action_carried_reveal_score": 8.95,
+    "relationship_cost_realization_score": 8.5,
+    "pronoun_lead_ratio": 0.1702,
+    "explanation_ratio": 0.0213,
+    "revised": true,
+    "chapter_length": 2562,
+    "delivered_beat_summary_text": "[Already delivered in this chapter]\n\nch_006.sc_001.b001 / Open the chapter contract with immediate pressure: 符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。\n- scene_goal: 符灯亮起的瞬间，云眠在心里骂了一句，陆既白的剑差点偏了半寸。\n- new_value: Readers newly feel the opening pressure as an active public trap, not as background setup.\n- relationship_delta: 关系从未正面碰撞的悬置，转为公开场域里必须立刻接招的压迫。\n- clue_delta: 这一块主要落地开场压力，不额外偷跑新 clue。\n- end_state: The opening pressure lands and the focal character loses room to recover before speaking.\n- micro_hook: The character is forced to answer the opening pressure before they can recover their footing.\n\nch_006.sc_001.b002 / Push the plot carrier through live pressure: 腕上的同生契红痕\n- scene_goal: 腕上的同生契红痕\n- new_value: The chapter object becomes newly actionable, but only through a more expensive route.\n- relationship_delta: 关系从单纯受压，转为带着程序和筹码差的试探性交锋。\n- clue_delta: 让章目标和小回报真正推进，但不要额外偷跑更高层真相。\n- end_state: The characters gain a small procedural push, but the relational and practical cost rises with it.\n- micro_hook: The procedural opening appears, but the price of taking it forward is now visible.\n\nch_006.sc_001.b003 / Reprice relationship and expose pressure naturally: 陆既白从冷面监考人，变成嘴上嫌弃但能接住她失误的人。\n- scene_goal: 云眠从只想甩开师兄，变成意识到他确实会在危险里先护她。\n- new_value: Readers newly see the relationship reprice and at least one clue carrier, without getting a clean explanation.\n- relationship_delta: 关系重新定价为更危险、更难判断，不能再停留在同一层敌意。\n- clue_delta: 至少有一个异常、停顿或反应被看见，但它还不能被解释清楚。\n- end_state: The relationship or emotional angle is repriced on the page and the situation becomes harder to read safely.\n- micro_hook: The clue is visible enough to keep the reader moving, but nobody will give it a clean explanation yet."
+  },
+  {
+    "stage": "write_chapter_full",
+    "mode": "sequential_beat_drafting",
+    "block_count": 4,
+    "chapter_length": 2562
+  },
+  {
+    "stage": "review_iteration_1",
+    "mode": "deep",
+    "skill_ids": [
+      "base_style"
+    ],
+    "tool_calls": [
+      "review_structure_and_continuity",
+      "review_prose_and_humanity"
+    ],
+    "review_reports": {
+      "review_structure_and_continuity": {
+        "pass": false,
+        "issues": [
+          {
+            "issue_id": "I1",
+            "severity": "high",
+            "problem_type": "pacing_break",
+            "reason": "章节实际字数约2000字，远低于合同信息预算3200–4200字，导致压力展开和情感转折被压缩，尤其是块b003的关系reprice深度不足。",
+            "target_blocks": [
+              "ch_006.sc_001.b003",
+              "ch_006.sc_001.b004"
+            ],
+            "patch_hint": "在b003中扩充云眠意识到陆既白会先护她的内心挣扎，用具体行为、对话推拉和痛感分配的不对等延长这一转折；在b004中增加互换随身物时的犹豫、身体反应和铃铛历史的小提示，使结尾情感更扎实。"
+          },
+          {
+            "issue_id": "I2",
+            "severity": "high",
+            "problem_type": "continuity_break",
+            "reason": "块b004中陆既白“小臂上那道新的红”在前文从未提及，b001和b003只描写了腕部红痕，突然出现的“新的红”造成读者困惑，属于连续性断裂。",
+            "target_blocks": [
+              "ch_006.sc_001.b003",
+              "ch_006.sc_001.b004"
+            ],
+            "patch_hint": "在b003末尾处或b004开头，加一句伏笔：如陆既白分担更多痛感后，袖口下小臂隐约浮现一道新的红痕，或云眠扫见他小臂上异样，使后文不突兀。"
+          },
+          {
+            "issue_id": "I3",
+            "severity": "medium",
+            "problem_type": "plot_deviation",
+            "reason": "合同要求线索揭示机制为：陆既白先注意到刻痕后立刻用袖口遮住并用冷话压过去。实际文本中，符灯光幕直接放大刻痕给两人同时看到，陆既白没有立刻遮的动作，仅后来用剑鞘格开云眠的手，偏离了‘第一时间主动隐藏’的指示。",
+            "target_blocks": [
+              "ch_006.sc_001.b002"
+            ],
+            "patch_hint": "修改b002末尾：让陆既白在光幕映出刻痕的瞬间，抢先一步用袖口或剑柄挡住云眠的视线，同时说一句冷话转移注意，维持她只知道刻痕存在但看不清细节的状态，为后续b003的遮掩埋下暗线。"
+          }
+        ],
+        "summary": "本章结构符合规划块顺序，主线推进清晰，但存在信息预算严重不足、关键身体状态连续断裂、以及线索揭示时机偏离合同的问题。需要扩充情感场景、补全伏笔、并调整刻痕曝光方式以维持秘密张力。",
+        "passed": false
+      },
+      "review_prose_and_humanity": {
+        "pass": true,
+        "issues": [],
+        "summary": "",
+        "passed": true
+      }
+    },
+    "final_judge": {
+      "passed": false,
+      "blocking_reasons": [
+        "本章结构符合规划块顺序，主线推进清晰，但存在信息预算严重不足、关键身体状态连续断裂、以及线索揭示时机偏离合同的问题。需要扩充情感场景、补全伏笔、并调整刻痕曝光方式以维持秘密张力。"
+      ],
+      "metrics": {
+        "review_tools": 2,
+        "issue_count": 3
+      }
+    }
+  },
+  {
+    "stage": "patch_round_1_structural_stop",
+    "patch_round": 1,
+    "patch_plan": {
+      "patch_targets": [
+        {
+          "target_type": "block",
+          "target_id": "ch_006.sc_001.b002",
+          "problem_type": "plot_deviation",
+          "goal": "修正刻痕曝光方式，让陆既白在符灯光幕映出红痕刻纹的瞬间立即用动作遮挡云眠视线并说冷话转移，使她只能隐约察觉异常而看不清具体刻痕细节，以维持同生契人为刻痕的秘密张力和男主主动隐瞒的指示。",
+          "instructions": [
+            "重写b002末尾部分：当符光上蹿凝成光幕映出红痕时，陆既白抢先一步侧身，用剑柄或袖口遮住光幕反射向云眠的方向，同时低声说‘别看’或一句冷话（例如‘管好你的眼睛’），让云眠只看到模糊光影和红痕放大但无法确认刻纹形状。",
+            "将云眠的呼吸屏住和‘这是什么？’的反应调整为她只瞥见异样光影但没看清，陆既白的指节泛白和‘已经看见了’改为他看到了清晰刻痕但立即遮住的动作细节。",
+            "确保陆既白‘立刻用袖口遮住刻痕，继续用冷话压过去’这一合同要求落在光幕出现的同一秒内，不给云眠仔细辨认的机会。"
+          ],
+          "local_context_needed": [
+            "prev_block",
+            "next_block",
+            "relationship_state"
+          ],
+          "source_issue_ids": [
+            "I3"
+          ]
+        },
+        {
+          "target_type": "block",
+          "target_id": "ch_006.sc_001.b003",
+          "problem_type": "pacing_break; continuity_break",
+          "goal": "扩充关系转折的深度并预埋伏笔：通过增加云眠内心纠结、互动推拉和痛感分配不对等的具体描写，把‘意识到他会先护她’这一心理转变做扎实；同时在后半部分引入陆既白手臂上浮现新红痕的伏笔，为b004的连续性断裂铺路。",
+          "instructions": [
+            "在云眠注意到陆既白左手无名指指节泛白加重、痛感分配偏移后，让她扫见他持剑手腕上方、袖口边缘隐约有一道新的红痕正从腕部往小臂中段延伸，但被他迅速调整姿势或袖子遮住。",
+            "扩展云眠的内心活动：她可以反复琢磨陆既白为何会‘刚好’挡在她前面、剑鞘格开她手的速度为什么‘快得不像是嫌弃’，并穿插她摸护身铃的小动作，表现她嘴硬之下渐渐松动的不安和动摇。",
+            "在符灯灭、地上浮出‘互换一件真正重要的随身物’提示时，延长云眠的犹豫：她可以下意识捏住铃铛系绳，内心闪回极短的一两个与铃铛有关的画面（不解释来历），同时观察陆既白居高临下的目光，用细微的动作矛盾（想交又不想交）来加深情感重量。",
+            "保持斗嘴节奏，插入一两句陆既白冷硬的催促或打断，避免变成纯内心戏，继续轻快紧张的甜中带险。"
+          ],
+          "local_context_needed": [
+            "prev_block",
+            "next_block",
+            "relationship_state"
+          ],
+          "source_issue_ids": [
+            "I1",
+            "I2"
+          ]
+        },
+        {
+          "target_type": "block",
+          "target_id": "ch_006.sc_001.b004",
+          "problem_type": "pacing_break",
+          "goal": "在互换随身物和跨金线的关键时刻增加生理细节和内心犹豫，使结尾的情感代价更强烈，同时自然呼应前文伏笔，让‘小臂上那道新的红’不再突兀。",
+          "instructions": [
+            "在陆既白解下玉牌放上阵心、云眠还攥着铃铛时，加入她短暂的心理挣扎：可借铃铛系绳扯过食指留下的红印，触发她对铃铛来历的模糊回忆（一句暗示即可），同时心里想‘怕他真的受伤’但嘴上仍说硬话。",
+            "当六盏符灯转为赤红、红痕缩紧时，明确描写痛感掠过两人腕骨后，云眠飞快扫见陆既白小臂上那道新红痕顺着血脉延展开，与他按腕的动作呼应（此时他按腕把痛拽回，红痕便在视觉上强化），但避免她出声或追问。",
+            "在结尾墙壁浮字‘此契原本只该绑死人’之前，增加云眠跨过金线后一个细微的身体反应（如脚底残余粘滞感、铜铃遥响），或者陆既白收回剑时的隐忍动作，让结局落地更有实感。",
+            "保持结尾干脆，不解释、不抒情，所有新增细节均为动作或感官描写，不打破原有的轻快紧张基调。"
+          ],
+          "local_context_needed": [
+            "prev_block",
+            "relationship_state"
+          ],
+          "source_issue_ids": [
+            "I1",
+            "I2"
+          ]
+        }
+      ],
+      "unchanged_blocks": [
+        "ch_006.sc_001.b001"
+      ],
+      "global_constraints": [
+        "所有补丁必须保持云眠不知道陆既白能听见心声的叙事限制，任何新增内容不得让云眠发现心声外泄。",
+        "不能解释同生契全规则、幕后黑手身份，不能将基调转向沉重宿命虐恋，继续维持轻快紧张甜中带险的阅读感受。",
+        "新增的身体细节和伏笔必须自然、简短，避免过度描写破坏原章节的节奏，伏笔只需暗示，不展开。",
+        "保持人物性格：云眠嘴硬、吐槽、小聪明；陆既白冷面、用冷话压制但动作先护。",
+        "所有修改都须在原块内进行，不得跨块重写或破坏块顺序，不得增加新的线索或暴露高于章节密级的信息。"
+      ]
+    },
+    "final_judge": {
+      "passed": false,
+      "blocking_reasons": [
+        "Patch plan requires deleting or reordering beats. Fast local patch cannot safely do that; keep the current draft and suggest deep structural rewrite."
+      ],
+      "metrics": {
+        "patch_round": 1,
+        "llm_pass_flag": false,
+        "remaining_issue_count": 0,
+        "introduced_issue_count": 0
+      },
+      "recommendation": "Patch plan requires deleting or reordering beats. Fast local patch cannot safely do that; keep the current draft and suggest deep structural rewrite."
+    }
+  },
+  {
+    "stage": "final_polish",
+    "skill_ids": [
+      "base_style",
+      "chapter_finalize"
+    ],
+    "chapter_length": 2531
+  },
+  {
+    "stage": "format_adjustment",
+    "chapter_length": 2531,
+    "format_issues": []
+  },
+  {
+    "stage": "summarize_actual_chapter",
+    "chapter_id": "ch_006"
+  }
+]

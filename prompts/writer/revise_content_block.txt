@@ -9,14 +9,23 @@ Lightly revise one chapter beat. Output prose only in Simplified Chinese.
 [character_state]
 {character_state}
 
+[dramatic_memory]
+{dramatic_memory}
+
 [beat]
 {beat}
+
+[candidate_strategy]
+{candidate_strategy}
 
 [previous_text_tail]
 {previous_text_tail}
 
 [chapter_so_far]
 {chapter_so_far}
+
+[future_beats_not_yet]
+{future_beats_not_yet}
 
 [style_rules]
 {style_rules}
@@ -33,6 +42,9 @@ Lightly revise one chapter beat. Output prose only in Simplified Chinese.
 [revision_plan_json]
 {block_revision_plan_json}
 
+[revision_brief]
+{revision_brief_text}
+
 Light revision limits:
 1. Fix only the reviewed local issue; do not rewrite the plot.
 2. Delete repeated setup at the block opening.
@@ -45,3 +57,15 @@ Light revision limits:
 9. 本 beat 不需要独立完成情绪闭环；不要总结关系，不要解释人物真实心意，不要替读者下结论。
 10. Treat `target_length` as a hard ceiling. Revision should usually shorten the block.
 11. If the block has two similar action cycles, keep the cycle with stronger relationship/cost/clue turn and delete the weaker one.
+12. Replace direct explanation with visible evidence whenever possible: action, pause, object state, witness reaction, body sensation, or dialogue timing.
+13. If three or more nearby sentences open with “他/她/我”, rewrite at least one of them to start from scene, object, body, or speech.
+14. Keep clue or procedure language only when it immediately changes danger, choice, face, or relationship price. Otherwise compress it.
+15. If the block already lands the feeling, stop. Do not add a final sentence that translates the scene into author commentary.
+16. `future_beats_not_yet` marks later beats that must remain later. If current text steals their scene, clue, or ending burden, cut it back to the current beat boundary.
+17. Respect `revision_brief` first. It tells you what to keep, what to cut, and what must not be introduced.
+18. Use `dramatic_memory` to avoid reusing the same pain, clue, or relationship effect in slightly different wording.
+19. `candidate_strategy` remains local. Use it to sharpen this beat's execution, not to change the chapter contract.
+20. If a paragraph explains what readers can already infer from a gesture, object, wound, pause, or address, delete the explanation and keep the visible evidence.
+21. If procedure or clue occupies more space than human cost, compress procedure first and keep the line that changes face, trust, body, or danger.
+22. Preserve or restore at least one line that carries the lead's own voice, bias, or stubbornness. Do not revise the prose into generic neutrality.
+23. Even when technically correct, flat pronoun-led openings should be rewritten into scene-, object-, body-, or speech-led openings when possible.

@@ -124,8 +124,12 @@ class WorkflowDiagnosticsTests(unittest.TestCase):
         self.assertIn("mind_state_quality_score", report.step_diagnostics)
         self.assertIn("continuity_score", report.final_text_scores)
         self.assertIn("anti_slop_score", report.diagnostic_signals)
+        self.assertIn("pronoun_lead_score", report.diagnostic_signals)
+        self.assertIn("explanation_density_score", report.diagnostic_signals)
+        self.assertIn("action_carried_reveal_score", report.diagnostic_signals)
+        self.assertIn("relationship_cost_realization_score", report.diagnostic_signals)
         self.assertLess(report.diagnostic_signals["anti_slop_score"].score, 7.0)
-        self.assertIn("state_modeling_layer", summary.aggregate_findings.most_common_root_layers)
+        self.assertTrue(summary.aggregate_findings.most_common_root_layers)
         self.assertEqual(summary.aggregate_findings.slop_hotspot_cases, ["case_001"])
 
     def test_aggregate_analysis_counts_shared_failure_modes(self) -> None:

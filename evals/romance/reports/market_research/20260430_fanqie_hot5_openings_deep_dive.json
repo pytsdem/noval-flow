@@ -1,0 +1,93 @@
+{
+  "date": "2026-04-30",
+  "scope": "fanqie_hot_ancient_openings_deep_dive",
+  "method_note": "Based on public title, chapter-1 title, public chapter snippet, book intro, and visible on-site discussion. No full copyrighted chapter text is stored.",
+  "samples": [
+    {
+      "title": "赐婚后，王妃只想靠王爷续命",
+      "page_url": "https://fanqienovel.com/page/7103732832253512744",
+      "reader_url": "https://fanqienovel.com/reader/7103744099613835809",
+      "chapter1_title": "第1章 一见倾心？",
+      "short_excerpt": "二月初二，花朝宴。",
+      "public_heat_signal": "约1.5万人在读",
+      "opening_pattern": "公开朝宴场面 + 疑似一见倾心的反套路起手",
+      "hook": "这份倾心是真是假，背后是否另有目的",
+      "techniques": [
+        "礼制大场面开局",
+        "标题问号反套路",
+        "把感情线嵌入公开权力结构"
+      ]
+    },
+    {
+      "title": "穿越古代落地生根",
+      "page_url": "https://fanqienovel.com/page/7159439843854912548",
+      "reader_url": "https://fanqienovel.com/reader/7159439937203995173",
+      "chapter1_title": "第1章 愁云惨淡",
+      "short_excerpt": "岭南府庆阳县五方镇赵家村。",
+      "public_heat_signal": "约6216人在读",
+      "opening_pattern": "地理坐标起手 + 生存困境前置",
+      "hook": "这个家怎么在困局里活下去",
+      "techniques": [
+        "先落地理位置",
+        "环境压力转身体困境",
+        "种田生存感先行"
+      ]
+    },
+    {
+      "title": "锦绣如茵",
+      "page_url": "https://fanqienovel.com/page/7401888311729474585",
+      "reader_url": "https://fanqienovel.com/reader/7401888675031679513",
+      "chapter1_title": "第一章 换亲",
+      "short_excerpt": "还有这种好事？",
+      "public_heat_signal": "约12.2万人在读",
+      "opening_pattern": "醒来发现身份 + 换亲危机 + 女主反向评估",
+      "hook": "别人以为是坑，女主却觉得可能是赚",
+      "techniques": [
+        "危机反转",
+        "女主主观判断很早出现",
+        "婚配利益判断驱动开场"
+      ]
+    },
+    {
+      "title": "春日宴",
+      "page_url": "https://fanqienovel.com/page/6547996243283414023",
+      "reader_url": "https://fanqienovel.com/reader/6548113438621565448",
+      "chapter1_title": "第1章 该死的丹阳长公主",
+      "short_excerpt": "这满街的白幡是做什么？",
+      "public_heat_signal": "约6.1万人在读，站内标签9.4",
+      "opening_pattern": "问句开场 + 街头丧仪 + 先给结论再追原因",
+      "hook": "这个人为何该死，她又到底值不值得死",
+      "techniques": [
+        "问句直接入戏",
+        "白幡白腰带等物件承载信息",
+        "先判死刑再展开人物"
+      ]
+    },
+    {
+      "title": "我在古早言情文里独自升级",
+      "page_url": "https://fanqienovel.com/page/7520193078334868542",
+      "reader_url": "https://fanqienovel.com/reader/7520260931444539929",
+      "chapter1_title": "第1章 舔狗背景板",
+      "short_excerpt": "她不明白。",
+      "public_heat_signal": "约7.6万人在读",
+      "opening_pattern": "女主吐槽脑回路前置 + 反套路背景板视角",
+      "hook": "她会不会按原女频剧本被炮灰",
+      "techniques": [
+        "现代脑回路切古早套路",
+        "人物声口先于世界说明",
+        "标签化标题给爽点预期"
+      ]
+    }
+  ],
+  "shared_findings": [
+    "番茄热门古言首章普遍开得快，前几句就会把场面、危机或人物声口打出来。",
+    "它们的钩子通常是具体局势，不是抽象悬念。",
+    "它们很少花长段预算去解释程序逻辑，更依赖事件、反应和判断切口推进。",
+    "好句往往不是华丽，而是能一刀切开人物立场和局势转向。"
+  ],
+  "implications_for_our_prose": [
+    "我们要继续守住中短篇幅，不靠加长去补情绪。",
+    "需要把女主声口提前，减少动作之后的解释句。",
+    "需要把程序/线索的展示从主戏降为施压工具。"
+  ]
+}
