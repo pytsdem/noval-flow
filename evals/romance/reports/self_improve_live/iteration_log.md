@@ -707,3 +707,28 @@
     - fast/deep escalation now defaults to a tiny bounded subset instead of all-case deep replay first
 - Next step: use the leaner deep path to rerun a bounded prose validation, then decide whether the remaining gap is mainly “voice/temperature” or still “relationship-cost execution”
 - Report ref: `report.md` / `Iteration 47`
+
+## Iteration 48
+
+- Date: `2026-04-30`
+- Outcome: `keep`
+- Title: `Selective rollback to the last stable sequential-beat prose chain`
+- Root layer: `draft_execution_layer`
+- Files changed: `src/novel_flow/agents/writer.py`, `src/novel_flow/agents/writing_chapter_agent.py`, `src/novel_flow/models/__init__.py`, `src/novel_flow/models/schemas.py`, `src/novel_flow/services/chapter_tool_payloads.py`, `src/novel_flow/services/novel_context.py`, `src/novel_flow/services/review_aggregator.py`, `src/novel_flow/tools/draft_block.py`, `src/novel_flow/tools/plan_content_blocks.py`, `src/novel_flow/tools/revise_block.py`, `prompts/writer/draft_content_block.txt`, `prompts/writer/plan_content_blocks.txt`, `prompts/writer/revise_content_block.txt`, `prompts/writer/step_8_chapter_briefs.txt`, `evals/romance/harness.py`, `evals/romance/judges/__init__.py`, `evals/romance/judges/rule_metrics.py`, `evals/romance/workflow_diagnostics.py`, `tests/test_prompt_rendering.py`, `tests/test_romance_eval_harness.py`, `tests/test_rule_metrics.py`, `tests/test_schema_and_context.py`, `tests/test_workflow_diagnostics.py`, `tests/test_writing_chapter_agent.py`
+- Success snapshot:
+  - did not blanket-revert all post-`2026-04-27` work
+  - preserved positive assets:
+    - `deepseek` default provider
+    - shared LLM executor
+    - style-card externalization
+    - report/run organization
+    - positive-example corpus and market-research materials
+    - `case03` removal from active requirement cases
+  - rolled the core prose workflow back to the last stable pre-contract / pre-six-upgrades state anchored around `2c7f55f`
+  - removed the low-confidence `4/30` execution layers:
+    - `src/novel_flow/services/prose_lint.py`
+    - `evals/romance/runners/layered_validation_eval.py`
+  - restored compatibility by aligning `writer / novel_context / chapter payload / schemas` to the same stable chain instead of leaving a mixed old/new workflow
+  - relevant regression tests passed again after the rollback
+- Next step: treat this rolled-back sequential-beat chain as the new safe floor, then reintroduce prose improvements one narrow draft-execution hypothesis at a time
+- Report ref: `report.md` / `Iteration 48`

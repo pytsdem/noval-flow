@@ -5,7 +5,6 @@ import re
 from typing import Any
 
 from evals.romance.models import RomanceMetricDetail
-from novel_flow.services.prose_lint import analyze_prose_surface
 
 
 _CN_PUNCTUATION = "，。！？；：、“”‘’（）《》〈〉【】『』「」—…\n\r\t "
@@ -21,12 +20,6 @@ def _paragraphs(text: str) -> list[str]:
     if parts:
         return parts
     return [item.strip() for item in raw.split("\n") if item.strip()]
-
-
-def _sentences(text: str) -> list[str]:
-    raw = str(text or "").replace("\r\n", "\n").replace("\r", "\n")
-    parts = re.split(r"(?<=[。！？；!?])|\n+", raw)
-    return [item.strip() for item in parts if item.strip()]
 
 
 def _char_ngrams(text: str, size: int = 4) -> set[str]:
@@ -55,13 +48,6 @@ _DIRECT_THOUGHT_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
 _EXPLANATORY_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
     ("解释性总结", re.compile(r"(这让|这使得|于是|因此)[^。！？；]{0,12}[他她我][^。！？；]{0,10}(更加|终于|开始|更)?(明白|知道|意识到|确定|觉得|清楚)")),
     ("抽象情绪命名", re.compile(r"[他她我][^。！？；]{0,8}(更加|终于|顿时|不由得)?(愤怒|难堪|委屈|心疼|慌乱|害怕|紧张|不安|酸涩|难过|痛苦|愧疚)")),
-]
-
-_PRONOUN_LEAD_RE = re.compile(r"^[“\"'‘「『（(【\s]*[他她我](们)?")
-_EXPLANATION_SENTENCE_PATTERNS: list[re.Pattern[str]] = [
-    *[pattern for _, pattern in _DIRECT_THOUGHT_PATTERNS],
-    *[pattern for _, pattern in _EXPLANATORY_PATTERNS],
-    re.compile(r"(这说明|这意味着|说到底|归根结底|换句话说|其实她|其实他|原来她|原来他)"),
 ]
 
 
@@ -214,167 +200,6 @@ class AntiSlopRuleAnalyzer:
             score=round(score, 2),
             reason=reason,
             evidence_summary="；".join(evidence_parts),
-            improvement_hint=hint,
-            source="rule",
-        )
-
-
-class PronounLeadRuleAnalyzer:
-    def analyze(self, *, chapter_text: str) -> RomanceMetricDetail:
-        sentences = _sentences(chapter_text)
-        if not sentences:
-            return RomanceMetricDetail(
-                score=10.0,
-                reason="没有可分析的正文句子。",
-                evidence_summary="句子数为 0。",
-                improvement_hint="先生成正文，再分析句首代词密度。",
-                source="rule",
-            )
-
-        pronoun_led = [item for item in sentences if _PRONOUN_LEAD_RE.match(item)]
-        total = len(sentences)
-        ratio = len(pronoun_led) / total
-        consecutive = 0
-        for left, right in zip(sentences, sentences[1:]):
-            if _PRONOUN_LEAD_RE.match(left) and _PRONOUN_LEAD_RE.match(right):
-                consecutive += 1
-
-        penalty = 0.0
-        penalty += max(0.0, ratio - 0.08) * 18.0
-        penalty += min(consecutive * 0.55, 3.0)
-        score = max(0.0, min(10.0, 10.0 - penalty))
-
-        evidence = (
-            f"句首代词占比 {ratio:.0%}（{len(pronoun_led)}/{total} 句）"
-            if pronoun_led
-            else "未检测到明显“他/她/我”句首堆叠。"
-        )
-        if pronoun_led:
-            evidence = f"{evidence}；样例“{_sample_matches(pronoun_led)}”"
-        if consecutive:
-            evidence = f"{evidence}；连续代词起句 {consecutive} 处"
-
-        if score >= 8.0:
-            reason = "句首代词密度较低，句面更容易保留场面感、物件感和人物声口。"
-            hint = "继续让场景、物件、动作、冷暖和对话来带起句子，而不是不断用代词起句。"
-        elif score >= 6.0:
-            reason = "句首代词有轻中度偏高，正文会更像在转述人物状态，而不是让场面自己说话。"
-            hint = "优先把至少一半的“他/她”起句改成动作起句、物件起句、环境起句或对话起句。"
-        else:
-            reason = "句首代词密度偏高，容易形成“他……她……”的平面转述感，削弱古言正文的场面质感。"
-            hint = "先删连续代词起句，再把段首改写成景、物、身体、礼法、停顿或台词带入。"
-
-        return RomanceMetricDetail(
-            score=round(score, 2),
-            reason=reason,
-            evidence_summary=evidence,
-            improvement_hint=hint,
-            source="rule",
-        )
-
-
-class ExplanationDensityRuleAnalyzer:
-    def analyze(self, *, chapter_text: str) -> RomanceMetricDetail:
-        sentences = _sentences(chapter_text)
-        if not sentences:
-            return RomanceMetricDetail(
-                score=10.0,
-                reason="没有可分析的正文句子。",
-                evidence_summary="句子数为 0。",
-                improvement_hint="先生成正文，再分析解释句密度。",
-                source="rule",
-            )
-
-        explanation_sentences: list[str] = []
-        for sentence in sentences:
-            if any(pattern.search(sentence) for pattern in _EXPLANATION_SENTENCE_PATTERNS):
-                explanation_sentences.append(sentence)
-
-        total = len(sentences)
-        ratio = len(explanation_sentences) / total
-        penalty = 0.0
-        penalty += max(0.0, ratio - 0.10) * 20.0
-        penalty += min(len(explanation_sentences) * 0.25, 3.0)
-        score = max(0.0, min(10.0, 10.0 - penalty))
-
-        if explanation_sentences:
-            evidence = (
-                f"解释句占比 {ratio:.0%}（{len(explanation_sentences)}/{total} 句）"
-                f"；样例“{_sample_matches(explanation_sentences)}”"
-            )
-        else:
-            evidence = "未检测到明显解释句密度问题。"
-
-        if score >= 8.0:
-            reason = "解释句密度较低，正文更多通过场面和动作递送信息。"
-            hint = "继续让动作、停顿、物件和旁人反应承担解释工作，不要把结论写在句面上。"
-        elif score >= 6.0:
-            reason = "解释句有轻中度偏多，常表现为动作后立刻补一句作者翻译。"
-            hint = "优先删除动作后的解释句，把同样的信息换成停顿、称呼变化、回避或身体反应。"
-        else:
-            reason = "解释句密度偏高，正文更像在说明读者该怎么理解，而不是让读者自己感觉到。"
-            hint = "把“她知道/他明白/这让她更清楚”类句式当作首要删除对象，再把篇幅换成场面和代价。"
-
-        return RomanceMetricDetail(
-            score=round(score, 2),
-            reason=reason,
-            evidence_summary=evidence,
-            improvement_hint=hint,
-            source="rule",
-        )
-
-
-class ActionCarriedRevealRuleAnalyzer:
-    def analyze(self, *, chapter_text: str) -> RomanceMetricDetail:
-        surface = analyze_prose_surface(chapter_text)
-        evidence = surface.evidence
-        score = float(surface.action_carried_reveal_score)
-        if score >= 8.0:
-            reason = "关键信息主要通过动作、物件、身体和场面自己露出来，解释性翻译较少。"
-            hint = "继续先给场面、动作和物件，再让读者自己得出结论。"
-        elif score >= 6.0:
-            reason = "动作已经承担了一部分信息，但关键变化仍有不少靠解释句交代。"
-            hint = "把最重要的结论再往动作、停顿、礼法压力和旁人反应上压一层。"
-        else:
-            reason = "信息更多靠说明句落地，动作、物件和场面没有真正承担主要叙事功能。"
-            hint = "优先删除动作后的解释句，让 clue、关系变化和疼点直接从场面里长出来。"
-        return RomanceMetricDetail(
-            score=round(score, 2),
-            reason=reason,
-            evidence_summary=(
-                f"body_or_object_hits={evidence['body_or_object_hits']} | "
-                f"social_pressure_hits={evidence['social_pressure_hits']} | "
-                f"dialogue_hits={evidence['dialogue_hits']} | "
-                f"explanation_ratio={surface.explanation_ratio:.0%}"
-            ),
-            improvement_hint=hint,
-            source="rule",
-        )
-
-
-class RelationshipCostRealizationRuleAnalyzer:
-    def analyze(self, *, chapter_text: str) -> RomanceMetricDetail:
-        surface = analyze_prose_surface(chapter_text)
-        evidence = surface.evidence
-        score = float(surface.relationship_cost_realization_score)
-        if score >= 8.0:
-            reason = "推进一出现就会变成关系代价或人身代价，人物在场上真有付出。"
-            hint = "继续让每一次 clue、动作或试探都立刻改变面子、信任、危险或选择权。"
-        elif score >= 6.0:
-            reason = "已经有部分关系代价兑现，但仍有推进停在“信息更清楚了”，没有及时伤到人。"
-            hint = "一旦程序或 clue 出现，就让它马上改变关系价格、体面或危险程度。"
-        else:
-            reason = "许多推进仍停在信息层或流程层，没有及时转换成关系代价或人身代价。"
-            hint = "压缩流程说明，把省下来的篇幅换成误读、难堪、避让、体面损失或身体反应。"
-        return RomanceMetricDetail(
-            score=round(score, 2),
-            reason=reason,
-            evidence_summary=(
-                f"social_pressure_hits={evidence['social_pressure_hits']} | "
-                f"procedure_hits={evidence['procedure_hits']} | "
-                f"pronoun_lead_ratio={surface.pronoun_lead_ratio:.0%} | "
-                f"explanation_ratio={surface.explanation_ratio:.0%}"
-            ),
             improvement_hint=hint,
             source="rule",
         )

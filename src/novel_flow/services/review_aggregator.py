@@ -8,7 +8,7 @@ from novel_flow.models.schemas import RevisionPlan
 class ReviewAggregator:
     DEFAULT_HARD_CONSTRAINTS = [
         "Do not add new truths, characters, clues, or setting rules.",
-        "Do not break chapter contract hard constraints or current reader belief.",
+        "Do not break chapter brief hard constraints or current reader belief.",
         "Do not explain allowed clues beyond what the brief permits.",
         "Do not reveal hidden twist truth before reveal_at.",
         "Keep continuity with completed chapter memory.",

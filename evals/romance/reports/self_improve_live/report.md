@@ -2575,3 +2575,53 @@
     - hotter relationship electricity
     - less clue/procedure dominance
     - stronger heroine voice and body-cost leakage within the same `4.5k-6k` budget
+
+## Iteration 48 - Selective Rollback To Stable Sequential Beat Prose
+
+- Date: `2026-04-30`
+- Outcome: `keep`
+- Decision: do **not** revert every post-`2026-04-27` change. Keep the clear positive infrastructure and research assets, but roll the core prose workflow back to the last stable sequential-beat chain.
+- Rationale:
+  - The strongest known `case01` prose remains the `2026-04-27` / `2026-04-28` sequential-beat DeepSeek baseline.
+  - The main regressions from the last three days were concentrated in the `4/30` execution experiments, not in the whole set of provider, style, reporting, and research changes.
+  - A blanket rollback would wrongly throw away:
+    - `deepseek` as the default provider
+    - the shared LLM executor
+    - style-card extraction
+    - report/run organization
+    - positive-example corpus and market-research notes
+    - removal of `case03` from active requirement cases
+- Keep set:
+  - `deepseek` defaults and stable provider wiring
+  - report organization and positive-example corpus
+  - `case03` living under `cases_legacy/`
+  - `codex_cli` Windows stderr unlock fix (infra-only, not part of prose regression)
+- Rolled-back workflow surface:
+  - `src/novel_flow/agents/writer.py`
+  - `src/novel_flow/agents/writing_chapter_agent.py`
+  - `src/novel_flow/models/__init__.py`
+  - `src/novel_flow/models/schemas.py`
+  - `src/novel_flow/services/chapter_tool_payloads.py`
+  - `src/novel_flow/services/novel_context.py`
+  - `src/novel_flow/services/review_aggregator.py`
+  - `src/novel_flow/tools/draft_block.py`
+  - `src/novel_flow/tools/plan_content_blocks.py`
+  - `src/novel_flow/tools/revise_block.py`
+  - `prompts/writer/draft_content_block.txt`
+  - `prompts/writer/plan_content_blocks.txt`
+  - `prompts/writer/revise_content_block.txt`
+  - `prompts/writer/step_8_chapter_briefs.txt`
+  - matching eval/test files that had drifted to the new prose path
+- Removed low-confidence execution layers introduced on `2026-04-30`:
+  - `src/novel_flow/services/prose_lint.py`
+  - `evals/romance/runners/layered_validation_eval.py`
+- Compatibility work:
+  - after restoring the older prose chain, `writer / novel_context / payload / schema` had to be aligned to the same generation era so the repo would not sit in a half-old half-new state.
+- Verification:
+  - `python -m py_compile src/novel_flow/models/__init__.py src/novel_flow/models/schemas.py src/novel_flow/agents/writer.py src/novel_flow/services/novel_context.py src/novel_flow/services/review_aggregator.py src/novel_flow/agents/writing_chapter_agent.py src/novel_flow/services/chapter_tool_payloads.py`
+  - `Get-ChildItem evals/romance -Filter *.py | ForEach-Object { python -m py_compile $_.FullName } ; Get-ChildItem tools -Filter *.py | ForEach-Object { python -m py_compile $_.FullName }`
+  - `python -m unittest tests.test_romance_eval_harness tests.test_writing_chapter_agent tests.test_schema_and_context tests.test_prompt_rendering`
+  - `python -m unittest tests.test_eval_case_exporter tests.test_workflow_diagnostics tests.test_step_evals tests.test_case_comparison tests.test_novel_self_improve_skill tests.test_requirement_cases`
+- Interpretation:
+  - the safe floor is now back to the sequential-beat DeepSeek path
+  - the next prose iteration should be much narrower: one draft-execution hypothesis at a time, always validated against the restored floor instead of the `4/30` experimental stack

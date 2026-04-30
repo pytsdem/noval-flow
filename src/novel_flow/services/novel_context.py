@@ -6,9 +6,9 @@ from typing import Any, Literal, Sequence
 
 from novel_flow.models.schemas import (
     ActualChapterSummary,
-    ChapterBeat,
-    ChapterContract,
+    ChapterBrief,
     CharacterCard,
+    ContentBlock,
     StoryLine,
     StoryPremise,
     TwistDesign,
@@ -73,8 +73,8 @@ def _event_timeline(worldbuilding: dict[str, Any]) -> list[dict[str, Any]]:
 @dataclass(frozen=True)
 class CurrentChapterRuntimeSelection:
     chapter_id: str
-    relevant_blocks: list[ChapterBeat]
-    recent_blocks: list[ChapterBeat]
+    relevant_blocks: list[ContentBlock]
+    recent_blocks: list[ContentBlock]
     chapter_draft_tail: str
 
 
@@ -107,7 +107,7 @@ class CharacterMindsetScopedSelection:
 
 @dataclass(frozen=True)
 class NovelContextSnapshot:
-    chapter_brief: ChapterContract
+    chapter_brief: ChapterBrief
     current_chapter_id: str
     premise: StoryPremise | None
     worldbuilding: dict[str, Any]
@@ -123,7 +123,7 @@ class NovelContextSelectorService:
     def create_snapshot(
         cls,
         *,
-        chapter_brief: ChapterContract,
+        chapter_brief: ChapterBrief,
         twist_designs: Sequence[TwistDesign],
         story_lines: Sequence[StoryLine],
         worldbuilding: dict[str, Any] | None,
@@ -168,7 +168,7 @@ class NovelContextSelectorService:
     def select_current_chapter_context(
         cls,
         chapter_id: str,
-        committed_blocks: list[ChapterBeat],
+        committed_blocks: list[ContentBlock],
         *,
         max_blocks: int = 4,
         tail_chars: int = 1000,
@@ -276,7 +276,7 @@ class NovelContextSelectorService:
         )
 
     @staticmethod
-    def _chapter_focus_names(chapter_brief: ChapterContract) -> list[str]:
+    def _chapter_focus_names(chapter_brief: ChapterBrief) -> list[str]:
         return list(
             dict.fromkeys(
                 _normalize_text(name)
@@ -312,7 +312,7 @@ class NovelContextSelectorService:
     def _rank_events(
         cls,
         *,
-        chapter_brief: ChapterContract,
+        chapter_brief: ChapterBrief,
         event_timeline: list[dict[str, Any]],
     ) -> list[tuple[int, int]]:
         search_terms = cls._collect_search_terms(chapter_brief)
@@ -344,7 +344,7 @@ class NovelContextSelectorService:
             for term in search_terms:
                 if term and term in haystack:
                     score += 6 if len(term) >= 6 else 3
-            chapter_object = _normalize_text(chapter_brief.plot_carrier)
+            chapter_object = _normalize_text(chapter_brief.chapter_object)
             if chapter_object and chapter_object in haystack:
                 score += 12
             backstory_trigger = _normalize_text(chapter_brief.backstory_trigger)
@@ -362,7 +362,7 @@ class NovelContextSelectorService:
         anchor_index: int,
         ranked: list[tuple[int, int]],
         event_timeline: list[dict[str, Any]],
-        chapter_brief: ChapterContract,
+        chapter_brief: ChapterBrief,
     ) -> list[int]:
         focus_names = {name for name in chapter_brief.character_focus if _normalize_text(name)}
         ranked_map = {index: score for index, score in ranked}
@@ -422,16 +422,16 @@ class NovelContextSelectorService:
         return notes
 
     @classmethod
-    def _collect_search_terms(cls, chapter_brief: ChapterContract) -> list[str]:
+    def _collect_search_terms(cls, chapter_brief: ChapterBrief) -> list[str]:
         base_terms = [
             chapter_brief.title,
-            chapter_brief.chapter_mission,
+            chapter_brief.summary,
             chapter_brief.incoming_hook,
             chapter_brief.opening_hook,
-            chapter_brief.plot_carrier,
+            chapter_brief.chapter_object,
             chapter_brief.backstory_trigger,
-            chapter_brief.must_payoff,
-            chapter_brief.final_hook,
+            chapter_brief.small_payoff,
+            chapter_brief.ending_pull,
             *chapter_brief.allowed_info,
             *chapter_brief.allowed_clues,
             *chapter_brief.character_focus,
@@ -631,7 +631,7 @@ class NovelContextFormatter:
                 f"Core hook: {premise.core_hook}",
                 f"Ending payoff: {premise.ending_payoff}",
                 "",
-                f"Current chapter mission inside this foundation: {snapshot.chapter_brief.chapter_mission}",
+                f"Current chapter mission inside this foundation: {snapshot.chapter_brief.summary}",
             ]
         )
         if premise.escalation_path:
@@ -700,7 +700,7 @@ class NovelContextFormatter:
     def _scene_character_context_text(cls, selection: WriterContextSelection) -> str:
         snapshot = selection.snapshot
         lines = ["[Scene character context]", ""]
-        chapter_object = snapshot.chapter_brief.plot_carrier
+        chapter_object = snapshot.chapter_brief.chapter_object
         for name in selection.writer_focus_names:
             card = selection.focus_character_cards.get(name)
             if card is None:
@@ -895,38 +895,33 @@ class NovelContextFormatter:
         return "\n".join(lines).strip()
 
     @staticmethod
-    def _step_8_chapter_brief_text(chapter_brief: ChapterContract) -> str:
-        contract = chapter_brief.contract_view()
+    def _step_8_chapter_brief_text(chapter_brief: ChapterBrief) -> str:
         lines = [
-            "[Step 8 current chapter contract]",
+            "[Step 8 current chapter brief]",
             "",
             f"Chapter id: {chapter_brief.chapter_id}",
             f"Title: {chapter_brief.title}",
             f"Chapter type: {chapter_brief.chapter_type}",
-            f"Chapter mission: {contract['chapter_mission']}",
+            f"Summary: {chapter_brief.summary}",
             f"Incoming hook: {chapter_brief.incoming_hook}",
             f"Opening hook: {chapter_brief.opening_hook}",
             f"Core scene: {chapter_brief.core_scene or 'None.'}",
-            f"Plot carrier: {contract['plot_carrier']}",
+            f"Chapter object: {chapter_brief.chapter_object}",
             f"Reader emotion: {chapter_brief.reader_emotion}",
             f"Reader belief: {chapter_brief.reader_belief}",
             f"World limit: {chapter_brief.world_limit}",
-            f"Character delta: {contract['character_delta']}",
-            f"Relationship delta: {contract['relationship_delta']}",
+            f"Character shift: {chapter_brief.character_shift}",
+            f"Relationship reprice: {chapter_brief.relationship_reprice}",
             f"Emotional turn: {chapter_brief.emotional_turn}",
-            f"Cost of progress: {contract['cost_of_progress'] or 'None.'}",
-            f"Hook kind: {contract['hook_kind']}",
-            f"Pace curve: {contract['pace_curve']}",
-            f"Must not repeat: {'; '.join(contract['must_not_repeat']) or 'None.'}",
             f"Backstory trigger: {chapter_brief.backstory_trigger or 'None.'}",
             f"Scene engine: {chapter_brief.scene_engine}",
             f"Clue reveal mechanism: {chapter_brief.clue_reveal_mechanism.model_dump(mode='json') if chapter_brief.clue_reveal_mechanism else {}}",
             f"Character reentry focus: {chapter_brief.character_reentry_focus or {}}",
             f"Human pain anchor: {chapter_brief.human_pain_anchor or 'None.'}",
             f"Romance seed: {chapter_brief.romance_seed or 'None.'}",
-            f"Must payoff: {contract['must_payoff']}",
-            f"Final hook: {contract['final_hook']}",
-            f"Pace contract: {contract['pace_contract']}",
+            f"Small payoff: {chapter_brief.small_payoff}",
+            f"Ending pull: {chapter_brief.ending_pull}",
+            f"Info budget: {chapter_brief.info_budget}",
         ]
         for label, values in (
             ("Active lines", chapter_brief.active_lines),
@@ -942,35 +937,30 @@ class NovelContextFormatter:
     @staticmethod
     def _chapter_payload_text(snapshot: NovelContextSnapshot) -> str:
         chapter_brief = snapshot.chapter_brief
-        contract = chapter_brief.contract_view()
         lines = [
-            "[Chapter contract payload]",
+            "[Chapter payload]",
             "",
             f"Chapter: {chapter_brief.chapter_id} / {chapter_brief.title}",
             f"Chapter type: {chapter_brief.chapter_type}",
-            f"Chapter mission: {contract['chapter_mission']}",
+            f"One-line mission: {chapter_brief.summary}",
             f"Incoming hook: {chapter_brief.incoming_hook or 'No previous hook.'}",
             f"Opening hook: {chapter_brief.opening_hook}",
             f"Core scene: {chapter_brief.core_scene or 'None.'}",
-            f"Plot carrier: {contract['plot_carrier']}",
+            f"Chapter object: {chapter_brief.chapter_object}",
             f"Scene engine: {chapter_brief.scene_engine}",
             f"Clue reveal mechanism: {chapter_brief.clue_reveal_mechanism.model_dump(mode='json') if chapter_brief.clue_reveal_mechanism else {}}",
             f"Character reentry focus: {chapter_brief.character_reentry_focus or {}}",
             f"Reader emotion target: {chapter_brief.reader_emotion}",
             f"Reader belief to preserve: {chapter_brief.reader_belief}",
-            f"Character delta: {contract['character_delta']}",
-            f"Relationship delta: {contract['relationship_delta']}",
+            f"Character shift: {chapter_brief.character_shift}",
+            f"Relationship reprice: {chapter_brief.relationship_reprice}",
             f"Emotional turn: {chapter_brief.emotional_turn}",
-            f"Cost of progress: {contract['cost_of_progress'] or 'None.'}",
-            f"Hook kind: {contract['hook_kind']}",
-            f"Pace curve: {contract['pace_curve']}",
-            f"Must not repeat: {'; '.join(contract['must_not_repeat']) or 'None.'}",
             f"Backstory trigger: {chapter_brief.backstory_trigger or 'None.'}",
             f"Human pain anchor: {chapter_brief.human_pain_anchor or 'None.'}",
             f"Romance seed: {chapter_brief.romance_seed or 'None.'}",
-            f"Must payoff: {contract['must_payoff']}",
-            f"Final hook: {contract['final_hook']}",
-            f"Pace contract: {contract['pace_contract']}",
+            f"Small payoff: {chapter_brief.small_payoff}",
+            f"Ending pull: {chapter_brief.ending_pull}",
+            f"Info budget: {chapter_brief.info_budget}",
             "",
             "Active story lines:",
         ]
@@ -1026,10 +1016,9 @@ class NovelContextFormatter:
                 lines.extend(
                     [
                         f"{center} -> {other}",
-                        f"- Current public read: {snapshot.chapter_brief.relationship_delta}",
+                        f"- Current public read: {snapshot.chapter_brief.relationship_reprice}",
                         f"- Emotional pressure now: {snapshot.chapter_brief.emotional_turn}",
-                        f"- Target relationship delta this chapter: {snapshot.chapter_brief.relationship_delta}",
-                        f"- Cost that must land: {snapshot.chapter_brief.cost_of_progress}",
+                        f"- Target reprice this chapter: {snapshot.chapter_brief.relationship_reprice}",
                         "- Forbidden shortcut: do not skip misreading, cost, or unrevealed truth.",
                         "",
                     ]
@@ -1037,10 +1026,9 @@ class NovelContextFormatter:
         else:
             lines.extend(
                 [
-                    f"- Relationship axis now: {snapshot.chapter_brief.relationship_delta}",
+                    f"- Relationship axis now: {snapshot.chapter_brief.relationship_reprice}",
                     f"- Emotional pressure now: {snapshot.chapter_brief.emotional_turn}",
-                    f"- Target relationship delta this chapter: {snapshot.chapter_brief.relationship_delta}",
-                    f"- Cost that must land: {snapshot.chapter_brief.cost_of_progress}",
+                    f"- Target reprice this chapter: {snapshot.chapter_brief.relationship_reprice}",
                     "",
                 ]
             )
@@ -1128,7 +1116,7 @@ class NovelContextFormatter:
 
 def build_current_chapter_context(
     chapter_id: str,
-    committed_blocks: list[ChapterBeat],
+    committed_blocks: list[ContentBlock],
     *,
     max_blocks: int = 4,
     tail_chars: int = 1000,

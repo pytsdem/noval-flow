@@ -208,26 +208,6 @@ class ChapterBrief(StrictBaseModel):
     relationship_reprice: str
     emotional_turn: str
     backstory_trigger: str
-    cost_of_progress: str = ""
-    relationship_cost: str = ""
-    must_hurt_now: str = ""
-    hook_kind: Literal[
-        "question",
-        "cost",
-        "deadline",
-        "reveal",
-        "danger",
-        "aftermath",
-        "withheld_answer",
-    ] = "question"
-    pace_curve: Literal[
-        "front_loaded",
-        "steady_climb",
-        "mid_pivot",
-        "late_snap",
-        "aftershock",
-    ] = "steady_climb"
-    must_not_repeat: list[str] = Field(default_factory=list, max_length=6)
     scene_engine: Literal[
         "opening_pressure",
         "disruptor_arrival",
@@ -264,86 +244,6 @@ class ChapterBrief(StrictBaseModel):
             mechanism["style"] = legacy_style
         payload["clue_reveal_mechanism"] = mechanism
         return payload
-
-    @model_validator(mode="after")
-    def backfill_contract_defaults(self) -> "ChapterBrief":
-        if not str(self.cost_of_progress or "").strip():
-            self.cost_of_progress = (
-                str(self.human_pain_anchor or "").strip()
-                or str(self.world_limit or "").strip()
-                or str(self.emotional_turn or "").strip()
-            )
-        if not str(self.relationship_cost or "").strip():
-            self.relationship_cost = (
-                str(self.relationship_reprice or "").strip()
-                or str(self.cost_of_progress or "").strip()
-                or str(self.human_pain_anchor or "").strip()
-            )
-        if not str(self.must_hurt_now or "").strip():
-            self.must_hurt_now = (
-                str(self.human_pain_anchor or "").strip()
-                or str(self.relationship_cost or "").strip()
-                or str(self.cost_of_progress or "").strip()
-            )
-        if not list(self.must_not_repeat or []):
-            guards = [str(item or "").strip() for item in self.forbidden[:3] if str(item or "").strip()]
-            guards.extend(
-                [
-                    "Do not restate the same relationship judgment in multiple beats.",
-                    "Do not replay finished pressure with explanation instead of consequence.",
-                ]
-            )
-            deduped: list[str] = []
-            for item in guards:
-                if item and item not in deduped:
-                    deduped.append(item)
-            self.must_not_repeat = deduped[:6]
-        return self
-
-    @property
-    def chapter_mission(self) -> str:
-        return str(self.summary or "").strip()
-
-    @property
-    def plot_carrier(self) -> str:
-        return str(self.chapter_object or "").strip()
-
-    @property
-    def character_delta(self) -> str:
-        return str(self.character_shift or "").strip()
-
-    @property
-    def relationship_delta(self) -> str:
-        return str(self.relationship_reprice or "").strip()
-
-    @property
-    def must_payoff(self) -> str:
-        return str(self.small_payoff or "").strip()
-
-    @property
-    def final_hook(self) -> str:
-        return str(self.ending_pull or "").strip()
-
-    @property
-    def pace_contract(self) -> str:
-        return str(self.info_budget or "").strip()
-
-    def contract_view(self) -> dict[str, Any]:
-        return {
-            "chapter_mission": self.chapter_mission,
-            "plot_carrier": self.plot_carrier,
-            "character_delta": self.character_delta,
-            "relationship_delta": self.relationship_delta,
-            "cost_of_progress": str(self.cost_of_progress or "").strip(),
-            "relationship_cost": str(self.relationship_cost or "").strip(),
-            "must_hurt_now": str(self.must_hurt_now or "").strip(),
-            "must_payoff": self.must_payoff,
-            "final_hook": self.final_hook,
-            "hook_kind": self.hook_kind,
-            "pace_curve": self.pace_curve,
-            "pace_contract": self.pace_contract,
-            "must_not_repeat": list(self.must_not_repeat or []),
-        }
 
 
 class SceneCard(StrictBaseModel):
@@ -504,9 +404,14 @@ class ContentBlockPlanPayload(StrictBaseModel):
     blocks: list[ContentBlock] = Field(default_factory=list, min_length=3, max_length=10)
 
 
-ChapterContract = ChapterBrief
+# Compatibility aliases:
+# The later 4/29-4/30 iterations renamed these concepts toward
+# "chapter contract / beat" language. The stable prose baseline still uses the
+# earlier ContentBlock/ChapterBrief workflow, so expose the newer names as
+# aliases instead of requiring the whole repo to stay on the regressed path.
 ChapterBeat = ContentBlock
 ChapterBeatPlanPayload = ContentBlockPlanPayload
+ChapterContract = ChapterBrief
 
 
 class BlockQualityReviewPayload(StrictBaseModel):
@@ -714,10 +619,6 @@ class ChapterExecutionResult(StrictBaseModel):
     final_judge: dict[str, Any] = Field(default_factory=dict)
     requires_human_review: bool = False
 
-    @property
-    def chapter_beats(self) -> list[ContentBlock]:
-        return self.content_blocks
-
 
 class TwistDesignsPayload(StrictBaseModel):
     twist_designs: list[TwistDesign] = Field(default_factory=list)
@@ -833,10 +734,6 @@ class Chapter(BaseModel):
     final_text: str = ""
     final_version: int = Field(default=0, ge=0)
     is_finalized: bool = False
-
-    @property
-    def chapter_beats(self) -> list[ContentBlock]:
-        return self.content_blocks
 
 
 class Volume(BaseModel):

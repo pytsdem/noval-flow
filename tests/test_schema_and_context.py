@@ -11,12 +11,12 @@ from novel_flow.llm.base import LLMClient, LLMMessage
 from novel_flow.models.schemas import (
     ActualChapterSummary,
     BookDocument,
-    ChapterContract,
-    ChapterBeat,
+    ChapterBrief,
     CharacterCard,
     CharacterCandidateLink,
     CharacterMindset,
     Chapter,
+    ContentBlock,
     CriticReport,
     NewCharacterCandidate,
     StoryLine,
@@ -78,7 +78,7 @@ class SchemaAndContextTests(unittest.TestCase):
             carried_twists=["twist_01"],
             line_rules=["Only indirect routes early."],
         )
-        self.chapter_brief = ChapterContract(
+        self.chapter_brief = ChapterBrief(
             chapter_id="ch_001",
             title="Return",
             chapter_type="opening",
@@ -127,7 +127,7 @@ class SchemaAndContextTests(unittest.TestCase):
     def _snapshot(
         self,
         *,
-        chapter_brief: ChapterContract | None = None,
+        chapter_brief: ChapterBrief | None = None,
         premise: StoryPremise | None = None,
         worldbuilding: dict | None = None,
         character_cards: list[CharacterCard] | None = None,
@@ -536,8 +536,7 @@ class SchemaAndContextTests(unittest.TestCase):
         self.assertNotIn("learn to trust her version later", text)
         self.assertIn("Current public read:", context.relationship_state_text)
         self.assertIn("Emotional pressure now:", context.relationship_state_text)
-        self.assertIn("Target relationship delta this chapter:", context.relationship_state_text)
-        self.assertIn("Cost that must land:", context.relationship_state_text)
+        self.assertIn("Target reprice this chapter:", context.relationship_state_text)
 
     def test_character_selectors_lookup_by_name(self) -> None:
         hero = CharacterCard(name="Hero", role="returned heir")
@@ -601,7 +600,7 @@ class SchemaAndContextTests(unittest.TestCase):
     def test_chapter_tool_payload_builder_converges_writing_and_review_payloads(self) -> None:
         context = self._writer_context(current_chapter_id="ch_001")
         planned_blocks = [
-            ChapterBeat(
+            ContentBlock(
                 block_id="ch_001.sc_001.b001",
                 chapter_id="ch_001",
                 block_index=1,
@@ -625,54 +624,16 @@ class SchemaAndContextTests(unittest.TestCase):
             planned_blocks=planned_blocks,
         )
 
-        self.assertEqual(plan_payload["target_word_count_text"], self.chapter_brief.pace_contract)
+        self.assertEqual(plan_payload["target_word_count_text"], self.chapter_brief.info_budget)
         self.assertIn("chapter_plan_json", write_payload)
         self.assertIn("step_1_to_7_outputs_json", write_payload)
         self.assertEqual(review_payload["chapter_text"], "正文")
         self.assertIn("twist_01", review_payload["active_twists_json"])
 
-    def test_chapter_contract_backfills_defaults_and_aliases(self) -> None:
-        chapter_contract = ChapterContract(
-            chapter_id="ch_009",
-            title="Test contract",
-            chapter_type="opening",
-            summary="Force an indirect move under pressure.",
-            incoming_hook="",
-            opening_hook="A public order interrupts him.",
-            chapter_object="Transfer register",
-            reader_emotion="pressure",
-            reader_belief="she betrayed him",
-            world_limit="He cannot challenge the verdict in public.",
-            character_shift="He shifts into disciplined action.",
-            relationship_reprice="She becomes a suspiciously controlled threat.",
-            emotional_turn="Pressure hardens into strategic coldness.",
-            backstory_trigger="",
-            scene_engine="opening_pressure",
-            small_payoff="He finds a legal opening.",
-            ending_pull="The first witness is dead.",
-            info_budget="new clues=1",
-            human_pain_anchor="He must stand under public scrutiny before he has settled from the road.",
-        )
-
-        self.assertEqual(chapter_contract.chapter_mission, chapter_contract.summary)
-        self.assertEqual(chapter_contract.relationship_delta, chapter_contract.relationship_reprice)
-        self.assertEqual(chapter_contract.must_payoff, chapter_contract.small_payoff)
-        self.assertEqual(chapter_contract.final_hook, chapter_contract.ending_pull)
-        self.assertEqual(chapter_contract.pace_contract, chapter_contract.info_budget)
-        self.assertEqual(chapter_contract.cost_of_progress, chapter_contract.human_pain_anchor)
-        self.assertEqual(chapter_contract.relationship_cost, chapter_contract.relationship_reprice)
-        self.assertEqual(chapter_contract.must_hurt_now, chapter_contract.human_pain_anchor)
-        self.assertTrue(chapter_contract.must_not_repeat)
-        contract_view = chapter_contract.contract_view()
-        self.assertEqual(contract_view["chapter_mission"], chapter_contract.summary)
-        self.assertEqual(contract_view["cost_of_progress"], chapter_contract.human_pain_anchor)
-        self.assertEqual(contract_view["relationship_cost"], chapter_contract.relationship_reprice)
-        self.assertEqual(contract_view["must_hurt_now"], chapter_contract.human_pain_anchor)
-
     def test_block_runtime_context_exposes_delivered_beat_summary(self) -> None:
         context = self._writer_context(current_chapter_id="ch_001")
         committed_blocks = [
-            ChapterBeat(
+            ContentBlock(
                 block_id="ch_001.sc_001.b001",
                 chapter_id="ch_001",
                 block_index=1,
@@ -693,7 +654,7 @@ class SchemaAndContextTests(unittest.TestCase):
                 status="committed",
             )
         ]
-        block = ChapterBeat(
+        block = ContentBlock(
             block_id="ch_001.sc_001.b002",
             chapter_id="ch_001",
             block_index=2,
@@ -778,17 +739,15 @@ class SchemaAndContextTests(unittest.TestCase):
             self.assertTrue(any("连续解规则" in item for item in block["must_not_repeat"]))
 
         self.assertIn("Readers newly feel the opening pressure", blocks[0]["new_value"])
-        self.assertTrue(
-            any("不要" in item or "Do not" in item for item in blocks[0]["must_not_repeat"])
-        )
-        self.assertTrue(blocks[1]["relationship_delta"])
-        self.assertTrue(blocks[2]["clue_delta"])
+        self.assertIn("不要", blocks[0]["must_not_repeat"][0])
+        self.assertIn("关系", blocks[1]["relationship_delta"])
+        self.assertIn("线索", blocks[2]["clue_delta"])
 
     def test_block_payloads_make_target_length_a_hard_ceiling(self) -> None:
         context = self._writer_context(current_chapter_id="ch_001")
         block_context = ChapterToolPayloadBuilder.build_block_runtime_context(
             context=context,
-            block=ChapterBeat(
+            block=ContentBlock(
                 block_id="ch_001.sc_001.b001",
                 chapter_id="ch_001",
                 block_index=1,
@@ -799,7 +758,7 @@ class SchemaAndContextTests(unittest.TestCase):
             committed_blocks=[],
         )
         draft_payload = ChapterToolPayloadBuilder.build_draft_block_payload(
-            block=ChapterBeat(
+            block=ContentBlock(
                 block_id="ch_001.sc_001.b001",
                 chapter_id="ch_001",
                 block_index=1,
@@ -819,80 +778,8 @@ class SchemaAndContextTests(unittest.TestCase):
 
         self.assertIn("Hard ceiling: 500", draft_payload["target_length"])
         self.assertIn("Stop immediately", draft_payload["target_length"])
-        self.assertIn("dramatic_memory", block_context)
-        self.assertEqual(draft_payload["candidate_strategy"], "")
         self.assertIn("Hard ceiling", polish_payload["target_length"])
         self.assertIn("shorten", polish_payload["target_length"])
-
-    def test_block_runtime_context_prefers_change_summary_over_raw_text_recap(self) -> None:
-        context = self._writer_context(current_chapter_id="ch_001")
-        committed_blocks = [
-            ChapterBeat(
-                block_id="ch_001.sc_001.b001",
-                chapter_id="ch_001",
-                block_index=1,
-                purpose="Opening pressure",
-                new_value="The wedding edict lands in public.",
-                relationship_delta="They cannot speak as equals now.",
-                cost_shift="She loses the option to refuse quietly.",
-                micro_hook="He notices she never denied the title.",
-                end_state="The room goes colder.",
-                text="她垂着眼，像是连雪光都不肯分给他。",
-            ),
-            ChapterBeat(
-                block_id="ch_001.sc_001.b002",
-                chapter_id="ch_001",
-                block_index=2,
-                purpose="First private probe",
-                new_value="She gives him a colder address.",
-                relationship_delta="Their old intimacy is repriced as distance.",
-                cost_shift="He has to probe through etiquette instead of memory.",
-                micro_hook="The old wound is about to surface.",
-                end_state="The first probe misses.",
-                text="他把话咽回去，只听见她那句称呼落得极稳。",
-            ),
-        ]
-        block_context = ChapterToolPayloadBuilder.build_block_runtime_context(
-            context=context,
-            block=ChapterBeat(
-                block_id="ch_001.sc_001.b003",
-                chapter_id="ch_001",
-                block_index=3,
-                purpose="Pressure beat.",
-                target_chars=500,
-                end_state="The beat lands.",
-            ),
-            committed_blocks=committed_blocks,
-            remaining_blocks=[
-                ChapterBeat(
-                    block_id="ch_001.sc_001.b004",
-                    chapter_id="ch_001",
-                    block_index=4,
-                    purpose="The clue is discovered in the marriage paper.",
-                    new_value="He finally notices the hidden mark.",
-                    micro_hook="The hidden mark points to tonight's trap.",
-                    end_state="The discovered mark changes the room.",
-                )
-            ],
-        )
-
-        self.assertIn("relationship=", block_context["chapter_so_far"])
-        self.assertIn("cost=", block_context["chapter_so_far"])
-        self.assertIn("[Dramatic memory]", block_context["dramatic_memory"])
-        self.assertIn("relationship_cost=", block_context["dramatic_memory"])
-        self.assertNotIn("雪光都不肯分给他", block_context["chapter_so_far"])
-        self.assertIn("[Not yet in this chapter]", block_context["future_beat_boundary_text"])
-        self.assertIn("He finally notices the hidden mark.", block_context["future_beat_boundary_text"])
-        self.assertIn("Open through a concrete scene impression", ChapterToolPayloadBuilder.compact_beat_json(
-            block=ChapterBeat(
-                block_id="ch_001.sc_001.b010",
-                chapter_id="ch_001",
-                block_index=10,
-                purpose="Quiet opening",
-                end_state="The beat lands.",
-            ),
-            block_context={"prior_block_summary_text": "No committed blocks yet."},
-        ))
 
     def test_plan_content_blocks_default_count_keeps_5000_char_chapter_to_four_beats(self) -> None:
         self.assertEqual(PlanContentBlocksTool._target_block_count("3000字左右"), 3)
@@ -915,7 +802,7 @@ class SchemaAndContextTests(unittest.TestCase):
         xianxia_context = self._writer_context(current_chapter_id="ch_001", premise=xianxia_premise)
         xianxia_block_context = ChapterToolPayloadBuilder.build_block_runtime_context(
             context=xianxia_context,
-            block=ChapterBeat(
+            block=ContentBlock(
                 block_id="ch_001.sc_001.b001",
                 chapter_id="ch_001",
                 block_index=1,
@@ -1018,7 +905,7 @@ class SchemaAndContextTests(unittest.TestCase):
   "step_5_character_milestones_text": "[Step 5 relevant character milestones]\\n\\nHeroine\\n- 关系线: 被误解 -> 关系重估\\n  - 关系线 / 被误解\\n    - Keep only visible trigger, pressure, and relationship movement for this phase.",
   "step_6_twists_text": "[Step 6 active twist packets]\\n\\ntwist_01 / Hidden motive\\n- False belief: Readers think she betrayed him.\\n- Reader alignment: Readers side with him before reveal.\\n- Seed from: ch_001\\n- Reveal at: ch_018\\n- Allowed clues: pause; avoid object\\n- Forbidden reveals: do not say she saved him; do not explain hidden motive\\n- POV lock: No true inner thought before reveal.\\n- Related characters: Heroine\\n- Payoff effect: Relationship gets re-priced after reveal.\\n- Truth: hidden until reveal chapter; do not narrate it directly.",
   "step_7_story_lines_text": "[Step 7 active story line packets]\\n\\nline_case / Old case\\n- Type: mystery\\n- Visibility: visible\\n- Core question: How to approach the old case indirectly\\n- Reader hook mode: pressure from rules\\n- Start state: He cannot challenge the verdict directly.\\n- Midpoint shift: Preserve the line's later re-pricing and payoff direction without stating concealed truth in advance.\\n- End state: Preserve the line's later re-pricing and payoff direction without stating concealed truth in advance.\\n- Carried twists: twist_01\\n- Line rules: Only indirect routes early.",
-  "step_8_chapter_brief_text": "[Step 8 current chapter contract]\\n\\nChapter id: ch_001\\nTitle: Return\\nChapter type: opening\\nChapter mission: Hero wants revenge but must move indirectly.",
+  "step_8_chapter_brief_text": "[Step 8 current chapter brief]\\n\\nChapter id: ch_001\\nTitle: Return\\nChapter type: opening\\nSummary: Hero wants revenge but must move indirectly.",
   "scene_character_context_text": "[Scene character context]\\n\\nHero\\n- Public identity: returned heir / general\\n- Surface goal in this chapter: He returns under pressure.",
   "relationship_state_text": "[Relationship state]\\n\\n- Relationship axis: She shifts from traitor to suspiciously controlled figure.\\n- Emotional temperature: Victory pressure becomes imperial pressure and cold hatred."
 }"""

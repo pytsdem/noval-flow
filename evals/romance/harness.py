@@ -19,15 +19,7 @@ from novel_flow.services.novel_context import NovelContextFormatter, NovelContex
 from novel_flow.services.tool_registry import ToolRegistry
 
 from evals.romance.instrumentation import InstrumentedLLMClient, InstrumentedToolRegistry
-from evals.romance.judges import (
-    ActionCarriedRevealRuleAnalyzer,
-    AntiSlopRuleAnalyzer,
-    ExplanationDensityRuleAnalyzer,
-    PronounLeadRuleAnalyzer,
-    RedundancyRuleAnalyzer,
-    RelationshipCostRealizationRuleAnalyzer,
-    RomanceChapterJudge,
-)
+from evals.romance.judges import AntiSlopRuleAnalyzer, RedundancyRuleAnalyzer, RomanceChapterJudge
 from evals.romance.loader import load_cases
 from evals.romance.models import (
     RomanceCaseArtifacts,
@@ -43,7 +35,6 @@ from evals.romance.models import (
     RomanceRunSummary,
     ScoreDelta,
 )
-from evals.romance.report_paths import build_structured_run_dir, normalize_reports_root, write_text_with_aliases
 from evals.romance.reporting import CORE_METRICS, write_diff_files, write_summary_files
 
 
@@ -243,7 +234,8 @@ class RomanceEvalHarness:
         self.llm_client = InstrumentedLLMClient(base_llm)
         self.mode = str(mode or "fast").strip().lower()
         self.case_dir = Path(case_dir or Path(__file__).resolve().parent / "cases")
-        self.reports_root, self.runs_root = normalize_reports_root(reports_root)
+        self.reports_root = Path(reports_root or Path(__file__).resolve().parent / "reports")
+        self.reports_root.mkdir(parents=True, exist_ok=True)
 
     def run(
         self,
@@ -254,17 +246,8 @@ class RomanceEvalHarness:
     ) -> tuple[RomanceRunSummary, RomanceRunDiff | None]:
         cases = load_cases(self.case_dir, case_ids=case_ids)
         run_label = _sanitize_label(label or f"{self.mode}_{datetime.now().strftime('%Y%m%d_%H%M%S')}")
-        provider_name = self.settings.llm_provider
-        model_name = self._effective_model_name()
-        run_paths = build_structured_run_dir(
-            self.reports_root,
-            task_slug="chapter_eval",
-            label=run_label,
-            case_ids=[case.case_id for case in cases],
-            provider=provider_name,
-            model=model_name,
-        )
-        run_dir = run_paths.run_dir
+        run_dir = self.reports_root / run_label
+        run_dir.mkdir(parents=True, exist_ok=True)
 
         results: list[RomanceCaseResult] = []
         run_errors: list[str] = []
@@ -279,8 +262,8 @@ class RomanceEvalHarness:
         summary = RomanceRunSummary(
             label=run_label,
             mode=self.mode,
-            provider=provider_name,
-            model=model_name,
+            provider=self.settings.llm_provider,
+            model=self._effective_model_name(),
             run_dir=str(run_dir),
             case_ids=[case.case_id for case in cases],
             average_scores=self._average_scores(results),
@@ -297,14 +280,14 @@ class RomanceEvalHarness:
                 "report_markdown": str(md_path),
             }
         )
-        write_text_with_aliases(json_path, summary.model_dump_json(indent=2), alias_names=("summary.json",))
+        json_path.write_text(summary.model_dump_json(indent=2), encoding="utf-8")
 
         diff: RomanceRunDiff | None = None
         if compare_to:
             diff = compare_run_summaries(compare_to, summary)
             write_diff_files(diff, run_dir, baseline_label=diff.baseline_label)
             summary = summary.model_copy(update={"compared_to": str(compare_to)})
-            write_text_with_aliases(json_path, summary.model_dump_json(indent=2), alias_names=("summary.json",))
+            json_path.write_text(summary.model_dump_json(indent=2), encoding="utf-8")
         return summary, diff
 
     def assemble_existing_run(
@@ -319,9 +302,10 @@ class RomanceEvalHarness:
             raise FileNotFoundError(f"Run directory does not exist: {run_path}")
 
         results: list[RomanceCaseResult] = []
-        result_paths = sorted(run_path.glob("*/chapter_eval_case_result.json")) or sorted(run_path.glob("*/result.json"))
-        for result_path in result_paths:
-            results.append(RomanceCaseResult.model_validate_json(result_path.read_text(encoding="utf-8")))
+        for result_path in sorted(run_path.glob("*/result.json")):
+            results.append(
+                RomanceCaseResult.model_validate_json(result_path.read_text(encoding="utf-8"))
+            )
         verdict_counts, blocked_case_ids, optimization_target_counts = self._summarize_results(results)
         summary = RomanceRunSummary(
             label=_sanitize_label(label or run_path.name),
@@ -343,21 +327,21 @@ class RomanceEvalHarness:
                 "report_markdown": str(md_path),
             }
         )
-        write_text_with_aliases(json_path, summary.model_dump_json(indent=2), alias_names=("summary.json",))
+        json_path.write_text(summary.model_dump_json(indent=2), encoding="utf-8")
 
         diff: RomanceRunDiff | None = None
         if compare_to:
             diff = compare_run_summaries(compare_to, summary)
             write_diff_files(diff, run_path, baseline_label=diff.baseline_label)
             summary = summary.model_copy(update={"compared_to": str(compare_to)})
-            write_text_with_aliases(json_path, summary.model_dump_json(indent=2), alias_names=("summary.json",))
+            json_path.write_text(summary.model_dump_json(indent=2), encoding="utf-8")
         return summary, diff
 
     def _run_case(self, *, case: RomanceEvalCase, run_dir: Path) -> RomanceCaseResult:
         case_dir = run_dir / case.case_id
         case_dir.mkdir(parents=True, exist_ok=True)
-        case_input_path = case_dir / "chapter_eval_case_input.json"
-        write_text_with_aliases(case_input_path, case.model_dump_json(indent=2), alias_names=("case_input.json",))
+        case_input_path = case_dir / "case_input.json"
+        case_input_path.write_text(case.model_dump_json(indent=2), encoding="utf-8")
 
         generation_start = len(self.llm_client.records)
         started_at = time.perf_counter()
@@ -365,8 +349,8 @@ class RomanceEvalHarness:
 
         writer_context = self._build_writer_context(case)
         writer_context_json = _json_text(_writer_context_to_dict(writer_context))
-        writer_context_path = case_dir / "chapter_eval_writer_context.json"
-        write_text_with_aliases(writer_context_path, writer_context_json, alias_names=("writer_context.json",))
+        writer_context_path = case_dir / "writer_context.json"
+        writer_context_path.write_text(writer_context_json, encoding="utf-8")
 
         registry = InstrumentedToolRegistry(
             ToolRegistry.build_default(
@@ -396,14 +380,14 @@ class RomanceEvalHarness:
         generation_calls = len(self.llm_client.records) - generation_start
 
         execution_json = execution.model_dump_json(indent=2)
-        execution_path = case_dir / "chapter_eval_execution.json"
-        write_text_with_aliases(execution_path, execution_json, alias_names=("chapter_execution.json",))
-        stage_log_path = case_dir / "chapter_eval_stage_log.json"
-        write_text_with_aliases(stage_log_path, _json_text(execution.stage_log), alias_names=("stage_log.json",))
-        final_text_path = case_dir / "chapter_text__final.txt"
-        write_text_with_aliases(final_text_path, execution.chapter_text, alias_names=("final_text.txt",))
+        execution_path = case_dir / "chapter_execution.json"
+        execution_path.write_text(execution_json, encoding="utf-8")
+        stage_log_path = case_dir / "stage_log.json"
+        stage_log_path.write_text(_json_text(execution.stage_log), encoding="utf-8")
+        final_text_path = case_dir / "final_text.txt"
+        final_text_path.write_text(execution.chapter_text, encoding="utf-8")
 
-        judge_payload_path = case_dir / "chapter_eval_judge.json"
+        judge_payload_path = case_dir / "judge.json"
         judge_errors: list[str] = []
         judge_detail: dict[str, RomanceMetricDetail] = {}
         breakdowns: dict[str, RomanceMetricDetail] = {}
@@ -418,10 +402,6 @@ class RomanceEvalHarness:
             chapter_text=execution.chapter_text,
             review_reports=execution.review_reports,
         )
-        rule_pronoun_lead = PronounLeadRuleAnalyzer().analyze(chapter_text=execution.chapter_text)
-        rule_explanation_density = ExplanationDensityRuleAnalyzer().analyze(chapter_text=execution.chapter_text)
-        rule_action_carried_reveal = ActionCarriedRevealRuleAnalyzer().analyze(chapter_text=execution.chapter_text)
-        rule_relationship_cost = RelationshipCostRealizationRuleAnalyzer().analyze(chapter_text=execution.chapter_text)
 
         judge_start = len(self.llm_client.records)
         self.llm_client.set_phase(f"judge:{case.case_id}")
@@ -432,7 +412,7 @@ class RomanceEvalHarness:
                 chapter_execution_json=execution_json,
                 chapter_text=execution.chapter_text,
             )
-            write_text_with_aliases(judge_payload_path, judge.model_dump_json(indent=2), alias_names=("judge.json",))
+            judge_payload_path.write_text(judge.model_dump_json(indent=2), encoding="utf-8")
             diagnosis = judge.diagnosis
             judge_detail = self._judge_metrics_to_core(
                 judge=judge,
@@ -449,10 +429,6 @@ class RomanceEvalHarness:
                 "judge_redundancy_score": judge.redundancy,
                 "rule_redundancy_score": rule_redundancy,
                 "rule_anti_slop_score": rule_anti_slop,
-                "rule_pronoun_lead_score": rule_pronoun_lead,
-                "rule_explanation_density_score": rule_explanation_density,
-                "rule_action_carried_reveal_score": rule_action_carried_reveal,
-                "rule_relationship_cost_realization_score": rule_relationship_cost,
             }
             if rule_redundancy.score < 7.0 and not any("重复" in item for item in diagnosis.weaknesses):
                 diagnosis.weaknesses.append("中段存在重复铺陈信号")
@@ -460,34 +436,17 @@ class RomanceEvalHarness:
             if rule_anti_slop.score < 7.0 and not any(token in item for item in diagnosis.weaknesses for token in ("直白", "心理", "解释")):
                 diagnosis.weaknesses.append("存在直白心理解释信号")
                 diagnosis.improvement_hints.append(rule_anti_slop.improvement_hint)
-            if rule_pronoun_lead.score < 7.0 and not any("代词" in item for item in diagnosis.weaknesses):
-                diagnosis.weaknesses.append("句首代词密度偏高，场面起句不足")
-                diagnosis.improvement_hints.append(rule_pronoun_lead.improvement_hint)
-            if rule_explanation_density.score < 7.0 and not any("解释句" in item for item in diagnosis.weaknesses):
-                diagnosis.weaknesses.append("解释句密度偏高，动作后常被作者翻译")
-                diagnosis.improvement_hints.append(rule_explanation_density.improvement_hint)
-            if rule_action_carried_reveal.score < 7.0 and not any("动作" in item or "场面" in item for item in diagnosis.weaknesses):
-                diagnosis.weaknesses.append("关键信息更多靠说明而非动作/场面露出")
-                diagnosis.improvement_hints.append(rule_action_carried_reveal.improvement_hint)
-            if rule_relationship_cost.score < 7.0 and not any("代价" in item for item in diagnosis.weaknesses):
-                diagnosis.weaknesses.append("线索推进没有稳定兑现成关系或人身代价")
-                diagnosis.improvement_hints.append(rule_relationship_cost.improvement_hint)
         except Exception as exc:
             judge_errors.append(f"romance_judge_failed: {exc}")
-            write_text_with_aliases(
-                judge_payload_path,
+            judge_payload_path.write_text(
                 _json_text(
                     {
                         "error": str(exc),
                         "rule_redundancy": rule_redundancy.model_dump(mode="json"),
                         "rule_anti_slop": rule_anti_slop.model_dump(mode="json"),
-                        "rule_pronoun_lead": rule_pronoun_lead.model_dump(mode="json"),
-                        "rule_explanation_density": rule_explanation_density.model_dump(mode="json"),
-                        "rule_action_carried_reveal": rule_action_carried_reveal.model_dump(mode="json"),
-                        "rule_relationship_cost_realization": rule_relationship_cost.model_dump(mode="json"),
                     }
                 ),
-                alias_names=("judge.json",),
+                encoding="utf-8",
             )
             judge_detail = self._fallback_core_metrics(
                 rule_redundancy=rule_redundancy,
@@ -496,10 +455,6 @@ class RomanceEvalHarness:
             breakdowns = {
                 "rule_redundancy_score": rule_redundancy,
                 "rule_anti_slop_score": rule_anti_slop,
-                "rule_pronoun_lead_score": rule_pronoun_lead,
-                "rule_explanation_density_score": rule_explanation_density,
-                "rule_action_carried_reveal_score": rule_action_carried_reveal,
-                "rule_relationship_cost_realization_score": rule_relationship_cost,
             }
             diagnosis = RomanceJudgeDiagnosis(
                 strengths=[],
@@ -547,8 +502,8 @@ class RomanceEvalHarness:
             ),
             errors=judge_errors,
         )
-        result_path = case_dir / "chapter_eval_case_result.json"
-        write_text_with_aliases(result_path, result.model_dump_json(indent=2), alias_names=("result.json",))
+        result_path = case_dir / "result.json"
+        result_path.write_text(result.model_dump_json(indent=2), encoding="utf-8")
         return result
 
     def _build_writer_context(self, case: RomanceEvalCase) -> Any:

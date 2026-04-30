@@ -233,7 +233,7 @@ def _sanitized_context_json() -> str:
             "step_5_character_milestones_text": "Relevant milestone packets",
             "step_6_twists_text": "Active twist packets",
             "step_7_story_lines_text": "Active story line packets",
-            "step_8_chapter_brief_text": "Current chapter contract packet",
+            "step_8_chapter_brief_text": "Current chapter brief packet",
             "scene_character_context_text": "[Scene character context]\\nHero under pressure\\nHeroine hiding a reaction",
             "relationship_state_text": "[Relationship state]\\nHostility with unresolved pull"
         },
@@ -545,10 +545,8 @@ class RomanceEvalHarnessTests(unittest.TestCase):
 
         self.assertIsNone(diff)
         self.assertEqual(len(summary.case_results), 1)
-        run_dir = Path(summary.run_dir)
-        self.assertTrue((run_dir / "chapter_eval_summary.json").exists())
-        self.assertTrue((run_dir / "chapter_eval_report.md").exists())
-        self.assertTrue((run_dir / "summary.json").exists())
+        self.assertTrue((reports_root / "single_case" / "summary.json").exists())
+        self.assertTrue((reports_root / "single_case" / "report.md").exists())
         case_result = summary.case_results[0]
         self.assertEqual(case_result.verdict, "pass")
         self.assertIn("romance_tension_score", case_result.scores)
@@ -556,7 +554,6 @@ class RomanceEvalHarnessTests(unittest.TestCase):
         self.assertIn("historical_romance_intrigue", llm.calls[-1][-1].content)
         self.assertIn("restrained_angst", llm.calls[-1][-1].content)
         self.assertTrue(Path(case_result.artifacts.final_text_txt).exists())
-        self.assertTrue(Path(case_result.artifacts.final_text_txt).name == "chapter_text__final.txt")
         self.assertGreater(case_result.cost_metrics.llm_calls, 0)
         self.assertEqual(summary.verdict_counts.get("pass"), 1)
 
@@ -590,8 +587,7 @@ class RomanceEvalHarnessTests(unittest.TestCase):
 
         self.assertIsNotNone(diff)
         assert diff is not None
-        self.assertTrue((Path(candidate_summary.run_dir) / "chapter_eval_diff_vs_baseline.md").exists())
-        self.assertTrue((Path(candidate_summary.run_dir) / "diff_vs_baseline.md").exists())
+        self.assertTrue((reports_root / "candidate" / "diff_vs_baseline.md").exists())
         self.assertGreater(
             diff.average_score_deltas["romance_tension_score"].delta,
             0.0,
@@ -759,20 +755,6 @@ class RomanceEvalHarnessTests(unittest.TestCase):
                 "judge_redundancy_score": judge.redundancy,
                 "rule_redundancy_score": rule_redundancy,
                 "rule_anti_slop_score": rule_anti_slop,
-                "rule_pronoun_lead_score": RomanceMetricDetail(
-                    score=4.5,
-                    reason="句首代词过密。",
-                    evidence_summary="句首代词占比 30%。",
-                    improvement_hint="改写句首。",
-                    source="rule",
-                ),
-                "rule_explanation_density_score": RomanceMetricDetail(
-                    score=4.8,
-                    reason="解释句偏多。",
-                    evidence_summary="解释句占比 25%。",
-                    improvement_hint="减少解释句。",
-                    source="rule",
-                ),
             },
             diagnosis=judge.diagnosis,
             judge_errors=[],
@@ -830,20 +812,6 @@ class RomanceEvalHarnessTests(unittest.TestCase):
                 "judge_redundancy_score": judge.redundancy,
                 "rule_redundancy_score": rule_redundancy,
                 "rule_anti_slop_score": rule_anti_slop,
-                "rule_pronoun_lead_score": RomanceMetricDetail(
-                    score=4.2,
-                    reason="句首代词过密。",
-                    evidence_summary="句首代词占比 35%。",
-                    improvement_hint="改写句首。",
-                    source="rule",
-                ),
-                "rule_explanation_density_score": RomanceMetricDetail(
-                    score=4.0,
-                    reason="解释句偏多。",
-                    evidence_summary="解释句占比 33%。",
-                    improvement_hint="减少解释句。",
-                    source="rule",
-                ),
             },
             diagnosis=judge.diagnosis,
             judge_errors=[],
